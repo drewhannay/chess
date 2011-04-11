@@ -1,0 +1,13 @@
+bin/*
+.metadata/*
+.project
+.settings/*
+glob:src/savedGame
+gameTypes
+pieceTypes
+savedGame
+savedGames/*
+ACN File
+completedGames/*
+gamesInProgress/*
+variants/*
