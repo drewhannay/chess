@@ -172,10 +172,17 @@ public class Square implements Serializable {
 	}
 
 	/**
-	 * Sets the Color of the Square
+	 * Sets the color of a square temporarily
+	 * @param c the color to set the background
+	 */
+	public void setColor(Color c){
+		jb.setBackground(c);
+	}
+	/**
+	 * Sets the background Color of the Square permanently
 	 * @param c New Color
 	 */
-	public void setColor(Color c) {
+	public void setBackgroundColor(Color c) {
 		jb.setBackground(c);//Use the given Color for the background
 		jb.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 		if (c != Square.HIGHLIGHT_COLOR) {

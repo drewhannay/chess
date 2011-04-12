@@ -461,7 +461,7 @@ public class CustomSetupMenu extends JPanel {
 				public void actionPerformed(ActionEvent arg0) {
 					Color color = JColorChooser.showDialog(popup, "Choose Color", square.getColor());
 					if (color != Square.HIGHLIGHT_COLOR) {//Can't let them pick exactly the highlight color, or they could move to that space from anywhere.
-						square.setColor(color);
+						square.setBackgroundColor(color);
 						pickColor.setBackground(color);
 						//TODO Weird issue if you hit cancel when selecting a color.
 					}

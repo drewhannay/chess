@@ -99,7 +99,7 @@ public class PlayGame extends JPanel {
 				List<Square> dests = clickedSquare.getPiece().getLegalDests();
 				if (dests.size() > 0) {
 					for (Square dest : dests) {
-						dest.setColor(Square.HIGHLIGHT_COLOR);
+						dest.setBackgroundColor(Square.HIGHLIGHT_COLOR);
 					}
 					storedSquare = clickedSquare;
 					mustMove = true;
@@ -245,8 +245,18 @@ public class PlayGame extends JPanel {
 	 * @param b The array of boards objects
 	 */
 	public static void boardRefresh(Board[] b) {
+		
+		for (int k = 0; k < b.length; k++) {
+			for (int i = 1; i <= b[k].getMaxRow(); i++) {
+				for (int j = 1; j <= b[k].getMaxCol(); j++) {
+					b[k].getSquare(i, j).refresh();
+				}
+			}
+		}
+		
 		Piece objective = g.isBlackMove() ? g.getBlackRules().objectivePiece(true) : g.getWhiteRules().objectivePiece(
 				false);
+		
 		if (objective != null && objective.isInCheck()) {
 			inCheck.setVisible(true);
 			if (g.getBlackRules().objectivePiece(true).isInCheck()) {
@@ -254,15 +264,12 @@ public class PlayGame extends JPanel {
 			} else {
 				inCheck.setBorder(BorderFactory.createTitledBorder("White Team"));
 			}
+			
+			for(Piece p : g.getThreats(objective))
+				p.getSquare().setColor(Color.red);
+			
 		} else {
 			inCheck.setVisible(false);
-		}
-		for (int k = 0; k < b.length; k++) {
-			for (int i = 1; i <= b[k].getMaxRow(); i++) {
-				for (int j = 1; j <= b[k].getMaxCol(); j++) {
-					b[k].getSquare(i, j).refresh();
-				}
-			}
 		}
 		for (int i = 1; i <= whiteCapturesBox.getMaxRow(); i++) {
 			for (int j = 1; j <= whiteCapturesBox.maxCol; j++) {
