@@ -246,7 +246,7 @@ public class CustomSetupMenu extends JPanel {
 					builder.setName(name.getText());//Set the name in the PieceBuilder
 					PieceBuilder.savePieceType(builder);//Save the piece type in the PieceBuilder class.
 					//Put the piece on it's square, refresh the square, dispose the pop up.
-					Piece toAdd = PieceBuilder.makePiece(name.getText(), isBlack,objective.isSelected(), square, board);
+					Piece toAdd = PieceBuilder.makePiece(name.getText(), isBlack, square, board);
 					(isBlack ? blackTeam : whiteTeam).add(toAdd);
 					square.setPiece(toAdd);
 					square.refresh();
@@ -361,7 +361,7 @@ public class CustomSetupMenu extends JPanel {
 						return;
 					}
 					//They must have selected a Piece type that's already defined. Create the Piece.
-					Piece p = PieceBuilder.makePiece((String) dropdown.getSelectedItem(), black.isSelected(),false, square,
+					Piece p = PieceBuilder.makePiece((String) dropdown.getSelectedItem(), black.isSelected(), square,
 							board);
 					//Add the Piece to the correct team.
 					if (p.isBlack()) {
@@ -611,12 +611,13 @@ public class CustomSetupMenu extends JPanel {
 						set = true;
 						break;
 					}
-					else if (p.isObjective()) {
-						whiteRules.setObjectivePiece(new ObjectivePiece("custom objective", p.getName()));
-						System.out.println(p.getName());
-						set = true;
-						break;
-					}
+					//TODO Fix this.
+//					else if (p.isObjective()) {
+//						whiteRules.setObjectivePiece(new ObjectivePiece("custom objective", p.getName()));
+//						System.out.println(p.getName());
+//						set = true;
+//						break;
+//					}
 				}
 				if (!set) {
 					whiteRules.setObjectivePiece(new ObjectivePiece("no objective", ""));
@@ -629,11 +630,12 @@ public class CustomSetupMenu extends JPanel {
 						set = true;
 						break;
 					}
-					else if (p.isObjective()) {
-						blackRules.setObjectivePiece(new ObjectivePiece("custom objective", p.getName()));
-						set = true;
-						break;
-					}
+					//TODO Fix this
+//					else if (p.isObjective()) {
+//						blackRules.setObjectivePiece(new ObjectivePiece("custom objective", p.getName()));
+//						set = true;
+//						break;
+//					}
 				}
 				if (!set) {
 					blackRules.setObjectivePiece(new ObjectivePiece("no objective", ""));

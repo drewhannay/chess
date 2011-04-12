@@ -28,7 +28,7 @@ public class Rook extends Piece {
 	 * @param board The Board the Piece is on.
 	 */
 	public Rook(boolean isBlack, Square origin, Board board) {
-		super("Rook", new ImageIcon("images/rook_dark.png"), new ImageIcon("images/rook_light.png"), isBlack,false, origin,
+		super("Rook", new ImageIcon("images/rook_dark.png"), new ImageIcon("images/rook_light.png"), isBlack,origin,
 				board, null);
 	}
 

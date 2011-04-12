@@ -102,7 +102,7 @@ public class CropLegalDests implements Serializable {
 	 * @param enemyTeam The enemy team.
 	 */
 	public void stationaryObjective(Piece movingObjective, Piece toAdjust, List<Piece> enemyTeam) {
-		if (toAdjust.isObjective()) {
+		if (toAdjust == movingObjective) {
 			toAdjust.getLegalDests().clear();
 		} else {
 			toAdjust.adjustPinsLegalDests(movingObjective, enemyTeam);

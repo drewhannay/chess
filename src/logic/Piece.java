@@ -79,11 +79,7 @@ public class Piece implements Serializable {
 	 * The Square that this Piece started on when the Game began
 	 */
 	protected Square originalSquare;
-	/**
-	 * Whether this piece is the objective
-	 */
-	//TODO Take this out
-	protected boolean isObjective;
+
 	/**
 	 * Constructor
 	 * Initialize instance variables.
@@ -96,13 +92,12 @@ public class Piece implements Serializable {
 	 * @param board The Board this Piece occupies
 	 * @param movements HashMap of legal movements for this Piece
 	 */
-	public Piece(String name, ImageIcon darkIcon, ImageIcon lightIcon, boolean isBlack,boolean isObjective, Square curSquare, Board board,
+	public Piece(String name, ImageIcon darkIcon, ImageIcon lightIcon, boolean isBlack,Square curSquare, Board board,
 			HashMap<Character, Integer> movements) {
 		this.name = name;
 		this.lightIcon = lightIcon;
 		this.darkIcon = darkIcon;
 		this.setBlack(isBlack);
-		this.isObjective = isObjective;
 		this.curSquare = curSquare;
 		setOriginalSquare(curSquare);
 		curSquare.setPiece(this);//Tell the Square what Piece is on it.
@@ -731,14 +726,6 @@ public class Piece implements Serializable {
 			return getLegalDests().contains(dest);
 		} else
 			return false;
-	}
-
-	/**
-	 * Check if this piece is the objective piece
-	 * @return If this piece is the objective piece
-	 */
-	public boolean isObjective() {
-		return isObjective;
 	}
 
 	/**

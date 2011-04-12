@@ -28,7 +28,7 @@ public class Queen extends Piece {
 	 * @param board The Board the Piece is on.
 	 */
 	public Queen(boolean isBlack, Square origin, Board board) {
-		super("Queen", new ImageIcon("images/queen_dark.png"), new ImageIcon("images/queen_light.png"), isBlack,false,
+		super("Queen", new ImageIcon("images/queen_dark.png"), new ImageIcon("images/queen_light.png"), isBlack,
 				origin, board, null);
 	}
 

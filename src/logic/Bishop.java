@@ -22,7 +22,7 @@ public class Bishop extends Piece {
 	 */
 	public Bishop(boolean isBlack, Square origin, Board board) {
 		super("Bishop", new ImageIcon("images/bishop_dark.png"), new ImageIcon(
-				"images/bishop_light.png"), isBlack,false, origin, board, null);
+				"images/bishop_light.png"), isBlack, origin, board, null);
 	}
 
 	/**

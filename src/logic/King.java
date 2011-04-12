@@ -28,7 +28,7 @@ public class King extends Piece {
 	 * @param board The Board the Piece is on.
 	 */
 	public King(boolean isBlack, Square origin, Board board) {
-		super("King", new ImageIcon("images/king_dark.png"), new ImageIcon("images/king_light.png"), isBlack,true, origin,
+		super("King", new ImageIcon("images/king_dark.png"), new ImageIcon("images/king_light.png"), isBlack,origin,
 				board, null);
 	}
 

@@ -30,7 +30,7 @@ public class Knight extends Piece {
 	 * @param board The Board the Piece is on.
 	 */
 	public Knight(boolean isBlack, Square origin, Board board) {
-		super("Knight", new ImageIcon("images/knight_dark.png"), new ImageIcon("images/knight_light.png"), isBlack,false,
+		super("Knight", new ImageIcon("images/knight_dark.png"), new ImageIcon("images/knight_light.png"), isBlack,
 				origin, board, null);
 	}
 

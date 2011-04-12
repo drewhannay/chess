@@ -32,7 +32,7 @@ public class Pawn extends Piece {
 	 * @param board The Board the Piece is on.
 	 */
 	public Pawn(boolean isBlack, Square origin, Board board) {
-		super("Pawn", new ImageIcon("images/pawn_dark.png"), new ImageIcon("images/pawn_light.png"), isBlack,false, origin,
+		super("Pawn", new ImageIcon("images/pawn_dark.png"), new ImageIcon("images/pawn_light.png"), isBlack,origin,
 				board, null);
 	}
 

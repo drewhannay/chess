@@ -128,8 +128,8 @@ public class PieceBuilder implements Serializable {
 	 * @param board The Board the Piece occupies
 	 * @return The new Piece
 	 */
-	public static Piece makePiece(String name, boolean isBlack,boolean isObjective, Square origin, Board board) {
-		return pieceTypes.get(name).makePiece(isBlack,isObjective, origin, board);
+	public static Piece makePiece(String name, boolean isBlack, Square origin, Board board) {
+		return pieceTypes.get(name).makePiece(isBlack, origin, board);
 	}
 
 	/**
@@ -167,12 +167,11 @@ public class PieceBuilder implements Serializable {
 	/**
 	 * Make a new instance of a Piece type
 	 * @param isBlack The team of the Piece
-	 * @param isObjective Is this the objective piece?
 	 * @param origin The Square this Piece is on
 	 * @param board the Board this Piece is on
 	 * @return The created Piece object
 	 */
-	private Piece makePiece(boolean isBlack,boolean isObjective, Square origin, Board board) {
+	private Piece makePiece(boolean isBlack, Square origin, Board board) {
 		//TODO Make this better. Currently terrible. Maybe use Reflection?
 		try {
 
@@ -181,7 +180,7 @@ public class PieceBuilder implements Serializable {
 			return (Piece) con.newInstance(isBlack, origin, board);
 		} catch (Exception e) {
 			//TODO Make sure darkImage and lightImage are not null. Or does that matter?
-			return new Piece(name, darkImage, lightImage, isBlack,isObjective, origin, board, movements);
+			return new Piece(name, darkImage, lightImage, isBlack, origin, board, movements);
 		}
 	}
 
