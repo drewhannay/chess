@@ -54,6 +54,7 @@ public class Move implements Serializable {
 	/**
 	 * Boolean indicating whether this Move has been executed
 	 */
+	//TODO Remove?
 	protected boolean executed;
 
 	/**

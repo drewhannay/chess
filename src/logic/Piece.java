@@ -82,6 +82,7 @@ public class Piece implements Serializable {
 	/**
 	 * Whether this piece is the objective
 	 */
+	//TODO Take this out
 	protected boolean isObjective;
 	/**
 	 * Constructor

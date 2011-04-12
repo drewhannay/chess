@@ -213,6 +213,7 @@ public class PlayGame extends JPanel {
 	public PlayGame(Game g, boolean isPlayback) {
 		PlayGame.g = g;
 		PlayGame.isPlayback = isPlayback;
+		initComponents(isPlayback);
 		if(isPlayback){
 			PlayGame.whiteTimer = new NoTimer();
 			PlayGame.blackTimer = new NoTimer();
@@ -234,7 +235,6 @@ public class PlayGame extends JPanel {
 			history = null;
 			index = -3;
 		}
-		initComponents(isPlayback);
 		boardRefresh(g.getBoards());
 	}
 
