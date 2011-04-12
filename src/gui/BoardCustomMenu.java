@@ -3,6 +3,7 @@ package gui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -135,6 +136,8 @@ public class BoardCustomMenu extends JPanel {
 	 */
 	private void initComponents() {
 
+		setBorder(BorderFactory.createLoweredBevelBorder());
+		
 		//Create button and add ActionListener
 		backButton = new JButton("Back");
 		backButton.addActionListener(new ActionListener() {
@@ -191,174 +194,77 @@ public class BoardCustomMenu extends JPanel {
 
 		});
 
-		//Layout stuff. Make it better later.
+		//Layout stuff. Don't. Ask.
 		GroupLayout layout = new GroupLayout(this);
 		this.setLayout(layout);
-		layout
-		.setHorizontalGroup(
-				layout
-				.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addGroup(
-						GroupLayout.Alignment.TRAILING,
-						layout
-						.createSequentialGroup()
-						.addGroup(
-								layout
-								.createParallelGroup(GroupLayout.Alignment.LEADING)
-								.addGroup(
-										layout
-										.createSequentialGroup()
+		layout.setHorizontalGroup(
+				layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+				.addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+								.addGroup(layout.createSequentialGroup()
 										.addContainerGap()
-										.addGroup(
-												layout
-												.createParallelGroup(
-														GroupLayout.Alignment.LEADING)
-														.addGroup(
-																layout
-																.createSequentialGroup()
-																.addComponent(
-																		numBoardsLabel,
-																		GroupLayout.DEFAULT_SIZE,
-																		177,
-																		Short.MAX_VALUE)
-																		.addPreferredGap(
-																				LayoutStyle.ComponentPlacement.RELATED)
-																				.addComponent(
-																						oneBoard))
-																						.addGroup(
-																								GroupLayout.Alignment.TRAILING,
-																								layout
-																								.createSequentialGroup()
-																								.addComponent(
-																										dimensionsLabel,
-																										GroupLayout.DEFAULT_SIZE,
-																										157,
-																										Short.MAX_VALUE)
-																										.addPreferredGap(
-																												LayoutStyle.ComponentPlacement.RELATED)
-																												.addGroup(
-																														layout
-																														.createParallelGroup(
-																																GroupLayout.Alignment.TRAILING)
-																																.addComponent(
-																																		numColsLabel)
-																																		.addComponent(
-																																				numRowsLabel))))
-																																				.addGap(23, 23, 23))
-																																				.addGroup(layout.createSequentialGroup()
-																																						.addGap(131, 131, 131)
-																																						.addComponent(submitButton))
-																																						.addGroup(
-																																								layout
-																																								.createSequentialGroup()
-																																								.addContainerGap()
-																																								.addComponent(
-																																										wraparoundLabel,
-																																										GroupLayout.PREFERRED_SIZE,
-																																										144,
-																																										GroupLayout.PREFERRED_SIZE)))
-																																										.addGroup(
-																																												layout
-																																												.createParallelGroup(
-																																														GroupLayout.Alignment.LEADING)
-																																														.addGroup(
-																																																layout
-																																																.createSequentialGroup()
-																																																.addGroup(
-																																																		layout
-																																																		.createParallelGroup(
-																																																				GroupLayout.Alignment.LEADING)
-																																																				.addGroup(
-																																																						layout
-																																																						.createSequentialGroup()
-																																																						.addPreferredGap(
-																																																								LayoutStyle.ComponentPlacement.RELATED)
-																																																								.addComponent(
-																																																										backButton))
-																																																										.addComponent(
-																																																												wraparound))
-																																																												.addContainerGap(
-																																																														90,
-																																																														Short.MAX_VALUE))
-																																																														.addGroup(
-																																																																GroupLayout.Alignment.TRAILING,
-																																																																layout
-																																																																.createSequentialGroup()
-																																																																.addGroup(
-																																																																		layout
-																																																																		.createParallelGroup(
-																																																																				GroupLayout.Alignment.TRAILING)
-																																																																				.addComponent(
-																																																																						numCols,
-																																																																						GroupLayout.PREFERRED_SIZE,
-																																																																						46,
-																																																																						GroupLayout.PREFERRED_SIZE)
-																																																																						.addGroup(
-																																																																								layout
-																																																																								.createParallelGroup(
-																																																																										GroupLayout.Alignment.LEADING)
-																																																																										.addComponent(
-																																																																												twoBoards)
-																																																																												.addComponent(
-																																																																														numRows,
-																																																																														GroupLayout.PREFERRED_SIZE,
-																																																																														46,
-																																																																														GroupLayout.PREFERRED_SIZE)))
-																																																																														.addGap(
-																																																																																95,
-																																																																																95,
-																																																																																95))))
+										.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+												.addGroup(layout.createSequentialGroup()
+														.addComponent(numBoardsLabel, GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE)
+														.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+														.addComponent(oneBoard))
+														.addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+																.addComponent(dimensionsLabel, GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE)
+																.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+																.addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+																		.addComponent(numColsLabel)
+																		.addComponent(numRowsLabel))))
+																		.addGap(20, 20, 20))
+																		.addGroup(layout.createSequentialGroup()
+																				.addGap(105, 105, 105)
+																				.addComponent(backButton)
+																				.addComponent(submitButton))
+																				.addGroup(layout.createSequentialGroup()
+																						.addContainerGap()
+																						.addComponent(wraparoundLabel, GroupLayout.PREFERRED_SIZE, 144, GroupLayout.PREFERRED_SIZE)))
+																						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+																								.addGroup(layout.createSequentialGroup()
+																										.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+																												.addGroup(layout.createSequentialGroup()
+																														.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+																														.addComponent(wraparound)))
+																														.addContainerGap(10, Short.MAX_VALUE))
+																														.addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+																																.addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+																																		.addComponent(numCols, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
+																																		.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+																																				.addComponent(twoBoards)
+																																				.addComponent(numRows, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)))
+																																				.addGap(10, 10, 10))))
 		);
-		layout
-		.setVerticalGroup(
-				layout
-				.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addGroup(
-						layout
-						.createSequentialGroup()
-						.addGap(26, 26, 26)
+		layout.setVerticalGroup(
+				layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+				.addGroup(layout.createSequentialGroup()
+						.addGap(15, 15, 15)
 						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
 								.addComponent(numBoardsLabel)
 								.addComponent(oneBoard)
 								.addComponent(twoBoards))
 								.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-								.addGroup(
-										layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+								.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
 										.addComponent(dimensionsLabel)
 										.addComponent(numRowsLabel)
-										.addComponent(numRows, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-												.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-												.addGroup(
-														layout
-														.createParallelGroup(GroupLayout.Alignment.TRAILING)
-														.addGroup(
-																layout
-																.createSequentialGroup()
-																.addGroup(
-																		layout
-																		.createParallelGroup(
-																				GroupLayout.Alignment.BASELINE)
-																				.addComponent(numColsLabel)
-																				.addComponent(
-																						numCols,
-																						GroupLayout.PREFERRED_SIZE,
-																						GroupLayout.DEFAULT_SIZE,
-																						GroupLayout.PREFERRED_SIZE))
-																						.addGap(18, 18, 18)
-																						.addComponent(wraparound)
-																						.addGap(5, 5, 5))
-																						.addComponent(wraparoundLabel,
-																								GroupLayout.PREFERRED_SIZE,
-																								GroupLayout.DEFAULT_SIZE,
-																								GroupLayout.PREFERRED_SIZE))
-																								.addGap(66, 66, 66)
-																								.addGroup(
-																										layout.createParallelGroup(
-																												GroupLayout.Alignment.BASELINE)
-																												.addComponent(backButton)
-																												.addComponent(submitButton))
-																												.addContainerGap(49, Short.MAX_VALUE))
+										.addComponent(numRows, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+										.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+										.addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+												.addGroup(layout.createSequentialGroup()
+														.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+																.addComponent(numColsLabel)
+																.addComponent(numCols, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+																.addGap(5, 5, 5)
+																.addComponent(wraparound)
+																.addGap(5, 5, 5))
+																.addComponent(wraparoundLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+																.addGap(20, 20, 20)
+																.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+																		.addComponent(backButton)
+																		.addComponent(submitButton))
+																		.addContainerGap(15, Short.MAX_VALUE))
 		);
 	}
 

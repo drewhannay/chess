@@ -52,7 +52,7 @@ public class Square implements Serializable {
 	/**
 	 * Color indicating that a Square is a legal destination for moving pieces
 	 */
-	public static final Color HIGHLIGHT_COLOR = Color.ORANGE;
+	public static final Color HIGHLIGHT_COLOR = new Color(20, 129, 191);
 
 	/**
 	 * Constructor.

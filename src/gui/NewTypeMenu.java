@@ -1,15 +1,17 @@
 package gui;
 
+import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import javax.swing.GroupLayout;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.LayoutStyle;
-
 import logic.Builder;
 
 /**
@@ -17,11 +19,11 @@ import logic.Builder;
  * 
  * GUI to initiate the process of creating a new game type.
  * 
- * @author Drew Hannay & Daniel Opdyke
+ * @author Drew Hannay & Daniel Opdyke & John McCormick & Andrew Wolfe & Becca Meloy
  * 
  * CSCI 335, Wheaton College, Spring 2011
- * Phase 1
- * February 24, 2011
+ * Phase 2
+ * April 7, 2011
  */
 public class NewTypeMenu extends JPanel {
 
@@ -30,7 +32,6 @@ public class NewTypeMenu extends JPanel {
 	 */
 	private static final long serialVersionUID = 8365806731061105369L;
 
-	// Variables declaration - do not modify
 	/**
 	 * JButton to return to previous screen.
 	 */
@@ -48,8 +49,6 @@ public class NewTypeMenu extends JPanel {
 	 */
 	private JButton submitButton;
 
-	// End of variables declaration
-
 	/**
 	 * Constructor.
 	 * Call initComponents to initialize the GUI.
@@ -64,73 +63,65 @@ public class NewTypeMenu extends JPanel {
 	 * window. Also add any necessary ActionListeners.
 	 */
 	public void initComponents() {
-
-		//Create button and add ActionListener
+		
+		setBorder(BorderFactory.createLoweredBevelBorder());
+		
+		//Create button and add ActionListener for going back to main menu
 		backButton = new JButton("Back");
+		backButton.setToolTipText("Press me to go back to the Main Menu");
 		backButton.addActionListener(new ActionListener() {
 
-			@Override
 			public void actionPerformed(ActionEvent e) {
 				//Return to the main screen.
 				Driver.getInstance().revertPanel();
+				Driver.getInstance().variantHelp.setVisible(false);
 			}
 		});
 
+
 		//Create JLabel and JTextField.
-		nameLabel = new JLabel("Please enter a name for your new game type:");
-		nameField = new JTextField(40);
+		nameLabel = new JLabel(" Please enter a name for your new game type: ");
+		nameField = new JTextField(20);
 
 		//Create button and add ActionListener
-		submitButton = new JButton("Submit");
+		submitButton = new JButton("Next");
+		submitButton.setToolTipText("Press me to save this name");
 		submitButton.addActionListener(new ActionListener() {
 
-			@Override
 			public void actionPerformed(ActionEvent e) {
-				//TODO Increase the robustness here...they shouldn't be able to enter spaces as names.
-				if (!nameField.getText().equals("")) {
+				if(!nameField.getText().equals("") && !nameField.getText().equals(" ")){
 					//Make a new Builder with the given name and send it on to the next GUI class.
 					Builder b = new Builder(nameField.getText());
 					Driver.getInstance().setPanel(new BoardCustomMenu(b));
 				}
+				else{
+					JOptionPane.showMessageDialog(NewTypeMenu.this, "Please enter a name for this game");
+				}
 			}
 		});
 
-		//Layout stuff. Make it better later.
-		GroupLayout layout = new GroupLayout(this);
-		this.setLayout(layout);
-		layout.setHorizontalGroup(
-				layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-						.addGroup(layout.createSequentialGroup()
-								.addContainerGap(49, Short.MAX_VALUE)
-								.addComponent(nameLabel, GroupLayout.PREFERRED_SIZE, 330, GroupLayout.PREFERRED_SIZE)
-								.addGap(42, 42, 42))
-						.addGroup(layout.createSequentialGroup()
-								.addGap(59, 59, 59)
-								.addComponent(nameField, GroupLayout.PREFERRED_SIZE, 269, GroupLayout.PREFERRED_SIZE)
-								.addContainerGap(72, Short.MAX_VALUE))
-								.addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-										.addContainerGap(133, Short.MAX_VALUE)
-										.addComponent(submitButton)
-										.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-										.addComponent(backButton)
-										.addGap(160, 160, 160))
-				);
-		layout.setVerticalGroup(
-				layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-						.addGroup(
-								GroupLayout.Alignment.TRAILING,
-								layout.createSequentialGroup()
-										.addContainerGap(141, Short.MAX_VALUE)
-										.addComponent(nameLabel)
-										.addGap(18, 18, 18)
-										.addComponent(nameField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-												GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-										.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-												.addComponent(submitButton)
-												.addComponent(backButton))
-										.addGap(56, 56, 56))
-				);
+		JPanel buttons = new JPanel();
+		buttons.setLayout(new FlowLayout());
+		buttons.add(backButton);
+		buttons.add(submitButton);
+		
+		//Layout stuff. Don't. Ask.
+		setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		
+		c.insets = new Insets(3,3,3,3);
+		c.gridx = 0;
+		c.gridy = 0;
+		add(nameLabel, c);
 
+		c.insets = new Insets(3,3,3,3);
+		c.gridx = 0;
+		c.gridy = 1;
+		add(nameField, c);
+		
+		c.gridx = 0;
+		c.gridy = 2;
+		add(buttons, c);
+		
 	}
 }

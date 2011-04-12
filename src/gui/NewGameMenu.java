@@ -235,7 +235,7 @@ public class NewGameMenu extends JPanel {
 														.addGroup(
 																layout
 																		.createSequentialGroup()
-																		.addGap(83, 83, 83)
+																		.addGap(20, 20, 20)
 																		.addGroup(
 																				layout
 																						.createParallelGroup(
@@ -256,9 +256,9 @@ public class NewGameMenu extends JPanel {
 																								234,
 																								GroupLayout.PREFERRED_SIZE)))
 														.addGroup(layout.createSequentialGroup()
-																.addGap(178, 178, 178)
+																.addGap(112, 112, 112)
 																.addComponent(backButton)))
-														.addContainerGap(83, Short.MAX_VALUE))
+														.addContainerGap(20, Short.MAX_VALUE))
 				);
 		layout.setVerticalGroup(
 				layout.createParallelGroup(GroupLayout.Alignment.LEADING)

@@ -1,9 +1,13 @@
 package gui;
 
 import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -132,18 +136,18 @@ public class PlayerCustomMenu extends JPanel {
 	private void initComponents(final Rules whiteRules, final Rules blackRules) {
 
 		//Set the layout and size of this JPanel.
-		setLayout(new FlowLayout());
-		setSize(100, 200);
+		setBorder(BorderFactory.createLoweredBevelBorder());
+
 
 		//Create JLabels and JTextFields.
 		numTurnsOneLabel = new JLabel("<html>How many turns in a <br/> " +
-				"row for White?</html>");
+				"row for White? </html>");
 		numTurnsTwoLabel = new JLabel("<html>How many turns in a <br/> " +
-				"row for Black?</html>");
+				"row for Black? </html>");
 		numTurnsOne = new JTextField(4);
 		numTurnsTwo = new JTextField(4);
 		incrementTurnsLabel = new JLabel("<html>Increase turns by <br/>" +
-				"how much each round?");
+				"how many each round?");
 		incrementTurns = new JTextField(4);
 
 		//Create button and add ActionListener
@@ -170,87 +174,49 @@ public class PlayerCustomMenu extends JPanel {
 			}
 		});
 
-		GroupLayout layout = new GroupLayout(this);
-		this.setLayout(layout);
-		// Maybe put borders around all of the pages.
-		//this.setBorder(BorderFactory.createEtchedBorder(Color.BLACK, Color.BLACK));
-		layout.setHorizontalGroup(
-				layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-						.addGroup(
-								layout.createSequentialGroup()
-										.addGap(45, 45, 45)
-										.addGroup(
-												layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-														.addComponent(numTurnsTwoLabel,
-																javax.swing.GroupLayout.DEFAULT_SIZE, 141,
-																Short.MAX_VALUE)
-														.addComponent(numTurnsOneLabel,
-																javax.swing.GroupLayout.DEFAULT_SIZE, 141,
-																Short.MAX_VALUE)
-														.addComponent(incrementTurnsLabel,
-																javax.swing.GroupLayout.DEFAULT_SIZE, 141,
-																Short.MAX_VALUE))
-										.addGap(29, 29, 29)
-										.addGroup(
-												layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING,
-														false)
-														.addComponent(numTurnsOne,
-																javax.swing.GroupLayout.Alignment.LEADING)
-														.addComponent(numTurnsTwo,
-																javax.swing.GroupLayout.Alignment.LEADING)
-														.addComponent(incrementTurns,
-																javax.swing.GroupLayout.Alignment.LEADING))
-										.addGap(91, 91, 91))
-										.addGroup(layout.createSequentialGroup()
-												.addGap(114, 114, 114)
-												.addComponent(submitButton)
-												.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-												.addComponent(backButton)
-												.addGap(130, 130, 130))
-				);
-		layout.setVerticalGroup(
-				layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-						.addGroup(
-								layout.createSequentialGroup()
-										.addGap(90, 90, 90)
-										.addGroup(
-												layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-														.addComponent(numTurnsOne,
-																javax.swing.GroupLayout.PREFERRED_SIZE,
-																javax.swing.GroupLayout.DEFAULT_SIZE,
-																javax.swing.GroupLayout.PREFERRED_SIZE)
-														.addComponent(numTurnsOneLabel,
-																javax.swing.GroupLayout.PREFERRED_SIZE, 47,
-																javax.swing.GroupLayout.PREFERRED_SIZE))
-										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-										.addGroup(
-												layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-														.addComponent(numTurnsTwo,
-																javax.swing.GroupLayout.PREFERRED_SIZE,
-																javax.swing.GroupLayout.DEFAULT_SIZE,
-																javax.swing.GroupLayout.PREFERRED_SIZE)
-														.addComponent(numTurnsTwoLabel,
-																javax.swing.GroupLayout.PREFERRED_SIZE, 50,
-																javax.swing.GroupLayout.PREFERRED_SIZE))
-										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-										.addGroup(
-												layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-														.addComponent(incrementTurns,
-																javax.swing.GroupLayout.PREFERRED_SIZE,
-																javax.swing.GroupLayout.DEFAULT_SIZE,
-																javax.swing.GroupLayout.PREFERRED_SIZE)
-														.addComponent(incrementTurnsLabel,
-																javax.swing.GroupLayout.PREFERRED_SIZE, 50,
-																javax.swing.GroupLayout.PREFERRED_SIZE))
-											.addGap(40, 40, 40)
-											.addGroup(
-													layout.createParallelGroup(
-															javax.swing.GroupLayout.Alignment.BASELINE)
-															.addComponent(submitButton)
-															.addComponent(backButton))
-													.addGap(43, 43, 43))
-				);
-
+		JPanel buttons = new JPanel();
+		buttons.setLayout(new FlowLayout());
+		buttons.add(backButton);
+		buttons.add(submitButton);
+		
+		setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		
+		c.insets = new Insets(3,3,3,3);
+		c.gridx = 0;
+		c.gridy = 0;
+		add(numTurnsOneLabel, c);
+		
+		c.insets = new Insets(3,3,3,3);
+		c.gridx = 2;
+		c.gridy = 0;
+		add(numTurnsOne, c);
+		
+		c.insets = new Insets(3,3,3,3);
+		c.gridx = 0;
+		c.gridy = 1;
+		add(numTurnsTwoLabel, c);
+		
+		c.insets = new Insets(3,3,3,3);
+		c.gridx = 2;
+		c.gridy = 1;
+		add(numTurnsTwo, c);
+		
+		c.insets = new Insets(3,3,3,3);
+		c.gridx = 0;
+		c.gridy = 2;
+		add(incrementTurnsLabel, c);
+		
+		c.insets = new Insets(3,3,3,3);
+		c.gridx = 2;
+		c.gridy = 2;
+		add(incrementTurns, c);
+		
+		c.gridwidth = 3;
+		c.gridx = 0;
+		c.gridy = 3;
+		add(buttons, c);
+		
 	}
 
 }

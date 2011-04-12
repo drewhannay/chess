@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -14,7 +15,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
-import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -296,7 +296,9 @@ public class PlayGame extends JPanel {
 		}
 		// Highlight the name labels if it's their turn.
 		whiteLabel.setBackground(g.isBlackMove() ? null : Square.HIGHLIGHT_COLOR);
+		whiteLabel.setForeground(g.isBlackMove() ? Color.black : Color.white); 
 		blackLabel.setBackground(g.isBlackMove() ? Square.HIGHLIGHT_COLOR : null);
+		blackLabel.setForeground(g.isBlackMove() ? Color.white : Color.black);
 
 	}
 
@@ -388,20 +390,8 @@ public class PlayGame extends JPanel {
 	/**
 	 * @return The Menu bar for the GUI
 	 */
-	public JMenuBar createMenu() {
-		JMenuBar menuBar = new JMenuBar();
+	public JMenu createMenu() {
 		JMenu menu = new JMenu("Menu");
-		JMenuItem mainItem = new JMenuItem("Main Menu");
-
-		mainItem.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Driver.getInstance().revertPanel();
-			}
-		});
-
-		menu.add(mainItem);
 
 		if (!isPlayback) {
 
@@ -436,9 +426,8 @@ public class PlayGame extends JPanel {
 			menu.add(saveItem);
 
 		}
-		menuBar.add(menu);
 
-		return menuBar;
+		return menu;
 	}
 
 	/**
@@ -447,9 +436,13 @@ public class PlayGame extends JPanel {
 	 * window. Also add any necessary ActionListeners.
 	 * @param isPlayback whether PlayGame is in playback mode
 	 */
+	@SuppressWarnings("static-access")
 	private void initComponents(boolean isPlayback) {
 		// Has spaces to hax0r fix centering.
-		inCheck = new JLabel("                You're In Check!");
+		inCheck = new JLabel("You're In Check!");
+		inCheck.setHorizontalTextPosition(inCheck.CENTER);
+		inCheck.setForeground(Color.RED);
+		
 		JButton undoItem = new JButton("Undo");
 		undoItem.addActionListener(new ActionListener() {
 
