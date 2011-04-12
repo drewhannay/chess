@@ -41,10 +41,6 @@ public class JailSquare implements Serializable {
 	 * Column Index of Square
 	 */
 	private int col;//Rank
-	/**
-	 * This highlights the squares on the smaller board for when they are being placed.
-	 */
-	public static final Color HIGHLIGHT_COLOR = Color.ORANGE;
 
 	/**
 	 * @param row the row of the Jail objects
