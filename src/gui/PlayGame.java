@@ -213,12 +213,12 @@ public class PlayGame extends JPanel {
 	public PlayGame(Game g, boolean isPlayback) {
 		PlayGame.g = g;
 		PlayGame.isPlayback = isPlayback;
-		initComponents(isPlayback);
 		if(isPlayback){
 			PlayGame.whiteTimer = new NoTimer();
 			PlayGame.blackTimer = new NoTimer();
 			history = new Move[g.getHistory().size()];
 			g.getHistory().toArray(history);
+			initComponents(isPlayback);
 			index = history.length-1;
 			while(index>=0){
 				history[index].undo();
@@ -234,6 +234,7 @@ public class PlayGame extends JPanel {
 			turn(g.isBlackMove());
 			history = null;
 			index = -3;
+			initComponents(isPlayback);
 		}
 		boardRefresh(g.getBoards());
 	}
