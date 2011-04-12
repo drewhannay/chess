@@ -8,6 +8,7 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.List;
 
@@ -396,8 +397,8 @@ public class PlayGame extends JPanel {
 
 		if (!isPlayback) {
 
-			JMenuItem drawItem = new JMenuItem("Declare Draw");
-			JMenuItem saveItem = new JMenuItem("Save & Quit");
+			JMenuItem drawItem = new JMenuItem("Declare Draw", KeyEvent.VK_D);
+			JMenuItem saveItem = new JMenuItem("Save & Quit", KeyEvent.VK_S);
 
 			drawItem.addActionListener(new ActionListener() {
 

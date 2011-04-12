@@ -123,7 +123,7 @@ public class JailSquare implements Serializable {
 	 */
 	public void setColor(Color c) {
 		jb.setBackground(c);//Use the given Color for the background
-		jb.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+		jb.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		if (c != Square.HIGHLIGHT_COLOR) {
 			//If the Color is the highlight color, then change is only temporary. Don't store it.
 			background = c;

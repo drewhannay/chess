@@ -102,7 +102,7 @@ final public class Driver extends JFrame {
 	/**
 	 * Menu to hold the options created in playGame for saving and such in game.
 	 */
-	private JMenu gameOptions;
+	public JMenu gameOptions;
 
 	/**
 	 * Initiate the program by creating a new Driver.
@@ -424,7 +424,8 @@ final public class Driver extends JFrame {
 				gameInfo.setVisible(false);
 				gamePlayHelp.setVisible(false);
 				completedHelp.setVisible(false);
-				gameOptions.setVisible(false);
+				if(gameOptions != null)
+					gameOptions.setVisible(false);
 				remove(otherPanel);
 				add(mainPanel);
 				pack();
@@ -434,7 +435,7 @@ final public class Driver extends JFrame {
 		fileMenu.add(mainMenu);
 
 		//Adds menu item to quit the program
-		JMenuItem exitMenuItem = new JMenuItem("Quit",KeyEvent.VK_E);
+		JMenuItem exitMenuItem = new JMenuItem("Quit",KeyEvent.VK_Q);
 		exitMenuItem.setToolTipText("Press to close the program");
 		exitMenuItem.addActionListener(new ActionListener() {
 

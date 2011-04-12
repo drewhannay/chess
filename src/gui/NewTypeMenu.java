@@ -73,8 +73,9 @@ public class NewTypeMenu extends JPanel {
 
 			public void actionPerformed(ActionEvent e) {
 				//Return to the main screen.
-				Driver.getInstance().revertPanel();
 				Driver.getInstance().variantHelp.setVisible(false);
+				Driver.getInstance().helpMenu.setText("Help");
+				Driver.getInstance().revertPanel();
 			}
 		});
 
