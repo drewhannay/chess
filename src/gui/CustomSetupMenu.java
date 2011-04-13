@@ -14,6 +14,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -103,14 +105,20 @@ public class CustomSetupMenu extends JPanel {
 
 			//Create the pop up and set the size, location and layout.
 			final JFrame popup = new JFrame("Create Piece");
-			popup.setSize(370, 300);
+			popup.setSize(350,470);
 			popup.setLocationRelativeTo(null);
 			popup.setLayout(new FlowLayout());
+			popup.setResizable(false);
 
 			//Add a JLabel and JTextField for the Piece name.
 			popup.add(new JLabel("Piece Name:"));
 			final JTextField name = new JTextField(15);
 			popup.add(name);
+			
+			final JPanel lightIconPanel = new JPanel();
+			final JButton lightIconButton = new JButton();
+			lightIconButton.setSize(48, 48);
+			lightIconPanel.add(lightIconButton);
 
 			//Add JButtons for choosing the images for the new type.
 			final JButton chooseLightImage = new JButton("Choose image for light piece");
@@ -118,65 +126,53 @@ public class CustomSetupMenu extends JPanel {
 
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					//Create the JFileChooser
-					final JFileChooser fc = new JFileChooser();
+					//Create the JFileChooser and add image for the new piece
+					final JFileChooser fc = new JFileChooser("./images"); //default directory is in the images folder
 					int returnVal = fc.showOpenDialog(CustomSetupMenu.this);
 					if (returnVal == JFileChooser.APPROVE_OPTION) {
-						//If a valid File was chosen, make an ImageIcon from the file path.
-						String file = fc.getSelectedFile().getAbsolutePath();
-						ImageIcon icon = new ImageIcon(file);
-						//Scale the image to 48x48.
-						icon.setImage(icon.getImage().getScaledInstance(48, 48, Image.SCALE_SMOOTH));
+						ImageIcon icon = makeIcon(fc, builder);
+						lightIconButton.setIcon(icon); //Adds icon to button
 						builder.setLightImage(icon);
-						//TODO Do something to show the user that they've already selected an image
 					}
 				}
 			});
 			popup.add(chooseLightImage);
+			popup.add(lightIconPanel);
 
+			final JPanel darkIconPanel = new JPanel();
+			final JButton darkIconButton = new JButton();
+			darkIconButton.setSize(48, 48);
+			darkIconPanel.add(darkIconButton);
+			
 			final JButton chooseDarkImage = new JButton("Choose image for dark piece");
 			chooseDarkImage.addActionListener(new ActionListener() {
 
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					//Create the JFileChooser
-					final JFileChooser fc = new JFileChooser();
+					//Create the JFileChooser and add image for the new piece
+					final JFileChooser fc = new JFileChooser("./images"); //default directory is in the images folder
 					int returnVal = fc.showOpenDialog(CustomSetupMenu.this);
 					if (returnVal == JFileChooser.APPROVE_OPTION) {
-						//If a valid File was chosen, make an ImageIcon from the file path.
-						String file = fc.getSelectedFile().getAbsolutePath();
-						ImageIcon icon = new ImageIcon(file);
-						//Scale the image to 48x48.
-						icon.setImage(icon.getImage().getScaledInstance(48, 48, Image.SCALE_SMOOTH));
+						ImageIcon icon = makeIcon(fc, builder);
+						darkIconButton.setIcon(icon); //Adds icon to button
 						builder.setDarkImage(icon);
-						//TODO Do something to show the user that they've already selected an image
 					}
 				}
 			});
 			popup.add(chooseDarkImage);
+			popup.add(darkIconPanel);
 
 			//Add components for collecting the directions of movement.
-			popup.add(new JLabel("Direction of Movement:"));
-			final JComboBox dropdown = new JComboBox(new String[] { "North", "South", "East", "West",
-					"Northeast", "Northwest", "Southeast", "Southwest" });
-			popup.add(dropdown);
+
+			final JComboBox dropdown = new JComboBox(new String[]{"North","Northeast","East","Southeast", "South","Southwest","West","Northwest"});
 
 			//Collect max distance of movement, -1 for infinity.
-			popup.add(new JLabel("Max Distance of Movement:"));
 			final JTextField dist = new JTextField(3);
-			popup.add(dist);
-			//TODO Show the user instructions for 
-
-			//Decide if this piece is the objective of the game.
-			//TODO Flesh this out more. Currently doesn't really do anything.
-			popup.add(new JLabel("Objective of game?"));
-			final JCheckBox objective = new JCheckBox();
-			ButtonGroup group = new ButtonGroup();
-			group.add(objective);
-			popup.add(objective);
-
-			//Create button and add ActionListener
-			final JButton addInstruction = new JButton("Add Instruction to Piece");
+			dist.setToolTipText("Greatest amount of spaces piece can travel in chosen direction");
+			
+			//Create button and add ActionListener for adding movement directions to a piece
+			final JButton addInstruction = new JButton("Add Movement Directions to this Piece");
+			addInstruction.setToolTipText("Pressing this will add movement direction and max distance in that direction.");
 			addInstruction.addActionListener(new ActionListener() {
 
 				@Override
@@ -232,6 +228,22 @@ public class CustomSetupMenu extends JPanel {
 			});
 			popup.add(addInstruction);
 
+			
+			//Setting up a panel handle movement instructions 
+			JPanel movementSetup = new JPanel();
+			movementSetup.setLayout(new BoxLayout(movementSetup,BoxLayout.Y_AXIS));
+			movementSetup.setBorder(BorderFactory.createTitledBorder("Movement Setup")); //Setting up border for movement panel
+			movementSetup.setLayout(new GridLayout(5,1));
+			
+			//Adds options and labels for setting up movement for the new piece
+			movementSetup.add(new JLabel("Direction of Movement:"));
+			movementSetup.add(dropdown);
+			movementSetup.add(new JLabel("Max Distance of Movement:"));
+			movementSetup.add(dist);
+			movementSetup.add(addInstruction);
+
+			popup.add(movementSetup);
+			
 			//Create button and add ActionListener
 			final JButton done = new JButton("Save Piece Type & Quit");
 			done.addActionListener(new ActionListener() {
@@ -254,6 +266,22 @@ public class CustomSetupMenu extends JPanel {
 				}
 			});
 			popup.add(done);
+			final JButton help = new JButton("Help");
+			help.addActionListener(new ActionListener(){
+
+				public void actionPerformed(ActionEvent arg0) {
+					JOptionPane.showMessageDialog(CustomSetupMenu.this, 
+							"Please enter the specific movement capabilities that you want for this piece.\n" +
+							"To add instructions for one direction choose that direction from the drop down menu,\n" +
+							"then fill in the farthest distance you would like it to move in that direction.\n" + 
+							"When you are finished press the \"Add Movement\" button to add it to the piece.\n" + 
+							"Repeat this process for each direction you would like the piece to move.\n" +
+							"When you have finished adding movements to the piece press Save and Quit.\n"+
+							"This piece will then be available for reuse from the piece selection screen.\n", "Help", 1);
+				}
+				
+			});
+			popup.add(help);
 
 			//Create button and add ActionListener
 			final JButton cancel = new JButton("Cancel");
@@ -403,9 +431,10 @@ public class CustomSetupMenu extends JPanel {
 		private void options() {
 			//Create the pop up and set the size, location and layout.
 			final JFrame popup = new JFrame("Customize");
-			popup.setSize(370, 300);
+			popup.setSize(300, 160);
 			popup.setLocationRelativeTo(null);
 			popup.setLayout(new FlowLayout());
+			popup.setResizable(false);
 
 			//Create button and add ActionListener
 			final JButton squareButton = new JButton("Customize options for this square");
@@ -436,6 +465,20 @@ public class CustomSetupMenu extends JPanel {
 				}
 			});
 			popup.add(makePiece);
+			
+			//Button to remove a piece that has been placed on the board
+			final JButton removePiece = new JButton("Remove Piece");
+			removePiece.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent arg0) {
+						square.setPiece(null);
+						square.refresh();
+						popup.dispose();
+				}
+			});
+			//Only lets the button work if there is a piece there
+			if(square.isOccupied()) removePiece.setEnabled(true);
+			else removePiece.setEnabled(false);
+			popup.add(removePiece);
 
 			//Finally, set the pop up to visible.
 			popup.setVisible(true);
@@ -560,6 +603,8 @@ public class CustomSetupMenu extends JPanel {
 		//Set the layout of this JPanel.
 		setLayout(new FlowLayout());
 
+		setBorder(BorderFactory.createLoweredBevelBorder());
+		
 		//Get the array of boards from the builder so we can modify it.
 		final Board[] boards = b.getBoards();
 
@@ -876,5 +921,21 @@ public class CustomSetupMenu extends JPanel {
 		add(submitButton);
 		add(advancedButton);
 	}
-
+	/**
+	 * Makes the icon for the for the new piece
+	 * @param fc The file chooser to select the piece
+	 * @param builder The builder that is building the piece
+	 * @return the icon to add to the button displaying the icon for the new piece
+	 */
+	public ImageIcon makeIcon(JFileChooser fc, PieceBuilder builder){
+		//If a valid File was chosen, make an ImageIcon from the file path.
+		String file = fc.getSelectedFile().getAbsolutePath();
+		
+		// default center section
+		ImageIcon icon = new ImageIcon(file);
+		//Scale the image to 48x48.
+		icon.setImage(icon.getImage().getScaledInstance(48, 48, Image.SCALE_SMOOTH));
+		builder.setLightImage(icon);
+		return icon;
+	}
 }

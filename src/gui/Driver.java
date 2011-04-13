@@ -456,7 +456,7 @@ final public class Driver extends JFrame {
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weightx = 0.0;
-		c.gridwidth = 2;
+		c.gridwidth = 3;
 		c.gridx = 0;
 		c.gridy = 0;
 		mainPanel.add(pictureHolder, c); //adding the front page image
@@ -465,12 +465,11 @@ final public class Driver extends JFrame {
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.gridy = 1;
-		c.gridwidth = 1;
+		c.gridwidth = 2;
 		mainPanel.add(newGame, c); //adding the New Game button
 
 		//Create new game type
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 1;
+		c.gridx = 2;
 		c.gridy = 1;
 		c.gridwidth = 1;
 		mainPanel.add(createType, c); //Adding variant creation button
@@ -479,12 +478,11 @@ final public class Driver extends JFrame {
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.gridy = 2;
-		c.gridwidth = 1;
+		c.gridwidth = 2;
 		mainPanel.add(continueGame, c); //Adds the load game button
 
 		//View Completed
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 1;       //aligned with button 2
+		c.gridx = 2;       //aligned with button 2
 		c.gridy = 2;       //third row
 		c.gridwidth = 1;
 		mainPanel.add(viewGame, c); //Adds the completed games button

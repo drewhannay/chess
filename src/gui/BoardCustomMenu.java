@@ -126,6 +126,17 @@ public class BoardCustomMenu extends JPanel {
 					"Invalid Submission", JOptionPane.INFORMATION_MESSAGE);
 			return false;
 		}
+		try{
+			int a = Integer.parseInt(numRows.getText());
+			int b = Integer.parseInt(numCols.getText());
+			if (twoBoards.isSelected() && (a < 3 || b < 3 || a > 10 || b > 10))
+				throw new Exception();
+		}catch(Exception e){
+			JOptionPane.showMessageDialog(null,
+					"Enter a valid number between 3 and 10 for the dimensions of the board.",
+					"Invalid Submission", JOptionPane.INFORMATION_MESSAGE);
+			return false;
+		}
 		return true;
 	}
 
