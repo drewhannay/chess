@@ -10,9 +10,11 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
+import logic.Board;
 import logic.Game;
 import logic.Move;
 import logic.Piece;
+import logic.Square;
 
 /**
  * AfterMove.java
@@ -67,12 +69,14 @@ public class AfterMove implements Serializable {
 			doMethods.put("goHome", AfterMove.class.getMethod("goHome", Move.class));
 			doMethods.put("placeCapturedSwitch",AfterMove.class.getMethod("placeCapturedSwitch",Move.class));
 			doMethods.put("placeCaptured",AfterMove.class.getMethod("placeCaptured",Move.class));
+			doMethods.put("atomicCapture",AfterMove.class.getMethod("atomicCapture",Move.class));
 			
 			undoMethods.put("placeCapturedSwitch",AfterMove.class.getMethod("undoPlaceCapturedSwitch",Move.class));
 			undoMethods.put("placeCaptured",AfterMove.class.getMethod("undoPlaceCaptured",Move.class));
 			undoMethods.put("classic", AfterMove.class.getMethod("classicUndo", Move.class));
 			undoMethods.put("captureTeamSwap", AfterMove.class.getMethod("captureTeamSwap", Move.class));
 			undoMethods.put("goHome", AfterMove.class.getMethod("undoGoHome", Move.class));
+			undoMethods.put("atomicCapture", AfterMove.class.getMethod("undoAtomicCapture", Move.class));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -309,6 +313,74 @@ public class AfterMove implements Serializable {
 		}
 		m.getCaptured().getSquare().setPiece(m.getRemoved());
 		m.getDest().setPiece(restore);
+	}
+	
+	/**
+	 * Capture removes pieces from 8 surrounding squares, including
+	 * the capturing piece - with the exception of pawns, unless the pawn
+	 * is either the captured piece or the capturer.
+	 * @param m The move performed.
+	 */
+	public void atomicCapture(Move m){
+		if(m.getCaptured()==null) return;
+		Piece captured = m.getCaptured();
+		Piece suicide = m.getPiece();
+		Square curSquare = captured.getSquare();
+		Board board = captured.getBoard();
+		Square[] squares = new Square[9];
+		int n = 0;
+		boolean wraparound = board.isWraparound();
+		int upperCol = curSquare.getCol() + 1;
+		for (int i = curSquare.getRow() - 1; i <= 1 + curSquare.getRow(); i++) {
+			for (int j = curSquare.getCol() - 1; j <= upperCol; j++) {
+				upperCol = curSquare.getCol() + 1;
+				if (board.isRowValid(i)) {
+					if (!wraparound && !board.isColValid(j)) {
+						continue;
+					}
+					int k = j;
+					if (k < 1) {
+						k = board.getMaxCol();
+						upperCol = board.getMaxCol() + 1;
+					} else if (k > board.getMaxCol()) {
+						k = 1;
+					}
+					squares[n++] = board.getSquare(i, k);
+				}
+			}
+		}
+		ArrayList<Piece> exploded = new ArrayList<Piece>();
+		for(Square s: squares){
+			if(s==null) continue;
+			Piece p = s.getPiece();
+			if(p!=null&&(!(p.getName().equals("Pawn"))&&p!=suicide)&&p!=captured){
+				exploded.add(p);
+				p.setCaptured(true);
+				p.getSquare().setPiece(null);
+			}
+		}
+		exploded.add(suicide);
+		suicide.setCaptured(true);
+		suicide.getSquare().setPiece(null);
+		Piece[] toReturn = new Piece[exploded.size()];
+		m.setExploded(exploded.toArray(toReturn));
+	}
+	
+	/**
+	 * Undo atomicCapture
+	 * @param m The move performed.
+	 */
+	public void undoAtomicCapture(Move m){
+		if(m.getCaptured() == null) return;
+		else{
+			Piece[] exploded = m.getExploded();
+			for(Piece p: exploded){
+				p.setCaptured(false);
+				p.getSquare().setPiece(p);
+			}
+			exploded[exploded.length-1].setMoveCount(exploded[exploded.length-1].getMoveCount()-1);
+			m.setExploded(null);
+		}
 	}
 
 }

@@ -230,6 +230,7 @@ public class Board implements Serializable {
 			m.undo();
 		} catch (Exception e) {
 			System.out.println("Illegal Move " + e.getMessage());
+			e.printStackTrace();
 			return false;
 		}
 		return true;

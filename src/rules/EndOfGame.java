@@ -147,6 +147,7 @@ public class EndOfGame implements Serializable {
 	 * @param objectivePiece The objective piece.
 	 */
 	public void classicEndOfGame(Piece objectivePiece) {
+
 		if (g.getLegalMoveCount() == 0
 				|| (g.isBlackMove() ? g.getBlackRules() : g.getWhiteRules()).objectivePiece(g.isBlackMove())
 						.isCaptured()) {

@@ -141,6 +141,10 @@ public class Move implements Serializable {
 	 * The old position of the square, if placed by opponent.
 	 */
 	private Square oldPos;
+	/**
+	 * The pieces caught up in a potential atomic explosion.
+	 */
+	private Piece[] exploded;
 
 	/**
 	 * Constructor
@@ -580,8 +584,8 @@ public class Move implements Serializable {
 			(board.isBlackTurn() ? board.getGame().getBlackRules() : board.getGame().getWhiteRules())
 			.undoPromote(promotion);
 		}
-
-		getDest().getPiece().setMoveCount(getDest().getPiece().getMoveCount() - 1);
+		if(getDest().getPiece()!=null)
+			getDest().getPiece().setMoveCount(getDest().getPiece().getMoveCount() - 1);
 
 		origin.setPiece(getDest().setPiece(null));
 		getPiece().setSquare(origin);
@@ -621,5 +625,19 @@ public class Move implements Serializable {
 	 */
 	public Square getOldPos(){
 		return oldPos;
+	}
+	/**
+	 * Setter for exploded
+	 * @param pieces The new value for exploded.
+	 */
+	public void setExploded(Piece[] pieces){
+		exploded = pieces;
+	}
+	/**
+	 * Getter for exploded.
+	 * @return exploded
+	 */
+	public Piece[] getExploded(){
+		return exploded;
 	}
 }
