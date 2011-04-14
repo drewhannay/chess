@@ -103,6 +103,7 @@ public class NextTurn implements Serializable {
 	 * @return Whose turn it is.
 	 */
 	public boolean classicNextTurn() {
+		
 		isBlackMove = !isBlackMove;
 		PlayGame.turn(isBlackMove);
 

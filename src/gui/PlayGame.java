@@ -44,7 +44,10 @@ import timer.NoTimer;
  * February 25, 2011
  */
 public class PlayGame extends JPanel {
-
+	/**
+	 * If the next move will place a piece.
+	 */
+	private static boolean mustPlace;
 	/**
 	 * ButtonListener
 	 * 
@@ -64,6 +67,7 @@ public class PlayGame extends JPanel {
 		 */
 		private Board b;
 
+
 		/**
 		 * Constructor.
 		 * Attaches a Square to this ButtonListener
@@ -82,6 +86,20 @@ public class PlayGame extends JPanel {
 		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			if(mustPlace){
+				mustPlace = false;
+				g.nextTurn();
+				if(!clickedSquare.isOccupied()&&clickedSquare.isHabitable()&&placePiece!=null){
+				placePiece.setSquare(clickedSquare);
+				clickedSquare.setPiece(placePiece);
+				placePiece = null;
+				mustPlace = false;
+				boardRefresh(g.getBoards());
+				g.genLegalDests();
+				}
+				
+				return;
+			}
 			if (mustMove && clickedSquare == storedSquare) {
 				boardRefresh(g.getBoards());
 				mustMove = false;
@@ -128,7 +146,7 @@ public class PlayGame extends JPanel {
 	/**
 	 * Boolean indicating if this piece must move before another may be selected
 	 */
-	private boolean mustMove;
+	private static boolean mustMove;
 	/**
 	 * Timer for the white team
 	 */
@@ -179,6 +197,11 @@ public class PlayGame extends JPanel {
 	 * This keeps the current place in the Move[] array during games.
 	 */
 	private static int index;
+
+	/**
+	 * The piece to place upon clicking.
+	 */
+	private static Piece placePiece;
 
 	/**
 	 * @param isPlayback whether PlayGame is in playback mode
@@ -735,5 +758,25 @@ public class PlayGame extends JPanel {
 		c.gridx = 11 + ifDouble;
 		this.add(whiteLabel, c);
 	}
-
+	/**
+	 * Set the mustPlace variable.
+	 * @param b The new value for mustPlace.
+	 */
+	public static void setMustPlace(boolean b){
+		mustPlace = b;
+	}
+	/**
+	 * Getter for mustPlace
+	 * @return mustPlace
+	 */
+	public static boolean getMustPlace() {
+		return mustPlace;
+	}
+	/**
+	 * Setter for placePiece
+	 * @param p The new value for Piece
+	 */
+	public static void setPlacePiece(Piece p){
+		placePiece = p;
+	}
 }

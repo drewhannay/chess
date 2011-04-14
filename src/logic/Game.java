@@ -84,6 +84,7 @@ public class Game implements Serializable {
 	 * Reference to the last completed move.
 	 */
 	private Move lastMove = null;
+	
 
 	/**
 	 * Constructor. Initializes and saves state of Game information.

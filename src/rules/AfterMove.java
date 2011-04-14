@@ -1,10 +1,14 @@
 package rules;
 
+import gui.PlayGame;
+
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import javax.swing.JOptionPane;
 
 import logic.Game;
 import logic.Move;
@@ -61,6 +65,11 @@ public class AfterMove implements Serializable {
 			doMethods.put("classic", AfterMove.class.getMethod("classicAfterMove", Move.class));
 			doMethods.put("captureTeamSwap", AfterMove.class.getMethod("captureTeamSwap", Move.class));
 			doMethods.put("goHome", AfterMove.class.getMethod("goHome", Move.class));
+			doMethods.put("placeCapturedSwitch",AfterMove.class.getMethod("placeCapturedSwitch",Move.class));
+			doMethods.put("placeCaptured",AfterMove.class.getMethod("placeCaptured",Move.class));
+			
+			undoMethods.put("placeCapturedSwitch",AfterMove.class.getMethod("undoPlaceCapturedSwitch",Move.class));
+			undoMethods.put("placeCaptured",AfterMove.class.getMethod("undoPlaceCaptured",Move.class));
 			undoMethods.put("classic", AfterMove.class.getMethod("classicUndo", Move.class));
 			undoMethods.put("captureTeamSwap", AfterMove.class.getMethod("captureTeamSwap", Move.class));
 			undoMethods.put("goHome", AfterMove.class.getMethod("undoGoHome", Move.class));
@@ -155,7 +164,6 @@ public class AfterMove implements Serializable {
 		//If there was a piece on the original square, save it so we can put it back there if we undo.
 		m.setRemoved(toHome.getOriginalSquare().getPiece());
 		if (m.getRemoved() != null) {
-			System.out.println(m.getRemoved().toString());
 			(m.getRemoved().isBlack() ? g.getBlackTeam() : g.getWhiteTeam()).remove(m.getRemoved());
 		}
 
@@ -164,6 +172,99 @@ public class AfterMove implements Serializable {
 		toHome.setCaptured(false);
 	}
 
+	/**
+	 * The capturer places the captured piece, and the
+	 * captured piece changes color.
+	 * @param m The move just performed.
+	 */
+	public void placeCapturedSwitch(Move m){
+		if(m.getCaptured()==null)
+			return;
+		Piece toPlace = m.getCaptured();
+		toPlace.getLegalDests().clear();
+		toPlace.getGuardSquares().clear();
+		toPlace.setPinnedBy(null);
+		(toPlace.isBlack() ? g.getBlackTeam() : g.getWhiteTeam()).remove(toPlace);
+		(!toPlace.isBlack() ? g.getBlackTeam() : g.getWhiteTeam()).add(toPlace);
+		toPlace.setBlack(!toPlace.isBlack());
+		toPlace.setCaptured(false);
+		m.setOldPos(toPlace.getSquare());
+		if(m.isVerified()){
+			JOptionPane.showMessageDialog(null, "This piece is now on your side. Place it in an empty square.");
+			PlayGame.setMustPlace(true);
+			PlayGame.setPlacePiece(toPlace);
+		}
+		
+		
+	}
+	/**
+	 * Undo the effects of placeCapturedSwap
+	 * @param m The move to undo.
+	 */
+	public void undoPlaceCapturedSwitch(Move m){
+		if(m.getOldPos()==null) return;
+		else {
+			Piece toPlace = m.getCaptured();
+			toPlace.getLegalDests().clear();
+			toPlace.getGuardSquares().clear();
+			toPlace.setPinnedBy(null);
+			(toPlace.isBlack() ? g.getBlackTeam() : g.getWhiteTeam()).remove(toPlace);
+			(!toPlace.isBlack() ? g.getBlackTeam() : g.getWhiteTeam()).add(toPlace);
+			toPlace.setBlack(!toPlace.isBlack());
+			toPlace.setCaptured(false);
+			toPlace.getSquare().setPiece(null);
+			toPlace.setSquare(m.getOldPos());
+			m.getOldPos().setPiece(toPlace);
+			toPlace.setCaptured(false);
+			PlayGame.setMustPlace(false);
+			PlayGame.setPlacePiece(null);
+			m.setOldPos(null);
+			
+		}
+	}
+	/**
+	 * The opponent places captured pieces.
+	 * @param m The move just performed.
+	 */
+	public void placeCaptured(Move m){
+		if(m.getCaptured()==null)
+			return;
+		Piece toPlace = m.getCaptured();
+		toPlace.getLegalDests().clear();
+		toPlace.getGuardSquares().clear();
+		toPlace.setPinnedBy(null);
+		
+		m.setOldPos(toPlace.getSquare());
+		Piece objectivePiece = toPlace.isBlack()?g.getBlackRules().objectivePiece(toPlace.isBlack()):g.getWhiteRules().objectivePiece(toPlace.isBlack());
+		if(m.isVerified()&&!(objectivePiece==toPlace)){
+			toPlace.setCaptured(false);
+			JOptionPane.showMessageDialog(null, "You have captured this piece. Now place it in an empty square.");
+			PlayGame.setMustPlace(true);
+			PlayGame.setPlacePiece(toPlace);
+		}
+		
+	}
+	/**
+	 * Undo the effects of placeCaptured.
+	 * @param m The move to undo.
+	 */
+	public void undoPlaceCaptured(Move m){
+		if(m.getOldPos()==null) return;
+		else {
+			Piece toPlace = m.getCaptured();
+			toPlace.getLegalDests().clear();
+			toPlace.getGuardSquares().clear();
+			toPlace.setPinnedBy(null);
+			toPlace.setCaptured(false);
+			toPlace.getSquare().setPiece(null);
+			toPlace.setSquare(m.getOldPos());
+			m.getOldPos().setPiece(toPlace);
+			toPlace.setCaptured(false);
+			PlayGame.setMustPlace(false);
+			PlayGame.setPlacePiece(null);
+			m.setOldPos(null);
+		}
+	}
 	/**
 	 * Setter method for the game object
 	 * @param g The game to set the instance variable to.
@@ -187,6 +288,7 @@ public class AfterMove implements Serializable {
 			for (Method curr : undoMethod) {
 				curr.invoke(this, m);
 			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

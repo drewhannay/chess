@@ -137,6 +137,10 @@ public class Move implements Serializable {
 	 * The uniqueness of the row and column of this move
 	 */
 	protected boolean[] unique = { false, false };//Row,Column
+	/**
+	 * The old position of the square, if placed by opponent.
+	 */
+	private Square oldPos;
 
 	/**
 	 * Constructor
@@ -287,23 +291,25 @@ public class Move implements Serializable {
 				.getWhiteRules()).getPromotionSquares(p);
 		if (promoSquares != null && promoSquares.contains(getDest())) {
 			promotion = (board.isBlackTurn() ? board.getGame().getBlackRules() : board.getGame().getWhiteRules())
-					.promote(p, isVerified(), promo);
+			.promote(p, isVerified(), promo);
 		}
 
 		board.getGame().afterMove(this);
-
-		board.getGame().nextTurn();
+		if(!PlayGame.getMustPlace()){
+			board.getGame().nextTurn();
+		}
+			if (isVerified() && prev == null) {
+				oldWhiteTime = oldBlackTime = -1;
+			} else {
+				oldWhiteTime = board.getGame().getWhiteTimer().getTime();
+				oldBlackTime = board.getGame().getBlackTimer().getTime();
+			}
+			if (board.getGame().getWhiteTimer() instanceof Word) {
+				oldWhiteDirection = board.getGame().getWhiteTimer().getDirection();
+				oldBlackDirection = board.getGame().getBlackTimer().getDirection();
+			}
+		
 		prev = board.getGame().getLastMove();
-		if (isVerified() && prev == null) {
-			oldWhiteTime = oldBlackTime = -1;
-		} else {
-			oldWhiteTime = board.getGame().getWhiteTimer().getTime();
-			oldBlackTime = board.getGame().getBlackTimer().getTime();
-		}
-		if (board.getGame().getWhiteTimer() instanceof Word) {
-			oldWhiteDirection = board.getGame().getWhiteTimer().getDirection();
-			oldBlackDirection = board.getGame().getBlackTimer().getDirection();
-		}
 		board.getGame().setLastMove(this);
 
 		executed = true;
@@ -515,9 +521,9 @@ public class Move implements Serializable {
 			s = "O-O";
 		} else {
 			s = ((getPiece() != null && !(getPiece() instanceof Pawn)) ? (pieceToChar(getPiece())) + "" : " ")
-					+ origin.toString(unique)
-					+ ((getCaptured() != null) ? "x" : "")
-					+ getDest().toString(new boolean[] { false, false });
+			+ origin.toString(unique)
+			+ ((getCaptured() != null) ? "x" : "")
+			+ getDest().toString(new boolean[] { false, false });
 
 			if (promotion != null) {
 				s += "=" + pieceToChar(promotion);
@@ -572,7 +578,7 @@ public class Move implements Serializable {
 				.getWhiteRules()).getPromotionSquares(getPiece());
 		if (promoSquares != null && promoSquares.contains(getDest())) {
 			(board.isBlackTurn() ? board.getGame().getBlackRules() : board.getGame().getWhiteRules())
-					.undoPromote(promotion);
+			.undoPromote(promotion);
 		}
 
 		getDest().getPiece().setMoveCount(getDest().getPiece().getMoveCount() - 1);
@@ -601,5 +607,19 @@ public class Move implements Serializable {
 
 		board.getGame().setStaleLegalDests(true);
 		PlayGame.boardRefresh(board.getGame().getBoards());
+	}
+	/**
+	 * Setter for oldPos.
+	 * @param square The square to set oldPos to.
+	 */
+	public void setOldPos(Square square) {
+		oldPos = square;
+	}
+	/**
+	 * Getter for oldPos
+	 * @return oldPos
+	 */
+	public Square getOldPos(){
+		return oldPos;
 	}
 }
