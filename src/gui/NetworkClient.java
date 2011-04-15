@@ -14,7 +14,7 @@ public class NetworkClient {
         BufferedReader in = null;
  
         try {
-            kkSocket = new Socket("wheaton.edu", 27335);
+            kkSocket = new Socket("cslab02", 27335);
             out = new PrintWriter(kkSocket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(kkSocket.getInputStream()));
         } catch (Exception e) {
