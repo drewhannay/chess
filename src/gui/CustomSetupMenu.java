@@ -1,7 +1,6 @@
 package gui;
 
 import java.awt.Checkbox;
-import java.awt.CheckboxGroup;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -105,7 +104,7 @@ public class CustomSetupMenu extends JPanel {
 
 			//Create the pop up and set the size, location and layout.
 			final JFrame popup = new JFrame("Create Piece");
-			popup.setSize(350,470);
+			popup.setSize(450,500);
 			popup.setLocationRelativeTo(null);
 			popup.setLayout(new FlowLayout());
 			popup.setResizable(false);
@@ -233,14 +232,76 @@ public class CustomSetupMenu extends JPanel {
 			JPanel movementSetup = new JPanel();
 			movementSetup.setLayout(new BoxLayout(movementSetup,BoxLayout.Y_AXIS));
 			movementSetup.setBorder(BorderFactory.createTitledBorder("Movement Setup")); //Setting up border for movement panel
-			movementSetup.setLayout(new GridLayout(5,1));
+			movementSetup.setLayout(new GridBagLayout());
+			GridBagConstraints c = new GridBagConstraints();
+			
+			final JTextField knight = new JTextField(2);
+			knight.setToolTipText("Enter the knight-like directions you would like");
+			knight.setEnabled(false);
+			
+			final JTextField knightSecond = new JTextField(2);
+			knightSecond.setToolTipText("Enter the other direction for the knight-like piece");
+			knightSecond.setEnabled(false);
+			
+			final JCheckBox knightOn = new JCheckBox("Knight-like Movements", false);
+			knightOn.addActionListener(new ActionListener() {
+				
+				public void actionPerformed(ActionEvent arg0) {
+					knight.setEnabled(true);
+					knightSecond.setEnabled(true);
+				}
+			});
+			
+			final JCheckBox leaper = new JCheckBox("Can jump other Pieces?", false);
+			
+			final JPanel knightMoving = new JPanel();
+			knightMoving.setLayout(new FlowLayout());
+			knightMoving.add(knight);
+			knightMoving.add(new JLabel("x"));
+			knightMoving.add(knightSecond);
+			
 			
 			//Adds options and labels for setting up movement for the new piece
-			movementSetup.add(new JLabel("Direction of Movement:"));
-			movementSetup.add(dropdown);
-			movementSetup.add(new JLabel("Max Distance of Movement:"));
-			movementSetup.add(dist);
-			movementSetup.add(addInstruction);
+			c.insets = new Insets(5, 0, 5, 0);
+			c.gridx = 0;
+			c.gridy = 0;
+			movementSetup.add(new JLabel("<html><u>Normal Movement Setup:</u></br></html>"), c);
+			c.insets = new Insets(5, 0, 0, 0);
+			c.gridx =0;
+			c.gridy = 1;
+			movementSetup.add(new JLabel("Direction of Movement:"), c);
+			c.insets = new Insets(5, 0, 0, 0);
+			c.gridx = 1;
+			c.gridy = 1;
+			movementSetup.add(dropdown, c);
+			c.insets = new Insets(5, 0, 0, 0);
+			c.gridx = 0;
+			c.gridy = 2;
+			movementSetup.add(new JLabel("Max Distance of Movement:"), c);
+			c.insets = new Insets(5, 0, 0, 0);
+			c.gridx = 1;
+			c.gridy = 2;
+			movementSetup.add(dist, c);
+			c.insets = new Insets(5, 0, 0, 0);
+			c.gridx = 0;
+			c.gridy = 3;
+			c.gridwidth = 3;
+			movementSetup.add(addInstruction, c);
+			c.insets = new Insets(5, 0, 0, 0);
+			c.gridx = 0;
+			c.gridy = 4;
+			movementSetup.add(leaper, c);
+			c.insets = new Insets(5, 0, 0, 0);
+			c.gridx = 0;
+			c.gridy = 5;
+			movementSetup.add(knightOn, c);
+			c.insets = new Insets(5, 0, 5, 0);
+			c.gridx = 0;
+			c.gridy = 6;
+			movementSetup.add(new JLabel("<html><u>Knight-like Movement Directions:</u></br></html>"), c);
+			c.gridx = 0;
+			c.gridy = 7;
+			movementSetup.add(knightMoving, c);
 
 			popup.add(movementSetup);
 			
