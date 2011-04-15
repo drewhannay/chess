@@ -451,10 +451,10 @@ public class Piece implements Serializable {
 		 * File = movements.get('File');
 		 * Rank = movements.get('Rank');
 		 */
-		//if(movements.containsKey("Rank")){
+		if(movements.containsKey('x')){
 		int f, r;
-		int Rank = 3;//movements.get("Rank");
-		int File = 2;//movements.get("File");
+		int Rank = movements.get('x');
+		int File = movements.get('y');
 		f = (curSquare.getRow() + File);
 		r = (curSquare.getCol() + Rank);
 		if (wraparound) {
@@ -548,7 +548,7 @@ public class Piece implements Serializable {
 		if (board.isRowValid(f) && board.isColValid(r)) {
 			addLegalDest(board.getSquare(f, r));
 		}
-		//}
+		}
 		
 		
 		
