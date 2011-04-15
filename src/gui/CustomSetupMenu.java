@@ -199,7 +199,7 @@ public class CustomSetupMenu extends JPanel {
 						return false;
 					}
 				}
-
+				
 				/**
 				 * Translate a direction string to it's corresponding char.
 				 * @param s The string to translate
@@ -226,7 +226,6 @@ public class CustomSetupMenu extends JPanel {
 				}
 			});
 			popup.add(addInstruction);
-
 			
 			//Setting up a panel handle movement instructions 
 			JPanel movementSetup = new JPanel();
@@ -316,14 +315,36 @@ public class CustomSetupMenu extends JPanel {
 								"Invalid Piece Name", JOptionPane.INFORMATION_MESSAGE);
 						return;
 					}
+					if(knight.isEnabled()){
+						if(isIntKnights()){
+							builder.addMove('x', Integer.parseInt(knight.getText())); //Knight movements stored in builder.
+							builder.addMove('y', Integer.parseInt(knightSecond.getText()));
+						}
+					}
 					builder.setName(name.getText());//Set the name in the PieceBuilder
 					PieceBuilder.savePieceType(builder);//Save the piece type in the PieceBuilder class.
 					//Put the piece on it's square, refresh the square, dispose the pop up.
 					Piece toAdd = PieceBuilder.makePiece(name.getText(), isBlack, square, board);
 					(isBlack ? blackTeam : whiteTeam).add(toAdd);
+					if(leaper.isSelected()) //Add leaper movement style
+						toAdd.setLeaper();
 					square.setPiece(toAdd);
 					square.refresh();
 					popup.dispose();
+				}
+				
+				/**
+				 * Determine if the user entered a valid integer.
+				 * @return If the text is a valid integer
+				 */
+				private boolean isIntKnights() {
+					try {
+						Integer.parseInt(knight.getText());
+						Integer.parseInt(knightSecond.getText());
+						return true;
+					} catch (Exception e) {
+						return false;
+					}
 				}
 			});
 			popup.add(done);

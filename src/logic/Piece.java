@@ -67,6 +67,11 @@ public class Piece implements Serializable {
 	 * The ImageIcon representing the black version of Piece in the GUI
 	 */
 	protected ImageIcon darkIcon;
+	
+	/**
+	 * Whether or not this Piece may jump over other Pieces in movement.
+	 */
+	protected boolean leaper = false;
 	/**
 	 * The number of times this Piece has moved
 	 */
@@ -310,7 +315,7 @@ public class Piece implements Serializable {
 
 				dest = board.getSquare(curSquare.getRow(), j);
 				done = !addLegalDest(dest);
-				done = (done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece().equals(
+				done = (done || leaper?false:(dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece().equals(
 						board.getGame().getOtherObjectivePiece(isBlack())))));
 			}
 		}
@@ -327,7 +332,7 @@ public class Piece implements Serializable {
 				int j = r;
 				dest = board.getSquare(j, curSquare.getCol());
 				done = !addLegalDest(dest);
-				done = (done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece().equals(
+				done = (done || leaper?false:(dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece().equals(
 						board.getGame().getOtherObjectivePiece(isBlack())))));
 			}
 		}
@@ -344,7 +349,7 @@ public class Piece implements Serializable {
 				int j = r;
 				dest = board.getSquare(j, curSquare.getCol());
 				done = !addLegalDest(dest);
-				done = (done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece().equals(
+				done = (done || leaper?false:(dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece().equals(
 						board.getGame().getOtherObjectivePiece(isBlack())))));
 			}
 		}
@@ -364,7 +369,7 @@ public class Piece implements Serializable {
 			for (int r = curSquare.getRow() + 1, c = curSquare.getCol() + 1; r <= neMax && c <= neMax && !done; r++, c++) {
 				dest = board.getSquare(r, c);
 				done = !addLegalDest(dest);
-				done = (done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece().equals(
+				done = (done || leaper?false:(dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece().equals(
 						board.getGame().getOtherObjectivePiece(isBlack())))));
 			}
 		}
@@ -386,7 +391,7 @@ public class Piece implements Serializable {
 
 				dest = board.getSquare(r, c);
 				done = !addLegalDest(dest);
-				done = (done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece().equals(
+				done = (done || leaper?false:(dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece().equals(
 						board.getGame().getOtherObjectivePiece(isBlack())))));
 			}
 		}
@@ -407,7 +412,7 @@ public class Piece implements Serializable {
 
 				dest = board.getSquare(r, c);
 				done = !addLegalDest(dest);
-				done = (done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece().equals(
+				done = (done || leaper?false:(dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece().equals(
 						board.getGame().getOtherObjectivePiece(isBlack())))));
 			}
 		}
@@ -427,10 +432,133 @@ public class Piece implements Serializable {
 			for (int r = curSquare.getRow() - 1, c = curSquare.getCol() - 1; r >= southMin && c >= westMin && !done; r--, c--) {
 				dest = board.getSquare(r, c);
 				done = !addLegalDest(dest);
-				done = (done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece().equals(
+				done = (done || leaper?false:(dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece().equals(
 						board.getGame().getOtherObjectivePiece(isBlack())))));
 			}
 		}
+		
+		
+		/*
+		 * Knight / Leaper Movements
+		 * 
+		 * 
+		 * Store of Knight Movements are as followed:
+		 * 
+		 * A Piece can move n File by m Rank squares at a time.
+		 * 
+		 * IE: A knight can move 1 by 2 or 2 by 1, but not 1 by 1 or 2 by 2
+		 * 
+		 * File = movements.get('File');
+		 * Rank = movements.get('Rank');
+		 */
+		//if(movements.containsKey("Rank")){
+		int f, r;
+		int Rank = 3;//movements.get("Rank");
+		int File = 2;//movements.get("File");
+		f = (curSquare.getRow() + File);
+		r = (curSquare.getCol() + Rank);
+		if (wraparound) {
+			if (r > board.getMaxCol() + 1) {
+				r = r%board.getMaxCol();
+			}
+		}
+		if (board.isRowValid(f) && board.isColValid(r)) {
+			addLegalDest(board.getSquare(f, r));
+		}
+		//two o'clock
+		f = (curSquare.getRow() + Rank);
+		r = (curSquare.getCol() + File);
+		if (wraparound) {
+			if (r > board.getMaxCol() + 1) {
+				r = r%board.getMaxCol();
+			}
+		}
+		if (board.isRowValid(f) && board.isColValid(r)) {
+			addLegalDest(board.getSquare(f, r));
+		}
+
+		//four o'clock
+		f = (curSquare.getRow() + File);
+		r = (curSquare.getCol() - Rank);
+		if (wraparound) {
+			if (r < 1) {
+				r = board.getMaxCol() + r;
+			}
+		}
+		if (board.isRowValid(f) && board.isColValid(r)) {
+			addLegalDest(board.getSquare(f, r));
+		}
+
+		//five o'clock
+		f = (curSquare.getRow() + Rank);
+		r = (curSquare.getCol() - File);
+		if (wraparound) {
+			if (r < 1) {
+				r = board.getMaxCol() + r;
+			}
+		}
+		if (board.isRowValid(f) && board.isColValid(r)) {
+			addLegalDest(board.getSquare(f, r));
+		}
+
+		//seven o'clock
+		f = (curSquare.getRow() - File);
+		r = (curSquare.getCol() - Rank);
+		if (wraparound) {
+			if (r < 1) {
+				r = board.getMaxCol() + r;
+			}
+		}
+		if (board.isRowValid(f) && board.isColValid(r)) {
+			addLegalDest(board.getSquare(f, r));
+		}
+
+		//eight o'clock
+		f = (curSquare.getRow() - Rank);
+		r = (curSquare.getCol() - File);
+		if (wraparound) {
+			if (r < 1) {
+				r = board.getMaxCol() + r;
+			}
+		}
+		if (board.isRowValid(f) && board.isColValid(r)) {
+			addLegalDest(board.getSquare(f, r));
+		}
+
+		//ten o'clock
+		f = (curSquare.getRow() - File);
+		r = (curSquare.getCol() + Rank);
+		if (wraparound) {
+			if (r > board.getMaxCol() + 1) {
+				r = r%board.getMaxCol();
+			}
+		}
+		if (board.isRowValid(f) && board.isColValid(r)) {
+			addLegalDest(board.getSquare(f, r));
+		}
+
+		//eleven o'clock
+		f = (curSquare.getRow() - Rank);
+		r = (curSquare.getCol() + File);
+		if (wraparound) {
+			if (r > board.getMaxCol() + 1) {
+				r = r%board.getMaxCol();
+			}
+		}
+		if (board.isRowValid(f) && board.isColValid(r)) {
+			addLegalDest(board.getSquare(f, r));
+		}
+		//}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		return getLegalDests().size();
 	}
 
@@ -799,6 +927,13 @@ public class Piece implements Serializable {
 	 */
 	public void setSquare(Square curSquare) {
 		this.curSquare = curSquare;
+	}
+	
+	/**
+	 * Setter method for the Piece's ability to leap over other Pieces.
+	 */
+	public void setLeaper(){
+		this.leaper = true;
 	}
 
 }
