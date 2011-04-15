@@ -264,12 +264,10 @@ public class Piece implements Serializable {
 		getLegalDests().clear();
 		getGuardSquares().clear();
 		setPinnedBy(null);
-
 		//Boolean to tell when we are done generating destinations
 		boolean done = false;
 		Square dest;
 		boolean wraparound = board.isWraparound();
-
 		/*
 		 * East
 		 */
@@ -291,7 +289,7 @@ public class Piece implements Serializable {
 				}
 				dest = board.getSquare(curSquare.getRow(), j);
 				done = !addLegalDest(dest);
-				done = (done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece().equals(
+				done = leaper?false:(done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece().equals(
 						board.getGame().getOtherObjectivePiece(isBlack())))));
 			}
 		}
@@ -315,7 +313,7 @@ public class Piece implements Serializable {
 
 				dest = board.getSquare(curSquare.getRow(), j);
 				done = !addLegalDest(dest);
-				done = (done || leaper?false:(dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece().equals(
+				done = leaper?false:(done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece().equals(
 						board.getGame().getOtherObjectivePiece(isBlack())))));
 			}
 		}
@@ -332,7 +330,7 @@ public class Piece implements Serializable {
 				int j = r;
 				dest = board.getSquare(j, curSquare.getCol());
 				done = !addLegalDest(dest);
-				done = (done || leaper?false:(dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece().equals(
+				done = leaper?false:(done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece().equals(
 						board.getGame().getOtherObjectivePiece(isBlack())))));
 			}
 		}
@@ -349,7 +347,7 @@ public class Piece implements Serializable {
 				int j = r;
 				dest = board.getSquare(j, curSquare.getCol());
 				done = !addLegalDest(dest);
-				done = (done || leaper?false:(dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece().equals(
+				done = leaper?false:(done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece().equals(
 						board.getGame().getOtherObjectivePiece(isBlack())))));
 			}
 		}
@@ -369,7 +367,7 @@ public class Piece implements Serializable {
 			for (int r = curSquare.getRow() + 1, c = curSquare.getCol() + 1; r <= neMax && c <= neMax && !done; r++, c++) {
 				dest = board.getSquare(r, c);
 				done = !addLegalDest(dest);
-				done = (done || leaper?false:(dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece().equals(
+				done = leaper?false:(done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece().equals(
 						board.getGame().getOtherObjectivePiece(isBlack())))));
 			}
 		}
@@ -391,7 +389,7 @@ public class Piece implements Serializable {
 
 				dest = board.getSquare(r, c);
 				done = !addLegalDest(dest);
-				done = (done || leaper?false:(dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece().equals(
+				done = leaper?false:(done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece().equals(
 						board.getGame().getOtherObjectivePiece(isBlack())))));
 			}
 		}
@@ -412,7 +410,7 @@ public class Piece implements Serializable {
 
 				dest = board.getSquare(r, c);
 				done = !addLegalDest(dest);
-				done = (done || leaper?false:(dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece().equals(
+				done = leaper?false:(done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece().equals(
 						board.getGame().getOtherObjectivePiece(isBlack())))));
 			}
 		}
@@ -432,7 +430,7 @@ public class Piece implements Serializable {
 			for (int r = curSquare.getRow() - 1, c = curSquare.getCol() - 1; r >= southMin && c >= westMin && !done; r--, c--) {
 				dest = board.getSquare(r, c);
 				done = !addLegalDest(dest);
-				done = (done || leaper?false:(dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece().equals(
+				done = leaper?false:(done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece().equals(
 						board.getGame().getOtherObjectivePiece(isBlack())))));
 			}
 		}
@@ -444,12 +442,10 @@ public class Piece implements Serializable {
 		 * 
 		 * Store of Knight Movements are as followed:
 		 * 
-		 * A Piece can move n File by m Rank squares at a time.
+		 * A Piece can move x File by y Rank squares at a time.
 		 * 
 		 * IE: A knight can move 1 by 2 or 2 by 1, but not 1 by 1 or 2 by 2
 		 * 
-		 * File = movements.get('File');
-		 * Rank = movements.get('Rank');
 		 */
 		if(movements.containsKey('x')){
 		int f, r;
