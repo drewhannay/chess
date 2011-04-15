@@ -445,11 +445,14 @@ public class PlayGame extends JPanel {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
+					whiteTimer.stop();
+					blackTimer.stop();
 					String fileName = JOptionPane.showInputDialog(null, "Enter a name for the save file:",
 							"Saving...", JOptionPane.PLAIN_MESSAGE);
 					if (fileName == null)
 						return;
 					g.saveGame("gamesInProgress", fileName, false);
+					
 					Driver.getInstance().revertPanel();
 				}
 			});
