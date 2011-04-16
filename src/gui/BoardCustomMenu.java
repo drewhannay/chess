@@ -17,7 +17,6 @@ import javax.swing.LayoutStyle;
 
 import logic.Board;
 import logic.Builder;
-import rules.Rules;
 
 /**
  * BoardCustomMenu.java
@@ -197,9 +196,8 @@ public class BoardCustomMenu extends JPanel {
 								Integer.parseInt(numCols.getText()), wraparound.isSelected());
 					}
 					b.setBoards(boards);//Add the Board[] to the Builder and pass it on to the next step.
-					Rules whiteRules = new Rules(false);
-					Rules blackRules = new Rules(false);
-					Driver.getInstance().setPanel(new PlayerCustomMenu(b, whiteRules, blackRules));
+					
+					Driver.getInstance().setPanel(new RuleMaker(b));
 				}
 			}
 

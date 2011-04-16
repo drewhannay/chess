@@ -342,7 +342,9 @@ public class PlayGame extends JPanel {
 			return;
 		Object[] options = new String[] { "Save Record of Game", "New Game", "Quit" };
 		int answer = JOptionPane.showOptionDialog(null,
-				"Game over! What would you like to do?", r.text(),
+				"Game over! " + r.text() + "\n" +
+				"The piece(s) that caused the final check are highlighted in Red.\n"	+
+				"What would you like to do?", r.text(),
 						JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null,
 						options, options[0]);
 		switch (answer) {

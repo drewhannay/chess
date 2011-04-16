@@ -1,6 +1,5 @@
 package gui;
 
-import java.awt.Checkbox;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -34,9 +33,6 @@ import logic.Builder;
 import logic.Piece;
 import logic.PieceBuilder;
 import logic.Square;
-import rules.AdjustTeamDests;
-import rules.EndOfGame;
-import rules.GetBoard;
 import rules.ObjectivePiece;
 import rules.Rules;
 
@@ -79,6 +75,10 @@ public class CustomSetupMenu extends JPanel {
 		 * The PieceBuilder which will set up the new Piece type.
 		 */
 		private PieceBuilder builder;
+		/**
+		 * Boolean to see if we are making a knight piece
+		 */
+		private boolean knightLike = false;
 
 		/**
 		 * Constructor
@@ -104,7 +104,7 @@ public class CustomSetupMenu extends JPanel {
 
 			//Create the pop up and set the size, location and layout.
 			final JFrame popup = new JFrame("Create Piece");
-			popup.setSize(450,500);
+			popup.setSize(400,500);
 			popup.setLocationRelativeTo(null);
 			popup.setLayout(new FlowLayout());
 			popup.setResizable(false);
@@ -246,8 +246,15 @@ public class CustomSetupMenu extends JPanel {
 			knightOn.addActionListener(new ActionListener() {
 				
 				public void actionPerformed(ActionEvent arg0) {
+					knightLike = !knightLike;
+					if(knightLike){
 					knight.setEnabled(true);
 					knightSecond.setEnabled(true);
+					}
+					else {
+						knight.setEnabled(false);
+						knightSecond.setEnabled(false);
+					}
 				}
 			});
 			
@@ -358,6 +365,10 @@ public class CustomSetupMenu extends JPanel {
 							"then fill in the farthest distance you would like it to move in that direction.\n" + 
 							"When you are finished press the \"Add Movement\" button to add it to the piece.\n" + 
 							"Repeat this process for each direction you would like the piece to move.\n" +
+							"If you would like the piece to e able to jump others please check the box.\n" +
+							"If you want this piece to be able to move like a knight please enter \n"+
+							"the directions you would like it to move in the following format: \n" +
+							
 							"When you have finished adding movements to the piece press Save and Quit.\n"+
 							"This piece will then be available for reuse from the piece selection screen.\n", "Help", 1);
 				}
@@ -656,11 +667,6 @@ public class CustomSetupMenu extends JPanel {
 	private JButton submitButton;
 
 	/**
-	 * JButton for advanced options.
-	 */
-	private JButton advancedButton;
-
-	/**
 	 * Constructor.
 	 * Initialize the ArrayLists and call initComponents to initialize the GUI.
 	 * @param b The builder which is creating the new game type.
@@ -775,301 +781,10 @@ public class CustomSetupMenu extends JPanel {
 
 		});
 
-		advancedButton = new JButton("Advanced Rules Options");
-		advancedButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-
-				final JPanel ldwCheckBox = new JPanel();
-				ldwCheckBox.setLayout(new GridLayout(3, 1));
-				ldwCheckBox.add(new JCheckBox("Capture Mandatory"));
-				ldwCheckBox.add(new JCheckBox("Can't Move Objective"));
-
-				final JPanel obwCheckBox = new JPanel();
-				obwCheckBox.setLayout(new GridLayout(5, 1));
-				obwCheckBox.add(new JCheckBox("Capture All", false));
-				obwCheckBox.add(new JCheckBox("Capture All of Type", false));
-				obwCheckBox.add(new JCheckBox("Protect Objective", false));
-				obwCheckBox.add(new JCheckBox("Lose All Pieces", false));
-				obwCheckBox.add(new JCheckBox("Check # Times", false));
-
-				final JPanel acpwCheckBox = new JPanel();
-				acpwCheckBox.setLayout(new GridLayout(4, 1));
-				acpwCheckBox.add(new JCheckBox("Capturer changes Color"));
-				acpwCheckBox.add(new JCheckBox("Captured piece returns to start"));
-
-				final JPanel ldbCheckBox = new JPanel();
-				ldbCheckBox.setLayout(new GridLayout(3, 1));
-				ldbCheckBox.add(new JCheckBox("Capture Mandatory"));
-				ldbCheckBox.add(new JCheckBox("Can't Move Objective"));
-
-				final JPanel obbCheckBox = new JPanel();
-				obbCheckBox.setLayout(new GridLayout(5, 1));
-				obbCheckBox.add(new JCheckBox("Capture All", false));
-				obbCheckBox.add(new JCheckBox("Capture All of Type", false));
-				obbCheckBox.add(new JCheckBox("Protect Objective", false));
-				obbCheckBox.add(new JCheckBox("Lose All Pieces", false));
-				obbCheckBox.add(new JCheckBox("Check # Times", false));
-
-				final JPanel acpbCheckBox = new JPanel();
-				acpbCheckBox.setLayout(new GridLayout(4, 1));
-				acpbCheckBox.add(new JCheckBox("Capturer changes Color"));
-				acpbCheckBox.add(new JCheckBox("Captured piece returns to start"));
-
-				final JPanel sCheckBox = new JPanel();
-				sCheckBox.setLayout(new GridLayout(3, 1));
-				sCheckBox.add(new JCheckBox("Pawn Promotion"));
-				sCheckBox.add(new JCheckBox("Move to other board"));
-
-				
-				final JFrame popup = new JFrame("New Game");
-				popup.setLayout(new GridBagLayout());
-				popup.setSize(600, 600); //TODO Figure out if there's a better way to set the size of the window.
-				popup.setResizable(false);
-				popup.setLocationRelativeTo(null);//This line makes the window show up in the center of the user's screen, regardless of resolution.
-				GridBagConstraints c = new GridBagConstraints();
-
-				
-				//Create button and add ActionListener
-				final JButton back = new JButton("Back");
-				back.addActionListener(new ActionListener() {
-
-					@Override
-					public void actionPerformed(ActionEvent arg0) {
-						//Get rid of this pop up.
-						popup.dispose();
-					}
-				});
-				final JButton save = new JButton("Save Settings");
-				save.addActionListener(new ActionListener() {
-
-					@Override
-					public void actionPerformed(ActionEvent arg0) {
-						if (((Checkbox) ldwCheckBox.getComponent(0)).getState()) {
-							whiteRules.addAdjustTeamDests(new AdjustTeamDests("mustCapture"));
-						}
-						if (((Checkbox) ldwCheckBox.getComponent(1)).getState()) {
-							whiteRules.addCropLegalDests("stationaryObjective");
-						}
-						if (((Checkbox) obwCheckBox.getComponent(0)).getState()) {
-							whiteRules.addEndOfGame(new EndOfGame("loseAllPieces", true, 0, ""));
-						}
-						if (((Checkbox) obwCheckBox.getComponent(1)).getState()) {
-							whiteRules.addEndOfGame(new EndOfGame("captureAllOfType", false, 0, "Knight")); //TODO - let the user define this. Currently not supported by GUI.
-						}
-						if (((Checkbox) obwCheckBox.getComponent(2)).getState()) {
-							whiteRules.addEndOfGame(new EndOfGame("classic", false, 0, ""));
-						}
-						if (((Checkbox) obwCheckBox.getComponent(3)).getState()) {
-							whiteRules.addEndOfGame(new EndOfGame("loseAllPieces", false, 0, ""));
-						}
-						if (((Checkbox) obwCheckBox.getComponent(4)).getState()) {
-							whiteRules.addEndOfGame(new EndOfGame("checkNTimes", false, 3, "")); //TODO let the user define this. Currently not supported by GUI.
-						}
-						if (((Checkbox) acpwCheckBox.getComponent(0)).getState()) {
-							whiteRules.addAfterMove("captureTeamSwap");
-						}
-						if (((Checkbox) acpwCheckBox.getComponent(1)).getState()) {
-							whiteRules.addAfterMove("goHome");
-						}
-
-						if (((Checkbox) ldbCheckBox.getComponent(0)).getState()) {
-							blackRules.addAdjustTeamDests(new AdjustTeamDests("mustCapture"));
-						}
-						if (((Checkbox) ldbCheckBox.getComponent(1)).getState()) {
-							blackRules.addCropLegalDests("stationaryObjective");
-						}
-						if (((Checkbox) obbCheckBox.getComponent(0)).getState()) {
-							blackRules.addEndOfGame(new EndOfGame("loseAllPieces", true, 0, ""));
-						}
-						if (((Checkbox) obbCheckBox.getComponent(1)).getState()) {
-							blackRules.addEndOfGame(new EndOfGame("captureAllOfType", false, 0, "Knight")); //TODO - let the user define this. Currently not supported by GUI.
-						}
-						if (((Checkbox) obbCheckBox.getComponent(2)).getState()) {
-							blackRules.addEndOfGame(new EndOfGame("classic", false, 0, ""));
-						}
-						if (((Checkbox) obbCheckBox.getComponent(3)).getState()) {
-							blackRules.addEndOfGame(new EndOfGame("loseAllPieces", false, 0, ""));
-						}
-						if (((Checkbox) obbCheckBox.getComponent(4)).getState()) {
-							blackRules.addEndOfGame(new EndOfGame("checkNTimes", false, 3, "")); //TODO let the user define this. Currently not supported by GUI.
-						}
-						if (((Checkbox) acpbCheckBox.getComponent(0)).getState()) {
-							blackRules.addAfterMove("captureTeamSwap");
-						}
-						if (((Checkbox) acpbCheckBox.getComponent(1)).getState()) {
-							blackRules.addAfterMove("goHome");
-						}
-						if (!((Checkbox) sCheckBox.getComponent(0)).getState()) {
-							whiteRules.addGetPromotionSquares("noPromos");
-							whiteRules.addPromote("noPromos");
-							blackRules.addGetPromotionSquares("noPromos");
-							blackRules.addPromote("noPromos");
-						}
-						if (((Checkbox) sCheckBox.getComponent(1)).getState() && boards.length == 2) {
-							whiteRules.setGetBoard(new GetBoard("oppositeBoard"));
-							blackRules.setGetBoard(new GetBoard("oppositeBoard"));
-						}
-
-						//						sCheckBox.add(new Checkbox("Move to other board"));
-						popup.dispose();
-
-					}
-				}
-			);
-
-				JPanel whiteTeam = new JPanel();
-				whiteTeam.setBorder(BorderFactory.createTitledBorder("White Team"));
-				whiteTeam.setLayout(new GridBagLayout());
-				
-					JPanel whiteLegalDests = new JPanel();
-					whiteLegalDests.setLayout(new GridBagLayout());
-						c.gridx = 0;
-						c.gridy = 1;
-						whiteLegalDests.add(new JLabel("<html><u> Legal Destination </u></br></html>"), c);
-						c.gridx = 0;
-						c.gridy = 2;
-						whiteLegalDests.add(ldwCheckBox, c);
-						
-				c.gridx = 0;
-				c.gridy = 0;
-				whiteTeam.add(whiteLegalDests, c);
-					
-					JPanel whiteObj = new JPanel();
-					whiteObj.setLayout(new GridBagLayout());
-						c.gridheight = 1;
-						c.gridx = 0;
-						c.gridy = 1;
-						whiteObj.add(new JLabel("<html><u> Objective </u></br></html>"), c);
-						c.gridx = 0;
-						c.gridy = 2;
-						whiteObj.add(obwCheckBox, c);
-						c.gridx = 0;
-						c.gridy = 3;
-						whiteObj.add(new JLabel(" "), c);
-						
-				c.gridx = 0;
-				c.gridy = 1;
-				whiteTeam.add(whiteObj, c);
-						
-					JPanel whiteCapture = new JPanel();
-					whiteCapture.setLayout(new GridBagLayout());
-						c.gridheight = 1;
-						c.gridx = 0;
-						c.gridy = 1;
-						whiteCapture.add(new JLabel("<html><u>After Capturing a piece</u></br></html>"), c);
-						c.gridx = 0;
-						c.gridy = 2;
-						whiteCapture.add(acpwCheckBox, c);
-					
-				c.gridx = 0;
-				c.gridy = 2;
-				whiteTeam.add(whiteCapture, c);
-				
-				
-				JPanel blackTeam = new JPanel();
-				blackTeam.setBorder(BorderFactory.createTitledBorder("Black Team"));
-				blackTeam.setLayout(new GridBagLayout());
-				
-					JPanel blackLegalDests = new JPanel();
-					blackLegalDests.setLayout(new GridBagLayout());
-						c.gridx = 0;
-						c.gridy = 1;
-						blackLegalDests.add(new JLabel("<html><u> Legal Destination </u></br></html>"), c);
-						c.gridx = 0;
-						c.gridy = 2;
-						blackLegalDests.add(ldbCheckBox, c);
-						
-				c.gridx = 0;
-				c.gridy = 0;
-				blackTeam.add(blackLegalDests, c);	
-					
-					JPanel blackObj = new JPanel();
-					blackObj.setLayout(new GridBagLayout());
-						c.gridheight = 1;
-						c.gridx = 0;
-						c.gridy = 1;
-						blackObj.add(new JLabel("<html><u> Objective </u></br></html>"), c);
-						c.gridx = 0;
-						c.gridy = 2;
-						blackObj.add(obbCheckBox, c);
-						c.gridx = 0;
-						c.gridy = 3;
-						blackObj.add(new JLabel(" "), c);
-						
-				c.gridx = 0;
-				c.gridy = 1;
-				blackTeam.add(blackObj, c);
-				
-					JPanel blackCapture = new JPanel();
-					blackCapture.setLayout(new GridBagLayout());
-						c.gridheight = 1;
-						c.gridx = 0;
-						c.gridy = 1;
-						blackCapture.add(new JLabel("<html><u>After Capturing a piece</u></br></html>"), c);
-						c.gridx = 0;
-						c.gridy = 2;
-						blackCapture.add(acpbCheckBox, c);
-				
-				c.gridx = 0;
-				c.gridy = 2;
-				blackTeam.add(blackCapture, c);
-					
-					
-				c.insets = new Insets(10, 10, 10, 10);
-				c.gridx = 0;
-				c.gridy = 0;
-				popup.add(whiteTeam, c);
-				
-				c.insets = new Insets(10, 10, 10, 10);
-				c.gridx = 1;
-				c.gridy = 0;
-				popup.add(blackTeam, c);
-				
-				
-				JPanel specialRules = new JPanel();
-				specialRules.setBorder(BorderFactory.createTitledBorder("Special rules"));
-				specialRules.setLayout(new GridBagLayout());
-				
-					c.gridx = 0;
-					c.gridy = 1;
-					specialRules.add(sCheckBox, c);
-					c.gridx = 0;
-					c.gridy = 2;
-				
-				c.fill = GridBagConstraints.HORIZONTAL;
-				c.gridx = 0;
-				c.gridy = 1;
-				c.gridwidth = 2;
-				popup.add(specialRules, c);
-				
-				
-				JPanel buttons = new JPanel();
-				buttons.setLayout(new FlowLayout());
-				buttons.add(back);
-				buttons.add(save);
-					
-				c.fill = GridBagConstraints.HORIZONTAL;
-				c.gridx = 0;
-				c.gridy = 2;
-				c.gridwidth = 2;
-				popup.add(buttons, c);
-				
-				
-				popup.setVisible(true);
-			}
-		});
-
 		JPanel options = new JPanel();
 		options.setBorder(BorderFactory.createTitledBorder("Options"));
 		options.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
-
-		//Add the buttons to the JPanel.
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 0;
-		c.gridy = 0;
-		options.add(advancedButton, c);
 		
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;

@@ -156,7 +156,7 @@ public class PlayerCustomMenu extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				//Return to the BoardCustomMenu screen.
-				Driver.getInstance().setPanel(new BoardCustomMenu(b));
+				Driver.getInstance().setPanel(new RuleMaker(b));
 			}
 		});
 

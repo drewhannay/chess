@@ -331,12 +331,8 @@ final public class Driver extends JFrame {
 
 			public void actionPerformed(ActionEvent arg0) {
 				JOptionPane.showMessageDialog(Driver.this, "To move a piece simply click on it and the places you can move will be highlighted. If you want to undo a move simply\n" +
-						"press Undo Previous Move. To reverse an undo press the Redo Previous Move button. The Parse move feature allows \n" +
-						"you to enter a move you would like into the box below the button in the following format: a6 b4 \n" + 
-						"(This will move the piece in column A and Row 6 to Column B and Row 4). When you have entered the desired move \n" +
-						"press the Parse move button and the piece will move if the entered move is valid. The Save game button will\n " + 
-						"save the current game for continuation at a later time. When a game has been completed use the File menu \n" + 
-						"to navigate away from the finished game. Once a game has been finished it is no longer playable, but it can \n" + 
+						"press Undo Move. Any other options you may need can be found under File or Options\n"+
+						"Once a game has been finished it is no longer playable, but it can \n" + 
 						"be reviewed from the View Completed Games option on the Main Menu.", "Game Play Help", 1);
 			}
 
