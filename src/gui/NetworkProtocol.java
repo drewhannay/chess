@@ -1,5 +1,7 @@
 package gui;
 
+import java.util.Scanner;
+
 public class NetworkProtocol {
 
     private static final int WAITING = 0;
@@ -7,11 +9,19 @@ public class NetworkProtocol {
  
     private int state = WAITING;
  
+    Scanner stdIn = new Scanner(System.in);
+    
     public String processInput(Object theInput) {
         String theOutput = null;
         
-        theOutput = "the output";
+        System.out.print("=> ");
+        theOutput = stdIn.nextLine();
         if(theInput == null)return theOutput;
+        
+        
+        System.out.println(theInput.toString());
+        
+        
         if(theInput.toString().equalsIgnoreCase("Bye"))
         	theOutput = "Bye";
  
