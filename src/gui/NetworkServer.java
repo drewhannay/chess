@@ -12,19 +12,13 @@ public class NetworkServer {
 		
 		
         ServerSocket serverSocket = null;
-        for(int i = 27335;i<27341;i++){
-	        try {
-	            serverSocket = new ServerSocket(i);
-	            break;
-	        } catch (Exception e) {
-	        	//System.out.println(e.getMessage());
-	        	//e.printStackTrace();
-	        }
+        try {
+            serverSocket = new ServerSocket(27335);
+        } catch (Exception e) {
+        	//System.out.println(e.getMessage());
+        	//e.printStackTrace();
         }
-        if(serverSocket == null){
-        	System.out.println("Sorry, all the ports are full.");
-        	System.exit(1);
-        }
+
         	
  
         Socket clientSocket = null;

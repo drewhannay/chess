@@ -18,7 +18,6 @@ public class NetworkClient {
 
         
         int hostIndex = 1;
-        //int portIndex = 27335;
         
         while(true){
 			try {
@@ -29,13 +28,9 @@ public class NetworkClient {
 				break;
 			} catch (Exception e) {
 				hostIndex = (hostIndex+1)%25;
-//				portIndex++;
 				
 	        	if(hostIndex == 0)
 	        		hostIndex++;
-//	        	if(portIndex == 27341)
-//	        		portIndex = 27335;
-	        	
 				//e.printStackTrace();
 			}
         }
