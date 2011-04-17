@@ -78,20 +78,25 @@ public class RuleMaker extends JPanel {
 		final JPanel objectiveWhiteCheckBox = new JPanel();
 		objectiveWhiteCheckBox.setLayout(new GridLayout(5, 1));
 			final JCheckBox wCaptureAll = new JCheckBox("Capture All", false);
+			wCaptureAll.setEnabled(false);
 			objectiveWhiteCheckBox.add(wCaptureAll);
 			final JCheckBox wCaptureAllType = new JCheckBox("Capture All of Type", false);
+			wCaptureAllType.setEnabled(false);
 			objectiveWhiteCheckBox.add(wCaptureAllType);
 			final JCheckBox wProtectObj = new JCheckBox("Protect Objective", true);
 			objectiveWhiteCheckBox.add(wProtectObj);
 			final JCheckBox wLoseAll = new JCheckBox("Lose All Pieces", false);
+			wLoseAll.setEnabled(false);
 			objectiveWhiteCheckBox.add(wLoseAll);
 			final JCheckBox wCheckTimes = new JCheckBox("Check # Times", false);
+			wCheckTimes.setEnabled(false);
 			objectiveWhiteCheckBox.add(wCheckTimes);
 
 		//Capturing pieces rules for White
 		final JPanel afterCaptureWhiteCheckBox = new JPanel();
 		afterCaptureWhiteCheckBox.setLayout(new GridLayout(4, 1));
 			final JCheckBox wChangeColor = new JCheckBox("Capturer changes Color");
+			wChangeColor.setEnabled(false);
 			afterCaptureWhiteCheckBox.add(wChangeColor);
 			final JCheckBox wPieceReturn = new JCheckBox("Captured piece returns to start");
 			afterCaptureWhiteCheckBox.add(wPieceReturn);
@@ -112,20 +117,25 @@ public class RuleMaker extends JPanel {
 		final JPanel objectiveBlackCheckBox = new JPanel();
 		objectiveBlackCheckBox.setLayout(new GridLayout(5, 1));
 			final JCheckBox bCaptureAll = new JCheckBox("Capture All", false);
+			bCaptureAll.setEnabled(false);
 			objectiveBlackCheckBox.add(bCaptureAll);
 			final JCheckBox bCaptureAllType = new JCheckBox("Capture All of Type", false);
+			bCaptureAllType.setEnabled(false);
 			objectiveBlackCheckBox.add(bCaptureAllType);
 			final JCheckBox bProtectObj = new JCheckBox("Protect Objective", true);
 			objectiveBlackCheckBox.add(bProtectObj);
 			final JCheckBox bLoseAll = new JCheckBox("Lose All Pieces", false);
+			bLoseAll.setEnabled(false);
 			objectiveBlackCheckBox.add(bLoseAll);
 			final JCheckBox bCheckTimes = new JCheckBox("Check # Times", false);
+			bCheckTimes.setEnabled(false);
 			objectiveBlackCheckBox.add(bCheckTimes);
 
 		//Capturing pieces rules for Black
 		final JPanel afterCapturepBlackCheckBox = new JPanel();
 		afterCapturepBlackCheckBox.setLayout(new GridLayout(4, 1));
 			final JCheckBox bChangeColor = new JCheckBox("Capturer changes Color");
+			bChangeColor.setEnabled(false);
 			afterCapturepBlackCheckBox.add(bChangeColor);
 			final JCheckBox bPieceReturn = new JCheckBox("Captured piece returns to start");
 			afterCapturepBlackCheckBox.add(bPieceReturn);
