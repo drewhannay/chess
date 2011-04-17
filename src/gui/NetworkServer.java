@@ -1,8 +1,7 @@
 package gui;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -10,12 +9,23 @@ public class NetworkServer {
 
 	public static void main(String[] args) throws Exception {
 		 
+		
+		
         ServerSocket serverSocket = null;
-        try {
-            serverSocket = new ServerSocket(27335);
-        } catch (Exception e) {
-        	e.printStackTrace();
+        for(int i = 27335;i<27341;i++){
+	        try {
+	            serverSocket = new ServerSocket(i);
+	            break;
+	        } catch (Exception e) {
+	        	//System.out.println(e.getMessage());
+	        	//e.printStackTrace();
+	        }
         }
+        if(serverSocket == null){
+        	System.out.println("Sorry, all the ports are full.");
+        	System.exit(1);
+        }
+        	
  
         Socket clientSocket = null;
         try {
@@ -24,21 +34,32 @@ public class NetworkServer {
         	e.printStackTrace();
         }
  
-        PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-        BufferedReader in = new BufferedReader(
-                new InputStreamReader(
-                clientSocket.getInputStream()));
-        String inputLine, outputLine;
+        ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());
+        
+        ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream());
+        
+        //PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+        //BufferedReader in = new BufferedReader(
+        //        new InputStreamReader(
+        //        clientSocket.getInputStream()));
+        Object input;
+        Object output;
         NetworkProtocol np = new NetworkProtocol();
  
-        outputLine = np.processInput(null);
-        out.println(outputLine);
- 
-        while ((inputLine = in.readLine()) != null) {
-             outputLine = np.processInput(inputLine);
-             out.println(outputLine);
-             if (outputLine.equals("Bye."))
-                break;
+        output = np.processInput(null);
+        out.writeObject(output);
+        
+        try{
+	        while ((input = in.readObject()) != null) {
+	             output = np.processInput(input);
+	             out.writeObject(output);
+	             out.flush();
+	             if (output.toString().equals("Bye."))
+	                break;
+	        }
+        }catch(Exception e){
+        	//The try catch is here because when the client closes the connection,
+        	//(input = in.readObject()) throws an End Of File Exception
         }
         out.close();
         in.close();

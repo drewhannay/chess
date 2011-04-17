@@ -2,45 +2,65 @@ package gui;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 public class NetworkClient {
-	
+
 	public static void main(String[] args) throws Exception {
-		 
-        Socket kkSocket = null;
-        PrintWriter out = null;
-        BufferedReader in = null;
- 
-        try {
-            kkSocket = new Socket("cslab02", 27335);
-            out = new PrintWriter(kkSocket.getOutputStream(), true);
-            in = new BufferedReader(new InputStreamReader(kkSocket.getInputStream()));
-        } catch (Exception e) {
-        	e.printStackTrace();
+
+		Socket socket = null;
+//		PrintWriter out = null;
+//		BufferedReader in = null;
+		ObjectOutputStream out = null;
+        ObjectInputStream in = null;
+
+        
+        int hostIndex = 1;
+        //int portIndex = 27335;
+        
+        while(true){
+			try {
+				String num = ((hostIndex+"").length()==1)?("0"+hostIndex):hostIndex+"";
+				socket = new Socket("cslab"+num, 27335);
+				out = new ObjectOutputStream(socket.getOutputStream());
+				in = new ObjectInputStream(socket.getInputStream());
+				break;
+			} catch (Exception e) {
+				hostIndex = (hostIndex+1)%25;
+//				portIndex++;
+				
+	        	if(hostIndex == 0)
+	        		hostIndex++;
+//	        	if(portIndex == 27341)
+//	        		portIndex = 27335;
+	        	
+				//e.printStackTrace();
+			}
         }
- 
-        BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
-        String fromServer;
-        String fromUser;
- 
-        while ((fromServer = in.readLine()) != null) {
-            System.out.println("Server: " + fromServer);
-            if (fromServer.equals("Bye."))
-                break;
-             
-            fromUser = stdIn.readLine();
-        if (fromUser != null) {
-                System.out.println("Client: " + fromUser);
-                out.println(fromUser);
-        }
-        }
- 
-        out.close();
-        in.close();
-        stdIn.close();
-        kkSocket.close();
-    }
+
+		BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
+		Object fromServer;
+		Object fromUser;
+
+		while ((fromServer = in.readObject()).toString() != null) {
+			System.out.println("Server: " + fromServer.toString());
+			if (fromServer.toString().equals("Bye"))
+				break;
+
+			fromUser = new TestPacket(stdIn.readLine());
+			if (fromUser.toString() != null) {
+				System.out.println("Client: " + fromUser.toString());
+				out.writeObject(fromUser);
+				out.flush();
+			}
+		}
+
+		out.close();
+		in.close();
+		stdIn.close();
+		socket.close();
+	}
 
 }
