@@ -1,4 +1,6 @@
-package gui;
+package net;
+
+import gui.TestPacket;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -11,8 +13,6 @@ public class NetworkClient {
 	public static void main(String[] args) throws Exception {
 
 		Socket socket = null;
-//		PrintWriter out = null;
-//		BufferedReader in = null;
 		ObjectOutputStream out = null;
         ObjectInputStream in = null;
 
@@ -26,8 +26,8 @@ public class NetworkClient {
 				out = new ObjectOutputStream(socket.getOutputStream());
 				in = new ObjectInputStream(socket.getInputStream());
 				break;
-			} catch (Exception e) {
-				hostIndex = (hostIndex+1)%25;
+			} catch(Exception e) {
+				hostIndex = (hostIndex+1)%26;
 				
 	        	if(hostIndex == 0)
 	        		hostIndex++;
@@ -37,16 +37,17 @@ public class NetworkClient {
 
 		BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
 		Object fromServer;
-		Object fromUser;
+		Object fromUser = "";
 
 		while ((fromServer = in.readObject()).toString() != null) {
-			System.out.println("Server: " + fromServer.toString());
-			if (fromServer.toString().equals("Bye"))
+			if(!fromServer.toString().equals(""))
+				System.out.println("Server: " + fromServer.toString());
+			if (fromUser.toString().equalsIgnoreCase("Bye"))
 				break;
 
+			System.out.print("=> ");
 			fromUser = new TestPacket(stdIn.readLine());
 			if (fromUser.toString() != null) {
-				System.out.println("Client: " + fromUser.toString());
 				out.writeObject(fromUser);
 				out.flush();
 			}
