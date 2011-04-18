@@ -201,7 +201,12 @@ public class RuleMaker extends JPanel {
 				if (wPieceReturn.isSelected()) {
 					whiteRules.addAfterMove("goHome");
 				}
-
+				if(wDrop.isSelected()){
+					whiteRules.addAfterMove("placeCaptured");
+				}
+				if(wCapturedColorAndDrop.isSelected()){
+					whiteRules.addAfterMove("placeCapturedSwitch");
+				}
 				if (bCaptureMand.isSelected()) {
 					blackRules.addAdjustTeamDests(new AdjustTeamDests("mustCapture"));
 				}
@@ -229,6 +234,12 @@ public class RuleMaker extends JPanel {
 				if (bPieceReturn.isSelected()) {
 					blackRules.addAfterMove("goHome");
 				}
+				if(bDrop.isSelected()){
+					blackRules.addAfterMove("placeCaptured");
+				}
+				if(bCapturedColorAndDrop.isSelected()){
+					blackRules.addAfterMove("placeCapturedSwitch");
+				}
 				if (!pawnPromotion.isSelected()) {
 					whiteRules.addGetPromotionSquares("noPromos");
 					whiteRules.addPromote("noPromos");
@@ -239,8 +250,11 @@ public class RuleMaker extends JPanel {
 					whiteRules.setGetBoard(new GetBoard("oppositeBoard"));
 					blackRules.setGetBoard(new GetBoard("oppositeBoard"));
 				}
+				if(atomic.isSelected()){
+					whiteRules.addAfterMove("atomicCapture");
+					blackRules.addAfterMove("atomicCapture");
+				}
 				
-				//TODO set up atomic chess, captured piece changes color and dropped, and pieces dropped.
 				
 				Driver.getInstance().setPanel(new PlayerCustomMenu(b, whiteRules, blackRules));
 				}
