@@ -1,4 +1,4 @@
-package gui;
+package net;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -32,10 +32,6 @@ public class NetworkServer {
         
         ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream());
         
-        //PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-        //BufferedReader in = new BufferedReader(
-        //        new InputStreamReader(
-        //        clientSocket.getInputStream()));
         Object input;
         Object output;
         NetworkProtocol np = new NetworkProtocol();
@@ -48,7 +44,7 @@ public class NetworkServer {
 	             output = np.processInput(input);
 	             out.writeObject(output);
 	             out.flush();
-	             if (output.toString().equals("Bye."))
+	             if (input.toString().equalsIgnoreCase("Bye"))
 	                break;
 	        }
         }catch(Exception e){

@@ -1,4 +1,4 @@
-package gui;
+package net;
 
 
 public class NetworkPlaySetup {
