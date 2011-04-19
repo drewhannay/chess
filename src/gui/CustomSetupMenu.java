@@ -8,13 +8,17 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Insets;
+import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -23,10 +27,17 @@ import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListDataEvent;
+import javax.swing.event.ListDataListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import logic.Board;
 import logic.Builder;
@@ -104,7 +115,7 @@ public class CustomSetupMenu extends JPanel {
 
 			//Create the pop up and set the size, location and layout.
 			final JFrame popup = new JFrame("Create Piece");
-			popup.setSize(400,500);
+			popup.setSize(400,650);
 			popup.setLocationRelativeTo(null);
 			popup.setLayout(new FlowLayout());
 			popup.setResizable(false);
@@ -462,7 +473,7 @@ public class CustomSetupMenu extends JPanel {
 			final JComboBox dropdown = new JComboBox(PieceBuilder.getSet().toArray());//Get the list of Piece types.
 			dropdown.addItem("New Piece Type");//Also add the option of creating a new Piece type.
 			popup.add(dropdown);
-
+			//TODO Hello!!!
 			//Create button and add ActionListener
 			final JButton done = new JButton("Done");
 			done.addActionListener(new ActionListener() {
@@ -720,6 +731,97 @@ public class CustomSetupMenu extends JPanel {
 			add(grid);//Add the grid to the main JPanel.
 		}
 
+		final Board bShowPiece = new Board(1,1,false);
+		//final Square sShowPiece = new Square(1,1);
+		final JPanel showPiece = new JPanel();
+		final Piece p = PieceBuilder.makePiece("Pawn", true, bShowPiece.getSquare(1,1), bShowPiece);
+		showPiece.setLayout(new GridLayout(1,1));
+		showPiece.setPreferredSize(new Dimension(50,50));
+		
+		JButton jb = new JButton();
+		jb.addActionListener(new SetUpListener(bShowPiece.getSquare(1, 1), bShowPiece));
+		bShowPiece.getSquare(1, 1).setButton(jb);//Let the Square know which button it owns.
+		showPiece.add(jb);//Add the button to the grid.
+		bShowPiece.getSquare(1, 1).refresh();
+		
+		 // Create a List with a vertical ScrollBar
+		final DefaultListModel list = new DefaultListModel();
+		Object[] allPieces = PieceBuilder.getSet().toArray();
+		for (int i = 0; i<allPieces.length; i++){
+			list.addElement(allPieces[i]);
+		}
+		list.addElement("Square Options");
+	    JList piecesList = new JList(list);
+	    list.addListDataListener(new ListDataListener(){
+	    	
+	    	public void contentsChanged(ListDataEvent listDataEvent) {
+	            appendEvent(listDataEvent);
+	          }
+
+	          public void intervalAdded(ListDataEvent listDataEvent) {
+	            appendEvent(listDataEvent);
+	          }
+
+	          public void intervalRemoved(ListDataEvent listDataEvent) {
+	            appendEvent(listDataEvent);
+	          }
+
+	          private void appendEvent(ListDataEvent listDataEvent) {
+	            switch (listDataEvent.getType()) {
+	            case ListDataEvent.CONTENTS_CHANGED:
+	              System.out.println("Type: Contents Changed");
+	              break;
+	            case ListDataEvent.INTERVAL_ADDED:
+	              System.out.println("Type: Interval Added");
+	              break;
+	            case ListDataEvent.INTERVAL_REMOVED:
+	              System.out.println("Type: Interval Removed");
+	              break;
+	            }
+	            System.out.println(", Index0: " + listDataEvent.getIndex0());
+	            System.out.println(", Index1: " + listDataEvent.getIndex1());
+	            DefaultListModel theModel = (DefaultListModel) listDataEvent.getSource();
+	            System.out.println(theModel);
+	          }
+	    	
+	    });
+	    
+	    piecesList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+	    piecesList.setLayoutOrientation(JList.VERTICAL);
+	    piecesList.setVisibleRowCount(-1);
+	    
+	    ListSelectionModel selectList = piecesList.getSelectionModel();
+	    selectList.addListSelectionListener(new ListSelectionListener(){
+	    	//TODO
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				ListSelectionModel lsm = (ListSelectionModel) e.getSource();
+				
+		        int firstIndex = e.getFirstIndex();
+		        int lastIndex = e.getLastIndex();
+		        int selection = lsm.getAnchorSelectionIndex();
+		       	boolean test = true;
+		       	
+		        if (!lsm.getValueIsAdjusting()){
+			       	if (((String) list.elementAt(selection)).equals("Square Options")){
+
+			       	}
+			        else{
+			        	Piece toAdd = PieceBuilder.makePiece((String) list.elementAt(selection), true, bShowPiece.getSquare(1,1), bShowPiece);
+			        	bShowPiece.getSquare(1, 1).setPiece(toAdd);
+			        	bShowPiece.getSquare(1, 1).refresh();
+				       	test = false;
+				       	}
+		       		}
+			}
+	    });
+
+	    JScrollPane scrollPane = new JScrollPane(piecesList);
+	    scrollPane.setPreferredSize(new Dimension(200, 200));
+
+	    add(scrollPane);
+	    add(showPiece);
+	    
 		//Create button and add ActionListener
 		backButton = new JButton("Back");
 		backButton.addActionListener(new ActionListener() {
