@@ -413,7 +413,7 @@ public class CustomSetupMenu extends JPanel {
 		});
 
 		//Create button and add ActionListener
-		submitButton = new JButton("Submit");
+		submitButton = new JButton("Save and Quit");
 		submitButton.addActionListener(new ActionListener() {
 
 			@Override

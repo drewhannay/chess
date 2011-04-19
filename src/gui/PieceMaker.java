@@ -187,9 +187,6 @@ public class PieceMaker extends JPanel{
 			knightMoving.add(new JLabel("x"));
 			knightMoving.add(knightSecond);
 			
-			//TODO add promotable as an option to determine what can be promoted
-			final JCheckBox promotable = new JCheckBox("This piece can be promoted", false);
-			
 			//Create button and add ActionListener for adding movement directions to a piece
 			final JButton addInstruction = new JButton("Add Movement Directions to this Piece");
 			addInstruction.setToolTipText("Pressing this will add movement direction and max distance in that direction.");
@@ -284,9 +281,6 @@ public class PieceMaker extends JPanel{
 			c.gridy = 3;
 			c.gridwidth = 3;
 			movementSetup.add(addInstruction, c);
-			c.gridx= 0;
-			c.gridy = 4;
-			movementSetup.add(promotable, c);
 			c.insets = new Insets(5, 0, 0, 0);
 			c.gridx = 0;
 			c.gridy = 5;
@@ -386,7 +380,13 @@ public class PieceMaker extends JPanel{
 			next.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					Driver.getInstance().setPanel(new RuleMaker(b));
+					if(name.getText().equals("")){
+						Driver.getInstance().setPanel(new RuleMaker(b));
+					}
+					else{
+						int answer = JOptionPane.showConfirmDialog(null,"If you continue the piece you are working on will not be saved. Continue?", "Piece Maker", JOptionPane.YES_NO_OPTION);
+						if(answer == 0) Driver.getInstance().setPanel(new RuleMaker(b));
+					}
 				}
 			});
 			
