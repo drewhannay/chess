@@ -7,11 +7,20 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.Insets;
+import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
@@ -27,6 +36,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
@@ -54,15 +64,6 @@ import rules.Rules;
  * February 25, 2011
  */
 public class CustomSetupMenu extends JPanel {
-
-	/**
-	 * MakeNewPieceType
-	 * 
-	 * ActionListener to handle board setup.
-	 * 
-	 * @author Drew Hannay & Daniel Opdyke
-	 */
-
 	
 	/**
 	 * SetUpListener
@@ -300,6 +301,90 @@ public class CustomSetupMenu extends JPanel {
 
 	}
 
+	class SetUpMouseListener implements MouseListener {
+		//TODO
+		/**
+		 * The Squares we are setting up.
+		 */
+		private Square square, option;
+		/**
+		 * The Board on which the Square we are setting up resides.
+		 */
+		private Board board;
+		
+		public SetUpMouseListener(Square square, Board board, Square option){
+			this.square = square;
+			this.board = board;
+			this.option = option;
+		}
+		
+		@Override
+		public void mouseClicked(MouseEvent e){
+			
+			int mods = e.getModifiers();
+					if (mods == 16){
+						setPieceOnBoard(false);
+					}
+					else if (mods == 4){
+						setPieceOnBoard(true);
+					}
+		}
+
+		private void setPieceOnBoard(boolean isBlack){
+			System.out.println(option.isHabitable());
+			if (option.isOccupied() == false){
+				square.setBackgroundColor(option.getColor());
+				square.setHabitable(option.isHabitable());
+				square.refresh();
+				square.setPiece(null);
+				System.out.println(option.getColor());
+			}
+			else{
+				if (square.isHabitable() == true){
+					Piece p = PieceBuilder.makePiece(option.getPiece().getName(), isBlack, square, board);
+					if (isBlack)
+						blackTeam.add(p);
+					else
+						whiteTeam.add(p);
+					square.setPiece(p);
+					square.refresh();
+				}
+				else{
+					JOptionPane.showMessageDialog(null,
+						    "Eggs are not supposed to be green.",
+						    "Inane warning",
+						    JOptionPane.WARNING_MESSAGE);
+
+				}
+			}
+		}
+		
+		@Override
+		public void mouseEntered(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseExited(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mousePressed(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	}
+	
 	/**
 	 * Generated Serial Version ID
 	 */
@@ -336,6 +421,7 @@ public class CustomSetupMenu extends JPanel {
 	 * @param b The builder which is creating the new game type.
 	 * @param whiteRules The whiteRules object.
 	 * @param blackRules The blackRules object.
+	 * @return 
 	 */
 	public CustomSetupMenu(Builder b, Rules whiteRules, Rules blackRules) {
 		this.b = b;
@@ -361,6 +447,66 @@ public class CustomSetupMenu extends JPanel {
 		//Get the array of boards from the builder so we can modify it.
 		final Board[] boards = b.getBoards();
 
+		final Board bShowPiece = new Board(1,1,false);
+		//final Square sShowPiece = new Square(1,1);
+		final JPanel showPiece = new JPanel();
+		final Piece p = PieceBuilder.makePiece("Pawn", true, bShowPiece.getSquare(1,1), bShowPiece);
+		showPiece.setLayout(new GridLayout(1,1));
+		showPiece.setPreferredSize(new Dimension(50,50));
+		
+		JButton jb1 = new JButton();
+		jb1.addActionListener(new SetUpListener(bShowPiece.getSquare(1, 1), bShowPiece));
+		bShowPiece.getSquare(1, 1).setButton(jb1);//Let the Square know which button it owns.
+		showPiece.add(jb1);//Add the button to the grid.
+		bShowPiece.getSquare(1, 1).refresh();
+		
+		 // Create a List with a vertical ScrollBar
+		final DefaultListModel list = new DefaultListModel();
+		Object[] allPieces = PieceBuilder.getSet().toArray();
+		for (int i = 0; i<allPieces.length; i++){
+			list.addElement(allPieces[i]);
+		}
+		list.addElement("Square Options");
+	    JList piecesList = new JList(list);
+	    
+	    piecesList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+	    piecesList.setLayoutOrientation(JList.VERTICAL);
+	    piecesList.setVisibleRowCount(-1);
+	    
+	    ListSelectionModel selectList = piecesList.getSelectionModel();
+	    final Color original = bShowPiece.getSquare(1, 1).getColor();
+	    selectList.addListSelectionListener(new ListSelectionListener(){
+	    	//TODO
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				ListSelectionModel lsm = (ListSelectionModel) e.getSource();
+				
+		        int firstIndex = e.getFirstIndex();
+		        int lastIndex = e.getLastIndex();
+		        int selection = lsm.getAnchorSelectionIndex();
+		        if (!lsm.getValueIsAdjusting()){
+			       	if (((String) list.elementAt(selection)).equals("Square Options")){
+			       			bShowPiece.getSquare(1, 1).setPiece(null);
+			       			bShowPiece.getSquare(1, 1).setBackgroundColor(original);
+			       			bShowPiece.getSquare(1, 1).setHabitable(true);
+			       			bShowPiece.getSquare(1, 1).refresh();
+			       	}
+			        else{
+			        	if (bShowPiece.getSquare(1, 1).isHabitable() == false)
+			        		bShowPiece.getSquare(1, 1).setHabitable(true);
+			        	if (bShowPiece.getSquare(1, 1).getColor().equals(original) == false)
+			        		bShowPiece.getSquare(1, 1).setBackgroundColor(original);	
+			        	Piece toAdd = PieceBuilder.makePiece((String) list.elementAt(selection), true, bShowPiece.getSquare(1,1), bShowPiece);
+			        	bShowPiece.getSquare(1, 1).setPiece(toAdd);
+			        	bShowPiece.getSquare(1, 1).refresh();
+		       		}
+		        }
+			}
+	    });
+
+	    JScrollPane scrollPane = new JScrollPane(piecesList);
+	    scrollPane.setPreferredSize(new Dimension(200, 200));
+	    
 		//Loop through the array of boards for setup.
 		for (int n = 0; n < boards.length; n++) {
 			//Create a JPanel to hold the grid and set the layout to the number of squares in the board.
@@ -375,7 +521,7 @@ public class CustomSetupMenu extends JPanel {
 			for (int i = numRows; i > 0; i--) {
 				for (int j = 1; j <= numCols; j++) {
 					JButton jb = new JButton();
-					jb.addActionListener(new SetUpListener(boards[n].getSquare(i, j), boards[n]));
+					jb.addMouseListener(new SetUpMouseListener(boards[n].getSquare(i, j), boards[n], bShowPiece.getSquare(1, 1)));
 					boards[n].getSquare(i, j).setButton(jb);//Let the Square know which button it owns.
 					grid.add(jb);//Add the button to the grid.
 					boards[n].getSquare(i, j).refresh(); //Have the square refresh all it's properties now that they're created.
@@ -383,94 +529,6 @@ public class CustomSetupMenu extends JPanel {
 			}
 			add(grid);//Add the grid to the main JPanel.
 		}
-
-		final Board bShowPiece = new Board(1,1,false);
-		//final Square sShowPiece = new Square(1,1);
-		final JPanel showPiece = new JPanel();
-		final Piece p = PieceBuilder.makePiece("Pawn", true, bShowPiece.getSquare(1,1), bShowPiece);
-		showPiece.setLayout(new GridLayout(1,1));
-		showPiece.setPreferredSize(new Dimension(50,50));
-		
-		JButton jb = new JButton();
-		jb.addActionListener(new SetUpListener(bShowPiece.getSquare(1, 1), bShowPiece));
-		bShowPiece.getSquare(1, 1).setButton(jb);//Let the Square know which button it owns.
-		showPiece.add(jb);//Add the button to the grid.
-		bShowPiece.getSquare(1, 1).refresh();
-		
-		 // Create a List with a vertical ScrollBar
-		final DefaultListModel list = new DefaultListModel();
-		Object[] allPieces = PieceBuilder.getSet().toArray();
-		for (int i = 0; i<allPieces.length; i++){
-			list.addElement(allPieces[i]);
-		}
-		list.addElement("Square Options");
-	    JList piecesList = new JList(list);
-	    list.addListDataListener(new ListDataListener(){
-	    	
-	    	public void contentsChanged(ListDataEvent listDataEvent) {
-	            appendEvent(listDataEvent);
-	          }
-
-	          public void intervalAdded(ListDataEvent listDataEvent) {
-	            appendEvent(listDataEvent);
-	          }
-
-	          public void intervalRemoved(ListDataEvent listDataEvent) {
-	            appendEvent(listDataEvent);
-	          }
-
-	          private void appendEvent(ListDataEvent listDataEvent) {
-	            switch (listDataEvent.getType()) {
-	            case ListDataEvent.CONTENTS_CHANGED:
-	              System.out.println("Type: Contents Changed");
-	              break;
-	            case ListDataEvent.INTERVAL_ADDED:
-	              System.out.println("Type: Interval Added");
-	              break;
-	            case ListDataEvent.INTERVAL_REMOVED:
-	              System.out.println("Type: Interval Removed");
-	              break;
-	            }
-	            System.out.println(", Index0: " + listDataEvent.getIndex0());
-	            System.out.println(", Index1: " + listDataEvent.getIndex1());
-	            DefaultListModel theModel = (DefaultListModel) listDataEvent.getSource();
-	            System.out.println(theModel);
-	          }
-	    	
-	    });
-	    
-	    piecesList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-	    piecesList.setLayoutOrientation(JList.VERTICAL);
-	    piecesList.setVisibleRowCount(-1);
-	    
-	    ListSelectionModel selectList = piecesList.getSelectionModel();
-	    selectList.addListSelectionListener(new ListSelectionListener(){
-	    	//TODO
-			@Override
-			public void valueChanged(ListSelectionEvent e) {
-				ListSelectionModel lsm = (ListSelectionModel) e.getSource();
-				
-		        int firstIndex = e.getFirstIndex();
-		        int lastIndex = e.getLastIndex();
-		        int selection = lsm.getAnchorSelectionIndex();
-		       	boolean test = true;
-		       	
-		        if (!lsm.getValueIsAdjusting()){
-			       	if (((String) list.elementAt(selection)).equals("Square Options")){
-
-			       	}
-			        else{
-			        	Piece toAdd = PieceBuilder.makePiece((String) list.elementAt(selection), true, bShowPiece.getSquare(1,1), bShowPiece);
-			        	bShowPiece.getSquare(1, 1).setPiece(toAdd);
-			        	bShowPiece.getSquare(1, 1).refresh();
-				       	test = false;
-				       	}
-		       		}
-			}
-	    });
-
-	    JScrollPane scrollPane = new JScrollPane(piecesList);
-	    scrollPane.setPreferredSize(new Dimension(200, 200));
 
 	    add(scrollPane);
 	    add(showPiece);
