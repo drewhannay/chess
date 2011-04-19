@@ -1,10 +1,5 @@
 package logic;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
@@ -23,7 +18,6 @@ import javax.swing.ImageIcon;
  * Phase 2
  * April 7, 2011
  */
-@SuppressWarnings("unchecked")
 public class PieceBuilder implements Serializable {
 
 	/**
@@ -59,20 +53,17 @@ public class PieceBuilder implements Serializable {
 	 * that to a file.
 	 */
 	static {
-		try {
-			FileInputStream f_in = new FileInputStream("pieceTypes");
-			ObjectInputStream in = new ObjectInputStream(f_in);
-			pieceTypes = (HashMap<String, PieceBuilder>) in.readObject();
+		initPieceTypes();
+	}
 
-		} catch (Exception e) {
-			pieceTypes.put("Pawn", new PieceBuilder("Pawn"));
-			pieceTypes.put("Rook", new PieceBuilder("Rook"));
-			pieceTypes.put("Bishop", new PieceBuilder("Bishop"));
-			pieceTypes.put("Knight", new PieceBuilder("Knight"));
-			pieceTypes.put("Queen", new PieceBuilder("Queen"));
-			pieceTypes.put("King", new PieceBuilder("King"));
-			writeFile();
-		}
+	public static void initPieceTypes(){
+		pieceTypes = new HashMap<String, PieceBuilder>();
+		pieceTypes.put("Pawn", new PieceBuilder("Pawn"));
+		pieceTypes.put("Rook", new PieceBuilder("Rook"));
+		pieceTypes.put("Bishop", new PieceBuilder("Bishop"));
+		pieceTypes.put("Knight", new PieceBuilder("Knight"));
+		pieceTypes.put("Queen", new PieceBuilder("Queen"));
+		pieceTypes.put("King", new PieceBuilder("King"));
 	}
 
 	/**
@@ -138,20 +129,6 @@ public class PieceBuilder implements Serializable {
 	 */
 	public static void savePieceType(PieceBuilder p) {
 		pieceTypes.put(p.name, p);
-		writeFile();
-	}
-
-	/**
-	 * Write the pieceTypes array to disk
-	 */
-	private static void writeFile() {
-		try {
-			FileOutputStream f_out = new FileOutputStream(new File("pieceTypes"));
-			ObjectOutputStream out = new ObjectOutputStream(f_out);
-			out.writeObject(pieceTypes);
-		} catch (Exception e) {
-			System.out.println(e.toString());
-		}
 	}
 
 	/**

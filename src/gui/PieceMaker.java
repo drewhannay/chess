@@ -52,6 +52,7 @@ public class PieceMaker extends JPanel{
 	 */
 	public PieceMaker(Builder b){
 		this.b = b;
+		PieceBuilder.initPieceTypes();
 		initComponents();
 	}
 	
