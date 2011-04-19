@@ -197,7 +197,7 @@ public class BoardCustomMenu extends JPanel {
 					}
 					b.setBoards(boards);//Add the Board[] to the Builder and pass it on to the next step.
 					
-					Driver.getInstance().setPanel(new RuleMaker(b));
+					Driver.getInstance().setPanel(new PieceMaker(b));
 				}
 			}
 

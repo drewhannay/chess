@@ -163,7 +163,7 @@ public class RuleMaker extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				Driver.getInstance().setPanel(new BoardCustomMenu(b));
+				Driver.getInstance().setPanel(new PieceMaker(b));
 			}
 		});
 		
