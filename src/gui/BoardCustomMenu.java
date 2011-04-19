@@ -182,7 +182,7 @@ public class BoardCustomMenu extends JPanel {
 		wraparound = new JCheckBox("Yes");
 
 		//Create button and add ActionListener
-		submitButton = new JButton("Submit");
+		submitButton = new JButton("Next");
 		submitButton.addActionListener(new ActionListener() {
 
 			@Override

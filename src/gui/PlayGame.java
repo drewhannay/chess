@@ -425,7 +425,7 @@ public class PlayGame extends JPanel {
 	 * @return The Menu bar for the GUI
 	 */
 	public JMenu createMenu() {
-		JMenu menu = new JMenu("Menu");
+		final JMenu menu = new JMenu("Menu");
 
 		if (!isPlayback) {
 
@@ -455,6 +455,7 @@ public class PlayGame extends JPanel {
 						return;
 					g.saveGame("gamesInProgress", fileName, false);
 					
+					menu.setVisible(false);
 					Driver.getInstance().revertPanel();
 				}
 			});

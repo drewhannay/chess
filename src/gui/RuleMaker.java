@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 
 import logic.Board;
 import logic.Builder;
@@ -77,18 +78,18 @@ public class RuleMaker extends JPanel {
 		//Objectives rules for White
 		final JPanel objectiveWhiteCheckBox = new JPanel();
 		objectiveWhiteCheckBox.setLayout(new GridLayout(5, 1));
-			final JCheckBox wCaptureAll = new JCheckBox("Capture All", false);
+			final JRadioButton wCaptureAll = new JRadioButton("Capture All", false);
 			wCaptureAll.setEnabled(false);
 			objectiveWhiteCheckBox.add(wCaptureAll);
-			final JCheckBox wCaptureAllType = new JCheckBox("Capture All of Type", false);
+			final JRadioButton wCaptureAllType = new JRadioButton("Capture All of Type", false);
 			wCaptureAllType.setEnabled(false);
 			objectiveWhiteCheckBox.add(wCaptureAllType);
-			final JCheckBox wProtectObj = new JCheckBox("Protect Objective", true);
+			final JRadioButton wProtectObj = new JRadioButton("Protect Objective", true);
 			objectiveWhiteCheckBox.add(wProtectObj);
-			final JCheckBox wLoseAll = new JCheckBox("Lose All Pieces", false);
+			final JRadioButton wLoseAll = new JRadioButton("Lose All Pieces", false);
 			wLoseAll.setEnabled(false);
 			objectiveWhiteCheckBox.add(wLoseAll);
-			final JCheckBox wCheckTimes = new JCheckBox("Check # Times", false);
+			final JRadioButton wCheckTimes = new JRadioButton("Check # Times", false);
 			wCheckTimes.setEnabled(false);
 			objectiveWhiteCheckBox.add(wCheckTimes);
 
@@ -116,18 +117,18 @@ public class RuleMaker extends JPanel {
 		//Objectives rules for Black
 		final JPanel objectiveBlackCheckBox = new JPanel();
 		objectiveBlackCheckBox.setLayout(new GridLayout(5, 1));
-			final JCheckBox bCaptureAll = new JCheckBox("Capture All", false);
+			final JRadioButton bCaptureAll = new JRadioButton("Capture All", false);
 			bCaptureAll.setEnabled(false);
 			objectiveBlackCheckBox.add(bCaptureAll);
-			final JCheckBox bCaptureAllType = new JCheckBox("Capture All of Type", false);
+			final JRadioButton bCaptureAllType = new JRadioButton("Capture All of Type", false);
 			bCaptureAllType.setEnabled(false);
 			objectiveBlackCheckBox.add(bCaptureAllType);
-			final JCheckBox bProtectObj = new JCheckBox("Protect Objective", true);
+			final JRadioButton bProtectObj = new JRadioButton("Protect Objective", true);
 			objectiveBlackCheckBox.add(bProtectObj);
-			final JCheckBox bLoseAll = new JCheckBox("Lose All Pieces", false);
+			final JRadioButton bLoseAll = new JRadioButton("Lose All Pieces", false);
 			bLoseAll.setEnabled(false);
 			objectiveBlackCheckBox.add(bLoseAll);
-			final JCheckBox bCheckTimes = new JCheckBox("Check # Times", false);
+			final JRadioButton bCheckTimes = new JRadioButton("Check # Times", false);
 			bCheckTimes.setEnabled(false);
 			objectiveBlackCheckBox.add(bCheckTimes);
 
@@ -149,7 +150,7 @@ public class RuleMaker extends JPanel {
 		sCheckBox.setLayout(new GridLayout(3, 1));
 			final JCheckBox atomic = new JCheckBox("Atomic Chess");
 			sCheckBox.add(atomic);
-			final JCheckBox pawnPromotion= new JCheckBox("Pawn Promotion", true);
+			final JCheckBox pawnPromotion= new JCheckBox("Piece Promotion", true);
 			sCheckBox.add(pawnPromotion);
 			final JCheckBox switchBoard = new JCheckBox("Move to other board");
 			switchBoard.setEnabled(false);

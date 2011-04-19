@@ -7,39 +7,25 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
-import java.awt.Insets;
-import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.InputEvent;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.PrintStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JColorChooser;
-import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
-import javax.swing.event.ListDataEvent;
-import javax.swing.event.ListDataListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -78,10 +64,6 @@ public class CustomSetupMenu extends JPanel {
 		 * The Square we are setting up.
 		 */
 		private Square square;
-		/**
-		 * The Board on which the Square we are setting up resides.
-		 */
-		private Board board;
 
 		/**
 		 * Constructor
@@ -89,9 +71,8 @@ public class CustomSetupMenu extends JPanel {
 		 * @param square The square we are setting up.
 		 * @param board The board on which the square resides.
 		 */
-		public SetUpListener(Square square, Board board) {
+		public SetUpListener(Square square) {
 			this.square = square;
-			this.board = board;
 		}
 
 		/**
@@ -101,86 +82,7 @@ public class CustomSetupMenu extends JPanel {
 		public void actionPerformed(ActionEvent arg0) {
 			options();
 		}
-
-		/**
-		 * GUI to set the piece desired for a Square.
-		 * Make the pop up, create the components and add their
-		 * ActionListeners to collect information.
-		 */
-		private void askForPiece() {
-			//Create the pop up and set the size, location and layout.
-			final JFrame popup = new JFrame("Choose Piece");
-			popup.setSize(370, 300);
-			popup.setLocationRelativeTo(null);
-			popup.setLayout(new FlowLayout());
-
-			//Add a JLabel asking which team this Piece will be on.
-			popup.add(new JLabel("Which Team?"));
-
-			//Create a ButtonGroup and add the radio buttons to the group.
-			ButtonGroup group = new ButtonGroup();
-			final JRadioButton white = new JRadioButton("White");
-			final JRadioButton black = new JRadioButton("Black");
-			group.add(white);
-			group.add(black);
-
-			//Add the buttons to the window.
-			popup.add(white);
-			popup.add(black);
-
-			//Add a JLabel asking for the Piece type, along with a drop down box.
-			popup.add(new JLabel("What kind of Piece?"));
-			final JComboBox dropdown = new JComboBox(PieceBuilder.getSet().toArray());//Get the list of Piece types.
-			dropdown.addItem("New Piece Type");//Also add the option of creating a new Piece type.
-			popup.add(dropdown);
-			//TODO Hello!!!
-			//Create button and add ActionListener
-			final JButton done = new JButton("Done");
-			done.addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(ActionEvent arg0) {
-					//Make sure they've picked a team.
-					if (!white.isSelected() && !black.isSelected()) {
-						JOptionPane.showMessageDialog(null, "Please choose a team for this piece.",
-								"Incomplete Form", JOptionPane.INFORMATION_MESSAGE);
-						return;
-					}
-					//They must have selected a Piece type that's already defined. Create the Piece.
-					Piece p = PieceBuilder.makePiece((String) dropdown.getSelectedItem(), black.isSelected(), square,
-							board);
-					//Add the Piece to the correct team.
-					if (p.isBlack()) {
-						blackTeam.add(p);
-					} else {
-						whiteTeam.add(p);
-					}
-
-					//Add the Piece to the square and then refresh the square.
-					square.setPiece(p);
-					square.refresh();
-					popup.dispose();
-				}
-			});
-			popup.add(done);
-
-			//Create button and add ActionListener
-			final JButton cancel = new JButton("Cancel");
-			cancel.addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(ActionEvent arg0) {
-					//Dispose of the window
-					popup.dispose();
-				}
-			});
-			popup.add(cancel);
-
-			//Finally, set the pop up to visible.
-			popup.setVisible(true);
-
-		}
-
+		
 		/**
 		 * Create a pop up window with customization options.
 		 * Let the user choose between adding a piece to the square or
@@ -189,7 +91,7 @@ public class CustomSetupMenu extends JPanel {
 		private void options() {
 			//Create the pop up and set the size, location and layout.
 			final JFrame popup = new JFrame("Customize");
-			popup.setSize(300, 160);
+			popup.setSize(300, 90);
 			popup.setLocationRelativeTo(null);
 			popup.setLayout(new FlowLayout());
 			popup.setResizable(false);
@@ -206,38 +108,7 @@ public class CustomSetupMenu extends JPanel {
 
 			});
 			popup.add(squareButton);
-			//Create button and add ActionListener
-			final JButton makePiece = new JButton("Set a piece on this square");
-			makePiece.addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(ActionEvent arg0) {
-					//Ask the player for a Piece for the Square the dispose of the pop up.
-					if (square.isHabitable()) {
-						askForPiece();
-					} else {
-						JOptionPane.showMessageDialog(popup,
-								"This square is uninhabitable, please make it habitable first");
-					}
-					popup.dispose();
-				}
-			});
-			popup.add(makePiece);
 			
-			//Button to remove a piece that has been placed on the board
-			final JButton removePiece = new JButton("Remove Piece");
-			removePiece.addActionListener(new ActionListener(){
-				public void actionPerformed(ActionEvent arg0) {
-						square.setPiece(null);
-						square.refresh();
-						popup.dispose();
-				}
-			});
-			//Only lets the button work if there is a piece there
-			if(square.isOccupied()) removePiece.setEnabled(true);
-			else removePiece.setEnabled(false);
-			popup.add(removePiece);
-
 			//Finally, set the pop up to visible.
 			popup.setVisible(true);
 		}
@@ -250,7 +121,7 @@ public class CustomSetupMenu extends JPanel {
 		private void squareOptions() {
 			//Create the pop up and set the size, location and layout.
 			final JFrame popup = new JFrame("Square Options");
-			popup.setSize(370, 300);
+			popup.setSize(370, 120);
 			popup.setLocationRelativeTo(null);
 			popup.setLayout(new FlowLayout());
 
@@ -301,17 +172,30 @@ public class CustomSetupMenu extends JPanel {
 
 	}
 
+	/**
+	 * @author 
+	 *
+	 */
 	class SetUpMouseListener implements MouseListener {
 		//TODO
 		/**
-		 * The Squares we are setting up.
+		 * The Square we are setting up.
 		 */
-		private Square square, option;
+		private Square square;
+		/**
+		 * The square holder for the piece being displayed
+		 */
+		private Square option;
 		/**
 		 * The Board on which the Square we are setting up resides.
 		 */
 		private Board board;
 		
+		/**
+		 * @param square
+		 * @param board
+		 * @param option
+		 */
 		public SetUpMouseListener(Square square, Board board, Square option){
 			this.square = square;
 			this.board = board;
@@ -330,6 +214,9 @@ public class CustomSetupMenu extends JPanel {
 					}
 		}
 
+		/**
+		 * @param isBlack
+		 */
 		private void setPieceOnBoard(boolean isBlack){
 			System.out.println(option.isHabitable());
 			if (option.isOccupied() == false){
@@ -351,37 +238,18 @@ public class CustomSetupMenu extends JPanel {
 				}
 				else{
 					JOptionPane.showMessageDialog(null,
-						    "Eggs are not supposed to be green.",
-						    "Inane warning",
+						    "This square is uninhabitable.",
+						    "Warning",
 						    JOptionPane.WARNING_MESSAGE);
 
 				}
 			}
 		}
 		
-		@Override
-		public void mouseEntered(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void mouseExited(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void mousePressed(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void mouseReleased(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-			
-		}
+		public void mouseEntered(MouseEvent arg0) {}
+		public void mouseExited(MouseEvent arg0) {}
+		public void mousePressed(MouseEvent arg0) {}
+		public void mouseReleased(MouseEvent arg0) {}
 		
 	}
 	
@@ -421,7 +289,6 @@ public class CustomSetupMenu extends JPanel {
 	 * @param b The builder which is creating the new game type.
 	 * @param whiteRules The whiteRules object.
 	 * @param blackRules The blackRules object.
-	 * @return 
 	 */
 	public CustomSetupMenu(Builder b, Rules whiteRules, Rules blackRules) {
 		this.b = b;
@@ -450,12 +317,11 @@ public class CustomSetupMenu extends JPanel {
 		final Board bShowPiece = new Board(1,1,false);
 		//final Square sShowPiece = new Square(1,1);
 		final JPanel showPiece = new JPanel();
-		final Piece p = PieceBuilder.makePiece("Pawn", true, bShowPiece.getSquare(1,1), bShowPiece);
 		showPiece.setLayout(new GridLayout(1,1));
 		showPiece.setPreferredSize(new Dimension(50,50));
 		
 		JButton jb1 = new JButton();
-		jb1.addActionListener(new SetUpListener(bShowPiece.getSquare(1, 1), bShowPiece));
+		jb1.addActionListener(new SetUpListener(bShowPiece.getSquare(1, 1)));
 		bShowPiece.getSquare(1, 1).setButton(jb1);//Let the Square know which button it owns.
 		showPiece.add(jb1);//Add the button to the grid.
 		bShowPiece.getSquare(1, 1).refresh();
@@ -472,6 +338,10 @@ public class CustomSetupMenu extends JPanel {
 	    piecesList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 	    piecesList.setLayoutOrientation(JList.VERTICAL);
 	    piecesList.setVisibleRowCount(-1);
+	    piecesList.setSelectedIndex(0);
+	    Piece toAdd = PieceBuilder.makePiece((String) list.elementAt(0), true, bShowPiece.getSquare(1,1), bShowPiece);
+    	bShowPiece.getSquare(1, 1).setPiece(toAdd);
+    	bShowPiece.getSquare(1, 1).refresh();
 	    
 	    ListSelectionModel selectList = piecesList.getSelectionModel();
 	    final Color original = bShowPiece.getSquare(1, 1).getColor();
@@ -481,8 +351,6 @@ public class CustomSetupMenu extends JPanel {
 			public void valueChanged(ListSelectionEvent e) {
 				ListSelectionModel lsm = (ListSelectionModel) e.getSource();
 				
-		        int firstIndex = e.getFirstIndex();
-		        int lastIndex = e.getLastIndex();
 		        int selection = lsm.getAnchorSelectionIndex();
 		        if (!lsm.getValueIsAdjusting()){
 			       	if (((String) list.elementAt(selection)).equals("Square Options")){

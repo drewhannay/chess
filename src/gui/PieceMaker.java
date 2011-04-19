@@ -21,7 +21,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import logic.Builder;
-import logic.Piece;
 import logic.PieceBuilder;
 
 /**
@@ -38,10 +37,6 @@ public class PieceMaker extends JPanel{
 	 * Builder for the new variant
 	 */
 	private Builder b;
-	/**
-	 * The color of the piece we are adding.
-	 */
-	private boolean isBlack;
 	/**
 	 * New Piece builder for the new.... piece
 	 */
@@ -191,6 +186,8 @@ public class PieceMaker extends JPanel{
 			knightMoving.add(new JLabel("x"));
 			knightMoving.add(knightSecond);
 			
+			//TODO add promotable as an option to determine what can be promoted
+			final JCheckBox promotable = new JCheckBox("This piece can be promoted", false);
 			
 			//Create button and add ActionListener for adding movement directions to a piece
 			final JButton addInstruction = new JButton("Add Movement Directions to this Piece");
@@ -286,20 +283,23 @@ public class PieceMaker extends JPanel{
 			c.gridy = 3;
 			c.gridwidth = 3;
 			movementSetup.add(addInstruction, c);
-			c.insets = new Insets(5, 0, 0, 0);
-			c.gridx = 0;
+			c.gridx= 0;
 			c.gridy = 4;
-			movementSetup.add(leaper, c);
+			movementSetup.add(promotable, c);
 			c.insets = new Insets(5, 0, 0, 0);
 			c.gridx = 0;
 			c.gridy = 5;
+			movementSetup.add(leaper, c);
+			c.insets = new Insets(5, 0, 0, 0);
+			c.gridx = 0;
+			c.gridy = 6;
 			movementSetup.add(knightOn, c);
 			c.insets = new Insets(5, 0, 5, 0);
 			c.gridx = 0;
-			c.gridy = 6;
+			c.gridy = 7;
 			movementSetup.add(new JLabel("<html><u>Knight-like Movement Directions:</u></br></html>"), c);
 			c.gridx = 0;
-			c.gridy = 7;
+			c.gridy = 8;
 			movementSetup.add(knightMoving, c);
 	
 		c.gridx = 0;
@@ -327,10 +327,6 @@ public class PieceMaker extends JPanel{
 					}
 					builder.setName(name.getText());//Set the name in the PieceBuilder
 					PieceBuilder.savePieceType(builder);//Save the piece type in the PieceBuilder class.
-					//Put the piece on it's square, refresh the square, dispose the pop up.
-//					Piece toAdd = PieceBuilder.makePiece(name.getText(), isBlack, null, null);
-//					if(leaper.isSelected()) //Add leaper movement style
-//						toAdd.setLeaper();
 					
 					//Refreshing the window
 					name.setText("");
@@ -428,7 +424,6 @@ public class PieceMaker extends JPanel{
 		c.gridy = 1;
 		add(mainButtons, c);
 
-		//Finally, set the pop up to visible.
 		}
 	
 	/**
