@@ -80,7 +80,9 @@ public class CustomSetupMenu extends JPanel {
 		 */
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
+			if (square.isOccupied()==false){
 			options();
+			}
 		}
 		
 		/**
@@ -220,11 +222,16 @@ public class CustomSetupMenu extends JPanel {
 		private void setPieceOnBoard(boolean isBlack){
 			System.out.println(option.isHabitable());
 			if (option.isOccupied() == false){
-				square.setBackgroundColor(option.getColor());
-				square.setHabitable(option.isHabitable());
-				square.refresh();
-				square.setPiece(null);
-				System.out.println(option.getColor());
+				if ((option.getColor().equals(Color.LIGHT_GRAY) == false) && (option.getColor().equals(Color.getHSBColor(30, 70, 70)) == false)){
+					square.setBackgroundColor(option.getColor());
+					square.setHabitable(option.isHabitable());
+					square.refresh();
+					if (option.isHabitable() == false)
+						square.setPiece(null);
+				}
+				else{
+					square.setHabitable(option.isHabitable());
+				}
 			}
 			else{
 				if (square.isHabitable() == true){
@@ -314,17 +321,21 @@ public class CustomSetupMenu extends JPanel {
 		//Get the array of boards from the builder so we can modify it.
 		final Board[] boards = b.getBoards();
 
-		final Board bShowPiece = new Board(1,1,false);
+		final Board bShowPiece = new Board(2,1,false);
 		//final Square sShowPiece = new Square(1,1);
 		final JPanel showPiece = new JPanel();
-		showPiece.setLayout(new GridLayout(1,1));
-		showPiece.setPreferredSize(new Dimension(50,50));
+		showPiece.setLayout(new GridLayout(2,1));
+		showPiece.setPreferredSize(new Dimension(50,100));
 		
 		JButton jb1 = new JButton();
+		final JButton jb2 = new JButton();
 		jb1.addActionListener(new SetUpListener(bShowPiece.getSquare(1, 1)));
-		bShowPiece.getSquare(1, 1).setButton(jb1);//Let the Square know which button it owns.
-		showPiece.add(jb1);//Add the button to the grid.
+		bShowPiece.getSquare(1, 1).setButton(jb1);
+		bShowPiece.getSquare(2, 1).setButton(jb2);//Let the Square know which button it owns.
+		showPiece.add(jb1);
+		showPiece.add(jb2);
 		bShowPiece.getSquare(1, 1).refresh();
+		bShowPiece.getSquare(2, 1).refresh();
 		
 		 // Create a List with a vertical ScrollBar
 		final DefaultListModel list = new DefaultListModel();
@@ -340,8 +351,11 @@ public class CustomSetupMenu extends JPanel {
 	    piecesList.setVisibleRowCount(-1);
 	    piecesList.setSelectedIndex(0);
 	    Piece toAdd = PieceBuilder.makePiece((String) list.elementAt(0), true, bShowPiece.getSquare(1,1), bShowPiece);
+	    Piece toAdd1 = PieceBuilder.makePiece((String) list.elementAt(0), false, bShowPiece.getSquare(1,1), bShowPiece);
     	bShowPiece.getSquare(1, 1).setPiece(toAdd);
+    	bShowPiece.getSquare(2, 1).setPiece(toAdd1);
     	bShowPiece.getSquare(1, 1).refresh();
+    	bShowPiece.getSquare(2, 1).refresh();
 	    
 	    ListSelectionModel selectList = piecesList.getSelectionModel();
 	    final Color original = bShowPiece.getSquare(1, 1).getColor();
@@ -358,15 +372,20 @@ public class CustomSetupMenu extends JPanel {
 			       			bShowPiece.getSquare(1, 1).setBackgroundColor(original);
 			       			bShowPiece.getSquare(1, 1).setHabitable(true);
 			       			bShowPiece.getSquare(1, 1).refresh();
+			       			jb2.setVisible(false);
 			       	}
 			        else{
+			        	jb2.setVisible(true);
 			        	if (bShowPiece.getSquare(1, 1).isHabitable() == false)
 			        		bShowPiece.getSquare(1, 1).setHabitable(true);
 			        	if (bShowPiece.getSquare(1, 1).getColor().equals(original) == false)
 			        		bShowPiece.getSquare(1, 1).setBackgroundColor(original);	
 			        	Piece toAdd = PieceBuilder.makePiece((String) list.elementAt(selection), true, bShowPiece.getSquare(1,1), bShowPiece);
+			        	Piece toAdd1 = PieceBuilder.makePiece((String) list.elementAt(selection), false, bShowPiece.getSquare(1,1), bShowPiece);
 			        	bShowPiece.getSquare(1, 1).setPiece(toAdd);
+			        	bShowPiece.getSquare(2, 1).setPiece(toAdd1);
 			        	bShowPiece.getSquare(1, 1).refresh();
+			        	bShowPiece.getSquare(2, 1).refresh();
 		       		}
 		        }
 			}
