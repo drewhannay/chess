@@ -27,17 +27,17 @@ public final class AlgebraicConverter {
 	 * HashMap to move from the char representation of a Class to the actual
 	 * Class
 	 */
-	private static HashMap<Character, Class<?>> map = new HashMap<Character, Class<?>>();
+	private static HashMap<Character, String> map = new HashMap<Character, String>();
 
 	/**
 	 * Static initializer to build the HashMap
 	 */
 	static {
-		map.put('B', Bishop.class);
-		map.put('K', King.class);
-		map.put('N', Knight.class);
-		map.put('Q', Queen.class);
-		map.put('R', Rook.class);
+		map.put('B', "Bishop");
+		map.put('K', "King");
+		map.put('N', "Knight");
+		map.put('Q', "Queen");
+		map.put('R', "Rook");
 	}
 
 	/**
@@ -51,8 +51,8 @@ public final class AlgebraicConverter {
 	private static Move algToMove(String s, Board board) {
 		Move move = null;
 		Matcher result = null;
-		Class<?> pieceKlass = null;
-		Class<?> promo = null;
+		String pieceKlass = null;
+		String promo = null;
 		int origRow = 0;
 		int origCol = 0;
 
@@ -70,7 +70,7 @@ public final class AlgebraicConverter {
 					move = new Move(board, Move.CASTLE_KING_SIDE);
 				} else {
 					if (result.group(2) != null) {
-						pieceKlass = map.get(result.group(2).charAt(0));
+						pieceKlass = map.get(result.group(2).charAt(0)); 
 					}
 
 					if (result.group(3) != null) {
@@ -91,8 +91,8 @@ public final class AlgebraicConverter {
 									.toLowerCase()));
 
 					if (origCol < 1 || origRow < 1) {
-						if (pieceKlass == null) {
-							pieceKlass = Pawn.class;
+						if(pieceKlass == null){
+							pieceKlass = "Pawn";
 						}
 						orig = board.getOriginSquare(pieceKlass, origCol,
 								origRow, dest);
@@ -110,7 +110,7 @@ public final class AlgebraicConverter {
 							// or
 							// '('
 						} else {
-							promo = map.get(result.group(8).charAt(0));
+							promo = map.get(result.group(8).charAt(0)); //TODO check this doesn't crash
 						}
 					}
 					if (promo == null) {

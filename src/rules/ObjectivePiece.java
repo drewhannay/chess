@@ -5,7 +5,6 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 
 import logic.Game;
-import logic.King;
 import logic.Piece;
 
 /**

@@ -50,7 +50,7 @@ public class Move implements Serializable {
 	/**
 	 * The Class to which this Move is promoting a Piece, if any
 	 */
-	protected Class<?> promo;
+	protected String promo;
 	/**
 	 * Boolean indicating whether this Move has been executed
 	 */
@@ -187,7 +187,7 @@ public class Move implements Serializable {
 	 * @param promo The Class to which the moving Piece will be promoted
 	 * @throws Exception If this move was illegal
 	 */
-	public Move(Board board, Square origin, Square dest, Class<?> promo) throws Exception {
+	public Move(Board board, Square origin, Square dest, String promo) throws Exception {
 		this.board = board;
 		this.origin = origin;
 		this.setDest(dest);

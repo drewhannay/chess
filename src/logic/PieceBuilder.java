@@ -1,7 +1,6 @@
 package logic;
 
 import java.io.Serializable;
-import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -56,6 +55,9 @@ public class PieceBuilder implements Serializable {
 		initPieceTypes();
 	}
 
+	/**
+	 * Initialize types...O
+	 */
 	public static void initPieceTypes(){
 		pieceTypes = new HashMap<String, PieceBuilder>();
 		pieceTypes.put("Pawn", new PieceBuilder("Pawn"));
@@ -114,7 +116,6 @@ public class PieceBuilder implements Serializable {
 	 * Make a new instance of a Piece type
 	 * @param name The name of the Piece to make
 	 * @param isBlack The team for the Piece
-	 * @param isObjective Is this the objective?
 	 * @param origin The Square the Piece occupies
 	 * @param board The Board the Piece occupies
 	 * @return The new Piece
@@ -149,16 +150,30 @@ public class PieceBuilder implements Serializable {
 	 * @return The created Piece object
 	 */
 	private Piece makePiece(boolean isBlack, Square origin, Board board) {
-		//TODO Make this better. Currently terrible. Maybe use Reflection?
-		try {
-
-			Class<?> klazz = Class.forName("logic." + name);
-			Constructor<?> con = klazz.getConstructor(boolean.class, Square.class, Board.class);
-			return (Piece) con.newInstance(isBlack, origin, board);
-		} catch (Exception e) {
-			//TODO Make sure darkImage and lightImage are not null. Or does that matter?
-			return new Piece(name, darkImage, lightImage, isBlack, origin, board, movements);
-		}
+		//TODO is it worth using reflection to get rid of that if/else? Doable, but worth it?
+		//I know how to do this so talk to me if we want to --Alisa
+		if(name.equals("Bishop"))
+			return Builder.createBishop(isBlack, origin, board);
+		if(name.equals("King"))
+			return Builder.createKing(isBlack, origin, board);
+		if(name.equals("Knight"))
+			return Builder.createKnight(isBlack,origin,board);
+		if(name.equals("Pawn"))
+			return Builder.createPawn(isBlack, origin, board);
+		if(name.equals("Queen"))
+			return Builder.createQueen(isBlack, origin, board);
+		if(name.equals("Rook"))
+			return Builder.createRook(isBlack,origin,board);
+		else return new Piece(name, darkImage, lightImage, isBlack, origin, board, movements);
+//		try {
+//
+//			Class<?> klazz = Class.forName("logic." + name);
+//			Constructor<?> con = klazz.getConstructor(boolean.class, Square.class, Board.class);
+//			return (Piece) con.newInstance(isBlack, origin, board);
+//		} catch (Exception e) {
+//			//TODO Make sure darkImage and lightImage are not null. Or does that matter?
+//			return new Piece(name, darkImage, lightImage, isBlack, origin, board, movements);
+//		}
 	}
 
 	/**

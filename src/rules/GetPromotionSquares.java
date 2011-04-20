@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import logic.Game;
-import logic.Pawn;
 import logic.Piece;
 import logic.Square;
 
@@ -71,7 +70,7 @@ public class GetPromotionSquares implements Serializable {
 	 * @return The list of squares it promotes on.
 	 */
 	public List<Square> classicPromoSquares(Piece p) {
-		if (!(p instanceof Pawn))
+		if (!(p.getName().equals("Pawn")))
 			return null;
 		List<Square> toReturn = new ArrayList<Square>();
 		for (int i = 1; i <= g.getBoards()[0].getMaxRow(); i++) {

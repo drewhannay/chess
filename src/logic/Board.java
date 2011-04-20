@@ -107,7 +107,7 @@ public class Board implements Serializable {
 	 * @param dest The Square where the Piece is moving to
 	 * @return The origin Square of the Piece that is moving
 	 */
-	public Square getOriginSquare(Class<?> pieceKlass, int origCol,
+	public Square getOriginSquare(String pieceKlass, int origCol,
 			int origRow, Square dest) {
 
 		// This method should never be called for anything but Classic chess
@@ -126,7 +126,7 @@ public class Board implements Serializable {
 		for (int i = 0; i < movingTeam.size(); i++) {
 			p = movingTeam.get(i);
 			if (p.genLegalDests(this) > 0) {
-				if ((p.getClass() == pieceKlass) && p.isLegalDest(dest)) {
+				if ((p.getName().equals(pieceKlass)) && p.isLegalDest(dest)) {
 					if ((origCol < 1 && origRow < 1)
 							|| // If the origCol and origRow were both zero
 							(origCol < 1 && p.getSquare().getRow() == origRow)

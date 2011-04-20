@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 import logic.Board;
 import logic.Game;
 import logic.Piece;
+import logic.PieceBuilder;
 import logic.Square;
 
 /**
@@ -63,14 +64,14 @@ public class Promote implements Serializable {
 	/**
 	 * What it was promoted to.
 	 */
-	private static Class<?> klazz;
+	private static String klazz;
 
 	static {
 		try {
 			doMethods.put("classic", Promote.class.getMethod("classicPromotion", Piece.class, boolean.class,
-					Class.class));
+					String.class));
 			undoMethods.put("classic", Promote.class.getMethod("classicUndo", Piece.class));
-			doMethods.put("noPromos", Promote.class.getMethod("noPromo", Piece.class, boolean.class, Class.class));
+			doMethods.put("noPromos", Promote.class.getMethod("noPromo", Piece.class, boolean.class, String.class));
 			undoMethods.put("noPromos", Promote.class.getMethod("noPromoUndo", Piece.class));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -95,7 +96,7 @@ public class Promote implements Serializable {
 	 * @param promo What the piece was promoted to.
 	 * @return The promoted Piece.
 	 */
-	public Piece classicPromotion(Piece p, boolean verified, Class<?> promo) {
+	public Piece classicPromotion(Piece p, boolean verified, String promo) {
 		lastPromoted = p.getClass();
 		if (!verified && promo == null) {
 			klazz = null;
@@ -107,7 +108,7 @@ public class Promote implements Serializable {
 					continue;
 				}
 				try {
-					klazz = Class.forName("logic." + result);
+					klazz = result;
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -117,8 +118,8 @@ public class Promote implements Serializable {
 		}
 
 		try {
-			Constructor<?> con = klazz.getConstructor(boolean.class, Square.class, Board.class);
-			Piece promoted = (Piece) con.newInstance(p.isBlack(), p.getSquare(), p.getBoard());
+
+			Piece promoted = PieceBuilder.makePiece(klazz,p.isBlack(), p.getSquare(), p.getBoard());
 			if (promoted.isBlack()) {
 				g.getBlackTeam().set(g.getBlackTeam().indexOf(p), promoted);
 			} else {
@@ -162,7 +163,7 @@ public class Promote implements Serializable {
 	 * @param promo What to promote from.
 	 * @return The promoted Piece.
 	 */
-	public Piece execute(Piece p, boolean verified, Class<?> promo) {
+	public Piece execute(Piece p, boolean verified, String promo) {
 		try {
 			if (doMethod == null) {
 				doMethod = doMethods.get(name);
@@ -181,7 +182,7 @@ public class Promote implements Serializable {
 	 * @param c Unused
 	 * @return the original piece.
 	 */
-	public Piece noPromo(Piece p, boolean b, Class<?> c) {
+	public Piece noPromo(Piece p, boolean b, String c) {
 		return p;
 	}
 

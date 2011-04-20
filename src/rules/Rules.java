@@ -244,7 +244,7 @@ public class Rules implements Serializable {
 	 * @param promo What it promotes from.
 	 * @return The promoted piece.
 	 */
-	public Piece promote(Piece toPromote, boolean verified, Class<?> promo) {
+	public Piece promote(Piece toPromote, boolean verified, String promo) {
 		return promote.execute(toPromote, verified, promo);
 	}
 
