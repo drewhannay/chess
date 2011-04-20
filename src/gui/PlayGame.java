@@ -88,32 +88,32 @@ public class PlayGame extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			if(mustPlace){
 				mustPlace = false;
-				g.nextTurn();
+				getGame().nextTurn();
 				if(!clickedSquare.isOccupied()&&clickedSquare.isHabitable()&&placePiece!=null){
 				placePiece.setSquare(clickedSquare);
 				clickedSquare.setPiece(placePiece);
 				placePiece = null;
 				mustPlace = false;
-				boardRefresh(g.getBoards());
-				g.genLegalDests();
+				boardRefresh(getGame().getBoards());
+				getGame().genLegalDests();
 				}
 				
 				return;
 			}
 			if (mustMove && clickedSquare == storedSquare) {
-				boardRefresh(g.getBoards());
+				boardRefresh(getGame().getBoards());
 				mustMove = false;
 			} else if (mustMove && clickedSquare.getColor() == Square.HIGHLIGHT_COLOR) {
 				try {
-					g.playMove(new Move(b, storedSquare, clickedSquare));
+					getGame().playMove(new Move(b, storedSquare, clickedSquare));
 					mustMove = false;
-					boardRefresh(g.getBoards());
+					boardRefresh(getGame().getBoards());
 				} catch (Exception e1) {
 					System.out.println(e1.getMessage());
 					e1.printStackTrace();
 				}
 			} else if (!mustMove && clickedSquare.getPiece() != null
-					&& clickedSquare.getPiece().isBlack() == g.isBlackMove()) {
+					&& clickedSquare.getPiece().isBlack() == getGame().isBlackMove()) {
 				List<Square> dests = clickedSquare.getPiece().getLegalDests();
 				if (dests.size() > 0) {
 					for (Square dest : dests) {
@@ -134,7 +134,7 @@ public class PlayGame extends JPanel {
 	/**
 	 * Reference to the current Game being played.
 	 */
-	protected static Game g;
+	private static Game g;
 
 	/**
 	 * Reference to the Square which will be moved to
@@ -220,24 +220,24 @@ public class PlayGame extends JPanel {
 	 * @param file The file holding the ACN of the game move history.
 	 */
 	public PlayGame(boolean isPlayback, File file) {
-		g = Builder.newGame("Classic");
+		setGame(Builder.newGame("Classic"));
 		PlayGame.isPlayback = isPlayback;
 		mustMove = false;
-		PlayGame.whiteTimer = g.getWhiteTimer();
-		PlayGame.blackTimer = g.getBlackTimer();
+		PlayGame.whiteTimer = getGame().getWhiteTimer();
+		PlayGame.blackTimer = getGame().getBlackTimer();
 		whiteTimer.restart();
 		blackTimer.restart();
-		turn(g.getBoards()[0].isBlackTurn());
+		turn(getGame().getBoards()[0].isBlackTurn());
 		initComponents(isPlayback);
-		g = AlgebraicConverter.convert(g, file);
-		history = new Move[g.getHistory().size()];
-		g.getHistory().toArray(history);
+		setGame(AlgebraicConverter.convert(getGame(), file));
+		history = new Move[getGame().getHistory().size()];
+		getGame().getHistory().toArray(history);
 		index = history.length - 1;
 		while (index >= 0) {
 			history[index].undo();
 			index--;
 		}
-		boardRefresh(g.getBoards());
+		boardRefresh(getGame().getBoards());
 	}
 
 	/**
@@ -247,7 +247,7 @@ public class PlayGame extends JPanel {
 	 * @param isPlayback whether PlayGame is in play back mode
 	 */
 	public PlayGame(Game g, boolean isPlayback) {
-		PlayGame.g = g;
+		PlayGame.setGame(g);
 		PlayGame.isPlayback = isPlayback;
 		if(isPlayback){
 			PlayGame.whiteTimer = new NoTimer();
@@ -289,18 +289,18 @@ public class PlayGame extends JPanel {
 			}
 		}
 		
-		Piece objective = g.isBlackMove() ? g.getBlackRules().objectivePiece(true) : g.getWhiteRules().objectivePiece(
+		Piece objective = getGame().isBlackMove() ? getGame().getBlackRules().objectivePiece(true) : getGame().getWhiteRules().objectivePiece(
 				false);
 		
 		if (objective != null && objective.isInCheck()) {
 			inCheck.setVisible(true);
-			if (g.getBlackRules().objectivePiece(true).isInCheck()) {
+			if (getGame().getBlackRules().objectivePiece(true).isInCheck()) {
 				inCheck.setBorder(BorderFactory.createTitledBorder("Black Team"));
 			} else {
 				inCheck.setBorder(BorderFactory.createTitledBorder("White Team"));
 			}
 			
-			for(Piece p : g.getThreats(objective))
+			for(Piece p : getGame().getThreats(objective))
 				p.getSquare().setColor(Color.red);
 			
 		} else {
@@ -312,7 +312,7 @@ public class PlayGame extends JPanel {
 			}
 		}
 		int index = 0;
-		Piece[] blackCaptured = g.getCapturedPieces(true);
+		Piece[] blackCaptured = getGame().getCapturedPieces(true);
 		for (int i = 1; i <= whiteCapturesBox.getMaxRow(); i++) {
 			for (int j = 1; j <= whiteCapturesBox.maxCol; j++) {
 				if (blackCaptured != null && index < blackCaptured.length) {
@@ -328,7 +328,7 @@ public class PlayGame extends JPanel {
 			}
 		}
 		index = 0;
-		Piece[] whiteCaptured = g.getCapturedPieces(false);
+		Piece[] whiteCaptured = getGame().getCapturedPieces(false);
 		for (int i = 1; i <= blackCapturesBox.getMaxRow(); i++) {
 			for (int j = 1; j <= blackCapturesBox.maxCol; j++) {
 				if (whiteCaptured != null && index < whiteCaptured.length) {
@@ -339,10 +339,10 @@ public class PlayGame extends JPanel {
 			}
 		}
 		// Highlight the name labels if it's their turn.
-		whiteLabel.setBackground(g.isBlackMove() ? null : Square.HIGHLIGHT_COLOR);
-		whiteLabel.setForeground(g.isBlackMove() ? Color.black : Color.white); 
-		blackLabel.setBackground(g.isBlackMove() ? Square.HIGHLIGHT_COLOR : null);
-		blackLabel.setForeground(g.isBlackMove() ? Color.white : Color.black);
+		whiteLabel.setBackground(getGame().isBlackMove() ? null : Square.HIGHLIGHT_COLOR);
+		whiteLabel.setForeground(getGame().isBlackMove() ? Color.black : Color.white); 
+		blackLabel.setBackground(getGame().isBlackMove() ? Square.HIGHLIGHT_COLOR : null);
+		blackLabel.setForeground(getGame().isBlackMove() ? Color.white : Color.black);
 
 	}
 
@@ -362,7 +362,7 @@ public class PlayGame extends JPanel {
 		case 0:
 			String fileName = JOptionPane.showInputDialog(null, "Enter a name for the save file:",
 					"Saving...", JOptionPane.PLAIN_MESSAGE);
-			g.saveGame("completedGames", fileName, g.isClassicChess());
+			getGame().saveGame("completedGames", fileName, getGame().isClassicChess());
 			Driver.getInstance().revertPanel();
 			break;
 		case 2:
@@ -447,12 +447,12 @@ public class PlayGame extends JPanel {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					if (g.getLastMove() == null)
+					if (getGame().getLastMove() == null)
 						return;
 					menu.setVisible(false);
 					Result r = new Result(Result.DRAW);
 					r.setText("Draw! \n" + "What would you like to do? \n");
-					g.getLastMove().setResult(r);
+					getGame().getLastMove().setResult(r);
 					endOfGame(r);
 				}
 			});
@@ -467,7 +467,7 @@ public class PlayGame extends JPanel {
 							"Saving...", JOptionPane.PLAIN_MESSAGE);
 					if (fileName == null)
 						return;
-					g.saveGame("gamesInProgress", fileName, false);
+					getGame().saveGame("gamesInProgress", fileName, false);
 					
 					menu.setVisible(false);
 					Driver.getInstance().revertPanel();
@@ -501,12 +501,12 @@ public class PlayGame extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				mustMove = false;
-				if (g.getHistory().size() == 0)
+				if (getGame().getHistory().size() == 0)
 					return;
-				g.getHistory().get(g.getHistory().size() - 1).undo();
-				g.getHistory().remove(g.getHistory().size() - 1);
-				(g.isBlackMove() ? g.getBlackRules() : g.getWhiteRules()).undoEndOfGame();
-				boardRefresh(g.getBoards());
+				getGame().getHistory().get(getGame().getHistory().size() - 1).undo();
+				getGame().getHistory().remove(getGame().getHistory().size() - 1);
+				(getGame().isBlackMove() ? getGame().getBlackRules() : getGame().getWhiteRules()).undoEndOfGame();
+				boardRefresh(getGame().getBoards());
 			}
 		});
 
@@ -518,7 +518,7 @@ public class PlayGame extends JPanel {
 		GridBagConstraints c = new GridBagConstraints();
 
 		//Get the Board[] from the Game.
-		final Board[] boards = g.getBoards();
+		final Board[] boards = getGame().getBoards();
 		this.setBorder(BorderFactory.createLoweredBevelBorder());
 		//Adds the grid
 
@@ -614,11 +614,11 @@ public class PlayGame extends JPanel {
 		 * This sets k to either the size of how many pieces white has or how many pieces black has.
 		 * If neither team has any pieces then 
 		 */
-		if (g.getWhiteTeam().size() <= 4 && g.getBlackTeam().size() <= 4) {
+		if (getGame().getWhiteTeam().size() <= 4 && getGame().getBlackTeam().size() <= 4) {
 			k = 4;
 		} else {
-			double o = g.getWhiteTeam().size() > g.getBlackTeam().size() ? Math.sqrt(g.getWhiteTeam().size()) : Math
-					.sqrt(g.getBlackTeam().size());
+			double o = getGame().getWhiteTeam().size() > getGame().getBlackTeam().size() ? Math.sqrt(getGame().getWhiteTeam().size()) : Math
+					.sqrt(getGame().getBlackTeam().size());
 			k = (int) Math.ceil(o);
 		}
 
@@ -798,5 +798,19 @@ public class PlayGame extends JPanel {
 	 */
 	public static void setPlacePiece(Piece p){
 		placePiece = p;
+	}
+
+	/**
+	 * @param g the g to set
+	 */
+	public static void setGame(Game g) {
+		PlayGame.g = g;
+	}
+
+	/**
+	 * @return the g
+	 */
+	public static Game getGame() {
+		return g;
 	}
 }

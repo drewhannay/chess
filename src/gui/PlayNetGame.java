@@ -97,35 +97,35 @@ public class PlayNetGame extends PlayGame {
 		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if(g.isBlackMove() == isBlack){
+			if(getGame().isBlackMove() == isBlack){
 				if(mustPlace){
 					mustPlace = false;
-					g.nextTurn();
+					getGame().nextTurn();
 					if(!clickedSquare.isOccupied()&&clickedSquare.isHabitable()&&placePiece!=null){
 					placePiece.setSquare(clickedSquare);
 					clickedSquare.setPiece(placePiece);
 					placePiece = null;
 					mustPlace = false;
-					boardRefresh(g.getBoards());
-					g.genLegalDests();
+					boardRefresh(getGame().getBoards());
+					getGame().genLegalDests();
 					}
 					
 					return;
 				}
 				if (mustMove && clickedSquare == storedSquare) {
-					boardRefresh(g.getBoards());
+					boardRefresh(getGame().getBoards());
 					mustMove = false;
 				} else if (mustMove && clickedSquare.getColor() == Square.HIGHLIGHT_COLOR) {
 					try {
-						g.playMove(new Move(b, storedSquare, clickedSquare));
+						getGame().playMove(new Move(b, storedSquare, clickedSquare));
 						mustMove = false;
-						boardRefresh(g.getBoards());
+						boardRefresh(getGame().getBoards());
 					} catch (Exception e1) {
 						System.out.println(e1.getMessage());
 						e1.printStackTrace();
 					}
 				} else if (!mustMove && clickedSquare.getPiece() != null
-						&& clickedSquare.getPiece().isBlack() == g.isBlackMove()) {
+						&& clickedSquare.getPiece().isBlack() == getGame().isBlackMove()) {
 					List<Square> dests = clickedSquare.getPiece().getLegalDests();
 					if (dests.size() > 0) {
 						for (Square dest : dests) {
@@ -212,7 +212,7 @@ public class PlayNetGame extends PlayGame {
 		GridBagConstraints c = new GridBagConstraints();
 
 		//Get the Board[] from the Game.
-		final Board[] boards = g.getBoards();
+		final Board[] boards = getGame().getBoards();
 		this.setBorder(BorderFactory.createLoweredBevelBorder());
 		//Adds the grid
 
@@ -308,11 +308,11 @@ public class PlayNetGame extends PlayGame {
 		 * This sets k to either the size of how many pieces white has or how many pieces black has.
 		 * If neither team has any pieces then 
 		 */
-		if (g.getWhiteTeam().size() <= 4 && g.getBlackTeam().size() <= 4) {
+		if (getGame().getWhiteTeam().size() <= 4 && getGame().getBlackTeam().size() <= 4) {
 			k = 4;
 		} else {
-			double o = g.getWhiteTeam().size() > g.getBlackTeam().size() ? Math.sqrt(g.getWhiteTeam().size()) : Math
-					.sqrt(g.getBlackTeam().size());
+			double o = getGame().getWhiteTeam().size() > getGame().getBlackTeam().size() ? Math.sqrt(getGame().getWhiteTeam().size()) : Math
+					.sqrt(getGame().getBlackTeam().size());
 			k = (int) Math.ceil(o);
 		}
 
@@ -471,10 +471,10 @@ public class PlayNetGame extends PlayGame {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					//TODO implement network feature to ask other player here
-					if (g.getLastMove() == null)
+					if (getGame().getLastMove() == null)
 						return;
 					menu.setVisible(false);
-					g.getLastMove().setResult(new Result(Result.DRAW));
+					getGame().getLastMove().setResult(new Result(Result.DRAW));
 					endOfGame(new Result(Result.DRAW));
 				}
 			});

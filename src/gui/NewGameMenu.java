@@ -236,13 +236,6 @@ public class NewGameMenu extends JPanel {
 					public void actionPerformed(ActionEvent arg0) {
 						setupPopup(true);
 						
-						try {
-							new NetworkServer().host();
-						} catch (Exception e) {
-							System.out.println("Host");
-							e.printStackTrace();
-						}
-						
 						pop.dispose();
 					}
 				});
@@ -451,13 +444,17 @@ public class NewGameMenu extends JPanel {
 					else{
 						game = new PlayNetGame(toPlay, false, false);
 					}
-					Driver.getInstance().setPanel(game);
+					try {
+						new NetworkServer().host(game);
+					} catch (Exception e) {
+						System.out.println("Host");
+						e.printStackTrace();
+					}
 				}
 				//else if(isAI){
 			//	}
 				else{
 					Game toPlay = Builder.newGame((String) dropdown.getSelectedItem());
-					System.out.println(dropdown.getSelectedItem());
 					toPlay.setTimers(whiteTimer, blackTimer);
 					PlayGame game = new PlayGame(toPlay, false);
 					Driver.getInstance().setPanel(game);

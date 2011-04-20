@@ -1,5 +1,8 @@
 package net;
 
+import gui.Driver;
+import gui.PlayNetGame;
+
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
@@ -9,7 +12,7 @@ import logic.Builder;
 
 public class NetworkServer {
 
-	public void host() throws Exception{
+	public void host(PlayNetGame png) throws Exception{
 		 
 		
 		
@@ -42,9 +45,11 @@ public class NetworkServer {
 //        out.writeObject(output);
         
         
-        output = Builder.newGame("Classic");
+        output = png.getGame();
         if(output!=null)
         	out.writeObject(output);
+        
+        Driver.getInstance().setPanel(png);
         
         try{
 	        while ((input = in.readObject()) != null) {
