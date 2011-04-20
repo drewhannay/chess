@@ -213,7 +213,7 @@ public class PlayGame extends JPanel {
 	/**
 	 * Menu to hold the options
 	 */
-	protected JMenu menu;
+	protected static JMenu menu;
 	
 	/**
 	 * @param isPlayback whether PlayGame is in playback mode
@@ -353,6 +353,7 @@ public class PlayGame extends JPanel {
 		if (isPlayback)
 			return;
 		Object[] options = new String[] { "Save Record of Game", "New Game", "Quit" };
+		menu.setVisible(false);
 		int answer = JOptionPane.showOptionDialog(null,
 				r.text(), r.winText(),
 						JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null,
