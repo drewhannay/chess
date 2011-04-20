@@ -84,6 +84,11 @@ public class Piece implements Serializable {
 	 * The Square that this Piece started on when the Game began
 	 */
 	protected Square originalSquare;
+	/**
+	 * What the piece can promote to; if size one, promotion is automatic and
+	 * is not prompted.
+	 */
+	protected ArrayList<String> promotesTo = new ArrayList<String>();
 
 	/**
 	 * Constructor
@@ -92,7 +97,6 @@ public class Piece implements Serializable {
 	 * @param lightIcon The Icon representing the white version of Piece in the GUI
 	 * @param darkIcon The Icon representing the black version of Piece in the GUI
 	 * @param isBlack The color of this Piece
-	 * @param isObjective Is this piece the objective?
 	 * @param curSquare The Square this Piece occupies
 	 * @param board The Board this Piece occupies
 	 * @param movements HashMap of legal movements for this Piece
@@ -1012,6 +1016,21 @@ public class Piece implements Serializable {
 	 */
 	public void setLeaper(){
 		this.leaper = true;
+	}
+	/**
+	 * Getter for promotesTo
+	 * @return The list of type names it can promote to.
+	 */
+	public ArrayList<String> getPromotesTo() {
+		return promotesTo;
+	}
+	/**
+	 * Setter for promotesTo
+	 * @param promotesTo The new ArrayList for promotesTo.
+	 */
+	public void setPromotesTo(ArrayList<String> promotesTo) {
+		this.promotesTo = promotesTo;
+		
 	}
 
 }

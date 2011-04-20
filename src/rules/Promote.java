@@ -1,17 +1,14 @@
 package rules;
 
 import java.io.Serializable;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 
 import javax.swing.JOptionPane;
 
-import logic.Board;
 import logic.Game;
 import logic.Piece;
 import logic.PieceBuilder;
-import logic.Square;
 
 /**
  * Promote.java
@@ -99,11 +96,13 @@ public class Promote implements Serializable {
 	public Piece classicPromotion(Piece p, boolean verified, String promo) {
 		lastPromoted = p.getName();
 		if (!verified && promo == null) {
-			klazz = null;
-			while (klazz == null) {
+			klazz = "";
+			if(p.getPromotesTo().size()==1)
+				klazz = p.getPromotesTo().get(0);
+			while (klazz.equals("")) {
 				String result = (String) JOptionPane.showInputDialog(null, "Select the Promotion type:",
 						"Promo choice", JOptionPane.PLAIN_MESSAGE, null,
-						new String[] { "Queen", "Rook", "Bishop", "Knight" }, null);
+						p.getPromotesTo().toArray(), null);
 				if (result == null) {
 					continue;
 				}
