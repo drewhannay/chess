@@ -158,6 +158,7 @@ public abstract class ChessTimer extends JApplet implements ActionListener, Seri
 	 */
 	public void timeElapsed() {
 		Result r = new Result(isBlack ? Result.WHITE_WIN : Result.BLACK_WIN);
+		r.setText("Time has run out. " + r.winText() + "\n");
 		PlayGame.endOfGame(r);
 		timer.stop();
 

@@ -163,9 +163,9 @@ public class NewGameMenu extends JPanel {
 										return;
 									}
 								}
-								
+								Thread client;
 								try{
-									new Thread(new Runnable() {
+									client = new Thread(new Runnable() {
 										@Override
 										public void run() {
 											try {
@@ -174,8 +174,11 @@ public class NewGameMenu extends JPanel {
 												System.out.println(e.getMessage());
 												e.printStackTrace();
 											}
+											
 										}
-									}).start();
+									});
+									client.start();
+									while(client.isAlive());
 								}catch(Exception e1){
 									System.out.println(e1.getMessage());
 									e1.printStackTrace();
