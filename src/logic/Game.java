@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import net.NetMove;
 import rules.Rules;
 import timer.ChessTimer;
 import timer.NoTimer;
@@ -687,6 +688,11 @@ public class Game implements Serializable {
 		} else {
 			getWhiteRules().undoAfterMove(m);
 		}
+	}
+	
+	public Move fakeToRealMove(NetMove m) throws Exception {
+		Board toPlay = boards[m.boardNum];
+		return new Move(toPlay,toPlay.getSquare(m.originRow, m.originCol),toPlay.getSquare(m.destRow, m.destCol));
 	}
 
 }

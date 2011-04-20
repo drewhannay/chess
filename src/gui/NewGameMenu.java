@@ -17,12 +17,12 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle;
 
 import logic.Builder;
 import logic.Game;
+import net.NetworkClient;
 import timer.BronsteinDelay;
 import timer.ChessTimer;
 import timer.Fischer;
@@ -135,6 +135,7 @@ public class NewGameMenu extends JPanel {
 						save.addActionListener(new ActionListener() {
 							@Override
 							public void actionPerformed(ActionEvent e) {
+								final String host;
 								if(computer.getText().equals("")) {
 									JOptionPane.showMessageDialog(null, "Please enter a number");
 									return;
@@ -142,7 +143,8 @@ public class NewGameMenu extends JPanel {
 								else if(computer.getText().length() <2){
 									try{
 										int hostNumber = Integer.parseInt(computer.getText());
-										String host = "0" + hostNumber;
+										if(hostNumber>25 || hostNumber<1) throw new Exception();
+										host = "cslab0" + hostNumber;
 									} catch(Exception ne){
 										JOptionPane.showMessageDialog(null, "Please enter a number between 1-25 in the box");
 										return;
@@ -151,14 +153,32 @@ public class NewGameMenu extends JPanel {
 								else{
 									try{
 										int hostNumber = Integer.parseInt(computer.getText());
-										String host = "" + hostNumber;
+										if(hostNumber>25 || hostNumber<1) throw new Exception();
+										host = "cslab" + hostNumber;
 									} catch(Exception ne){
 										JOptionPane.showMessageDialog(null, "Please enter a number between 1-25 in the box");
 										return;
 									}
 								}
 								
-								//TODO accept the host and make the connection
+								try{
+									new Thread(new Runnable() {
+										@Override
+										public void run() {
+											try {
+												new NetworkClient().join(host);
+											} catch (Exception e) {
+												System.out.println(e.getMessage());
+												e.printStackTrace();
+											}
+										}
+									}).start();
+								}catch(Exception e1){
+									System.out.println(e1.getMessage());
+									e1.printStackTrace();
+								}
+								
+								
 								popped.dispose();
 							}
 						});
