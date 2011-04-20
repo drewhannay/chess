@@ -122,6 +122,7 @@ public class EndOfGame implements Serializable {
 				return;
 		}
 		Result r = new Result(!g.isBlackMove() ? Result.BLACK_WIN : Result.WHITE_WIN);
+		r.setText("Game Over! " + r.winText() + "\n");
 		PlayGame.endOfGame(r);
 	}
 
@@ -134,6 +135,7 @@ public class EndOfGame implements Serializable {
 		if (g.getLastMove() != null && g.getLastMove().isVerified() && g.getLastMove().isCheck()) {
 			if (++checks == maxChecks) {
 				Result r = new Result(g.isBlackMove() ? Result.WHITE_WIN : Result.BLACK_WIN);
+				r.setText("Game Over! " + r.winText() + "\n");
 				PlayGame.endOfGame(r);
 
 			}
@@ -155,6 +157,8 @@ public class EndOfGame implements Serializable {
 				if (g.getLastMove() != null) {
 					g.getLastMove().setCheckmate(true);
 					Result r = new Result(g.isBlackMove() ? Result.WHITE_WIN : Result.BLACK_WIN);
+					r.setText("Game over! " + r.winText() +  "\n" + "The piece(s) that caused the final check are highlighted in Red. \n" + "The piece that placed the King in check was the " + g.getThreats(objectivePiece)[0].getName() + " at location " + g.getThreats(objectivePiece)[0].getSquare().toString(new boolean[]{false,false}) + "\n"
+							+ "What would you like to do? \n");
 					g.getLastMove().setResult(r);
 					if (!g.getHistory().contains(g.getLastMove())) {
 						g.getHistory().add(g.getLastMove());
@@ -168,6 +172,7 @@ public class EndOfGame implements Serializable {
 				if (g.getLastMove() != null) {
 					g.getLastMove().setStalemate(true);
 					Result r = new Result(Result.DRAW);
+					r.setText("Draw! " + "\n");
 					g.getLastMove().setResult(r);
 					if (!g.getHistory().contains(g.getLastMove())) {
 						g.getHistory().add(g.getLastMove());
@@ -213,6 +218,7 @@ public class EndOfGame implements Serializable {
 				return;
 		}
 		Result r = new Result(blackLosesPieces ? Result.BLACK_WIN : Result.WHITE_WIN);
+		r.setText("Game Over! " + r.winText() + "\n");
 		PlayGame.endOfGame(r);
 	}
 

@@ -85,12 +85,25 @@ public class Result implements Serializable{
 		return choice == WHITE_WIN;
 	}
 
+
+	public String winText() {
+		return choice == WHITE_WIN ? "White won!" : "Black won!";
+	}
+	
 	/**
 	 * Getter method for the text of this Result
 	 * @return The text of this Result
 	 */
-	public String text() {
-		return choice == WHITE_WIN ? "White won!" : "Black won!";
+	public String text(){
+		return text;
+	}
+	
+	/**
+	 * Setter method for the text of this Result
+	 * @param text The text of this Result
+	 */
+	public void setText(String text){
+		this.text = text;
 	}
 
 	/**
@@ -116,7 +129,7 @@ public class Result implements Serializable{
 		default:
 			s = "?";
 		}
-		return s;
+		return text;
 	}
 
 }
