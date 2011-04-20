@@ -341,10 +341,15 @@ public class PlayGame extends JPanel {
 		if (isPlayback)
 			return;
 		Object[] options = new String[] { "Save Record of Game", "New Game", "Quit" };
+		String toDisplay;
+		System.out.println(r.isDraw());
+		if(r.isDraw())
+			toDisplay = "Draw! " + "\n";
+		else
+			toDisplay = "Game over! " + r.text() + "\n" + "The piece(s) that caused the final check are highlighted in Red.\n";
+		toDisplay += "What would you like to do?";
 		int answer = JOptionPane.showOptionDialog(null,
-				"Game over! " + r.text() + "\n" +
-				"The piece(s) that caused the final check are highlighted in Red.\n"	+
-				"What would you like to do?", r.text(),
+				toDisplay, r.text(),
 						JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null,
 						options, options[0]);
 		switch (answer) {

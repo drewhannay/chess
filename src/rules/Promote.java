@@ -60,7 +60,7 @@ public class Promote implements Serializable {
 	/**
 	 * What the piece was promoted from
 	 */
-	private static Class<?> lastPromoted;
+	private static String lastPromoted;
 	/**
 	 * What it was promoted to.
 	 */
@@ -97,7 +97,7 @@ public class Promote implements Serializable {
 	 * @return The promoted Piece.
 	 */
 	public Piece classicPromotion(Piece p, boolean verified, String promo) {
-		lastPromoted = p.getClass();
+		lastPromoted = p.getName();
 		if (!verified && promo == null) {
 			klazz = null;
 			while (klazz == null) {
@@ -141,8 +141,8 @@ public class Promote implements Serializable {
 	 */
 	public Piece classicUndo(Piece p) {
 		try {
-			Constructor<?> con = lastPromoted.getConstructor(boolean.class, Square.class, Board.class);
-			Piece promoted = (Piece) con.newInstance(p.isBlack(), p.getSquare(), p.getBoard());
+			
+			Piece promoted = PieceBuilder.makePiece(lastPromoted,p.isBlack(), p.getSquare(), p.getBoard());
 			if (promoted.isBlack()) {
 				g.getBlackTeam().set(g.getBlackTeam().indexOf(p), promoted);
 			} else {
