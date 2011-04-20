@@ -66,7 +66,11 @@ public class NewGameMenu extends JPanel {
 	 * JButton to return to previous screen.
 	 */
 	private JButton backButton;
-	
+	/**
+	 * The host of the game for playing
+	 */
+	private String host = "";
+
 	/**
 	 * Represents whether an option has been
 	 * clicked; reset once the game begins.
@@ -101,7 +105,7 @@ public class NewGameMenu extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				if(!clicked){
 					clicked = true;
-					setupPopup();
+					setupPopup(false);
 				}}});
 
 		//Create button and add ActionListener
@@ -112,7 +116,7 @@ public class NewGameMenu extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				final JFrame pop = new JFrame("New Game");
 				pop.setLayout(new FlowLayout());
-				pop.setSize(350, 150); //TODO Figure out if there's a better way to set the size of the window.
+				pop.setSize(350, 150);
 				pop.setResizable(false);
 				pop.setLocationRelativeTo(null);
 				JPanel options = new JPanel();
@@ -123,19 +127,18 @@ public class NewGameMenu extends JPanel {
 					public void actionPerformed(ActionEvent arg0) {
 						final JFrame popped = new JFrame("New Game");
 						popped.setLayout(new GridBagLayout());
-						popped.setSize(370, 150); //TODO Figure out if there's a better way to set the size of the window.
+						popped.setSize(370, 150); 
 						popped.setResizable(false);
 						popped.setLocationRelativeTo(null);
 						GridBagConstraints c = new GridBagConstraints();
 						
-						final JLabel host = new JLabel("Which computer would you like to connect to?");
+						final JLabel hoster = new JLabel("Which computer would you like to connect to?");
 						final JTextField computer = new JTextField("", 2);
 						
 						final JButton save = new JButton("Next");
 						save.addActionListener(new ActionListener() {
 							@Override
 							public void actionPerformed(ActionEvent e) {
-								final String host;
 								if(computer.getText().equals("")) {
 									JOptionPane.showMessageDialog(null, "Please enter a number");
 									return;
@@ -198,7 +201,7 @@ public class NewGameMenu extends JPanel {
 						c.gridy = 0;
 						c.gridwidth = 2;
 						c.insets = new Insets(3,3,3,3);
-						popped.add(host, c);
+						popped.add(hoster, c);
 						c.gridx = 0;
 						c.gridy = 1;
 						c.gridwidth = 1;
@@ -228,7 +231,7 @@ public class NewGameMenu extends JPanel {
 				host.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent arg0) {
-						setupPopup();
+						setupPopup(true);
 						//TODO set up hosting, etc.
 						pop.dispose();
 					}
@@ -316,7 +319,11 @@ public class NewGameMenu extends JPanel {
 		);
 	}
 	
-	public void setupPopup(){
+	/**
+	 * This is the method to open the pop up to create a new game.
+	 * @param isNetwork boolean to see if this is a network game or not
+	 */
+	public void setupPopup(final boolean isNetwork){
 		clicked = true;
 		final JFrame popup = new JFrame("New Game");
 		popup.setLayout(new FlowLayout());
@@ -424,11 +431,26 @@ public class NewGameMenu extends JPanel {
 				}
 				//Create the new panel and display it, then get rid of this pop up.
 
-				Game toPlay = Builder.newGame((String) dropdown.getSelectedItem());
-				toPlay.setTimers(whiteTimer, blackTimer);
-				PlayGame game = new PlayGame(toPlay, false);
-				Driver.getInstance().setPanel(game);
-
+				if(isNetwork){
+					Game toPlay = Builder.newGame((String) dropdown.getSelectedItem());
+					toPlay.setTimers(whiteTimer, blackTimer);
+					PlayNetGame game;
+					if(host.equals(arg0)){
+						game = new PlayNetGame(toPlay, false, true);
+					}
+					else{
+						game = new PlayNetGame(toPlay, false, false);
+					}
+					Driver.getInstance().setPanel(game);
+				}
+				//else if(isAI){
+			//	}
+				else{
+					Game toPlay = Builder.newGame((String) dropdown.getSelectedItem());
+					toPlay.setTimers(whiteTimer, blackTimer);
+					PlayGame game = new PlayGame(toPlay, false);
+					Driver.getInstance().setPanel(game);
+				}
 				popup.dispose();
 			}
 		});

@@ -6,8 +6,6 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -16,11 +14,9 @@ import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JColorChooser;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -58,6 +54,43 @@ public class CustomSetupMenu extends JPanel {
 	 * ActionListener to handle board setup.
 	 * 
 	 * @author Drew Hannay & Daniel Opdyke
+	 */
+	
+	/**
+	 * Int to hold how many objective pieces have been placed
+	 */
+	private int objectives =0;
+	/**
+	 * Int to hold the amount of allowable objectives
+	 */
+	private int allowableObjectives = 1;
+	/**
+	 * Rules holder for the white rules
+	 */
+	private Rules whiteRules;
+	/**
+	 * Rules holder for the black rules
+	 */
+	private Rules blackRules;
+	/**
+	 * Constructor.
+	 * Initialize the ArrayLists and call initComponents to initialize the GUI.
+	 * @param b The builder which is creating the new game type.
+	 * @param whiteRules The whiteRules object.
+	 * @param blackRules The blackRules object.
+	 */
+	public CustomSetupMenu(Builder b, Rules whiteRules, Rules blackRules) {
+		this.b = b;
+		whiteTeam = new ArrayList<Piece>();
+		blackTeam = new ArrayList<Piece>();
+		this.whiteRules = whiteRules;
+		this.blackRules = blackRules;
+		initComponents();
+	}
+	
+	/**
+	 * @author 
+	 *
 	 */
 	class SetUpListener implements ActionListener {
 
@@ -194,19 +227,14 @@ public class CustomSetupMenu extends JPanel {
 		 */
 		private Board board;
 		/**
-		 * Stores what item is selected;
-		 */
-		private boolean remove;
-		/**
 		 * @param square
 		 * @param board
 		 * @param option
 		 */
-		public SetUpMouseListener(Square square, Board board, Square option, boolean remove){
+		public SetUpMouseListener(Square square, Board board, Square option){
 			this.square = square;
 			this.board = board;
 			this.option = option;
-			this.remove = remove;
 		}
 		
 		@Override
@@ -242,6 +270,14 @@ public class CustomSetupMenu extends JPanel {
 			else{
 				if (square.isHabitable() == true){
 					Piece p = PieceBuilder.makePiece(option.getPiece().getName(), isBlack, square, board);
+//					if(whiteRules.objectivePiece(isBlack) == p) {
+//						objectives++;
+//						RuleMaker.needsObj = false;
+//					}
+//					if(allowableObjectives < objectives){
+//						JOptionPane.showMessageDialog(null, "You cannot place any more objective pieces");
+//						return;
+//					}
 					if (isBlack)
 						blackTeam.add(p);
 					else
@@ -296,19 +332,6 @@ public class CustomSetupMenu extends JPanel {
 	 */
 	private JButton submitButton;
 
-	/**
-	 * Constructor.
-	 * Initialize the ArrayLists and call initComponents to initialize the GUI.
-	 * @param b The builder which is creating the new game type.
-	 * @param whiteRules The whiteRules object.
-	 * @param blackRules The blackRules object.
-	 */
-	public CustomSetupMenu(Builder b, Rules whiteRules, Rules blackRules) {
-		this.b = b;
-		whiteTeam = new ArrayList<Piece>();
-		blackTeam = new ArrayList<Piece>();
-		initComponents(whiteRules, blackRules);
-	}
 
 	/**
 	 * Initialize components of the GUI
@@ -317,7 +340,7 @@ public class CustomSetupMenu extends JPanel {
 	 * @param whiteRules the rules for white team.
 	 * @param blackRules the rules for black team.
 	 */
-	private void initComponents(final Rules whiteRules, final Rules blackRules) {
+	private void initComponents() {
 
 		//Set the layout of this JPanel.
 		setLayout(new FlowLayout());
@@ -335,10 +358,8 @@ public class CustomSetupMenu extends JPanel {
 		}
 		list.addElement("Square Options");
 //		list.addElement("Remove Piece");
-	    JList piecesList = new JList(list);
+	    final JList piecesList = new JList(list);
 	    
-	    final boolean remove = false;
-
 		final Board bShowPiece = new Board(2,1,false);
 		final JPanel showPiece = new JPanel();
 		showPiece.setLayout(new GridLayout(2,1));
@@ -423,7 +444,7 @@ public class CustomSetupMenu extends JPanel {
 			for (int i = numRows; i > 0; i--) {
 				for (int j = 1; j <= numCols; j++) {
 					JButton jb = new JButton();
-					jb.addMouseListener(new SetUpMouseListener(boards[n].getSquare(i, j), boards[n], bShowPiece.getSquare(1, 1), remove));
+					jb.addMouseListener(new SetUpMouseListener(boards[n].getSquare(i, j), boards[n], bShowPiece.getSquare(1, 1)));
 					boards[n].getSquare(i, j).setButton(jb);//Let the Square know which button it owns.
 					grid.add(jb);//Add the button to the grid.
 					boards[n].getSquare(i, j).refresh(); //Have the square refresh all it's properties now that they're created.
@@ -452,6 +473,10 @@ public class CustomSetupMenu extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				if(RuleMaker.needsObj == true){
+					JOptionPane.showMessageDialog(null, "You must select a piece to be an objective.");
+					return;
+				}
 				b.whiteTeam = whiteTeam;
 				boolean set = false;
 				for (Piece p : whiteTeam) {
@@ -512,22 +537,5 @@ public class CustomSetupMenu extends JPanel {
 		options.add(backButton, c);
 		
 		add(options);
-	}
-	/**
-	 * Makes the icon for the for the new piece
-	 * @param fc The file chooser to select the piece
-	 * @param builder The builder that is building the piece
-	 * @return the icon to add to the button displaying the icon for the new piece
-	 */
-	public ImageIcon makeIcon(JFileChooser fc, PieceBuilder builder){
-		//If a valid File was chosen, make an ImageIcon from the file path.
-		String file = fc.getSelectedFile().getAbsolutePath();
-		
-		// default center section
-		ImageIcon icon = new ImageIcon(file);
-		//Scale the image to 48x48.
-		icon.setImage(icon.getImage().getScaledInstance(48, 48, Image.SCALE_SMOOTH));
-		builder.setLightImage(icon);
-		return icon;
 	}
 }

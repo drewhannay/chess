@@ -202,7 +202,6 @@ public class PieceMaker extends JPanel{
 							dropdown.removeItemAt(dropdown.getSelectedIndex());
 							dist.setText(""); //Clear their int distance.
 							
-							//TODO add knight instructions here
 						}
 					}
 				}
@@ -441,7 +440,6 @@ public class PieceMaker extends JPanel{
 		ImageIcon icon = new ImageIcon(file);
 		//Scale the image to 48x48.
 		icon.setImage(icon.getImage().getScaledInstance(48, 48, Image.SCALE_SMOOTH));
-		builder.setLightImage(icon);
 		return icon;
 	}
 	

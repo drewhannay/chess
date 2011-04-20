@@ -47,7 +47,7 @@ public class PlayGame extends JPanel {
 	/**
 	 * If the next move will place a piece.
 	 */
-	private static boolean mustPlace;
+	static boolean mustPlace;
 	/**
 	 * ButtonListener
 	 * 
@@ -123,9 +123,7 @@ public class PlayGame extends JPanel {
 					mustMove = true;
 				}
 			}
-
 		}
-
 	}
 
 	/**
@@ -136,73 +134,87 @@ public class PlayGame extends JPanel {
 	/**
 	 * Reference to the current Game being played.
 	 */
-	private static Game g;
+	protected static Game g;
 
 	/**
 	 * Reference to the Square which will be moved to
 	 */
-	private Square storedSquare;
+	protected Square storedSquare;
 
 	/**
 	 * Boolean indicating if this piece must move before another may be selected
 	 */
-	private static boolean mustMove;
+	protected static boolean mustMove;
 	/**
 	 * Timer for the white team
 	 */
-	private static ChessTimer whiteTimer;
+	protected static ChessTimer whiteTimer;
 
 	/**
 	 * Timer for the black team.
 	 */
-	private static ChessTimer blackTimer;
+	protected static ChessTimer blackTimer;
 	/**
 	 * Display message for being in check. Invisible when not in check.
 	 */
-	private static JLabel inCheck;
+	protected static JLabel inCheck;
 	/**
 	 * The label for the white team.
 	 */
-	private static JLabel whiteLabel;
+	protected static JLabel whiteLabel;
 	/**
 	 * The label for the black team.
 	 */
-	private static JLabel blackLabel;
+	protected static JLabel blackLabel;
 	/**
 	 * The Panel to hold any black pieces that have been captured by white.
 	 */
-	private static JPanel whiteCaptures;
+	protected static JPanel whiteCaptures;
 	/**
 	 * The Panel to hold any white pieces that have been captured by black.
 	 */
-	private static JPanel blackCaptures;
+	protected static JPanel blackCaptures;
 	/**
 	 * The Jail that holds black pieces white has taken.
 	 */
-	private static Jail whiteCapturesBox;
+	protected static Jail whiteCapturesBox;
 	/**
 	 * The Jail that holds white pieces black
 	 */
-	private static Jail blackCapturesBox;
+	protected static Jail blackCapturesBox;
 	/**
 	 * Defines the state of PlayGame to be in a game or a play back of a completed game.
 	 */
-	private static boolean isPlayback;
+	protected static boolean isPlayback;
 	/**
 	 * Used for the play back and undo functions. This hold the history of moves in an array of moves.
 	 */
-	private static Move[] history;
-
+	protected static Move[] history;
+	/**
+	 * Button for undoing moves
+	 */
+	protected JButton undoItem;
 	/**
 	 * This keeps the current place in the Move[] array during games.
 	 */
-	private static int index;
-
+	protected static int index;
 	/**
 	 * The piece to place upon clicking.
 	 */
-	private static Piece placePiece;
-
+	protected static Piece placePiece;
+	/**
+	 * Menu item for saving games
+	 */
+	protected JMenuItem saveItem;
+	/**
+	 * Menu item to declare a draw
+	 */
+	protected JMenuItem drawItem;
+	/**
+	 * Menu to hold the options
+	 */
+	protected JMenu menu;
+	
 	/**
 	 * @param isPlayback whether PlayGame is in playback mode
 	 * @param file The file holding the ACN of the game move history.
@@ -429,12 +441,12 @@ public class PlayGame extends JPanel {
 	 * @return The Menu bar for the GUI
 	 */
 	public JMenu createMenu() {
-		final JMenu menu = new JMenu("Menu");
+		menu = new JMenu("Menu");
 
 		if (!isPlayback) {
 
-			JMenuItem drawItem = new JMenuItem("Declare Draw", KeyEvent.VK_D);
-			JMenuItem saveItem = new JMenuItem("Save & Quit", KeyEvent.VK_S);
+			drawItem = new JMenuItem("Declare Draw", KeyEvent.VK_D);
+			saveItem = new JMenuItem("Save & Quit", KeyEvent.VK_S);
 
 			drawItem.addActionListener(new ActionListener() {
 
@@ -485,7 +497,7 @@ public class PlayGame extends JPanel {
 		inCheck.setHorizontalTextPosition(inCheck.CENTER);
 		inCheck.setForeground(Color.RED);
 		
-		JButton undoItem = new JButton("Undo");
+		undoItem = new JButton("Undo");
 		undoItem.addActionListener(new ActionListener() {
 
 			@Override

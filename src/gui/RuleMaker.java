@@ -44,7 +44,10 @@ public class RuleMaker extends JPanel {
 	 * Rules for the Black Team
 	 */
 	private Rules blackRules = new Rules(false);
-	
+	/**
+	 * This is a boolean to see if we need to force a piece to be set as an Objective
+	 */
+	static boolean needsObj = false;
 	/**
 	 * Constructor for setting up the rules window
 	 * @param b the builder containing everything
@@ -415,7 +418,7 @@ public class RuleMaker extends JPanel {
 						wCaptureAllType.setSelected(false);
 						wLoseAll.setEnabled(false);
 						wLoseAll.setSelected(false);
-						//TODO force an objective piece selection somehow.
+						needsObj = true;
 					}
 					else{
 						wCaptureAll.setEnabled(true);
@@ -433,7 +436,7 @@ public class RuleMaker extends JPanel {
 						bCaptureAllType.setSelected(false);
 						bLoseAll.setEnabled(false);
 						bLoseAll.setSelected(false);
-						//TODO force an objective piece selection somehow.
+						needsObj = true;
 					}
 					else{
 						bCaptureAll.setEnabled(true);
@@ -553,7 +556,7 @@ public class RuleMaker extends JPanel {
 						wLoseAll.setSelected(false);
 						wCheckTimes.setEnabled(false);
 						wCheckTimes.setSelected(false);
-						//TODO force an objective piece selection somehow.
+						needsObj = true;
 					}
 					else{
 						wChangeColor.setEnabled(true);
@@ -577,7 +580,7 @@ public class RuleMaker extends JPanel {
 						bLoseAll.setSelected(false);
 						bCheckTimes.setEnabled(false);
 						bCheckTimes.setSelected(false);
-						//TODO force an objective piece selection somehow.
+						needsObj = true;
 					}
 					else{
 						bChangeColor.setEnabled(true);
