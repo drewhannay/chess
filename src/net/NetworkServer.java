@@ -5,9 +5,11 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import logic.Builder;
+
 public class NetworkServer {
 
-	public static void main(String[] args) throws Exception {
+	public void host() throws Exception{
 		 
 		
 		
@@ -36,16 +38,21 @@ public class NetworkServer {
         Object output;
         NetworkProtocol np = new NetworkProtocol();
  
-        output = np.processInput(null);
-        out.writeObject(output);
+//        output = np.processInput(null);
+//        out.writeObject(output);
+        
+        
+        output = Builder.newGame("Classic");
+        if(output!=null)
+        	out.writeObject(output);
         
         try{
 	        while ((input = in.readObject()) != null) {
-	             output = np.processInput(input);
-	             out.writeObject(output);
-	             out.flush();
-	             if (input.toString().equalsIgnoreCase("Bye"))
-	                break;
+//	             output = np.processInput(input);
+//	             out.writeObject(output);
+//	             out.flush();
+//	             if (input.toString().equalsIgnoreCase("Bye"))
+//	                break;
 	        }
         }catch(Exception e){
         	//The try catch is here because when the client closes the connection,

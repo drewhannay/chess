@@ -243,6 +243,7 @@ public class Builder implements Serializable {
 	 * @return The created Game object
 	 */
 	public static Game newGame(String name) {
+		new File("variants").mkdir();
 		String[] vars = new File("variants").list();
 		for (String s : vars) {
 			if (s.equals(name)) {

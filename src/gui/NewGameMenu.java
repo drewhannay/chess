@@ -23,6 +23,7 @@ import javax.swing.LayoutStyle;
 import logic.Builder;
 import logic.Game;
 import net.NetworkClient;
+import net.NetworkServer;
 import timer.BronsteinDelay;
 import timer.ChessTimer;
 import timer.Fischer;
@@ -178,7 +179,6 @@ public class NewGameMenu extends JPanel {
 										}
 									});
 									client.start();
-									while(client.isAlive());
 								}catch(Exception e1){
 									System.out.println(e1.getMessage());
 									e1.printStackTrace();
@@ -235,7 +235,14 @@ public class NewGameMenu extends JPanel {
 					@Override
 					public void actionPerformed(ActionEvent arg0) {
 						setupPopup(true);
-						//TODO set up hosting, etc.
+						
+						try {
+							new NetworkServer().host();
+						} catch (Exception e) {
+							System.out.println("Host");
+							e.printStackTrace();
+						}
+						
 						pop.dispose();
 					}
 				});
@@ -450,6 +457,7 @@ public class NewGameMenu extends JPanel {
 			//	}
 				else{
 					Game toPlay = Builder.newGame((String) dropdown.getSelectedItem());
+					System.out.println(dropdown.getSelectedItem());
 					toPlay.setTimers(whiteTimer, blackTimer);
 					PlayGame game = new PlayGame(toPlay, false);
 					Driver.getInstance().setPanel(game);

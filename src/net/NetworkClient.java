@@ -1,5 +1,6 @@
 package net;
 
+import gui.Driver;
 import gui.PlayNetGame;
 
 import java.io.ObjectInputStream;
@@ -33,15 +34,16 @@ public class NetworkClient {
 		Game g = (Game) in.readObject();
 		
 		PlayNetGame png = new PlayNetGame(g, false, true);
+		Driver.getInstance().setPanel(png);
 		
 		while ((fromServer = in.readObject()) != null) {
-			g.playMove(g.fakeToRealMove((NetMove)fromServer));
-
-			fromUser = null;
-			if (fromUser != null) {
-				out.writeObject(fromUser);
-				out.flush();
-			}
+//			g.playMove(g.fakeToRealMove((NetMove)fromServer));
+//
+//			fromUser = null;
+//			if (fromUser != null) {
+//				out.writeObject(fromUser);
+//				out.flush();
+//			}
 		}
 
 		out.close();
