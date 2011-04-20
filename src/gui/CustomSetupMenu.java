@@ -7,6 +7,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -192,16 +193,20 @@ public class CustomSetupMenu extends JPanel {
 		 * The Board on which the Square we are setting up resides.
 		 */
 		private Board board;
-		
+		/**
+		 * Stores what item is selected;
+		 */
+		private boolean remove;
 		/**
 		 * @param square
 		 * @param board
 		 * @param option
 		 */
-		public SetUpMouseListener(Square square, Board board, Square option){
+		public SetUpMouseListener(Square square, Board board, Square option, boolean remove){
 			this.square = square;
 			this.board = board;
 			this.option = option;
+			this.remove = remove;
 		}
 		
 		@Override
@@ -214,24 +219,25 @@ public class CustomSetupMenu extends JPanel {
 					else if (mods == 4){
 						setPieceOnBoard(true);
 					}
+					else if (mods == 8 || mods == 20){
+						square.setPiece(null);
+						square.refresh();
+					}
 		}
 
 		/**
 		 * @param isBlack
 		 */
 		private void setPieceOnBoard(boolean isBlack){
-			System.out.println(option.isHabitable());
 			if (option.isOccupied() == false){
 				if ((option.getColor().equals(Color.LIGHT_GRAY) == false) && (option.getColor().equals(Color.getHSBColor(30, 70, 70)) == false)){
 					square.setBackgroundColor(option.getColor());
-					square.setHabitable(option.isHabitable());
-					square.refresh();
-					if (option.isHabitable() == false)
-						square.setPiece(null);
 				}
-				else{
-					square.setHabitable(option.isHabitable());
+				if (option.isHabitable() == false){
+					square.setPiece(option.getPiece());
 				}
+				square.setHabitable(option.isHabitable());
+				square.refresh();
 			}
 			else{
 				if (square.isHabitable() == true){
@@ -259,7 +265,7 @@ public class CustomSetupMenu extends JPanel {
 		public void mouseReleased(MouseEvent arg0) {}
 		
 	}
-	
+
 	/**
 	 * Generated Serial Version ID
 	 */
@@ -320,22 +326,6 @@ public class CustomSetupMenu extends JPanel {
 		
 		//Get the array of boards from the builder so we can modify it.
 		final Board[] boards = b.getBoards();
-
-		final Board bShowPiece = new Board(2,1,false);
-		//final Square sShowPiece = new Square(1,1);
-		final JPanel showPiece = new JPanel();
-		showPiece.setLayout(new GridLayout(2,1));
-		showPiece.setPreferredSize(new Dimension(50,100));
-		
-		JButton jb1 = new JButton();
-		final JButton jb2 = new JButton();
-		jb1.addActionListener(new SetUpListener(bShowPiece.getSquare(1, 1)));
-		bShowPiece.getSquare(1, 1).setButton(jb1);
-		bShowPiece.getSquare(2, 1).setButton(jb2);//Let the Square know which button it owns.
-		showPiece.add(jb1);
-		showPiece.add(jb2);
-		bShowPiece.getSquare(1, 1).refresh();
-		bShowPiece.getSquare(2, 1).refresh();
 		
 		 // Create a List with a vertical ScrollBar
 		final DefaultListModel list = new DefaultListModel();
@@ -344,7 +334,25 @@ public class CustomSetupMenu extends JPanel {
 			list.addElement(allPieces[i]);
 		}
 		list.addElement("Square Options");
+//		list.addElement("Remove Piece");
 	    JList piecesList = new JList(list);
+	    
+	    final boolean remove = false;
+
+		final Board bShowPiece = new Board(2,1,false);
+		final JPanel showPiece = new JPanel();
+		showPiece.setLayout(new GridLayout(2,1));
+		showPiece.setPreferredSize(new Dimension(50,100));
+		
+		final JButton jb1 = new JButton();
+		final JButton jb2 = new JButton();
+		jb1.addActionListener(new SetUpListener(bShowPiece.getSquare(1, 1)));
+		bShowPiece.getSquare(1, 1).setButton(jb1);
+		bShowPiece.getSquare(2, 1).setButton(jb2);//Let the Square know which button it owns.
+		showPiece.add(jb1);
+		showPiece.add(jb2);
+		bShowPiece.getSquare(1, 1).refresh();
+		bShowPiece.getSquare(2, 1).refresh();
 	    
 	    piecesList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 	    piecesList.setLayoutOrientation(JList.VERTICAL);
@@ -372,10 +380,18 @@ public class CustomSetupMenu extends JPanel {
 			       			bShowPiece.getSquare(1, 1).setBackgroundColor(original);
 			       			bShowPiece.getSquare(1, 1).setHabitable(true);
 			       			bShowPiece.getSquare(1, 1).refresh();
+			       			jb1.setVisible(true);
 			       			jb2.setVisible(false);
 			       	}
+//			       	else if (((String) list.elementAt(selection)).equals("Remove Piece")){
+//
+//		       			bShowPiece.getSquare(1, 1).refresh();
+//			       		jb2.setVisible(false);
+//			       		jb1.setVisible(false);
+//			       	}
 			        else{
 			        	jb2.setVisible(true);
+			        	jb1.setVisible(true);
 			        	if (bShowPiece.getSquare(1, 1).isHabitable() == false)
 			        		bShowPiece.getSquare(1, 1).setHabitable(true);
 			        	if (bShowPiece.getSquare(1, 1).getColor().equals(original) == false)
@@ -393,7 +409,6 @@ public class CustomSetupMenu extends JPanel {
 
 	    JScrollPane scrollPane = new JScrollPane(piecesList);
 	    scrollPane.setPreferredSize(new Dimension(200, 200));
-	    
 		//Loop through the array of boards for setup.
 		for (int n = 0; n < boards.length; n++) {
 			//Create a JPanel to hold the grid and set the layout to the number of squares in the board.
@@ -408,7 +423,7 @@ public class CustomSetupMenu extends JPanel {
 			for (int i = numRows; i > 0; i--) {
 				for (int j = 1; j <= numCols; j++) {
 					JButton jb = new JButton();
-					jb.addMouseListener(new SetUpMouseListener(boards[n].getSquare(i, j), boards[n], bShowPiece.getSquare(1, 1)));
+					jb.addMouseListener(new SetUpMouseListener(boards[n].getSquare(i, j), boards[n], bShowPiece.getSquare(1, 1), remove));
 					boards[n].getSquare(i, j).setButton(jb);//Let the Square know which button it owns.
 					grid.add(jb);//Add the button to the grid.
 					boards[n].getSquare(i, j).refresh(); //Have the square refresh all it's properties now that they're created.
