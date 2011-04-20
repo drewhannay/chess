@@ -192,6 +192,7 @@ public class PlayNetGame extends PlayGame {
 	 * Setups up the window
 	 * @param isPlayback whether this is just a review or not
 	 */
+	@SuppressWarnings("static-access")
 	private void initComponents(boolean isPlayback) {
 		
 		super.removeAll();
@@ -472,6 +473,7 @@ public class PlayNetGame extends PlayGame {
 					//TODO implement network feature to ask other player here
 					if (g.getLastMove() == null)
 						return;
+					menu.setVisible(false);
 					g.getLastMove().setResult(new Result(Result.DRAW));
 					endOfGame(new Result(Result.DRAW));
 				}

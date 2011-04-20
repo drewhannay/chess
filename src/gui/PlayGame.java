@@ -448,6 +448,7 @@ public class PlayGame extends JPanel {
 				public void actionPerformed(ActionEvent e) {
 					if (g.getLastMove() == null)
 						return;
+					menu.setVisible(false);
 					Result r = new Result(Result.DRAW);
 					r.setText("Draw! \n" + "What would you like to do? \n");
 					g.getLastMove().setResult(r);
