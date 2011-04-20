@@ -142,6 +142,8 @@ public class Piece implements Serializable {
 	 * @param enemyTeam The enemy team
 	 */
 	public void adjustPinsLegalDests(Piece objectivePiece, List<Piece> enemyTeam) {
+		if(name.equals("Pawn"))
+			return;
 
 		if (((isBlack() ? board.getGame().getBlackRules() : board.getGame().getWhiteRules()).objectivePiece(isBlack()) == this)
 				&& (board.getGame().isBlackMove() == isBlack())) {
@@ -265,6 +267,73 @@ public class Piece implements Serializable {
 		getGuardSquares().clear();
 		setPinnedBy(null);
 		//Boolean to tell when we are done generating destinations
+		
+		/*
+		 * Special genLegalDests for Pawns, to incorporate enPassant, special initial movement, and diagonal capturing.
+		 */
+		if(name.equals("Pawn")){
+			Square dest = null;
+			int dir, row, col;
+			setPinnedBy(null);
+			if (captured)
+				return 0;
+
+			dir = (isBlack()) ? -1 : 1;
+
+			//Take one step forward
+			if (board.isRowValid(curSquare.getRow() + dir)) {
+				dest = board.getSquare(curSquare.getRow() + dir, curSquare.getCol());
+				if (!dest.isOccupied() && !getLegalDests().contains(dest)) {
+					addLegalDest(dest);
+				}
+			}
+
+			//Take an opposing piece 
+			if (board.isRowValid(row = (curSquare.getRow() + dir))) {
+				col = curSquare.getCol();
+
+				//if valid row
+				//and the square is occupied (by the other team)
+				//    or  it's not my move (so I'm threatening the square)
+				if (board.isColValid((col + 1)) && ((board.getSquare(row, col + 1).isOccupied()
+						&& isBlack() != board.getSquare(row, col + 1).getPiece().isBlack())
+						)) {
+					addLegalDest(board.getSquare(row, col + 1));
+				}
+				if (board.isColValid((col - 1)) && ((board.getSquare(row, col - 1).isOccupied()
+						&& isBlack() != board.getSquare(row, col - 1).getPiece().isBlack())
+						)) {
+					addLegalDest(board.getSquare(row, col - 1));
+				}
+			}
+
+			//two step
+			if (getMoveCount() == 0 && board.isRowValid((curSquare.getRow() + (2 * dir)))) {
+				dest = board.getSquare((curSquare.getRow() + (2 * dir)), curSquare.getCol());
+				if (!dest.isOccupied() && !board.getSquare((curSquare.getRow() + dir), curSquare.getCol()).isOccupied()
+						&& !getLegalDests().contains(dest)) {
+					addLegalDest(dest);
+				}
+			}
+
+			if (board.getGame().isClassicChess()) {
+				//enPassant
+				if (isBlack() == board.isBlackTurn()
+						&& ((!isBlack() && curSquare.getRow() == 5) || (isBlack() && curSquare.getRow() == 4))) {
+					col = curSquare.getCol();
+					row = isBlack() ? curSquare.getRow() - 1 : curSquare.getRow() + 1;
+					if (board.isColValid(col + 1) && board.getEnpassantCol() == (col + 1)) {
+						addLegalDest(board.getSquare(row, (col + 1)));
+					}
+
+					if (board.isColValid(col - 1) && board.getEnpassantCol() == (col - 1)) {
+						addLegalDest(board.getSquare(row, (col - 1)));
+					}
+				}
+			}
+			return getLegalDests().size();
+		}
+		
 		boolean done = false;
 		Square dest;
 		boolean wraparound = board.isWraparound();
@@ -834,6 +903,19 @@ public class Piece implements Serializable {
 	 * @return If this Square is a legal attack
 	 */
 	public boolean isLegalAttack(Square threatened) {
+		if(name.equals("Pawn")){
+			if (board.getGame().isStaleLegalDests()) {
+				board.getGame().genLegalDests();
+			}
+			if (captured)
+				return false;
+
+			if (threatened.getCol() == curSquare.getCol())
+				return false;
+			else
+				return (isLegalDest(threatened) || (threatened.getRow() - curSquare.getRow() == ((isBlack()) ? -1 : 1) && Math
+						.abs(threatened.getCol() - curSquare.getCol()) == 1));
+		}
 		return isLegalDest(threatened);
 	}
 

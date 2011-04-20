@@ -139,8 +139,9 @@ public class Pawn extends Piece {
 				getLegalDests().add(sq);
 			} else if (sq.equals(threat.getSquare())) {
 				getLegalDests().add(sq);
-			} else if (threat instanceof Pawn && threat.getSquare().getCol() == board.getEnpassantCol()
+			} else if (threat.getName().equals("Pawn") && threat.getSquare().getCol() == board.getEnpassantCol()
 					&& sq.getCol() == board.getEnpassantCol()) {
+				//TODO Get this working in generic Piece
 				getLegalDests().add(sq);
 			}
 		}

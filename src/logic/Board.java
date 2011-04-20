@@ -189,7 +189,7 @@ public class Board implements Serializable {
 		List<Square> dests = null;
 		Piece piece = null;
 
-		if (p instanceof King)
+		if (p.getName().equals("King"))
 			return unique;
 
 		for (int i = 0; i < movingTeam.size(); i++) {

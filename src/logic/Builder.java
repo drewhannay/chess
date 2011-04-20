@@ -93,8 +93,10 @@ public class Builder implements Serializable {
 		classic.setBoards(new Board[] { new Board(8, 8, false) });
 		Board b = classic.boards[0];
 		for (int i = 1; i < 9; i++) {
-			classic.whiteTeam.add(new Pawn(false, b.getSquare(2, i), b));
-			classic.blackTeam.add(new Pawn(true, b.getSquare(7, i), b));
+			classic.whiteTeam.add(new Piece("Pawn", new ImageIcon("./images/pawn_dark.png"), new ImageIcon("./images/pawn_light.png"), false, b.getSquare(2,i), b, null));
+			classic.blackTeam.add(new Piece("Pawn", new ImageIcon("./images/pawn_dark.png"), new ImageIcon("./images/pawn_light.png"), true, b.getSquare(7,i), b, null));
+			//classic.whiteTeam.add(new Pawn(false, b.getSquare(2, i), b));
+			//classic.blackTeam.add(new Pawn(true, b.getSquare(7, i), b));
 		}
 		
 		HashMap<Character, Integer> rookMovement = new HashMap<Character, Integer>();
@@ -123,6 +125,16 @@ public class Builder implements Serializable {
 		bishopMovement.put('L', -1);
 		bishopMovement.put('l', -1);
 		
+		HashMap<Character, Integer> kingMovement = new HashMap<Character, Integer>();
+		kingMovement.put('N', 1);
+		kingMovement.put('S', 1);
+		kingMovement.put('E', 1);
+		kingMovement.put('W', 1);
+		kingMovement.put('R', 1);
+		kingMovement.put('r', 1);
+		kingMovement.put('L', 1);
+		kingMovement.put('l', 1);
+		
 		//classic.whiteTeam.add(new Rook(false, b.getSquare(1, 1), b));
 		//classic.whiteTeam.add(new Knight(false, b.getSquare(1, 2), b));
 		//classic.whiteTeam.add(new Bishop(false, b.getSquare(1, 3), b));
@@ -130,11 +142,12 @@ public class Builder implements Serializable {
 		//classic.whiteTeam.add(new Bishop(false, b.getSquare(1, 6), b));
 		//classic.whiteTeam.add(new Knight(false, b.getSquare(1, 7), b));
 		//classic.whiteTeam.add(new Rook(false, b.getSquare(1, 8), b));
+		//classic.whiteTeam.add(new King(false, b.getSquare(1, 5), b));
 		classic.whiteTeam.add(new Piece("Rook", new ImageIcon("./images/rook_dark.png"), new ImageIcon("./images/rook_light.png"), false, b.getSquare(1,1), b, rookMovement));
 		classic.whiteTeam.add(new Piece("Knight", new ImageIcon("./images/knight_dark.png"), new ImageIcon("./images/knight_light.png"), false, b.getSquare(1,2), b, knightMovement));
 		classic.whiteTeam.add(new Piece("Bishop", new ImageIcon("./images/bishop_dark.png"), new ImageIcon("./images/bishop_light.png"), false, b.getSquare(1,3), b, bishopMovement));
 		classic.whiteTeam.add(new Piece("Queen", new ImageIcon("./images/queen_dark.png"), new ImageIcon("./images/queen_light.png"), false, b.getSquare(1,4), b, queenMovement));
-		classic.whiteTeam.add(new King(false, b.getSquare(1, 5), b));
+		classic.whiteTeam.add(new Piece("King", new ImageIcon("./images/king_dark.png"), new ImageIcon("./images/king_light.png"), false, b.getSquare(1,5), b, kingMovement));
 		classic.whiteTeam.add(new Piece("Bishop", new ImageIcon("./images/bishop_dark.png"), new ImageIcon("./images/bishop_light.png"), false, b.getSquare(1,6), b, bishopMovement));
 		classic.whiteTeam.add(new Piece("Knight", new ImageIcon("./images/knight_dark.png"), new ImageIcon("./images/knight_light.png"), false, b.getSquare(1,7), b, knightMovement));
 		classic.whiteTeam.add(new Piece("Rook", new ImageIcon("./images/rook_dark.png"), new ImageIcon("./images/rook_light.png"), false, b.getSquare(1,8), b, rookMovement));
@@ -145,14 +158,15 @@ public class Builder implements Serializable {
 		//classic.blackTeam.add(new Queen(true, b.getSquare(8, 4), b));
 		//classic.blackTeam.add(new Bishop(true, b.getSquare(8, 6), b));
 		//classic.blackTeam.add(new Knight(true, b.getSquare(8, 7), b));
-		//	classic.blackTeam.add(new Rook(true, b.getSquare(8, 8), b));
+		//classic.blackTeam.add(new Rook(true, b.getSquare(8, 8), b));
+		//classic.blackTeam.add(new King(true, b.getSquare(8, 5), b));
 		classic.blackTeam.add(new Piece("Rook", new ImageIcon("./images/rook_dark.png"), new ImageIcon("./images/rook_light.png"), true, b.getSquare(8,1), b, rookMovement));
-		classic.whiteTeam.add(new Piece("Knight", new ImageIcon("./images/knight_dark.png"), new ImageIcon("./images/knight_light.png"), true, b.getSquare(8,2), b, knightMovement));
-		classic.whiteTeam.add(new Piece("Bishop", new ImageIcon("./images/bishop_dark.png"), new ImageIcon("./images/bishop_light.png"), true, b.getSquare(8,3), b, bishopMovement));
-		classic.whiteTeam.add(new Piece("Queen", new ImageIcon("./images/queen_dark.png"), new ImageIcon("./images/queen_light.png"), true, b.getSquare(8,4), b, queenMovement));
-		classic.blackTeam.add(new King(true, b.getSquare(8, 5), b));
-		classic.whiteTeam.add(new Piece("Bishop", new ImageIcon("./images/bishop_dark.png"), new ImageIcon("./images/bishop_light.png"), true, b.getSquare(8,3), b, bishopMovement));
-		classic.whiteTeam.add(new Piece("Knight", new ImageIcon("./images/knight_dark.png"), new ImageIcon("./images/knight_light.png"), true, b.getSquare(8,7), b, knightMovement));
+		classic.blackTeam.add(new Piece("Knight", new ImageIcon("./images/knight_dark.png"), new ImageIcon("./images/knight_light.png"), true, b.getSquare(8,2), b, knightMovement));
+		classic.blackTeam.add(new Piece("Bishop", new ImageIcon("./images/bishop_dark.png"), new ImageIcon("./images/bishop_light.png"), true, b.getSquare(8,3), b, bishopMovement));
+		classic.blackTeam.add(new Piece("Queen", new ImageIcon("./images/queen_dark.png"), new ImageIcon("./images/queen_light.png"), true, b.getSquare(8,4), b, queenMovement));
+		classic.blackTeam.add(new Piece("King", new ImageIcon("./images/king_dark.png"), new ImageIcon("./images/king_light.png"), true, b.getSquare(8,5), b, kingMovement));
+		classic.blackTeam.add(new Piece("Bishop", new ImageIcon("./images/bishop_dark.png"), new ImageIcon("./images/bishop_light.png"), true, b.getSquare(8,6), b, bishopMovement));
+		classic.blackTeam.add(new Piece("Knight", new ImageIcon("./images/knight_dark.png"), new ImageIcon("./images/knight_light.png"), true, b.getSquare(8,7), b, knightMovement));
 		classic.blackTeam.add(new Piece("Rook", new ImageIcon("./images/rook_dark.png"), new ImageIcon("./images/rook_light.png"), true, b.getSquare(8,8), b, rookMovement));
 
 		classic.writeFile(new Rules(true), new Rules(true));

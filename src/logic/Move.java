@@ -235,7 +235,7 @@ public class Move implements Serializable {
 		setCaptured(getDest().getPiece());
 
 		if (board.getGame().isClassicChess()) {
-			if (origin.getPiece() instanceof Pawn && getCaptured() == null && origin.getCol() != getDest().getCol()) {
+			if (origin.getPiece().getName().equals("Pawn") && getCaptured() == null && origin.getCol() != getDest().getCol()) {
 				setCaptured(board.getSquare(origin.getRow(), getDest().getCol()).getPiece());
 			} else {
 				board.setEnpassantCol(Board.NO_ENPASSANT);
@@ -252,12 +252,12 @@ public class Move implements Serializable {
 		//Only do enpassant and castling for Classic chess.
 		if (board.getGame().isClassicChess()) {
 			//Mark enpassant on the board
-			if (origin.getPiece().getClass() == Pawn.class && Math.abs(origin.getRow() - getDest().getRow()) == 2) {
+			if (origin.getPiece().getName().equals("Pawn") && Math.abs(origin.getRow() - getDest().getRow()) == 2) {
 				board.setEnpassantCol(origin.getCol());
 			}
 
 			//Castling
-			if (origin.getPiece().getClass() == King.class
+			if (origin.getPiece().getName().equals("King")
 					&& origin.getPiece().getMoveCount() == 0) {
 
 				Square rookOrigin;
@@ -417,7 +417,7 @@ public class Move implements Serializable {
 	 * @return The character representing this piece
 	 */
 	public char pieceToChar(Piece p) {
-		if (p instanceof Knight)
+		if (p.getName().equals("Knight"))
 			return 'N';
 		else
 			return p.getName().charAt(0);
@@ -524,7 +524,7 @@ public class Move implements Serializable {
 		} else if (castleKingside) {
 			s = "O-O";
 		} else {
-			s = ((getPiece() != null && !(getPiece() instanceof Pawn)) ? (pieceToChar(getPiece())) + "" : " ")
+			s = ((getPiece() != null && !(getPiece().getName().equals("Pawn"))) ? (pieceToChar(getPiece())) + "" : " ")
 			+ origin.toString(unique)
 			+ ((getCaptured() != null) ? "x" : "")
 			+ getDest().toString(new boolean[] { false, false });
@@ -556,7 +556,7 @@ public class Move implements Serializable {
 
 		if (board.getGame().isClassicChess()) {
 			//Castling
-			if (getPiece().getClass() == King.class && getPiece().getMoveCount() == 1) {
+			if (getPiece().getName().equals("King") && getPiece().getMoveCount() == 1) {
 				Square rookOrigin;
 				Square rookDest;
 				//Long

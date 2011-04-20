@@ -77,11 +77,12 @@ public class ObjectivePiece implements Serializable {
 		try {
 			if (isBlack) {
 				for (Piece p : g.getBlackTeam())
-					if (p instanceof King)
+					if (p.getName().equals("King"))
 						return p;
+					
 			}
 			for (Piece p : g.getWhiteTeam())
-				if (p instanceof King)
+				if (p.getName().equals("King"))
 					return p;
 			return null;
 		} catch (Exception e) {
