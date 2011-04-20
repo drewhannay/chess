@@ -342,7 +342,6 @@ public class PlayGame extends JPanel {
 			return;
 		Object[] options = new String[] { "Save Record of Game", "New Game", "Quit" };
 		String toDisplay;
-		System.out.println(r.isDraw());
 		if(r.isDraw())
 			toDisplay = "Draw! " + "\n";
 		else
