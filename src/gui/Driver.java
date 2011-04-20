@@ -422,7 +422,8 @@ final public class Driver extends JFrame {
 				completedHelp.setVisible(false);
 				if(gameOptions != null)
 					gameOptions.setVisible(false);
-				remove(otherPanel);
+				if(otherPanel != null)
+					remove(otherPanel);
 				add(mainPanel);
 				pack();
 			}

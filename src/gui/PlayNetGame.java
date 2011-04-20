@@ -464,11 +464,9 @@ public class PlayNetGame extends PlayGame {
 
 	public JMenu createMenu() {
 		menu = new JMenu("Menu");
-
 		if (!isPlayback) {
-
-			JMenuItem draw = new JMenuItem("Request Draw", KeyEvent.VK_R);
-			draw.addActionListener(new ActionListener() {
+			drawItem = new JMenuItem("Request Draw", KeyEvent.VK_R);
+			drawItem.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					//TODO implement network feature to ask other player here
@@ -479,8 +477,7 @@ public class PlayNetGame extends PlayGame {
 				}
 			});
 
-			menu.add(draw);
-
+			menu.add(drawItem);
 		}
 
 		return menu;
