@@ -184,8 +184,8 @@ public class NewGameMenu extends JPanel {
 									e1.printStackTrace();
 								}
 								
-								
 								popped.dispose();
+								pop.dispose();
 							}
 						});
 						
