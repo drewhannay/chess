@@ -48,6 +48,170 @@ import rules.Rules;
  */
 public class CustomSetupMenu extends JPanel {
 	
+	
+	
+	/**
+	 * Creates a popup box for the Promotion Options.
+	 * 
+	 */
+	private void promotion() {
+		//Create the pop up and set the size, location, and layout.
+		final JFrame popup = new JFrame("Promotion Options");
+		popup.setSize(500,500);
+		popup.setLocationRelativeTo(null);
+		popup.setLayout(new FlowLayout());
+		popup.setResizable(false);
+
+		
+		// LIST - CANT PROMOTE TO
+		final DefaultListModel list = new DefaultListModel();
+		Object[] allPieces = PieceBuilder.getSet().toArray();
+		for (int i = 0; i<allPieces.length; i++){
+			list.addElement(allPieces[i]);
+		}
+		JList piecesList = new JList(list);
+		
+		// EMPTY LIST - CAN PROMOTE TO
+		final DefaultListModel emptyList = new DefaultListModel();
+		emptyList.addElement("");
+		JList piecesList2 = new JList(emptyList);
+		
+		/*
+		 * ARROW PANEL
+		 */
+		JButton moveLeft = new JButton();
+		moveLeft.setText("<---");
+		JButton moveRight = new JButton();
+		moveRight.setText("--->");
+		JPanel otherCrap = new JPanel();
+		otherCrap.setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		
+//		c.fill = GridBagConstraints.HORIZONTAL;
+//		c.gridx = 0;
+//		c.gridy = 1;
+//		otherCrap.add(piecesList, c);
+		
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 0;
+		c.gridy = 1;
+		otherCrap.add(moveRight, c);
+		
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 0;
+		c.gridy = 2;
+		otherCrap.add(moveLeft, c);
+		
+//		c.fill = GridBagConstraints.HORIZONTAL;
+//		c.gridx = 2;
+//		c.gridy = 1;
+//		otherCrap.add(canPromoteTo, c);
+
+		// LIST - CANT PROMOTE TO
+		piecesList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+	    piecesList.setLayoutOrientation(JList.VERTICAL);
+	    piecesList.setVisibleRowCount(-1);
+	    piecesList.setSelectedIndex(0);    
+	    // EMPTY LIST - CAN PROMOTE TO
+		piecesList2.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+	    piecesList2.setLayoutOrientation(JList.VERTICAL);
+	    piecesList2.setVisibleRowCount(-1);
+	    piecesList2.setSelectedIndex(0);    
+
+
+
+
+	    // LIST - CANT PROMOTE TO
+		JScrollPane scrollPane = new JScrollPane(piecesList);
+	    scrollPane.setPreferredSize(new Dimension(200, 200));
+		
+		ListSelectionModel selectList = piecesList.getSelectionModel();
+		selectList.addListSelectionListener(new ListSelectionListener(){
+			//TODO
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				
+				
+				
+				
+			}
+		});
+
+		
+		// EMPTY LIST - CAN PROMOTE TO
+		JScrollPane scrollPane2 = new JScrollPane(piecesList2);
+	    scrollPane.setPreferredSize(new Dimension(200, 200));
+		
+		ListSelectionModel selectList2 = piecesList2.getSelectionModel();
+		selectList2.addListSelectionListener(new ListSelectionListener(){
+			//TODO
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				
+				
+				
+				
+			}
+		});
+		
+		
+		///////////////////////////////////////////////////////////////
+		/*
+		 * Add the Submit and Back Buttons.
+		 */
+		JButton submitButton = new JButton("Ok");
+		submitButton.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					//squareOptions();
+					popup.dispose();
+				}
+
+			});
+		/*
+		JButton backButton = new JButton("Back");
+		backButton.addActionListener(new ActionListener() {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+
+			}
+		});
+		*/
+		// This adds a new Panel with the option buttons.
+		JPanel options = new JPanel();
+		options.setLayout(new GridBagLayout());
+		options.setSize(50, 50);
+		GridBagConstraints cee = new GridBagConstraints();
+		
+		cee.fill = GridBagConstraints.HORIZONTAL;
+		cee.gridx = 0;
+		cee.gridy = 1;
+		options.add(submitButton, cee);
+		
+		
+		/*
+		cee.fill = GridBagConstraints.HORIZONTAL;
+		cee.gridx = 0;
+		cee.gridy = 2;
+		options.add(backButton, cee);
+		*/
+		
+		
+		// Add this to the popup.
+		// LIST - CANT PROMOTE TO
+		popup.add(scrollPane);
+		popup.add(otherCrap);
+		// EMPTY LIST - CAN PROMOTE TO
+		popup.add(scrollPane2);
+		popup.add(options);
+
+		
+		//Finally, set the pop up to visible.
+		popup.setVisible(true);
+	}
+	
 	/**
 	 * SetUpListener
 	 * 
@@ -119,6 +283,7 @@ public class CustomSetupMenu extends JPanel {
 			}
 		}
 		
+
 		/**
 		 * Create a pop up window with customization options.
 		 * Let the user choose between adding a piece to the square or
@@ -458,14 +623,7 @@ public class CustomSetupMenu extends JPanel {
 	    
 		//Create button and add ActionListener
 		backButton = new JButton("Back");
-		backButton.addActionListener(new ActionListener() {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				//Return to the PlayerCustomMenu screen.
-				Driver.getInstance().setPanel(new PlayerCustomMenu(b, whiteRules, blackRules));
-			}
-		});
 
 		//Create button and add ActionListener
 		submitButton = new JButton("Save and Quit");
@@ -521,6 +679,19 @@ public class CustomSetupMenu extends JPanel {
 
 		});
 
+		
+		
+		
+		
+		JButton changePromote = new JButton("Promotion Properties");
+		changePromote.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent arg0) {
+				promotion();
+			}
+			
+		});
+		
 		JPanel options = new JPanel();
 		options.setBorder(BorderFactory.createTitledBorder("Options"));
 		options.setLayout(new GridBagLayout());
@@ -529,11 +700,16 @@ public class CustomSetupMenu extends JPanel {
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.gridy = 1;
-		options.add(submitButton, c);
+		options.add(changePromote, c);
 		
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.gridy = 2;
+		options.add(submitButton, c);
+		
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 0;
+		c.gridy = 3;
 		options.add(backButton, c);
 		
 		add(options);

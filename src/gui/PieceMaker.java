@@ -180,6 +180,7 @@ public class PieceMaker extends JPanel{
 			});
 			
 			final JCheckBox leaper = new JCheckBox("Can jump other Pieces?", false);
+			final JCheckBox promoteMe = new JCheckBox("Can be promoted?", false);
 			
 			final JPanel knightMoving = new JPanel();
 			knightMoving.setLayout(new FlowLayout());
@@ -287,6 +288,8 @@ public class PieceMaker extends JPanel{
 			c.insets = new Insets(5, 0, 0, 0);
 			c.gridx = 0;
 			c.gridy = 6;
+			//movementSetup.add(promoteMe, c);
+			//c.insets = new Insets(5, 0, 0, 0);
 			movementSetup.add(knightOn, c);
 			c.insets = new Insets(5, 0, 5, 0);
 			c.gridx = 0;
