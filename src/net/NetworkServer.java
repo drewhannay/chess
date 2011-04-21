@@ -11,6 +11,8 @@ import java.net.Socket;
 import logic.Game;
 
 public class NetworkServer {
+	
+	public static boolean playing;
 
 	public void host(PlayNetGame png) throws Exception{
 		 
@@ -58,7 +60,8 @@ public class NetworkServer {
 		out.flush();
         
         try{
-	        while ((fromUser = in.readObject()) != null) {
+	        while (playing) {
+	        	fromUser = in.readObject();
 	        	g.playMove(g.fakeToRealMove((NetMove)fromUser));
 
 				while(png.netMove == null)

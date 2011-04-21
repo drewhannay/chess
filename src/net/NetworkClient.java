@@ -10,6 +10,8 @@ import java.net.Socket;
 import logic.Game;
 
 public class NetworkClient {
+	
+	public static boolean playing;
 
 	public void join(String host) throws Exception{
 
@@ -36,8 +38,10 @@ public class NetworkClient {
 		PlayNetGame png = new PlayNetGame(g, false, true);
 		Driver.getInstance().setPanel(png);
 		
-
-		while ((fromServer = in.readObject()) != null) {
+		playing = true;
+		
+		while (playing) {
+			fromServer = in.readObject();
 			g.playMove(g.fakeToRealMove((NetMove)fromServer));
 			
 			while(png.netMove == null)

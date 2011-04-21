@@ -21,6 +21,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import net.NetworkClient;
+import net.NetworkServer;
+
 import logic.AlgebraicConverter;
 import logic.Board;
 import logic.Builder;
@@ -354,6 +357,8 @@ public class PlayGame extends JPanel {
 			return;
 		Object[] options = new String[] { "Save Record of Game", "New Game", "Quit" };
 		menu.setVisible(false);
+		NetworkClient.playing = false;
+		NetworkServer.playing = false;
 		int answer = JOptionPane.showOptionDialog(null,
 				r.text(), r.winText(),
 						JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null,
