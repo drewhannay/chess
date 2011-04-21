@@ -84,25 +84,22 @@ public class RuleMaker extends JPanel {
 		final JCheckBox wCaptureMand = new JCheckBox("Capture Mandatory");
 		legalDestWhiteCheckBox.add(wCaptureMand);
 		final JCheckBox wNoMoveObj = new JCheckBox("Can't Move Objective");
-		legalDestWhiteCheckBox.add(wNoMoveObj);
-		if(!whiteRules.theEndIsNigh().equals("classic") || !whiteRules.theEndIsNigh().equals("checkNTimes")){
-			wNoMoveObj.setVisible(false);
+		if(whiteRules.theEndIsNigh().equals("classic") || whiteRules.theEndIsNigh().equals("checkNTimes")){
+			legalDestWhiteCheckBox.add(wNoMoveObj);
 		}
 
 		//Capturing pieces rules for White
 		final JPanel afterCaptureWhiteCheckBox = new JPanel();
 		afterCaptureWhiteCheckBox.setLayout(new GridLayout(4, 1));
-			final JCheckBox wChangeColor = new JCheckBox("Capturer changes Color");
-			afterCaptureWhiteCheckBox.add(wChangeColor);
-			if(whiteRules.theEndIsNigh().equals("classic")){
-				wChangeColor.setVisible(false);
+		final JCheckBox wChangeColor = new JCheckBox("Capturer changes Color");
+			if(!whiteRules.theEndIsNigh().equals("classic")){
+				afterCaptureWhiteCheckBox.add(wChangeColor);
 			}
 			final JCheckBox wPieceReturn = new JCheckBox("Captured piece returns to start");
 			afterCaptureWhiteCheckBox.add(wPieceReturn);
 			final JCheckBox wDrop = new JCheckBox("Captured Pieces Drop");
-			afterCaptureWhiteCheckBox.add(wDrop);
-			if(whiteRules.theEndIsNigh().equals("captureAllOfType") || whiteRules.theEndIsNigh().equals("loseAllPieces")){
-				wDrop.setVisible(false);
+			if(!whiteRules.theEndIsNigh().equals("captureAllOfType") || !whiteRules.theEndIsNigh().equals("loseAllPieces")){
+				afterCaptureWhiteCheckBox.add(wDrop);
 			}
 			final JCheckBox wCapturedColorAndDrop = new JCheckBox("Captured Piece Changes Color and Drops");
 			afterCaptureWhiteCheckBox.add(wCapturedColorAndDrop);
@@ -113,25 +110,22 @@ public class RuleMaker extends JPanel {
 			final JCheckBox bCaptureMand = new JCheckBox("Capture Mandatory");
 			legalDestBlackCheckBox.add(bCaptureMand);
 			final JCheckBox bNoMoveObj = new JCheckBox("Can't Move Objective");
-			legalDestBlackCheckBox.add(bNoMoveObj);
-			if(!blackRules.theEndIsNigh().equals("classic") || !blackRules.theEndIsNigh().equals("checkNTimes")){
-				bNoMoveObj.setVisible(false);
+			if(blackRules.theEndIsNigh().equals("classic") || blackRules.theEndIsNigh().equals("checkNTimes")){
+				legalDestBlackCheckBox.add(bNoMoveObj);
 			}
 
 		//Capturing pieces rules for Black
 		final JPanel afterCapturepBlackCheckBox = new JPanel();
 		afterCapturepBlackCheckBox.setLayout(new GridLayout(4, 1));
-			final JCheckBox bChangeColor = new JCheckBox("Capturer changes Color");
-			afterCapturepBlackCheckBox.add(bChangeColor);
-			if(blackRules.theEndIsNigh().equals("classic")){
-				bChangeColor.setVisible(false);
+		final JCheckBox bChangeColor = new JCheckBox("Capturer changes Color");
+			if(!blackRules.theEndIsNigh().equals("classic")){
+				afterCapturepBlackCheckBox.add(bChangeColor);
 			}
 			final JCheckBox bPieceReturn = new JCheckBox("Captured piece returns to start");
 			afterCapturepBlackCheckBox.add(bPieceReturn);
 			final JCheckBox bDrop = new JCheckBox("Captured Pieces Drop");
-			afterCapturepBlackCheckBox.add(bDrop);
-			if(blackRules.theEndIsNigh().equals("captureAllOfType") || blackRules.theEndIsNigh().equals("loseAllPieces")){
-				bDrop.setVisible(false);
+			if(!blackRules.theEndIsNigh().equals("captureAllOfType") || !blackRules.theEndIsNigh().equals("loseAllPieces")){
+				afterCapturepBlackCheckBox.add(bDrop);
 			}
 			final JCheckBox bCapturedColorAndDrop = new JCheckBox("Captured Piece Changes Color and Drops");
 			afterCapturepBlackCheckBox.add(bCapturedColorAndDrop);
@@ -155,35 +149,30 @@ public class RuleMaker extends JPanel {
 		JLabel wChecksLabel = new JLabel("How many times for check?");
 		JLabel wPiecesLabel = new JLabel("Which piece is the objective?");
 		
-		wChecksLabel.setVisible(false);
-		wNumChecks.setVisible(false);
-		wPiecesLabel.setVisible(false);
-		wPiecesList.setVisible(false);
-		
 		if(whiteRules.theEndIsNigh().equals("classic") || whiteRules.theEndIsNigh().equals("captureAllOfType")){
-			wPiecesLabel.setVisible(true);
-			wPiecesList.setVisible(true);
+			c.gridx = 0;
+			c.gridy = 1;
+			c.insets = new Insets(1, 1, 1, 1);
+			wExtras.add(wPiecesLabel, c);
+			c.gridx = 1;
+			c.gridy = 1;
+			wExtras.add(wPiecesList, c);
 		}
 		if(whiteRules.theEndIsNigh().equals("checkNTimes")){
-			wPiecesLabel.setVisible(true);
-			wPiecesList.setVisible(true);
-			wChecksLabel.setVisible(true);
-			wNumChecks.setVisible(true);
+			c.gridx = 0;
+			c.gridy = 0;
+			wExtras.add(wChecksLabel, c);
+			c.gridx = 1;
+			c.gridy = 0;
+			wExtras.add(wNumChecks, c);
+			c.gridx = 0;
+			c.gridy = 1;
+			c.insets = new Insets(1, 1, 1, 1);
+			wExtras.add(wPiecesLabel, c);
+			c.gridx = 1;
+			c.gridy = 1;
+			wExtras.add(wPiecesList, c);
 		}
-		
-		c.gridx = 0;
-		c.gridy = 0;
-		wExtras.add(wChecksLabel, c);
-		c.gridx = 1;
-		c.gridy = 0;
-		wExtras.add(wNumChecks, c);
-		c.gridx = 0;
-		c.gridy = 1;
-		c.insets = new Insets(1, 1, 1, 1);
-		wExtras.add(wPiecesLabel, c);
-		c.gridx = 1;
-		c.gridy = 1;
-		wExtras.add(wPiecesList, c);
 		
 		
 		final JPanel bExtras = new JPanel();
@@ -194,35 +183,31 @@ public class RuleMaker extends JPanel {
 		JLabel bChecksLabel = new JLabel("How many times for check?");
 		JLabel bPiecesLabel = new JLabel("Which piece is the objective?");
 		
-		bChecksLabel.setVisible(false);
-		bNumChecks.setVisible(false);
-		bPiecesLabel.setVisible(false);
-		bPiecesList.setVisible(false);
-		
 		if(blackRules.theEndIsNigh().equals("classic") || blackRules.theEndIsNigh().equals("captureAllOfType")){
-			bPiecesLabel.setVisible(true);
-			bPiecesList.setVisible(true);
+			c.gridx = 0;
+			c.gridy = 1;
+			c.insets = new Insets(1, 1, 1, 1);
+			bExtras.add(bPiecesLabel, c);
+			c.gridx = 1;
+			c.gridy = 1;
+			bExtras.add(bPiecesList, c);
 		}
 		if(blackRules.theEndIsNigh().equals("checkNTimes")){
-			bPiecesLabel.setVisible(true);
-			bPiecesList.setVisible(true);
-			bChecksLabel.setVisible(true);
-			bNumChecks.setVisible(true);
+			c.gridx = 0;
+			c.gridy = 0;
+			bExtras.add(bChecksLabel, c);
+			c.gridx = 1;
+			c.gridy = 0;
+			bExtras.add(bNumChecks, c);
+			c.gridx = 0;
+			c.gridy = 1;
+			c.insets = new Insets(1, 1, 1, 1);
+			bExtras.add(bPiecesLabel, c);
+			c.gridx = 1;
+			c.gridy = 1;
+			bExtras.add(bPiecesList, c);
 		}
 		
-		c.gridx = 0;
-		c.gridy = 0;
-		bExtras.add(bChecksLabel, c);
-		c.gridx = 1;
-		c.gridy = 0;
-		bExtras.add(bNumChecks, c);
-		c.gridx = 0;
-		c.gridy = 1;
-		c.insets = new Insets(1, 1, 1, 1);
-		bExtras.add(bPiecesLabel, c);
-		c.gridx = 1;
-		c.gridy = 1;
-		bExtras.add(bPiecesList, c);
 		
 		//Create button and add ActionListener for going back
 		final JButton back = new JButton("Back");
