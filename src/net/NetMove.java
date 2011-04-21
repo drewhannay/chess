@@ -1,6 +1,10 @@
 package net;
 
-public class NetMove {
+import java.io.Serializable;
+
+public class NetMove implements Serializable {
+	
+	private static final long serialVersionUID = -7511895104920021930L;
 	
 	public int boardNum;
 	public int originRow;

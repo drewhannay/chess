@@ -49,7 +49,8 @@ public class NetworkServer {
         
         Driver.getInstance().setPanel(png);
         
-        while(png.netMove == null);
+        while(png.netMove == null)
+        	Thread.sleep(0);
         System.out.println("here");
 		fromUser = png.netMove;
 		png.netMove = null;
