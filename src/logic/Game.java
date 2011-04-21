@@ -694,5 +694,10 @@ public class Game implements Serializable {
 		Board toPlay = boards[m.boardNum];
 		return new Move(toPlay,toPlay.getSquare(m.originRow, m.originCol),toPlay.getSquare(m.destRow, m.destCol));
 	}
+	
+	public NetMove moveToFakeMove(Move m){
+		int boardNum = (m.board == boards[0])?0:1;
+		return new NetMove(boardNum, m.origin.getRow(), m.origin.getCol(), m.getDest().getRow(), m.getDest().getCol());
+	}
 
 }

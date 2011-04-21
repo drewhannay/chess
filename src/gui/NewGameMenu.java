@@ -449,7 +449,6 @@ public class NewGameMenu extends JPanel {
 								try {
 									new NetworkServer().host(game);
 								} catch (Exception e) {
-									// TODO Auto-generated catch block
 									e.printStackTrace();
 								}
 							}

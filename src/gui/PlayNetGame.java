@@ -16,17 +16,16 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-
-import timer.NoTimer;
 
 import logic.Board;
 import logic.Game;
 import logic.Move;
 import logic.Result;
 import logic.Square;
+import net.NetMove;
+import timer.NoTimer;
 
 /**
  * @author jmccormi
@@ -43,6 +42,8 @@ public class PlayNetGame extends PlayGame {
 	 * 
 	 */
 	private boolean isBlack;
+	
+	public static NetMove netMove = null;
 
 	/**
 	 * @param g
@@ -117,7 +118,9 @@ public class PlayNetGame extends PlayGame {
 					mustMove = false;
 				} else if (mustMove && clickedSquare.getColor() == Square.HIGHLIGHT_COLOR) {
 					try {
-						getGame().playMove(new Move(b, storedSquare, clickedSquare));
+						Move m = new Move(b, storedSquare, clickedSquare);
+						getGame().playMove(m);
+						netMove = g.moveToFakeMove(m);
 						mustMove = false;
 						boardRefresh(getGame().getBoards());
 					} catch (Exception e1) {

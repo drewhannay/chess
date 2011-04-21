@@ -15,35 +15,37 @@ public class NetworkClient {
 
 		Socket socket = null;
 		ObjectOutputStream out = null;
-        ObjectInputStream in = null;
-        
-        while(socket == null){
-	        try{
-	        	socket = new Socket(host, 27335);
-	        }catch(Exception e){
-	        	
-	        }
-        }
+		ObjectInputStream in = null;
+
+		while(socket == null){
+			try{
+				socket = new Socket(host, 27335);
+			}catch(Exception e){
+
+			}
+		}
 		out = new ObjectOutputStream(socket.getOutputStream());
 		in = new ObjectInputStream(socket.getInputStream());
 
 
 		Object fromServer;
-		Object fromUser = "";
-		
+		Object fromUser;
+
 		Game g = (Game) in.readObject();
-		
+
 		PlayNetGame png = new PlayNetGame(g, false, true);
 		Driver.getInstance().setPanel(png);
-		
+
 		while ((fromServer = in.readObject()) != null) {
-//			g.playMove(g.fakeToRealMove((NetMove)fromServer));
-//
-//			fromUser = null;
-//			if (fromUser != null) {
-//				out.writeObject(fromUser);
-//				out.flush();
-//			}
+			g.playMove(g.fakeToRealMove((NetMove)fromServer));
+
+			while(PlayNetGame.netMove == null);
+
+			fromUser = PlayNetGame.netMove;
+			PlayNetGame.netMove = null;
+
+			out.writeObject(fromUser);
+			out.flush();
 		}
 
 		out.close();

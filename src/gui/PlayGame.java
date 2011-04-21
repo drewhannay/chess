@@ -134,7 +134,7 @@ public class PlayGame extends JPanel {
 	/**
 	 * Reference to the current Game being played.
 	 */
-	private static Game g;
+	protected static Game g;
 
 	/**
 	 * Reference to the Square which will be moved to

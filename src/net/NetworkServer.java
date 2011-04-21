@@ -8,7 +8,7 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import logic.Builder;
+import logic.Game;
 
 public class NetworkServer {
 
@@ -37,22 +37,39 @@ public class NetworkServer {
         
         ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream());
         
-        Object input;
-        Object output;
+        Object fromUser;
+        Object fromServer;
         NetworkProtocol np = new NetworkProtocol();
- 
-//        output = np.processInput(null);
-//        out.writeObject(output);
         
+        Game g = PlayNetGame.getGame();
         
-        output = png.getGame();
-        if(output!=null)
-        	out.writeObject(output);
+        fromServer = g;
+        if(fromServer!=null)
+        	out.writeObject(fromServer);
         
         Driver.getInstance().setPanel(png);
         
+        while(PlayNetGame.netMove == null);
+
+		fromUser = PlayNetGame.netMove;
+		PlayNetGame.netMove = null;
+
+		out.writeObject(fromUser);
+		out.flush();
+        
         try{
-	        while ((input = in.readObject()) != null) {
+	        while ((fromUser = in.readObject()) != null) {
+	        	g.playMove(g.fakeToRealMove((NetMove)fromServer));
+
+				while(PlayNetGame.netMove == null);
+
+				fromUser = PlayNetGame.netMove;
+				PlayNetGame.netMove = null;
+
+				out.writeObject(fromUser);
+				out.flush();
+	        	
+	        	
 //	             output = np.processInput(input);
 //	             out.writeObject(output);
 //	             out.flush();
