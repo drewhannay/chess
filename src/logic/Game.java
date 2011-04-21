@@ -692,12 +692,15 @@ public class Game implements Serializable {
 	
 	public Move fakeToRealMove(NetMove m) throws Exception {
 		Board toPlay = boards[m.boardNum];
-		return new Move(toPlay,toPlay.getSquare(m.originRow, m.originCol),toPlay.getSquare(m.destRow, m.destCol));
+		return new Move(toPlay,toPlay.getSquare(m.originRow, m.originCol),toPlay.getSquare(m.destRow, m.destCol),m.promoName);
 	}
 	
 	public NetMove moveToFakeMove(Move m){
 		int boardNum = (m.board == boards[0])?0:1;
-		return new NetMove(boardNum, m.origin.getRow(), m.origin.getCol(), m.getDest().getRow(), m.getDest().getCol());
+		String promoName = null;
+		if(m.getPromoPiece()!=null)
+			promoName = m.getPromoPiece().getName();
+		return new NetMove(boardNum, m.origin.getRow(), m.origin.getCol(), m.getDest().getRow(), m.getDest().getCol(),promoName);
 	}
 
 }

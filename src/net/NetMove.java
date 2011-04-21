@@ -11,13 +11,15 @@ public class NetMove implements Serializable {
 	public int originCol;
 	public int destRow;
 	public int destCol;
+	public String promoName;
 	
-	public NetMove(int boardNum, int originRow, int originCol, int destRow, int destCol){
+	public NetMove(int boardNum, int originRow, int originCol, int destRow, int destCol, String promoName){
 		this.boardNum = boardNum;
 		this.originRow = originRow;
 		this.originCol = originCol;
 		this.destRow = destRow;
 		this.destCol = destCol;
+		this.promoName = promoName;
 	}
 	
 	public String toString(){
