@@ -63,12 +63,12 @@ public class NetworkServer {
 				NetMove toMove = (NetMove)fromServer;
 				if(toMove.originCol == -1){
 					int surrender = JOptionPane.showConfirmDialog(null, "Player has requested a Draw. Do you accept?", "Draw",
-								 JOptionPane.YES_NO_OPTION);
-					if(surrender == 2)
+							JOptionPane.YES_NO_OPTION);
+					if(surrender == 2){
 						JOptionPane.showConfirmDialog(null, "The game has ended in a Draw!", "Draw", 0);
-						break;
-					}
-	        	g.playMove(g.fakeToRealMove((NetMove)fromUser));
+						break;}
+				}
+				g.playMove(g.fakeToRealMove((NetMove)fromUser));
 
 				while(png.netMove == null)
 					Thread.sleep(0);
