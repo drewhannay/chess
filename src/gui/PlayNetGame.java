@@ -484,9 +484,9 @@ public class PlayNetGame extends PlayGame {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					//TODO implement network feature to ask other player here
-					int surrender = JOptionPane.showInternalConfirmDialog(null, "Player has requested a Draw. Do you accept?", "Draw",
-						 JOptionPane.PLAIN_MESSAGE);
-					if(surrender == 0)
+					int surrender = JOptionPane.showConfirmDialog(null, "Player has requested a Draw. Do you accept?", "Draw",
+						 JOptionPane.YES_NO_OPTION);
+					if(surrender == 1)
 						return;
 					if (getGame().getLastMove() == null)
 						return;
