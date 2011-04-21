@@ -48,6 +48,8 @@ public class NetworkClient {
 
 			out.writeObject(fromUser);
 			out.flush();
+			if(g.getLastMove().getResult()!=null)
+				break;
 		}
 
 		out.close();

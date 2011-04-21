@@ -295,6 +295,8 @@ public class Builder implements Serializable {
 			ObjectOutputStream out = new ObjectOutputStream(f_out);
 			out.writeObject(new Builder(name, boards, whiteTeam, blackTeam,
 					whiteRules, blackRules));
+			out.close();
+			f_out.close();
 		} catch (Exception e) {
 			System.out.println(e.toString());
 		}

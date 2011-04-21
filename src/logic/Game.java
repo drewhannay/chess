@@ -593,6 +593,7 @@ public class Game implements Serializable {
 				ObjectOutputStream out = new ObjectOutputStream(f_out);
 				out.writeObject(this);
 				out.close();
+				f_out.close();
 			}
 		} catch (Exception e) {
 			System.out.println(e.toString());

@@ -39,7 +39,6 @@ public class NetworkServer {
         
         Object fromUser;
         Object fromServer;
-        NetworkProtocol np = new NetworkProtocol();
         
         Game g = PlayNetGame.getGame();
         
@@ -69,6 +68,8 @@ public class NetworkServer {
 
 				out.writeObject(fromServer);
 				out.flush();
+				if(g.getLastMove().getResult()!=null)
+					break;
 	        }
         }catch(Exception e){
         	//The try catch is here because when the client closes the connection,
