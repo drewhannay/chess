@@ -394,8 +394,6 @@ public class PlayNetGame extends PlayGame {
 
 		// If it is playback then we do not want timers.
 		if (!isPlayback) {
-			PlayGame.whiteTimer = g.getWhiteTimer();
-			PlayGame.blackTimer = g.getBlackTimer();
 			//Adds the Black timer
 			c.fill = GridBagConstraints.HORIZONTAL;
 			c.anchor = GridBagConstraints.BASELINE;
