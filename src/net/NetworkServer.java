@@ -63,17 +63,22 @@ public class NetworkServer {
         
         try{
 	        while ((fromUser = in.readObject()) != null) {
-				NetMove toMove = (NetMove)fromServer;
-				if(toMove.originCol == -1){
-					int surrender = JOptionPane.showConfirmDialog(null, "Player has requested a Draw. Do you accept?", "Draw",
-							JOptionPane.YES_NO_OPTION);
-					if(surrender == 0){
-						JMenu menu = png.createMenu();
-						menu.setVisible(true);
-						out.writeObject(new NetMove(-1,-1,-1,-1,-1,null));
-						break;
-					}
-				}
+	        	NetMove toMove = (NetMove)fromServer;
+	        	if(toMove.originCol == -1){
+	        		int surrender = JOptionPane.showConfirmDialog(null, "Player has requested a Draw. Do you accept?", "Draw",
+	        				JOptionPane.YES_NO_OPTION);
+	        		if(surrender == 0){
+	        			JOptionPane.showConfirmDialog(null, "Player has requested a Draw. Do you accept?", "Draw",
+	        					0);
+	        			break;
+	        		}
+	        	}
+
+	        	if(toMove.originCol == -2){ //Response of draw request
+	        		JOptionPane.showConfirmDialog(null, "Game has resulted in a draw.", "Draw",
+	        				0);
+	        		break;
+	        	}
 				g.playMove(g.fakeToRealMove((NetMove)fromUser));
 
 				while(png.netMove == null)

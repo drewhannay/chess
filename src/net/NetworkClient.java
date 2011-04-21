@@ -46,11 +46,16 @@ public class NetworkClient {
 				int surrender = JOptionPane.showConfirmDialog(null, "Player has requested a Draw. Do you accept?", "Draw",
 						JOptionPane.YES_NO_OPTION);
 				if(surrender == 0){
-					JMenu menu = png.createMenu();
-					menu.setVisible(true);
-					out.writeObject(new NetMove(-1,-1,-1,-1,-1,null));
+					JOptionPane.showConfirmDialog(null, "Player has requested a Draw. Do you accept?", "Draw",
+							0);
 					break;
 				}
+			}
+			
+			if(toMove.originCol == -2){ //Response of draw request
+				JOptionPane.showConfirmDialog(null, "Game has resulted in a draw.", "Draw",
+						0);
+				break;
 			}
 				//TODO HERE
 			g.playMove(g.fakeToRealMove((NetMove)fromServer));
