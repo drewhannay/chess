@@ -46,6 +46,7 @@ public class NetworkClient {
 						JOptionPane.YES_NO_OPTION);
 				if(surrender == 2){
 					JOptionPane.showConfirmDialog(null, "The game has ended in a Draw!", "Draw", 0);
+					out.writeObject(new NetMove(-1,-1,-1,-1,-1,null));
 					break;
 				}
 			}
