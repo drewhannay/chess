@@ -357,8 +357,8 @@ public class PlayGame extends JPanel {
 			return;
 		Object[] options = new String[] { "Save Record of Game", "New Game", "Quit" };
 		menu.setVisible(false);
-		NetworkClient.playing = false;
-		NetworkServer.playing = false;
+//		NetworkClient.playing = false;
+//		NetworkServer.playing = false;
 		int answer = JOptionPane.showOptionDialog(null,
 				r.text(), r.winText(),
 						JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null,
