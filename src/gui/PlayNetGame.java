@@ -123,14 +123,8 @@ public class PlayNetGame extends PlayGame {
 						Move m = new Move(b, storedSquare, clickedSquare);
 						getGame().playMove(m);
 						
-						
-						
-						System.out.println(g.getHistory().get(g.getHistory().size()-1).getPromoPiece() + " here");
-						
-						
-						
 						netMove = g.moveToFakeMove(m);
-						System.out.println(netMove);
+						
 						mustMove = false;
 						boardRefresh(getGame().getBoards());
 					} catch (Exception e1) {

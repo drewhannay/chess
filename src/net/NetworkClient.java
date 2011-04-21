@@ -37,40 +37,46 @@ public class NetworkClient {
 
 		PlayNetGame png = new PlayNetGame(g, false, true);
 		Driver.getInstance().setPanel(png);
-		
+
 
 		while ((fromServer = in.readObject()) != null) {
-			NetMove toMove = (NetMove)fromServer;
-			if(toMove.originCol == -1){ //If the object is an initial request to Draw.
-				int surrender = JOptionPane.showConfirmDialog(null, "Player has requested a Draw. Do you accept?", "Draw",
-						JOptionPane.YES_NO_OPTION);
-				if(surrender == 0){ //If this player also accepts the Draw.
-					png.createMenu(); //Create menu to show end of game.
-        			out.writeObject(new NetMove(-2,-2,-2,-2,-2,null)); //Write out a new object which shows you accepted the Draw.
+			while(g.isBlackMove()==false){
+				NetMove toMove = (NetMove)fromServer;
+				if(toMove.originCol == -1){ //If the object is an initial request to Draw.
+					int surrender = JOptionPane.showConfirmDialog(null, "Player has requested a Draw. Do you accept?", "Draw",
+							JOptionPane.YES_NO_OPTION);
+					if(surrender == 0){ //If this player also accepts the Draw.
+						png.createMenu(); //Create menu to show end of game.
+						out.writeObject(new NetMove(-2,-2,-2,-2,-2,null)); //Write out a new object which shows you accepted the Draw.
+						break;
+					}
+					else{
+						out.writeObject(new NetMove(-3,-3,-3,-3,-3,null));//Else, write out an object which shows you did NOT accept the Draw.
+					}
+				}
+	
+				if(toMove.originCol == -2){ //Response of accepted Draw request
+					png.createMenu();
 					break;
 				}
-				else{
-					out.writeObject(new NetMove(-3,-3,-3,-3,-3,null));//Else, write out an object which shows you did NOT accept the Draw.
+				if(!(toMove.originCol == -3)){ //If the response is an unaccepted Draw request, do not perform the Move.
+					g.playMove(g.fakeToRealMove((NetMove)fromServer));
 				}
+				if(g.getLastMove().getResult()!=null)
+					break;
 			}
-			
-			if(toMove.originCol == -2){ //Response of accepted Draw request
-				png.createMenu();
-				break;
+			while(g.isBlackMove()==true){
+				while(png.netMove == null)
+					Thread.sleep(0);
+	
+				fromUser = png.netMove;
+				png.netMove = null;
+	
+				out.writeObject(fromUser);
+				out.flush();
+				if(g.getLastMove().getResult()!=null)
+					break;
 			}
-			if(!(toMove.originCol == -3)){ //If the response is an unaccepted Draw request, do not perform the Move.
-			g.playMove(g.fakeToRealMove((NetMove)fromServer));}
-			
-			while(png.netMove == null)
-				Thread.sleep(0);
-
-			fromUser = png.netMove;
-			png.netMove = null;
-
-			out.writeObject(fromUser);
-			out.flush();
-			if(g.getLastMove().getResult()!=null)
-				break;
 		}
 
 		out.close();
