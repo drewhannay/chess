@@ -484,17 +484,17 @@ public class PlayNetGame extends PlayGame {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					//TODO implement network feature to ask other player here
-					int surrender = JOptionPane.showConfirmDialog(null, "Player has requested a Draw. Do you accept?", "Draw",
-						 JOptionPane.YES_NO_OPTION);
+					int surrender = requestDraw();
 					if(surrender == 1)
 						return;
-					if (getGame().getLastMove() == null)
-						return;
-					menu.setVisible(false);
-					Result r = new Result(Result.DRAW);
-					r.setText("The game has ended in a Draw!");
-					getGame().getLastMove().setResult(r);
-					endOfGame(r);
+					netMove = new NetMove(-1, -1, -1, -1, -1, null); //Send move indicating surrender request.
+//					if (getGame().getLastMove() == null)
+//						return;
+//					menu.setVisible(false);
+//					Result r = new Result(Result.DRAW);
+//					r.setText("The game has ended in a Draw!");
+//					getGame().getLastMove().setResult(r);
+//					endOfGame(r);
 				}
 			});
 
@@ -502,6 +502,11 @@ public class PlayNetGame extends PlayGame {
 		}
 
 		return menu;
+	}
+	
+	public int requestDraw(){
+		return JOptionPane.showConfirmDialog(null, "Player has requested a Draw. Do you accept?", "Draw",
+				 JOptionPane.YES_NO_OPTION);
 	}
 	
 }

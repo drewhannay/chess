@@ -7,6 +7,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+import javax.swing.JOptionPane;
+
 import logic.Game;
 
 public class NetworkClient {
@@ -38,6 +40,15 @@ public class NetworkClient {
 		
 
 		while ((fromServer = in.readObject()) != null) {
+			NetMove toMove = (NetMove)fromServer;
+			if(toMove.originCol == -1){
+			int surrender = JOptionPane.showConfirmDialog(null, "Player has requested a Draw. Do you accept?", "Draw",
+						 JOptionPane.YES_NO_OPTION);
+			if(surrender == 2)
+				JOptionPane.showConfirmDialog(null, "The game has ended in a Draw!", "Draw", 0);
+				break;
+			}
+				//TODO HERE
 			g.playMove(g.fakeToRealMove((NetMove)fromServer));
 			
 			while(png.netMove == null)
