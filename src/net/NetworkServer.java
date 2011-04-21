@@ -61,17 +61,18 @@ public class NetworkServer {
         
         try{
 	        while (playing) {
-	        	while((fromUser = in.readObject())==null);
-	        	g.playMove(g.fakeToRealMove((NetMove)fromUser));
-
-				while(png.netMove == null)
-					Thread.sleep(0);
-
-				fromServer = png.netMove;
-				png.netMove = null;
-
-				out.writeObject(fromServer);
-				out.flush();
+	        	while((fromUser = in.readObject())!=null){
+		        	g.playMove(g.fakeToRealMove((NetMove)fromUser));
+	
+					while(png.netMove == null)
+						Thread.sleep(0);
+	
+					fromServer = png.netMove;
+					png.netMove = null;
+	
+					out.writeObject(fromServer);
+					out.flush();
+	        	}
 	        }
         }catch(Exception e){
         	//The try catch is here because when the client closes the connection,

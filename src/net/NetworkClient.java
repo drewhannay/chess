@@ -41,17 +41,18 @@ public class NetworkClient {
 		playing = true;
 		
 		while (playing) {
-			while((fromServer = in.readObject())==null);
-			g.playMove(g.fakeToRealMove((NetMove)fromServer));
-			
-			while(png.netMove == null)
-				Thread.sleep(0);
-
-			fromUser = png.netMove;
-			png.netMove = null;
-
-			out.writeObject(fromUser);
-			out.flush();
+			while((fromServer = in.readObject())!=null){
+				g.playMove(g.fakeToRealMove((NetMove)fromServer));
+				
+				while(png.netMove == null)
+					Thread.sleep(0);
+	
+				fromUser = png.netMove;
+				png.netMove = null;
+	
+				out.writeObject(fromUser);
+				out.flush();
+			}
 		}
 
 		out.close();
