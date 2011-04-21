@@ -150,6 +150,7 @@ public class RuleMaker extends JPanel {
 		JLabel wPiecesLabel = new JLabel("Which piece is the objective?");
 		
 		if(whiteRules.theEndIsNigh().equals("classic") || whiteRules.theEndIsNigh().equals("captureAllOfType")){
+			if(whiteRules.theEndIsNigh().equals("captureAllOfType")) wPiecesLabel.setText("Which Piece type will be captured?");
 			c.gridx = 0;
 			c.gridy = 1;
 			c.insets = new Insets(1, 1, 1, 1);
@@ -184,6 +185,7 @@ public class RuleMaker extends JPanel {
 		JLabel bPiecesLabel = new JLabel("Which piece is the objective?");
 		
 		if(blackRules.theEndIsNigh().equals("classic") || blackRules.theEndIsNigh().equals("captureAllOfType")){
+			if(blackRules.theEndIsNigh().equals("captureAllOfType")) bPiecesLabel.setText("Which Piece type will be captured?");
 			c.gridx = 0;
 			c.gridy = 1;
 			c.insets = new Insets(1, 1, 1, 1);
