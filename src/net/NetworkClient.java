@@ -7,7 +7,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-import javax.swing.JMenu;
 import javax.swing.JOptionPane;
 
 import logic.Game;
@@ -42,23 +41,25 @@ public class NetworkClient {
 
 		while ((fromServer = in.readObject()) != null) {
 			NetMove toMove = (NetMove)fromServer;
-			if(toMove.originCol == -1){
+			if(toMove.originCol == -1){ //If the object is an initial request to Draw.
 				int surrender = JOptionPane.showConfirmDialog(null, "Player has requested a Draw. Do you accept?", "Draw",
 						JOptionPane.YES_NO_OPTION);
-				if(surrender == 0){
-					JOptionPane.showConfirmDialog(null, "Player has requested a Draw. Do you accept?", "Draw",
-							0);
+				if(surrender == 0){ //If this player also accepts the Draw.
+					png.createMenu(); //Create menu to show end of game.
+        			out.writeObject(new NetMove(-2,-2,-2,-2,-2,null)); //Write out a new object which shows you accepted the Draw.
 					break;
+				}
+				else{
+					out.writeObject(new NetMove(-3,-3,-3,-3,-3,null));//Else, write out an object which shows you did NOT accept the Draw.
 				}
 			}
 			
-			if(toMove.originCol == -2){ //Response of draw request
-				JOptionPane.showConfirmDialog(null, "Game has resulted in a draw.", "Draw",
-						0);
+			if(toMove.originCol == -2){ //Response of accepted Draw request
+				png.createMenu();
 				break;
 			}
-				//TODO HERE
-			g.playMove(g.fakeToRealMove((NetMove)fromServer));
+			if(!(toMove.originCol == -3)){ //If the response is an unaccepted Draw request, do not perform the Move.
+			g.playMove(g.fakeToRealMove((NetMove)fromServer));}
 			
 			while(png.netMove == null)
 				Thread.sleep(0);

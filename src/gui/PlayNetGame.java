@@ -488,13 +488,11 @@ public class PlayNetGame extends PlayGame {
 					if(surrender == 1)
 						return;
 					netMove = new NetMove(-1, -1, -1, -1, -1, null); //Send move indicating surrender request.
-//					if (getGame().getLastMove() == null)
-//						return;
-//					menu.setVisible(false);
-//					Result r = new Result(Result.DRAW);
-//					r.setText("The game has ended in a Draw!");
-//					getGame().getLastMove().setResult(r);
-//					endOfGame(r);
+					menu.setVisible(false);
+					Result r = new Result(Result.DRAW);
+					r.setText("The game has ended in a Draw!");
+					getGame().getLastMove().setResult(r);
+					endOfGame(r);
 				}
 			});
 
