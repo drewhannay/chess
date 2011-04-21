@@ -691,10 +691,10 @@ public class Game implements Serializable {
 	}
 	
 	public Move fakeToRealMove(NetMove m) throws Exception {
-		Board toPlay = boards[m.boardNum];
-		toPlay = ((isBlackMove)?blackRules:whiteRules).getBoard(toPlay);
+		Board to = boards[m.boardNum];
+		Board from = ((isBlackMove)?blackRules:whiteRules).getBoard(to);
 		System.out.println(m.boardNum);
-		return new Move(toPlay,toPlay.getSquare(m.originRow, m.originCol),toPlay.getSquare(m.destRow, m.destCol),m.promoName);
+		return new Move(from,from.getSquare(m.originRow, m.originCol),to.getSquare(m.destRow, m.destCol),m.promoName);
 	}
 	
 	public NetMove moveToFakeMove(Move m){
