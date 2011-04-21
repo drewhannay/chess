@@ -175,7 +175,6 @@ public class NewGameMenu extends JPanel {
 												System.out.println(e.getMessage());
 												e.printStackTrace();
 											}
-											
 										}
 									});
 									client.start();
@@ -235,7 +234,6 @@ public class NewGameMenu extends JPanel {
 					@Override
 					public void actionPerformed(ActionEvent arg0) {
 						setupPopup(true);
-						
 						pop.dispose();
 					}
 				});
@@ -437,7 +435,7 @@ public class NewGameMenu extends JPanel {
 				if(isNetwork){
 					Game toPlay = Builder.newGame((String) dropdown.getSelectedItem());
 					toPlay.setTimers(whiteTimer, blackTimer);
-					PlayNetGame game;
+					final PlayNetGame game;
 					if(host.equals(arg0)){
 						game = new PlayNetGame(toPlay, false, true);
 					}
@@ -445,7 +443,18 @@ public class NewGameMenu extends JPanel {
 						game = new PlayNetGame(toPlay, false, false);
 					}
 					try {
-						new NetworkServer().host(game);
+						Thread host = new Thread(new Runnable() {
+							@Override
+							public void run() {
+								try {
+									new NetworkServer().host(game);
+								} catch (Exception e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+							}
+						});
+						
 					} catch (Exception e) {
 						System.out.println("Host");
 						e.printStackTrace();
