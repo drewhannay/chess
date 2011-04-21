@@ -41,7 +41,7 @@ public class PlayNetGame extends PlayGame {
 	/**
 	 * 
 	 */
-	private boolean isBlack;
+	private static boolean isBlack;
 	
 	public NetMove netMove = null;
 
@@ -52,7 +52,7 @@ public class PlayNetGame extends PlayGame {
 	 */
 	public PlayNetGame(Game g, boolean isPlayback, boolean isBlack) {
 		super(g, isPlayback);
-		this.isBlack = isBlack;
+		PlayNetGame.isBlack = isBlack;
 		initComponents(isPlayback);
 	}
 	
@@ -60,7 +60,7 @@ public class PlayNetGame extends PlayGame {
 	 * Getter method for isBlack boolean
 	 * @return If the player of this game controls the white or black team
 	 */
-	public boolean isBlack(){
+	public static boolean isBlack(){
 		return isBlack;
 	}
 	
@@ -120,6 +120,13 @@ public class PlayNetGame extends PlayGame {
 					try {
 						Move m = new Move(b, storedSquare, clickedSquare);
 						getGame().playMove(m);
+						
+						
+						
+						System.out.println(m.getPromo());
+						
+						
+						
 						netMove = g.moveToFakeMove(m);
 						System.out.println(netMove);
 						mustMove = false;

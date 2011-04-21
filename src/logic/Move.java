@@ -640,4 +640,8 @@ public class Move implements Serializable {
 	public Piece[] getExploded(){
 		return exploded;
 	}
+	
+	public String getPromo(){
+		return promo;
+	}
 }
