@@ -225,10 +225,6 @@ public class CustomSetupMenu extends JPanel {
 	 */
 	private int objectives =0;
 	/**
-	 * Int to hold the amount of allowable objectives
-	 */
-	private int allowableObjectives = 1;
-	/**
 	 * Rules holder for the white rules
 	 */
 	private Rules whiteRules;
@@ -629,9 +625,27 @@ public class CustomSetupMenu extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if(RuleMaker.needsObj == true){
-					JOptionPane.showMessageDialog(null, "You must select a piece to be an objective.");
-					return;
+				int numObjectives = 0;
+				if(!whiteRules.getObjectiveName().equals("")){
+					for(Piece p:whiteTeam){
+						if(p.getName().equals(whiteRules.getObjectiveName()))
+							numObjectives++;
+					}
+					if(numObjectives!=1){
+						JOptionPane.showMessageDialog(null, "Please place exactly one White Objective Piece");
+						return;
+					}
+				}
+				numObjectives = 0;
+				if(!blackRules.getObjectiveName().equals("")){
+					for(Piece p:blackTeam){
+						if(p.getName().equals(blackRules.getObjectiveName()))
+							numObjectives++;
+					}
+					if(numObjectives!=1){
+						JOptionPane.showMessageDialog(null, "Please place exactly one Black Objective Piece");
+						return;				
+					}
 				}
 				b.whiteTeam = whiteTeam;
 				boolean set = false;

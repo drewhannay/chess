@@ -437,7 +437,9 @@ final public class Driver extends JFrame {
 		exitMenuItem.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
+				int answer = JOptionPane.showConfirmDialog(null, "Are you sure you want to quit?", "Quit?", 1);
+				if(answer == 0)
+					System.exit(0);
 			}
 		});
 		fileMenu.add(exitMenuItem);

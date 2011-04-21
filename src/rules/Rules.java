@@ -132,6 +132,15 @@ public class Rules implements Serializable {
 	}
 
 	/**
+	 * Getter for name of the game.
+	 * @return name of the game.
+	 */
+	public String theEndIsNigh(){
+		return endOfGame.getName();
+	}
+	
+	
+	/**
 	 * Setter for getPromotionSquares
 	 * @param string The name of the method to implement
 	 */
@@ -310,5 +319,9 @@ public class Rules implements Serializable {
 	 */
 	public Piece undoPromote(Piece p) {
 		return promote.undo(p);
+	}
+	
+	public String getObjectiveName(){
+		return objectivePiece.getObjectiveName();
 	}
 }

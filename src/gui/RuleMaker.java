@@ -11,15 +11,19 @@ import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
+import javax.swing.JTextField;
 
 import logic.Board;
 import logic.Builder;
+import logic.PieceBuilder;
 import rules.AdjustTeamDests;
 import rules.EndOfGame;
 import rules.GetBoard;
+import rules.ObjectivePiece;
 import rules.Rules;
 
 /**
@@ -39,11 +43,11 @@ public class RuleMaker extends JPanel {
 	/**
 	 * Rules for the White Team
 	 */
-	private Rules whiteRules = new Rules(false);
+	private Rules whiteRules;
 	/**
 	 * Rules for the Black Team
 	 */
-	private Rules blackRules = new Rules(false);
+	private Rules blackRules;
 	/**
 	 * This is a boolean to see if we need to force a piece to be set as an Objective
 	 */
@@ -51,9 +55,13 @@ public class RuleMaker extends JPanel {
 	/**
 	 * Constructor for setting up the rules window
 	 * @param b the builder containing everything
+	 * @param whiteRules The container for the white Rules
+	 * @param blackRules the container for the black rules
 	 */
-	public RuleMaker(Builder b){
+	public RuleMaker(Builder b, Rules whiteRules, Rules blackRules){
 		this.b = b;
+		this.whiteRules = whiteRules;
+		this.blackRules = blackRules;
 		initComponents();
 	}
 	
@@ -77,35 +85,25 @@ public class RuleMaker extends JPanel {
 		legalDestWhiteCheckBox.add(wCaptureMand);
 		final JCheckBox wNoMoveObj = new JCheckBox("Can't Move Objective");
 		legalDestWhiteCheckBox.add(wNoMoveObj);
-
-		//Objectives rules for White
-		final JPanel objectiveWhiteCheckBox = new JPanel();
-		objectiveWhiteCheckBox.setLayout(new GridLayout(5, 1));
-			final JRadioButton wCaptureAll = new JRadioButton("Capture All", false);
-			wCaptureAll.setEnabled(false);
-			objectiveWhiteCheckBox.add(wCaptureAll);
-			final JRadioButton wCaptureAllType = new JRadioButton("Capture All of Type", false);
-			wCaptureAllType.setEnabled(false);
-			objectiveWhiteCheckBox.add(wCaptureAllType);
-			final JRadioButton wProtectObj = new JRadioButton("Protect Objective", true);
-			objectiveWhiteCheckBox.add(wProtectObj);
-			final JRadioButton wLoseAll = new JRadioButton("Lose All Pieces", false);
-			wLoseAll.setEnabled(false);
-			objectiveWhiteCheckBox.add(wLoseAll);
-			final JRadioButton wCheckTimes = new JRadioButton("Check # Times", false);
-			wCheckTimes.setEnabled(false);
-			objectiveWhiteCheckBox.add(wCheckTimes);
+		if(!whiteRules.theEndIsNigh().equals("classic") || !whiteRules.theEndIsNigh().equals("checkNTimes")){
+			wNoMoveObj.setVisible(false);
+		}
 
 		//Capturing pieces rules for White
 		final JPanel afterCaptureWhiteCheckBox = new JPanel();
 		afterCaptureWhiteCheckBox.setLayout(new GridLayout(4, 1));
 			final JCheckBox wChangeColor = new JCheckBox("Capturer changes Color");
-			wChangeColor.setEnabled(false);
 			afterCaptureWhiteCheckBox.add(wChangeColor);
+			if(whiteRules.theEndIsNigh().equals("classic")){
+				wChangeColor.setVisible(false);
+			}
 			final JCheckBox wPieceReturn = new JCheckBox("Captured piece returns to start");
 			afterCaptureWhiteCheckBox.add(wPieceReturn);
 			final JCheckBox wDrop = new JCheckBox("Captured Pieces Drop");
 			afterCaptureWhiteCheckBox.add(wDrop);
+			if(whiteRules.theEndIsNigh().equals("captureAllOfType") || whiteRules.theEndIsNigh().equals("loseAllPieces")){
+				wDrop.setVisible(false);
+			}
 			final JCheckBox wCapturedColorAndDrop = new JCheckBox("Captured Piece Changes Color and Drops");
 			afterCaptureWhiteCheckBox.add(wCapturedColorAndDrop);
 		
@@ -116,35 +114,25 @@ public class RuleMaker extends JPanel {
 			legalDestBlackCheckBox.add(bCaptureMand);
 			final JCheckBox bNoMoveObj = new JCheckBox("Can't Move Objective");
 			legalDestBlackCheckBox.add(bNoMoveObj);
-
-		//Objectives rules for Black
-		final JPanel objectiveBlackCheckBox = new JPanel();
-		objectiveBlackCheckBox.setLayout(new GridLayout(5, 1));
-			final JRadioButton bCaptureAll = new JRadioButton("Capture All", false);
-			bCaptureAll.setEnabled(false);
-			objectiveBlackCheckBox.add(bCaptureAll);
-			final JRadioButton bCaptureAllType = new JRadioButton("Capture All of Type", false);
-			bCaptureAllType.setEnabled(false);
-			objectiveBlackCheckBox.add(bCaptureAllType);
-			final JRadioButton bProtectObj = new JRadioButton("Protect Objective", true);
-			objectiveBlackCheckBox.add(bProtectObj);
-			final JRadioButton bLoseAll = new JRadioButton("Lose All Pieces", false);
-			bLoseAll.setEnabled(false);
-			objectiveBlackCheckBox.add(bLoseAll);
-			final JRadioButton bCheckTimes = new JRadioButton("Check # Times", false);
-			bCheckTimes.setEnabled(false);
-			objectiveBlackCheckBox.add(bCheckTimes);
+			if(!blackRules.theEndIsNigh().equals("classic") || !blackRules.theEndIsNigh().equals("checkNTimes")){
+				bNoMoveObj.setVisible(false);
+			}
 
 		//Capturing pieces rules for Black
 		final JPanel afterCapturepBlackCheckBox = new JPanel();
 		afterCapturepBlackCheckBox.setLayout(new GridLayout(4, 1));
 			final JCheckBox bChangeColor = new JCheckBox("Capturer changes Color");
-			bChangeColor.setEnabled(false);
 			afterCapturepBlackCheckBox.add(bChangeColor);
+			if(blackRules.theEndIsNigh().equals("classic")){
+				bChangeColor.setVisible(false);
+			}
 			final JCheckBox bPieceReturn = new JCheckBox("Captured piece returns to start");
 			afterCapturepBlackCheckBox.add(bPieceReturn);
 			final JCheckBox bDrop = new JCheckBox("Captured Pieces Drop");
 			afterCapturepBlackCheckBox.add(bDrop);
+			if(blackRules.theEndIsNigh().equals("captureAllOfType") || blackRules.theEndIsNigh().equals("loseAllPieces")){
+				bDrop.setVisible(false);
+			}
 			final JCheckBox bCapturedColorAndDrop = new JCheckBox("Captured Piece Changes Color and Drops");
 			afterCapturepBlackCheckBox.add(bCapturedColorAndDrop);
 
@@ -153,21 +141,96 @@ public class RuleMaker extends JPanel {
 		sCheckBox.setLayout(new GridLayout(3, 1));
 			final JCheckBox atomic = new JCheckBox("Atomic Chess");
 			sCheckBox.add(atomic);
-			final JCheckBox pawnPromotion= new JCheckBox("Piece Promotion", true);
-			sCheckBox.add(pawnPromotion);
 			final JCheckBox switchBoard = new JCheckBox("Move to other board");
 			switchBoard.setEnabled(false);
 			sCheckBox.add(switchBoard);
 
+			
+		final JPanel wExtras = new JPanel();
+		wExtras.setLayout(new GridBagLayout());
+		final JTextField wNumChecks = new JTextField(2);
+		Object[] allPieces = PieceBuilder.getSet().toArray();
+		final JComboBox wPiecesList = new JComboBox(allPieces);
+			
+		JLabel wChecksLabel = new JLabel("How many times for check?");
+		JLabel wPiecesLabel = new JLabel("Which piece is the objective?");
 		
-				
+		wChecksLabel.setVisible(false);
+		wNumChecks.setVisible(false);
+		wPiecesLabel.setVisible(false);
+		wPiecesList.setVisible(false);
+		
+		if(whiteRules.theEndIsNigh().equals("classic") || whiteRules.theEndIsNigh().equals("captureAllOftype")){
+			wPiecesLabel.setVisible(true);
+			wPiecesList.setVisible(true);
+		}
+		if(whiteRules.theEndIsNigh().equals("checkNTimes")){
+			wPiecesLabel.setVisible(true);
+			wPiecesList.setVisible(true);
+			wChecksLabel.setVisible(true);
+			wNumChecks.setVisible(true);
+		}
+		
+		c.gridx = 0;
+		c.gridy = 0;
+		wExtras.add(wChecksLabel, c);
+		c.gridx = 1;
+		c.gridy = 0;
+		wExtras.add(wNumChecks, c);
+		c.gridx = 0;
+		c.gridy = 1;
+		c.insets = new Insets(1, 1, 1, 1);
+		wExtras.add(wPiecesLabel, c);
+		c.gridx = 1;
+		c.gridy = 1;
+		wExtras.add(wPiecesList, c);
+		
+		
+		final JPanel bExtras = new JPanel();
+		bExtras.setLayout(new GridBagLayout());
+		final JTextField bNumChecks = new JTextField(2);
+		final JComboBox bPiecesList = new JComboBox(allPieces);
+			
+		JLabel bChecksLabel = new JLabel("How many times for check?");
+		JLabel bPiecesLabel = new JLabel("Which piece is the objective?");
+		
+		bChecksLabel.setVisible(false);
+		bNumChecks.setVisible(false);
+		bPiecesLabel.setVisible(false);
+		bPiecesList.setVisible(false);
+		
+		if(blackRules.theEndIsNigh().equals("classic") || blackRules.theEndIsNigh().equals("captureAllOftype")){
+			bPiecesLabel.setVisible(true);
+			bPiecesList.setVisible(true);
+		}
+		if(blackRules.theEndIsNigh().equals("checkNTimes")){
+			bPiecesLabel.setVisible(true);
+			bPiecesList.setVisible(true);
+			bChecksLabel.setVisible(true);
+			bNumChecks.setVisible(true);
+		}
+		
+		c.gridx = 0;
+		c.gridy = 0;
+		bExtras.add(bChecksLabel, c);
+		c.gridx = 1;
+		c.gridy = 0;
+		bExtras.add(bNumChecks, c);
+		c.gridx = 0;
+		c.gridy = 1;
+		c.insets = new Insets(1, 1, 1, 1);
+		bExtras.add(bPiecesLabel, c);
+		c.gridx = 1;
+		c.gridy = 1;
+		bExtras.add(bPiecesList, c);
+		
 		//Create button and add ActionListener for going back
 		final JButton back = new JButton("Back");
 		back.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				Driver.getInstance().setPanel(new PieceMaker(b));
+				Driver.getInstance().setPanel(new ObjectiveMaker(b));
 			}
 		});
 		
@@ -183,21 +246,6 @@ public class RuleMaker extends JPanel {
 				}
 				if (wNoMoveObj.isSelected()) {
 					whiteRules.addCropLegalDests("stationaryObjective");
-				}
-				if (wCaptureAll.isSelected()) {
-					whiteRules.addEndOfGame(new EndOfGame("loseAllPieces", true, 0, ""));
-				}
-				if (wCaptureAllType.isSelected()) {
-					whiteRules.addEndOfGame(new EndOfGame("captureAllOfType", false, 0, "Knight")); //TODO - let the user define this. Currently not supported by GUI.
-				}
-				if (wProtectObj.isSelected()) {
-					whiteRules.addEndOfGame(new EndOfGame("classic", false, 0, ""));
-				}
-				if (wLoseAll.isSelected()) {
-					whiteRules.addEndOfGame(new EndOfGame("loseAllPieces", false, 0, ""));
-				}
-				if (wCheckTimes.isSelected()) {
-					whiteRules.addEndOfGame(new EndOfGame("checkNTimes", false, 3, "")); //TODO let the user define this. Currently not supported by GUI.
 				}
 				if (wChangeColor.isSelected()) {
 					whiteRules.addAfterMove("captureTeamSwap");
@@ -217,21 +265,6 @@ public class RuleMaker extends JPanel {
 				if (bNoMoveObj.isSelected()) {
 					blackRules.addCropLegalDests("stationaryObjective");
 				}
-				if (bCaptureAll.isSelected()) {
-					blackRules.addEndOfGame(new EndOfGame("loseAllPieces", true, 0, ""));
-				}
-				if (bCaptureAllType.isSelected()) {
-					blackRules.addEndOfGame(new EndOfGame("captureAllOfType", false, 0, "Knight")); //TODO - let the user define this. Currently not supported by GUI.
-				}
-				if (bProtectObj.isSelected()) {
-					blackRules.addEndOfGame(new EndOfGame("classic", false, 0, ""));
-				}
-				if (bLoseAll.isSelected()) {
-					blackRules.addEndOfGame(new EndOfGame("loseAllPieces", false, 0, ""));
-				}
-				if (bCheckTimes.isSelected()) {
-					blackRules.addEndOfGame(new EndOfGame("checkNTimes", false, 3, "")); //TODO let the user define this. Currently not supported by GUI.
-				}
 				if (bChangeColor.isSelected()) {
 					blackRules.addAfterMove("captureTeamSwap");
 				}
@@ -244,12 +277,6 @@ public class RuleMaker extends JPanel {
 				if(bCapturedColorAndDrop.isSelected()){
 					blackRules.addAfterMove("placeCapturedSwitch");
 				}
-				if (!pawnPromotion.isSelected()) {
-					whiteRules.addGetPromotionSquares("noPromos");
-					whiteRules.addPromote("noPromos");
-					blackRules.addGetPromotionSquares("noPromos");
-					blackRules.addPromote("noPromos");
-				}
 				if (switchBoard.isSelected() && boards.length == 2) {
 					whiteRules.setGetBoard(new GetBoard("oppositeBoard"));
 					blackRules.setGetBoard(new GetBoard("oppositeBoard"));
@@ -259,6 +286,55 @@ public class RuleMaker extends JPanel {
 					blackRules.addAfterMove("atomicCapture");
 				}
 				
+				if(wNumChecks.isVisible()){
+					String wNumChecked = wNumChecks.getText();
+					try{
+						int answer = Integer.parseInt(wNumChecked);
+						//TODO should we have a bound on the number of checks?
+						if(answer < 1){
+							JOptionPane.showMessageDialog(null, "Please enter a number greater than 1 into the Number of Checks box.");
+							return;
+						}
+						whiteRules.addEndOfGame(new EndOfGame("checkNTimes", false, answer, ""));
+					}catch(Exception ne){
+						JOptionPane.showMessageDialog(null, "Please enter a number into the Number of Checks box.");
+						return;
+					}
+				}
+				if(bNumChecks.isVisible()){
+					String bNumChecked = bNumChecks.getText();
+					try{
+						int answer = Integer.parseInt(bNumChecked);
+						//TODO should we have a bound on the number of checks?
+						if(answer < 1){
+							JOptionPane.showMessageDialog(null, "Please enter a number greater than 1 into the Number of Checks box.");
+							return;
+						}
+						blackRules.addEndOfGame(new EndOfGame("checkNTimes", false, answer, ""));
+					}catch(Exception ne){
+						JOptionPane.showMessageDialog(null, "Please enter a number into the Number of Checks box.");
+						return;
+					}
+				}
+				if(wPiecesList.isVisible()){
+					if(whiteRules.theEndIsNigh().equals("classic")){
+						whiteRules.addEndOfGame(new EndOfGame("classic", false, 0, ""));
+						whiteRules.setObjectivePiece(new ObjectivePiece("custom objective", wPiecesList.getSelectedItem().toString()));
+					}
+					else{
+						whiteRules.addEndOfGame(new EndOfGame("captureAllOfType", false, 0, wPiecesList.getSelectedItem().toString()));
+					}
+				}
+				if(bPiecesList.isVisible()){
+					bPiecesList.getSelectedItem();
+					if(blackRules.theEndIsNigh().equals("classic")){
+						blackRules.addEndOfGame(new EndOfGame("classic", false, 0, ""));
+						blackRules.setObjectivePiece(new ObjectivePiece("custom objective", bPiecesList.getSelectedItem().toString()));
+					}
+					else{
+						blackRules.addEndOfGame(new EndOfGame("captureAllOfType", false, 0, bPiecesList.getSelectedItem().toString()));
+					}
+				}
 				
 				Driver.getInstance().setPanel(new PlayerCustomMenu(b, whiteRules, blackRules));
 				}
@@ -284,24 +360,11 @@ public class RuleMaker extends JPanel {
 		c.gridx = 0;
 		c.gridy = 0;
 		whiteTeam.add(whiteLegalDests, c);
-			
-			JPanel whiteObj = new JPanel();
-			whiteObj.setLayout(new GridBagLayout());
-				c.gridheight = 1;
-				c.gridx = 0;
-				c.gridy = 1;
-				whiteObj.add(new JLabel("<html><u> Objective </u></br></html>"), c);
-				c.gridx = 0;
-				c.gridy = 2;
-				whiteObj.add(objectiveWhiteCheckBox, c);
-				c.gridx = 0;
-				c.gridy = 3;
-				whiteObj.add(new JLabel(" "), c);
 				
 		c.gridx = 0;
 		c.gridy = 1;
-		whiteTeam.add(whiteObj, c);
-				
+		whiteTeam.add(wExtras, c);
+		
 			JPanel whiteCapture = new JPanel();
 			whiteCapture.setLayout(new GridBagLayout());
 				c.gridheight = 1;
@@ -333,23 +396,6 @@ public class RuleMaker extends JPanel {
 		c.gridx = 0;
 		c.gridy = 0;
 		blackTeam.add(blackLegalDests, c);	
-			
-			JPanel blackObj = new JPanel();
-			blackObj.setLayout(new GridBagLayout());
-				c.gridheight = 1;
-				c.gridx = 0;
-				c.gridy = 1;
-				blackObj.add(new JLabel("<html><u> Objective </u></br></html>"), c);
-				c.gridx = 0;
-				c.gridy = 2;
-				blackObj.add(objectiveBlackCheckBox, c);
-				c.gridx = 0;
-				c.gridy = 3;
-				blackObj.add(new JLabel(" "), c);
-				
-		c.gridx = 0;
-		c.gridy = 1;
-		blackTeam.add(blackObj, c);
 		
 			JPanel blackCapture = new JPanel();
 			blackCapture.setLayout(new GridBagLayout());
@@ -362,17 +408,21 @@ public class RuleMaker extends JPanel {
 				blackCapture.add(afterCapturepBlackCheckBox, c);
 		
 		c.gridx = 0;
+		c.gridy = 1;
+		blackTeam.add(bExtras, c);
+				
+		c.gridx = 0;
 		c.gridy = 2;
 		blackTeam.add(blackCapture, c);
 			
 		//Adding White team to window
-		c.insets = new Insets(10, 10, 10, 10);
+		c.insets = new Insets(5, 5, 5, 5);
 		c.gridx = 0;
 		c.gridy = 0;
 		add(whiteTeam, c);
 		
 		//Adding black team to the window
-		c.insets = new Insets(10, 10, 10, 10);
+		c.insets = new Insets(5, 5, 5, 5);
 		c.gridx = 1;
 		c.gridy = 0;
 		add(blackTeam, c);
@@ -408,293 +458,16 @@ public class RuleMaker extends JPanel {
 		
 		
 		//Setting up which buttons turn off others
-		//Objective can't move
-			wNoMoveObj.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					if(wNoMoveObj.isSelected()){
-						wCaptureAll.setEnabled(false);
-						wCaptureAll.setSelected(false);
-						wCaptureAllType.setEnabled(false);
-						wCaptureAllType.setSelected(false);
-						wLoseAll.setEnabled(false);
-						wLoseAll.setSelected(false);
-						needsObj = true;
-					}
-					else{
-						wCaptureAll.setEnabled(true);
-						wCaptureAllType.setEnabled(true);
-						wLoseAll.setEnabled(true);
-					}
-				}
-			});
-			bNoMoveObj.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					if(bNoMoveObj.isSelected()){
-						bCaptureAll.setEnabled(false);
-						bCaptureAll.setSelected(false);
-						bCaptureAllType.setEnabled(false);
-						bCaptureAllType.setSelected(false);
-						bLoseAll.setEnabled(false);
-						bLoseAll.setSelected(false);
-						needsObj = true;
-					}
-					else{
-						bCaptureAll.setEnabled(true);
-						bCaptureAllType.setEnabled(true);
-						bLoseAll.setEnabled(true);
-					}
-				}
-			});
-		
 		//Capture All
-			wCaptureAll.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					if(wCaptureAll.isSelected()){
-						wProtectObj.setEnabled(false);
-						wProtectObj.setSelected(false);
-						wCaptureAllType.setEnabled(false);
-						wCaptureAllType.setSelected(false);
-						wLoseAll.setEnabled(false);
-						wLoseAll.setSelected(false);
-						wCheckTimes.setEnabled(false);
-						wCheckTimes.setSelected(false);
-						wDrop.setEnabled(false);
-						wDrop.setSelected(false);
-					}
-					else{
-						wProtectObj.setEnabled(true);
-						wCaptureAllType.setEnabled(true);
-						wLoseAll.setEnabled(true);
-						wCheckTimes.setEnabled(true);
-						wDrop.setEnabled(true);
-					}
-				}
-			});
-			bCaptureAll.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					if(bCaptureAll.isSelected()){
-						bProtectObj.setEnabled(false);
-						bProtectObj.setSelected(false);
-						bCaptureAllType.setEnabled(false);
-						bCaptureAllType.setSelected(false);
-						bLoseAll.setEnabled(false);
-						bLoseAll.setSelected(false);
-						bCheckTimes.setEnabled(false);
-						bCheckTimes.setSelected(false);
-						bDrop.setEnabled(false);
-						bDrop.setSelected(false);
-					}
-					else{
-						bProtectObj.setEnabled(true);
-						bCaptureAllType.setEnabled(true);
-						bLoseAll.setEnabled(true);
-						bCheckTimes.setEnabled(true);
-						bDrop.setEnabled(true);
-					}
-				}
-			});
-		
-		//Capture All of Type
-			wCaptureAllType.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					if(wCaptureAllType.isSelected()){
-						wProtectObj.setEnabled(false);
-						wProtectObj.setSelected(false);
-						wCaptureAll.setEnabled(false);
-						wCaptureAll.setSelected(false);
-						wLoseAll.setEnabled(false);
-						wLoseAll.setSelected(false);
-						wCheckTimes.setEnabled(false);
-						wCheckTimes.setSelected(false);
-						wDrop.setEnabled(false);
-						wDrop.setSelected(false);
-					}
-					else{
-						wProtectObj.setEnabled(true);
-						wCaptureAll.setEnabled(true);
-						wLoseAll.setEnabled(true);
-						wCheckTimes.setEnabled(true);
-						wDrop.setEnabled(true);
-					}
-				}
-			});
-			bCaptureAllType.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					if(bCaptureAllType.isSelected()){
-						bProtectObj.setEnabled(false);
-						bProtectObj.setSelected(false);
-						bCaptureAll.setEnabled(false);
-						bCaptureAll.setSelected(false);
-						bLoseAll.setEnabled(false);
-						bLoseAll.setSelected(false);
-						bCheckTimes.setEnabled(false);
-						bCheckTimes.setSelected(false);
-						bDrop.setEnabled(false);
-						bDrop.setSelected(false);
-					}
-					else{
-						bProtectObj.setEnabled(true);
-						bCaptureAll.setEnabled(true);
-						bLoseAll.setEnabled(true);
-						bCheckTimes.setEnabled(true);
-						bDrop.setEnabled(true);
-					}
-				}
-			});
-		
-		//Protect Objective
-			wProtectObj.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					if(wProtectObj.isSelected()){
-						wChangeColor.setEnabled(false);
-						wChangeColor.setSelected(false);
-						wCaptureAllType.setEnabled(false);
-						wCaptureAllType.setSelected(false);
-						wCaptureAll.setEnabled(false);
-						wCaptureAll.setSelected(false);
-						wLoseAll.setEnabled(false);
-						wLoseAll.setSelected(false);
-						wCheckTimes.setEnabled(false);
-						wCheckTimes.setSelected(false);
-						needsObj = true;
-					}
-					else{
-						wChangeColor.setEnabled(true);
-						wCaptureAllType.setEnabled(true);
-						wCaptureAll.setEnabled(true);
-						wLoseAll.setEnabled(true);
-						wCheckTimes.setEnabled(true);
-					}
-				}
-			});
-			bProtectObj.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					if(bProtectObj.isSelected()){
-						bChangeColor.setEnabled(false);
-						bChangeColor.setSelected(false);
-						bCaptureAll.setEnabled(false);
-						bCaptureAll.setSelected(false);
-						bCaptureAllType.setEnabled(false);
-						bCaptureAllType.setSelected(false);
-						bLoseAll.setEnabled(false);
-						bLoseAll.setSelected(false);
-						bCheckTimes.setEnabled(false);
-						bCheckTimes.setSelected(false);
-						needsObj = true;
-					}
-					else{
-						bChangeColor.setEnabled(true);
-						bCaptureAll.setEnabled(true);
-						bCaptureAllType.setEnabled(true);
-						bLoseAll.setEnabled(true);
-						bCheckTimes.setEnabled(true);
-					}
-				}
-			});
-		
-		//Lose All Pieces	
-			wLoseAll.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					if(wLoseAll.isSelected()){
-						wProtectObj.setEnabled(false);
-						wProtectObj.setSelected(false);
-						wCaptureAll.setEnabled(false);
-						wCaptureAll.setSelected(false);
-						wCaptureAllType.setEnabled(false);
-						wCaptureAllType.setSelected(false);
-						wCheckTimes.setEnabled(false);
-						wCheckTimes.setSelected(false);
-						wDrop.setEnabled(false);
-						wDrop.setSelected(false);
-					}
-					else{
-						wProtectObj.setEnabled(true);
-						wCaptureAll.setEnabled(true);
-						wCaptureAllType.setEnabled(true);
-						wCheckTimes.setEnabled(true);
-						wDrop.setEnabled(true);
-					}
-				}
-			});
-			bLoseAll.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					if(bLoseAll.isSelected()){
-						bProtectObj.setEnabled(false);
-						bProtectObj.setSelected(false);
-						bCaptureAllType.setEnabled(false);
-						bCaptureAllType.setSelected(false);
-						bCaptureAll.setEnabled(false);
-						bCaptureAll.setSelected(false);
-						bCheckTimes.setEnabled(false);
-						bCheckTimes.setSelected(false);
-						bDrop.setEnabled(false);
-						bDrop.setSelected(false);
-					}
-					else{
-						bProtectObj.setEnabled(true);
-						bCaptureAllType.setEnabled(true);
-						bCaptureAll.setEnabled(true);
-						bCheckTimes.setEnabled(true);
-						bDrop.setEnabled(true);
-					}
-				}
-			});
-			
-		//Check # of Times
-			wCheckTimes.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					if(wCheckTimes.isSelected()){
-						wProtectObj.setEnabled(false);
-						wProtectObj.setSelected(false);
-						wCaptureAll.setEnabled(false);
-						wCaptureAll.setSelected(false);
-						wCaptureAllType.setEnabled(false);
-						wCaptureAllType.setSelected(false);
-						wLoseAll.setEnabled(false);
-						wLoseAll.setSelected(false);
-						//TODO make a pop up to get how many checks
-					}
-					else{
-						wProtectObj.setEnabled(true);
-						wCaptureAll.setEnabled(true);
-						wCaptureAllType.setEnabled(true);
-						wLoseAll.setEnabled(true);
-					}
-				}
-			});
-			bCheckTimes.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					if(bCheckTimes.isSelected()){
-						bProtectObj.setEnabled(false);
-						bProtectObj.setSelected(false);
-						bCaptureAllType.setEnabled(false);
-						bCaptureAllType.setSelected(false);
-						bCaptureAll.setEnabled(false);
-						bCaptureAll.setSelected(false);
-						bLoseAll.setEnabled(false);
-						bLoseAll.setSelected(false);
-						//TODO make a pop up to get how many checks
-					}
-					else{
-						bProtectObj.setEnabled(true);
-						bCaptureAllType.setEnabled(true);
-						bCaptureAll.setEnabled(true);
-						bLoseAll.setEnabled(true);
-					}
-				}
-			});
 			
 		//Capturer Changes color
 			wChangeColor.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if(wChangeColor.isSelected()){
-						wProtectObj.setEnabled(false);
-						wProtectObj.setSelected(false);
 						atomic.setEnabled(false);
 						atomic.setSelected(false);
 					}
 					else{
-						wProtectObj.setEnabled(true);
 						atomic.setEnabled(true);
 					}
 				}
@@ -702,13 +475,10 @@ public class RuleMaker extends JPanel {
 			bChangeColor.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if(bChangeColor.isSelected()){
-						bProtectObj.setEnabled(false);
-						bProtectObj.setSelected(false);
 						atomic.setEnabled(false);
 						atomic.setSelected(false);
 					}
 					else{
-						bProtectObj.setEnabled(true);
 						atomic.setEnabled(true);
 					}
 				}
@@ -830,20 +600,11 @@ public class RuleMaker extends JPanel {
 						wCapturedColorAndDrop.setSelected(false);
 						wPieceReturn.setEnabled(false);
 						wPieceReturn.setSelected(false);
-						wCaptureAll.setEnabled(false);
-						wCaptureAll.setSelected(false);
-						wCaptureAllType.setEnabled(false);
-						wCaptureAllType.setSelected(false);
-						wLoseAll.setEnabled(false);
-						wLoseAll.setSelected(false);
 					}
 					else{
 						atomic.setEnabled(true);
 						wCapturedColorAndDrop.setEnabled(true);
 						wPieceReturn.setEnabled(true);
-						wCaptureAll.setEnabled(true);
-						wCaptureAllType.setEnabled(true);
-						wLoseAll.setEnabled(true);
 					}
 				}
 			});
@@ -856,20 +617,11 @@ public class RuleMaker extends JPanel {
 						bCapturedColorAndDrop.setSelected(false);
 						bPieceReturn.setEnabled(false);
 						bPieceReturn.setSelected(false);
-						bCaptureAll.setEnabled(false);
-						bCaptureAll.setSelected(false);
-						bCaptureAllType.setEnabled(false);
-						bCaptureAllType.setSelected(false);
-						bLoseAll.setEnabled(false);
-						bLoseAll.setSelected(false);
 					}
 					else{
 						atomic.setEnabled(true);
 						bCapturedColorAndDrop.setEnabled(true);
 						bPieceReturn.setEnabled(true);
-						bCaptureAll.setEnabled(true);
-						bCaptureAllType.setEnabled(true);
-						bLoseAll.setEnabled(true);
 					}
 				}
 			});

@@ -144,5 +144,9 @@ public class ObjectivePiece implements Serializable {
 	public void setGame(Game g) {
 		this.g = g;
 	}
+	
+	public String getObjectiveName(){
+		return objectiveName;
+	}
 
 }

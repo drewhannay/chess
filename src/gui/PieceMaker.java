@@ -180,7 +180,6 @@ public class PieceMaker extends JPanel{
 			});
 			
 			final JCheckBox leaper = new JCheckBox("Can jump other Pieces?", false);
-			final JCheckBox promoteMe = new JCheckBox("Can be promoted?", false);
 			
 			final JPanel knightMoving = new JPanel();
 			knightMoving.setLayout(new FlowLayout());
@@ -288,8 +287,6 @@ public class PieceMaker extends JPanel{
 			c.insets = new Insets(5, 0, 0, 0);
 			c.gridx = 0;
 			c.gridy = 6;
-			//movementSetup.add(promoteMe, c);
-			//c.insets = new Insets(5, 0, 0, 0);
 			movementSetup.add(knightOn, c);
 			c.insets = new Insets(5, 0, 5, 0);
 			c.gridx = 0;
@@ -370,7 +367,8 @@ public class PieceMaker extends JPanel{
 							"If you would like the piece to e able to jump others please check the box.\n" +
 							"If you want this piece to be able to move like a knight please enter \n"+
 							"the directions you would like it to move in the following format: \n" +
-							
+							"enter the movements either by column then row or vice versa. For an example\n"+
+							"a normal knight moves 2x1 squares.\n" + 
 							"When you have finished adding movements to the piece press Save and Quit.\n"+
 							"This piece will then be available for reuse from the piece selection screen.\n", "Help", 1);
 				}
@@ -383,11 +381,11 @@ public class PieceMaker extends JPanel{
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					if(name.getText().equals("")){
-						Driver.getInstance().setPanel(new RuleMaker(b));
+						Driver.getInstance().setPanel(new ObjectiveMaker(b));
 					}
 					else{
 						int answer = JOptionPane.showConfirmDialog(null,"If you continue the piece you are working on will not be saved. Continue?", "Piece Maker", JOptionPane.YES_NO_OPTION);
-						if(answer == 0) Driver.getInstance().setPanel(new RuleMaker(b));
+						if(answer == 0) Driver.getInstance().setPanel(new ObjectiveMaker(b));
 					}
 				}
 			});
