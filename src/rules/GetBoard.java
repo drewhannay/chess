@@ -65,7 +65,7 @@ public class GetBoard implements Serializable {
 	 * @return The same board.
 	 */
 	public Board classicGetBoard(Board startBoard) {
-		return g.getBoards()[0];
+		return startBoard;
 	}
 
 	/**
