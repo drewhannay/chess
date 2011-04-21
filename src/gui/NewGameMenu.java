@@ -454,6 +454,7 @@ public class NewGameMenu extends JPanel {
 								}
 							}
 						});
+						host.start();
 						
 					} catch (Exception e) {
 						System.out.println("Host");
