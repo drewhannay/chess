@@ -51,31 +51,23 @@ public class NetworkServer {
         
         while(png.netMove == null)
         	Thread.sleep(0);
-        System.out.println("here");
-		fromUser = png.netMove;
+		fromServer = png.netMove;
 		png.netMove = null;
 
-		out.writeObject(fromUser);
+		out.writeObject(fromServer);
 		out.flush();
         
         try{
 	        while ((fromUser = in.readObject()) != null) {
-	        	g.playMove(g.fakeToRealMove((NetMove)fromServer));
+	        	g.playMove(g.fakeToRealMove((NetMove)fromUser));
 
 				while(png.netMove == null);
 
-				fromUser = png.netMove;
+				fromServer = png.netMove;
 				png.netMove = null;
 
-				out.writeObject(fromUser);
+				out.writeObject(fromServer);
 				out.flush();
-	        	
-	        	
-//	             output = np.processInput(input);
-//	             out.writeObject(output);
-//	             out.flush();
-//	             if (input.toString().equalsIgnoreCase("Bye"))
-//	                break;
 	        }
         }catch(Exception e){
         	//The try catch is here because when the client closes the connection,

@@ -35,12 +35,13 @@ public class NetworkClient {
 
 		PlayNetGame png = new PlayNetGame(g, false, true);
 		Driver.getInstance().setPanel(png);
+		
 
 		while ((fromServer = in.readObject()) != null) {
 			g.playMove(g.fakeToRealMove((NetMove)fromServer));
-			System.out.println(fromServer);
 			
-			while(png.netMove == null);
+			while(png.netMove == null)
+				Thread.sleep(0);
 
 			fromUser = png.netMove;
 			png.netMove = null;
