@@ -291,11 +291,9 @@ public class Move implements Serializable {
 		p.setPinnedBy(null);
 		p.setMoveCount(p.getMoveCount() + 1);
 
-		List<Square> promoSquares = (board.isBlackTurn() ? board.getGame().getBlackRules() : board.getGame()
-				.getWhiteRules()).getPromotionSquares(p);
+		List<Square> promoSquares = (board.isBlackTurn() ? board.getGame().getBlackRules() : board.getGame().getWhiteRules()).getPromotionSquares(p);
 		if (promoSquares != null && promoSquares.contains(getDest())) {
-			promotion = (board.isBlackTurn() ? board.getGame().getBlackRules() : board.getGame().getWhiteRules())
-			.promote(p, isVerified(), promo);
+			promotion = (board.isBlackTurn() ? board.getGame().getBlackRules() : board.getGame().getWhiteRules()).promote(p, isVerified(), promo);
 		}
 
 		board.getGame().afterMove(this);
@@ -641,7 +639,7 @@ public class Move implements Serializable {
 		return exploded;
 	}
 	
-	public String getPromo(){
-		return promo;
+	public Piece getPromoPiece(){
+		return promotion;
 	}
 }

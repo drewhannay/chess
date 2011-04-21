@@ -123,7 +123,7 @@ public class PlayNetGame extends PlayGame {
 						
 						
 						
-						System.out.println(m.getPromo());
+						System.out.println(g.getHistory().get(g.getHistory().size()-1).getPromoPiece() + " here");
 						
 						
 						
