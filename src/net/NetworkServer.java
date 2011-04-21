@@ -8,7 +8,10 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import javax.swing.JButton;
+import javax.swing.JMenu;
 import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 
 import logic.Game;
 
@@ -65,7 +68,8 @@ public class NetworkServer {
 					int surrender = JOptionPane.showConfirmDialog(null, "Player has requested a Draw. Do you accept?", "Draw",
 							JOptionPane.YES_NO_OPTION);
 					if(surrender == 0){
-						JOptionPane.showConfirmDialog(null, "The game has ended in a Draw!", "Draw", 0);
+						JMenu menu = png.createMenu();
+						menu.setVisible(true);
 						out.writeObject(new NetMove(-1,-1,-1,-1,-1,null));
 						break;
 					}

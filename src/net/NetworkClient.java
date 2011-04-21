@@ -7,6 +7,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+import javax.swing.JMenu;
 import javax.swing.JOptionPane;
 
 import logic.Game;
@@ -45,7 +46,8 @@ public class NetworkClient {
 				int surrender = JOptionPane.showConfirmDialog(null, "Player has requested a Draw. Do you accept?", "Draw",
 						JOptionPane.YES_NO_OPTION);
 				if(surrender == 0){
-					JOptionPane.showConfirmDialog(null, "The game has ended in a Draw!", "Draw", 0);
+					JMenu menu = png.createMenu();
+					menu.setVisible(true);
 					out.writeObject(new NetMove(-1,-1,-1,-1,-1,null));
 					break;
 				}
