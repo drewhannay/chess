@@ -44,7 +44,7 @@ public class NetworkClient {
 			if(toMove.originCol == -1){
 				int surrender = JOptionPane.showConfirmDialog(null, "Player has requested a Draw. Do you accept?", "Draw",
 						JOptionPane.YES_NO_OPTION);
-				if(surrender == 2){
+				if(surrender == 0){
 					JOptionPane.showConfirmDialog(null, "The game has ended in a Draw!", "Draw", 0);
 					out.writeObject(new NetMove(-1,-1,-1,-1,-1,null));
 					break;
