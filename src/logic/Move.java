@@ -192,6 +192,8 @@ public class Move implements Serializable {
 		this.origin = origin;
 		this.setDest(dest);
 		this.promo = promo;
+		if(promo!=null)
+			System.out.println(promo);
 		if (!board.isLegalMove(this))
 			throw new Exception("Illegal Move");
 	}

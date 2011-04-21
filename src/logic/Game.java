@@ -698,8 +698,8 @@ public class Game implements Serializable {
 	public NetMove moveToFakeMove(Move m){
 		int boardNum = (m.board == boards[0])?0:1;
 		String promoName = null;
-		if(m.getPromoPiece()!=null)
-			promoName = m.getPromoPiece().getName();
+		if(history.get(history.size()-1).getPromoPiece()!=null)
+			promoName = history.get(history.size()-1).getPromoPiece().getName();
 		return new NetMove(boardNum, m.origin.getRow(), m.origin.getCol(), m.getDest().getRow(), m.getDest().getCol(),promoName);
 	}
 
