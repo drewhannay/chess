@@ -61,7 +61,8 @@ public class NetworkServer {
 	        while ((fromUser = in.readObject()) != null) {
 	        	g.playMove(g.fakeToRealMove((NetMove)fromUser));
 
-				while(png.netMove == null);
+				while(png.netMove == null)
+					Thread.sleep(0);
 
 				fromServer = png.netMove;
 				png.netMove = null;
