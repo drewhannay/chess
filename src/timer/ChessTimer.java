@@ -8,7 +8,6 @@ import java.awt.event.ActionListener;
 import java.io.Serializable;
 import java.text.NumberFormat;
 
-import javax.swing.JApplet;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
@@ -20,7 +19,7 @@ import logic.Result;
  * @author alisa.maas
  *
  */
-public abstract class ChessTimer extends JApplet implements ActionListener, Serializable {
+public abstract class ChessTimer implements ActionListener, Serializable {
 	/**
 	 * The current time on the clock, in ms.
 	 */
@@ -108,12 +107,11 @@ public abstract class ChessTimer extends JApplet implements ActionListener, Seri
 		return time;
 	}
 
-	@Override
 	public void init() {
 		label = new JLabel();
 		label.setHorizontalAlignment(SwingConstants.CENTER);
 		label.setOpaque(true);
-		getContentPane().add(label, BorderLayout.CENTER);
+		//getContentPane().add(label, BorderLayout.CENTER);
 		nf = NumberFormat.getNumberInstance();
 		nf.setMinimumIntegerDigits(2);
 		timer = new Timer(1000, this);
@@ -146,10 +144,8 @@ public abstract class ChessTimer extends JApplet implements ActionListener, Seri
 		timeSet = true;
 	}
 
-	@Override
 	public abstract void start();
 
-	@Override
 	public abstract void stop();
 
 	/**

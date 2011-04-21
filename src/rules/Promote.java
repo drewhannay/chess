@@ -100,9 +100,11 @@ public class Promote implements Serializable {
 			if(p.getPromotesTo().size()==1)
 				klazz = p.getPromotesTo().get(0);
 			while (klazz.equals("")) {
+
 				String result = (String) JOptionPane.showInputDialog(null, "Select the Promotion type:",
 						"Promo choice", JOptionPane.PLAIN_MESSAGE, null,
 						p.getPromotesTo().toArray(), null);
+
 				if (result == null) {
 					continue;
 				}

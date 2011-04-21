@@ -699,7 +699,7 @@ public class PlayGame extends JPanel {
 			c.ipadx = 100;
 			c.gridx = 11 + ifDouble;
 			c.gridy = 4;
-			this.add(blackTimer, c);
+			this.add(blackTimer.getLabel(), c);
 
 			//Adds the UNDO button
 			c.fill = GridBagConstraints.HORIZONTAL;
@@ -719,7 +719,7 @@ public class PlayGame extends JPanel {
 			c.ipadx = 100;
 			c.gridx = 11 + ifDouble;
 			c.gridy = 6;
-			this.add(whiteTimer, c);
+			this.add(whiteTimer.getLabel(), c);
 		} else {
 			//Adds the Black timer
 			c.fill = GridBagConstraints.HORIZONTAL;
