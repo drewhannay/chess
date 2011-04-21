@@ -49,10 +49,10 @@ public class NetworkServer {
         
         Driver.getInstance().setPanel(png);
         
-        while(PlayNetGame.netMove == null);
-
-		fromUser = PlayNetGame.netMove;
-		PlayNetGame.netMove = null;
+        while(png.netMove == null);
+        System.out.println("here");
+		fromUser = png.netMove;
+		png.netMove = null;
 
 		out.writeObject(fromUser);
 		out.flush();
@@ -61,10 +61,10 @@ public class NetworkServer {
 	        while ((fromUser = in.readObject()) != null) {
 	        	g.playMove(g.fakeToRealMove((NetMove)fromServer));
 
-				while(PlayNetGame.netMove == null);
+				while(png.netMove == null);
 
-				fromUser = PlayNetGame.netMove;
-				PlayNetGame.netMove = null;
+				fromUser = png.netMove;
+				png.netMove = null;
 
 				out.writeObject(fromUser);
 				out.flush();

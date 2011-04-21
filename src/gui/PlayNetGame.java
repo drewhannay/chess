@@ -43,7 +43,7 @@ public class PlayNetGame extends PlayGame {
 	 */
 	private boolean isBlack;
 	
-	public static NetMove netMove = null;
+	public NetMove netMove = null;
 
 	/**
 	 * @param g
@@ -121,6 +121,7 @@ public class PlayNetGame extends PlayGame {
 						Move m = new Move(b, storedSquare, clickedSquare);
 						getGame().playMove(m);
 						netMove = g.moveToFakeMove(m);
+						System.out.println(netMove);
 						mustMove = false;
 						boardRefresh(getGame().getBoards());
 					} catch (Exception e1) {

@@ -16,5 +16,9 @@ public class NetMove {
 		this.destCol = destCol;
 	}
 	
+	public String toString(){
+		return boardNum + " " + originRow + " " + originCol;
+	}
+	
 
 }

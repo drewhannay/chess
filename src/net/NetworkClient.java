@@ -38,11 +38,12 @@ public class NetworkClient {
 
 		while ((fromServer = in.readObject()) != null) {
 			g.playMove(g.fakeToRealMove((NetMove)fromServer));
+			System.out.println(fromServer);
+			
+			while(png.netMove == null);
 
-			while(PlayNetGame.netMove == null);
-
-			fromUser = PlayNetGame.netMove;
-			PlayNetGame.netMove = null;
+			fromUser = png.netMove;
+			png.netMove = null;
 
 			out.writeObject(fromUser);
 			out.flush();
