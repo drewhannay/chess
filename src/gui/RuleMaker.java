@@ -160,7 +160,7 @@ public class RuleMaker extends JPanel {
 		wPiecesLabel.setVisible(false);
 		wPiecesList.setVisible(false);
 		
-		if(whiteRules.theEndIsNigh().equals("classic") || whiteRules.theEndIsNigh().equals("captureAllOftype")){
+		if(whiteRules.theEndIsNigh().equals("classic") || whiteRules.theEndIsNigh().equals("captureAllOfType")){
 			wPiecesLabel.setVisible(true);
 			wPiecesList.setVisible(true);
 		}
@@ -199,7 +199,7 @@ public class RuleMaker extends JPanel {
 		bPiecesLabel.setVisible(false);
 		bPiecesList.setVisible(false);
 		
-		if(blackRules.theEndIsNigh().equals("classic") || blackRules.theEndIsNigh().equals("captureAllOftype")){
+		if(blackRules.theEndIsNigh().equals("classic") || blackRules.theEndIsNigh().equals("captureAllOfType")){
 			bPiecesLabel.setVisible(true);
 			bPiecesList.setVisible(true);
 		}

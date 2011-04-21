@@ -6,7 +6,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
-import java.awt.Label;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -45,6 +44,9 @@ public class PlayNetGame extends PlayGame {
 	 */
 	private static boolean isBlack;
 	
+	/**
+	 * 
+	 */
 	public NetMove netMove = null;
 
 	/**
@@ -392,6 +394,8 @@ public class PlayNetGame extends PlayGame {
 
 		// If it is playback then we do not want timers.
 		if (!isPlayback) {
+			PlayGame.whiteTimer = g.getWhiteTimer();
+			PlayGame.blackTimer = g.getBlackTimer();
 			//Adds the Black timer
 			c.fill = GridBagConstraints.HORIZONTAL;
 			c.anchor = GridBagConstraints.BASELINE;
