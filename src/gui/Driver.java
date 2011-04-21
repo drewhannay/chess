@@ -136,7 +136,7 @@ final public class Driver extends JFrame {
 
 		//This section makes the app match the look and feel of whatever system it's running on.
 		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
 		} catch(Exception e) {
 			System.out.println("Error setting native LAF: " + e);
 		}
