@@ -6,6 +6,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.awt.Label;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -16,6 +17,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
@@ -482,11 +484,16 @@ public class PlayNetGame extends PlayGame {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					//TODO implement network feature to ask other player here
+					int surrender = JOptionPane.showInternalConfirmDialog(null, "Player has requested a Draw. Do you accept?");
+					if(surrender == 0)
+						return;
 					if (getGame().getLastMove() == null)
 						return;
 					menu.setVisible(false);
-					getGame().getLastMove().setResult(new Result(Result.DRAW));
-					endOfGame(new Result(Result.DRAW));
+					Result r = new Result(Result.DRAW);
+					r.setText("The game has ended in a Draw!");
+					getGame().getLastMove().setResult(r);
+					endOfGame(r);
 				}
 			});
 
