@@ -41,7 +41,7 @@ public class NetworkClient {
 		playing = true;
 		
 		while (playing) {
-			fromServer = in.readObject();
+			while((fromServer = in.readObject())==null);
 			g.playMove(g.fakeToRealMove((NetMove)fromServer));
 			
 			while(png.netMove == null)
