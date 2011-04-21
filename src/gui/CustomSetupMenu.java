@@ -281,6 +281,16 @@ public class CustomSetupMenu extends JPanel {
 			if (square.isOccupied()==false){
 			options();
 			}
+			else{
+				if(square.getPiece().isBlack()){
+					square.getPiece().setBlack(false);
+					square.refresh();
+				}
+				else{
+					square.getPiece().setBlack(true);
+					square.refresh();
+				}
+			}
 		}
 		
 
@@ -407,12 +417,9 @@ public class CustomSetupMenu extends JPanel {
 			
 			int mods = e.getModifiers();
 					if (mods == 16){
-						setPieceOnBoard(false);
+						setPieceOnBoard();
 					}
 					else if (mods == 4){
-						setPieceOnBoard(true);
-					}
-					else if (mods == 8 || mods == 20){
 						square.setPiece(null);
 						square.refresh();
 					}
@@ -421,7 +428,7 @@ public class CustomSetupMenu extends JPanel {
 		/**
 		 * @param isBlack
 		 */
-		private void setPieceOnBoard(boolean isBlack){
+		private void setPieceOnBoard(){
 			if (option.isOccupied() == false){
 				if ((option.getColor().equals(Color.LIGHT_GRAY) == false) && (option.getColor().equals(Color.getHSBColor(30, 70, 70)) == false)){
 					square.setBackgroundColor(option.getColor());
@@ -434,16 +441,8 @@ public class CustomSetupMenu extends JPanel {
 			}
 			else{
 				if (square.isHabitable() == true){
-					Piece p = PieceBuilder.makePiece(option.getPiece().getName(), isBlack, square, board);
-//					if(whiteRules.objectivePiece(isBlack) == p) {
-//						objectives++;
-//						RuleMaker.needsObj = false;
-//					}
-//					if(allowableObjectives < objectives){
-//						JOptionPane.showMessageDialog(null, "You cannot place any more objective pieces");
-//						return;
-//					}
-					if (isBlack)
+					Piece p = PieceBuilder.makePiece(option.getPiece().getName(), option.getPiece().isBlack(), square, board);
+					if (option.getPiece().isBlack())
 						blackTeam.add(p);
 					else
 						whiteTeam.add(p);
@@ -455,11 +454,10 @@ public class CustomSetupMenu extends JPanel {
 						    "This square is uninhabitable.",
 						    "Warning",
 						    JOptionPane.WARNING_MESSAGE);
-
 				}
 			}
 		}
-		
+
 		public void mouseEntered(MouseEvent arg0) {}
 		public void mouseExited(MouseEvent arg0) {}
 		public void mousePressed(MouseEvent arg0) {}
@@ -525,31 +523,31 @@ public class CustomSetupMenu extends JPanel {
 //		list.addElement("Remove Piece");
 	    final JList piecesList = new JList(list);
 	    
-		final Board bShowPiece = new Board(2,1,false);
+		final Board bShowPiece = new Board(1,1,false);
 		final JPanel showPiece = new JPanel();
-		showPiece.setLayout(new GridLayout(2,1));
-		showPiece.setPreferredSize(new Dimension(50,100));
+		showPiece.setLayout(new GridLayout(1,1));
+		showPiece.setPreferredSize(new Dimension(50,50));
 		
 		final JButton jb1 = new JButton();
 		final JButton jb2 = new JButton();
 		jb1.addActionListener(new SetUpListener(bShowPiece.getSquare(1, 1)));
 		bShowPiece.getSquare(1, 1).setButton(jb1);
-		bShowPiece.getSquare(2, 1).setButton(jb2);//Let the Square know which button it owns.
+//		bShowPiece.getSquare(2, 1).setButton(jb2);//Let the Square know which button it owns.
 		showPiece.add(jb1);
-		showPiece.add(jb2);
+//		showPiece.add(jb2);
 		bShowPiece.getSquare(1, 1).refresh();
-		bShowPiece.getSquare(2, 1).refresh();
+//		bShowPiece.getSquare(2, 1).refresh();
 	    
 	    piecesList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 	    piecesList.setLayoutOrientation(JList.VERTICAL);
 	    piecesList.setVisibleRowCount(-1);
 	    piecesList.setSelectedIndex(0);
-	    Piece toAdd = PieceBuilder.makePiece((String) list.elementAt(0), true, bShowPiece.getSquare(1,1), bShowPiece);
-	    Piece toAdd1 = PieceBuilder.makePiece((String) list.elementAt(0), false, bShowPiece.getSquare(1,1), bShowPiece);
+	    Piece toAdd = PieceBuilder.makePiece((String) list.elementAt(0), false, bShowPiece.getSquare(1,1), bShowPiece);
+//	    Piece toAdd1 = PieceBuilder.makePiece((String) list.elementAt(0), false, bShowPiece.getSquare(1,1), bShowPiece);
     	bShowPiece.getSquare(1, 1).setPiece(toAdd);
-    	bShowPiece.getSquare(2, 1).setPiece(toAdd1);
+//    	bShowPiece.getSquare(2, 1).setPiece(toAdd1);
     	bShowPiece.getSquare(1, 1).refresh();
-    	bShowPiece.getSquare(2, 1).refresh();
+//    	bShowPiece.getSquare(2, 1).refresh();
 	    
 	    ListSelectionModel selectList = piecesList.getSelectionModel();
 	    final Color original = bShowPiece.getSquare(1, 1).getColor();
@@ -567,7 +565,7 @@ public class CustomSetupMenu extends JPanel {
 			       			bShowPiece.getSquare(1, 1).setHabitable(true);
 			       			bShowPiece.getSquare(1, 1).refresh();
 			       			jb1.setVisible(true);
-			       			jb2.setVisible(false);
+//			       			jb2.setVisible(false);
 			       	}
 //			       	else if (((String) list.elementAt(selection)).equals("Remove Piece")){
 //
@@ -582,12 +580,12 @@ public class CustomSetupMenu extends JPanel {
 			        		bShowPiece.getSquare(1, 1).setHabitable(true);
 			        	if (bShowPiece.getSquare(1, 1).getColor().equals(original) == false)
 			        		bShowPiece.getSquare(1, 1).setBackgroundColor(original);	
-			        	Piece toAdd = PieceBuilder.makePiece((String) list.elementAt(selection), true, bShowPiece.getSquare(1,1), bShowPiece);
-			        	Piece toAdd1 = PieceBuilder.makePiece((String) list.elementAt(selection), false, bShowPiece.getSquare(1,1), bShowPiece);
+			        	Piece toAdd = PieceBuilder.makePiece((String) list.elementAt(selection), false, bShowPiece.getSquare(1,1), bShowPiece);
+//			        	Piece toAdd1 = PieceBuilder.makePiece((String) list.elementAt(selection), false, bShowPiece.getSquare(1,1), bShowPiece);
 			        	bShowPiece.getSquare(1, 1).setPiece(toAdd);
-			        	bShowPiece.getSquare(2, 1).setPiece(toAdd1);
+//			        	bShowPiece.getSquare(2, 1).setPiece(toAdd1);
 			        	bShowPiece.getSquare(1, 1).refresh();
-			        	bShowPiece.getSquare(2, 1).refresh();
+//			        	bShowPiece.getSquare(2, 1).refresh();
 		       		}
 		        }
 			}
@@ -618,8 +616,8 @@ public class CustomSetupMenu extends JPanel {
 			add(grid);//Add the grid to the main JPanel.
 		}
 
+		add(showPiece);
 	    add(scrollPane);
-	    add(showPiece);
 	    
 		//Create button and add ActionListener
 		backButton = new JButton("Back");
