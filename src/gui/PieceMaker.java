@@ -68,7 +68,6 @@ public class PieceMaker extends JPanel{
 		setSize(550,875);
 		setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
-		Driver.getInstance().setLocationRelativeTo(null);
 
 		JPanel piecePanel = new JPanel();
 		piecePanel.setLayout(new GridBagLayout());

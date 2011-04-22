@@ -80,7 +80,7 @@ public class RuleMaker extends JPanel {
 		
 		//Legal Destination Rules for White
 		final JPanel legalDestWhiteCheckBox = new JPanel();
-		legalDestWhiteCheckBox.setLayout(new GridLayout(3, 1));
+		legalDestWhiteCheckBox.setLayout(new GridLayout(2, 1));
 		final JCheckBox wCaptureMand = new JCheckBox("Capture Mandatory");
 		legalDestWhiteCheckBox.add(wCaptureMand);
 		final JCheckBox wNoMoveObj = new JCheckBox("Can't Move Objective");
@@ -106,7 +106,7 @@ public class RuleMaker extends JPanel {
 		
 		//Legal Destination Rules for Black
 		final JPanel legalDestBlackCheckBox = new JPanel();
-		legalDestBlackCheckBox.setLayout(new GridLayout(3, 1));
+		legalDestBlackCheckBox.setLayout(new GridLayout(2, 1));
 			final JCheckBox bCaptureMand = new JCheckBox("Capture Mandatory");
 			legalDestBlackCheckBox.add(bCaptureMand);
 			final JCheckBox bNoMoveObj = new JCheckBox("Can't Move Objective");
@@ -132,7 +132,7 @@ public class RuleMaker extends JPanel {
 
 		//Special overall rules
 		final JPanel sCheckBox = new JPanel();
-		sCheckBox.setLayout(new GridLayout(3, 1));
+		sCheckBox.setLayout(new GridLayout(2, 1));
 			final JCheckBox atomic = new JCheckBox("Atomic Chess");
 			sCheckBox.add(atomic);
 			final JCheckBox switchBoard = new JCheckBox("Move to other board");
@@ -149,8 +149,12 @@ public class RuleMaker extends JPanel {
 		JLabel wChecksLabel = new JLabel("How many times for check?");
 		JLabel wPiecesLabel = new JLabel("Which piece is the objective?");
 		
+		wNumChecks.setVisible(false);
+		wPiecesList.setVisible(false);
+		
 		if(whiteRules.theEndIsNigh().equals("classic") || whiteRules.theEndIsNigh().equals("captureAllOfType")){
 			if(whiteRules.theEndIsNigh().equals("captureAllOfType")) wPiecesLabel.setText("Which Piece type will be captured?");
+			wPiecesList.setVisible(true);
 			c.gridx = 0;
 			c.gridy = 1;
 			c.insets = new Insets(1, 1, 1, 1);
@@ -160,6 +164,8 @@ public class RuleMaker extends JPanel {
 			wExtras.add(wPiecesList, c);
 		}
 		if(whiteRules.theEndIsNigh().equals("checkNTimes")){
+			wNumChecks.setVisible(true);
+			wPiecesList.setVisible(true);
 			c.gridx = 0;
 			c.gridy = 0;
 			wExtras.add(wChecksLabel, c);
@@ -184,8 +190,12 @@ public class RuleMaker extends JPanel {
 		JLabel bChecksLabel = new JLabel("How many times for check?");
 		JLabel bPiecesLabel = new JLabel("Which piece is the objective?");
 		
+		bNumChecks.setVisible(false);
+		bPiecesList.setVisible(false);
+		
 		if(blackRules.theEndIsNigh().equals("classic") || blackRules.theEndIsNigh().equals("captureAllOfType")){
 			if(blackRules.theEndIsNigh().equals("captureAllOfType")) bPiecesLabel.setText("Which Piece type will be captured?");
+			bPiecesList.setVisible(true);
 			c.gridx = 0;
 			c.gridy = 1;
 			c.insets = new Insets(1, 1, 1, 1);
@@ -195,6 +205,8 @@ public class RuleMaker extends JPanel {
 			bExtras.add(bPiecesList, c);
 		}
 		if(blackRules.theEndIsNigh().equals("checkNTimes")){
+			bNumChecks.setVisible(true);
+			bPiecesList.setVisible(true);
 			c.gridx = 0;
 			c.gridy = 0;
 			bExtras.add(bChecksLabel, c);
@@ -277,7 +289,6 @@ public class RuleMaker extends JPanel {
 					String wNumChecked = wNumChecks.getText();
 					try{
 						int answer = Integer.parseInt(wNumChecked);
-						//TODO should we have a bound on the number of checks?
 						if(answer < 1){
 							JOptionPane.showMessageDialog(null, "Please enter a number greater than 1 into the Number of Checks box.");
 							return;
@@ -292,7 +303,6 @@ public class RuleMaker extends JPanel {
 					String bNumChecked = bNumChecks.getText();
 					try{
 						int answer = Integer.parseInt(bNumChecked);
-						//TODO should we have a bound on the number of checks?
 						if(answer < 1){
 							JOptionPane.showMessageDialog(null, "Please enter a number greater than 1 into the Number of Checks box.");
 							return;
@@ -348,6 +358,7 @@ public class RuleMaker extends JPanel {
 		c.gridy = 0;
 		whiteTeam.add(whiteLegalDests, c);
 				
+		c.insets = new Insets(1,3,3,3);
 		c.gridx = 0;
 		c.gridy = 1;
 		whiteTeam.add(wExtras, c);
@@ -394,6 +405,7 @@ public class RuleMaker extends JPanel {
 				c.gridy = 2;
 				blackCapture.add(afterCapturepBlackCheckBox, c);
 		
+		c.insets = new Insets(1,3,3,3);
 		c.gridx = 0;
 		c.gridy = 1;
 		blackTeam.add(bExtras, c);
