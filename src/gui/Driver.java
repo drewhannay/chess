@@ -393,7 +393,8 @@ final public class Driver extends JFrame {
 				helpMenu.setText("Game Help");
 				gamePlayHelp.setVisible(true);
 				gameInfo.setVisible(true);
-				
+				if(PlayGame.menu != null)
+					PlayGame.menu.setVisible(false);
 				//Resets the panels being displayed to only contain the new game
 				if(otherPanel != null) remove(otherPanel); 
 				if(mainPanel != null) remove(mainPanel);

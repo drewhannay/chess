@@ -8,8 +8,6 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -222,10 +220,6 @@ public class CustomSetupMenu extends JPanel {
 	 * @author Drew Hannay & Daniel Opdyke
 	 */
 	
-	/**
-	 * Int to hold how many objective pieces have been placed
-	 */
-	private int objectives =0;
 	/**
 	 * Rules holder for the white rules
 	 */
@@ -465,6 +459,9 @@ public class CustomSetupMenu extends JPanel {
 		public void mouseReleased(MouseEvent arg0) {}
 	}
 
+	
+
+	
 	/**
 	 * Generated Serial Version ID
 	 */
@@ -520,7 +517,6 @@ public class CustomSetupMenu extends JPanel {
 			list.addElement(allPieces[i]);
 		}
 		list.addElement("Square Options");
-//		list.addElement("Remove Piece");
 	    final JList piecesList = new JList(list);
 	    
 		final Board bShowPiece = new Board(2,1,false);
@@ -566,12 +562,6 @@ public class CustomSetupMenu extends JPanel {
 			       			bShowPiece.getSquare(1, 1).refresh();
 			       			jb1.setVisible(true);
 			       			jb2.setVisible(false);
-			       	}
-			       	else if (((String) list.elementAt(selection)).equals("Remove Piece")){
-
-		       			bShowPiece.getSquare(1, 1).refresh();
-			       		jb2.setVisible(false);
-			       		jb1.setVisible(false);
 			       	}
 			        else{
 			        	jb2.setVisible(true);

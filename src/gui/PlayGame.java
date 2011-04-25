@@ -511,8 +511,11 @@ public class PlayGame extends JPanel {
 		});
 
 		int ifDouble = 0;
-		Driver.getInstance().setMenu(createMenu());
-
+		if(menu == null)
+			Driver.getInstance().setMenu(createMenu());
+		else if(!menu.isVisible())
+			Driver.getInstance().setMenu(createMenu());
+		
 		//Set the layout of the JPanel.
 		setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
