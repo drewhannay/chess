@@ -54,162 +54,193 @@ public class CustomSetupMenu extends JPanel {
 	 * Creates a popup box for the Promotion Options.
 	 * 
 	 */
+
 	private void promotion() {
-		//Create the pop up and set the size, location, and layout.
-		final JFrame popup = new JFrame("Promotion Options");
-		popup.setSize(500,500);
-		popup.setLocationRelativeTo(null);
-		popup.setLayout(new FlowLayout());
-		popup.setResizable(false);
+	//Create the pop up and set the size, location, and layout.
+	final JFrame popup = new JFrame("Promotion Options");
+	popup.setSize(500,500);
+	popup.setLocationRelativeTo(null);
+	popup.setLayout(new FlowLayout());
+	popup.setResizable(false);
 
-		
-		// LIST - CANT PROMOTE TO
-		final DefaultListModel list = new DefaultListModel();
-		Object[] allPieces = PieceBuilder.getSet().toArray();
-		for (int i = 0; i<allPieces.length; i++){
-			list.addElement(allPieces[i]);
-		}
-		JList piecesList = new JList(list);
-		
-		// EMPTY LIST - CAN PROMOTE TO
-		final DefaultListModel emptyList = new DefaultListModel();
-		emptyList.addElement("");
-		JList piecesList2 = new JList(emptyList);
-		
-		/*
-		 * ARROW PANEL
-		 */
-		JButton moveLeft = new JButton();
-		moveLeft.setText("<---");
-		JButton moveRight = new JButton();
-		moveRight.setText("--->");
-		JPanel otherCrap = new JPanel();
-		otherCrap.setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
-		
-//		c.fill = GridBagConstraints.HORIZONTAL;
-//		c.gridx = 0;
-//		c.gridy = 1;
-//		otherCrap.add(piecesList, c);
-		
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 0;
-		c.gridy = 1;
-		otherCrap.add(moveRight, c);
-		
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 0;
-		c.gridy = 2;
-		otherCrap.add(moveLeft, c);
-		
-//		c.fill = GridBagConstraints.HORIZONTAL;
-//		c.gridx = 2;
-//		c.gridy = 1;
-//		otherCrap.add(canPromoteTo, c);
+	// EMPTY LIST
+	final DefaultListModel emptyList = new DefaultListModel();
+	// LIST - CANT PROMOTE TO
+	final DefaultListModel list = new DefaultListModel();
+	Object[] allPieces = PieceBuilder.getSet().toArray();
+	for (int i = 0; i<allPieces.length; i++){
+	list.addElement(allPieces[i]);
+	
+	}
+	list.remove(4);
+	final JList piecesList = new JList(list);
+	// EMPTY LIST - CAN PROMOTE TO
+	final JList piecesList2 = new JList(emptyList);
+	
+	
+	/*
+	* ARROW PANEL
+	*/
+	
+	
+	// moveLeft This button will move a selected piece from the right list
+	// to the left list.
+	final JButton moveLeft = new JButton();
+	moveLeft.addActionListener(new ActionListener() {
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+	int index = piecesList2.getSelectedIndex();
+	
+	// Add the element of the right list to the left list.
+	list.addElement(emptyList.elementAt(index));
+	emptyList.remove(index);
+	}
+	});
+	moveLeft.setText("<---");
+	
+	
+	// moveRight This button will move a selected piece from the left list
+	// to the right list.
+	final JButton moveRight = new JButton();
+	moveRight.addActionListener(new ActionListener() {
 
-		// LIST - CANT PROMOTE TO
-		piecesList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-	    piecesList.setLayoutOrientation(JList.VERTICAL);
-	    piecesList.setVisibleRowCount(-1);
-	    piecesList.setSelectedIndex(0);    
-	    // EMPTY LIST - CAN PROMOTE TO
-		piecesList2.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-	    piecesList2.setLayoutOrientation(JList.VERTICAL);
-	    piecesList2.setVisibleRowCount(-1);
-	    piecesList2.setSelectedIndex(0);    
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+	int index = piecesList.getSelectedIndex();
+	
+	// Add the element of the left list to the right list.
+	emptyList.addElement(list.elementAt(index));
+	list.remove(index);
+
+	}
+	});
+	moveRight.setText("--->");
 
 
+	// LIST - CANT PROMOTE TO
+	piecesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+	   piecesList.setLayoutOrientation(JList.VERTICAL);
+	   piecesList.setVisibleRowCount(-1);
+	   piecesList.setSelectedIndex(0);    
+	   // EMPTY LIST - CAN PROMOTE TO
+	piecesList2.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+	   piecesList2.setLayoutOrientation(JList.VERTICAL);
+	   piecesList2.setVisibleRowCount(-1);
+	   piecesList2.setSelectedIndex(0);    
 
 
-	    // LIST - CANT PROMOTE TO
-		JScrollPane scrollPane = new JScrollPane(piecesList);
-	    scrollPane.setPreferredSize(new Dimension(200, 200));
-		
-		ListSelectionModel selectList = piecesList.getSelectionModel();
-		selectList.addListSelectionListener(new ListSelectionListener(){
-			//TODO
-			@Override
-			public void valueChanged(ListSelectionEvent e) {
-				
-				
-				
-				
-			}
-		});
 
-		
-		// EMPTY LIST - CAN PROMOTE TO
-		JScrollPane scrollPane2 = new JScrollPane(piecesList2);
-	    scrollPane.setPreferredSize(new Dimension(200, 200));
-		
-		ListSelectionModel selectList2 = piecesList2.getSelectionModel();
-		selectList2.addListSelectionListener(new ListSelectionListener(){
-			//TODO
-			@Override
-			public void valueChanged(ListSelectionEvent e) {
-				
-				
-				
-				
-			}
-		});
-		
-		
-		///////////////////////////////////////////////////////////////
-		/*
-		 * Add the Submit and Back Buttons.
-		 */
-		JButton submitButton = new JButton("Ok");
-		submitButton.addActionListener(new ActionListener() {
 
-				@Override
-				public void actionPerformed(ActionEvent arg0) {
-					//squareOptions();
-					popup.dispose();
-				}
+	   // LIST - CANT PROMOTE TO
+	JScrollPane scrollPane = new JScrollPane(piecesList);
+	   scrollPane.setPreferredSize(new Dimension(200, 200));
+	ListSelectionModel selectList = piecesList.getSelectionModel();
+	selectList.addListSelectionListener(new ListSelectionListener(){
+	//TODO
+	@Override
+	public void valueChanged(ListSelectionEvent e) {
+	if (e.getValueIsAdjusting() == false) { // If the user is still selecting.
 
-			});
-		/*
-		JButton backButton = new JButton("Back");
-		backButton.addActionListener(new ActionListener() {
+	// If the user has not selected anything yet.
+	       if (piecesList.getSelectedIndex() == -1) {
+	       //No selection, disable fire button.
+	           moveLeft.setEnabled(false);
+	           moveRight.setEnabled(false);
 
-		@Override
-		public void actionPerformed(ActionEvent e) {
+	       } else {
+	       //Selection, enable the fire button.
+	           moveLeft.setEnabled(true);
+	           moveRight.setEnabled(true);
+	       }
+	   }
+	}
+	});
 
-			}
-		});
-		*/
-		// This adds a new Panel with the option buttons.
-		JPanel options = new JPanel();
-		options.setLayout(new GridBagLayout());
-		options.setSize(50, 50);
-		GridBagConstraints cee = new GridBagConstraints();
-		
-		cee.fill = GridBagConstraints.HORIZONTAL;
-		cee.gridx = 0;
-		cee.gridy = 1;
-		options.add(submitButton, cee);
-		
-		
-		/*
-		cee.fill = GridBagConstraints.HORIZONTAL;
-		cee.gridx = 0;
-		cee.gridy = 2;
-		options.add(backButton, cee);
-		*/
-		
-		
-		// Add this to the popup.
-		// LIST - CANT PROMOTE TO
-		popup.add(scrollPane);
-		popup.add(otherCrap);
-		// EMPTY LIST - CAN PROMOTE TO
-		popup.add(scrollPane2);
-		popup.add(options);
+	// EMPTY LIST - CAN PROMOTE TO
+	JScrollPane scrollPane2 = new JScrollPane(piecesList2);
+	   scrollPane2.setPreferredSize(new Dimension(200, 200));
+	ListSelectionModel selectList2 = piecesList2.getSelectionModel();
+	selectList2.addListSelectionListener(new ListSelectionListener(){
+	//TODO
+	@Override
+	public void valueChanged(ListSelectionEvent e) {
+	if (e.getValueIsAdjusting() == false) { // If the user is still selecting.
 
-		
-		//Finally, set the pop up to visible.
-		popup.setVisible(true);
+	// If the user has not selected anything yet.
+	       if (piecesList2.getSelectedIndex() == -1) {
+	       //No selection, disable the buttons.
+	           moveLeft.setEnabled(false);
+	           moveRight.setEnabled(false);
+
+	       } else {
+	       //Selection, enable the buttons.
+	           moveLeft.setEnabled(true);
+	           moveRight.setEnabled(true);
+	       }
+	   }
+	}
+	});
+	////////////////////////////SHOWING GUI/////////////////////////////
+	/*
+	* Add the Submit and Back Buttons.
+	*/
+	JButton submitButton = new JButton("Ok");
+	submitButton.addActionListener(new ActionListener() {
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+	//squareOptions();
+	popup.dispose();
+	}
+
+	});
+	/*
+	JButton backButton = new JButton("Back");
+	backButton.addActionListener(new ActionListener() {
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+
+	}
+	});
+	*/
+	// This adds a new Panel with the option buttons.
+	JPanel options = new JPanel();
+	options.setLayout(new GridBagLayout());
+	options.setSize(50, 50);
+	GridBagConstraints cee = new GridBagConstraints();
+	cee.fill = GridBagConstraints.HORIZONTAL;
+	cee.gridx = 0;
+	cee.gridy = 1;
+	options.add(submitButton, cee);
+	/*
+	cee.fill = GridBagConstraints.HORIZONTAL;
+	cee.gridx = 0;
+	cee.gridy = 2;
+	options.add(backButton, cee);
+	*/
+	// This panel holds just the arrows. This will be placed
+	// in between the two lists.
+	JPanel otherCrap = new JPanel();
+	otherCrap.setLayout(new GridBagLayout());
+	GridBagConstraints c = new GridBagConstraints();
+	c.fill = GridBagConstraints.HORIZONTAL;
+	c.gridx = 0;
+	c.gridy = 1;
+	otherCrap.add(moveRight, c);
+	c.fill = GridBagConstraints.HORIZONTAL;
+	c.gridx = 0;
+	c.gridy = 2;
+	otherCrap.add(moveLeft, c);
+	// Add this to the popup.
+	// LIST - CANT PROMOTE TO
+	popup.add(scrollPane);
+	popup.add(otherCrap);
+	// EMPTY LIST - CAN PROMOTE TO
+	popup.add(scrollPane2);
+	popup.add(options);
+	//Finally, set the pop up to visible.
+	popup.setVisible(true);
 	}
 	
 	/**
