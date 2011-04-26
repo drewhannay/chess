@@ -57,7 +57,7 @@ public class Promote implements Serializable {
 	/**
 	 * What the piece was promoted from
 	 */
-	private static String lastPromoted;
+	private String lastPromoted;
 	/**
 	 * What it was promoted to.
 	 */

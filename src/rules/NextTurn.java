@@ -51,19 +51,19 @@ public class NextTurn implements Serializable {
 	/**
 	 * The number of moves white can currently make before the turn changes.
 	 */
-	private static int whiteMoves;
+	private int whiteMoves;
 	/**
 	 * The number of moves black can currently make before the turn changes.
 	 */
-	private static int blackMoves;
+	private int blackMoves;
 	/**
 	 * The amount the number of turns increases by every turn.
 	 */
-	private static int increment;
+	private int increment;
 	/**
 	 * The current number of moves made.
 	 */
-	private static int currentNumMoves;
+	private int currentNumMoves;
 
 	static {
 		try {
@@ -91,9 +91,9 @@ public class NextTurn implements Serializable {
 		this.name = name;
 		doMethod = doMethods.get(name);
 		undoMethod = undoMethods.get(name);
-		NextTurn.whiteMoves = whiteMoves;
-		NextTurn.blackMoves = blackMoves;
-		NextTurn.increment = increment;
+		this.whiteMoves = whiteMoves;
+		this.blackMoves = blackMoves;
+		this.increment = increment;
 		currentNumMoves = 0;
 		isBlackMove = false;
 	}

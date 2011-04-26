@@ -441,16 +441,18 @@ public class CustomSetupMenu extends JPanel {
 		public void mouseClicked(MouseEvent e){
 			
 			int mods = e.getModifiers();
-					if (mods == 16){
+					if (mods == 16){ //left click
 						setPieceOnBoard(false);
 					}
-					else if (mods == 4){
+					else if (mods == 4){ //right click
 						setPieceOnBoard(true);
 					}
-					else if (mods == 8){
+					else if (mods == 8){ //middle click
 						square.setPiece(null);
 						square.refresh();
 					}
+
+		
 		}
 
 		/**

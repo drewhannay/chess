@@ -2,7 +2,6 @@ package timer;
 
 import gui.PlayGame;
 
-import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.Serializable;
@@ -106,7 +105,17 @@ public abstract class ChessTimer implements ActionListener, Serializable {
 	public long getTime() {
 		return time;
 	}
-
+	/**
+	 * Reset the timer to its original settings
+	 */
+	public void reset(){
+		lastUpdated = System.currentTimeMillis();
+		time = startTime;
+		updateDisplay();
+	}
+	/**
+	 * Initialize the components of the timer.
+	 */
 	public void init() {
 		label = new JLabel();
 		label.setHorizontalAlignment(SwingConstants.CENTER);
@@ -143,9 +152,14 @@ public abstract class ChessTimer implements ActionListener, Serializable {
 		time = newTime == -1 ? startTime : newTime;
 		timeSet = true;
 	}
-
+	/**
+	 * Start the timer
+	 */
 	public abstract void start();
 
+	/**
+	 * Stop the timer.
+	 */
 	public abstract void stop();
 
 	/**
