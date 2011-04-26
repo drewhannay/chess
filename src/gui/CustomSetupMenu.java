@@ -459,18 +459,22 @@ public class CustomSetupMenu extends JPanel {
 		 * @param isBlack
 		 */
 		private void setPieceOnBoard(boolean isBlack){
-			if (option.isOccupied() == false){
+			if (!option.isOccupied()){
 				if ((option.getColor().equals(Color.LIGHT_GRAY) == false) && (option.getColor().equals(Color.getHSBColor(30, 70, 70)) == false)){
 					square.setBackgroundColor(option.getColor());
 				}
-				if (option.isHabitable() == false){
+				if (!option.isHabitable()){
 					square.setPiece(option.getPiece());
 				}
 				square.setHabitable(option.isHabitable());
 				square.refresh();
 			}
 			else{
-				if (square.isHabitable() == true){
+				if (square.isHabitable()){
+					if(square.isOccupied()){
+						Piece toRemove = square.getPiece();
+						(toRemove.isBlack()?blackTeam:whiteTeam).remove(toRemove);
+					}
 					Piece p = PieceBuilder.makePiece(option.getPiece().getName(), isBlack, square, board);
 					if (isBlack)
 						blackTeam.add(p);
@@ -678,6 +682,14 @@ public class CustomSetupMenu extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("White team: ");
+				for(Piece p: whiteTeam){
+					System.out.print(p.getName() + " ");
+				}
+				System.out.println("\nBlack team: ");
+				for(Piece p: blackTeam){
+					System.out.print(p.getName() + " ");
+				}
 				int numObjectives = 0;
 				if(!whiteRules.getObjectiveName().equals("")){
 					for(Piece p:whiteTeam){
