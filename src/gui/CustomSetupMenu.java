@@ -6,6 +6,7 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -638,12 +639,36 @@ public class CustomSetupMenu extends JPanel {
 			add(grid);//Add the grid to the main JPanel.
 		}
 
+		JButton changePromote = new JButton("Promote This Piece");
+		changePromote.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent arg0) {
+				promotion();
+			}
+			
+		});
+		
+		GridBagConstraints c = new GridBagConstraints();
+		JPanel pieceHolder = new JPanel();
+		pieceHolder.setLayout(new GridBagLayout());
+		c.gridx = 0;
+		c.gridy = 0;
+		pieceHolder.add(scrollPane, c);
+		c.gridx = 0;
+		c.gridy = 1;
+		pieceHolder.add(changePromote, c);
+		
 		add(showPiece);
-	    add(scrollPane);
+	    add(pieceHolder);
 	    
 		//Create button and add ActionListener
 		backButton = new JButton("Back");
-
+		backButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				Driver.getInstance().setPanel(new PlayerCustomMenu(b, whiteRules, blackRules));
+			}
+		});
 
 		//Create button and add ActionListener
 		submitButton = new JButton("Save and Quit");
@@ -717,28 +742,8 @@ public class CustomSetupMenu extends JPanel {
 
 		});
 
-		
-		
-		
-		
-		JButton changePromote = new JButton("Promotion Properties");
-		changePromote.addActionListener(new ActionListener() {
-			
-			public void actionPerformed(ActionEvent arg0) {
-				promotion();
-			}
-			
-		});
-		
 		JPanel options = new JPanel();
-		options.setBorder(BorderFactory.createTitledBorder("Options"));
 		options.setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
-		
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 0;
-		c.gridy = 1;
-		options.add(changePromote, c);
 		
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
