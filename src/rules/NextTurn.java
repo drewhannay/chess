@@ -186,7 +186,22 @@ public class NextTurn implements Serializable {
 		}
 		return isBlackMove;
 	}
-
+	/**
+	 * This is undone by decrementing the number
+	 * of moves made, and if necessary, decrementing the amount
+	 * of moves possible each round. Then the turn is changed, if
+	 * appropriate.
+	 * @return Whose turn it is.
+	 */
+	public boolean undoIncreasingTurnsTogether() {
+		if (--currentNumMoves < 0) {
+			isBlackMove = !isBlackMove;
+			PlayGame.turn(isBlackMove);
+			whiteMoves -= increment;
+			currentNumMoves = whiteMoves-1;
+		}
+		return isBlackMove;
+	}
 	/**
 	 * @return Whose turn it is.
 	 */
@@ -228,23 +243,6 @@ public class NextTurn implements Serializable {
 			PlayGame.turn(isBlackMove);
 
 			currentNumMoves = isBlackMove ? blackMoves : whiteMoves;
-		}
-		return isBlackMove;
-	}
-
-	/**
-	 * This is undone by decrementing the number
-	 * of moves made, and if necessary, decrementing the amount
-	 * of moves possible each round. Then the turn is changed, if
-	 * appropriate.
-	 * @return Whose turn it is.
-	 */
-	public boolean undoIncreasingTurnsTogether() {
-		if (--currentNumMoves < 0) {
-			isBlackMove = !isBlackMove;
-			PlayGame.turn(isBlackMove);
-			whiteMoves -= increment;
-			currentNumMoves = whiteMoves;
 		}
 		return isBlackMove;
 	}

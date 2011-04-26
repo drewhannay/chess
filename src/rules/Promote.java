@@ -57,11 +57,12 @@ public class Promote implements Serializable {
 	/**
 	 * What the piece was promoted from
 	 */
-	private String lastPromoted;
+	private static String lastPromoted;
+	private String resetLastPromoted;
 	/**
 	 * What it was promoted to.
 	 */
-	private static String klazz;
+	private String klazz;
 
 	static {
 		try {
@@ -165,11 +166,16 @@ public class Promote implements Serializable {
 	 * @return The promoted Piece.
 	 */
 	public Piece execute(Piece p, boolean verified, String promo) {
+		if(lastPromoted==null)
+			lastPromoted = resetLastPromoted;
+		
 		try {
 			if (doMethod == null) {
 				doMethod = doMethods.get(name);
 			}
-			return (Piece) doMethod.invoke(this, p, verified, promo);
+			Piece toReturn =  (Piece) doMethod.invoke(this, p, verified, promo);
+			resetLastPromoted = lastPromoted;
+			return toReturn;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -209,10 +215,14 @@ public class Promote implements Serializable {
 	 */
 	public Piece undo(Piece p) {
 		try {
+			if(lastPromoted==null)
+				lastPromoted = resetLastPromoted;
 			if (undoMethod == null) {
 				undoMethod = undoMethods.get(name);
 			}
-			return (Piece) undoMethod.invoke(this, p);
+			Piece toReturn = (Piece) undoMethod.invoke(this, p);
+			resetLastPromoted = lastPromoted;
+			return toReturn;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

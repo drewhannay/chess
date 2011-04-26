@@ -234,8 +234,7 @@ public class PlayGame extends JPanel {
 		getGame().getHistory().toArray(history);
 		index = history.length - 1;
 		while (index >= 0) {
-			history[index].undo();
-			index--;
+			history[index--].undo();
 		}
 		boardRefresh(getGame().getBoards());
 	}
