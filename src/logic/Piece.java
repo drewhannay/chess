@@ -146,8 +146,6 @@ public class Piece implements Serializable {
 	 * @param enemyTeam The enemy team
 	 */
 	public void adjustPinsLegalDests(Piece objectivePiece, List<Piece> enemyTeam) {
-		if(name.equals("Pawn"))
-			return;
 
 		if (((isBlack() ? board.getGame().getBlackRules() : board.getGame().getWhiteRules()).objectivePiece(isBlack()) == this)
 				&& (board.getGame().isBlackMove() == isBlack())) {
@@ -226,6 +224,16 @@ public class Piece implements Serializable {
 			return;
 
 		if (line != null) {
+			
+			ArrayList<Square> temp = new ArrayList<Square>();
+			for(Square sq:line){
+				if(legalDests.contains(sq))
+					temp.add(sq);
+			}
+			line = new Square[temp.size()];
+			temp.toArray(line);
+			
+			
 			if (board.getGame().isStaleLegalDests()) {
 				board.getGame().genLegalDests();
 			}
