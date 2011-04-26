@@ -144,10 +144,13 @@ public class PlayerCustomMenu extends JPanel {
 		numTurnsTwoLabel = new JLabel("<html>How many turns in a <br/> " +
 				"row for Black? </html>");
 		numTurnsOne = new JTextField(4);
+		numTurnsOne.setText("1");
 		numTurnsTwo = new JTextField(4);
+		numTurnsTwo.setText("1");
 		incrementTurnsLabel = new JLabel("<html>Increase turns by <br/>" +
 				"how many each round?");
 		incrementTurns = new JTextField(4);
+		incrementTurns.setText("0");
 
 		//Create button and add ActionListener
 		backButton = new JButton("Back");
