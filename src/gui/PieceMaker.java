@@ -7,7 +7,11 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -353,23 +357,22 @@ public class PieceMaker extends JPanel{
 				}
 			});
 	
+			BufferedImage helpMe = null;
+			try {
+				helpMe = ImageIO.read(new File("./images/piece_help.png")); //Gets it from the image folder
+			} catch (IOException e1) {
+				System.out.println("Error reading picture file");
+				e1.printStackTrace();
+			}
+			//Makes the image an icon and ands it to a JLabel
+			final ImageIcon picture = new ImageIcon(helpMe);
+			picture.setImage(picture.getImage().getScaledInstance(700, 500, Image.SCALE_SMOOTH));
+			
 			final JButton help = new JButton("Help");
 			help.addActionListener(new ActionListener(){
 		
 				public void actionPerformed(ActionEvent arg0) {
-					JOptionPane.showMessageDialog(null, 
-							"Please enter the specific movement capabilities that you want for this piece.\n" +
-							"To add instructions for one direction choose that direction from the drop down menu,\n" +
-							"then fill in the farthest distance you would like it to move in that direction.\n" + 
-							"When you are finished press the \"Add Movement\" button to add it to the piece.\n" + 
-							"Repeat this process for each direction you would like the piece to move.\n" +
-							"If you would like the piece to e able to jump others please check the box.\n" +
-							"If you want this piece to be able to move like a knight please enter \n"+
-							"the directions you would like it to move in the following format: \n" +
-							"enter the movements either by column then row or vice versa. For an example\n"+
-							"a normal knight moves 2x1 squares.\n" + 
-							"When you have finished adding movements to the piece press Save and Quit.\n"+
-							"This piece will then be available for reuse from the piece selection screen.\n", "Help", 1);
+					JOptionPane.showMessageDialog(null, "", "Piece Making Help", 0, picture);
 				}
 				
 			});

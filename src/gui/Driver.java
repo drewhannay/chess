@@ -300,6 +300,7 @@ final public class Driver extends JFrame {
 		//Adding Help to menu with xkcd.com picture. will remove later
 		JMenuItem helpMenuItem = new JMenuItem("General Help", KeyEvent.VK_H);
 		helpMenuItem.setToolTipText("Press me to get general help");
+		
 		BufferedImage help = null;
 		try {
 			help = ImageIO.read(new File("./images/tech_support_cheat_sheet.png"));
@@ -318,36 +319,48 @@ final public class Driver extends JFrame {
 		});
 		helpMenu.add(helpMenuItem);
 
+		BufferedImage helpGame = null;
+		try {
+			helpGame = ImageIO.read(new File("./images/gameplay_help.png")); //Gets it from the image folder
+		} catch (IOException e1) {
+			System.out.println("Error reading picture file");
+			e1.printStackTrace();
+		}
+		//Makes the image an icon and ands it to a JLabel
+		final ImageIcon gameHelpPicture = new ImageIcon(helpGame);
+		gameHelpPicture.setImage(gameHelpPicture.getImage().getScaledInstance(700, 375, Image.SCALE_SMOOTH));
+		
 		//Adding the menu item to display help specific for normal game play
 		gamePlayHelp = new JMenuItem("Game Play Help", KeyEvent.VK_G);
 		gamePlayHelp.setToolTipText("Press if you need help with game play");
 		gamePlayHelp.addActionListener(new ActionListener(){
 
 			public void actionPerformed(ActionEvent arg0) {
-				JOptionPane.showMessageDialog(Driver.this, "To move a piece simply click on it and the places you can move will be highlighted.\nIf you want to undo a move simply\n" +
-						"press Undo Move. Any other options you may need can be found under File or Options\n"+
-						"Once a game has been finished it is no longer playable, but it can \n" + 
-						"be reviewed from the View Completed Games option on the Main Menu.", "Game Play Help", 1);
+				JOptionPane.showMessageDialog(null, "", "Game Play Help", 0, gameHelpPicture);
 			}
 
 		});
 		helpMenu.add(gamePlayHelp);
 		gamePlayHelp.setVisible(false);
 
+		BufferedImage helpMe = null;
+		try {
+			helpMe = ImageIO.read(new File("./images/variant_help.png")); //Gets it from the image folder
+		} catch (IOException e1) {
+			System.out.println("Error reading picture file");
+			e1.printStackTrace();
+		}
+		//Makes the image an icon and ands it to a JLabel
+		final ImageIcon variantPicture = new ImageIcon(helpMe);
+		variantPicture.setImage(variantPicture.getImage().getScaledInstance(650, 300, Image.SCALE_SMOOTH));
+		
 		//Adds the menu item to help for specific instructions on making variants
 		variantHelp = new JMenuItem("Variant Making Help", KeyEvent.VK_V);
 		variantHelp.setToolTipText("Press me for help setting up your chess game");
 		variantHelp.addActionListener(new ActionListener(){
 
 			public void actionPerformed(ActionEvent arg0) {
-				JOptionPane.showMessageDialog(Driver.this, 			"Follow the initial windows to set up the name, board,\n"+
-						"pieces, rules and turns for each of the players. It will then load your game.\n" +
-						"To set up the board simply click on a piece name and then on the board.\n" +
-						"To place a white piece left click, to place a black piece\n" +
-						"right click, and to remove a piece middle click on a square.\n" +
-						"Please make all of your pieces before setting up your rules.\n" +
-						"At any time press the back buttons to move backwards one step in the process\n" +
-						"When you are completely finished please press Save.\n", "Help", 1);
+				JOptionPane.showMessageDialog(null, "", "Variant Help", 0, variantPicture);
 			}
 
 		});
@@ -419,7 +432,7 @@ final public class Driver extends JFrame {
 		exitMenuItem.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				int answer = JOptionPane.showConfirmDialog(null, "Are you sure you want to quit?", "Quit?", 1);
+				int answer = JOptionPane.showConfirmDialog(null,"Are you sure you want to Quit?", "Quit?", JOptionPane.YES_NO_OPTION);
 				if(answer == 0)
 					System.exit(0);
 			}
