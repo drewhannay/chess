@@ -70,8 +70,10 @@ public class GetPromotionSquares implements Serializable {
 	 * @return The list of squares it promotes on.
 	 */
 	public List<Square> classicPromoSquares(Piece p) {
-		if (!(p.getName().equals("Pawn")))
-			return null;
+//		if (!(p.getName().equals("Pawn")))
+//			return null; //TODO uncomment these lines, make a promotion method
+		//that gets from the user the promotion squares of each type (looks up
+		//in a hashmap). Can eventually replace this method.
 		List<Square> toReturn = new ArrayList<Square>();
 		for (int i = 1; i <= g.getBoards()[0].getMaxRow(); i++) {
 			if (p.isBlack()) {

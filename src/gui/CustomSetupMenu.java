@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
@@ -56,7 +57,7 @@ public class CustomSetupMenu extends JPanel {
 	 * 
 	 */
 
-	private void promotion() {
+	private void promotion(final String type) {
 	//Create the pop up and set the size, location, and layout.
 	final JFrame popup = new JFrame("Promotion Options");
 	popup.setSize(500,300);
@@ -190,7 +191,11 @@ public class CustomSetupMenu extends JPanel {
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-	//squareOptions();
+	ArrayList<String> promotesTo = new ArrayList<String>();
+	for(int i = 0;i<emptyList.size();i++){
+		promotesTo.add((String)emptyList.get(i));
+	}
+	promotions.put(type, promotesTo);
 	popup.dispose();
 	}
 
@@ -258,6 +263,10 @@ public class CustomSetupMenu extends JPanel {
 	 * Rules holder for the black rules
 	 */
 	private Rules blackRules;
+	/**
+	 * Hashmap for keeping track of what types promote to which pieces.
+	 */
+	private HashMap<String,ArrayList<String>> promotions = new HashMap<String,ArrayList<String>>();
 	/**
 	 * Constructor.
 	 * Initialize the ArrayLists and call initComponents to initialize the GUI.
@@ -445,6 +454,7 @@ public class CustomSetupMenu extends JPanel {
 						setPieceOnBoard(true);
 					}
 					else if (mods == 8){ //middle click
+						(square.getPiece().isBlack()?blackTeam:whiteTeam).remove(square.getPiece());
 						square.setPiece(null);
 						square.refresh();
 					}
@@ -646,7 +656,7 @@ public class CustomSetupMenu extends JPanel {
 		changePromote.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent arg0) {
-				promotion();
+				promotion((String)piecesList.getSelectedValue());
 			}
 			
 		});
@@ -679,13 +689,11 @@ public class CustomSetupMenu extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("White team: ");
 				for(Piece p: whiteTeam){
-					System.out.print(p.getName() + " ");
+					p.setPromotesTo(promotions.get(p.getName()));
 				}
-				System.out.println("\nBlack team: ");
 				for(Piece p: blackTeam){
-					System.out.print(p.getName() + " ");
+					p.setPromotesTo(promotions.get(p.getName()));
 				}
 				int numObjectives = 0;
 				if(!whiteRules.getObjectiveName().equals("")){
