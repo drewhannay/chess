@@ -31,7 +31,7 @@ public class NetworkServer {
 		while(clientSocket == null){
 			try {
 				serverSocket = new ServerSocket(27335);
-				serverSocket.setSoTimeout(1000);
+				serverSocket.setSoTimeout(10000);
 				clientSocket = serverSocket.accept();
 			} catch (Exception e) {
 				if(NewGameMenu.cancelled)
@@ -39,6 +39,8 @@ public class NetworkServer {
 			}
 		}
 
+		
+		System.out.println("here");
 		ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());
 		ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream());
 		boolean playing = true;
