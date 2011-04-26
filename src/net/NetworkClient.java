@@ -3,6 +3,7 @@ package net;
 import gui.Driver;
 import gui.PlayNetGame;
 
+import java.io.EOFException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -31,7 +32,7 @@ public class NetworkClient {
 		in = new ObjectInputStream(socket.getInputStream());
 
 
-		Object fromServer;
+		Object fromServer = null;
 		Object fromUser;
 
 		Game g = (Game) in.readObject();
@@ -43,8 +44,9 @@ public class NetworkClient {
 		//		while ((fromServer = in.readObject()) != null) {
 		while(playing){
 			while(g.isBlackMove()==false){
+				try{
 				fromServer = in.readObject();
-				System.out.println("Received Move: " + fromServer.toString());
+				}catch (EOFException e){}
 				NetMove toMove = (NetMove)fromServer;
 				//				if(toMove.originCol == -1){ //If the object is an initial request to Draw.
 				//					int surrender = JOptionPane.showConfirmDialog(null, "Player has requested a Draw. Do you accept?", "Draw",
