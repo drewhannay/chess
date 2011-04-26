@@ -41,7 +41,13 @@ public class Fischer extends ChessTimer {
 		this.startTime = startTime;
 		super.init();
 	}
-
+	
+	public void reset(){
+		lastUpdated = System.currentTimeMillis();
+		time = startTime;
+		updateDisplay();
+		firstTime = true;
+	}
 	@Override
 	public void start() {
 		if (!fisherAfter && !firstTime && !timeSet) {

@@ -30,5 +30,6 @@ public class NoTimer extends ChessTimer {
 	@Override
 	public void timeElapsed() {
 	}
+	public void reset(){}
 
 }

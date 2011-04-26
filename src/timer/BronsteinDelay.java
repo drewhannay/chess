@@ -47,7 +47,12 @@ public class BronsteinDelay extends ChessTimer {
 		lag = System.currentTimeMillis();
 		timer.start();
 	}
-
+	public void reset(){
+		lastUpdated = System.currentTimeMillis();
+		time = startTime;
+		updateDisplay();
+		firstTime = true;
+	}
 	@Override
 	public void stop() {
 		lastUpdated = System.currentTimeMillis();

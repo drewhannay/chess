@@ -2,6 +2,7 @@ package net;
 
 import gui.Driver;
 import gui.NewGameMenu;
+import gui.PlayGame;
 import gui.PlayNetGame;
 
 import java.io.ObjectInputStream;
@@ -18,20 +19,15 @@ public class NetworkServer {
 
 
 		ServerSocket serverSocket = null;
-		try {
-			
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-			//e.printStackTrace();
-		}
-
 
 
 		Socket clientSocket = null;
+		serverSocket = new ServerSocket(27335);
+		serverSocket.setSoTimeout(1000);
 		while(clientSocket == null){
 			try {
-				serverSocket = new ServerSocket(27335);
-				serverSocket.setSoTimeout(10000);
+				PlayGame.resetTimers();
+				
 				clientSocket = serverSocket.accept();
 			} catch (Exception e) {
 				if(NewGameMenu.cancelled)
@@ -40,7 +36,6 @@ public class NetworkServer {
 		}
 
 		
-		System.out.println("here");
 		ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());
 		ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream());
 		boolean playing = true;
@@ -49,11 +44,10 @@ public class NetworkServer {
 		Object fromServer;
 
 		Game g = PlayNetGame.getGame();
-
 		fromServer = g;
 		if(fromServer!=null)
 			out.writeObject(fromServer);
-
+		PlayGame.resetTimers();
 		Driver.getInstance().setPanel(png);
 
 		while(g.isBlackMove()==false){

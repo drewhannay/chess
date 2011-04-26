@@ -815,4 +815,9 @@ public class PlayGame extends JPanel {
 	public static Game getGame() {
 		return g;
 	}
+	public static void resetTimers(){
+		whiteTimer.reset();
+		blackTimer.reset();
+	}
+
 }

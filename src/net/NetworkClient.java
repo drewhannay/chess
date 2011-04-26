@@ -2,6 +2,7 @@ package net;
 
 import gui.Driver;
 import gui.NewGameMenu;
+import gui.PlayGame;
 import gui.PlayNetGame;
 
 import java.io.ObjectInputStream;
@@ -35,8 +36,8 @@ public class NetworkClient {
 		Object fromUser;
 
 		Game g = (Game) in.readObject();
-
 		PlayNetGame png = new PlayNetGame(g, false, true);
+		PlayGame.resetTimers();
 		Driver.getInstance().setPanel(png);
 
 
