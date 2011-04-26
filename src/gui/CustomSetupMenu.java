@@ -19,6 +19,9 @@ import javax.swing.JCheckBox;
 import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import javax.swing.JList;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -58,9 +61,9 @@ public class CustomSetupMenu extends JPanel {
 	private void promotion() {
 	//Create the pop up and set the size, location, and layout.
 	final JFrame popup = new JFrame("Promotion Options");
-	popup.setSize(500,500);
+	popup.setSize(500,300);
 	popup.setLocationRelativeTo(null);
-	popup.setLayout(new FlowLayout());
+	popup.setLayout(new GridBagLayout());
 	popup.setResizable(false);
 
 	// EMPTY LIST
@@ -184,7 +187,7 @@ public class CustomSetupMenu extends JPanel {
 	/*
 	* Add the Submit and Back Buttons.
 	*/
-	JButton submitButton = new JButton("Ok");
+	JMenuItem submitButton = new JMenuItem("Save");
 	submitButton.addActionListener(new ActionListener() {
 
 	@Override
@@ -194,31 +197,23 @@ public class CustomSetupMenu extends JPanel {
 	}
 
 	});
-	/*
-	JButton backButton = new JButton("Back");
+	JMenuItem backButton = new JMenuItem("Back");
 	backButton.addActionListener(new ActionListener() {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-
+		popup.dispose();
 	}
 	});
-	*/
 	// This adds a new Panel with the option buttons.
-	JPanel options = new JPanel();
-	options.setLayout(new GridBagLayout());
-	options.setSize(50, 50);
-	GridBagConstraints cee = new GridBagConstraints();
-	cee.fill = GridBagConstraints.HORIZONTAL;
-	cee.gridx = 0;
-	cee.gridy = 1;
-	options.add(submitButton, cee);
-	/*
-	cee.fill = GridBagConstraints.HORIZONTAL;
-	cee.gridx = 0;
-	cee.gridy = 2;
-	options.add(backButton, cee);
-	*/
+	JMenuBar optionHolder = new JMenuBar();
+
+	JMenu options = new JMenu("Options");
+	options.setForeground(Color.WHITE);
+	options.add(submitButton);
+	options.add(backButton);
+	
+	optionHolder.add(options);
 	// This panel holds just the arrows. This will be placed
 	// in between the two lists.
 	JPanel otherCrap = new JPanel();
@@ -234,11 +229,17 @@ public class CustomSetupMenu extends JPanel {
 	otherCrap.add(moveLeft, c);
 	// Add this to the popup.
 	// LIST - CANT PROMOTE TO
-	popup.add(scrollPane);
-	popup.add(otherCrap);
+	c.gridx = 0;
+	c.gridy = 0;
+	popup.add(scrollPane, c);
+	c.gridx = 1;
+	c.gridy = 0;
+	popup.add(otherCrap, c);
 	// EMPTY LIST - CAN PROMOTE TO
-	popup.add(scrollPane2);
-	popup.add(options);
+	c.gridx = 2;
+	c.gridy = 0;
+	popup.add(scrollPane2, c);
+	popup.setJMenuBar(optionHolder);
 	//Finally, set the pop up to visible.
 	popup.setVisible(true);
 	}

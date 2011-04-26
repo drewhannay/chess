@@ -76,10 +76,6 @@ final public class Driver extends JFrame {
 	 */
 	private JMenuBar menuBar;
 	/**
-	 *Menu Item for describing current game being played 
-	 */
-	public JMenuItem gameInfo;
-	/**
 	 * Menu Item for explaining gameplay
 	 */
 	public JMenuItem gamePlayHelp;
@@ -169,7 +165,6 @@ final public class Driver extends JFrame {
 				//Remove the current panel, set otherPanel, repaint.
 				helpMenu.setText("Game Help"); //Sets the help menu to say Game Help
 				gamePlayHelp.setVisible(true); //Shows the help for general game play
-				gameInfo.setVisible(true); //Sets the info specific for the variant to be displayable
 				//gameOptions.setVisible(true); //Turns on the game options
 				remove(mainPanel);
 				otherPanel = new NewGameMenu();
@@ -206,7 +201,6 @@ final public class Driver extends JFrame {
 					Game toPlay = (Game) obj_in.readObject();
 					//Sets the help menu info to be specific for game play
 					helpMenu.setText("Game Help");
-					gameInfo.setVisible(true);
 					gamePlayHelp.setVisible(true);
 					gameOptions.setVisible(true);
 					
@@ -330,7 +324,7 @@ final public class Driver extends JFrame {
 		gamePlayHelp.addActionListener(new ActionListener(){
 
 			public void actionPerformed(ActionEvent arg0) {
-				JOptionPane.showMessageDialog(Driver.this, "To move a piece simply click on it and the places you can move will be highlighted. If you want to undo a move simply\n" +
+				JOptionPane.showMessageDialog(Driver.this, "To move a piece simply click on it and the places you can move will be highlighted.\nIf you want to undo a move simply\n" +
 						"press Undo Move. Any other options you may need can be found under File or Options\n"+
 						"Once a game has been finished it is no longer playable, but it can \n" + 
 						"be reviewed from the View Completed Games option on the Main Menu.", "Game Play Help", 1);
@@ -340,18 +334,6 @@ final public class Driver extends JFrame {
 		helpMenu.add(gamePlayHelp);
 		gamePlayHelp.setVisible(false);
 
-		//Adds the information about the specific variant that is displayed
-		gameInfo = new JMenuItem("Game Info", KeyEvent.VK_I);
-		gameInfo.setToolTipText("Press me if you want to know about a game's rules");
-		gameInfo.addActionListener(new ActionListener(){
-
-			public void actionPerformed(ActionEvent arg0) {
-				//TODO open a window with the option to view the specific objectives and nuances of each game type.
-			}
-		});
-		helpMenu.add(gameInfo);
-		gameInfo.setVisible(false);
-
 		//Adds the menu item to help for specific instructions on making variants
 		variantHelp = new JMenuItem("Variant Making Help", KeyEvent.VK_V);
 		variantHelp.setToolTipText("Press me for help setting up your chess game");
@@ -359,10 +341,12 @@ final public class Driver extends JFrame {
 
 			public void actionPerformed(ActionEvent arg0) {
 				JOptionPane.showMessageDialog(Driver.this, 			"Follow the initial windows to set up the name, board,\n"+
-						"and turns for each of the players. It will then load your game.\n" +
-						"To set up the board simply click on any square.\n" +
-						"To set up game rules for your variant press Game Rules.\n" +
-						"Press Restart to begin the variant set up process again.\n" +
+						"pieces, rules and turns for each of the players. It will then load your game.\n" +
+						"To set up the board simply click on a piece name and then on the board.\n" +
+						"To place a white piece left click, to place a black piece\n" +
+						"right click, and to remove a piece middle click on a square.\n" +
+						"Please make all of your pieces before setting up your rules.\n" +
+						"At any time press the back buttons to move backwards one step in the process\n" +
 						"When you are completely finished please press Save.\n", "Help", 1);
 			}
 
@@ -392,7 +376,6 @@ final public class Driver extends JFrame {
 				variantHelp.setVisible(false); //Makes sure that the appropriate help menus are displayed
 				helpMenu.setText("Game Help");
 				gamePlayHelp.setVisible(true);
-				gameInfo.setVisible(true);
 				if(PlayGame.menu != null)
 					PlayGame.menu.setVisible(false);
 				//Resets the panels being displayed to only contain the new game
@@ -401,7 +384,6 @@ final public class Driver extends JFrame {
 				otherPanel = new NewGameMenu();
 				add(otherPanel);
 				gamePlayHelp.setVisible(true);
-				gameInfo.setVisible(true);
 				pack();
 			}
 		});
@@ -418,7 +400,6 @@ final public class Driver extends JFrame {
 				//Changes help to only be the general help and displays the main panel
 				helpMenu.setText("Help");
 				variantHelp.setVisible(false);
-				gameInfo.setVisible(false);
 				gamePlayHelp.setVisible(false);
 				completedHelp.setVisible(false);
 				if(gameOptions != null)

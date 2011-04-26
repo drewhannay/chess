@@ -258,7 +258,6 @@ public class NewGameMenu extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				//Return to the main screen.
 				Driver.getInstance().helpMenu.setText("Help");
-				Driver.getInstance().gameInfo.setVisible(false);
 				Driver.getInstance().gamePlayHelp.setVisible(false);
 				Driver.getInstance().revertPanel();
 			}
