@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.File;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -252,7 +253,82 @@ public class NewGameMenu extends JPanel {
 		
 		//Create button and add ActionListener
 		AIPlay = new JButton("AI Play");
-		//TODO Add ActionListener to this button.
+		AIPlay.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				final JFrame popped = new JFrame("New Game");
+				popped.setLayout(new GridBagLayout());
+				popped.setSize(170, 150); 
+				popped.setResizable(false);
+				popped.setLocationRelativeTo(null);
+				GridBagConstraints c = new GridBagConstraints();
+		
+				final JComboBox dropdown = new JComboBox(Builder.getArray());
+				c.gridx =0;
+				c.gridy = 0;
+				popped.add(new JLabel("Type: "), c);
+				c.gridx = 1;
+				c.gridy = 0;
+				c.insets = new Insets(3, 0, 3, 0);
+				popped.add(dropdown, c);
+				c.gridx = 0;
+				c.gridy = 1;
+				popped.add(new JLabel("AI: "), c);
+				
+				File dir = new File("AI");
+				dir.mkdir();
+				String[] files = dir.list();
+				if(files == null){
+					JOptionPane.showMessageDialog(null,
+							"There are no AI files to use.",
+							"No AI files", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				final JComboBox ai = new JComboBox(files);
+				c.gridx = 1;
+				c.gridy = 1;
+				c.fill = GridBagConstraints.HORIZONTAL;
+				popped.add(ai, c);
+				
+				JButton next = new JButton("Next");
+				next.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent arg0) {
+						final String choice = (String) ai.getSelectedItem();
+						File file = new File("AI/" + choice);
+						if(ai.getSelectedItem() == null){
+							JOptionPane.showMessageDialog(null,
+									"You have not selected an AI file",
+									"No AI file", JOptionPane.ERROR_MESSAGE);
+							return;
+						}
+						Game toPlay = Builder.newGame((String) dropdown.getSelectedItem());
+						Driver.getInstance().setPanel(new PlayNetGame(toPlay, false, false));
+						popped.dispose();
+					}
+				});
+				
+				JButton back = new JButton("Back");
+				back.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						popped.dispose();
+					}
+				});
+				
+				JPanel buttons = new JPanel();
+				buttons.setLayout(new FlowLayout());
+				buttons.add(back);
+				buttons.add(next);
+				
+				c.gridx = 0;
+				c.gridy = 2;
+				c.gridwidth =2;
+				popped.add(buttons, c);
+				
+				popped.setVisible(true);
+			}
+		});
 
 		//Create button and add ActionListener
 		backButton = new JButton("Back");

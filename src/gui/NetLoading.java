@@ -23,9 +23,13 @@ public class NetLoading extends JPanel{
 	 */
 	private JLabel waitLabel;
 
-	
+	/**
+	 * The thread that is running the networking.
+	 */
 	private Thread th;
-	
+	/**
+	 * The button to cancel network play
+	 */
 	private JButton cancelButton;
 	
 	/**
@@ -63,9 +67,7 @@ public class NetLoading extends JPanel{
 
 
 		//Create JLabel and JTextField.
-		waitLabel = new JLabel(" Waiting... ");
-
-		
+		waitLabel = new JLabel(" Waiting... ");		
 		
 		//Layout stuff. Don't. Ask.
 		setLayout(new GridBagLayout());
@@ -77,21 +79,9 @@ public class NetLoading extends JPanel{
 		add(waitLabel, c);
 
 		c.gridx = 0;
-		c.gridy =1;
+		c.gridy = 1;
 		add(cancelButton, c);
 		
-//		c.insets = new Insets(3,3,3,3);
-//		c.gridx = 0;
-//		c.gridy = 1;
-//		add(nameField, c);
-//		
-//		c.gridx = 0;
-//		c.gridy = 2;
-//		add(buttons, c);
-//		
 	}
-	
-	
-	
 	
 }
