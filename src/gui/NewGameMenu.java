@@ -178,6 +178,7 @@ public class NewGameMenu extends JPanel {
 										}
 									});
 									client.start();
+									Driver.getInstance().setPanel(new NetLoading(client));
 								}catch(Exception e1){
 									System.out.println(e1.getMessage());
 									e1.printStackTrace();
@@ -452,6 +453,7 @@ public class NewGameMenu extends JPanel {
 								}
 							}
 						});
+						Driver.getInstance().setPanel(new NetLoading(host));
 						host.start();
 						
 					} catch (Exception e) {
