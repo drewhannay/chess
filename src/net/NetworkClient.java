@@ -1,14 +1,12 @@
 package net;
 
 import gui.Driver;
+import gui.NewGameMenu;
 import gui.PlayNetGame;
 
-import java.io.EOFException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-
-import javax.swing.JOptionPane;
 
 import logic.Game;
 
@@ -25,7 +23,8 @@ public class NetworkClient {
 			try{
 				socket = new Socket(host, 27335);
 			}catch(Exception e){
-
+				if(NewGameMenu.cancelled)
+					return;
 			}
 		}
 		out = new ObjectOutputStream(socket.getOutputStream());

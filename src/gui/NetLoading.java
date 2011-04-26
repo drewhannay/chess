@@ -1,6 +1,5 @@
 package gui;
 
-import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -10,11 +9,7 @@ import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
-
-import logic.Builder;
 
 public class NetLoading extends JPanel{
 
@@ -59,7 +54,7 @@ public class NetLoading extends JPanel{
 			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent e) {
 				//Return to the main screen.
-				th.stop();
+				NewGameMenu.cancelled = true;
 				Driver.getInstance().gamePlayHelp.setVisible(false);
 				Driver.getInstance().helpMenu.setText("Help");
 				Driver.getInstance().revertPanel();

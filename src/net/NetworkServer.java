@@ -1,14 +1,13 @@
 package net;
 
 import gui.Driver;
+import gui.NewGameMenu;
 import gui.PlayNetGame;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-
-import javax.swing.JOptionPane;
 
 import logic.Game;
 
@@ -20,7 +19,7 @@ public class NetworkServer {
 
 		ServerSocket serverSocket = null;
 		try {
-			serverSocket = new ServerSocket(27335);
+			
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			//e.printStackTrace();
@@ -29,10 +28,15 @@ public class NetworkServer {
 
 
 		Socket clientSocket = null;
-		try {
-			clientSocket = serverSocket.accept();
-		} catch (Exception e) {
-			e.printStackTrace();
+		while(clientSocket == null){
+			try {
+				serverSocket = new ServerSocket(27335);
+				serverSocket.setSoTimeout(1000);
+				clientSocket = serverSocket.accept();
+			} catch (Exception e) {
+				if(NewGameMenu.cancelled)
+					return;
+			}
 		}
 
 		ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());

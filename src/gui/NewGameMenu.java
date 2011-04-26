@@ -71,6 +71,8 @@ public class NewGameMenu extends JPanel {
 	 * The host of the game for playing
 	 */
 	private String host = "";
+	
+	public static boolean cancelled = false;
 
 	/**
 	 * Represents whether an option has been
@@ -164,6 +166,7 @@ public class NewGameMenu extends JPanel {
 										return;
 									}
 								}
+								NewGameMenu.cancelled = false;
 								Thread client;
 								try{
 									client = new Thread(new Runnable() {
@@ -443,6 +446,7 @@ public class NewGameMenu extends JPanel {
 						game = new PlayNetGame(toPlay, false, false);
 					}
 					try {
+						NewGameMenu.cancelled = false;
 						Thread host = new Thread(new Runnable() {
 							@Override
 							public void run() {
