@@ -31,28 +31,29 @@ import timer.NoTimer;
 /**
  * @author jmccormi
  *
+ * Class for playing network or AI games
  */
 public class PlayNetGame extends PlayGame {
 
 	/**
-	 * 
+	 * Generated Serial ID
 	 */
 	private static final long serialVersionUID = -4220208356045682711L;
 	
 	/**
-	 * 
+	 * If the player is black
 	 */
 	private static boolean isBlack;
 	
 	/**
-	 * 
+	 * Move that is being made
 	 */
 	public NetMove netMove = null;
 
 	/**
-	 * @param g
-	 * @param isPlayback
-	 * @param isBlack
+	 * @param g the game to be played
+	 * @param isPlayback if this is a playback (always false)
+	 * @param isBlack if the player is black
 	 */
 	public PlayNetGame(Game g, boolean isPlayback, boolean isBlack) {
 		super(g, isPlayback);
@@ -69,8 +70,7 @@ public class PlayNetGame extends PlayGame {
 	}
 	
 	/**
-	 * @author jmccormi
-	 *
+	 * Class for button listeners
 	 */
 	class ButtonListener implements ActionListener {
 

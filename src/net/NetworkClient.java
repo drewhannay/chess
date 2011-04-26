@@ -1,5 +1,6 @@
 package net;
 
+import gui.AnimatedLabel;
 import gui.Driver;
 import gui.NewGameMenu;
 import gui.PlayGame;
@@ -28,6 +29,7 @@ public class NetworkClient {
 					return;
 			}
 		}
+		AnimatedLabel.finished = true;
 		out = new ObjectOutputStream(socket.getOutputStream());
 		in = new ObjectInputStream(socket.getInputStream());
 

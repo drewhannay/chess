@@ -55,9 +55,9 @@ public class NetLoading extends JPanel{
 		cancelButton.setToolTipText("Press me to go back to the Main Menu");
 		cancelButton.addActionListener(new ActionListener() {
 
-			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent e) {
 				//Return to the main screen.
+				AnimatedLabel.finished = true;
 				NewGameMenu.cancelled = true;
 				Driver.getInstance().gamePlayHelp.setVisible(false);
 				Driver.getInstance().helpMenu.setText("Help");
@@ -67,7 +67,7 @@ public class NetLoading extends JPanel{
 
 
 		//Create JLabel and JTextField.
-		waitLabel = new JLabel(" Waiting... ");		
+		waitLabel = new AnimatedLabel();		
 		
 		//Layout stuff. Don't. Ask.
 		setLayout(new GridBagLayout());
