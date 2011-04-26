@@ -97,7 +97,7 @@ public class Promote implements Serializable {
 	public Piece classicPromotion(Piece p, boolean verified, String promo) {
 		lastPromoted = p.getName();
 		klazz = p.getName();
-		if(p.getPromotesTo()==null) return p;
+		if(p.getPromotesTo()==null||p.getPromotesTo().size()==0) return p;
 		if (!verified && promo == null&&g.isBlackMove()==p.isBlack()) {
 			klazz = "";
 			if(p.getPromotesTo().size()==1)
