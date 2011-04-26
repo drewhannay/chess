@@ -42,11 +42,10 @@ public class NetworkClient {
 
 
 		//		while ((fromServer = in.readObject()) != null) {
+		try{
 		while(playing){
 			while(g.isBlackMove()==false){
-				try{
 				fromServer = in.readObject();
-				}catch (EOFException e){}
 				NetMove toMove = (NetMove)fromServer;
 				//				if(toMove.originCol == -1){ //If the object is an initial request to Draw.
 				//					int surrender = JOptionPane.showConfirmDialog(null, "Player has requested a Draw. Do you accept?", "Draw",
@@ -84,6 +83,11 @@ public class NetworkClient {
 				if(g.getLastMove().getResult()!=null)
 					break;
 			}
+		}
+		}catch (Exception e){
+			out.close();
+			in.close();
+			socket.close();	
 		}
 
 		out.close();

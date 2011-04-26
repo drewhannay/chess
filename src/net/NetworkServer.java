@@ -66,7 +66,7 @@ public class NetworkServer {
 				while(g.isBlackMove()==true){
 					fromUser = in.readObject();
 					NetMove toMove = (NetMove)fromUser;
-					System.out.println("Received Move: " + fromUser.toString());
+					//System.out.println("Received Move: " + fromUser.toString());
 					//					if(toMove.originCol == -1){ //If the object is an initial request to Draw.
 					//						int surrender = JOptionPane.showConfirmDialog(null, "Player has requested a Draw. Do you accept?", "Draw",
 					//								JOptionPane.YES_NO_OPTION);
@@ -100,15 +100,17 @@ public class NetworkServer {
 					png.netMove = null;
 
 					out.writeObject(fromServer);
-					System.out.println("Sent Move: " + fromServer.toString());
+					//System.out.println("Sent Move: " + fromServer.toString());
 					out.flush();
 					if(g.getLastMove().getResult()!=null)
 						break;
 				}
 			}
 		}catch(Exception e){
-			//The try catch is here because when the client closes the connection,
-			//(input = in.readObject()) throws an End Of File Exception
+			out.close();
+			in.close();
+			clientSocket.close();
+			serverSocket.close();
 		}
 		out.close();
 		in.close();
