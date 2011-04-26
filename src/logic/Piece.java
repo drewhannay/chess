@@ -227,7 +227,7 @@ public class Piece implements Serializable {
 			
 			ArrayList<Square> temp = new ArrayList<Square>();
 			for(Square sq:line){
-				if(legalDests.contains(sq))
+				if(legalDests.contains(sq) || sq.equals(curSquare))
 					temp.add(sq);
 			}
 			line = new Square[temp.size()];
