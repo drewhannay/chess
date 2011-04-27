@@ -145,12 +145,15 @@ public class PlayerCustomMenu extends JPanel {
 				"row for Black? </html>");
 		numTurnsOne = new JTextField(4);
 		numTurnsOne.setText("1");
+		numTurnsOne.setToolTipText("This will be the amount of turns for the First Player (white in classic)");
 		numTurnsTwo = new JTextField(4);
 		numTurnsTwo.setText("1");
+		numTurnsTwo.setToolTipText("This will be the amount of turns for the First Player (white in classic)");
 		incrementTurnsLabel = new JLabel("<html>Increase turns by <br/>" +
 				"how many each round?");
 		incrementTurns = new JTextField(4);
 		incrementTurns.setText("0");
+		incrementTurns.setToolTipText("This will be the number of turns each player gains for each time their turn occurs");
 
 		//Create button and add ActionListener
 		backButton = new JButton("Back");

@@ -83,6 +83,7 @@ public class NewTypeMenu extends JPanel {
 		//Create JLabel and JTextField.
 		nameLabel = new JLabel(" Please enter a name for your new game type: ");
 		nameField = new JTextField(20);
+		nameField.setToolTipText("Please enter a name for this variant here");
 
 		//Create button and add ActionListener
 		submitButton = new JButton("Next");

@@ -84,6 +84,7 @@ public class PieceMaker extends JPanel{
 			
 			namePanel.add(new JLabel("Piece Name:"));
 			final JTextField name = new JTextField(15);
+			name.setToolTipText("Enter the name of the new piece here");
 			namePanel.add(name);
 		
 		c.gridx=0;
@@ -100,12 +101,13 @@ public class PieceMaker extends JPanel{
 		
 			//Add JButtons for choosing the images for the new type.
 			final JButton chooseLightImage = new JButton("Choose image for light piece");
+			chooseLightImage.setToolTipText("Click me to choose an Light Colored Icon for this piece");
 			chooseLightImage.addActionListener(new ActionListener() {
 		
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					//Create the JFileChooser and add image for the new piece
-					final JFileChooser fc = new JFileChooser("./images"); //default directory is in the images folder
+					final JFileChooser fc = new JFileChooser("~/"); //default directory is in the images folder
 					int returnVal = fc.showOpenDialog(null);
 					if (returnVal == JFileChooser.APPROVE_OPTION) {
 						ImageIcon icon = makeIcon(fc, builder);
@@ -120,7 +122,7 @@ public class PieceMaker extends JPanel{
 			builder.setLightImage(temp);
 			
 		c.gridx = 0;
-		c.gridy = 2;
+		c.gridy = 3;
 		piecePanel.add(lightIconPanel, c);
 	
 			final JPanel darkIconPanel = new JPanel();
@@ -130,12 +132,13 @@ public class PieceMaker extends JPanel{
 			darkIconButton.setIcon(temp);
 			
 			final JButton chooseDarkImage = new JButton("Choose image for dark piece");
+			chooseDarkImage.setToolTipText("Click me to choose an Dark Colored Icon for this piece");
 			chooseDarkImage.addActionListener(new ActionListener() {
 		
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					//Create the JFileChooser and add image for the new piece
-					final JFileChooser fc = new JFileChooser("./images"); //default directory is in the images folder
+					final JFileChooser fc = new JFileChooser("~/"); //default directory is in the images folder
 					int returnVal = fc.showOpenDialog(null);
 					if (returnVal == JFileChooser.APPROVE_OPTION) {
 						ImageIcon icon = makeIcon(fc, builder);
@@ -150,13 +153,14 @@ public class PieceMaker extends JPanel{
 			builder.setDarkImage(temp);
 			
 		c.gridx=0;
-		c.gridy=3;
+		c.gridy=2;
 		piecePanel.add(darkIconPanel, c);
 	
 		//Add components for collecting the directions of movement.
 	
 			final String[] directions = new String[]{"North","Northeast","East","Southeast", "South","Southwest","West","Northwest"};
 			final JComboBox dropdown = new JComboBox(directions);
+			dropdown.setToolTipText("This dropdown has all of the valid directions you can still set movement for");
 		
 			//Collect max distance of movement, -1 for infinity.
 			final JTextField dist = new JTextField(3);
@@ -171,6 +175,7 @@ public class PieceMaker extends JPanel{
 			knightSecond.setEnabled(false);
 			
 			final JCheckBox knightOn = new JCheckBox("Knight-like Movements", false);
+			knightOn.setToolTipText("Press me to turn on Knight-Like Movements for this piece");
 			knightOn.addActionListener(new ActionListener() {
 				
 				public void actionPerformed(ActionEvent arg0) {
@@ -186,9 +191,11 @@ public class PieceMaker extends JPanel{
 				}
 			});
 			
-			final JCheckBox leaper = new JCheckBox("Can jump other Pieces?", false);
+			final JCheckBox leaper = new JCheckBox("Can jump other Pieces", false);
+			leaper.setToolTipText("Press me to allow this piece to jump others");
 			
 			final JPanel knightMoving = new JPanel();
+			knightMoving.setToolTipText("Use me to set up Knight Like Movements. See Variant Help for instructions");
 			knightMoving.setLayout(new FlowLayout());
 			knightMoving.add(knight);
 			knightMoving.add(new JLabel("x"));

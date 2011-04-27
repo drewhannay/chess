@@ -163,9 +163,11 @@ public class BoardCustomMenu extends JPanel {
 		//Create JLabels and JRadioButtons.
 		numBoardsLabel = new JLabel("How many boards?");
 		oneBoard = new JRadioButton("1");
+		oneBoard.setToolTipText("Choose me for one Board");
 		// Set oneBoard to be initially selected.
 		oneBoard.setSelected(true);
 		twoBoards = new JRadioButton("2");
+		twoBoards.setToolTipText("Choose me for two boards");
 
 		//This is important! Add the buttons to a group so only one can be selected at a time.
 		ButtonGroup group = new ButtonGroup();
@@ -176,8 +178,10 @@ public class BoardCustomMenu extends JPanel {
 		dimensionsLabel = new JLabel("Dimensions?");
 		numRowsLabel = new JLabel("Rows:");
 		numRows = new JTextField("8");
+		numRows.setToolTipText("Enter the amount of rows you would like");
 		numColsLabel = new JLabel("Columns:");
 		numCols = new JTextField("8");
+		numCols.setToolTipText("Enter the amount of columns you would like");
 
 		//Create JLabel and JCheckBox
 		wraparoundLabel = new JLabel("<html>Should boards wrap <br />" +
