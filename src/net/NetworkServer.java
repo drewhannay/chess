@@ -85,7 +85,7 @@ public class NetworkServer {
 						r.setText("The game has ended in a Draw!");
 						g.getLastMove().setResult(r);
 						PlayGame.endOfGame(r);
-						break;
+						throw new Exception();
 					}
 					else if(toMove.originCol == -3){ //If the response is an unaccepted Draw request, do not perform the Move.
 						continue;
