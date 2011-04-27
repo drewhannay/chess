@@ -480,7 +480,6 @@ public class PlayNetGame extends PlayGame {
 			drawItem.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					//TODO implement network feature to ask other player here
 					if(getGame().isBlackMove() == isBlack){
 						int surrender = requestDraw();
 						if(surrender != 0)
@@ -498,7 +497,7 @@ public class PlayNetGame extends PlayGame {
 	}
 	
 	public int requestDraw(){
-		return JOptionPane.showConfirmDialog(null, "Player has requested a Draw. Do you accept?", "Draw",
+		return JOptionPane.showConfirmDialog(null, "Would you like to send the other player a draw request?", "Draw",
 				 JOptionPane.YES_NO_OPTION);
 	}
 	

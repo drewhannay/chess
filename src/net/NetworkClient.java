@@ -66,6 +66,7 @@ public class NetworkClient {
 						}
 						else{
 							out.writeObject(new FakeMove(-3,-3,-3,-3,-3,null));//Else, write out an object which shows you did NOT accept the Draw.
+							continue;
 						}
 					}
 					else{
