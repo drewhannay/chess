@@ -23,7 +23,6 @@ import javax.swing.SwingConstants;
 import logic.Board;
 import logic.Game;
 import logic.Move;
-import logic.Result;
 import logic.Square;
 import net.FakeMove;
 import timer.NoTimer;
@@ -482,14 +481,10 @@ public class PlayNetGame extends PlayGame {
 					//TODO implement network feature to ask other player here
 					if(getGame().isBlackMove() == isBlack){
 						int surrender = requestDraw();
-						if(surrender == 1)
+						if(surrender != 0)
 							return;
 						netMove = new FakeMove(-1, -1, -1, -1, -1, null); //Send move indicating surrender request.
 						menu.setVisible(false);
-						Result r = new Result(Result.DRAW);
-						r.setText("The game has ended in a Draw!");
-						getGame().getLastMove().setResult(r);
-						endOfGame(r);
 					}
 				}
 			});

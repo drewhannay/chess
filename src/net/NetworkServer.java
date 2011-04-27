@@ -11,13 +11,14 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import javax.swing.JOptionPane;
+
 import logic.Game;
+import logic.Result;
 
 public class NetworkServer {
 
 	public void host(PlayNetGame png) throws Exception{
-
-
 
 		ServerSocket serverSocket = null;
 
@@ -28,7 +29,7 @@ public class NetworkServer {
 		while(clientSocket == null){
 			try {
 				PlayGame.resetTimers();
-				
+
 				clientSocket = serverSocket.accept();
 			} catch (Exception e) {
 				if(NewGameMenu.cancelled)
@@ -67,36 +68,39 @@ public class NetworkServer {
 				while(g.isBlackMove()==true){
 					fromUser = in.readObject();
 					FakeMove toMove = (FakeMove)fromUser;
-					//System.out.println("Received Move: " + fromUser.toString());
-					//					if(toMove.originCol == -1){ //If the object is an initial request to Draw.
-					//						int surrender = JOptionPane.showConfirmDialog(null, "Player has requested a Draw. Do you accept?", "Draw",
-					//								JOptionPane.YES_NO_OPTION);
-					//						if(surrender == 0){ //If this player also accepts the Draw.
-					//							png.createMenu(); //Create menu to show end of game.
-					//							out.writeObject(new NetMove(-2,-2,-2,-2,-2,null)); //Write out a new object which shows you accepted the Draw.
-					//							break;
-					//						}
-					//						else{
-					//							out.writeObject(new NetMove(-3,-3,-3,-3,-3,null));//Else, write out an object which shows you did NOT accept the Draw.
-					//						}
-					//					}
-					//
-					//					if(toMove.originCol == -2){ //Response of accepted Draw request
-					//						png.createMenu();
-					//						break;
-					//					}
-					//					if(!(toMove.originCol == -3)){ //If the response is an unaccepted Draw request, do not perform the Move.
-					g.playMove(g.fakeToRealMove((FakeMove)fromUser));
-					//					}
 
-					if(g.getLastMove().getResult()!=null)
+					if(toMove.originCol == -1){
+						int surrender = JOptionPane.showConfirmDialog(null, "The other player has requested a Draw. Do you accept?", "Draw",
+								JOptionPane.YES_NO_OPTION);
+						if(surrender == 0){ //If this player also accepts the Draw.
+							out.writeObject(new FakeMove(-2,-2,-2,-2,-2,null)); //Write out a new object which shows you accepted the Draw.
+							continue;
+						}
+						else{
+							out.writeObject(new FakeMove(-3,-3,-3,-3,-3,null));//Else, write out an object which shows you did NOT accept the Draw.
+						}
+					}
+					else if(toMove.originCol == -2){
+						Result r = new Result(Result.DRAW);
+						r.setText("The game has ended in a Draw!");
+						g.getLastMove().setResult(r);
+						PlayGame.endOfGame(r);
 						break;
+					}
+					else if(toMove.originCol == -3){ //If the response is an unaccepted Draw request, do not perform the Move.
+						continue;
+					}
+					else{
+						g.playMove(g.fakeToRealMove((FakeMove)fromUser));
+						if(g.getLastMove().getResult()!=null)
+							continue;
+					}
 				}
 
 				while(g.isBlackMove()==false){
 					while(png.netMove == null)
 						Thread.sleep(0);
-					
+
 					fromServer = png.netMove;
 					png.netMove = null;
 
