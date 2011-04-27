@@ -58,7 +58,11 @@ public class NetworkClient {
 								JOptionPane.YES_NO_OPTION);
 						if(surrender == 0){ //If this player also accepts the Draw.
 							out.writeObject(new FakeMove(-2,-2,-2,-2,-2,null)); //Write out a new object which shows you accepted the Draw.
-							continue;
+							Result r = new Result(Result.DRAW);
+							r.setText("The game has ended in a Draw!");
+							g.getLastMove().setResult(r);
+							PlayGame.endOfGame(r);
+							throw new Exception();
 						}
 						else{
 							out.writeObject(new FakeMove(-3,-3,-3,-3,-3,null));//Else, write out an object which shows you did NOT accept the Draw.
