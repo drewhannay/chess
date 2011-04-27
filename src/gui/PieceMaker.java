@@ -117,6 +117,8 @@ public class PieceMaker extends JPanel{
 			lightIconPanel.add(chooseLightImage);
 			lightIconPanel.add(lightIconButton);
 			
+			builder.setLightImage(temp);
+			
 		c.gridx = 0;
 		c.gridy = 2;
 		piecePanel.add(lightIconPanel, c);
@@ -144,6 +146,8 @@ public class PieceMaker extends JPanel{
 			});
 			darkIconPanel.add(chooseDarkImage);
 			darkIconPanel.add(darkIconButton);
+			
+			builder.setDarkImage(temp);
 			
 		c.gridx=0;
 		c.gridy=3;
@@ -327,6 +331,7 @@ public class PieceMaker extends JPanel{
 					PieceBuilder.savePieceType(builder);//Save the piece type in the PieceBuilder class.
 					
 					//Refreshing the window
+					builder = new PieceBuilder();
 					name.setText("");
 					lightIconButton.setIcon(temp);
 					darkIconButton.setIcon(temp);
@@ -337,6 +342,7 @@ public class PieceMaker extends JPanel{
 					knight.setEnabled(false);
 					knightSecond.setText("");
 					knightSecond.setEnabled(false);
+					knightLike = false;
 					dropdown.removeAllItems();
 					for(int i = 0; i < directions.length; i++)
 						dropdown.addItem(directions[i]);

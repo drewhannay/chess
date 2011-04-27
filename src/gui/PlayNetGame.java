@@ -213,7 +213,6 @@ public class PlayNetGame extends PlayGame {
 		menu.setVisible(false);
 
 		// Has spaces to hax0r fix centering.
-		
 		inCheck = new JLabel("You're In Check!");
 		inCheck.setHorizontalTextPosition(inCheck.CENTER);
 		inCheck.setForeground(Color.RED);
@@ -313,6 +312,8 @@ public class PlayNetGame extends PlayGame {
 		whiteLabel.setOpaque(true);
 		blackLabel.setOpaque(true);
 
+		whiteLabel.setBackground(getGame().isBlackMove() ? null : Square.HIGHLIGHT_COLOR);
+		
 		/**
 		 *  int to hold the size of the jail board.
 		 */

@@ -19,10 +19,8 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JColorChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -138,7 +136,6 @@ public class CustomSetupMenu extends JPanel {
 	   scrollPane.setPreferredSize(new Dimension(200, 200));
 	ListSelectionModel selectList = piecesList.getSelectionModel();
 	selectList.addListSelectionListener(new ListSelectionListener(){
-	//TODO
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 	if (e.getValueIsAdjusting() == false) { // If the user is still selecting.
@@ -163,7 +160,6 @@ public class CustomSetupMenu extends JPanel {
 	   scrollPane2.setPreferredSize(new Dimension(200, 200));
 	ListSelectionModel selectList2 = piecesList2.getSelectionModel();
 	selectList2.addListSelectionListener(new ListSelectionListener(){
-	//TODO
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 	if (e.getValueIsAdjusting() == false) { // If the user is still selecting.
@@ -186,7 +182,7 @@ public class CustomSetupMenu extends JPanel {
 	/*
 	* Add the Submit and Back Buttons.
 	*/
-	JMenuItem submitButton = new JMenuItem("Save");
+	JButton submitButton = new JButton("Save");
 	submitButton.addActionListener(new ActionListener() {
 
 	@Override
@@ -200,7 +196,7 @@ public class CustomSetupMenu extends JPanel {
 	}
 
 	});
-	JMenuItem backButton = new JMenuItem("Cancel");
+	JButton backButton = new JButton("Cancel");
 	backButton.addActionListener(new ActionListener() {
 
 	@Override
@@ -208,15 +204,12 @@ public class CustomSetupMenu extends JPanel {
 		popup.dispose();
 	}
 	});
-	// This adds a new Panel with the option buttons.
-	JMenuBar optionHolder = new JMenuBar();
-
-	JMenu options = new JMenu("Options");
-	options.setForeground(Color.WHITE);
-	options.add(submitButton);
-	options.add(backButton);
 	
-	optionHolder.add(options);
+	// This adds a new Panel with the option buttons.
+	JPanel options = new JPanel();
+	options.add(backButton);
+	options.add(submitButton);
+	
 	// This panel holds just the arrows. This will be placed
 	// in between the two lists.
 	JPanel otherCrap = new JPanel();
@@ -230,19 +223,27 @@ public class CustomSetupMenu extends JPanel {
 	c.gridx = 0;
 	c.gridy = 2;
 	otherCrap.add(moveLeft, c);
-	// Add this to the popup.
 	// LIST - CANT PROMOTE TO
 	c.gridx = 0;
 	c.gridy = 0;
+	popup.add(new JLabel("Can't Promote To"), c);
+	c.gridx = 0;
+	c.gridy = 1;
 	popup.add(scrollPane, c);
 	c.gridx = 1;
-	c.gridy = 0;
+	c.gridy = 1;
 	popup.add(otherCrap, c);
 	// EMPTY LIST - CAN PROMOTE TO
 	c.gridx = 2;
 	c.gridy = 0;
+	popup.add(new JLabel("Can Promote To"), c);
+	c.gridx = 2;
+	c.gridy = 1;
 	popup.add(scrollPane2, c);
-	popup.setJMenuBar(optionHolder);
+	c.gridx = 0;
+	c.gridy = 2;
+	c.gridwidth = 3;
+	popup.add(options, c);
 	//Finally, set the pop up to visible.
 	popup.setVisible(true);
 	}
@@ -378,7 +379,6 @@ public class CustomSetupMenu extends JPanel {
 					if (color != Square.HIGHLIGHT_COLOR) {//Can't let them pick exactly the highlight color, or they could move to that space from anywhere.
 						square.setBackgroundColor(color);
 						pickColor.setBackground(color);
-						//TODO Weird issue if you hit cancel when selecting a color.
 					}
 					else {
 						//The chances of this happening is EXTREMELY small...
@@ -419,7 +419,6 @@ public class CustomSetupMenu extends JPanel {
 	 *
 	 */
 	class SetUpMouseListener implements MouseListener{
-		//TODO
 		/**
 		 * The Square we are setting up.
 		 */
@@ -594,7 +593,6 @@ public class CustomSetupMenu extends JPanel {
 	    ListSelectionModel selectList = piecesList.getSelectionModel();
 	    final Color original = bShowPiece.getSquare(1, 1).getColor();
 	    selectList.addListSelectionListener(new ListSelectionListener(){
-	    	//TODO
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				ListSelectionModel lsm = (ListSelectionModel) e.getSource();
