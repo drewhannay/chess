@@ -43,6 +43,10 @@ public class AIAdapter {
 		while(true){
 //			System.out.println("my turn");
 			while(g.isBlackMove()){
+				try {
+					Thread.sleep(200);
+				} catch (InterruptedException e) {
+				}
 				System.out.println("my turn");
 				FakeMove fm = ai.getMove(getBoards());
 				System.out.println(fm);
@@ -58,8 +62,8 @@ public class AIAdapter {
 
 
 	public boolean playMove(FakeMove m){
-		Board b = g.getBoards()[m.boardNum];
 		try{
+			Board b = g.getBoards()[m.boardNum];
 			g.playMove(new Move(b, b.getSquare(m.originRow, m.originCol), b.getSquare(m.destRow, m.destCol)));
 			return true;
 		}catch(Exception e){
@@ -67,7 +71,7 @@ public class AIAdapter {
 		}
 	}
 
-	public AIBoard[] getBoards(){
+	public synchronized AIBoard[] getBoards(){
 		boards = new AIBoard[g.getBoards().length];
 		for(int i = 0;i<boards.length;i++)
 			boards[i] = new AIBoard(g.getBoards()[i]);
@@ -211,7 +215,7 @@ public class AIAdapter {
 			this.legalDests = transformLegalDests(p.getLegalDests());
 		}
 
-		private List<AISquare> transformLegalDests(List<Square> legalDests){
+		private synchronized List<AISquare> transformLegalDests(List<Square> legalDests){
 			List<AISquare> toReturn = new ArrayList<AISquare>();
 			for(Square s:legalDests)
 				toReturn.add(board.getSquare(s.getRow(), s.getCol()));
