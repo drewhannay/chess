@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import net.NetMove;
+import net.FakeMove;
 import rules.Rules;
 import timer.ChessTimer;
 import timer.NoTimer;
@@ -691,21 +691,21 @@ public class Game implements Serializable {
 		}
 	}
 	
-	public Move fakeToRealMove(NetMove m) throws Exception {
+	public Move fakeToRealMove(FakeMove m) throws Exception {
 		Board to = boards[m.boardNum];
 		Board from = ((isBlackMove)?blackRules:whiteRules).getBoard(to);
 		System.out.println(m.boardNum);
 		return new Move(from,from.getSquare(m.originRow, m.originCol),to.getSquare(m.destRow, m.destCol),m.promoName);
 	}
 	
-	public NetMove moveToFakeMove(Move m){
+	public FakeMove moveToFakeMove(Move m){
 		int boardNum = (m.board == boards[0])?0:1;
 		String promoName = null;
 		if(history.get(history.size()-1).getPromoPiece()!=null){
 			System.out.println("here");
 			promoName = history.get(history.size()-1).getPromoPiece().getName();
 		}
-		return new NetMove(boardNum, m.origin.getRow(), m.origin.getCol(), m.getDest().getRow(), m.getDest().getCol(),promoName);
+		return new FakeMove(boardNum, m.origin.getRow(), m.origin.getCol(), m.getDest().getRow(), m.getDest().getCol(),promoName);
 	}
 
 }

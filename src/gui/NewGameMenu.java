@@ -10,6 +10,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -20,7 +26,14 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle;
+import javax.tools.JavaCompiler;
+import javax.tools.JavaFileObject;
+import javax.tools.StandardJavaFileManager;
+import javax.tools.ToolProvider;
+import javax.tools.JavaCompiler.CompilationTask;
 
+import logic.AIAdapter;
+import logic.AIPlugin;
 import logic.Builder;
 import logic.Game;
 import net.NetworkClient;
@@ -72,7 +85,7 @@ public class NewGameMenu extends JPanel {
 	 * The host of the game for playing
 	 */
 	private String host = "";
-	
+
 	public static boolean cancelled = false;
 
 	/**
@@ -115,7 +128,7 @@ public class NewGameMenu extends JPanel {
 		//Create button and add ActionListener
 		networkPlay = new JButton("Network Play");
 		networkPlay.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				final JFrame pop = new JFrame("New Game");
@@ -135,10 +148,10 @@ public class NewGameMenu extends JPanel {
 						popped.setResizable(false);
 						popped.setLocationRelativeTo(null);
 						GridBagConstraints c = new GridBagConstraints();
-						
+
 						final JLabel hoster = new JLabel("Which computer would you like to connect to?");
 						final JTextField computer = new JTextField("", 2);
-						
+
 						final JButton save = new JButton("Next");
 						save.addActionListener(new ActionListener() {
 							@Override
@@ -187,12 +200,12 @@ public class NewGameMenu extends JPanel {
 									System.out.println(e1.getMessage());
 									e1.printStackTrace();
 								}
-								
+
 								popped.dispose();
 								pop.dispose();
 							}
 						});
-						
+
 						final JButton back = new JButton("Back");
 						back.addActionListener(new ActionListener() {
 							@Override
@@ -200,10 +213,10 @@ public class NewGameMenu extends JPanel {
 								popped.dispose();
 							}
 						});
-						
+
 						JPanel everything = new JPanel();
 						everything.setLayout(new GridBagLayout());
-						
+
 						c.gridx = 0;
 						c.gridy = 0;
 						c.gridwidth = 2;
@@ -225,7 +238,7 @@ public class NewGameMenu extends JPanel {
 						c.gridy = 2;
 						c.gridwidth = 1;
 						everything.add(save, c);
-						
+
 						c.gridx = 0;
 						c.gridy = 1;
 						c.gridwidth = 2;
@@ -246,11 +259,11 @@ public class NewGameMenu extends JPanel {
 				pop.add(options);
 				pop.add(host);
 				pop.add(client);
-				
+
 				pop.setVisible(true);
 			}
 		});
-		
+
 		//Create button and add ActionListener
 		AIPlay = new JButton("AI Play");
 		AIPlay.addActionListener(new ActionListener() {
@@ -262,7 +275,7 @@ public class NewGameMenu extends JPanel {
 				popped.setResizable(false);
 				popped.setLocationRelativeTo(null);
 				GridBagConstraints c = new GridBagConstraints();
-		
+
 				final JComboBox dropdown = new JComboBox(Builder.getArray());
 				c.gridx =0;
 				c.gridy = 0;
@@ -274,13 +287,14 @@ public class NewGameMenu extends JPanel {
 				c.gridx = 0;
 				c.gridy = 1;
 				popped.add(new JLabel("AI: "), c);
-				
+
 				File dir = new File("AI");
 				dir.mkdir();
 				String[] files = dir.list();
-				if(files == null){
+				//TODO Take out everything that isn't a .java file
+				if(files.length == 0){
 					JOptionPane.showMessageDialog(null,
-							"There are no AI files to use.",
+							"There are no AI files to use.\nPlease insert your AI java files in the AI directory.",
 							"No AI files", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
@@ -289,7 +303,7 @@ public class NewGameMenu extends JPanel {
 				c.gridy = 1;
 				c.fill = GridBagConstraints.HORIZONTAL;
 				popped.add(ai, c);
-				
+
 				JButton next = new JButton("Next");
 				next.addActionListener(new ActionListener() {
 					@Override
@@ -303,11 +317,66 @@ public class NewGameMenu extends JPanel {
 							return;
 						}
 						Game toPlay = Builder.newGame((String) dropdown.getSelectedItem());
+
+
+
+						JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+						StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, Locale.getDefault(), null);
+
+						String[] compileOptions = new String[]{"-d","bin"};
+						Iterable<String> compilationOptions = Arrays.asList(compileOptions);
+
+						// prepare the source file to compile
+						List<File> sourceFileList = new ArrayList<File>();
+						sourceFileList.add(file);
+						Iterable<? extends JavaFileObject> compilationUnits =fileManager.getJavaFileObjectsFromFiles(sourceFileList);
+						CompilationTask task = compiler.getTask(null,fileManager, null, compilationOptions, null, compilationUnits);
+
+						boolean result = task.call();
+						if (result) {
+							System.out.println ("Compilation was successful");
+						} else {
+							System.out.println ("Compilation failed");
+						}
+						try {
+							fileManager.close ();
+						} catch (IOException e) {
+						}
+
+						final AIPlugin plugin;
+						final AIAdapter ai = new AIAdapter(toPlay);
+						try {
+							ClassLoader c = ClassLoader.getSystemClassLoader();
+							Class<?> klazz = c.loadClass("logic." + choice.substring(0, choice.indexOf(".java")));
+							Constructor<?> construct = klazz.getConstructor();
+							plugin = (AIPlugin) construct.newInstance();
+
+							
+
+							Thread aiThread;
+							aiThread = new Thread(new Runnable() {
+								@Override
+								public void run() {
+									try {
+										ai.runGame(plugin);
+									} catch (Exception e) {
+										System.out.println(e.getMessage());
+										e.printStackTrace();
+									}
+								}
+							});
+							aiThread.start();
+						}catch(Exception e1){
+							System.out.println(e1.getMessage());
+							e1.printStackTrace();
+						}
+
+						System.out.println(toPlay.equals(ai.getGame()));
 						Driver.getInstance().setPanel(new PlayNetGame(toPlay, false, false));
 						popped.dispose();
 					}
 				});
-				
+
 				JButton back = new JButton("Back");
 				back.addActionListener(new ActionListener() {
 					@Override
@@ -315,17 +384,17 @@ public class NewGameMenu extends JPanel {
 						popped.dispose();
 					}
 				});
-				
+
 				JPanel buttons = new JPanel();
 				buttons.setLayout(new FlowLayout());
 				buttons.add(back);
 				buttons.add(next);
-				
+
 				c.gridx = 0;
 				c.gridy = 2;
 				c.gridwidth =2;
 				popped.add(buttons, c);
-				
+
 				popped.setVisible(true);
 			}
 		});
@@ -398,7 +467,7 @@ public class NewGameMenu extends JPanel {
 						.addGap(4, 4, 4))
 		);
 	}
-	
+
 	/**
 	 * This is the method to open the pop up to create a new game.
 	 * @param isNetwork boolean to see if this is a network game or not
@@ -535,14 +604,14 @@ public class NewGameMenu extends JPanel {
 						});
 						Driver.getInstance().setPanel(new NetLoading(host));
 						host.start();
-						
+
 					} catch (Exception e) {
 						System.out.println("Host");
 						e.printStackTrace();
 					}
 				}
 				//else if(isAI){
-			//	}
+				//	}
 				else{
 					Game toPlay = Builder.newGame((String) dropdown.getSelectedItem());
 					toPlay.setTimers(whiteTimer, blackTimer);
@@ -569,6 +638,6 @@ public class NewGameMenu extends JPanel {
 
 		popup.setVisible(true);
 	}
-	
-	
+
+
 }

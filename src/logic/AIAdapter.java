@@ -3,6 +3,8 @@ package logic;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.FakeMove;
+
 /**
  * AIAdapter.java
  * 
@@ -17,14 +19,14 @@ import java.util.List;
  * April 11, 2011
  */
 public class AIAdapter {
-	
+
 	/**
 	 * The Game being viewed by the AI plug in
 	 */
 	private Game g;
-	
+
 	private AIBoard[] boards;
-	
+
 	/**
 	 * Constructor
 	 * @param g The Game being played
@@ -33,25 +35,42 @@ public class AIAdapter {
 		this.g = g;
 	}
 	
-	public boolean playMove(int boardNum, int origRow, int origCol, int destRow, int destCol){
-		Board b = g.getBoards()[boardNum];
+	public Game getGame(){
+		return g;
+	}
+
+	public void runGame(AIPlugin ai){
+		while(true){
+//			System.out.println("my turn");
+			while(g.isBlackMove()){
+				System.out.println("my turn");
+				FakeMove fm = ai.getMove(getBoards());
+				System.out.println(fm);
+				System.out.println("Sucess? " + playMove(fm));
+			}
+		}
+	}
+
+
+	public boolean playMove(FakeMove m){
+		Board b = g.getBoards()[m.boardNum];
 		try{
-			g.playMove(new Move(b, b.getSquare(origRow, origCol), b.getSquare(destRow, destCol)));
+			g.playMove(new Move(b, b.getSquare(m.originRow, m.originCol), b.getSquare(m.destRow, m.destCol)));
 			return true;
 		}catch(Exception e){
 			return false;
 		}
 	}
-	
+
 	public AIBoard[] getBoards(){
 		boards = new AIBoard[g.getBoards().length];
 		for(int i = 0;i<boards.length;i++)
 			boards[i] = new AIBoard(g.getBoards()[i]);
 		return boards;
 	}
-	
+
 	public class AIBoard{
-		
+
 		/**
 		 * Two dimensional Array of AISquares representing the AIBoard
 		 */
@@ -62,7 +81,7 @@ public class AIAdapter {
 		 * further relocation.
 		 */
 		private boolean wraparound;
-		
+
 		public AIBoard(Board b) {
 			this.wraparound = b.isWraparound();
 			squares = new AISquare[b.getMaxRow()][b.getMaxCol()];
@@ -71,16 +90,19 @@ public class AIAdapter {
 				for (col = 0; col < b.getMaxCol(); col++) {
 					// Initialize the AISquares. Add one to the row and column to
 					// ignore counting from zero.
-					squares[row][col] = new AISquare((row + 1), (col + 1),b.getSquare(row+1, col+1).isHabitable(),
-							new AIPiece(b.getSquare(row+1, col+1).getPiece(),this));
+					if(b.getSquare(row+1, col+1).getPiece()!=null)
+						squares[row][col] = new AISquare((row + 1), (col + 1),b.getSquare(row+1, col+1).isHabitable(),
+								new AIPiece(b.getSquare(row+1, col+1).getPiece(),this));
+					else
+						squares[row][col] = new AISquare((row + 1), (col + 1),b.getSquare(row+1, col+1).isHabitable(),null);
 				}
 			}
 		}
-		
+
 		public boolean isWraparound(){
 			return wraparound;
 		}
-		
+
 		/**
 		 * Getter method for AISquares at specified position.
 		 * @param row Row number
@@ -93,9 +115,9 @@ public class AIAdapter {
 			return squares[row - 1][col - 1];
 		}
 	}
-	
+
 	public class AISquare{
-		
+
 		/**
 		 * Row Index of AISquare
 		 */
@@ -108,19 +130,19 @@ public class AIAdapter {
 		 * If the AISquare is able to be occupied.
 		 */
 		private boolean isHabitable;
-		
+
 		/**
 		 * The AIPiece occupying this AISquare
 		 */
 		private AIPiece piece;
-		
+
 		public AISquare(int row, int col, boolean isHabitable, AIPiece piece) {
 			this.row = row;
 			this.col = col;
 			this.isHabitable = isHabitable;
 			this.piece = piece;
 		}
-		
+
 		/**
 		 * Getter method for index to Row
 		 * @return Index to Row
@@ -128,7 +150,7 @@ public class AIAdapter {
 		public int getRow() {
 			return row;
 		}
-		
+
 		/**
 		 * Getter method for index to Column
 		 * @return Index to Column
@@ -136,7 +158,7 @@ public class AIAdapter {
 		public int getCol() {
 			return col;
 		}
-		
+
 		/**
 		 * Getter method for Piece occupying the Square
 		 * @return Piece occupying the Square.
@@ -144,7 +166,7 @@ public class AIAdapter {
 		public AIPiece getPiece() {
 			return piece;
 		}
-		
+
 		/**
 		 * Getter method for ability of AISquare to be occupied.
 		 * @return If AISquare can be occupied.
@@ -152,60 +174,60 @@ public class AIAdapter {
 		public boolean isHabitable(){
 			return isHabitable;
 		}
-		
+
 	}
-	
+
 	public class AIPiece{
-		
+
 		/**
 		 * The name of this AIPiece
 		 */
 		private String name;
-		
+
 		/**
 		 * The color of this AIPiece
 		 */
 		private boolean isBlack;
-		
+
 		/**
 		 * The Board this AIPiece is on
 		 */
 		private AIBoard board;
-		
+
 		/**
 		 * List of legal AISquares for this AIPiece to move to
 		 */
 		protected List<AISquare> legalDests;
-		
+
 		public AIPiece(Piece p,AIBoard b) {
 			this.name = p.getName();
 			this.isBlack = p.isBlack();
 			this.board = b;
 			this.legalDests = transformLegalDests(p.getLegalDests());
 		}
-		
+
 		private List<AISquare> transformLegalDests(List<Square> legalDests){
 			List<AISquare> toReturn = new ArrayList<AISquare>();
 			for(Square s:legalDests)
 				toReturn.add(board.getSquare(s.getRow(), s.getCol()));
 			return toReturn;
 		}
-		
+
 		public String getName(){
 			return name;
 		}
-		
+
 		public boolean isBlack(){
 			return isBlack;
 		}
-		
+
 		public AIBoard getBoard(){
 			return board;
 		}
-		
+
 		public List<AISquare> getLegalDests(){
 			return legalDests;
 		}
-		
+
 	}
 }

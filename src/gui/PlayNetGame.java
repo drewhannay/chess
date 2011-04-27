@@ -25,7 +25,7 @@ import logic.Game;
 import logic.Move;
 import logic.Result;
 import logic.Square;
-import net.NetMove;
+import net.FakeMove;
 import timer.NoTimer;
 
 /**
@@ -48,7 +48,7 @@ public class PlayNetGame extends PlayGame {
 	/**
 	 * Move that is being made
 	 */
-	public NetMove netMove = null;
+	public FakeMove netMove = null;
 
 	/**
 	 * @param g the game to be played
@@ -484,7 +484,7 @@ public class PlayNetGame extends PlayGame {
 						int surrender = requestDraw();
 						if(surrender == 1)
 							return;
-						netMove = new NetMove(-1, -1, -1, -1, -1, null); //Send move indicating surrender request.
+						netMove = new FakeMove(-1, -1, -1, -1, -1, null); //Send move indicating surrender request.
 						menu.setVisible(false);
 						Result r = new Result(Result.DRAW);
 						r.setText("The game has ended in a Draw!");

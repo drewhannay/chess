@@ -48,7 +48,7 @@ public class NetworkClient {
 		while(playing){
 			while(g.isBlackMove()==false){
 				fromServer = in.readObject();
-				NetMove toMove = (NetMove)fromServer;
+				FakeMove toMove = (FakeMove)fromServer;
 				//				if(toMove.originCol == -1){ //If the object is an initial request to Draw.
 				//					int surrender = JOptionPane.showConfirmDialog(null, "Player has requested a Draw. Do you accept?", "Draw",
 				//							JOptionPane.YES_NO_OPTION);
@@ -67,7 +67,7 @@ public class NetworkClient {
 				//					break;
 				//				}
 				//				if(!(toMove.originCol == -3)){ //If the response is an unaccepted Draw request, do not perform the Move.
-				g.playMove(g.fakeToRealMove((NetMove)fromServer));
+				g.playMove(g.fakeToRealMove((FakeMove)fromServer));
 				//				}
 				if(g.getLastMove().getResult()!=null)
 					break;

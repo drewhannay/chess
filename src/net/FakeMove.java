@@ -2,7 +2,7 @@ package net;
 
 import java.io.Serializable;
 
-public class NetMove implements Serializable {
+public class FakeMove implements Serializable {
 	
 	private static final long serialVersionUID = -7511895104920021930L;
 	
@@ -13,7 +13,7 @@ public class NetMove implements Serializable {
 	public int destCol;
 	public String promoName;
 	
-	public NetMove(int boardNum, int originRow, int originCol, int destRow, int destCol, String promoName){
+	public FakeMove(int boardNum, int originRow, int originCol, int destRow, int destCol, String promoName){
 		this.boardNum = boardNum;
 		this.originRow = originRow;
 		this.originCol = originCol;
@@ -23,7 +23,7 @@ public class NetMove implements Serializable {
 	}
 	
 	public String toString(){
-		return boardNum + " " + originRow + " " + originCol;
+		return boardNum + " " + originRow + " " + originCol + " " + destRow + " " + destCol;
 	}
 	
 
