@@ -48,6 +48,11 @@ public class AIAdapter {
 				System.out.println(fm);
 				System.out.println("Sucess? " + playMove(fm));
 			}
+			try {
+				Thread.sleep(0);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
