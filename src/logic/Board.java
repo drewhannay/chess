@@ -118,7 +118,6 @@ public class Board implements Serializable {
 			return null;
 
 		List<Piece> movingTeam = (getGame().isBlackMove()) ? getGame().getBlackTeam() : getGame().getWhiteTeam();
-		// TODO Make sure we're maintaining whose turn it is as we parse files
 
 		Piece p = null;
 		Piece mover = null;
@@ -132,11 +131,7 @@ public class Board implements Serializable {
 							(origCol < 1 && p.getSquare().getRow() == origRow)
 							|| // If just the origCol was zero
 							(origRow < 1 && p.getSquare().getCol() == origCol)) { // If
-						// just
-						// the
-						// origRow
-						// was
-						// zero
+						// just the origRow was zero
 						mover = p;
 						break;
 					}

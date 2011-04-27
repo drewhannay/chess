@@ -10,11 +10,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -247,7 +245,6 @@ public class NewGameMenu extends JPanel {
 						c.gridwidth = 2;
 						popped.add(everything, c);
 						popped.setVisible(true);
-						//TODO get the variant and open the game
 					}
 				});
 				final JButton host = new JButton("Host");
@@ -627,8 +624,6 @@ public class NewGameMenu extends JPanel {
 						e.printStackTrace();
 					}
 				}
-				//else if(isAI){
-				//	}
 				else{
 					Game toPlay = Builder.newGame((String) dropdown.getSelectedItem());
 					toPlay.setTimers(whiteTimer, blackTimer);

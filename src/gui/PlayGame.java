@@ -647,7 +647,6 @@ public class PlayGame extends JPanel {
 		for (int i = k; i > 0; i--) {
 			for (int j = 1; j <= k; j++) {
 				JButton jb = new JButton();
-				//jb.addActionListener(new ButtonListener(blackJailBox.getSquare(i, j),boards[0])); TODO - worry about actionListener later
 				whiteCapturesBox.getSquare(i, j).setButton(jb);//Let the Square know which button it owns.
 				whiteCaptures.add(jb);
 			}
@@ -671,7 +670,6 @@ public class PlayGame extends JPanel {
 		for (int i = k; i > 0; i--) {
 			for (int j = 1; j <= k; j++) {
 				JButton jb = new JButton();
-				//	jb.addActionListener(new ButtonListener(whiteJailBox.getSquare(i, j),boards[0]));TODO - worry about actionListener later
 				blackCapturesBox.getSquare(i, j).setButton(jb);//Let the Square know which button it owns.
 				blackCaptures.add(jb);
 			}

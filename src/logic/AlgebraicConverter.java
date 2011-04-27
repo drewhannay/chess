@@ -96,8 +96,6 @@ public final class AlgebraicConverter {
 						}
 						orig = board.getOriginSquare(pieceKlass, origCol,
 								origRow, dest);
-						// TODO If origin is null, this was an illegal move.
-						// Warn the user..
 					} else {
 						orig = board.getSquare(origRow, origCol);
 					}
@@ -110,7 +108,7 @@ public final class AlgebraicConverter {
 							// or
 							// '('
 						} else {
-							promo = map.get(result.group(8).charAt(0)); //TODO check this doesn't crash
+							promo = map.get(result.group(8).charAt(0));
 						}
 					}
 					if (promo == null) {
