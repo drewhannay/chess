@@ -44,7 +44,6 @@ public class AIAdapter {
 	public void runGame(AIPlugin ai){
 		PlayNetGame.running = true;
 		while(PlayNetGame.running){
-//			System.out.println("my turn");
 			while(g.isBlackMove()){
 				try {
 					Thread.sleep(200);
@@ -52,6 +51,7 @@ public class AIAdapter {
 				}
 				AIBoard[] boards = getBoards();
 				FakeMove fm = ai.getMove(boards);
+				playMove(fm);
 			}
 			try {
 				Thread.sleep(0);
