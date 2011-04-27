@@ -10,8 +10,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -290,8 +293,14 @@ public class NewGameMenu extends JPanel {
 
 				File dir = new File("AI");
 				dir.mkdir();
-				String[] files = dir.list();
-				//TODO Take out everything that isn't a .java file
+				String[] allFiles = dir.list();
+				List<String> tempFiles = new ArrayList<String>();
+				for(String st:allFiles)
+					if(st.endsWith(".java"))
+						tempFiles.add(st);
+				String[] files = new String[tempFiles.size()];
+				tempFiles.toArray(files);
+				
 				if(files.length == 0){
 					JOptionPane.showMessageDialog(null,
 							"There are no AI files to use.\nPlease insert your AI java files in the AI directory.",
@@ -411,6 +420,14 @@ public class NewGameMenu extends JPanel {
 				Driver.getInstance().revertPanel();
 			}
 		});
+		
+		try {
+			if(InetAddress.getLocalHost().getHostName().contains("cslab")){
+				//TODO Add Network Play button here.
+			}
+		}catch(Exception e){
+			
+		}
 
 		//Layout stuff. Make it better later.
 		GroupLayout layout = new GroupLayout(this);
