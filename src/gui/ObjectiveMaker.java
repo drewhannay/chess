@@ -77,7 +77,7 @@ public class ObjectiveMaker extends JPanel{
 			wCaptureAllType.setToolTipText("Press me if you want the objective to be capturing all enemy pieces of a certain type");
 			objectiveWhiteCheckBox.add(wCaptureAllType);
 			final JRadioButton wProtectObj = new JRadioButton("Protect Objective", true);
-			wProtectObj.setToolTipText("Press me if you want the objective to be protecting your own objective while capturing theirs");
+			wProtectObj.setToolTipText("Press me if you want the objective to be protecting your own objective");
 			objectiveWhiteCheckBox.add(wProtectObj);
 			final JRadioButton wLoseAll = new JRadioButton("Lose All Pieces", false);
 			wLoseAll.setToolTipText("Press me if you want the objective to be losing all of your pieces");
@@ -103,7 +103,7 @@ public class ObjectiveMaker extends JPanel{
 			bCaptureAllType.setToolTipText("Press me if you want the objective to be capturing all enemy pieces of a certain type");
 			objectiveBlackCheckBox.add(bCaptureAllType);
 			final JRadioButton bProtectObj = new JRadioButton("Protect Objective", true);
-			bProtectObj.setToolTipText("Press me if you want the objective to be protecting your own objective while capturing theirs");
+			bProtectObj.setToolTipText("Press me if you want the objective to be protecting your own objective");
 			objectiveBlackCheckBox.add(bProtectObj);
 			final JRadioButton bLoseAll = new JRadioButton("Lose All Pieces", false);
 			bLoseAll.setToolTipText("Press me if you want the objective to be losing all of your pieces");
@@ -152,6 +152,14 @@ public class ObjectiveMaker extends JPanel{
 					return;
 				}
 				
+				if(wCheckTimes.isSelected() || bCheckTimes.isSelected()){
+					if(!(wCheckTimes.isSelected() && bCheckTimes.isSelected())){
+						int answer = JOptionPane.showConfirmDialog(null,"Using Check N Times combined with another objective style is not recommended.\n" +
+								"Do you want to continue anyways?", "Continue?", JOptionPane.YES_NO_OPTION);
+						if(answer != 0)
+							return;
+					}
+				}
 				
 				if (wCaptureAll.isSelected()) {
 					whiteRules.addEndOfGame(new EndOfGame("loseAllPieces", true, 0, ""));
