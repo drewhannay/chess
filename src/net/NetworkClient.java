@@ -76,6 +76,7 @@ public class NetworkClient {
 						throw new Exception();
 					}
 					else if(toMove.originCol == -3){ //If the response is an unaccepted Draw request, do not perform the Move.
+						JOptionPane.showMessageDialog(null, "Your request for a draw has been denied. Continue play as normal.","Denied",JOptionPane.PLAIN_MESSAGE);
 						continue;
 					}
 					else{
