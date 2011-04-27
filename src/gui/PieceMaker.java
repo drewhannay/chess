@@ -305,6 +305,7 @@ public class PieceMaker extends JPanel{
 		
 			//Create button and add ActionListener
 			final JButton done = new JButton("Save Piece Type");
+			done.setToolTipText("Press me to save this Piece type");
 			done.addActionListener(new ActionListener() {
 		
 				@Override
@@ -369,6 +370,7 @@ public class PieceMaker extends JPanel{
 			picture.setImage(picture.getImage().getScaledInstance(700, 500, Image.SCALE_SMOOTH));
 			
 			final JButton help = new JButton("Help");
+			help.setToolTipText("Press me for help in setting up a piece type");
 			help.addActionListener(new ActionListener(){
 		
 				public void actionPerformed(ActionEvent arg0) {
@@ -394,6 +396,7 @@ public class PieceMaker extends JPanel{
 			
 			//Create button and add ActionListener
 			final JButton cancel = new JButton("Back");
+			cancel.setToolTipText("Press me to return to board setup window");
 			cancel.addActionListener(new ActionListener() {
 		
 				@Override

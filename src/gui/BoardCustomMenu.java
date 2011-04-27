@@ -150,6 +150,7 @@ public class BoardCustomMenu extends JPanel {
 		
 		//Create button and add ActionListener
 		backButton = new JButton("Back");
+		backButton.setToolTipText("Press me to go back to the name setup");
 		backButton.addActionListener(new ActionListener() {
 
 			@Override
@@ -182,9 +183,11 @@ public class BoardCustomMenu extends JPanel {
 		wraparoundLabel = new JLabel("<html>Should boards wrap <br />" +
 		"around horizontally?</html>");
 		wraparound = new JCheckBox("Yes");
+		wraparound.setToolTipText("Press me to have boards that wrap around on the edges");
 
 		//Create button and add ActionListener
 		submitButton = new JButton("Next");
+		submitButton.setToolTipText("Press me to save these board settings");
 		submitButton.addActionListener(new ActionListener() {
 
 			@Override

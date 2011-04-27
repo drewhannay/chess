@@ -200,7 +200,7 @@ public class CustomSetupMenu extends JPanel {
 	}
 
 	});
-	JMenuItem backButton = new JMenuItem("Back");
+	JMenuItem backButton = new JMenuItem("Cancel");
 	backButton.addActionListener(new ActionListener() {
 
 	@Override
@@ -653,6 +653,7 @@ public class CustomSetupMenu extends JPanel {
 		}
 
 		JButton changePromote = new JButton("Promote This Piece");
+		changePromote.setToolTipText("Press me to set up promotion for the above selected piece");
 		changePromote.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent arg0) {
@@ -676,6 +677,7 @@ public class CustomSetupMenu extends JPanel {
 	    
 		//Create button and add ActionListener
 		backButton = new JButton("Back");
+		backButton.setToolTipText("Press me to go back to the Turn setup window");
 		backButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -685,6 +687,7 @@ public class CustomSetupMenu extends JPanel {
 
 		//Create button and add ActionListener
 		submitButton = new JButton("Save and Quit");
+		submitButton.setToolTipText("Press me to save your finished variant");
 		submitButton.addActionListener(new ActionListener() {
 
 			@Override

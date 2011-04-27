@@ -1,7 +1,10 @@
 package gui;
 
 import javax.swing.JLabel;
-
+/**
+ * @author jmccormi
+ * Some code borrowed from http://www.java2s.com/Code/Java/Swing-JFC/Animationlabel.htm
+ */
 public class AnimatedLabel extends JLabel implements Runnable {
 	/**
 	 * Serial number

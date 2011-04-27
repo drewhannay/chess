@@ -230,6 +230,7 @@ public class RuleMaker extends JPanel {
 		
 		//Create button and add ActionListener for going back
 		final JButton back = new JButton("Back");
+		back.setToolTipText("Press me to return to the Objective setup window");
 		back.addActionListener(new ActionListener() {
 
 			@Override

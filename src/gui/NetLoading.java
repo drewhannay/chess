@@ -26,6 +26,7 @@ public class NetLoading extends JPanel{
 	/**
 	 * The thread that is running the networking.
 	 */
+	@SuppressWarnings("unused")
 	private Thread th;
 	/**
 	 * The button to cancel network play
@@ -59,6 +60,7 @@ public class NetLoading extends JPanel{
 				//Return to the main screen.
 				AnimatedLabel.finished = true;
 				NewGameMenu.cancelled = true;
+				PlayGame.menu.setVisible(false);
 				Driver.getInstance().gamePlayHelp.setVisible(false);
 				Driver.getInstance().helpMenu.setText("Help");
 				Driver.getInstance().revertPanel();

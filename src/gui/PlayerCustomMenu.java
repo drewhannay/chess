@@ -154,6 +154,7 @@ public class PlayerCustomMenu extends JPanel {
 
 		//Create button and add ActionListener
 		backButton = new JButton("Back");
+		backButton.setToolTipText("Press me to return to the Rule making window");
 		backButton.addActionListener(new ActionListener() {
 
 			@Override
@@ -165,6 +166,7 @@ public class PlayerCustomMenu extends JPanel {
 
 		//Create button and add ActionListener
 		submitButton = new JButton("Next");
+		submitButton.setToolTipText("Press me to save these turn settings");
 		submitButton.addActionListener(new ActionListener() {
 
 			@Override
