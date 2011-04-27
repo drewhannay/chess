@@ -14,9 +14,8 @@ public class AIDemo implements AIPlugin {
 			for(int j = 0;j<boards[0].squares[i].length;j++){
 				if(boards[0].squares[i][j].getPiece()!=null && boards[0].squares[i][j].getPiece().isBlack()){
 					List<AISquare> legalDests = boards[0].squares[i][j].getPiece().legalDests;
-					System.out.println(legalDests.size());
 					for(AISquare s: legalDests){
-						try{return new FakeMove(0, i+1, j+1, s.getRow(), s.getCol(), null);
+						try{return new FakeMove(0, i+1, j+1, s.getRow(), s.getCol(), "Queen");
 						}catch(Exception e){
 							continue;
 						}

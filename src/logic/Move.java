@@ -203,7 +203,6 @@ public class Move implements Serializable {
 	 * @throws Exception If this move was illegal
 	 */
 	public void execute() throws Exception {
-
 		prevEnpassantCol = board.getEnpassantCol();
 
 		if (board.getGame().isClassicChess()) {

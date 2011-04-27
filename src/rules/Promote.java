@@ -97,13 +97,14 @@ public class Promote implements Serializable {
 	public Piece classicPromotion(Piece p, boolean verified, String promo) {
 		lastPromoted = p.getName();
 		klazz = p.getName();
+		System.out.println("Top: " + klazz);
 		if(p.getPromotesTo()==null||p.getPromotesTo().size()==0) return p;
 		if (!verified && promo == null&&g.isBlackMove()==p.isBlack()) {
 			klazz = "";
 			if(p.getPromotesTo().size()==1)
 				klazz = p.getPromotesTo().get(0);
 			while (klazz.equals("")) {
-
+				System.out.println(promo==null);
 				String result = (String) JOptionPane.showInputDialog(null, "Select the Promotion type:",
 						"Promo choice", JOptionPane.PLAIN_MESSAGE, null,
 						p.getPromotesTo().toArray(), null);
@@ -111,16 +112,13 @@ public class Promote implements Serializable {
 				if (result == null) {
 					continue;
 				}
-				try {
+
 					klazz = result;
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+					promo = result;
 			}
-		} else if (promo != null) {
+		} else if (promo != null && p.getPromotesTo().contains(promo)) {
 			klazz = promo;
 		}
-
 		try {
 
 			Piece promoted = PieceBuilder.makePiece(klazz,p.isBlack(), p.getSquare(), p.getBoard());
@@ -145,15 +143,15 @@ public class Promote implements Serializable {
 	 */
 	public Piece classicUndo(Piece p) {
 		try {
-			
-			Piece promoted = PieceBuilder.makePiece(lastPromoted,p.isBlack(), p.getSquare(), p.getBoard());
-			if (promoted.isBlack()) {
-				g.getBlackTeam().set(g.getBlackTeam().indexOf(p), promoted);
-			} else {
-				g.getWhiteTeam().set(g.getWhiteTeam().indexOf(p), promoted);
-			}
-			promoted.getLegalDests().clear();
-			promoted.setMoveCount(p.getMoveCount());
+			Piece promoted = classicPromotion(p,true,lastPromoted);
+			//Piece promoted = PieceBuilder.makePiece(lastPromoted,p.isBlack(), p.getSquare(), p.getBoard());
+//			if (promoted.isBlack()) {
+//				g.getBlackTeam().set(g.getBlackTeam().indexOf(p), promoted);
+//			} else {
+//				g.getWhiteTeam().set(g.getWhiteTeam().indexOf(p), promoted);
+//			}
+//			promoted.getLegalDests().clear();
+//			promoted.setMoveCount(p.getMoveCount());
 			return promoted;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -217,13 +215,13 @@ public class Promote implements Serializable {
 	 */
 	public Piece undo(Piece p) {
 		try {
-			if(lastPromoted==null)
-				lastPromoted = resetLastPromoted;
+//			if(lastPromoted==null)
+//				lastPromoted = resetLastPromoted;
 			if (undoMethod == null) {
 				undoMethod = undoMethods.get(name);
 			}
 			Piece toReturn = (Piece) undoMethod.invoke(this, p);
-			resetLastPromoted = lastPromoted;
+			//resetLastPromoted = lastPromoted;
 			return toReturn;
 		} catch (Exception e) {
 			e.printStackTrace();

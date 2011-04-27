@@ -65,7 +65,7 @@ public class AIAdapter {
 	public boolean playMove(FakeMove m){
 		try{
 			Board b = g.getBoards()[m.boardNum];
-			g.playMove(new Move(b, b.getSquare(m.originRow, m.originCol), b.getSquare(m.destRow, m.destCol)));
+			g.playMove(new Move(b, b.getSquare(m.originRow, m.originCol), b.getSquare(m.destRow, m.destCol),m.promoName));
 			return true;
 		}catch(Exception e){
 			return false;
@@ -73,6 +73,9 @@ public class AIAdapter {
 	}
 
 	public synchronized AIBoard[] getBoards(){
+		if(g.isStaleLegalDests()){
+			g.genLegalDests();
+		}
 		boards = new AIBoard[g.getBoards().length];
 		for(int i = 0;i<boards.length;i++)
 			boards[i] = new AIBoard(g.getBoards()[i]);
@@ -110,7 +113,6 @@ public class AIAdapter {
 						squares[row-1][col-1].setPiece(new AIPiece(b.getSquare(row, col).getPiece(),this));
 				}
 			}
-			System.out.println("Here");
 		}
 
 		public boolean isWraparound(){
@@ -126,8 +128,6 @@ public class AIAdapter {
 		public AISquare getSquare(int row, int col) {
 			// Use x-1 and y-1 so that we can maintain the illusion of counting from
 			// 1.
-			if(squares[row-1][col-1]==null)
-				System.out.println("I am impressed");
 			return squares[row - 1][col - 1];
 		}
 	}
