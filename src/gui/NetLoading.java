@@ -11,6 +11,11 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+/**
+ * Class to set up a small loading window for network play
+ * @author John McCormick & Andrew Wolfe & Drew Hannay
+ *
+ */
 public class NetLoading extends JPanel{
 
 	/**

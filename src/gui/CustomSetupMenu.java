@@ -44,7 +44,7 @@ import rules.Rules;
  * GUI to handle setup of pieces on the board and special square
  * properties.
  * 
- * @author Drew Hannay & Daniel Opdyke
+ * @author Drew Hannay & Daniel Opdyke & Yelemis Soung & Cheney Hester & John McCormick
  * 
  * CSCI 335, Wheaton College, Spring 2011
  * Phase 1

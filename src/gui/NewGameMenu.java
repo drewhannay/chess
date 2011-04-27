@@ -51,7 +51,7 @@ import timer.Word;
  * 
  * GUI to initiate the a new game.
  * 
- * @author Drew Hannay & Daniel Opdyke
+ * @author Drew Hannay & Daniel Opdyke & John McCormick
  * 
  * CSCI 335, Wheaton College, Spring 2011
  * Phase 1

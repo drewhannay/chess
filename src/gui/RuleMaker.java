@@ -27,7 +27,7 @@ import rules.ObjectivePiece;
 import rules.Rules;
 
 /**
- * @author jmccormi
+ * @author John McCormick
  * Window to set up the special rules for the variants
  */
 public class RuleMaker extends JPanel {

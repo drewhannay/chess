@@ -28,7 +28,7 @@ import logic.Builder;
 import logic.PieceBuilder;
 
 /**
- * @author jmccormi
+ * @author John mcCormick
  * Class to make new pieces for new variants
  */
 public class PieceMaker extends JPanel{

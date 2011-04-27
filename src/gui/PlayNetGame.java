@@ -29,7 +29,7 @@ import net.FakeMove;
 import timer.NoTimer;
 
 /**
- * @author jmccormi
+ * @author John McCormick
  *
  * Class for playing network or AI games
  */

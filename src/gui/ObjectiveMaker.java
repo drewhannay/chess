@@ -271,7 +271,5 @@ public class ObjectiveMaker extends JPanel{
 		add(buttons, c);
 		
 		
-		//Setting up which buttons turn off others
-
 	}
 }

@@ -18,7 +18,7 @@ import logic.Square;
  */
 public class JailSquare implements Serializable {
 	/**
-	 * 
+	 * Because it told me to.
 	 */
 	private static final long serialVersionUID = -6328168977600352667L;
 	/**

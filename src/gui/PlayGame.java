@@ -37,7 +37,7 @@ import timer.NoTimer;
  * 
  * GUI to manipulate Board.
  * 
- * @author Drew Hannay & Daniel Opdyke
+ * @author Drew Hannay & Daniel Opdyke & John McCormick
  * 
  * CSCI 335, Wheaton College, Spring 2011
  * Phase 1
