@@ -48,7 +48,8 @@ public class AIAdapter {
 				} catch (InterruptedException e) {
 				}
 				System.out.println("my turn");
-				FakeMove fm = ai.getMove(getBoards());
+				AIBoard[] boards = getBoards();
+				FakeMove fm = ai.getMove(boards);
 				System.out.println(fm);
 				System.out.println("Sucess? " + playMove(fm));
 			}
@@ -94,18 +95,22 @@ public class AIAdapter {
 		public AIBoard(Board b) {
 			this.wraparound = b.isWraparound();
 			squares = new AISquare[b.getMaxRow()][b.getMaxCol()];
-
-			for (int row = 0, col = 0; row < b.getMaxRow(); row++) {
-				for (col = 0; col < b.getMaxCol(); col++) {
-					// Initialize the AISquares. Add one to the row and column to
+			for (int row = 1, col = 1; row <= b.getMaxRow(); row++) {
+				for (col = 1; col <= b.getMaxCol(); col++) {
+					// Initialize the AISquares. 
 					// ignore counting from zero.
-					if(b.getSquare(row+1, col+1).getPiece()!=null)
-						squares[row][col] = new AISquare((row + 1), (col + 1),b.getSquare(row+1, col+1).isHabitable(),
-								new AIPiece(b.getSquare(row+1, col+1).getPiece(),this));
-					else
-						squares[row][col] = new AISquare((row + 1), (col + 1),b.getSquare(row+1, col+1).isHabitable(),null);
+						squares[row-1][col-1] = new AISquare((row ), (col ),b.getSquare(row, col).isHabitable(),null);
 				}
 			}
+			for (int row = 1, col = 1; row <= b.getMaxRow(); row++) {
+				for (col = 1; col <= b.getMaxCol(); col++) {
+					// Initialize the AISquares. 
+					// ignore counting from zero.
+					if(b.getSquare(row, col).getPiece()!=null)
+						squares[row-1][col-1].setPiece(new AIPiece(b.getSquare(row, col).getPiece(),this));
+				}
+			}
+			System.out.println("Here");
 		}
 
 		public boolean isWraparound(){
@@ -121,6 +126,8 @@ public class AIAdapter {
 		public AISquare getSquare(int row, int col) {
 			// Use x-1 and y-1 so that we can maintain the illusion of counting from
 			// 1.
+			if(squares[row-1][col-1]==null)
+				System.out.println("I am impressed");
 			return squares[row - 1][col - 1];
 		}
 	}
@@ -159,7 +166,13 @@ public class AIAdapter {
 		public int getRow() {
 			return row;
 		}
-
+		/**
+		 * Setter for piece.
+		 * @param p The new piece.
+		 */
+		public void setPiece(AIPiece p){
+			this.piece = p;
+		}
 		/**
 		 * Getter method for index to Column
 		 * @return Index to Column
@@ -218,7 +231,8 @@ public class AIAdapter {
 		private synchronized List<AISquare> transformLegalDests(List<Square> legalDests){
 			List<AISquare> toReturn = new ArrayList<AISquare>();
 			for(Square s:legalDests)
-				toReturn.add(board.getSquare(s.getRow(), s.getCol()));
+				if(board.getSquare(s.getRow(),s.getCol())!=null)
+					toReturn.add(board.getSquare(s.getRow(), s.getCol()));
 			return toReturn;
 		}
 
