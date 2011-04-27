@@ -634,8 +634,14 @@ public class PlayGame extends JPanel {
 		 */
 		whiteCaptures = new JPanel();
 		whiteCaptures.setBorder(BorderFactory.createTitledBorder("Captured Pieces"));
-		whiteCapturesBox = new Jail(k, k);
-		whiteCaptures.setLayout(new GridLayout(k, k));
+		if(k < 4){
+			whiteCapturesBox = new Jail(4, 4);
+			whiteCaptures.setLayout(new GridLayout(4, 4));
+		}
+		else{
+			whiteCapturesBox = new Jail(k, k);
+			whiteCaptures.setLayout(new GridLayout(k, k));
+		}
 		whiteCaptures.setPreferredSize(new Dimension((whiteCapturesBox.numCols() + 1) * 25,
 				(whiteCapturesBox.numRows() + 1) * 25));
 		for (int i = k; i > 0; i--) {
@@ -652,8 +658,14 @@ public class PlayGame extends JPanel {
 		 */
 		blackCaptures = new JPanel();
 		blackCaptures.setBorder(BorderFactory.createTitledBorder("Captured Pieces"));
-		blackCapturesBox = new Jail(k, k);
-		blackCaptures.setLayout(new GridLayout(k, k));
+		if(k < 4){
+			blackCapturesBox = new Jail(4, 4);
+			blackCaptures.setLayout(new GridLayout(4, 4));
+		}
+		else{
+			blackCapturesBox = new Jail(k, k);
+			blackCaptures.setLayout(new GridLayout(k, k));
+		}
 		blackCaptures.setPreferredSize(new Dimension((blackCapturesBox.numCols() + 1) * 25,
 				(blackCapturesBox.numRows() + 1) * 25));
 		for (int i = k; i > 0; i--) {
