@@ -43,6 +43,10 @@ public class PlayNetGame extends PlayGame {
 	 * If the player is black
 	 */
 	private static boolean isBlack;
+
+	public static boolean running = true;
+	
+	
 	
 	/**
 	 * Move that is being made

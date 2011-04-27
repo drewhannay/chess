@@ -621,7 +621,7 @@ public class NewGameMenu extends JPanel {
 				popup.dispose();
 			}
 		});
-		popup.add(done);
+		
 
 		//Create button and add ActionListener
 		final JButton back = new JButton("Back");
@@ -635,7 +635,7 @@ public class NewGameMenu extends JPanel {
 			}
 		});
 		popup.add(back);
-
+		popup.add(done);
 		popup.setVisible(true);
 	}
 

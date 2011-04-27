@@ -349,6 +349,7 @@ public class PlayGame extends JPanel {
 	 * @param r Reference to which button the user clicked for the end game. "Save" "New Game" or "Quit"
 	 */
 	public static void endOfGame(Result r) {
+		PlayNetGame.running = false;
 		if (isPlayback)
 			return;
 		Object[] options = new String[] { "Save Record of Game", "New Game", "Quit" };
@@ -362,12 +363,15 @@ public class PlayGame extends JPanel {
 			String fileName = JOptionPane.showInputDialog(null, "Enter a name for the save file:",
 					"Saving...", JOptionPane.PLAIN_MESSAGE);
 			getGame().saveGame("completedGames", fileName, getGame().isClassicChess());
+			g.setBlackMove(false);
 			Driver.getInstance().revertPanel();
 			break;
 		case 2:
+			g.setBlackMove(false);
 			System.exit(0);
 			break;
 		default:
+			g.setBlackMove(false);
 			Driver.getInstance().revertPanel();
 		}
 	}

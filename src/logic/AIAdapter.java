@@ -1,5 +1,7 @@
 package logic;
 
+import gui.PlayNetGame;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,18 +42,16 @@ public class AIAdapter {
 	}
 
 	public void runGame(AIPlugin ai){
-		while(true){
+		PlayNetGame.running = true;
+		while(PlayNetGame.running){
 //			System.out.println("my turn");
 			while(g.isBlackMove()){
 				try {
 					Thread.sleep(200);
 				} catch (InterruptedException e) {
 				}
-				System.out.println("my turn");
 				AIBoard[] boards = getBoards();
 				FakeMove fm = ai.getMove(boards);
-				System.out.println(fm);
-				System.out.println("Sucess? " + playMove(fm));
 			}
 			try {
 				Thread.sleep(0);
