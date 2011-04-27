@@ -485,7 +485,6 @@ public class PlayNetGame extends PlayGame {
 						if(surrender != 0)
 							return;
 						netMove = new FakeMove(-1, -1, -1, -1, -1, null); //Send move indicating surrender request.
-						drawRequested = true;
 					}
 				}
 			});

@@ -117,9 +117,12 @@ public class NetworkServer {
 
 					fromServer = png.netMove;
 					png.netMove = null;
+					
+					if(((FakeMove)fromServer).originCol == -1)
+						png.drawRequested = true;
 
 					out.writeObject(fromServer);
-					//System.out.println("Sent Move: " + fromServer.toString());
+					System.out.println("Sent Move: " + fromServer.toString());
 					out.flush();
 					if(g.getLastMove().getResult()!=null)
 						break;

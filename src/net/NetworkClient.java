@@ -99,6 +99,8 @@ public class NetworkClient {
 					fromUser = png.netMove;
 					png.netMove = null;
 
+					if(((FakeMove)fromUser).originCol == -1)
+						png.drawRequested = true;
 					out.writeObject(fromUser);
 					System.out.println("Sent Move: " + fromUser.toString());
 					out.flush();
