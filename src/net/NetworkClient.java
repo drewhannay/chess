@@ -75,7 +75,7 @@ public class NetworkClient {
 					}
 				}
 				while(g.isBlackMove()==true){
-					while(png.netMove == null || !png.drawRequested)
+					while(png.netMove == null && !png.drawRequested)
 						Thread.sleep(0);
 					if(png.drawRequested){
 						fromServer = in.readObject();

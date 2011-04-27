@@ -95,7 +95,7 @@ public class NetworkServer {
 				}
 
 				while(g.isBlackMove()==false){
-					while(png.netMove == null || !png.drawRequested)
+					while(png.netMove == null && !png.drawRequested)
 						Thread.sleep(0);
 					if(png.drawRequested){
 						fromUser = in.readObject();
