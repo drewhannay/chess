@@ -75,7 +75,7 @@ public class NetworkClient {
 					}
 				}
 				while(g.isBlackMove()==true){
-					while(png.netMove == null && !png.drawRequested)
+					while(PlayNetGame.netMove == null && !png.drawRequested)
 						Thread.sleep(0);
 					if(png.drawRequested){
 						fromServer = in.readObject();
@@ -95,8 +95,8 @@ public class NetworkClient {
 						}
 					}
 
-					fromUser = png.netMove;
-					png.netMove = null;
+					fromUser = PlayNetGame.netMove;
+					PlayNetGame.netMove = null;
 
 					if(((FakeMove)fromUser).originCol == -1)
 						png.drawRequested = true;

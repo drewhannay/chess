@@ -52,10 +52,10 @@ public class NetworkServer {
 		Driver.getInstance().setPanel(png);
 
 		while(g.isBlackMove()==false){
-			while(png.netMove == null)
+			while(PlayNetGame.netMove == null)
 				Thread.sleep(0);
-			fromServer = png.netMove;
-			png.netMove = null;
+			fromServer = PlayNetGame.netMove;
+			PlayNetGame.netMove = null;
 
 			out.writeObject(fromServer);
 			out.flush();
@@ -90,7 +90,7 @@ public class NetworkServer {
 				}
 
 				while(g.isBlackMove()==false){
-					while(png.netMove == null && !png.drawRequested)
+					while(PlayNetGame.netMove == null && !png.drawRequested)
 						Thread.sleep(0);
 					if(png.drawRequested){
 						fromUser = in.readObject();
@@ -110,8 +110,8 @@ public class NetworkServer {
 						}
 					}
 
-					fromServer = png.netMove;
-					png.netMove = null;
+					fromServer = PlayNetGame.netMove;
+					PlayNetGame.netMove = null;
 					
 					if(((FakeMove)fromServer).originCol == -1)
 						png.drawRequested = true;
