@@ -102,7 +102,6 @@ public class NetworkClient {
 					if(((FakeMove)fromUser).originCol == -1)
 						png.drawRequested = true;
 					out.writeObject(fromUser);
-					System.out.println("Sent Move: " + fromUser.toString());
 					out.flush();
 					if(g.getLastMove().getResult()!=null)
 						break;

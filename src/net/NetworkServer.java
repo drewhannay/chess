@@ -59,7 +59,6 @@ public class NetworkServer {
 			png.netMove = null;
 
 			out.writeObject(fromServer);
-			System.out.println("Sent Move: " + fromServer.toString());
 			out.flush();
 		}
 
@@ -68,13 +67,11 @@ public class NetworkServer {
 				while(g.isBlackMove()==true){
 					fromUser = in.readObject();
 					FakeMove toMove = (FakeMove)fromUser;
-					System.out.println("Recieved Move: " + toMove.toString());
 					if(toMove.originCol == -1){
 						int surrender = JOptionPane.showConfirmDialog(null, "The other player has requested a Draw. Do you accept?", "Draw",
 								JOptionPane.YES_NO_OPTION);
 						if(surrender == 0){ //If this player also accepts the Draw.
 							out.writeObject(new FakeMove(-2,-2,-2,-2,-2,null)); //Write out a new object which shows you accepted the Draw.
-							System.out.println("Sent Move: " + fromServer.toString());
 							Result r = new Result(Result.DRAW);
 							r.setText("The game has ended in a Draw!");
 							g.getLastMove().setResult(r);
@@ -83,7 +80,6 @@ public class NetworkServer {
 						}
 						else{
 							out.writeObject(new FakeMove(-3,-3,-3,-3,-3,null));//Else, write out an object which shows you did NOT accept the Draw.
-							System.out.println("Sent Move: " + fromServer.toString());
 							continue;
 						}
 					}
@@ -122,7 +118,6 @@ public class NetworkServer {
 						png.drawRequested = true;
 
 					out.writeObject(fromServer);
-					System.out.println("Sent Move: " + fromServer.toString());
 					out.flush();
 					if(g.getLastMove().getResult()!=null)
 						break;
