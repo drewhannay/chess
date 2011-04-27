@@ -51,7 +51,7 @@ public class PlayNetGame extends PlayGame {
 	/**
 	 * Move that is being made
 	 */
-	public FakeMove netMove = null;
+	public static FakeMove netMove = null;
 	
 	public boolean drawRequested = false;
 

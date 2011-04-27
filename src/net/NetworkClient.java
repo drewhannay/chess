@@ -22,7 +22,6 @@ public class NetworkClient {
 		Socket socket = null;
 		ObjectOutputStream out = null;
 		ObjectInputStream in = null;
-		boolean playing = true;
 
 		while(socket == null){
 			try{
@@ -48,7 +47,7 @@ public class NetworkClient {
 
 		//		while ((fromServer = in.readObject()) != null) {
 		try{
-			while(playing){
+			while(PlayNetGame.running){
 				while(g.isBlackMove()==false){
 					fromServer = in.readObject();
 					FakeMove toMove = (FakeMove)fromServer;

@@ -40,7 +40,6 @@ public class NetworkServer {
 		AnimatedLabel.finished = true;
 		ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());
 		ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream());
-		boolean playing = true;
 
 		Object fromUser;
 		Object fromServer;
@@ -63,7 +62,7 @@ public class NetworkServer {
 		}
 
 		try{
-			while(playing) {
+			while(PlayNetGame.running) {
 				while(g.isBlackMove()==true){
 					fromUser = in.readObject();
 					FakeMove toMove = (FakeMove)fromUser;

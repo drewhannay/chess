@@ -350,6 +350,7 @@ public class PlayGame extends JPanel {
 	 */
 	public static void endOfGame(Result r) {
 		PlayNetGame.running = false;
+		PlayNetGame.netMove = g.moveToFakeMove(g.getHistory().get(g.getHistory().size()-1));
 		if (isPlayback)
 			return;
 		Object[] options = new String[] { "Save Record of Game", "New Game", "Quit" };
