@@ -68,17 +68,6 @@ public class NetworkClient {
 							out.writeObject(new FakeMove(-3,-3,-3,-3,-3,null));//Else, write out an object which shows you did NOT accept the Draw.
 						}
 					}
-					else if(toMove.originCol == -2){
-						Result r = new Result(Result.DRAW);
-						r.setText("The game has ended in a Draw!");
-						g.getLastMove().setResult(r);
-						PlayGame.endOfGame(r);
-						throw new Exception();
-					}
-					else if(toMove.originCol == -3){ //If the response is an unaccepted Draw request, do not perform the Move.
-						JOptionPane.showMessageDialog(null, "Your request for a draw has been denied. Continue play as normal.","Denied",JOptionPane.PLAIN_MESSAGE);
-						continue;
-					}
 					else{
 						g.playMove(g.fakeToRealMove((FakeMove)fromServer));
 						if(g.getLastMove().getResult()!=null)
@@ -86,8 +75,25 @@ public class NetworkClient {
 					}
 				}
 				while(g.isBlackMove()==true){
-					while(png.netMove == null)
+					while(png.netMove == null || !png.drawRequested)
 						Thread.sleep(0);
+					if(png.drawRequested){
+						fromServer = in.readObject();
+						FakeMove toMove = (FakeMove)fromServer;
+						if(toMove.originCol == -2){
+							Result r = new Result(Result.DRAW);
+							r.setText("The game has ended in a Draw!");
+							g.getLastMove().setResult(r);
+							PlayGame.endOfGame(r);
+							png.drawRequested = false;
+							throw new Exception();
+						}
+						else if(toMove.originCol == -3){ //If the response is an unaccepted Draw request, do not perform the Move.
+							JOptionPane.showMessageDialog(null, "Your request for a draw has been denied. Continue play as normal.","Denied",JOptionPane.PLAIN_MESSAGE);
+							png.drawRequested = false;
+							continue;
+						}
+					}
 
 					fromUser = png.netMove;
 					png.netMove = null;
