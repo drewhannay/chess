@@ -18,7 +18,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -26,7 +25,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.LayoutStyle;
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
@@ -478,7 +476,7 @@ public class NewGameMenu extends JPanel {
 		clicked = true;
 		final JFrame popup = new JFrame("New Game");
 		popup.setLayout(new FlowLayout());
-		popup.setSize(200, 150); //TODO Figure out if there's a better way to set the size of the window.
+		popup.setSize(200, 225); //TODO Figure out if there's a better way to set the size of the window.
 		popup.setResizable(false);
 		popup.setLocationRelativeTo(null);//This line makes the window show up in the center of the user's screen, regardless of resolution.
 
