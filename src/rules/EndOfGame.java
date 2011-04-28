@@ -149,8 +149,8 @@ public class EndOfGame implements Serializable {
 	 * @param objectivePiece The objective piece.
 	 */
 	public void classicEndOfGame(Piece objectivePiece) {
-		if (g.getLegalMoveCount() == 0
-				|| objectivePiece.isCaptured()) {
+		
+		if (g.getLegalMoveCount() == 0 || objectivePiece.isCaptured()) {
 			// if the King is threatened, it's check mate.
 			if (objectivePiece == null||objectivePiece.isInCheck() || objectivePiece.isCaptured()) {
 				if (g.getLastMove() != null) {
