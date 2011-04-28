@@ -550,7 +550,7 @@ public class Move implements Serializable {
 	/**
 	 * Undo the execution of this move
 	 */
-	public void undo() {
+	public void undo() throws Exception {
 		board.setEnpassantCol(prevEnpassantCol);
 
 		if (board.getGame().isClassicChess()) {

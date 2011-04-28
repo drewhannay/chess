@@ -217,17 +217,15 @@ public class Board implements Serializable {
 	 * @param m The Move on which to check legality
 	 * @return Whether or not the Move is legal
 	 */
-	public boolean isLegalMove(Move m) {
+	public boolean isLegalMove(Move m) throws Exception {
 		if (m == null)
 			return false;
-		try {
+//		try {
 			m.execute();
 			m.undo();
-		} catch (Exception e) {
-			System.out.println("Illegal Move " + e.getMessage());
-			e.printStackTrace();
-			return false;
-		}
+//		} catch (Exception e) {
+//			return false;
+//		}
 		return true;
 	}
 

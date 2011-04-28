@@ -49,205 +49,205 @@ import rules.Rules;
  * February 25, 2011
  */
 public class CustomSetupMenu extends JPanel {
-	
+
 	/**
 	 * Creates a popup box for the Promotion Options.
 	 * 
 	 */
 
 	private void promotion(final String type) {
-	//Create the pop up and set the size, location, and layout.
-	final JFrame popup = new JFrame("Promotion Options");
-	popup.setSize(500,300);
-	popup.setLocationRelativeTo(null);
-	popup.setLayout(new GridBagLayout());
-	popup.setResizable(false);
+		//Create the pop up and set the size, location, and layout.
+		final JFrame popup = new JFrame("Promotion Options");
+		popup.setSize(500,300);
+		popup.setLocationRelativeTo(null);
+		popup.setLayout(new GridBagLayout());
+		popup.setResizable(false);
 
-	// EMPTY LIST
-	final DefaultListModel emptyList = new DefaultListModel();
-	// LIST - CANT PROMOTE TO
-	final DefaultListModel list = new DefaultListModel();
-	Object[] allPieces = PieceBuilder.getSet().toArray();
-	for (int i = 0; i<allPieces.length; i++){
-	list.addElement(allPieces[i]);
-	
+		// EMPTY LIST
+		final DefaultListModel emptyList = new DefaultListModel();
+		// LIST - CANT PROMOTE TO
+		final DefaultListModel list = new DefaultListModel();
+		Object[] allPieces = PieceBuilder.getSet().toArray();
+		for (int i = 0; i<allPieces.length; i++){
+			list.addElement(allPieces[i]);
+
+		}
+		list.remove(4);
+		final JList piecesList = new JList(list);
+		// EMPTY LIST - CAN PROMOTE TO
+		final JList piecesList2 = new JList(emptyList);
+
+
+		/*
+		 * ARROW PANEL
+		 */
+
+
+		// moveLeft This button will move a selected piece from the right list
+		// to the left list.
+		final JButton moveLeft = new JButton();
+		moveLeft.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				int index = piecesList2.getSelectedIndex();
+
+				// Add the element of the right list to the left list.
+				list.addElement(emptyList.elementAt(index));
+				emptyList.remove(index);
+			}
+		});
+		moveLeft.setText("<---");
+
+
+		// moveRight This button will move a selected piece from the left list
+		// to the right list.
+		final JButton moveRight = new JButton();
+		moveRight.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				int index = piecesList.getSelectedIndex();
+
+				// Add the element of the left list to the right list.
+				emptyList.addElement(list.elementAt(index));
+				list.remove(index);
+
+			}
+		});
+		moveRight.setText("--->");
+
+
+		// LIST - CANT PROMOTE TO
+		piecesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		piecesList.setLayoutOrientation(JList.VERTICAL);
+		piecesList.setVisibleRowCount(-1);
+		piecesList.setSelectedIndex(0);    
+		// EMPTY LIST - CAN PROMOTE TO
+		piecesList2.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		piecesList2.setLayoutOrientation(JList.VERTICAL);
+		piecesList2.setVisibleRowCount(-1);
+		piecesList2.setSelectedIndex(0);    
+
+
+
+
+		// LIST - CANT PROMOTE TO
+		JScrollPane scrollPane = new JScrollPane(piecesList);
+		scrollPane.setPreferredSize(new Dimension(200, 200));
+		ListSelectionModel selectList = piecesList.getSelectionModel();
+		selectList.addListSelectionListener(new ListSelectionListener(){
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				if (e.getValueIsAdjusting() == false) { // If the user is still selecting.
+
+					// If the user has not selected anything yet.
+					if (piecesList.getSelectedIndex() == -1) {
+						//No selection, disable fire button.
+						moveLeft.setEnabled(false);
+						moveRight.setEnabled(false);
+
+					} else {
+						//Selection, enable the fire button.
+						moveLeft.setEnabled(true);
+						moveRight.setEnabled(true);
+					}
+				}
+			}
+		});
+
+		// EMPTY LIST - CAN PROMOTE TO
+		JScrollPane scrollPane2 = new JScrollPane(piecesList2);
+		scrollPane2.setPreferredSize(new Dimension(200, 200));
+		ListSelectionModel selectList2 = piecesList2.getSelectionModel();
+		selectList2.addListSelectionListener(new ListSelectionListener(){
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				if (e.getValueIsAdjusting() == false) { // If the user is still selecting.
+
+					// If the user has not selected anything yet.
+					if (piecesList2.getSelectedIndex() == -1) {
+						//No selection, disable the buttons.
+						moveLeft.setEnabled(false);
+						moveRight.setEnabled(false);
+
+					} else {
+						//Selection, enable the buttons.
+						moveLeft.setEnabled(true);
+						moveRight.setEnabled(true);
+					}
+				}
+			}
+		});
+		////////////////////////////SHOWING GUI/////////////////////////////
+		/*
+		 * Add the Submit and Back Buttons.
+		 */
+		JButton submitButton = new JButton("Save");
+		submitButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				ArrayList<String> promotesTo = new ArrayList<String>();
+				for(int i = 0;i<emptyList.size();i++){
+					promotesTo.add((String)emptyList.get(i));
+				}
+				promotions.put(type, promotesTo);
+				popup.dispose();
+			}
+
+		});
+		JButton backButton = new JButton("Cancel");
+		backButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				popup.dispose();
+			}
+		});
+
+		// This adds a new Panel with the option buttons.
+		JPanel options = new JPanel();
+		options.add(backButton);
+		options.add(submitButton);
+
+		// This panel holds just the arrows. This will be placed
+		// in between the two lists.
+		JPanel otherCrap = new JPanel();
+		otherCrap.setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 0;
+		c.gridy = 1;
+		otherCrap.add(moveRight, c);
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 0;
+		c.gridy = 2;
+		otherCrap.add(moveLeft, c);
+		// LIST - CANT PROMOTE TO
+		c.gridx = 0;
+		c.gridy = 0;
+		popup.add(new JLabel("Can't Promote To"), c);
+		c.gridx = 0;
+		c.gridy = 1;
+		popup.add(scrollPane, c);
+		c.gridx = 1;
+		c.gridy = 1;
+		popup.add(otherCrap, c);
+		// EMPTY LIST - CAN PROMOTE TO
+		c.gridx = 2;
+		c.gridy = 0;
+		popup.add(new JLabel("Can Promote To"), c);
+		c.gridx = 2;
+		c.gridy = 1;
+		popup.add(scrollPane2, c);
+		c.gridx = 0;
+		c.gridy = 2;
+		c.gridwidth = 3;
+		popup.add(options, c);
+		//Finally, set the pop up to visible.
+		popup.setVisible(true);
 	}
-	list.remove(4);
-	final JList piecesList = new JList(list);
-	// EMPTY LIST - CAN PROMOTE TO
-	final JList piecesList2 = new JList(emptyList);
-	
-	
-	/*
-	* ARROW PANEL
-	*/
-	
-	
-	// moveLeft This button will move a selected piece from the right list
-	// to the left list.
-	final JButton moveLeft = new JButton();
-	moveLeft.addActionListener(new ActionListener() {
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-	int index = piecesList2.getSelectedIndex();
-	
-	// Add the element of the right list to the left list.
-	list.addElement(emptyList.elementAt(index));
-	emptyList.remove(index);
-	}
-	});
-	moveLeft.setText("<---");
-	
-	
-	// moveRight This button will move a selected piece from the left list
-	// to the right list.
-	final JButton moveRight = new JButton();
-	moveRight.addActionListener(new ActionListener() {
 
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-	int index = piecesList.getSelectedIndex();
-	
-	// Add the element of the left list to the right list.
-	emptyList.addElement(list.elementAt(index));
-	list.remove(index);
-
-	}
-	});
-	moveRight.setText("--->");
-
-
-	// LIST - CANT PROMOTE TO
-	piecesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-	   piecesList.setLayoutOrientation(JList.VERTICAL);
-	   piecesList.setVisibleRowCount(-1);
-	   piecesList.setSelectedIndex(0);    
-	   // EMPTY LIST - CAN PROMOTE TO
-	piecesList2.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-	   piecesList2.setLayoutOrientation(JList.VERTICAL);
-	   piecesList2.setVisibleRowCount(-1);
-	   piecesList2.setSelectedIndex(0);    
-
-
-
-
-	   // LIST - CANT PROMOTE TO
-	JScrollPane scrollPane = new JScrollPane(piecesList);
-	   scrollPane.setPreferredSize(new Dimension(200, 200));
-	ListSelectionModel selectList = piecesList.getSelectionModel();
-	selectList.addListSelectionListener(new ListSelectionListener(){
-	@Override
-	public void valueChanged(ListSelectionEvent e) {
-	if (e.getValueIsAdjusting() == false) { // If the user is still selecting.
-
-	// If the user has not selected anything yet.
-	       if (piecesList.getSelectedIndex() == -1) {
-	       //No selection, disable fire button.
-	           moveLeft.setEnabled(false);
-	           moveRight.setEnabled(false);
-
-	       } else {
-	       //Selection, enable the fire button.
-	           moveLeft.setEnabled(true);
-	           moveRight.setEnabled(true);
-	       }
-	   }
-	}
-	});
-
-	// EMPTY LIST - CAN PROMOTE TO
-	JScrollPane scrollPane2 = new JScrollPane(piecesList2);
-	   scrollPane2.setPreferredSize(new Dimension(200, 200));
-	ListSelectionModel selectList2 = piecesList2.getSelectionModel();
-	selectList2.addListSelectionListener(new ListSelectionListener(){
-	@Override
-	public void valueChanged(ListSelectionEvent e) {
-	if (e.getValueIsAdjusting() == false) { // If the user is still selecting.
-
-	// If the user has not selected anything yet.
-	       if (piecesList2.getSelectedIndex() == -1) {
-	       //No selection, disable the buttons.
-	           moveLeft.setEnabled(false);
-	           moveRight.setEnabled(false);
-
-	       } else {
-	       //Selection, enable the buttons.
-	           moveLeft.setEnabled(true);
-	           moveRight.setEnabled(true);
-	       }
-	   }
-	}
-	});
-	////////////////////////////SHOWING GUI/////////////////////////////
-	/*
-	* Add the Submit and Back Buttons.
-	*/
-	JButton submitButton = new JButton("Save");
-	submitButton.addActionListener(new ActionListener() {
-
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-	ArrayList<String> promotesTo = new ArrayList<String>();
-	for(int i = 0;i<emptyList.size();i++){
-		promotesTo.add((String)emptyList.get(i));
-	}
-	promotions.put(type, promotesTo);
-	popup.dispose();
-	}
-
-	});
-	JButton backButton = new JButton("Cancel");
-	backButton.addActionListener(new ActionListener() {
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		popup.dispose();
-	}
-	});
-	
-	// This adds a new Panel with the option buttons.
-	JPanel options = new JPanel();
-	options.add(backButton);
-	options.add(submitButton);
-	
-	// This panel holds just the arrows. This will be placed
-	// in between the two lists.
-	JPanel otherCrap = new JPanel();
-	otherCrap.setLayout(new GridBagLayout());
-	GridBagConstraints c = new GridBagConstraints();
-	c.fill = GridBagConstraints.HORIZONTAL;
-	c.gridx = 0;
-	c.gridy = 1;
-	otherCrap.add(moveRight, c);
-	c.fill = GridBagConstraints.HORIZONTAL;
-	c.gridx = 0;
-	c.gridy = 2;
-	otherCrap.add(moveLeft, c);
-	// LIST - CANT PROMOTE TO
-	c.gridx = 0;
-	c.gridy = 0;
-	popup.add(new JLabel("Can't Promote To"), c);
-	c.gridx = 0;
-	c.gridy = 1;
-	popup.add(scrollPane, c);
-	c.gridx = 1;
-	c.gridy = 1;
-	popup.add(otherCrap, c);
-	// EMPTY LIST - CAN PROMOTE TO
-	c.gridx = 2;
-	c.gridy = 0;
-	popup.add(new JLabel("Can Promote To"), c);
-	c.gridx = 2;
-	c.gridy = 1;
-	popup.add(scrollPane2, c);
-	c.gridx = 0;
-	c.gridy = 2;
-	c.gridwidth = 3;
-	popup.add(options, c);
-	//Finally, set the pop up to visible.
-	popup.setVisible(true);
-	}
-	
 	/**
 	 * SetUpListener
 	 * 
@@ -255,7 +255,7 @@ public class CustomSetupMenu extends JPanel {
 	 * 
 	 * @author Drew Hannay & Daniel Opdyke
 	 */
-	
+
 	/**
 	 * Rules holder for the white rules
 	 */
@@ -283,7 +283,7 @@ public class CustomSetupMenu extends JPanel {
 		this.blackRules = blackRules;
 		initComponents();
 	}
-	
+
 	/**
 	 * @author 
 	 *
@@ -311,20 +311,20 @@ public class CustomSetupMenu extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			if (square.isOccupied()==false){
-			options();
+				options();
 			}
-//			else{
-//				if(square.getPiece().isBlack()){
-//					square.getPiece().setBlack(false);
-//					square.refresh();
-//				}
-//				else{
-//					square.getPiece().setBlack(true);
-//					square.refresh();
-//				}
-//			}
+			//			else{
+			//				if(square.getPiece().isBlack()){
+			//					square.getPiece().setBlack(false);
+			//					square.refresh();
+			//				}
+			//				else{
+			//					square.getPiece().setBlack(true);
+			//					square.refresh();
+			//				}
+			//			}
 		}
-		
+
 
 		/**
 		 * Create a pop up window with customization options.
@@ -351,7 +351,7 @@ public class CustomSetupMenu extends JPanel {
 
 			});
 			popup.add(squareButton);
-			
+
 			//Finally, set the pop up to visible.
 			popup.setVisible(true);
 		}
@@ -441,24 +441,24 @@ public class CustomSetupMenu extends JPanel {
 			this.board = board;
 			this.option = option;
 		}
-		
+
 		@Override
 		public void mouseClicked(MouseEvent e){
-			
-			int mods = e.getModifiers();
-					if (mods == 16){ //left click
-						setPieceOnBoard(false);
-					}
-					else if (mods == 4){ //right click
-						setPieceOnBoard(true);
-					}
-					else if (mods == 8){ //middle click
-						(square.getPiece().isBlack()?blackTeam:whiteTeam).remove(square.getPiece());
-						square.setPiece(null);
-						square.refresh();
-					}
 
-		
+			int mods = e.getModifiers();
+			if (mods == 16){ //left click
+				setPieceOnBoard(false);
+			}
+			else if (mods == 4){ //right click
+				setPieceOnBoard(true);
+			}
+			else if (mods == 8){ //middle click
+				(square.getPiece().isBlack()?blackTeam:whiteTeam).remove(square.getPiece());
+				square.setPiece(null);
+				square.refresh();
+			}
+
+
 		}
 
 		/**
@@ -491,9 +491,9 @@ public class CustomSetupMenu extends JPanel {
 				}
 				else{
 					JOptionPane.showMessageDialog(null,
-						    "This square is uninhabitable.",
-						    "Warning",
-						    JOptionPane.WARNING_MESSAGE);
+							"This square is uninhabitable.",
+							"Warning",
+							JOptionPane.WARNING_MESSAGE);
 				}
 			}
 		}
@@ -504,9 +504,9 @@ public class CustomSetupMenu extends JPanel {
 		public void mouseReleased(MouseEvent arg0) {}
 	}
 
-	
 
-	
+
+
 	/**
 	 * Generated Serial Version ID
 	 */
@@ -549,26 +549,26 @@ public class CustomSetupMenu extends JPanel {
 
 		//Set the layout of this JPanel.
 		setLayout(new FlowLayout());
-		
+
 		setBorder(BorderFactory.createLoweredBevelBorder());
-		
+
 		//Get the array of boards from the builder so we can modify it.
 		final Board[] boards = b.getBoards();
-		
-		 // Create a List with a vertical ScrollBar
+
+		// Create a List with a vertical ScrollBar
 		final DefaultListModel list = new DefaultListModel();
 		Object[] allPieces = PieceBuilder.getSet().toArray();
 		for (int i = 0; i<allPieces.length; i++){
 			list.addElement(allPieces[i]);
 		}
 		list.addElement("Square Options");
-	    final JList piecesList = new JList(list);
-	    
+		final JList piecesList = new JList(list);
+
 		final Board bShowPiece = new Board(2,1,false);
 		final JPanel showPiece = new JPanel();
 		showPiece.setLayout(new GridLayout(2,1));
 		showPiece.setPreferredSize(new Dimension(50,100));
-		
+
 		final JButton jb1 = new JButton();
 		final JButton jb2 = new JButton();
 		jb1.addActionListener(new SetUpListener(bShowPiece.getSquare(1, 1)));
@@ -578,55 +578,55 @@ public class CustomSetupMenu extends JPanel {
 		showPiece.add(jb2);
 		bShowPiece.getSquare(1, 1).refresh();
 		bShowPiece.getSquare(2, 1).refresh();
-	    
-	    piecesList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-	    piecesList.setLayoutOrientation(JList.VERTICAL);
-	    piecesList.setVisibleRowCount(-1);
-	    piecesList.setSelectedIndex(0);
-	    Piece toAdd = PieceBuilder.makePiece((String) list.elementAt(0), false, bShowPiece.getSquare(1,1), bShowPiece);
-	    Piece toAdd1 = PieceBuilder.makePiece((String) list.elementAt(0), true, bShowPiece.getSquare(1,1), bShowPiece);
-    	bShowPiece.getSquare(1, 1).setPiece(toAdd);
-    	bShowPiece.getSquare(2, 1).setPiece(toAdd1);
-    	bShowPiece.getSquare(1, 1).refresh();
-    	bShowPiece.getSquare(2, 1).refresh();
-	    
-	    ListSelectionModel selectList = piecesList.getSelectionModel();
-	    final Color original = bShowPiece.getSquare(1, 1).getColor();
-	    selectList.addListSelectionListener(new ListSelectionListener(){
+
+		piecesList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		piecesList.setLayoutOrientation(JList.VERTICAL);
+		piecesList.setVisibleRowCount(-1);
+		piecesList.setSelectedIndex(0);
+		Piece toAdd = PieceBuilder.makePiece((String) list.elementAt(0), false, bShowPiece.getSquare(1,1), bShowPiece);
+		Piece toAdd1 = PieceBuilder.makePiece((String) list.elementAt(0), true, bShowPiece.getSquare(1,1), bShowPiece);
+		bShowPiece.getSquare(1, 1).setPiece(toAdd);
+		bShowPiece.getSquare(2, 1).setPiece(toAdd1);
+		bShowPiece.getSquare(1, 1).refresh();
+		bShowPiece.getSquare(2, 1).refresh();
+
+		ListSelectionModel selectList = piecesList.getSelectionModel();
+		final Color original = bShowPiece.getSquare(1, 1).getColor();
+		selectList.addListSelectionListener(new ListSelectionListener(){
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				ListSelectionModel lsm = (ListSelectionModel) e.getSource();
-				
-		        int selection = lsm.getAnchorSelectionIndex();
-		        if (!lsm.getValueIsAdjusting()){
-			       	if (((String) list.elementAt(selection)).equals("Square Options")){
-			       			bShowPiece.getSquare(1, 1).setPiece(null);
-			       			bShowPiece.getSquare(1, 1).setBackgroundColor(original);
-			       			bShowPiece.getSquare(1, 1).setHabitable(true);
-			       			bShowPiece.getSquare(1, 1).refresh();
-			       			jb1.setVisible(true);
-			       			jb2.setVisible(false);
-			       	}
-			        else{
-			        	jb2.setVisible(true);
-			        	jb1.setVisible(true);
-			        	if (bShowPiece.getSquare(1, 1).isHabitable() == false)
-			        		bShowPiece.getSquare(1, 1).setHabitable(true);
-			        	if (bShowPiece.getSquare(1, 1).getColor().equals(original) == false)
-			        		bShowPiece.getSquare(1, 1).setBackgroundColor(original);	
-			        	Piece toAdd = PieceBuilder.makePiece((String) list.elementAt(selection), false, bShowPiece.getSquare(1,1), bShowPiece);
-			        	Piece toAdd1 = PieceBuilder.makePiece((String) list.elementAt(selection), true, bShowPiece.getSquare(1,1), bShowPiece);
-			        	bShowPiece.getSquare(1, 1).setPiece(toAdd);
-			        	bShowPiece.getSquare(2, 1).setPiece(toAdd1);
-			        	bShowPiece.getSquare(1, 1).refresh();
-			        	bShowPiece.getSquare(2, 1).refresh();
-		       		}
-		        }
-			}
-	    });
 
-	    JScrollPane scrollPane = new JScrollPane(piecesList);
-	    scrollPane.setPreferredSize(new Dimension(200, 200));
+				int selection = lsm.getAnchorSelectionIndex();
+				if (!lsm.getValueIsAdjusting()){
+					if (((String) list.elementAt(selection)).equals("Square Options")){
+						bShowPiece.getSquare(1, 1).setPiece(null);
+						bShowPiece.getSquare(1, 1).setBackgroundColor(original);
+						bShowPiece.getSquare(1, 1).setHabitable(true);
+						bShowPiece.getSquare(1, 1).refresh();
+						jb1.setVisible(true);
+						jb2.setVisible(false);
+					}
+					else{
+						jb2.setVisible(true);
+						jb1.setVisible(true);
+						if (bShowPiece.getSquare(1, 1).isHabitable() == false)
+							bShowPiece.getSquare(1, 1).setHabitable(true);
+						if (bShowPiece.getSquare(1, 1).getColor().equals(original) == false)
+							bShowPiece.getSquare(1, 1).setBackgroundColor(original);	
+						Piece toAdd = PieceBuilder.makePiece((String) list.elementAt(selection), false, bShowPiece.getSquare(1,1), bShowPiece);
+						Piece toAdd1 = PieceBuilder.makePiece((String) list.elementAt(selection), true, bShowPiece.getSquare(1,1), bShowPiece);
+						bShowPiece.getSquare(1, 1).setPiece(toAdd);
+						bShowPiece.getSquare(2, 1).setPiece(toAdd1);
+						bShowPiece.getSquare(1, 1).refresh();
+						bShowPiece.getSquare(2, 1).refresh();
+					}
+				}
+			}
+		});
+
+		JScrollPane scrollPane = new JScrollPane(piecesList);
+		scrollPane.setPreferredSize(new Dimension(200, 200));
 		//Loop through the array of boards for setup.
 		for (int n = 0; n < boards.length; n++) {
 			//Create a JPanel to hold the grid and set the layout to the number of squares in the board.
@@ -653,13 +653,13 @@ public class CustomSetupMenu extends JPanel {
 		JButton changePromote = new JButton("Promote This Piece");
 		changePromote.setToolTipText("Press me to set up promotion for the above selected piece");
 		changePromote.addActionListener(new ActionListener() {
-			
+
 			public void actionPerformed(ActionEvent arg0) {
 				promotion((String)piecesList.getSelectedValue());
 			}
-			
+
 		});
-		
+
 		GridBagConstraints c = new GridBagConstraints();
 		JPanel pieceHolder = new JPanel();
 		pieceHolder.setLayout(new GridBagLayout());
@@ -669,10 +669,10 @@ public class CustomSetupMenu extends JPanel {
 		c.gridx = 0;
 		c.gridy = 1;
 		pieceHolder.add(changePromote, c);
-		
+
 		add(showPiece);
-	    add(pieceHolder);
-	    
+		add(pieceHolder);
+
 		//Create button and add ActionListener
 		backButton = new JButton("Back");
 		backButton.setToolTipText("Press me to go back to the Turn setup window");
@@ -727,12 +727,12 @@ public class CustomSetupMenu extends JPanel {
 						break;
 					}
 					//TODO Fix this.
-//					else if (p.isObjective()) {
-//						whiteRules.setObjectivePiece(new ObjectivePiece("custom objective", p.getName()));
-//						System.out.println(p.getName());
-//						set = true;
-//						break;
-//					}
+					//					else if (p.isObjective()) {
+					//						whiteRules.setObjectivePiece(new ObjectivePiece("custom objective", p.getName()));
+					//						System.out.println(p.getName());
+					//						set = true;
+					//						break;
+					//					}
 				}
 				if (!set) {
 					whiteRules.setObjectivePiece(new ObjectivePiece("no objective", ""));
@@ -746,11 +746,11 @@ public class CustomSetupMenu extends JPanel {
 						break;
 					}
 					//TODO Fix this
-//					else if (p.isObjective()) {
-//						blackRules.setObjectivePiece(new ObjectivePiece("custom objective", p.getName()));
-//						set = true;
-//						break;
-//					}
+					//					else if (p.isObjective()) {
+					//						blackRules.setObjectivePiece(new ObjectivePiece("custom objective", p.getName()));
+					//						set = true;
+					//						break;
+					//					}
 				}
 				if (!set) {
 					blackRules.setObjectivePiece(new ObjectivePiece("no objective", ""));
@@ -764,17 +764,17 @@ public class CustomSetupMenu extends JPanel {
 
 		JPanel options = new JPanel();
 		options.setLayout(new GridBagLayout());
-		
+
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.gridy = 2;
 		options.add(submitButton, c);
-		
+
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.gridy = 3;
 		options.add(backButton, c);
-		
+
 		add(options);
 	}
 }

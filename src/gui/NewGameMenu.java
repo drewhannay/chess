@@ -381,7 +381,12 @@ public class NewGameMenu extends JPanel {
 						}
 
 						System.out.println(toPlay.equals(ai.getGame()));
-						Driver.getInstance().setPanel(new PlayNetGame(toPlay, false, false));
+						try {
+							Driver.getInstance().setPanel(new PlayNetGame(toPlay, false, false));
+						} catch (Exception e) {
+							//TODO do somethign here. preferable really cool
+							return;
+						}
 						popped.dispose();
 					}
 				});
@@ -582,10 +587,20 @@ public class NewGameMenu extends JPanel {
 					toPlay.setTimers(whiteTimer, blackTimer);
 					final PlayNetGame game;
 					if(host.equals(arg0)){
-						game = new PlayNetGame(toPlay, false, true);
+						try {
+							game = new PlayNetGame(toPlay, false, true);
+						} catch (Exception e) {
+							//TODO do somethign here. preferable really cool
+							return;						
+						}
 					}
 					else{
-						game = new PlayNetGame(toPlay, false, false);
+						try {
+							game = new PlayNetGame(toPlay, false, false);
+						} catch (Exception e) {
+							//TODO do somethign here. preferable really cool
+							return;
+						}
 					}
 					try {
 						NewGameMenu.cancelled = false;
@@ -610,7 +625,13 @@ public class NewGameMenu extends JPanel {
 				else{
 					Game toPlay = Builder.newGame((String) dropdown.getSelectedItem());
 					toPlay.setTimers(whiteTimer, blackTimer);
-					PlayGame game = new PlayGame(toPlay, false);
+					PlayGame game = null;
+					try {
+						game = new PlayGame(toPlay, false);
+					} catch (Exception e) {
+						//TODO do somethign here. preferable really cool
+						return;
+					}
 					Driver.getInstance().setPanel(game);
 				}
 				popup.dispose();

@@ -219,7 +219,7 @@ public class PlayGame extends JPanel {
 	 * @param isPlayback whether PlayGame is in playback mode
 	 * @param file The file holding the ACN of the game move history.
 	 */
-	public PlayGame(boolean isPlayback, File file) {
+	public PlayGame(boolean isPlayback, File file) throws Exception {
 		setGame(Builder.newGame("Classic"));
 		PlayGame.isPlayback = isPlayback;
 		mustMove = false;
@@ -245,7 +245,7 @@ public class PlayGame extends JPanel {
 	 * @param g The reference to the game being played.
 	 * @param isPlayback whether PlayGame is in play back mode
 	 */
-	public PlayGame(Game g, boolean isPlayback) {
+	public PlayGame(Game g, boolean isPlayback) throws Exception{
 		PlayGame.setGame(g);
 		PlayGame.isPlayback = isPlayback;
 		if(isPlayback){
@@ -493,7 +493,7 @@ public class PlayGame extends JPanel {
 	 * @param isPlayback whether PlayGame is in playback mode
 	 */
 	@SuppressWarnings("static-access")
-	private void initComponents(boolean isPlayback) {
+	private void initComponents(boolean isPlayback) throws Exception{
 		// Has spaces to hax0r fix centering.
 		inCheck = new JLabel("You're In Check!");
 		inCheck.setHorizontalTextPosition(inCheck.CENTER);
@@ -507,7 +507,11 @@ public class PlayGame extends JPanel {
 				mustMove = false;
 				if (getGame().getHistory().size() == 0)
 					return;
-				getGame().getHistory().get(getGame().getHistory().size() - 1).undo();
+				try{
+					getGame().getHistory().get(getGame().getHistory().size() - 1).undo();
+				}catch(Exception e){
+					
+				}
 				getGame().getHistory().remove(getGame().getHistory().size() - 1);
 				(getGame().isBlackMove() ? getGame().getBlackRules() : getGame().getWhiteRules()).undoEndOfGame();
 				boardRefresh(getGame().getBoards());
@@ -592,7 +596,9 @@ public class PlayGame extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				if (index == -1)
 					return;
-				history[index--].undo();
+				try {
+					history[index--].undo();
+				} catch (Exception e1) {}
 			}
 		});
 

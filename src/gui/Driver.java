@@ -244,7 +244,12 @@ final public class Driver extends JFrame {
 
 						Game toView;
 						if (choice.endsWith(".acn")) {
-							otherPanel = new PlayGame(true, file);
+							try{
+								otherPanel = new PlayGame(true, file);
+							}catch(Exception e){
+								JOptionPane.showMessageDialog(null, "This file contains invalid ACN notation. Please check the format and try again");
+								return;
+							}
 						}
 						else {
 							FileInputStream f_in = new FileInputStream(file);

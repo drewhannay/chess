@@ -60,7 +60,7 @@ public class PlayNetGame extends PlayGame {
 	 * @param isPlayback if this is a playback (always false)
 	 * @param isBlack if the player is black
 	 */
-	public PlayNetGame(Game g, boolean isPlayback, boolean isBlack) {
+	public PlayNetGame(Game g, boolean isPlayback, boolean isBlack) throws Exception {
 		super(g, isPlayback);
 		PlayNetGame.isBlack = isBlack;
 		initComponents(isPlayback);
@@ -292,7 +292,11 @@ public class PlayNetGame extends PlayGame {
 			public void actionPerformed(ActionEvent e) {
 				if (index == -1)
 					return;
-				history[index--].undo();
+				try{
+					history[index--].undo();
+				}catch(Exception e1){
+					
+				}
 			}
 		});
 

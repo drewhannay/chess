@@ -10,6 +10,8 @@ import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.swing.JOptionPane;
+
 /**
  * AlgebraicConverter.java Class to convert Move objects to Algebraic Chess
  * Notation and vice versa.
@@ -48,7 +50,7 @@ public final class AlgebraicConverter {
 	 * @param board The Board on which this Move is to be played
 	 * @return The completed Move object
 	 */
-	private static Move algToMove(String s, Board board) {
+	private static Move algToMove(String s, Board board) throws Exception {
 		Move move = null;
 		Matcher result = null;
 		String pieceKlass = null;
@@ -61,66 +63,61 @@ public final class AlgebraicConverter {
 
 		result = getPattern().matcher(s);
 		if (result.find()) {
-			try {
-				if (result.group(1).equals("O-O-O")
-						|| result.group(1).equals("0-0-0")) {
-					move = new Move(board, Move.CASTLE_QUEEN_SIDE);
-				} else if (result.group(1).equals("O-O")
-						|| result.group(1).equals("0-0")) {
-					move = new Move(board, Move.CASTLE_KING_SIDE);
+			if (result.group(1).equals("O-O-O")
+					|| result.group(1).equals("0-0-0")) {
+				move = new Move(board, Move.CASTLE_QUEEN_SIDE);
+			} else if (result.group(1).equals("O-O")
+					|| result.group(1).equals("0-0")) {
+				move = new Move(board, Move.CASTLE_KING_SIDE);
+			} else {
+				if (result.group(2) != null) {
+					pieceKlass = map.get(result.group(2).charAt(0)); 
+				}
+
+				if (result.group(3) != null) {
+					origCol = columns
+					.indexOf((result.group(3).charAt(0) + "")
+							.toLowerCase());
+				}
+
+				if (result.group(4) != null) {
+					origRow = Integer.parseInt(result.group(4).charAt(0)
+							+ "");
+				}
+
+				dest = board.getSquare(Integer.parseInt(result.group(7)
+						.charAt(0)
+						+ ""), columns
+						.indexOf((result.group(6).charAt(0) + "")
+								.toLowerCase()));
+
+				if (origCol < 1 || origRow < 1) {
+					if(pieceKlass == null){
+						pieceKlass = "Pawn";
+					}
+					orig = board.getOriginSquare(pieceKlass, origCol,
+							origRow, dest);
 				} else {
-					if (result.group(2) != null) {
-						pieceKlass = map.get(result.group(2).charAt(0)); 
-					}
+					orig = board.getSquare(origRow, origCol);
+				}
 
-					if (result.group(3) != null) {
-						origCol = columns
-								.indexOf((result.group(3).charAt(0) + "")
-										.toLowerCase());
-					}
-
-					if (result.group(4) != null) {
-						origRow = Integer.parseInt(result.group(4).charAt(0)
-								+ "");
-					}
-
-					dest = board.getSquare(Integer.parseInt(result.group(7)
-							.charAt(0)
-							+ ""), columns
-							.indexOf((result.group(6).charAt(0) + "")
-									.toLowerCase()));
-
-					if (origCol < 1 || origRow < 1) {
-						if(pieceKlass == null){
-							pieceKlass = "Pawn";
-						}
-						orig = board.getOriginSquare(pieceKlass, origCol,
-								origRow, dest);
+				if (result.group(8) != null) { // promotion
+					if (result.group(8).contains("=")
+							|| result.group(8).contains("(")) {
+						promo = map.get(result.group(8).charAt(1)); // 0 is
+						// '='
+						// or
+						// '('
 					} else {
-						orig = board.getSquare(origRow, origCol);
-					}
-
-					if (result.group(8) != null) { // promotion
-						if (result.group(8).contains("=")
-								|| result.group(8).contains("(")) {
-							promo = map.get(result.group(8).charAt(1)); // 0 is
-							// '='
-							// or
-							// '('
-						} else {
-							promo = map.get(result.group(8).charAt(0));
-						}
-					}
-					if (promo == null) {
-						move = new Move(board, orig, dest);
-					} else {
-						move = new Move(board, orig, dest, promo);
+						promo = map.get(result.group(8).charAt(0));
 					}
 				}
-			} catch (Exception e) {
-				System.out.println(e.getMessage());
+				if (promo == null) {
+					move = new Move(board, orig, dest);
+				} else {
+					move = new Move(board, orig, dest, promo);
+				}
 			}
-
 		}
 		return move;
 	}
@@ -134,7 +131,7 @@ public final class AlgebraicConverter {
 	 * @param f The File from which to read in ACN
 	 * @return The Game object with it's history added
 	 */
-	public static Game convert(Game g, File f) {
+	public static Game convert(Game g, File f) throws Exception{
 		Game game = g;
 		Board board = game.getBoards()[0];// Since this is Classic chess, it'll
 		// always be Boards[0]
@@ -166,14 +163,12 @@ public final class AlgebraicConverter {
 			}
 			in.close();
 		} catch (Exception e) {
-			System.out
-					.println("AlgebraicConverter.convert() " + e.getMessage());
 			return null;
 		}
 		return game;
 	}
 
-	/**
+	/** q
 	 * Convert a List of Moves to a text file of Algebraic Chess Notation Open
 	 * the file to write to, then iterate through the list of Moves, printing
 	 * each one in the proper format.
@@ -189,8 +184,8 @@ public final class AlgebraicConverter {
 				String turn = moves.get(i).toString();
 				if (moves.get(i).result != null) {
 					turn = moves.get(i)
-							+ (i % 2 == 0 ? (" " + moves.get(i).result) : ("\n"
-									+ (j + 1) + " " + moves.get(i).result));
+					+ (i % 2 == 0 ? (" " + moves.get(i).result) : ("\n"
+							+ (j + 1) + " " + moves.get(i).result));
 				}
 				if (i % 2 == 1 || moves.get(i).result != null) {
 					out.write(j + " " + toWrite + " " + turn + '\n');
