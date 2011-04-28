@@ -6,9 +6,11 @@ import gui.NewGameMenu;
 import gui.PlayGame;
 import gui.PlayNetGame;
 
+import java.io.EOFException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.SocketException;
 
 import javax.swing.JOptionPane;
 
@@ -106,10 +108,18 @@ public class NetworkClient {
 						break;
 				}
 			}
-		}catch (Exception e){
-			out.close();
-			in.close();
-			socket.close();	
+		}catch(SocketException e){
+			JOptionPane.showMessageDialog(null, "Your opponent closed the game", "Oops!", JOptionPane.ERROR_MESSAGE);
+			Driver.getInstance().revertPanel();
+			return;
+		}catch(EOFException e){
+			JOptionPane.showMessageDialog(null, "Your opponent closed the game", "Oops!", JOptionPane.ERROR_MESSAGE);
+			Driver.getInstance().revertPanel();
+			return;
+		}catch(Exception e){
+			JOptionPane.showMessageDialog(null, "Something went wrong! Returning to main menu...", "Oops!", JOptionPane.ERROR_MESSAGE);
+			Driver.getInstance().revertPanel();
+			return;
 		}
 
 		out.close();
