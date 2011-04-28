@@ -137,10 +137,10 @@ public class NetworkServer {
 			serverSocket.close();
 			return;
 		}catch(Exception e){
-			JOptionPane.showMessageDialog(null, "Something went wrong! Returning to main menu...", "Oops!", JOptionPane.ERROR_MESSAGE);
-			Driver.getInstance().revertPanel();
-			serverSocket.close();
-			return;
+//			JOptionPane.showMessageDialog(null, "Something went wrong! Returning to main menu...", "Oops!", JOptionPane.ERROR_MESSAGE);
+//			Driver.getInstance().revertPanel();
+//			serverSocket.close();
+//			return;
 		}
 		
 		out.close();

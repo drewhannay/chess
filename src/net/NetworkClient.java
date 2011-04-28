@@ -119,9 +119,9 @@ public class NetworkClient {
 			Driver.getInstance().revertPanel();
 			return;
 		}catch(Exception e){
-			JOptionPane.showMessageDialog(null, "Something went wrong! Returning to main menu...", "Oops!", JOptionPane.ERROR_MESSAGE);
-			Driver.getInstance().revertPanel();
-			return;
+//			JOptionPane.showMessageDialog(null, "Something went wrong! Returning to main menu...", "Oops!", JOptionPane.ERROR_MESSAGE);
+//			Driver.getInstance().revertPanel();
+//			return;
 		}
 
 		out.close();
