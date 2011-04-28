@@ -69,10 +69,10 @@ public class CustomSetupMenu extends JPanel {
 		final DefaultListModel list = new DefaultListModel();
 		Object[] allPieces = PieceBuilder.getSet().toArray();
 		for (int i = 0; i<allPieces.length; i++){
-			list.addElement(allPieces[i]);
+			if(!allPieces[i].equals(type))
+				list.addElement(allPieces[i]);
 
 		}
-		list.remove(4);
 		final JList piecesList = new JList(list);
 		// EMPTY LIST - CAN PROMOTE TO
 		final JList piecesList2 = new JList(emptyList);
