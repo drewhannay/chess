@@ -560,11 +560,11 @@ public class Game implements Serializable {
 		if (getHistory().contains(m))
 			return;
 		getHistory().add(m);
-		if (isBlackMove()) {
+//		if (isBlackMove()) {
 			getBlackRules().endOfGame(blackObjectivePiece);
-		} else {
+//		} else {
 			getWhiteRules().endOfGame(whiteObjectivePiece);
-		}
+//		}
 	}
 
 	/**
