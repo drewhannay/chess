@@ -177,6 +177,7 @@ public class PlayerCustomMenu extends JPanel {
 				if (formComplete(whiteRules, blackRules)) {//Make sure the form is complete.
 					//TODO parse form here
 					Driver.getInstance().setPanel(new CustomSetupMenu(b, whiteRules, blackRules));
+					Driver.getInstance().variantHelp.doClick();
 				}
 			}
 		});

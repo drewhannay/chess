@@ -115,6 +115,9 @@ public class NewGameMenu extends JPanel {
 	 */
 	public void initComponents() {
 
+		setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		
 		//Create button and add ActionListener
 		humanPlay = new JButton("Human Play");
 		humanPlay.addActionListener(new ActionListener() {
@@ -420,68 +423,48 @@ public class NewGameMenu extends JPanel {
 		
 		try {
 			if(InetAddress.getLocalHost().getHostName().contains("cslab")){
-				//TODO Add Network Play button here.
+				c.gridx = 0;
+				c.gridy = 0;
+				c.fill = GridBagConstraints.HORIZONTAL;
+				c.insets = new Insets(5,5,0,0);
+				add(humanPlay, c);
+				c.gridx = 1;
+				c.gridy = 0;
+				c.fill = GridBagConstraints.HORIZONTAL;
+				c.insets = new Insets(5,5,0,5);
+				add(networkPlay, c);
+				c.gridx = 0;
+				c.gridy = 1;
+				c.gridwidth = 2;
+				c.insets = new Insets(0,5,20,5);
+				c.fill = GridBagConstraints.HORIZONTAL;
+				add(AIPlay, c);
+				c.gridx = 0;
+				c.gridy = 2;
+				add(backButton, c);			
+			}
+			else{
+				//Layout stuff. Make it better later.
+				c.gridx = 0;
+				c.gridy = 0;
+				c.fill = GridBagConstraints.HORIZONTAL;
+				c.insets = new Insets(5,5,0,5);
+				add(humanPlay, c);
+				c.gridx = 0;
+				c.gridy = 1;
+				c.insets = new Insets(0,5,20,5);
+				c.fill = GridBagConstraints.HORIZONTAL;
+				add(AIPlay, c);
+				c.gridx = 0;
+				c.gridy = 2;
+				add(backButton, c);
 			}
 		}catch(Exception e){
 			
 		}
 
-		//Layout stuff. Make it better later.
-		GroupLayout layout = new GroupLayout(this);
-		this.setLayout(layout);
-		layout
-		.setHorizontalGroup(
-				layout
-				.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addGroup(
-						layout
-						.createSequentialGroup()
-						.addGroup(
-								layout
-								.createParallelGroup(GroupLayout.Alignment.LEADING)
-								.addGroup(
-										layout
-										.createSequentialGroup()
-										.addGap(20, 20, 20)
-										.addGroup(
-												layout
-												.createParallelGroup(
-														GroupLayout.Alignment.LEADING)
-														.addComponent(
-																AIPlay,
-																GroupLayout.PREFERRED_SIZE,
-																234,
-																GroupLayout.PREFERRED_SIZE)
-																.addComponent(
-																		networkPlay,
-																		GroupLayout.PREFERRED_SIZE,
-																		234,
-																		GroupLayout.PREFERRED_SIZE)
-																		.addComponent(
-																				humanPlay,
-																				GroupLayout.PREFERRED_SIZE,
-																				234,
-																				GroupLayout.PREFERRED_SIZE)))
-																				.addGroup(layout.createSequentialGroup()
-																						.addGap(112, 112, 112)
-																						.addComponent(backButton)))
-																						.addContainerGap(20, Short.MAX_VALUE))
-		);
-		layout.setVerticalGroup(
-				layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-						//.addContainerGap(162, Short.MAX_VALUE)
-						.addComponent(humanPlay)
-						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-						.addComponent(networkPlay)
-						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-						.addComponent(AIPlay)
-						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-						.addComponent(backButton)
-						.addGap(4, 4, 4))
-		);
 	}
-
+	
 	/**
 	 * This is the method to open the pop up to create a new game.
 	 * @param isNetwork boolean to see if this is a network game or not
@@ -490,7 +473,7 @@ public class NewGameMenu extends JPanel {
 		clicked = true;
 		final JFrame popup = new JFrame("New Game");
 		popup.setLayout(new FlowLayout());
-		popup.setSize(370, 150); //TODO Figure out if there's a better way to set the size of the window.
+		popup.setSize(200, 150); //TODO Figure out if there's a better way to set the size of the window.
 		popup.setResizable(false);
 		popup.setLocationRelativeTo(null);//This line makes the window show up in the center of the user's screen, regardless of resolution.
 
