@@ -95,13 +95,12 @@ public class Promote implements Serializable {
 	 * @return The promoted Piece.
 	 */
 	public Piece classicPromotion(Piece p, boolean verified, String promo) {
-		System.out.println(verified);
+		if(p.getPromotesTo() == null || p.getPromotesTo().size() == 0) return p;
 		if(!verified){
 			lastPromoted = p.getName();
 			klazz = p.getName();
 		}
 		if(verified&&promo!=null&&!promo.equals(p.getName())){
-			System.out.println("PROMO: " + promo + " " + p.getName());
 			try {
 
 				Piece promoted = PieceBuilder.makePiece(promo,p.isBlack(), p.getSquare(), p.getBoard());
@@ -136,9 +135,10 @@ public class Promote implements Serializable {
 					klazz = result;
 					promo = result;
 			}
-		} else if (promo != null && p.getPromotesTo().contains(promo)) {
+		} else if (promo != null &&p.getPromotesTo()!=null&& p.getPromotesTo().contains(promo)) {
 			klazz = promo;
 		}
+		
 		try {
 
 			Piece promoted = PieceBuilder.makePiece(klazz,p.isBlack(), p.getSquare(), p.getBoard());
