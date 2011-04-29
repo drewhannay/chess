@@ -59,18 +59,17 @@ public class NetworkServer {
 			out.writeObject(fromServer);
 		PlayGame.resetTimers();
 		Driver.getInstance().setPanel(png);
-
-		while(g.isBlackMove()==false){
-			while(PlayNetGame.netMove == null)
-				Thread.sleep(0);
-			fromServer = PlayNetGame.netMove;
-			PlayNetGame.netMove = null;
-
-			out.writeObject(fromServer);
-			out.flush();
-		}
-
 		try{
+			while(g.isBlackMove()==false){
+				while(PlayNetGame.netMove == null)
+					Thread.sleep(0);
+				fromServer = PlayNetGame.netMove;
+				PlayNetGame.netMove = null;
+	
+				out.writeObject(fromServer);
+				out.flush();
+			}
+		
 			while(PlayNetGame.running) {
 				while(g.isBlackMove()==true){
 					fromUser = in.readObject();
@@ -146,10 +145,7 @@ public class NetworkServer {
 			serverSocket.close();
 			return;
 		}catch(Exception e){
-//			JOptionPane.showMessageDialog(null, "Something went wrong! Returning to main menu...", "Oops!", JOptionPane.ERROR_MESSAGE);
-//			Driver.getInstance().revertPanel();
-//			serverSocket.close();
-//			return;
+			
 		}
 		
 		out.close();

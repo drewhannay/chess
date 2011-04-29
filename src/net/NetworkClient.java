@@ -56,7 +56,6 @@ public class NetworkClient {
 		Driver.getInstance().setPanel(png);
 
 
-		//		while ((fromServer = in.readObject()) != null) {
 		try{
 			while(PlayNetGame.running){
 				while(g.isBlackMove()==false){
@@ -130,9 +129,7 @@ public class NetworkClient {
 			Driver.getInstance().revertPanel();
 			return;
 		}catch(Exception e){
-//			JOptionPane.showMessageDialog(null, "Something went wrong! Returning to main menu...", "Oops!", JOptionPane.ERROR_MESSAGE);
-//			Driver.getInstance().revertPanel();
-//			return;
+			
 		}
 
 		out.close();
