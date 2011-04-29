@@ -398,20 +398,7 @@ final public class Driver extends JFrame {
 		newGameItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				//Remove the current panel, set otherPanel, repaint.
-				variantHelp.setVisible(false); //Makes sure that the appropriate help menus are displayed
-				helpMenu.setText("Game Help");
-				gamePlayHelp.setVisible(true);
-				
-				if(PlayGame.menu != null)
-					PlayGame.menu.setVisible(false);
-				//Resets the panels being displayed to only contain the new game
-				if(otherPanel != null) remove(otherPanel); 
-				if(mainPanel != null) remove(mainPanel);
-				otherPanel = new NewGameMenu();
-				add(otherPanel);
-				ChessTimer.stopTimers();
-				gamePlayHelp.setVisible(true);
-				pack();
+				Driver.this.newGame();
 			}
 		});
 
@@ -498,6 +485,24 @@ final public class Driver extends JFrame {
 
 		add(mainPanel);
 		setVisible(true);
+	}
+
+	public void newGame() {
+		
+		variantHelp.setVisible(false); //Makes sure that the appropriate help menus are displayed
+		helpMenu.setText("Game Help");
+		gamePlayHelp.setVisible(true);
+		
+		if(PlayGame.menu != null)
+			PlayGame.menu.setVisible(false);
+		//Resets the panels being displayed to only contain the new game
+		if(otherPanel != null) remove(otherPanel); 
+		if(mainPanel != null) remove(mainPanel);
+		otherPanel = new NewGameMenu();
+		add(otherPanel);
+		ChessTimer.stopTimers();
+		gamePlayHelp.setVisible(true);
+		pack();
 	}
 
 	/**
