@@ -224,7 +224,8 @@ public class Piece implements Serializable {
 			return;
 
 		if (line != null) {
-			
+			for(Square s:line)
+				System.out.println("Square before is " + s.toString(new boolean[]{false,false}));
 			ArrayList<Square> temp = new ArrayList<Square>();
 			for(Square sq:line){
 				if(legalDests.contains(sq) || sq.equals(curSquare))
@@ -232,6 +233,8 @@ public class Piece implements Serializable {
 			}
 			line = new Square[temp.size()];
 			temp.toArray(line);
+			for(Square s:line)
+				System.out.println("Square after is " + s.toString(new boolean[]{false,false}));
 			
 			
 			if (board.getGame().isStaleLegalDests()) {
