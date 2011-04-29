@@ -38,11 +38,11 @@ public class ObjectiveMaker extends JPanel{
 	/**
 	 * Rules for the White Team
 	 */
-	private Rules whiteRules = new Rules(false);
+	private Rules whiteRules = new Rules(false,false);
 	/**
 	 * Rules for the Black Team
 	 */
-	private Rules blackRules = new Rules(false);
+	private Rules blackRules = new Rules(false,true);
 	/**
 	 * This is a boolean to see if we need to force a piece to be set as an Objective
 	 */
@@ -162,37 +162,37 @@ public class ObjectiveMaker extends JPanel{
 				}
 				
 				if (wCaptureAll.isSelected()) {
-					whiteRules.addEndOfGame(new EndOfGame("loseAllPieces", true, 0, ""));
+					whiteRules.addEndOfGame(new EndOfGame("loseAllPieces", true, 0, "",false));
 				}
 				if (wCaptureAllType.isSelected()) {
-					whiteRules.addEndOfGame(new EndOfGame("captureAllOfType", false, 0, "Knight")); 
+					whiteRules.addEndOfGame(new EndOfGame("captureAllOfType", false, 0, "Knight",false)); 
 				}
 				if (wProtectObj.isSelected()) {
-					whiteRules.addEndOfGame(new EndOfGame("classic", false, 0, ""));
+					whiteRules.addEndOfGame(new EndOfGame("classic", false, 0, "",false));
 					needsObj = true;
 				}
 				if (wLoseAll.isSelected()) {
-					whiteRules.addEndOfGame(new EndOfGame("loseAllPieces", false, 0, ""));
+					whiteRules.addEndOfGame(new EndOfGame("loseAllPieces", false, 0, "",false));
 				}
 				if (wCheckTimes.isSelected()) {
-					whiteRules.addEndOfGame(new EndOfGame("checkNTimes", false, 3, "")); 
+					whiteRules.addEndOfGame(new EndOfGame("checkNTimes", false, 3, "",false)); 
 				}
 				
 				if (bCaptureAll.isSelected()) {
-					blackRules.addEndOfGame(new EndOfGame("loseAllPieces", true, 0, ""));
+					blackRules.addEndOfGame(new EndOfGame("loseAllPieces", true, 0, "",true));
 				}
 				if (bCaptureAllType.isSelected()) {
-					blackRules.addEndOfGame(new EndOfGame("captureAllOfType", false, 0, "Knight")); 
+					blackRules.addEndOfGame(new EndOfGame("captureAllOfType", false, 0, "Knight",true)); 
 					needsObj = false;
 				}
 				if (bProtectObj.isSelected()) {
-					blackRules.addEndOfGame(new EndOfGame("classic", false, 0, ""));
+					blackRules.addEndOfGame(new EndOfGame("classic", false, 0, "",true));
 				}
 				if (bLoseAll.isSelected()) {
-					blackRules.addEndOfGame(new EndOfGame("loseAllPieces", false, 0, ""));
+					blackRules.addEndOfGame(new EndOfGame("loseAllPieces", false, 0, "",true));
 				}
 				if (bCheckTimes.isSelected()) {
-					blackRules.addEndOfGame(new EndOfGame("checkNTimes", false, 3, ""));
+					blackRules.addEndOfGame(new EndOfGame("checkNTimes", false, 3, "",true));
 					needsObj = false;
 				}
 				Driver.getInstance().setPanel(new RuleMaker(b, whiteRules, blackRules));

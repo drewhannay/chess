@@ -78,6 +78,10 @@ public class EndOfGame implements Serializable {
 	 * A hashmap for convenience's sake to lookup the undo methods by name.
 	 */
 	private static HashMap<String, Method> undoMethods = new HashMap<String, Method>();
+	/**
+	 * Is this the white or black rule set?
+	 */
+	private boolean isBlack;
 	static {
 		try {
 			doMethods.put("classic", EndOfGame.class.getMethod("classicEndOfGame", Piece.class));
@@ -101,13 +105,14 @@ public class EndOfGame implements Serializable {
 	 * @param maxChecks Set the instance variable
 	 * @param type Set the instance variable.
 	 */
-	public EndOfGame(String name, boolean blackLosesPieces, int maxChecks, String type) {
+	public EndOfGame(String name, boolean blackLosesPieces, int maxChecks, String type,boolean isBlack) {
 		doMethod = doMethods.get(name);
 		undoMethod = undoMethods.get(name);
 		this.name = name;
 		this.blackLosesPieces = blackLosesPieces;
 		this.maxChecks = maxChecks;
 		this.type = type;
+		this.isBlack = isBlack;
 		checks = 0;
 	}
 
@@ -116,12 +121,13 @@ public class EndOfGame implements Serializable {
 	 * @param objectivePiece Unused.
 	 */
 	public void captureAllOfType(Piece objectivePiece) {
-		List<Piece> team = (g.isBlackMove() ? g.getBlackTeam() : g.getWhiteTeam());
+		List<Piece> team = (!isBlack ? g.getBlackTeam() : g.getWhiteTeam());
 		for (Piece p : team) {
-			if (p.getName().equals(type) && !p.isCaptured())
+			if (p.getName().equals(type) && !p.isCaptured()){
 				return;
+			}
 		}
-		Result r = new Result(!g.isBlackMove() ? Result.BLACK_WIN : Result.WHITE_WIN);
+		Result r = new Result(isBlack ? Result.BLACK_WIN : Result.WHITE_WIN);
 		r.setText("Game Over! " + r.winText() + "\n");
 		PlayGame.endOfGame(r);
 	}
@@ -217,7 +223,7 @@ public class EndOfGame implements Serializable {
 	 * @param objectivePiece The objective piece; unused.
 	 */
 	public void loseAllPieces(Piece objectivePiece) {
-		List<Piece> team = (blackLosesPieces ? g.getBlackTeam() : g.getWhiteTeam());
+		List<Piece> team = (isBlack ? g.getBlackTeam() : g.getWhiteTeam());
 		for (Piece p : team) {
 			if (!p.isCaptured())
 				return;

@@ -76,10 +76,10 @@ public class Rules implements Serializable {
 	/**
 	 * @param isClassic Whether the game is classic chess.
 	 */
-	public Rules(boolean isClassic) {
+	public Rules(boolean isClassic,boolean isBlack) {
 		//Initialize everything to classic to ensure nothing can be null.
 		nextTurn = new NextTurn("classic", 1, 1, 0);
-		endOfGame = new EndOfGame("classic", false, 3, "Queen");
+		endOfGame = new EndOfGame("classic", false, 3, "Queen",isBlack);
 		cropLegalDests = new CropLegalDests();
 		cropLegalDests.addMethod("classic");
 		objectivePiece = new ObjectivePiece("classic", ""); //TODO error handling, in GUI

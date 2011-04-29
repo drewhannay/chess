@@ -115,7 +115,7 @@ public class Builder implements Serializable {
 		classic.blackTeam.add(createKnight(true,b.getSquare(8, 7),b));
 		classic.blackTeam.add(createRook(true,b.getSquare(8,8),b));
 
-		classic.writeFile(new Rules(true), new Rules(true));
+		classic.writeFile(new Rules(true,false), new Rules(true,true));
 	}
 	/**
 	 * Create a piece that represents a bishop, without
