@@ -804,10 +804,10 @@ public class Piece implements Serializable {
 		case'N': //North
 			return (curSquare.getRow()-destRow)< movements.get('N') || movements.get('N')==-1;
 
-		case'E': //east
+		case'E': //East
 			return (destCol - curSquare.getCol())< movements.get('E') || movements.get('E')==-1;
 
-		case'W': //west
+		case'W': //West
 			return (curSquare.getCol() - destCol)< movements.get('W') || movements.get('W')==-1;
 		default:
 			return false;
