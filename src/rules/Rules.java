@@ -1,6 +1,7 @@
 package rules;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import logic.Board;
@@ -323,5 +324,14 @@ public class Rules implements Serializable {
 	
 	public String getObjectiveName(){
 		return objectivePiece.getObjectiveName();
+	}
+
+	/**
+	 * May these rules be played across a networked connection?
+	 * @return
+	 */
+	public boolean networkable() {
+		List<String> afterMoves = afterMove.getMethods();
+		return !(afterMoves.contains("placeCaptured")||afterMoves.contains("placeCapturedSwitch"));
 	}
 }

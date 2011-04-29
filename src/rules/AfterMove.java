@@ -82,6 +82,9 @@ public class AfterMove implements Serializable {
 		}
 	}
 
+	public List<String> getMethods(){
+		return names;
+	}
 	/**
 	 * Add a method to the current list of them.
 	 * @param name The method to add.

@@ -116,7 +116,7 @@ public class NewGameMenu extends JPanel {
 
 		setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
-		
+
 		//Create button and add ActionListener
 		humanPlay = new JButton("Human Play");
 		humanPlay.addActionListener(new ActionListener() {
@@ -299,7 +299,7 @@ public class NewGameMenu extends JPanel {
 						tempFiles.add(st);
 				String[] files = new String[tempFiles.size()];
 				tempFiles.toArray(files);
-				
+
 				if(files.length == 0){
 					JOptionPane.showMessageDialog(null,
 							"There are no AI files to use.\nPlease insert your AI java files in the AI directory.",
@@ -362,7 +362,7 @@ public class NewGameMenu extends JPanel {
 							Constructor<?> construct = klazz.getConstructor();
 							plugin = (AIPlugin) construct.newInstance();
 
-							
+
 
 							Thread aiThread;
 							aiThread = new Thread(new Runnable() {
@@ -427,7 +427,7 @@ public class NewGameMenu extends JPanel {
 				Driver.getInstance().revertPanel();
 			}
 		});
-		
+
 		try {
 			if(InetAddress.getLocalHost().getHostName().contains("cslab")){
 				c.gridx = 0;
@@ -467,11 +467,11 @@ public class NewGameMenu extends JPanel {
 				add(backButton, c);
 			}
 		}catch(Exception e){
-			
+
 		}
 
 	}
-	
+
 	/**
 	 * This is the method to open the pop up to create a new game.
 	 * @param isNetwork boolean to see if this is a network game or not
@@ -484,13 +484,26 @@ public class NewGameMenu extends JPanel {
 		popup.setResizable(false);
 		popup.setLocationRelativeTo(null);//This line makes the window show up in the center of the user's screen, regardless of resolution.
 		GridBagConstraints c = new GridBagConstraints();
-		
+
 		//Make a JComboBox drop down filled with the names of all the saved game types.
-		final JComboBox dropdown = new JComboBox(Builder.getArray());
-		
+		String[] gametypes = Builder.getArray();
+		if(isNetwork){
+			ArrayList<String> filtered = new ArrayList<String>();
+			for(String s: gametypes){
+				Game temp = Builder.newGame(s);
+				if(temp.getWhiteRules().networkable()&&temp.getBlackRules().networkable())
+					filtered.add(s);
+			}
+			gametypes = new String[filtered.size()];
+			int i = 0;
+			for(String s: filtered)
+				gametypes[i++] = s;
+		}
+		final JComboBox dropdown = new JComboBox(gametypes);
+
 		//TODO restrict game types here.
-		
-		
+
+
 		c.gridx = 0;
 		c.gridy = 0;
 		c.anchor = GridBagConstraints.WEST; 
@@ -664,7 +677,7 @@ public class NewGameMenu extends JPanel {
 				popup.dispose();
 			}
 		});
-		
+
 
 		//Create button and add ActionListener
 		final JButton back = new JButton("Back");
@@ -677,12 +690,12 @@ public class NewGameMenu extends JPanel {
 				popup.dispose();
 			}
 		});
-		
+
 		JPanel buttons = new JPanel();
 		buttons.setLayout(new FlowLayout());
 		buttons.add(back);
 		buttons.add(done);
-		
+
 		c.gridx = 0;
 		c.gridy = 4;
 		c.gridwidth = 2;

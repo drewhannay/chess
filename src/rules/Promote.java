@@ -151,9 +151,8 @@ public class Promote implements Serializable {
 			promoted.setMoveCount(p.getMoveCount());
 			return promoted;
 		} catch (Exception e) {
-			e.printStackTrace();
+			return p;
 		}
-		return null;
 	}
 
 	/**
