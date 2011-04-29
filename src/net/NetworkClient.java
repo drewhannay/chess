@@ -19,21 +19,11 @@ import logic.Result;
 
 public class NetworkClient {
 	
-	public static Socket socket;
-	
-	public static void closeSocket(){
-		try {
-			socket.close();
-		} catch(Exception e) {
-			
-		}
-	}
-
 	public void join(String host) throws Exception{
 
+		Socket socket = null;
 		ObjectOutputStream out = null;
 		ObjectInputStream in = null;
-		socket = null;
 		while(socket == null){
 			try{
 				socket = new Socket(host, 27335);
@@ -58,7 +48,7 @@ public class NetworkClient {
 
 		try{
 			while(PlayNetGame.running){
-				while(g.isBlackMove()==false){
+				while(g.isBlackMove()==false && PlayNetGame.running){
 					fromServer = in.readObject();
 					FakeMove toMove = (FakeMove)fromServer;
 
@@ -84,8 +74,8 @@ public class NetworkClient {
 							continue;
 					}
 				}
-				while(g.isBlackMove()==true){
-					while(PlayNetGame.netMove == null && !png.drawRequested)
+				while(g.isBlackMove()==true && PlayNetGame.running){
+					while(PlayNetGame.netMove == null && !png.drawRequested && PlayNetGame.running)
 						Thread.sleep(0);
 					if(png.drawRequested){
 						fromServer = in.readObject();
@@ -133,7 +123,7 @@ public class NetworkClient {
 			Driver.getInstance().revertPanel();
 			return;
 		}catch(Exception e){
-			
+
 		}
 
 		out.close();

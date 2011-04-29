@@ -20,18 +20,8 @@ import logic.Result;
 
 public class NetworkServer {
 	
-	private static ServerSocket serverSocket;
-	
-	public static void closeSocket(){
-		try {
-			serverSocket.close();
-		} catch(Exception e) {
-			
-		}
-	}
-
 	public void host(PlayNetGame png) throws Exception{
-
+		ServerSocket serverSocket = null;
 		Socket clientSocket = null;
 		serverSocket = new ServerSocket(27335);
 		serverSocket.setSoTimeout(1000);
@@ -71,7 +61,7 @@ public class NetworkServer {
 			}
 		
 			while(PlayNetGame.running) {
-				while(g.isBlackMove()==true){
+				while(g.isBlackMove()==true && PlayNetGame.running){
 					fromUser = in.readObject();
 					FakeMove toMove = (FakeMove)fromUser;
 					if(toMove.originCol == -1){
@@ -97,8 +87,8 @@ public class NetworkServer {
 					}
 				}
 
-				while(g.isBlackMove()==false){
-					while(PlayNetGame.netMove == null && !png.drawRequested)
+				while(g.isBlackMove()==false && PlayNetGame.running){
+					while(PlayNetGame.netMove == null && !png.drawRequested && PlayNetGame.running)
 						Thread.sleep(0);
 					if(png.drawRequested){
 						fromUser = in.readObject();
@@ -149,7 +139,7 @@ public class NetworkServer {
 			serverSocket.close();
 			return;
 		}catch(Exception e){
-			
+
 		}
 		
 		out.close();

@@ -21,9 +21,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import net.NetworkClient;
-import net.NetworkServer;
-
 import logic.AlgebraicConverter;
 import logic.Board;
 import logic.Builder;
@@ -357,8 +354,7 @@ public class PlayGame extends JPanel {
 			PlayNetGame.netMove = g.moveToFakeMove(g.getHistory().get(g.getHistory().size()-1));
 		else{
 			JOptionPane.showMessageDialog(null, "No moves were made and the time ran out. Returning to the Main Menu.");
-			NetworkClient.closeSocket();
-			NetworkServer.closeSocket();
+			PlayNetGame.running = false;
 			Driver.getInstance().revertPanel();
 			Driver.getInstance().gamePlayHelp.setVisible(false);
 			Driver.getInstance().helpMenu.setText("Help");

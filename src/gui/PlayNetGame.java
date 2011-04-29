@@ -46,8 +46,6 @@ public class PlayNetGame extends PlayGame {
 
 	public static boolean running = true;
 	
-	
-	
 	/**
 	 * Move that is being made
 	 */
