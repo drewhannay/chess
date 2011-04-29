@@ -98,7 +98,7 @@ public class NetworkClient {
 					fromUser = PlayNetGame.netMove;
 					PlayNetGame.netMove = null;
 
-					if(((FakeMove)fromUser).originCol == -1)
+					if(fromUser!=null && ((FakeMove)fromUser).originCol == -1)
 						png.drawRequested = true;
 					out.writeObject(fromUser);
 					out.flush();
@@ -107,12 +107,14 @@ public class NetworkClient {
 				}
 			}
 		}catch(SocketException e){
+			e.printStackTrace();
 			JOptionPane.showMessageDialog(null, "Your opponent closed the game", "Oops!", JOptionPane.ERROR_MESSAGE);
 			Driver.getInstance().fileMenu.setVisible(true);
 			Driver.getInstance().gameOptions.setVisible(false);
 			Driver.getInstance().revertPanel();
 			return;
 		}catch(EOFException e){
+			e.printStackTrace();
 			if(g.getHistory().size() != 0 && g.getHistory().get(g.getHistory().size()-1).getResult()!=null)
 				return;
 			if(!PlayNetGame.running)
@@ -125,7 +127,7 @@ public class NetworkClient {
 			Driver.getInstance().revertPanel();
 			return;
 		}catch(Exception e){
-
+			e.printStackTrace();
 		}
 
 		out.close();
