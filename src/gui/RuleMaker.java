@@ -319,6 +319,15 @@ public class RuleMaker extends JPanel {
 						return;
 					}
 				}
+				else if(wPiecesList.isVisible()){
+					if(whiteRules.theEndIsNigh().equals("classic")){
+						whiteRules.addEndOfGame(new EndOfGame("classic", false, 0, "",false));
+						whiteRules.setObjectivePiece(new ObjectivePiece("custom objective", wPiecesList.getSelectedItem().toString()));
+					}
+					else{
+						whiteRules.addEndOfGame(new EndOfGame("captureAllOfType", false, 0, wPiecesList.getSelectedItem().toString(),false));
+					}
+				}
 				if(bNumChecks.isVisible()){
 					String bNumChecked = bNumChecks.getText();
 					try{
@@ -333,16 +342,7 @@ public class RuleMaker extends JPanel {
 						return;
 					}
 				}
-				if(wPiecesList.isVisible()){
-					if(whiteRules.theEndIsNigh().equals("classic")){
-						whiteRules.addEndOfGame(new EndOfGame("classic", false, 0, "",false));
-						whiteRules.setObjectivePiece(new ObjectivePiece("custom objective", wPiecesList.getSelectedItem().toString()));
-					}
-					else{
-						whiteRules.addEndOfGame(new EndOfGame("captureAllOfType", false, 0, wPiecesList.getSelectedItem().toString(),false));
-					}
-				}
-				if(bPiecesList.isVisible()){
+				else if(bPiecesList.isVisible()){
 					bPiecesList.getSelectedItem();
 					if(blackRules.theEndIsNigh().equals("classic")){
 						blackRules.addEndOfGame(new EndOfGame("classic", false, 0, "",true));

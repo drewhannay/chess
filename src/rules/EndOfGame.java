@@ -90,6 +90,8 @@ public class EndOfGame implements Serializable {
 			undoMethods.put("checkNTimes", EndOfGame.class.getMethod("undoCheckNTimes"));
 			doMethods.put("loseAllPieces", EndOfGame.class.getMethod("loseAllPieces", Piece.class));
 			undoMethods.put("loseAllPieces", EndOfGame.class.getMethod("dummyUndo"));
+			doMethods.put("captureAllPieces", EndOfGame.class.getMethod("captureAllPieces", Piece.class));
+			undoMethods.put("captureAllPieces", EndOfGame.class.getMethod("dummyUndo"));
 			doMethods.put("captureAllOfType", EndOfGame.class.getMethod("captureAllOfType", Piece.class));
 			undoMethods.put("captureAllOfType", EndOfGame.class.getMethod("dummyUndo"));
 
@@ -138,9 +140,9 @@ public class EndOfGame implements Serializable {
 	 * @param objectivePiece the objective piece to place in check.
 	 */
 	public void checkNTimes(Piece objectivePiece) {
-		if (g.getLastMove() != null && g.getLastMove().isVerified() && g.getLastMove().isCheck()) {
+		if (g.getLastMove() != null && g.getLastMove().isVerified() && g.getLastMove().isCheck()&&g.getLastMove().getPiece().isBlack()==isBlack) {
 			if (++checks == maxChecks) {
-				Result r = new Result(g.isBlackMove() ? Result.WHITE_WIN : Result.BLACK_WIN);
+				Result r = new Result(!isBlack ? Result.WHITE_WIN : Result.BLACK_WIN);
 				r.setText("Game Over! " + r.winText() + "\n");
 				PlayGame.endOfGame(r);
 
@@ -223,12 +225,27 @@ public class EndOfGame implements Serializable {
 	 * @param objectivePiece The objective piece; unused.
 	 */
 	public void loseAllPieces(Piece objectivePiece) {
+		List<Piece> team = (!isBlack ? g.getBlackTeam() : g.getWhiteTeam());
+		for (Piece p : team) {
+			if (!p.isCaptured())
+				return;
+		}
+		Result r = new Result(isBlack ? Result.BLACK_WIN : Result.WHITE_WIN);
+		r.setText("Game Over! " + r.winText() + "\n");
+		PlayGame.endOfGame(r);
+	}
+	/**
+	 * Capture all the pieces.
+	 * @param objectivePiece Unused.
+	 */
+	public void captureAllPieces(Piece objectivePiece) {
+		System.out.println("Here");
 		List<Piece> team = (isBlack ? g.getBlackTeam() : g.getWhiteTeam());
 		for (Piece p : team) {
 			if (!p.isCaptured())
 				return;
 		}
-		Result r = new Result(blackLosesPieces ? Result.BLACK_WIN : Result.WHITE_WIN);
+		Result r = new Result(!isBlack ? Result.BLACK_WIN : Result.WHITE_WIN);
 		r.setText("Game Over! " + r.winText() + "\n");
 		PlayGame.endOfGame(r);
 	}

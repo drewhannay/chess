@@ -162,7 +162,7 @@ public class ObjectiveMaker extends JPanel{
 				}
 				
 				if (wCaptureAll.isSelected()) {
-					whiteRules.addEndOfGame(new EndOfGame("loseAllPieces", true, 0, "",false));
+					whiteRules.addEndOfGame(new EndOfGame("captureAllPieces", true, 0, "",false));
 				}
 				if (wCaptureAllType.isSelected()) {
 					whiteRules.addEndOfGame(new EndOfGame("captureAllOfType", false, 0, "Knight",false)); 
@@ -176,10 +176,11 @@ public class ObjectiveMaker extends JPanel{
 				}
 				if (wCheckTimes.isSelected()) {
 					whiteRules.addEndOfGame(new EndOfGame("checkNTimes", false, 3, "",false)); 
+					needsObj = true;
 				}
 				
 				if (bCaptureAll.isSelected()) {
-					blackRules.addEndOfGame(new EndOfGame("loseAllPieces", true, 0, "",true));
+					blackRules.addEndOfGame(new EndOfGame("captureAllPieces", true, 0, "",true));
 				}
 				if (bCaptureAllType.isSelected()) {
 					blackRules.addEndOfGame(new EndOfGame("captureAllOfType", false, 0, "Knight",true)); 
@@ -193,7 +194,7 @@ public class ObjectiveMaker extends JPanel{
 				}
 				if (bCheckTimes.isSelected()) {
 					blackRules.addEndOfGame(new EndOfGame("checkNTimes", false, 3, "",true));
-					needsObj = false;
+					needsObj = true;
 				}
 				Driver.getInstance().setPanel(new RuleMaker(b, whiteRules, blackRules));
 				}
