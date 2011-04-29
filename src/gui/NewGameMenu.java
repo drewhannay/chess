@@ -346,7 +346,9 @@ public class NewGameMenu extends JPanel {
 						} else {
 							System.out.println ("Compilation failed");
 							System.out.println("Make sure your class implements the AIPlugin interface");
-							System.out.println("Make sure your class imports ai.*;");
+							System.out.println("Make sure your class includes the following imports:");
+							System.out.println("import ai.*;");
+							System.out.println("import ai.AIAdapter.*;");
 							return;
 						}
 						try {
