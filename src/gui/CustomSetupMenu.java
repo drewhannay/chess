@@ -596,38 +596,6 @@ public class CustomSetupMenu extends JPanel {
 
 		ListSelectionModel selectList = piecesList.getSelectionModel();
 		final Color original = bShowPiece.getSquare(1, 1).getColor();
-		selectList.addListSelectionListener(new ListSelectionListener(){
-			@Override
-			public void valueChanged(ListSelectionEvent e) {
-				ListSelectionModel lsm = (ListSelectionModel) e.getSource();
-
-				int selection = lsm.getAnchorSelectionIndex();
-				if (!lsm.getValueIsAdjusting()){
-					if (((String) list.elementAt(selection)).equals("Square Options")){
-						bShowPiece.getSquare(1, 1).setPiece(null);
-						bShowPiece.getSquare(1, 1).setBackgroundColor(original);
-						bShowPiece.getSquare(1, 1).setHabitable(true);
-						bShowPiece.getSquare(1, 1).refresh();
-						jb1.setVisible(true);
-						jb2.setVisible(false);
-					}
-					else{
-						jb2.setVisible(true);
-						jb1.setVisible(true);
-						if (bShowPiece.getSquare(1, 1).isHabitable() == false)
-							bShowPiece.getSquare(1, 1).setHabitable(true);
-						if (bShowPiece.getSquare(1, 1).getColor().equals(original) == false)
-							bShowPiece.getSquare(1, 1).setBackgroundColor(original);	
-						Piece toAdd = PieceBuilder.makePiece((String) list.elementAt(selection), false, bShowPiece.getSquare(1,1), bShowPiece);
-						Piece toAdd1 = PieceBuilder.makePiece((String) list.elementAt(selection), true, bShowPiece.getSquare(1,1), bShowPiece);
-						bShowPiece.getSquare(1, 1).setPiece(toAdd);
-						bShowPiece.getSquare(2, 1).setPiece(toAdd1);
-						bShowPiece.getSquare(1, 1).refresh();
-						bShowPiece.getSquare(2, 1).refresh();
-					}
-				}
-			}
-		});
 
 		JScrollPane scrollPane = new JScrollPane(piecesList);
 		scrollPane.setPreferredSize(new Dimension(200, 200));
@@ -654,7 +622,7 @@ public class CustomSetupMenu extends JPanel {
 			add(grid);//Add the grid to the main JPanel.
 		}
 
-		JButton changePromote = new JButton("Promote This Piece");
+		final JButton changePromote = new JButton("Promote This Piece");
 		changePromote.setToolTipText("Press me to set up promotion for the above selected piece");
 		changePromote.addActionListener(new ActionListener() {
 
@@ -663,7 +631,40 @@ public class CustomSetupMenu extends JPanel {
 			}
 
 		});
+		selectList.addListSelectionListener(new ListSelectionListener(){
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				ListSelectionModel lsm = (ListSelectionModel) e.getSource();
 
+				int selection = lsm.getAnchorSelectionIndex();
+				if (!lsm.getValueIsAdjusting()){
+					if (((String) list.elementAt(selection)).equals("Square Options")){
+						bShowPiece.getSquare(1, 1).setPiece(null);
+						bShowPiece.getSquare(1, 1).setBackgroundColor(original);
+						bShowPiece.getSquare(1, 1).setHabitable(true);
+						bShowPiece.getSquare(1, 1).refresh();
+						jb1.setVisible(true);
+						jb2.setVisible(false);
+						changePromote.setEnabled(false);
+					}
+					else{
+						jb2.setVisible(true);
+						jb1.setVisible(true);
+						changePromote.setEnabled(true);
+						if (bShowPiece.getSquare(1, 1).isHabitable() == false)
+							bShowPiece.getSquare(1, 1).setHabitable(true);
+						if (bShowPiece.getSquare(1, 1).getColor().equals(original) == false)
+							bShowPiece.getSquare(1, 1).setBackgroundColor(original);	
+						Piece toAdd = PieceBuilder.makePiece((String) list.elementAt(selection), false, bShowPiece.getSquare(1,1), bShowPiece);
+						Piece toAdd1 = PieceBuilder.makePiece((String) list.elementAt(selection), true, bShowPiece.getSquare(1,1), bShowPiece);
+						bShowPiece.getSquare(1, 1).setPiece(toAdd);
+						bShowPiece.getSquare(2, 1).setPiece(toAdd1);
+						bShowPiece.getSquare(1, 1).refresh();
+						bShowPiece.getSquare(2, 1).refresh();
+					}
+				}
+			}
+		});
 		GridBagConstraints c = new GridBagConstraints();
 		JPanel pieceHolder = new JPanel();
 		pieceHolder.setLayout(new GridBagLayout());
