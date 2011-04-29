@@ -130,9 +130,11 @@ public class NetworkServer {
 			serverSocket.close();
 			return;
 		}catch(EOFException e){
-			if(g.getHistory().get(g.getHistory().size()-1).getResult()!=null)
+			if(g.getHistory().size() != 0 && g.getHistory().get(g.getHistory().size()-1).getResult()!=null)
 				return;
 			JOptionPane.showMessageDialog(null, "Your opponent closed the game", "Oops!", JOptionPane.ERROR_MESSAGE);
+			g.getBlackTimer().stop();
+			g.getWhiteTimer().stop();
 			Driver.getInstance().revertPanel();
 			serverSocket.close();
 			return;

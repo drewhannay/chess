@@ -350,7 +350,15 @@ public class PlayGame extends JPanel {
 	 */
 	public static void endOfGame(Result r) {
 		PlayNetGame.running = false;
-		PlayNetGame.netMove = g.moveToFakeMove(g.getHistory().get(g.getHistory().size()-1));
+		if(g.getHistory().size() != 0)
+			PlayNetGame.netMove = g.moveToFakeMove(g.getHistory().get(g.getHistory().size()-1));
+		else{
+			JOptionPane.showMessageDialog(null, "No moves were made and the time ran out. Returning to the Main Menu.");
+			Driver.getInstance().revertPanel();
+			Driver.getInstance().gamePlayHelp.setVisible(false);
+			Driver.getInstance().helpMenu.setText("Help");
+			return;
+		}
 		if (isPlayback)
 			return;
 		Object[] options = new String[] { "Save Record of Game", "New Game", "Quit" };
@@ -365,6 +373,8 @@ public class PlayGame extends JPanel {
 					"Saving...", JOptionPane.PLAIN_MESSAGE);
 			getGame().saveGame("completedGames", fileName, getGame().isClassicChess());
 			g.setBlackMove(false);
+			Driver.getInstance().gamePlayHelp.setVisible(false);
+			Driver.getInstance().helpMenu.setText("Help");
 			Driver.getInstance().revertPanel();
 			break;
 		case 2:
@@ -373,6 +383,8 @@ public class PlayGame extends JPanel {
 			break;
 		default:
 			g.setBlackMove(false);
+			Driver.getInstance().gamePlayHelp.setVisible(false);
+			Driver.getInstance().helpMenu.setText("Help");
 			Driver.getInstance().revertPanel();
 		}
 	}

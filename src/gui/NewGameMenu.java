@@ -475,15 +475,22 @@ public class NewGameMenu extends JPanel {
 	public void setupPopup(final boolean isNetwork){
 		clicked = true;
 		final JFrame popup = new JFrame("New Game");
-		popup.setLayout(new FlowLayout());
-		popup.setSize(200, 225); //TODO Figure out if there's a better way to set the size of the window.
+		popup.setLayout(new GridBagLayout());
+		popup.setSize(325, 225); //TODO Figure out if there's a better way to set the size of the window.
 		popup.setResizable(false);
 		popup.setLocationRelativeTo(null);//This line makes the window show up in the center of the user's screen, regardless of resolution.
-
+		GridBagConstraints c = new GridBagConstraints();
+		
 		//Make a JComboBox drop down filled with the names of all the saved game types.
 		final JComboBox dropdown = new JComboBox(Builder.getArray());
-		popup.add(new JLabel("Type: "));
-		popup.add(dropdown);
+		c.gridx = 0;
+		c.gridy = 0;
+		c.anchor = GridBagConstraints.WEST; 
+		popup.add(new JLabel("Type: "), c);
+		c.gridx = 1;
+		c.gridy = 0;
+		c.fill = GridBagConstraints.HORIZONTAL;
+		popup.add(dropdown, c);
 
 		//Create button and add ActionListener
 		final JButton done = new JButton("Start");
@@ -518,12 +525,26 @@ public class NewGameMenu extends JPanel {
 			}
 		});
 
-		popup.add(new JLabel("Timer: "));
-		popup.add(timers);
-		popup.add(totalTimeText);
-		popup.add(totalTime);
-		popup.add(increaseText);
-		popup.add(increase);
+		c.gridx = 0;
+		c.gridy = 1;
+		popup.add(new JLabel("Timer: "), c);
+		c.gridx = 1;
+		c.gridy = 1;
+		c.fill = GridBagConstraints.HORIZONTAL;
+		popup.add(timers, c);
+		c.gridx = 0;
+		c.gridy = 2;
+		popup.add(totalTimeText, c);
+		c.gridx = 1;
+		c.gridy = 2;
+		popup.add(totalTime, c);
+		c.gridx = 0;
+		c.gridy = 3;
+		c.anchor = GridBagConstraints.CENTER; 
+		popup.add(increaseText, c);
+		c.gridx = 1;
+		c.gridy = 3;
+		popup.add(increase, c);
 		popup.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		popup.addWindowListener(new WindowListener(){
 			public void windowActivated(WindowEvent arg0) {}
@@ -648,8 +669,17 @@ public class NewGameMenu extends JPanel {
 				popup.dispose();
 			}
 		});
-		popup.add(back);
-		popup.add(done);
+		
+		JPanel buttons = new JPanel();
+		buttons.setLayout(new FlowLayout());
+		buttons.add(back);
+		buttons.add(done);
+		
+		c.gridx = 0;
+		c.gridy = 4;
+		c.gridwidth = 2;
+		c.fill = GridBagConstraints.HORIZONTAL;
+		popup.add(buttons, c);
 		popup.setVisible(true);
 	}
 
