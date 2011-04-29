@@ -692,6 +692,12 @@ public class Game implements Serializable {
 		}
 	}
 	
+
+	/**
+	 * @param m A fake move
+	 * @return An actual move
+	 * @throws Exception If the move is not legal.
+	 */
 	public Move fakeToRealMove(FakeMove m) throws Exception {
 		Board to = boards[m.boardNum];
 		Board from = ((isBlackMove)?blackRules:whiteRules).getBoard(to);
@@ -699,6 +705,10 @@ public class Game implements Serializable {
 		return new Move(from,from.getSquare(m.originRow, m.originCol),to.getSquare(m.destRow, m.destCol),m.promoName);
 	}
 	
+	/**
+	 * @param m An actual move
+	 * @return A fake move.
+	 */
 	public FakeMove moveToFakeMove(Move m){
 		int boardNum = (m.board == boards[0])?0:1;
 		String promoName = null;

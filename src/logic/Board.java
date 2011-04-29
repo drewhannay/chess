@@ -216,6 +216,7 @@ public class Board implements Serializable {
 	 * Determine if a Move is legal to be executed
 	 * @param m The Move on which to check legality
 	 * @return Whether or not the Move is legal
+	 * @throws Exception Throws if there was an illegal move, or failure to undo.
 	 */
 	public boolean isLegalMove(Move m) throws Exception {
 		if (m == null)

@@ -41,6 +41,7 @@ public class NetLoading extends JPanel{
 	/**
 	 * Constructor.
 	 * Call initComponents to initialize the GUI.
+	 * @param th The thread being passed to be loaded.
 	 */
 	public NetLoading(Thread th) {
 		this.th = th;

@@ -66,6 +66,9 @@ public abstract class ChessTimer implements ActionListener, Serializable {
 	 */
 	protected int direction = 1; // should be 1 or -1 to account for timer
 	// counting up instead. -1 to count up since it gets subtracted.
+	/**
+	 * If the timers have been stopped or not.
+	 */
 	protected static boolean stopTimers;
 	/**
 	 * For Serialization.
@@ -75,6 +78,9 @@ public abstract class ChessTimer implements ActionListener, Serializable {
 	public void actionPerformed(ActionEvent ae) {
 		updateDisplay();
 	}
+	/**
+	 * Will change the stopTimers boolean to true.
+	 */
 	public static void stopTimers(){
 		stopTimers = true;
 	}

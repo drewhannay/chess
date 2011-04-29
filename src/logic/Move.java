@@ -549,6 +549,7 @@ public class Move implements Serializable {
 
 	/**
 	 * Undo the execution of this move
+	 * @throws Exception If the undo doesn't work properly
 	 */
 	public void undo() throws Exception {
 		board.setEnpassantCol(prevEnpassantCol);
@@ -640,6 +641,9 @@ public class Move implements Serializable {
 		return exploded;
 	}
 	
+	/**
+	 * @return returns the piece that will replace the piece being promoted.
+	 */
 	public Piece getPromoPiece(){
 		return promotion;
 	}

@@ -48,6 +48,7 @@ public final class AlgebraicConverter {
 	 * @param s The String of ACN to convert to a Move.
 	 * @param board The Board on which this Move is to be played
 	 * @return The completed Move object
+	 * @throws Exception Creating a new move requires an exception handler
 	 */
 	private static Move algToMove(String s, Board board) throws Exception {
 		Move move = null;
@@ -129,6 +130,7 @@ public final class AlgebraicConverter {
 	 * @param g The Game in which to play the Moves
 	 * @param f The File from which to read in ACN
 	 * @return The Game object with it's history added
+	 * @throws Exception when dealing with files, handle exceptions.
 	 */
 	public static Game convert(Game g, File f) throws Exception{
 		Game game = g;

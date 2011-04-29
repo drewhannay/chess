@@ -85,7 +85,10 @@ public class NewGameMenu extends JPanel {
 	 * The host of the game for playing
 	 */
 	private String host = "";
-
+	/**
+	 * The boolean for whether a user wishes to stay in the program
+	 * but cancel out of the current box.
+	 */
 	public static boolean cancelled = false;
 
 	/**

@@ -52,6 +52,7 @@ public class CustomSetupMenu extends JPanel {
 
 	/**
 	 * Creates a popup box for the Promotion Options.
+	 * @param type The type of piece that can be promoted.
 	 * 
 	 */
 

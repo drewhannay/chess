@@ -218,6 +218,8 @@ public class PlayGame extends JPanel {
 	/**
 	 * @param isPlayback whether PlayGame is in playback mode
 	 * @param file The file holding the ACN of the game move history.
+	 * @throws Exception The exception that has to be there when dealing with files.
+	 * 					 in case of file failure.
 	 */
 	public PlayGame(boolean isPlayback, File file) throws Exception {
 		setGame(Builder.newGame("Classic"));
@@ -244,6 +246,7 @@ public class PlayGame extends JPanel {
 	 * Call initComponents to initialize the GUI.
 	 * @param g The reference to the game being played.
 	 * @param isPlayback whether PlayGame is in play back mode
+	 * @throws Exception Again in case of file failure.
 	 */
 	public PlayGame(Game g, boolean isPlayback) throws Exception{
 		PlayGame.setGame(g);
@@ -507,6 +510,7 @@ public class PlayGame extends JPanel {
 	 * Create all the GUI components, set their specific properties and add them to the 
 	 * window. Also add any necessary ActionListeners.
 	 * @param isPlayback whether PlayGame is in playback mode
+	 * @throws Exception catches game history file failure.
 	 */
 	@SuppressWarnings("static-access")
 	private void initComponents(boolean isPlayback) throws Exception{
@@ -852,6 +856,9 @@ public class PlayGame extends JPanel {
 	public static Game getGame() {
 		return g;
 	}
+	/**
+	 * Resets both timers when called.
+	 */
 	public static void resetTimers(){
 		whiteTimer.reset();
 		blackTimer.reset();

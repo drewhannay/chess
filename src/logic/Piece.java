@@ -806,6 +806,12 @@ public class Piece implements Serializable {
 		return returnSet;
 	}
 
+	/**
+	 * @param destRow The row you wish to move to
+	 * @param destCol The col you wish to move to
+	 * @param direction The direction that space is from you.
+	 * @return Whether you are allowed to take that space and/or the piece on it.
+	 */
 	public boolean canAttack(int destRow, int destCol, char direction){
 		switch(direction){
 		case'S': //South

@@ -86,6 +86,9 @@ public class Result implements Serializable{
 	}
 
 
+	/**
+	 * @return The String text of what should be on the end game popup box.
+	 */
 	public String winText() {
 		switch(choice){
 			case Result.DRAW : return "Draw!";

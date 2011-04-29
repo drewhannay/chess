@@ -45,6 +45,9 @@ public class PlayNetGame extends PlayGame {
 	 */
 	private static boolean isBlack;
 
+	/**
+	 * If the game is running.
+	 */
 	public static boolean running = true;
 	
 	/**
@@ -52,12 +55,16 @@ public class PlayNetGame extends PlayGame {
 	 */
 	public static FakeMove netMove = null;
 	
+	/**
+	 * If one play hits the 'draw' button to end game.
+	 */
 	public boolean drawRequested = false;
 
 	/**
 	 * @param g the game to be played
 	 * @param isPlayback if this is a playback (always false)
 	 * @param isBlack if the player is black
+	 * @throws Exception Needed for dealing with super()
 	 */
 	public PlayNetGame(Game g, boolean isPlayback, boolean isBlack) throws Exception {
 		super(g, isPlayback);
@@ -515,6 +522,9 @@ public class PlayNetGame extends PlayGame {
 		return menu;
 	}
 	
+	/**
+	 * @return The user's choice to send a draw request, 0 or 1
+	 */
 	public int requestDraw(){
 		return JOptionPane.showConfirmDialog(null, "Would you like to send the other player a draw request?", "Draw",
 				 JOptionPane.YES_NO_OPTION);

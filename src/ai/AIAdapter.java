@@ -32,6 +32,9 @@ public class AIAdapter {
 	 */
 	private Game g;
 
+	/**
+	 * The array of boards for reference.
+	 */
 	private AIBoard[] boards;
 
 	/**
@@ -42,10 +45,16 @@ public class AIAdapter {
 		this.g = g;
 	}
 	
+	/**
+	 * @return The game. DUH
+	 */
 	public Game getGame(){
 		return g;
 	}
 
+	/**
+	 * @param ai The AI logical analysis plugin for decision trees
+	 */
 	public void runGame(AIPlugin ai){
 		PlayNetGame.running = true;
 		while(PlayNetGame.running){
@@ -67,6 +76,10 @@ public class AIAdapter {
 	}
 
 
+	/**
+	 * @param m The move that it wishes to try
+	 * @return Whether it moved there or not.
+	 */
 	public boolean playMove(FakeMove m){
 		try{
 			Board b = g.getBoards()[m.boardNum];
@@ -77,6 +90,9 @@ public class AIAdapter {
 		}
 	}
 
+	/**
+	 * @return The array of boards in terms of AIBoard type.
+	 */
 	public synchronized AIBoard[] getBoards(){
 		if(g.isStaleLegalDests()){
 			g.genLegalDests();
@@ -87,6 +103,10 @@ public class AIAdapter {
 		return boards;
 	}
 
+	/**
+	 * @author Drew Hannay
+	 * The AIBoard class. This is the board the AI "sees" and acts upon, similar to networking games.
+	 */
 	public class AIBoard{
 
 		/**
@@ -109,6 +129,9 @@ public class AIAdapter {
 		 */
 		private int maxRow;
 
+		/**
+		 * @param b The AI board for reference to all of its components.
+		 */
 		public AIBoard(Board b) {
 			this.wraparound = b.isWraparound();
 			squares = new AISquare[b.getMaxRow()][b.getMaxCol()];
@@ -131,13 +154,22 @@ public class AIAdapter {
 			}
 		}
 
+		/**
+		 * @return If the board is a wraparound board (if right and left edges connect)
+		 */
 		public boolean isWraparound(){
 			return wraparound;
 		}
 		
+		/**
+		 * @return The max col for the AI Board
+		 */
 		public int maxCol(){
 			return maxCol;
 		}
+		/**
+		 * @return The max row for the AI Board
+		 */
 		public int maxRow(){
 			return maxRow;
 		}
@@ -155,6 +187,10 @@ public class AIAdapter {
 		}
 	}
 
+	/**
+	 * @author Drew Hannay
+	 * The class for AI squares.
+	 */
 	public class AISquare{
 
 		/**
@@ -175,6 +211,13 @@ public class AIAdapter {
 		 */
 		private AIPiece piece;
 
+		/**
+		 * Constructor
+		 * @param row The row number
+		 * @param col The col number
+		 * @param isHabitable If it can hold a piece
+		 * @param piece The piece on it, if there is one.
+		 */
 		public AISquare(int row, int col, boolean isHabitable, AIPiece piece) {
 			this.row = row;
 			this.col = col;
@@ -222,6 +265,10 @@ public class AIAdapter {
 
 	}
 
+	/**
+	 * @author Drew Hannay
+	 * This is the AIPiece class to distinguish between normal and AI pieces.
+	 */
 	public class AIPiece{
 
 		/**
@@ -244,6 +291,10 @@ public class AIAdapter {
 		 */
 		protected List<AISquare> legalDests;
 
+		/**
+		 * @param p The piece we are extracting data from
+		 * @param b The board the AI piece is on
+		 */
 		public AIPiece(Piece p,AIBoard b) {
 			this.name = p.getName();
 			this.isBlack = p.isBlack();
@@ -251,6 +302,10 @@ public class AIAdapter {
 			this.legalDests = transformLegalDests(p.getLegalDests());
 		}
 
+		/**
+		 * @param legalDests The legal destinations of the piece in standard terms
+		 * @return The legal destinations of the piece in terms of AI Squares
+		 */
 		private synchronized List<AISquare> transformLegalDests(List<Square> legalDests){
 			List<AISquare> toReturn = new ArrayList<AISquare>();
 			for(Square s:legalDests)
@@ -259,18 +314,30 @@ public class AIAdapter {
 			return toReturn;
 		}
 
+		/**
+		 * @return Name of piece
+		 */
 		public String getName(){
 			return name;
 		}
 
+		/**
+		 * @return Color of piece
+		 */
 		public boolean isBlack(){
 			return isBlack;
 		}
 
+		/**
+		 * @return Board this piece is on
+		 */
 		public AIBoard getBoard(){
 			return board;
 		}
 
+		/**
+		 * @return Legal destinations for this piece
+		 */
 		public List<AISquare> getLegalDests(){
 			return legalDests;
 		}
