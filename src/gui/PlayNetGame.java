@@ -46,6 +46,9 @@ public class PlayNetGame extends PlayGame {
 	 */
 	private static boolean isBlack;
 	
+	/**
+	 * If the game is an AIGame
+	 */
 	private boolean AIGame;
 
 	/**
@@ -550,6 +553,10 @@ public class PlayNetGame extends PlayGame {
 				 JOptionPane.YES_NO_OPTION);
 	}
 	
+	/**
+	 * Setter method for boolean indicating if the current game is an AIGame.
+	 * @param AIGame If this game is an AIGame
+	 */
 	public void setAIGame(boolean AIGame){
 		this.AIGame = AIGame;
 		Driver.getInstance().fileMenu.setVisible(true);

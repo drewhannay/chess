@@ -55,6 +55,10 @@ public class FakeMove implements Serializable {
 		this.promoName = promoName;
 	}
 	
+	/**
+	 * Getter method for String representation of the FakeMove
+	 * @return String String representation of the FakeMove  
+	 */
 	public String toString(){
 		return boardNum + " " + originRow + " " + originCol + " " + destRow + " " + destCol;
 	}
