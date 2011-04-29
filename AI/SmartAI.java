@@ -1,3 +1,4 @@
+
 import ai.AIPlugin;
 import ai.FakeMove;
 import ai.AIAdapter.AIBoard;

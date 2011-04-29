@@ -1,16 +1,17 @@
 
 import java.util.List;
-
+import ai.*;
+import ai.AIAdapter.*;
 public class AIDemo implements AIPlugin {
 
 	@Override
 	public FakeMove getMove(AIBoard[] boards) {
-		for(int i = 0;i<boards[0].squares.length;i++){
-			for(int j = 0;j<boards[0].squares[i].length;j++){
-				if(boards[0].squares[i][j].getPiece()!=null && boards[0].squares[i][j].getPiece().isBlack()){
-					List<AISquare> legalDests = boards[0].squares[i][j].getPiece().legalDests;
+		for(int i = 1;i<=boards[0].maxRow();i++){
+			for(int j = 1;j<=boards[0].maxCol();j++){
+				if(boards[0].getSquare(i, j).getPiece()!=null && boards[0].getSquare(i, j).getPiece().isBlack()){
+					List<AISquare> legalDests = boards[0].getSquare(i, j).getPiece().getLegalDests();
 					for(AISquare s: legalDests){
-						try{return new FakeMove(0, i+1, j+1, s.getRow(), s.getCol(), "Queen");
+						try{return new FakeMove(0, i, j, s.getRow(), s.getCol(), "Queen");
 						}catch(Exception e){
 							continue;
 						}

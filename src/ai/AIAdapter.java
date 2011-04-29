@@ -99,10 +99,21 @@ public class AIAdapter {
 		 * further relocation.
 		 */
 		private boolean wraparound;
+		
+		/**
+		 * The max column for this AIBoard
+		 */
+		private int maxCol;
+		/**
+		 * The max row for this AIBoard
+		 */
+		private int maxRow;
 
 		public AIBoard(Board b) {
 			this.wraparound = b.isWraparound();
 			squares = new AISquare[b.getMaxRow()][b.getMaxCol()];
+			this.maxCol = b.getMaxCol();
+			this.maxRow = b.getMaxRow();
 			for (int row = 1, col = 1; row <= b.getMaxRow(); row++) {
 				for (col = 1; col <= b.getMaxCol(); col++) {
 					// Initialize the AISquares. 
@@ -122,6 +133,13 @@ public class AIAdapter {
 
 		public boolean isWraparound(){
 			return wraparound;
+		}
+		
+		public int maxCol(){
+			return maxCol;
+		}
+		public int maxRow(){
+			return maxRow;
 		}
 
 		/**
