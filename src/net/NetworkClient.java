@@ -14,6 +14,8 @@ import java.net.SocketException;
 
 import javax.swing.JOptionPane;
 
+import ai.FakeMove;
+
 import logic.Game;
 import logic.Result;
 

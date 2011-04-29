@@ -1,7 +1,6 @@
-package logic;
+package ai;
 
-import logic.AIAdapter.AIBoard;
-import net.FakeMove;
+import ai.AIAdapter.AIBoard;
 
 public interface AIPlugin {
 	

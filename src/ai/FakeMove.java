@@ -1,4 +1,4 @@
-package net;
+package ai;
 
 import java.io.Serializable;
 

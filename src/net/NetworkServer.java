@@ -15,11 +15,13 @@ import java.net.SocketException;
 
 import javax.swing.JOptionPane;
 
+import ai.FakeMove;
+
 import logic.Game;
 import logic.Result;
 
 public class NetworkServer {
-	
+
 	public void host(PlayNetGame png) throws Exception{
 		ServerSocket serverSocket = null;
 		Socket clientSocket = null;
@@ -55,11 +57,11 @@ public class NetworkServer {
 					Thread.sleep(0);
 				fromServer = PlayNetGame.netMove;
 				PlayNetGame.netMove = null;
-	
+
 				out.writeObject(fromServer);
 				out.flush();
 			}
-		
+
 			while(PlayNetGame.running) {
 				while(g.isBlackMove()==true && PlayNetGame.running){
 					fromUser = in.readObject();
@@ -110,7 +112,7 @@ public class NetworkServer {
 
 					fromServer = PlayNetGame.netMove;
 					PlayNetGame.netMove = null;
-					
+
 					if(((FakeMove)fromServer).originCol == -1)
 						png.drawRequested = true;
 
@@ -121,6 +123,7 @@ public class NetworkServer {
 				}
 			}
 		}catch(SocketException e){
+			e.printStackTrace();
 			JOptionPane.showMessageDialog(null, "Your opponent closed the game", "Oops!", JOptionPane.ERROR_MESSAGE);
 			Driver.getInstance().fileMenu.setVisible(true);
 			Driver.getInstance().gameOptions.setVisible(false);
@@ -128,6 +131,7 @@ public class NetworkServer {
 			serverSocket.close();
 			return;
 		}catch(EOFException e){
+			e.printStackTrace();
 			if(g.getHistory().size() != 0 && g.getHistory().get(g.getHistory().size()-1).getResult()!=null)
 				return;
 			JOptionPane.showMessageDialog(null, "Your opponent closed the game", "Oops!", JOptionPane.ERROR_MESSAGE);
@@ -139,9 +143,9 @@ public class NetworkServer {
 			serverSocket.close();
 			return;
 		}catch(Exception e){
-
+			e.printStackTrace();
 		}
-		
+
 		out.close();
 		in.close();
 		clientSocket.close();

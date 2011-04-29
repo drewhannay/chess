@@ -1,10 +1,5 @@
-package logic;
 
 import java.util.List;
-
-import logic.AIAdapter.AIBoard;
-import logic.AIAdapter.AISquare;
-import net.FakeMove;
 
 public class AIDemo implements AIPlugin {
 

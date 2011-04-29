@@ -8,7 +8,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import net.FakeMove;
+import ai.FakeMove;
+
 import rules.Rules;
 import timer.ChessTimer;
 import timer.NoTimer;

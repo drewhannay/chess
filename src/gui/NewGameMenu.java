@@ -31,8 +31,9 @@ import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 import javax.tools.JavaCompiler.CompilationTask;
 
-import logic.AIAdapter;
-import logic.AIPlugin;
+import ai.AIAdapter;
+import ai.AIPlugin;
+
 import logic.Builder;
 import logic.Game;
 import net.NetworkClient;
@@ -344,6 +345,9 @@ public class NewGameMenu extends JPanel {
 							System.out.println ("Compilation was successful");
 						} else {
 							System.out.println ("Compilation failed");
+							System.out.println("Make sure your class implements the AIPlugin interface");
+							System.out.println("Make sure your class imports ai.*;");
+							return;
 						}
 						try {
 							fileManager.close ();
@@ -354,7 +358,7 @@ public class NewGameMenu extends JPanel {
 						final AIAdapter ai = new AIAdapter(toPlay);
 						try {
 							ClassLoader c = ClassLoader.getSystemClassLoader();
-							Class<?> klazz = c.loadClass("logic." + choice.substring(0, choice.indexOf(".java")));
+							Class<?> klazz = c.loadClass(choice.substring(0, choice.indexOf(".java")));
 							Constructor<?> construct = klazz.getConstructor();
 							plugin = (AIPlugin) construct.newInstance();
 

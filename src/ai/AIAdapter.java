@@ -1,11 +1,16 @@
-package logic;
+package ai;
 
 import gui.PlayNetGame;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import net.FakeMove;
+import logic.Board;
+import logic.Game;
+import logic.Move;
+import logic.Piece;
+import logic.Square;
+
 
 /**
  * AIAdapter.java

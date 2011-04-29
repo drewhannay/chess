@@ -20,11 +20,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import ai.FakeMove;
+
 import logic.Board;
 import logic.Game;
 import logic.Move;
 import logic.Square;
-import net.FakeMove;
 import timer.NoTimer;
 
 /**
