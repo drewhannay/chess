@@ -89,11 +89,14 @@ public class CustomSetupMenu extends JPanel {
 		moveLeft.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				int index = piecesList2.getSelectedIndex();
-
-				// Add the element of the right list to the left list.
-				list.addElement(emptyList.elementAt(index));
-				emptyList.remove(index);
+				try{
+					int index = piecesList2.getSelectedIndex();
+	
+					// Add the element of the right list to the left list.
+					list.addElement(emptyList.elementAt(index));
+					emptyList.remove(index);
+				}catch(Exception e){
+				}
 			}
 		});
 		moveLeft.setText("<---");

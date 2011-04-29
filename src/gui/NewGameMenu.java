@@ -272,7 +272,7 @@ public class NewGameMenu extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				final JFrame popped = new JFrame("New Game");
 				popped.setLayout(new GridBagLayout());
-				popped.setSize(170, 150); 
+				popped.setSize(225, 150); 
 				popped.setResizable(false);
 				popped.setLocationRelativeTo(null);
 				GridBagConstraints c = new GridBagConstraints();
