@@ -391,6 +391,7 @@ public class PlayGame extends JPanel {
 		default:
 			g.setBlackMove(false);
 			Driver.getInstance().gamePlayHelp.setVisible(false);
+			Driver.getInstance().fileMenu.setVisible(true);
 			Driver.getInstance().helpMenu.setText("Help");
 			Driver.getInstance().revertPanel();
 		}
