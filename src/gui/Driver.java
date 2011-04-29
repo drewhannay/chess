@@ -202,7 +202,8 @@ final public class Driver extends JFrame {
 					//Sets the help menu info to be specific for game play
 					helpMenu.setText("Game Help");
 					gamePlayHelp.setVisible(true);
-					gameOptions.setVisible(true);
+					if(gameOptions!=null)
+						gameOptions.setVisible(true);
 					
 					//Changes panels
 					remove(mainPanel);
@@ -210,7 +211,7 @@ final public class Driver extends JFrame {
 					add(otherPanel);
 					pack();
 				}catch(Exception e){
-					//Empty directory?
+					e.printStackTrace();
 					JOptionPane.showMessageDialog(null, "There is no saved game. Start a New Game instead.", 
 							"No Saved Game", JOptionPane.ERROR_MESSAGE);
 				}

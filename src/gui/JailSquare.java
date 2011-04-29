@@ -71,6 +71,7 @@ public class JailSquare implements Serializable {
 	 * Refresh the GUI's view of this Square with the current accurate information.
 	 */
 	public void refresh() {
+		if(jb!=null){
 		jb.setContentAreaFilled(false);
 		jb.setOpaque(true);
 		if (piece != null) {//If there's a Piece here
@@ -86,6 +87,7 @@ public class JailSquare implements Serializable {
 			jb.setText("");
 		}
 		resetColor();//Then reset the color too.
+		}
 	}
 
 	/**

@@ -82,8 +82,10 @@ public class RuleMaker extends JPanel {
 		final JPanel legalDestWhiteCheckBox = new JPanel();
 		legalDestWhiteCheckBox.setLayout(new GridLayout(2, 1));
 		final JCheckBox wCaptureMand = new JCheckBox("Capture Mandatory");
+		wCaptureMand.setToolTipText("Capturing moves must be performed");
 		legalDestWhiteCheckBox.add(wCaptureMand);
 		final JCheckBox wNoMoveObj = new JCheckBox("Can't Move Objective");
+		wNoMoveObj.setToolTipText("Moving the objective piece is illegal");
 		if(whiteRules.theEndIsNigh().equals("classic") || whiteRules.theEndIsNigh().equals("checkNTimes")){
 			legalDestWhiteCheckBox.add(wNoMoveObj);
 		}
@@ -92,24 +94,30 @@ public class RuleMaker extends JPanel {
 		final JPanel afterCaptureWhiteCheckBox = new JPanel();
 		afterCaptureWhiteCheckBox.setLayout(new GridLayout(4, 1));
 		final JCheckBox wChangeColor = new JCheckBox("Capturer changes Color");
+		wChangeColor.setToolTipText("The capturing piece changes color after performing a capture");
 			if(!whiteRules.theEndIsNigh().equals("classic")){
 				afterCaptureWhiteCheckBox.add(wChangeColor);
 			}
 			final JCheckBox wPieceReturn = new JCheckBox("Captured piece returns to start");
+			wPieceReturn.setToolTipText("Captured pieces return to their starting squares");
 			afterCaptureWhiteCheckBox.add(wPieceReturn);
 			final JCheckBox wDrop = new JCheckBox("Captured Pieces Drop");
+			wDrop.setToolTipText("Captured pieces are placed in any open square on the board by the capturer");
 			if(!whiteRules.theEndIsNigh().equals("captureAllOfType") || !whiteRules.theEndIsNigh().equals("loseAllPieces")){
 				afterCaptureWhiteCheckBox.add(wDrop);
 			}
 			final JCheckBox wCapturedColorAndDrop = new JCheckBox("Captured Piece Changes Color and Drops");
+			wCapturedColorAndDrop.setToolTipText("Captured pieces change teams and are placed in any open square on the board by the capturer");
 			afterCaptureWhiteCheckBox.add(wCapturedColorAndDrop);
 		
 		//Legal Destination Rules for Black
 		final JPanel legalDestBlackCheckBox = new JPanel();
 		legalDestBlackCheckBox.setLayout(new GridLayout(2, 1));
 			final JCheckBox bCaptureMand = new JCheckBox("Capture Mandatory");
+			bCaptureMand.setToolTipText("Capturing moves must be performed");
 			legalDestBlackCheckBox.add(bCaptureMand);
 			final JCheckBox bNoMoveObj = new JCheckBox("Can't Move Objective");
+			bNoMoveObj.setToolTipText("Moving the objective piece is illegal");
 			if(blackRules.theEndIsNigh().equals("classic") || blackRules.theEndIsNigh().equals("checkNTimes")){
 				legalDestBlackCheckBox.add(bNoMoveObj);
 			}
@@ -118,24 +126,30 @@ public class RuleMaker extends JPanel {
 		final JPanel afterCapturepBlackCheckBox = new JPanel();
 		afterCapturepBlackCheckBox.setLayout(new GridLayout(4, 1));
 		final JCheckBox bChangeColor = new JCheckBox("Capturer changes Color");
+		bChangeColor.setToolTipText("The capturing piece changes color after performing a capture");
 			if(!blackRules.theEndIsNigh().equals("classic")){
 				afterCapturepBlackCheckBox.add(bChangeColor);
 			}
 			final JCheckBox bPieceReturn = new JCheckBox("Captured piece returns to start");
+			bPieceReturn.setToolTipText("Captured pieces return to their starting squares");
 			afterCapturepBlackCheckBox.add(bPieceReturn);
 			final JCheckBox bDrop = new JCheckBox("Captured Pieces Drop");
+			bDrop.setToolTipText("Captured pieces are placed in any open square on the board by the capturer");
 			if(!blackRules.theEndIsNigh().equals("captureAllOfType") || !blackRules.theEndIsNigh().equals("loseAllPieces")){
 				afterCapturepBlackCheckBox.add(bDrop);
 			}
 			final JCheckBox bCapturedColorAndDrop = new JCheckBox("Captured Piece Changes Color and Drops");
+			bCapturedColorAndDrop.setToolTipText("Captured pieces change teams and are placed in any open square on the board by the capturer");
 			afterCapturepBlackCheckBox.add(bCapturedColorAndDrop);
 
 		//Special overall rules
 		final JPanel sCheckBox = new JPanel();
 		sCheckBox.setLayout(new GridLayout(2, 1));
 			final JCheckBox atomic = new JCheckBox("Atomic Chess");
+			atomic.setToolTipText("Capture removes from play both capturer and the captured piece,\nas well as the pieces in the 8 surrounding squares (except for pawns)");
 			sCheckBox.add(atomic);
 			final JCheckBox switchBoard = new JCheckBox("Move to other board");
+			switchBoard.setToolTipText("Each piece moves to the opposite board every time it moves.");
 			switchBoard.setEnabled(false);
 			sCheckBox.add(switchBoard);
 
