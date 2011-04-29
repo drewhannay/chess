@@ -95,10 +95,30 @@ public class Promote implements Serializable {
 	 * @return The promoted Piece.
 	 */
 	public Piece classicPromotion(Piece p, boolean verified, String promo) {
-		lastPromoted = p.getName();
-		klazz = p.getName();
+		System.out.println(verified);
+		if(!verified){
+			lastPromoted = p.getName();
+			klazz = p.getName();
+		}
+		if(verified&&promo!=null&&!promo.equals(p.getName())){
+			System.out.println("PROMO: " + promo + " " + p.getName());
+			try {
+
+				Piece promoted = PieceBuilder.makePiece(promo,p.isBlack(), p.getSquare(), p.getBoard());
+				if (promoted.isBlack()) {
+					g.getBlackTeam().set(g.getBlackTeam().indexOf(p), promoted);
+				} else {
+					g.getWhiteTeam().set(g.getWhiteTeam().indexOf(p), promoted);
+				}
+				promoted.getLegalDests().clear();
+				promoted.setMoveCount(p.getMoveCount());
+				return promoted;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 		System.out.println("Top: " + klazz);
-		if(p.getPromotesTo()==null||p.getPromotesTo().size()==0) return p;
+		if(!verified&&(p.getPromotesTo()==null||p.getPromotesTo().size()==0)) return p;
 		if (!verified && promo == null&&g.isBlackMove()==p.isBlack()) {
 			klazz = "";
 			if(p.getPromotesTo().size()==1)

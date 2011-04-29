@@ -158,7 +158,7 @@ public class Piece implements Serializable {
 			Square dest;
 			while (perlimMoves.hasNext()) {
 				dest = perlimMoves.next();
-
+				
 				if (!board.getGame().isThreatened(dest, !isBlack()) && !board.getGame().isGuarded(dest, !isBlack())) {
 					addLegalDest(dest);
 				}
@@ -655,7 +655,7 @@ public class Piece implements Serializable {
 		if (captured)
 			return;
 
-		setLegalDests(new ArrayList<Square>(3));
+		setLegalDests(new ArrayList<Square>());
 
 		while (oldLegalDests.hasNext()) {
 			sq = oldLegalDests.next();
@@ -924,6 +924,7 @@ public class Piece implements Serializable {
 
 			if (threatened.getCol() == curSquare.getCol())
 				return false;
+			
 			else
 				return (isLegalDest(threatened) || (threatened.getRow() - curSquare.getRow() == ((isBlack()) ? -1 : 1) && Math
 						.abs(threatened.getCol() - curSquare.getCol()) == 1));
