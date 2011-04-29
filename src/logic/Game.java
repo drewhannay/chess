@@ -597,7 +597,6 @@ public class Game implements Serializable {
 				f_out.close();
 			}
 		} catch (Exception e) {
-			System.out.println(e.toString());
 		}
 	}
 
@@ -701,7 +700,6 @@ public class Game implements Serializable {
 	public Move fakeToRealMove(FakeMove m) throws Exception {
 		Board to = boards[m.boardNum];
 		Board from = ((isBlackMove)?blackRules:whiteRules).getBoard(to);
-		System.out.println(m.boardNum);
 		return new Move(from,from.getSquare(m.originRow, m.originCol),to.getSquare(m.destRow, m.destCol),m.promoName);
 	}
 	
@@ -713,7 +711,6 @@ public class Game implements Serializable {
 		int boardNum = (m.board == boards[0])?0:1;
 		String promoName = null;
 		if(history.get(history.size()-1).getPromoPiece()!=null){
-			System.out.println("here");
 			promoName = history.get(history.size()-1).getPromoPiece().getName();
 		}
 		return new FakeMove(boardNum, m.origin.getRow(), m.origin.getCol(), m.getDest().getRow(), m.getDest().getCol(),promoName);

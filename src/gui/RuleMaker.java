@@ -313,7 +313,7 @@ public class RuleMaker extends JPanel {
 							JOptionPane.showMessageDialog(null, "Please enter a number greater than 1 into the Number of Checks box.");
 							return;
 						}
-						whiteRules.addEndOfGame(new EndOfGame("checkNTimes", false, answer, "",false));
+						whiteRules.addEndOfGame(new EndOfGame("checkNTimes", answer, "",false));
 					}catch(Exception ne){
 						JOptionPane.showMessageDialog(null, "Please enter a number into the Number of Checks box.");
 						return;
@@ -321,11 +321,11 @@ public class RuleMaker extends JPanel {
 				}
 				else if(wPiecesList.isVisible()){
 					if(whiteRules.theEndIsNigh().equals("classic")){
-						whiteRules.addEndOfGame(new EndOfGame("classic", false, 0, "",false));
+						whiteRules.addEndOfGame(new EndOfGame("classic",  0, "",false));
 						whiteRules.setObjectivePiece(new ObjectivePiece("custom objective", wPiecesList.getSelectedItem().toString()));
 					}
 					else{
-						whiteRules.addEndOfGame(new EndOfGame("captureAllOfType", false, 0, wPiecesList.getSelectedItem().toString(),false));
+						whiteRules.addEndOfGame(new EndOfGame("captureAllOfType",  0, wPiecesList.getSelectedItem().toString(),false));
 					}
 				}
 				if(bNumChecks.isVisible()){
@@ -336,7 +336,7 @@ public class RuleMaker extends JPanel {
 							JOptionPane.showMessageDialog(null, "Please enter a number greater than 1 into the Number of Checks box.");
 							return;
 						}
-						blackRules.addEndOfGame(new EndOfGame("checkNTimes", false, answer, "",true));
+						blackRules.addEndOfGame(new EndOfGame("checkNTimes",  answer, "",true));
 					}catch(Exception ne){
 						JOptionPane.showMessageDialog(null, "Please enter a number into the Number of Checks box.");
 						return;
@@ -345,11 +345,11 @@ public class RuleMaker extends JPanel {
 				else if(bPiecesList.isVisible()){
 					bPiecesList.getSelectedItem();
 					if(blackRules.theEndIsNigh().equals("classic")){
-						blackRules.addEndOfGame(new EndOfGame("classic", false, 0, "",true));
+						blackRules.addEndOfGame(new EndOfGame("classic",  0, "",true));
 						blackRules.setObjectivePiece(new ObjectivePiece("custom objective", bPiecesList.getSelectedItem().toString()));
 					}
 					else{
-						blackRules.addEndOfGame(new EndOfGame("captureAllOfType", false, 0, bPiecesList.getSelectedItem().toString(),true));
+						blackRules.addEndOfGame(new EndOfGame("captureAllOfType",  0, bPiecesList.getSelectedItem().toString(),true));
 					}
 				}
 				

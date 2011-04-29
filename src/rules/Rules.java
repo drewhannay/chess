@@ -1,7 +1,6 @@
 package rules;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import logic.Board;
@@ -75,11 +74,12 @@ public class Rules implements Serializable {
 
 	/**
 	 * @param isClassic Whether the game is classic chess.
+	 * @param isBlack is this for the black or white player?
 	 */
 	public Rules(boolean isClassic,boolean isBlack) {
 		//Initialize everything to classic to ensure nothing can be null.
 		nextTurn = new NextTurn("classic", 1, 1, 0);
-		endOfGame = new EndOfGame("classic", false, 3, "Queen",isBlack);
+		endOfGame = new EndOfGame("classic", 3, "Queen",isBlack);
 		cropLegalDests = new CropLegalDests();
 		cropLegalDests.addMethod("classic");
 		objectivePiece = new ObjectivePiece("classic", ""); //TODO error handling, in GUI
@@ -322,13 +322,17 @@ public class Rules implements Serializable {
 		return promote.undo(p);
 	}
 	
+	/**
+	 * Get the name of the objective piece
+	 * @return the name of the objective piece
+	 */
 	public String getObjectiveName(){
 		return objectivePiece.getObjectiveName();
 	}
 
 	/**
 	 * May these rules be played across a networked connection?
-	 * @return
+	 * @return can this game be played across a network?
 	 */
 	public boolean networkable() {
 		List<String> afterMoves = afterMove.getMethods();

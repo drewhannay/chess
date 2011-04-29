@@ -58,6 +58,10 @@ public class Promote implements Serializable {
 	 * What the piece was promoted from
 	 */
 	private static String lastPromoted;
+	/**
+	 * Used to allow promotion to work properly when loading
+	 * a saved game.
+	 */
 	private String resetLastPromoted;
 	/**
 	 * What it was promoted to.

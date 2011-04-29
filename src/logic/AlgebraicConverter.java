@@ -199,7 +199,6 @@ public final class AlgebraicConverter {
 			}
 			out.close();
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
 			e.printStackTrace();
 		}
 	}

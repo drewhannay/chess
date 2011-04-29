@@ -82,6 +82,10 @@ public class AfterMove implements Serializable {
 		}
 	}
 
+	/**
+	 * Getter for names
+	 * @return Return the names of the methods set.
+	 */
 	public List<String> getMethods(){
 		return names;
 	}

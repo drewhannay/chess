@@ -269,7 +269,6 @@ final public class Driver extends JFrame {
 					add(otherPanel);
 					pack();
 					}catch (Exception e) {
-						System.out.println(e.getMessage());
 						e.printStackTrace();
 						JOptionPane.showMessageDialog(null,
 								"Either there are no completed games or the game file is missing.",

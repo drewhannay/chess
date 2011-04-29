@@ -40,12 +40,6 @@ public class EndOfGame implements Serializable {
 	 */
 	private Move m;
 	/**
-	 * Whether or not black is to lose pieces;
-	 * used so we can implement loseAllPieces and
-	 * captureAllPieces in the same method.
-	 */
-	private boolean blackLosesPieces;
-	/**
 	 * The number of times the opponent has been placed in check.
 	 */
 	private int checks;
@@ -103,15 +97,14 @@ public class EndOfGame implements Serializable {
 	/**
 	 * Create a new EndOfGame object
 	 * @param name The name of the method
-	 * @param blackLosesPieces Set the instance variable
 	 * @param maxChecks Set the instance variable
 	 * @param type Set the instance variable.
+	 * @param isBlack Is this for the black or white team?
 	 */
-	public EndOfGame(String name, boolean blackLosesPieces, int maxChecks, String type,boolean isBlack) {
+	public EndOfGame(String name, int maxChecks, String type,boolean isBlack) {
 		doMethod = doMethods.get(name);
 		undoMethod = undoMethods.get(name);
 		this.name = name;
-		this.blackLosesPieces = blackLosesPieces;
 		this.maxChecks = maxChecks;
 		this.type = type;
 		this.isBlack = isBlack;
@@ -281,10 +274,17 @@ public class EndOfGame implements Serializable {
 		}
 	}
 
+	/**
+	 * Getter for the method name
+	 * @return The method being used
+	 */
 	public String getName(){
 		return this.name;
 	}
-	
+	/**
+	 * The type to capture all of, if any.
+	 * @return The string representation of the type.
+	 */
 	public String getType(){
 		return this.type;
 	}

@@ -298,7 +298,6 @@ public class Builder implements Serializable {
 			out.close();
 			f_out.close();
 		} catch (Exception e) {
-			System.out.println(e.toString());
 		}
 	}
 

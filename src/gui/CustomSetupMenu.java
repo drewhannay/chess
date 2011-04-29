@@ -289,7 +289,7 @@ public class CustomSetupMenu extends JPanel {
 	}
 
 	/**
-	 * @author 
+	 * 
 	 *
 	 */
 	class SetUpListener implements ActionListener {
@@ -303,7 +303,6 @@ public class CustomSetupMenu extends JPanel {
 		 * Constructor
 		 * Set instance variables to passed parameters
 		 * @param square The square we are setting up.
-		 * @param board The board on which the square resides.
 		 */
 		public SetUpListener(Square square) {
 			this.square = square;
@@ -419,7 +418,7 @@ public class CustomSetupMenu extends JPanel {
 	}
 
 	/**
-	 * @author 
+	 * 
 	 *
 	 */
 	class SetUpMouseListener implements MouseListener{
@@ -436,9 +435,9 @@ public class CustomSetupMenu extends JPanel {
 		 */
 		private Board board;
 		/**
-		 * @param square
-		 * @param board
-		 * @param option
+		 * @param square The square this is attached to
+		 * @param board The current board
+		 * @param option The square holder for the piece
 		 */
 		public SetUpMouseListener(Square square, Board board, Square option){
 			this.square = square;
@@ -466,7 +465,8 @@ public class CustomSetupMenu extends JPanel {
 		}
 
 		/**
-		 * @param isBlack
+		 * Place the piece on the board.
+		 * @param isBlack Is this piece black?
 		 */
 		private void setPieceOnBoard(boolean isBlack){
 			if (!option.isOccupied()){
@@ -546,8 +546,6 @@ public class CustomSetupMenu extends JPanel {
 	 * Initialize components of the GUI
 	 * Create all the GUI components, set their specific properties and add them to the 
 	 * window. Also add any necessary ActionListeners.
-	 * @param whiteRules the rules for white team.
-	 * @param blackRules the rules for black team.
 	 */
 	private void initComponents() {
 

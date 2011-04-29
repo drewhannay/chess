@@ -145,6 +145,10 @@ public class ObjectivePiece implements Serializable {
 		this.g = g;
 	}
 	
+	/**
+	 * Getter for objective name
+	 * @return The name of the objective.
+	 */
 	public String getObjectiveName(){
 		return objectiveName;
 	}
