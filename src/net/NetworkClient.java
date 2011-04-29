@@ -33,7 +33,7 @@ public class NetworkClient {
 
 		ObjectOutputStream out = null;
 		ObjectInputStream in = null;
-
+		socket = null;
 		while(socket == null){
 			try{
 				socket = new Socket(host, 27335);
