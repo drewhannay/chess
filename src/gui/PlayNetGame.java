@@ -560,6 +560,7 @@ public class PlayNetGame extends PlayGame {
 	public void setAIGame(boolean AIGame){
 		this.AIGame = AIGame;
 		Driver.getInstance().fileMenu.setVisible(true);
+		drawItem.setText("Declare Draw");
 	}
 	
 }

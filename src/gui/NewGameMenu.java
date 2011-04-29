@@ -342,14 +342,12 @@ public class NewGameMenu extends JPanel {
 						CompilationTask task = compiler.getTask(null,fileManager, null, compilationOptions, null, compilationUnits);
 
 						boolean result = task.call();
-						if (result) {
-							System.out.println ("Compilation was successful");
-						} else {
-							System.out.println ("Compilation failed");
-							System.out.println("Make sure your class implements the AIPlugin interface");
-							System.out.println("Make sure your class includes the following imports:");
-							System.out.println("import ai.*;");
-							System.out.println("import ai.AIAdapter.*;");
+						if (!result) {
+							JOptionPane.showMessageDialog(null, "Compilation failed\n" +
+							"Make sure your class implements the AIPlugin interface\n" +
+							"Make sure your class includes the following imports:\n" +
+							"import ai.*;\n" +
+							"import ai.AIAdapter.*;\n");
 							return;
 						}
 						try {
@@ -389,7 +387,6 @@ public class NewGameMenu extends JPanel {
 							png.setAIGame(true);
 							Driver.getInstance().setPanel(png);
 						} catch (Exception e) {
-							//TODO do somethign here. preferable really cool
 							return;
 						}
 						popped.dispose();
@@ -483,7 +480,7 @@ public class NewGameMenu extends JPanel {
 		clicked = true;
 		final JFrame popup = new JFrame("New Game");
 		popup.setLayout(new GridBagLayout());
-		popup.setSize(325, 225); //TODO Figure out if there's a better way to set the size of the window.
+		popup.setSize(325, 225);
 		popup.setResizable(false);
 		popup.setLocationRelativeTo(null);//This line makes the window show up in the center of the user's screen, regardless of resolution.
 		GridBagConstraints c = new GridBagConstraints();
@@ -593,7 +590,6 @@ public class NewGameMenu extends JPanel {
 				long increment = Integer.parseInt(increase.getText()) * 1000;
 				ChessTimer blackTimer = null;
 				ChessTimer whiteTimer = null;
-				//TODO something else here - possibly reflection? Make this better.
 				if (timerName.equals("No timer")) {
 					blackTimer = new NoTimer();
 					whiteTimer = new NoTimer();
@@ -633,7 +629,6 @@ public class NewGameMenu extends JPanel {
 						try {
 							game = new PlayNetGame(toPlay, false, true);
 						} catch (Exception e) {
-							//TODO do somethign here. preferable really cool
 							return;						
 						}
 					}
@@ -641,7 +636,6 @@ public class NewGameMenu extends JPanel {
 						try {
 							game = new PlayNetGame(toPlay, false, false);
 						} catch (Exception e) {
-							//TODO do somethign here. preferable really cool
 							return;
 						}
 					}
@@ -672,7 +666,6 @@ public class NewGameMenu extends JPanel {
 					try {
 						game = new PlayGame(toPlay, false);
 					} catch (Exception e) {
-						//TODO do somethign here. preferable really cool
 						return;
 					}
 					Driver.getInstance().setPanel(game);

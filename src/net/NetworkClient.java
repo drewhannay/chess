@@ -19,8 +19,18 @@ import ai.FakeMove;
 import logic.Game;
 import logic.Result;
 
+/**
+ * 
+ * Class to create the network client
+ * @author Drew Hannay & Andrew Wolfe & John McCormick
+ *
+ */
 public class NetworkClient {
-	
+	/**
+	 * Method to allow the client to join the host
+	 * @param host the computer being joined to
+	 * @throws Exception throws an end of file or socket exception
+	 */
 	public void join(String host) throws Exception{
 
 		Socket socket = null;

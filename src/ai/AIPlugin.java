@@ -12,6 +12,7 @@ import ai.AIAdapter.AIBoard;
  * @author Drew Hannay
  *
  */
+@SuppressWarnings("unused")
 public interface AIPlugin {
 	
 	/**

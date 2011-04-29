@@ -482,6 +482,9 @@ final public class Driver extends JFrame {
 		setVisible(true);
 	}
 
+	/**
+	 * Sets up a new game and clears out any old game being played
+	 */
 	public void newGame() {
 		
 		variantHelp.setVisible(false); //Makes sure that the appropriate help menus are displayed

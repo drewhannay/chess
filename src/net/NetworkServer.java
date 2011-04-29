@@ -19,9 +19,18 @@ import ai.FakeMove;
 
 import logic.Game;
 import logic.Result;
-
+/**
+ * 
+ * Class to create the network host
+ * @author Drew Hannay & Andrew Wolfe & John McCormick
+ *
+ */
 public class NetworkServer {
-
+	/**
+	 * Method to create the host to wait for a client and to set up the new game
+	 * @param png the game that is going to be played
+	 * @throws Exception socket or end of file exception
+	 */
 	public void host(PlayNetGame png) throws Exception{
 		ServerSocket serverSocket = null;
 		Socket clientSocket = null;

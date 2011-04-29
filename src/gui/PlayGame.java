@@ -355,7 +355,7 @@ public class PlayGame extends JPanel {
 		PlayNetGame.running = false;
 		if(g.getHistory().size() != 0)
 			PlayNetGame.netMove = g.moveToFakeMove(g.getHistory().get(g.getHistory().size()-1));
-		else{
+		else if(!r.isDraw()){
 			JOptionPane.showMessageDialog(null, "No moves were made and the time ran out. Returning to the Main Menu.");
 			PlayNetGame.running = false;
 			Driver.getInstance().revertPanel();
