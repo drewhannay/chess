@@ -1,8 +1,10 @@
 package ai;
 
+import gui.PlayGame;
+import logic.Result;
 import ai.AIAdapter.AIBoard;
 
 public interface AIPlugin {
 	
-	public FakeMove getMove(AIBoard[] boards);
+	public abstract FakeMove getMove(AIBoard[] boards);
 }

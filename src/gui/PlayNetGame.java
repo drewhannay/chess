@@ -25,6 +25,7 @@ import ai.FakeMove;
 import logic.Board;
 import logic.Game;
 import logic.Move;
+import logic.Result;
 import logic.Square;
 import timer.NoTimer;
 
@@ -44,6 +45,8 @@ public class PlayNetGame extends PlayGame {
 	 * If the player is black
 	 */
 	private static boolean isBlack;
+	
+	private boolean AIGame;
 
 	/**
 	 * If the game is running.
@@ -508,10 +511,20 @@ public class PlayNetGame extends PlayGame {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					if(getGame().isBlackMove() == isBlack){
+						if(AIGame){
+						int surrender = requestAIDraw();
+						if(surrender != 0)
+							return;
+						Result result = new Result(Result.DRAW);
+						result.setText("You have declared a draw. What would you like to do?");
+						PlayGame.endOfGame(result);}
+						else{
 						int surrender = requestDraw();
+
 						if(surrender != 0)
 							return;
 						netMove = new FakeMove(-1, -1, -1, -1, -1, null); //Send move indicating surrender request.
+						}
 					}
 				}
 			});
@@ -528,6 +541,18 @@ public class PlayNetGame extends PlayGame {
 	public int requestDraw(){
 		return JOptionPane.showConfirmDialog(null, "Would you like to send the other player a draw request?", "Draw",
 				 JOptionPane.YES_NO_OPTION);
+	}
+	/**
+	 * @return The user's choice to request a draw vs an AI player.
+	 */
+	public int requestAIDraw(){
+		return JOptionPane.showConfirmDialog(null, "Are you sure you would like to declare a draw?", "Draw",
+				 JOptionPane.YES_NO_OPTION);
+	}
+	
+	public void setAIGame(boolean AIGame){
+		this.AIGame = AIGame;
+		Driver.getInstance().fileMenu.setVisible(true);
 	}
 	
 }

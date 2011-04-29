@@ -385,7 +385,9 @@ public class NewGameMenu extends JPanel {
 
 						//System.out.println(toPlay.equals(ai.getGame()));
 						try {
-							Driver.getInstance().setPanel(new PlayNetGame(toPlay, false, false));
+							PlayNetGame png = new PlayNetGame(toPlay, false, false);
+							png.setAIGame(true);
+							Driver.getInstance().setPanel(png);
 						} catch (Exception e) {
 							//TODO do somethign here. preferable really cool
 							return;
