@@ -378,7 +378,7 @@ public class NewGameMenu extends JPanel {
 							e1.printStackTrace();
 						}
 
-						System.out.println(toPlay.equals(ai.getGame()));
+						//System.out.println(toPlay.equals(ai.getGame()));
 						try {
 							Driver.getInstance().setPanel(new PlayNetGame(toPlay, false, false));
 						} catch (Exception e) {

@@ -26,6 +26,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
+
+import timer.ChessTimer;
 import logic.Game;
 
 /**
@@ -399,6 +401,7 @@ final public class Driver extends JFrame {
 				variantHelp.setVisible(false); //Makes sure that the appropriate help menus are displayed
 				helpMenu.setText("Game Help");
 				gamePlayHelp.setVisible(true);
+				
 				if(PlayGame.menu != null)
 					PlayGame.menu.setVisible(false);
 				//Resets the panels being displayed to only contain the new game
@@ -406,6 +409,7 @@ final public class Driver extends JFrame {
 				if(mainPanel != null) remove(mainPanel);
 				otherPanel = new NewGameMenu();
 				add(otherPanel);
+				ChessTimer.stopTimers();
 				gamePlayHelp.setVisible(true);
 				pack();
 			}
@@ -429,6 +433,7 @@ final public class Driver extends JFrame {
 					gameOptions.setVisible(false);
 				if(otherPanel != null)
 					remove(otherPanel);
+				ChessTimer.stopTimers();
 				add(mainPanel);
 				pack();
 			}

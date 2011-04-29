@@ -10,7 +10,6 @@ import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.swing.JOptionPane;
 
 /**
  * AlgebraicConverter.java Class to convert Move objects to Algebraic Chess
