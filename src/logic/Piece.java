@@ -154,7 +154,7 @@ public class Piece implements Serializable {
 
 			setLegalDests(new ArrayList<Square>());
 
-			//Make sure the you don't move into check
+//			Make sure the you don't move into check
 			Square dest;
 			while (perlimMoves.hasNext()) {
 				dest = perlimMoves.next();
