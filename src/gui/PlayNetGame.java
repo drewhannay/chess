@@ -212,6 +212,8 @@ public class PlayNetGame extends PlayGame {
 		super.removeAll();
 		menu.setVisible(false);
 
+		Driver.getInstance().fileMenu.setVisible(false);
+		
 		// Has spaces to hax0r fix centering.
 		inCheck = new JLabel("You're In Check!");
 		inCheck.setHorizontalTextPosition(inCheck.CENTER);

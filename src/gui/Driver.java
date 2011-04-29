@@ -99,6 +99,10 @@ final public class Driver extends JFrame {
 	 * Menu to hold the options created in playGame for saving and such in game.
 	 */
 	public JMenu gameOptions;
+	/**
+	 * Menu item for the File options
+	 */
+	public JMenu fileMenu;
 
 	/**
 	 * Initiate the program by creating a new Driver.
@@ -294,7 +298,7 @@ final public class Driver extends JFrame {
 
 		//Create MenuBar and add MenuItems
 		menuBar = new JMenuBar();
-		JMenu fileMenu = new JMenu("File");
+		fileMenu = new JMenu("File");
 		fileMenu.setForeground(Color.WHITE);
 		fileMenu.setMnemonic('F');
 

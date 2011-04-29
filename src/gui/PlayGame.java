@@ -362,6 +362,7 @@ public class PlayGame extends JPanel {
 			Driver.getInstance().revertPanel();
 			Driver.getInstance().gamePlayHelp.setVisible(false);
 			Driver.getInstance().helpMenu.setText("Help");
+			Driver.getInstance().fileMenu.setVisible(true);
 			return;
 		}
 		if (isPlayback)
@@ -380,6 +381,7 @@ public class PlayGame extends JPanel {
 			g.setBlackMove(false);
 			Driver.getInstance().gamePlayHelp.setVisible(false);
 			Driver.getInstance().helpMenu.setText("Help");
+			Driver.getInstance().fileMenu.setVisible(true);
 			Driver.getInstance().revertPanel();
 			break;
 		case 2:

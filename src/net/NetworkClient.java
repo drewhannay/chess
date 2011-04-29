@@ -118,6 +118,8 @@ public class NetworkClient {
 			}
 		}catch(SocketException e){
 			JOptionPane.showMessageDialog(null, "Your opponent closed the game", "Oops!", JOptionPane.ERROR_MESSAGE);
+			Driver.getInstance().fileMenu.setVisible(true);
+			Driver.getInstance().gameOptions.setVisible(false);
 			Driver.getInstance().revertPanel();
 			return;
 		}catch(EOFException e){
@@ -126,6 +128,8 @@ public class NetworkClient {
 			JOptionPane.showMessageDialog(null, "Your opponent closed the game", "Oops!", JOptionPane.ERROR_MESSAGE);
 			g.getBlackTimer().stop();
 			g.getWhiteTimer().stop();
+			Driver.getInstance().fileMenu.setVisible(true);
+			Driver.getInstance().gameOptions.setVisible(false);
 			Driver.getInstance().revertPanel();
 			return;
 		}catch(Exception e){

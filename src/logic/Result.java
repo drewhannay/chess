@@ -87,7 +87,12 @@ public class Result implements Serializable{
 
 
 	public String winText() {
-		return choice == WHITE_WIN ? "White won!" : "Black won!";
+		switch(choice){
+			case Result.DRAW : return "Draw!";
+			case Result.WHITE_WIN : return "White won!";
+			case Result.BLACK_WIN : return "Black won!";
+			default : return "";
+		}
 	}
 	
 	/**
@@ -111,6 +116,7 @@ public class Result implements Serializable{
 	 */
 	@Override
 	public String toString() {
+		@SuppressWarnings("unused")
 		String s = "";
 
 		switch (choice) {
