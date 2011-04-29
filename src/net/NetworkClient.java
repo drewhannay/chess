@@ -18,10 +18,19 @@ import logic.Game;
 import logic.Result;
 
 public class NetworkClient {
+	
+	public static Socket socket;
+	
+	public static void closeSocket(){
+		try {
+			socket.close();
+		} catch(Exception e) {
+			
+		}
+	}
 
 	public void join(String host) throws Exception{
 
-		Socket socket = null;
 		ObjectOutputStream out = null;
 		ObjectInputStream in = null;
 

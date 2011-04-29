@@ -19,11 +19,18 @@ import logic.Game;
 import logic.Result;
 
 public class NetworkServer {
+	
+	private static ServerSocket serverSocket;
+	
+	public static void closeSocket(){
+		try {
+			serverSocket.close();
+		} catch(Exception e) {
+			
+		}
+	}
 
 	public void host(PlayNetGame png) throws Exception{
-
-		ServerSocket serverSocket = null;
-
 
 		Socket clientSocket = null;
 		serverSocket = new ServerSocket(27335);
