@@ -239,7 +239,6 @@ public class EndOfGame implements Serializable {
 	 * @param objectivePiece Unused.
 	 */
 	public void captureAllPieces(Piece objectivePiece) {
-		System.out.println("Here");
 		List<Piece> team = (isBlack ? g.getBlackTeam() : g.getWhiteTeam());
 		for (Piece p : team) {
 			if (!p.isCaptured())

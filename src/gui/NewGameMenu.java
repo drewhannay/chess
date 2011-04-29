@@ -195,7 +195,6 @@ public class NewGameMenu extends JPanel {
 											try {
 												new NetworkClient().join(host);
 											} catch (Exception e) {
-												System.out.println(e.getMessage());
 												e.printStackTrace();
 											}
 										}
@@ -203,7 +202,6 @@ public class NewGameMenu extends JPanel {
 									client.start();
 									Driver.getInstance().setPanel(new NetLoading(client));
 								}catch(Exception e1){
-									System.out.println(e1.getMessage());
 									e1.printStackTrace();
 								}
 
@@ -376,14 +374,12 @@ public class NewGameMenu extends JPanel {
 									try {
 										ai.runGame(plugin);
 									} catch (Exception e) {
-										System.out.println(e.getMessage());
 										e.printStackTrace();
 									}
 								}
 							});
 							aiThread.start();
 						}catch(Exception e1){
-							System.out.println(e1.getMessage());
 							e1.printStackTrace();
 						}
 

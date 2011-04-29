@@ -165,9 +165,6 @@ public class NextTurn implements Serializable {
 			whiteMoves += increment;
 			currentNumMoves = 0;
 		}
-		if (isBlackMove) {
-			System.out.println("current move: " + currentNumMoves + " max moves: " + blackMoves);
-		}
 		return isBlackMove;
 	}
 

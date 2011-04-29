@@ -375,7 +375,6 @@ public class PieceMaker extends JPanel{
 			try {
 				helpMe = ImageIO.read(new File("./images/piece_help.png")); //Gets it from the image folder
 			} catch (IOException e1) {
-				System.out.println("Error reading picture file");
 				e1.printStackTrace();
 			}
 			//Makes the image an icon and ands it to a JLabel

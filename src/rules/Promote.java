@@ -116,14 +116,12 @@ public class Promote implements Serializable {
 				e.printStackTrace();
 			}
 		}
-		System.out.println("Top: " + klazz);
 		if(!verified&&(p.getPromotesTo()==null||p.getPromotesTo().size()==0)) return p;
 		if (!verified && promo == null&&g.isBlackMove()==p.isBlack()) {
 			klazz = "";
 			if(p.getPromotesTo().size()==1)
 				klazz = p.getPromotesTo().get(0);
 			while (klazz.equals("")) {
-				System.out.println(promo==null);
 				String result = (String) JOptionPane.showInputDialog(null, "Select the Promotion type:",
 						"Promo choice", JOptionPane.PLAIN_MESSAGE, null,
 						p.getPromotesTo().toArray(), null);

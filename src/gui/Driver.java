@@ -140,7 +140,6 @@ final public class Driver extends JFrame {
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch(Exception e) {
-			System.out.println("Error setting native LAF: " + e);
 		}
 
 		//Setting up a new panel to hold everything on the main window
@@ -152,7 +151,6 @@ final public class Driver extends JFrame {
 		try {
 			temp = ImageIO.read(new File("./images/front_page_image.jpeg")); //Gets it from the image folder
 		} catch (IOException e1) {
-			System.out.println("Error reading picture file");
 			e1.printStackTrace();
 		}
 		//Makes the image an icon and ands it to a JLabel
@@ -317,7 +315,6 @@ final public class Driver extends JFrame {
 		try {
 			help = ImageIO.read(new File("./images/tech_support_cheat_sheet.png"));
 		} catch (IOException e1) {
-			System.out.println("Error reading picture file");
 			e1.printStackTrace();
 		}
 		//Making the icon and adding it to the appropriate menu item
@@ -335,7 +332,6 @@ final public class Driver extends JFrame {
 		try {
 			helpGame = ImageIO.read(new File("./images/gameplay_help.png")); //Gets it from the image folder
 		} catch (IOException e1) {
-			System.out.println("Error reading picture file");
 			e1.printStackTrace();
 		}
 		//Makes the image an icon and ands it to a JLabel
@@ -359,7 +355,6 @@ final public class Driver extends JFrame {
 		try {
 			helpMe = ImageIO.read(new File("./images/variant_help.png")); //Gets it from the image folder
 		} catch (IOException e1) {
-			System.out.println("Error reading picture file");
 			e1.printStackTrace();
 		}
 		//Makes the image an icon and ands it to a JLabel

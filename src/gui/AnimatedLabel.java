@@ -49,7 +49,6 @@ public class AnimatedLabel extends JLabel implements Runnable {
 			try {
 				Thread.sleep(1000);
 			} catch (Exception ex) {
-				System.out.println("fail");
 			}
 		}
 	}
