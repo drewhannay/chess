@@ -483,6 +483,10 @@ public class NewGameMenu extends JPanel {
 		
 		//Make a JComboBox drop down filled with the names of all the saved game types.
 		final JComboBox dropdown = new JComboBox(Builder.getArray());
+		
+		//TODO restrict game types here.
+		
+		
 		c.gridx = 0;
 		c.gridy = 0;
 		c.anchor = GridBagConstraints.WEST; 
