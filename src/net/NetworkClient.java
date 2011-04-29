@@ -115,6 +115,8 @@ public class NetworkClient {
 		}catch(EOFException e){
 			if(g.getHistory().size() != 0 && g.getHistory().get(g.getHistory().size()-1).getResult()!=null)
 				return;
+			if(!PlayNetGame.running)
+				return;
 			JOptionPane.showMessageDialog(null, "Your opponent closed the game", "Oops!", JOptionPane.ERROR_MESSAGE);
 			g.getBlackTimer().stop();
 			g.getWhiteTimer().stop();
