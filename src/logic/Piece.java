@@ -624,16 +624,6 @@ public class Piece implements Serializable {
 				addLegalDest(board.getSquare(f, r));
 			}
 		}
-
-
-
-
-
-
-
-
-
-
 		return getLegalDests().size();
 	}
 
@@ -708,6 +698,9 @@ public class Piece implements Serializable {
 	 * @return The Squares between this Piece and the target piece
 	 */
 	public Square[] getLineOfSight(int targetRow, int targetCol, boolean inclusive) {
+		if(name.equals("Pawn"))return null;
+		if((isBlack?board.getGame().getBlackRules():board.getGame().getWhiteRules()).objectivePiece(isBlack).equals(this))
+			return null;
 		Square[] returnSet = null;
 		ArrayList<Square> returnTemp = new ArrayList<Square>();
 		int originCol = getSquare().getCol();
@@ -719,7 +712,7 @@ public class Piece implements Serializable {
 		//Same column
 		if (originCol == targetCol) {
 			//North
-			if (originRow < targetRow) {
+			if (originRow < targetRow && canAttack(targetRow, targetCol, 'N')) {
 				for (r = (originRow + 1); r <= targetRow; r++)
 					if (r != targetRow || inclusive) {
 						returnTemp.add(i++, board.getSquare(r, originCol));
@@ -727,17 +720,19 @@ public class Piece implements Serializable {
 			}
 			//South
 			else {
-				for (r = (originRow - 1); r >= targetRow; r--)
-					if (r != targetRow || inclusive) {
-						returnTemp.add(i++,board.getSquare(r, originCol));
-					}
+				if(canAttack(targetRow, targetCol, 'S')){
+					for (r = (originRow - 1); r >= targetRow; r--)
+						if (r != targetRow || inclusive) {
+							returnTemp.add(i++,board.getSquare(r, originCol));
+						}
+				}
 			}
 		}
 
 		//Same Row
 		else if (originRow == targetRow) {
 			//East
-			if (originCol < targetCol) {
+			if (originCol < targetCol && canAttack(targetRow, targetCol, 'E')) {
 				for (c = (originCol + 1); c <= targetCol; c++)
 					if (c != targetCol || inclusive) {
 						returnTemp.add(i++,board.getSquare(originRow, c));
@@ -745,17 +740,19 @@ public class Piece implements Serializable {
 			}
 			//West
 			else {
-				for (c = (originCol - 1); c >= targetCol; c--)
-					if (c != targetCol || inclusive) {
-						returnTemp.add(i++,board.getSquare(originRow, c));
-					}
+				if(canAttack(targetRow, targetCol, 'W')){
+					for (c = (originCol - 1); c >= targetCol; c--)
+						if (c != targetCol || inclusive) {
+							returnTemp.add(i++,board.getSquare(originRow, c));
+						}
+				}
 			}
 		}
 
 		//First diagonal
 		else if ((originCol - targetCol) == (originRow - targetRow)) {
 			//Northeast
-			if (originRow < targetRow) {
+			if (originRow < targetRow && canAttack(targetRow, targetCol, 'R')) {
 				for (c = (originCol + 1), r = (originRow + 1); r <= targetRow; c++, r++)
 					if (r != targetRow || inclusive) {
 						returnTemp.add(i++,board.getSquare(r, c));
@@ -763,16 +760,18 @@ public class Piece implements Serializable {
 			}
 			//Southwest
 			else {
-				for (c = (originCol - 1), r = (originRow - 1); r >= targetRow; c--, r--)
-					if (r != targetRow || inclusive) {
-						returnTemp.add(i++,board.getSquare(r, c));
-					}
+				if(canAttack(targetRow, targetCol, 'l')){
+					for (c = (originCol - 1), r = (originRow - 1); r >= targetRow; c--, r--)
+						if (r != targetRow || inclusive) {
+							returnTemp.add(i++,board.getSquare(r, c));
+						}
+				}
 			}
 		}
 		//Second diagonal
 		else if ((originCol - targetCol) == ((originRow - targetRow) * -1)) {
 			//Northwest
-			if ((originRow - targetRow) < 0) {
+			if ((originRow - targetRow) < 0 && canAttack(targetRow, targetCol, 'L')) {
 				for (c = (originCol - 1), r = (originRow + 1); r <= targetRow; c--, r++)
 					if (r != targetRow || inclusive) {
 						returnTemp.add(i++,board.getSquare(r, c));
@@ -780,17 +779,28 @@ public class Piece implements Serializable {
 			}
 			//Southeast
 			else {
-				for (c = (originCol + 1), r = (originRow - 1); r >= targetRow; c++, r--)
-					if (r != targetRow || inclusive) {
-						returnTemp.add(i++,board.getSquare(r, c));
-					}
+				if(canAttack(targetRow, targetCol, 'r')){
+					for (c = (originCol + 1), r = (originRow - 1); r >= targetRow; c++, r--)
+						if (r != targetRow || inclusive) {
+							returnTemp.add(i++,board.getSquare(r, c));
+						}
+				}
 			}
 		}
 
 		if (i != 0) {//If i is zero, they weren't in line so return the null array
 			returnSet = new Square[i + 1];
 			returnSet[0] = this.getSquare();
-			System.arraycopy(returnTemp, 0, returnSet, 1, i);//Copy over the returnTemp array moving forward a position
+
+			int j = 1;
+			for(Square sq:returnTemp){
+				returnSet[j++] = sq;
+			}
+			for(Square sq:returnSet)
+				System.out.print(sq.toString(new boolean[]{false,false}) + " ");
+			System.out.println();
+			System.out.println();
+//			System.arraycopy(returnTemp, 0, returnSet, 1, i);//Copy over the returnTemp array moving forward a position
 		}
 
 		return returnSet;
@@ -799,16 +809,32 @@ public class Piece implements Serializable {
 	public boolean canAttack(int destRow, int destCol, char direction){
 		switch(direction){
 		case'S': //South
-			return (destRow - curSquare.getRow())< movements.get('S') || movements.get('S')==-1;
+			if(movements.containsKey('S'))
+				return (destRow - curSquare.getRow())< movements.get('S') || movements.get('S')==-1;
 			
 		case'N': //North
+			if(movements.containsKey('N'))
 			return (curSquare.getRow()-destRow)< movements.get('N') || movements.get('N')==-1;
 
 		case'E': //East
+			if(movements.containsKey('E'))
 			return (destCol - curSquare.getCol())< movements.get('E') || movements.get('E')==-1;
 
 		case'W': //West
+			if(movements.containsKey('W'))
 			return (curSquare.getCol() - destCol)< movements.get('W') || movements.get('W')==-1;
+		case'R': //NorthEast
+			if(movements.containsKey('R'))
+				return (curSquare.getCol() - destCol) < movements.get('R') || movements.get('R') == -1;
+		case'r': //SouthEast
+			if(movements.containsKey('r'))
+				return (curSquare.getCol() - destCol) < movements.get('r') || movements.get('r') == -1;
+		case'L': //NorthWest
+			if(movements.containsKey('L'))
+				return (destCol - curSquare.getCol()) < movements.get('L') || movements.get('L') == -1;
+		case'l': //SouthWest
+			if(movements.containsKey('l'))
+				return (destCol - curSquare.getCol()) < movements.get('l') || movements.get('l') == -1;
 		default:
 			return false;
 		}
