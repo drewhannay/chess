@@ -796,11 +796,6 @@ public class Piece implements Serializable {
 			for(Square sq:returnTemp){
 				returnSet[j++] = sq;
 			}
-			//for(Square sq:returnSet)
-				//System.out.print(sq.toString(new boolean[]{false,false}) + " ");
-			//System.out.println();
-			//System.out.println();
-//			System.arraycopy(returnTemp, 0, returnSet, 1, i);//Copy over the returnTemp array moving forward a position
 		}
 
 		return returnSet;
