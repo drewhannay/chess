@@ -28,7 +28,10 @@ _Of course, there may be alternate ways to do many of these steps, but these are
 
 ### Running the Code
 * Download and set up [Eclipse](http://www.eclipse.org/downloads/packages/eclipse-classic-372/indigosr2)
-* In Eclipse, click New Java Project, then give the project a name and uncheck the "Use Default Location" checkbox and choose the location of your local copy of the code.
+* In Eclipse, click New Java Project, then give the project a name and uncheck the "Use Default Location" checkbox and choose the location of your local copy of the code, then click finish.
+* Right-click on the project folder in Eclipse and click Import
+ * Choose General -> Preferences as the Import Source
+ * Choose chessProject.epf from your newly downloaded local code as the input preference file, and make sure "Import All" is checked, then click Finish. This will make sure your Eclipse code clean up tools follow the code guidelines for our project.
  * If you have errors in the project at this point, make sure your Eclipse is set to use the 1.6 Java Compiler (Preferences->Java->Compiler)
 * You should now be able to run the project just by choosing "Run" in Eclipse!
  * Note that every time you switch branches in SmartGit (See [Making and Committing Changes](https://github.com/drewhannay/chess#making-and-committing-your-changes) below), you will need to refresh your project in Eclipse before making any changes to the code, since switching branches actually changes the contents of some of the project files.
@@ -38,6 +41,7 @@ This project uses the github Issues system to track all work being done on the a
 
 ### Making and Committing Your Changes
 Once you've picked an issue to work on and claimed it as your own in the comments, it's time to start coding! Well, almost...here's where things get a little complicated (*but I promise, this is worthwhile!*).  We <b>highly</b> recommend you make a separate branch for the changes you'll be working on. But you say "I don't even know what a branch is! Why would I want to make one?"  Well, my friend, if this sounds like you, you should take some time and read this [tutorial on Git](http://git-scm.com/book/en/Git-Basics).  Back? Okay. Here's the steps you need to follow:
+
 * Go to SmartGit and make sure you have the project we made earlier with your fork open.
 * At the top of the screen, click the "Branch" menu item and then click "Add Branch" and give your new branch a name (*something like "MyChanges"...it doesn't really matter what you call it*), then click "Add Branch & Switch"
 * You are now ready to code!
@@ -50,6 +54,7 @@ This formatting is very important because with it, github will conveniently link
 
 ### Updating Your Fork
 Frequently you will want to update your forked copy of the repository with changes from the main repo. There's a few steps required for this:
+
 * Switch to your <code>upstream-master</code> branch and press the large "Pull" button and select the remote branch to pull from (https://github.com/drewhannay/chess).
 * After that is finished, switch to your <code>origin/master</code> branch and press "Merge". You should see a log of all the commit messages along with labels indicating the last commit for each branch. Click on the latest commit (which should have the label <code>upstream-master</code>) and click "Merge".
 * Next, commit those files as you would any other changes, but use the commit message that SmartGit provides for you, then click "Push" to push the changes to your remote fork.
@@ -57,6 +62,7 @@ Frequently you will want to update your forked copy of the repository with chang
 
 ### Getting Your Changes Merged with the Main Repository
 So you made some changes and added a cool new feature or fixed a pesky bug. You probably want to know how to get those changes included in the main repository. Well, it's your lucky day...
+
 * Go to your forked repository on github and click "Branches" and find the branch you want merged with the main repo.
 * Once you're looking at that branch, click "Pull Request" to open a message to the repo admins with your commit message in the subject line. Here you can add a message to the admins describing your changes or clarifying anything you think they might find confusing when they're reviewing your code.
 * Once you're done with your message, just hit "Pull Request" to send the request on it's way.
@@ -65,3 +71,6 @@ So you made some changes and added a cool new feature or fixed a pesky bug. You 
  * After you've made those changes on your local branch, commit them and push again, except this time your commit message should say <code>Code review. Issue #N</code>, where N is your issue number. This commit is automatically added to your pull request, so you don't need to make another one.
  * Repeat these steps until your code is approved!
 * Once the admins accept your code, you will be able to see a new commit on the main repo with your changes and all contributors will be able to pull them and update.
+
+### Now what?
+For more information on the project, visit our [Project Wiki](https://github.com/drewhannay/chess/wiki) or contact one of the administrators or other contributors and we'll be more than happy to help you get started!
