@@ -127,6 +127,7 @@ final public class Driver extends JFrame {
 	 */
 	private void initComponents(){
 
+		setName("Chess Master 9001");
 		setTitle("Chess Master 9001");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(325,340);
@@ -298,12 +299,12 @@ final public class Driver extends JFrame {
 		//Create MenuBar and add MenuItems
 		menuBar = new JMenuBar();
 		fileMenu = new JMenu("File");
-		fileMenu.setForeground(Color.WHITE);
+		
 		fileMenu.setMnemonic('F');
 
 		//Making the help menu
 		helpMenu = new JMenu("Help");
-		helpMenu.setForeground(Color.white);
+		
 		helpMenu.setMnemonic('H');
 
 		//Adding Help to menu with xkcd.com picture. will remove later
