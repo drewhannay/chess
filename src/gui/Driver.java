@@ -105,6 +105,11 @@ final public class Driver extends JFrame {
 	 * Menu item for the File options
 	 */
 	public JMenu fileMenu;
+	
+	/**
+	 * Menu item for returning to main menu
+	 */
+	public JMenuItem mainMenu;
 
 	/**
 	 * Initiate the program by creating a new Driver.
@@ -173,7 +178,7 @@ final public class Driver extends JFrame {
 				//gameOptions.setVisible(true); //Turns on the game options
 				remove(mainPanel);
 				otherPanel = new NewGameMenu();
-				add(otherPanel);
+				setPanel(otherPanel);
 				pack();
 			}
 		});
@@ -213,7 +218,7 @@ final public class Driver extends JFrame {
 					//Changes panels
 					remove(mainPanel);
 					otherPanel = new PlayGame(toPlay, false);
-					add(otherPanel);
+					setPanel(otherPanel);
 					pack();
 				}catch(Exception e){
 					e.printStackTrace();
@@ -267,7 +272,7 @@ final public class Driver extends JFrame {
 					completedHelp.setVisible(true);
 					helpMenu.setText("Playback Help");;					
 					remove(mainPanel);
-					add(otherPanel);
+					setPanel(otherPanel);
 					pack();
 					}catch (Exception e) {
 						e.printStackTrace();
@@ -290,7 +295,7 @@ final public class Driver extends JFrame {
 				helpMenu.setText("Variant Help");
 				remove(mainPanel);
 				otherPanel = new NewTypeMenu();
-				add(otherPanel);
+				setPanel(otherPanel);
 				pack();
 			}
 		});
@@ -393,7 +398,13 @@ final public class Driver extends JFrame {
 		newGameItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				//Remove the current panel, set otherPanel, repaint.
-				Driver.this.newGame();
+				helpMenu.setText("Game Help"); //Sets the help menu to say Game Help
+				gamePlayHelp.setVisible(true); //Shows the help for general game play
+				//gameOptions.setVisible(true); //Turns on the game options
+				remove(mainPanel);
+				otherPanel = new NewGameMenu();
+				setPanel(otherPanel);
+				pack();
 			}
 		});
 
@@ -401,7 +412,7 @@ final public class Driver extends JFrame {
 
 
 		//Adding Main Menu Option
-		JMenuItem mainMenu = new JMenuItem("Main Menu", KeyEvent.VK_M);
+		mainMenu = new JMenuItem("Main Menu", KeyEvent.VK_M);
 		mainMenu.setToolTipText("Press to return to the Main Menu");
 		mainMenu.addActionListener(new ActionListener(){
 
@@ -421,6 +432,7 @@ final public class Driver extends JFrame {
 			}
 
 		});
+		mainMenu.setVisible(false);
 		fileMenu.add(mainMenu);
 
 		//Adds menu item to quit the program
@@ -510,6 +522,7 @@ final public class Driver extends JFrame {
 	 */
 	public void setPanel(JPanel panel){
 		remove(otherPanel);
+		mainMenu.setVisible(true);
 		otherPanel = panel;
 		add(otherPanel);
 		pack();
@@ -520,6 +533,7 @@ final public class Driver extends JFrame {
 	 */
 	public void revertPanel(){
 		remove(otherPanel);
+		mainMenu.setVisible(false);
 		add(mainPanel);
 		pack();
 	}
