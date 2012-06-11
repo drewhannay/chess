@@ -17,11 +17,10 @@ import logic.PieceBuilder;
  * 
  * @author Drew Hannay & Alisa Maas
  * 
- * CSCI 335, Wheaton College, Spring 2011
- * Phase 2
- * April 7, 2011
+ * CSCI 335, Wheaton College, Spring 2011 Phase 2 April 7, 2011
  */
-public class Promote implements Serializable {
+public class Promote implements Serializable
+{
 
 	/**
 	 * Generated Serial Version ID
@@ -29,7 +28,7 @@ public class Promote implements Serializable {
 	private static final long serialVersionUID = -2346237261367453073L;
 
 	/**
-	 *  The current Game object.
+	 * The current Game object.
 	 */
 	private Game g;
 
@@ -59,8 +58,7 @@ public class Promote implements Serializable {
 	 */
 	private static String lastPromoted;
 	/**
-	 * Used to allow promotion to work properly when loading
-	 * a saved game.
+	 * Used to allow promotion to work properly when loading a saved game.
 	 */
 	private String resetLastPromoted;
 	/**
@@ -68,14 +66,21 @@ public class Promote implements Serializable {
 	 */
 	private String klazz;
 
-	static {
-		try {
-			doMethods.put("classic", Promote.class.getMethod("classicPromotion", Piece.class, boolean.class,
+	static
+	{
+		try
+		{
+			doMethods.put("classic", Promote.class.getMethod(
+					"classicPromotion", Piece.class, boolean.class,
 					String.class));
-			undoMethods.put("classic", Promote.class.getMethod("classicUndo", Piece.class));
-			doMethods.put("noPromos", Promote.class.getMethod("noPromo", Piece.class, boolean.class, String.class));
-			undoMethods.put("noPromos", Promote.class.getMethod("noPromoUndo", Piece.class));
-		} catch (Exception e) {
+			undoMethods.put("classic",
+					Promote.class.getMethod("classicUndo", Piece.class));
+			doMethods.put("noPromos", Promote.class.getMethod("noPromo",
+					Piece.class, boolean.class, String.class));
+			undoMethods.put("noPromos",
+					Promote.class.getMethod("noPromoUndo", Piece.class));
+		} catch (Exception e)
+		{
 			e.printStackTrace();
 		}
 	}
@@ -83,98 +88,127 @@ public class Promote implements Serializable {
 	/**
 	 * @param name The name of the method to use.
 	 */
-	public Promote(String name) {
+	public Promote(String name)
+	{
 		doMethod = doMethods.get(name);
 		undoMethod = undoMethods.get(name);
 		this.name = name;
 	}
 
 	/**
-	 * In this case, only pawns can promote,
-	 * allow the user to pick which class it promotes to.
+	 * In this case, only pawns can promote, allow the user to pick which class
+	 * it promotes to.
+	 * 
 	 * @param p The piece to promote
-	 * @param verified Whether it has been verified that this
-	 * is ok
+	 * @param verified Whether it has been verified that this is ok
 	 * @param promo What the piece was promoted to.
 	 * @return The promoted Piece.
 	 */
-	public Piece classicPromotion(Piece p, boolean verified, String promo) {
-		if(!verified&&(p.getPromotesTo() == null || p.getPromotesTo().size() == 0)) return p;
-		if(!verified){
+	public Piece classicPromotion(Piece p, boolean verified, String promo)
+	{
+		if (!verified
+				&& (p.getPromotesTo() == null || p.getPromotesTo().size() == 0))
+			return p;
+		if (!verified)
+		{
 			lastPromoted = p.getName();
 			klazz = p.getName();
 		}
-		if(verified&&promo!=null&&!promo.equals(p.getName())){
-			try {
+		if (verified && promo != null && !promo.equals(p.getName()))
+		{
+			try
+			{
 
-				Piece promoted = PieceBuilder.makePiece(promo,p.isBlack(), p.getSquare(), p.getBoard());
-				if (promoted.isBlack()) {
+				Piece promoted = PieceBuilder.makePiece(promo, p.isBlack(),
+						p.getSquare(), p.getBoard());
+				if (promoted.isBlack())
+				{
 					g.getBlackTeam().set(g.getBlackTeam().indexOf(p), promoted);
-				} else {
+				} else
+				{
 					g.getWhiteTeam().set(g.getWhiteTeam().indexOf(p), promoted);
 				}
 				promoted.getLegalDests().clear();
 				promoted.setMoveCount(p.getMoveCount());
 				return promoted;
-			} catch (Exception e) {
+			} catch (Exception e)
+			{
 				e.printStackTrace();
 			}
 		}
-		if(!verified&&(p.getPromotesTo()==null||p.getPromotesTo().size()==0)) return p;
-		if (!verified && promo == null&&g.isBlackMove()==p.isBlack()) {
+		if (!verified
+				&& (p.getPromotesTo() == null || p.getPromotesTo().size() == 0))
+			return p;
+		if (!verified && promo == null && g.isBlackMove() == p.isBlack())
+		{
 			klazz = "";
-			if(p.getPromotesTo().size()==1)
+			if (p.getPromotesTo().size() == 1)
 				klazz = p.getPromotesTo().get(0);
-			while (klazz.equals("")) {
-				String result = (String) JOptionPane.showInputDialog(null, "Select the Promotion type:",
-						"Promo choice", JOptionPane.PLAIN_MESSAGE, null,
-						p.getPromotesTo().toArray(), null);
+			while (klazz.equals(""))
+			{
+				String result = (String) JOptionPane.showInputDialog(null,
+						"Select the Promotion type:", "Promo choice",
+						JOptionPane.PLAIN_MESSAGE, null, p.getPromotesTo()
+								.toArray(), null);
 
-				if (result == null) {
+				if (result == null)
+				{
 					continue;
 				}
 
-					klazz = result;
-					promo = result;
+				klazz = result;
+				promo = result;
 			}
-		} else if (promo != null &&p.getPromotesTo()!=null&& p.getPromotesTo().contains(promo)) {
+		} else if (promo != null && p.getPromotesTo() != null
+				&& p.getPromotesTo().contains(promo))
+		{
 			klazz = promo;
 		}
-		
-		try {
 
-			Piece promoted = PieceBuilder.makePiece(klazz,p.isBlack(), p.getSquare(), p.getBoard());
-			if (promoted.isBlack()) {
+		try
+		{
+
+			Piece promoted = PieceBuilder.makePiece(klazz, p.isBlack(),
+					p.getSquare(), p.getBoard());
+			if (promoted.isBlack())
+			{
 				g.getBlackTeam().set(g.getBlackTeam().indexOf(p), promoted);
-			} else {
+			} else
+			{
 				g.getWhiteTeam().set(g.getWhiteTeam().indexOf(p), promoted);
 			}
 			promoted.getLegalDests().clear();
 			promoted.setMoveCount(p.getMoveCount());
 			return promoted;
-		} catch (Exception e) {
+		} catch (Exception e)
+		{
 			return p;
 		}
 	}
 
 	/**
 	 * Revert the piece back to what it was.
+	 * 
 	 * @param p The piece to unpromote
 	 * @return The unpromoted piece.
 	 */
-	public Piece classicUndo(Piece p) {
-		try {
-			Piece promoted = classicPromotion(p,true,lastPromoted);
-			//Piece promoted = PieceBuilder.makePiece(lastPromoted,p.isBlack(), p.getSquare(), p.getBoard());
-//			if (promoted.isBlack()) {
-//				g.getBlackTeam().set(g.getBlackTeam().indexOf(p), promoted);
-//			} else {
-//				g.getWhiteTeam().set(g.getWhiteTeam().indexOf(p), promoted);
-//			}
-//			promoted.getLegalDests().clear();
-//			promoted.setMoveCount(p.getMoveCount());
+	public Piece classicUndo(Piece p)
+	{
+		try
+		{
+			Piece promoted = classicPromotion(p, true, lastPromoted);
+			// Piece promoted = PieceBuilder.makePiece(lastPromoted,p.isBlack(),
+			// p.getSquare(), p.getBoard());
+			// if (promoted.isBlack()) {
+			// g.getBlackTeam().set(g.getBlackTeam().indexOf(p), promoted);
+			// } else {
+			// g.getWhiteTeam().set(g.getWhiteTeam().indexOf(p), promoted);
+			// }
+			// promoted.getLegalDests().clear();
+			// promoted.setMoveCount(p.getMoveCount());
 			return promoted;
-		} catch (Exception e) {
+		} catch (Exception e)
+		{
 			e.printStackTrace();
 		}
 		return null;
@@ -186,18 +220,22 @@ public class Promote implements Serializable {
 	 * @param promo What to promote from.
 	 * @return The promoted Piece.
 	 */
-	public Piece execute(Piece p, boolean verified, String promo) {
-		if(lastPromoted==null)
+	public Piece execute(Piece p, boolean verified, String promo)
+	{
+		if (lastPromoted == null)
 			lastPromoted = resetLastPromoted;
-		
-		try {
-			if (doMethod == null) {
+
+		try
+		{
+			if (doMethod == null)
+			{
 				doMethod = doMethods.get(name);
 			}
-			Piece toReturn =  (Piece) doMethod.invoke(this, p, verified, promo);
+			Piece toReturn = (Piece) doMethod.invoke(this, p, verified, promo);
 			resetLastPromoted = lastPromoted;
 			return toReturn;
-		} catch (Exception e) {
+		} catch (Exception e)
+		{
 			e.printStackTrace();
 			return null;
 		}
@@ -205,28 +243,33 @@ public class Promote implements Serializable {
 
 	/**
 	 * Don't allow promotion.
+	 * 
 	 * @param p The piece to "promote"
 	 * @param b Unused
 	 * @param c Unused
 	 * @return the original piece.
 	 */
-	public Piece noPromo(Piece p, boolean b, String c) {
+	public Piece noPromo(Piece p, boolean b, String c)
+	{
 		return p;
 	}
 
 	/**
 	 * Return the original piece
+	 * 
 	 * @param p The piece to "unpromote"
 	 * @return The original piece.
 	 */
-	public Piece noPromoUndo(Piece p) {
+	public Piece noPromoUndo(Piece p)
+	{
 		return p;
 	}
 
 	/**
 	 * @param g Setter for g.
 	 */
-	public void setGame(Game g) {
+	public void setGame(Game g)
+	{
 		this.g = g;
 	}
 
@@ -234,17 +277,21 @@ public class Promote implements Serializable {
 	 * @param p The piece to unpromote
 	 * @return The unpromoted piece.
 	 */
-	public Piece undo(Piece p) {
-		try {
-//			if(lastPromoted==null)
-//				lastPromoted = resetLastPromoted;
-			if (undoMethod == null) {
+	public Piece undo(Piece p)
+	{
+		try
+		{
+			// if(lastPromoted==null)
+			// lastPromoted = resetLastPromoted;
+			if (undoMethod == null)
+			{
 				undoMethod = undoMethods.get(name);
 			}
 			Piece toReturn = (Piece) undoMethod.invoke(this, p);
-			//resetLastPromoted = lastPromoted;
+			// resetLastPromoted = lastPromoted;
 			return toReturn;
-		} catch (Exception e) {
+		} catch (Exception e)
+		{
 			e.printStackTrace();
 			return null;
 		}

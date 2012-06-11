@@ -1,12 +1,13 @@
 package timer;
 
 /**
- * A class to implement the 
- * Simple Delay timer.
+ * A class to implement the Simple Delay timer.
+ * 
  * @author alisa.maas
- *
+ * 
  */
-public class SimpleDelay extends ChessTimer {
+public class SimpleDelay extends ChessTimer
+{
 
 	/**
 	 * For Serialization
@@ -22,7 +23,8 @@ public class SimpleDelay extends ChessTimer {
 	 * @param startTime The start time
 	 * @param isBlack Whether the clock is black.
 	 */
-	public SimpleDelay(long delay, long startTime, boolean isBlack) {
+	public SimpleDelay(long delay, long startTime, boolean isBlack)
+	{
 		this.delay = delay;
 		this.isBlack = isBlack;
 		time = startTime;
@@ -32,7 +34,8 @@ public class SimpleDelay extends ChessTimer {
 	}
 
 	@Override
-	public void start() {
+	public void start()
+	{
 		super.delay = false;
 		lastUpdated = System.currentTimeMillis();
 		updateDisplay();
@@ -42,7 +45,8 @@ public class SimpleDelay extends ChessTimer {
 	}
 
 	@Override
-	public void stop() {
+	public void stop()
+	{
 		lastUpdated = System.currentTimeMillis();
 		updateDisplay();
 		timer.stop();
