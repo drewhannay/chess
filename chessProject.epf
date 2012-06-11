@@ -1,4 +1,4 @@
-#Sun Jun 10 20:15:08 PDT 2012
+#Sun Jun 10 21:45:35 PDT 2012
 /instance/org.eclipse.jdt.core/org.eclipse.jdt.core.formatter.comment.indent_parameter_description=true
 @org.eclipse.ui.editors=3.7.0.v20110517-0800
 /instance/org.eclipse.jdt.core/org.eclipse.jdt.core.formatter.insert_space_after_at_in_annotation_type_declaration=do not insert
@@ -96,6 +96,7 @@
 /instance/org.eclipse.jdt.core/org.eclipse.jdt.core.formatter.insert_space_before_opening_paren_in_catch=insert
 /instance/org.eclipse.jdt.core/org.eclipse.jdt.core.formatter.insert_new_line_in_empty_enum_declaration=insert
 /instance/org.eclipse.jdt.core/org.eclipse.jdt.core.formatter.blank_lines_before_package=0
+/configuration/org.eclipse.core.net/proxiesEnabled=false
 /instance/org.eclipse.jdt.core/org.eclipse.jdt.core.formatter.indent_switchstatements_compare_to_switch=false
 /instance/org.eclipse.jdt.core/org.eclipse.jdt.core.formatter.insert_space_before_comma_in_method_declaration_parameters=do not insert
 /instance/org.eclipse.jdt.core/org.eclipse.jdt.core.formatter.insert_space_after_at_in_annotation=do not insert
@@ -217,6 +218,7 @@
 /instance/org.eclipse.jdt.core/org.eclipse.jdt.core.formatter.insert_space_after_opening_angle_bracket_in_type_arguments=do not insert
 /instance/org.eclipse.jdt.ui/cleanup.organize_imports=true
 /instance/com.android.ide.eclipse.ddms/logcat.view.colsize.Text=758
+/instance/org.eclipse.ui.workbench/PLUGINS_NOT_ACTIVATED_ON_STARTUP=
 /instance/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_VM_XML=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?>\n<vmSettings defaultVM\="52,org.eclipse.jdt.internal.launching.macosx.MacOSXType8,Contents" defaultVMConnector\="">\n<vmType id\="org.eclipse.jdt.internal.launching.macosx.MacOSXType">\n<vm id\="Contents" name\="Java SE 6 (MacOS X Default)" path\="/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home"/>\n</vmType>\n</vmSettings>\n
 /instance/org.eclipse.jdt.core/org.eclipse.jdt.core.codeComplete.staticFieldSuffixes=
 /instance/org.eclipse.jdt.core/org.eclipse.jdt.core.formatter.number_of_blank_lines_at_beginning_of_method_body=0
@@ -365,6 +367,7 @@
 /instance/org.eclipse.jdt.ui/org.eclipse.jdt.ui.text.code_templates_migrated=true
 /instance/org.eclipse.jdt.core/org.eclipse.jdt.core.formatter.insert_space_before_comma_in_for_inits=do not insert
 /instance/org.eclipse.jdt.core/org.eclipse.jdt.core.formatter.insert_space_after_assignment_operator=insert
+/configuration/org.eclipse.core.net/systemProxiesEnabled=false
 /instance/org.eclipse.jdt.core/org.eclipse.jdt.core.formatter.alignment_for_expressions_in_array_initializer=16
 /instance/org.eclipse.jdt.core/org.eclipse.jdt.core.formatter.indent_breaks_compare_to_cases=true
 /instance/org.eclipse.jdt.core/org.eclipse.jdt.core.formatter.insert_space_after_closing_angle_bracket_in_type_parameters=insert
