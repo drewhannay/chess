@@ -9,11 +9,10 @@ import java.io.Serializable;
  * 
  * @author Drew Hannay & Alisa Maas
  * 
- * CSCI 335, Wheaton College, Spring 2011
- * Phase 2
- * April 7, 2011
+ * CSCI 335, Wheaton College, Spring 2011 Phase 2 April 7, 2011
  */
-public class Result implements Serializable{
+public class Result implements Serializable
+{
 
 	/**
 	 * Generated Serial Version ID
@@ -47,70 +46,89 @@ public class Result implements Serializable{
 
 	/**
 	 * Constructor
+	 * 
 	 * @param i The choice for this Result
 	 */
-	public Result(int i) {
+	public Result(int i)
+	{
 		choice = i;
 	}
 
 	/**
 	 * Check if this game is a black win
+	 * 
 	 * @return If this game is a black win
 	 */
-	public boolean isBlackWin() {
+	public boolean isBlackWin()
+	{
 		return choice == BLACK_WIN;
 	}
 
 	/**
 	 * Check if this game is a draw
+	 * 
 	 * @return If this game is a draw
 	 */
-	public boolean isDraw() {
+	public boolean isDraw()
+	{
 		return choice == DRAW;
 	}
 
 	/**
 	 * Check if this game is undecided
+	 * 
 	 * @return If this game is undecided
 	 */
-	public boolean isUndecided() {
+	public boolean isUndecided()
+	{
 		return choice == UNDECIDED;
 	}
 
 	/**
 	 * Check if this game is a white win
+	 * 
 	 * @return If this game is a white win
 	 */
-	public boolean isWhiteWin() {
+	public boolean isWhiteWin()
+	{
 		return choice == WHITE_WIN;
 	}
-
 
 	/**
 	 * @return The String text of what should be on the end game popup box.
 	 */
-	public String winText() {
-		switch(choice){
-			case Result.DRAW : return "Draw!";
-			case Result.WHITE_WIN : return "White won!";
-			case Result.BLACK_WIN : return "Black won!";
-			default : return "";
+	public String winText()
+	{
+		switch (choice)
+		{
+		case Result.DRAW:
+			return "Draw!";
+		case Result.WHITE_WIN:
+			return "White won!";
+		case Result.BLACK_WIN:
+			return "Black won!";
+		default:
+			return "";
 		}
 	}
-	
+
 	/**
 	 * Getter method for the text of this Result
+	 * 
 	 * @return The text of this Result
 	 */
-	public String text(){
+	public String text()
+	{
 		return text;
 	}
-	
+
 	/**
 	 * Setter method for the text of this Result
+	 * 
 	 * @param text The text of this Result
 	 */
-	public void setText(String text){
+	public void setText(String text)
+	{
 		this.text = text;
 	}
 
@@ -118,11 +136,13 @@ public class Result implements Serializable{
 	 * @return The String representation of this Result
 	 */
 	@Override
-	public String toString() {
+	public String toString()
+	{
 		@SuppressWarnings("unused")
 		String s = "";
 
-		switch (choice) {
+		switch (choice)
+		{
 		case UNDECIDED:
 			s = "?";
 			break;

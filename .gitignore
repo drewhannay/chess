@@ -16,3 +16,4 @@ variants/*
 # Package Files #
 *.war
 *.ear
+/*.DS_Store

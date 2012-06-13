@@ -13,11 +13,10 @@ import java.util.HashMap;
  * 
  * @author Drew Hannay & Alisa Maas
  * 
- * CSCI 335, Wheaton College, Spring 2011
- * Phase 2
- * April 7, 2011
+ * CSCI 335, Wheaton College, Spring 2011 Phase 2 April 7, 2011
  */
-public class NextTurn implements Serializable {
+public class NextTurn implements Serializable
+{
 
 	/**
 	 * Generated Serial Version ID
@@ -65,17 +64,27 @@ public class NextTurn implements Serializable {
 	 */
 	private int currentNumMoves;
 
-	static {
-		try {
-			doMethods.put("classic", NextTurn.class.getMethod("classicNextTurn"));
+	static
+	{
+		try
+		{
+			doMethods.put("classic",
+					NextTurn.class.getMethod("classicNextTurn"));
 			undoMethods.put("classic", NextTurn.class.getMethod("classicUndo"));
-			doMethods.put("increasing together", NextTurn.class.getMethod("increasingTurnsTogether"));
-			undoMethods.put("increasing together", NextTurn.class.getMethod("undoIncreasingTurnsTogether"));
-			doMethods.put("different turns", NextTurn.class.getMethod("differentNumTurns"));
-			undoMethods.put("different turns", NextTurn.class.getMethod("undoDifferentNumTurns"));
-			doMethods.put("increasing separately", NextTurn.class.getMethod("increasingTurnsSeparately"));
-			undoMethods.put("increasing separately", NextTurn.class.getMethod("undoIncreasingTurnsSeparately"));
-		} catch (Exception e) {
+			doMethods.put("increasing together",
+					NextTurn.class.getMethod("increasingTurnsTogether"));
+			undoMethods.put("increasing together",
+					NextTurn.class.getMethod("undoIncreasingTurnsTogether"));
+			doMethods.put("different turns",
+					NextTurn.class.getMethod("differentNumTurns"));
+			undoMethods.put("different turns",
+					NextTurn.class.getMethod("undoDifferentNumTurns"));
+			doMethods.put("increasing separately",
+					NextTurn.class.getMethod("increasingTurnsSeparately"));
+			undoMethods.put("increasing separately",
+					NextTurn.class.getMethod("undoIncreasingTurnsSeparately"));
+		} catch (Exception e)
+		{
 			e.printStackTrace();
 		}
 
@@ -87,7 +96,8 @@ public class NextTurn implements Serializable {
 	 * @param blackMoves The number of black moves
 	 * @param increment The increment.
 	 */
-	public NextTurn(String name, int whiteMoves, int blackMoves, int increment) {
+	public NextTurn(String name, int whiteMoves, int blackMoves, int increment)
+	{
 		this.name = name;
 		doMethod = doMethods.get(name);
 		undoMethod = undoMethods.get(name);
@@ -100,10 +110,12 @@ public class NextTurn implements Serializable {
 
 	/**
 	 * In classic, each player gets 1 move.
+	 * 
 	 * @return Whose turn it is.
 	 */
-	public boolean classicNextTurn() {
-		
+	public boolean classicNextTurn()
+	{
+
 		isBlackMove = !isBlackMove;
 		PlayGame.turn(isBlackMove);
 
@@ -112,9 +124,11 @@ public class NextTurn implements Serializable {
 
 	/**
 	 * Classic is undone by changing the turn back.
+	 * 
 	 * @return Whose turn it is.
 	 */
-	public boolean classicUndo() {
+	public boolean classicUndo()
+	{
 		isBlackMove = !isBlackMove;
 
 		PlayGame.turn(isBlackMove);
@@ -123,12 +137,15 @@ public class NextTurn implements Serializable {
 	}
 
 	/**
-	 * Black and white have different numbers of turns,
-	 * but that number does not increase.
+	 * Black and white have different numbers of turns, but that number does not
+	 * increase.
+	 * 
 	 * @return Whose turn it is.
 	 */
-	public boolean differentNumTurns() {
-		if (++currentNumMoves >= (isBlackMove ? blackMoves : whiteMoves)) {
+	public boolean differentNumTurns()
+	{
+		if (++currentNumMoves >= (isBlackMove ? blackMoves : whiteMoves))
+		{
 			isBlackMove = !isBlackMove;
 			PlayGame.turn(isBlackMove);
 
@@ -140,25 +157,32 @@ public class NextTurn implements Serializable {
 	/**
 	 * @return Whose turn it is.
 	 */
-	public boolean execute() {
-		try {
-			if (doMethod == null) {
+	public boolean execute()
+	{
+		try
+		{
+			if (doMethod == null)
+			{
 				doMethod = doMethods.get(name);
 			}
 			return (Boolean) doMethod.invoke(this, (Object[]) null);
-		} catch (Exception e) {
+		} catch (Exception e)
+		{
 			e.printStackTrace();
 		}
 		return false;
 	}
 
 	/**
-	 * White and black have different numbers of turns,
-	 * and this number increases.
+	 * White and black have different numbers of turns, and this number
+	 * increases.
+	 * 
 	 * @return Whose turn it is.
 	 */
-	public boolean increasingTurnsSeparately() {
-		if (++currentNumMoves >= (isBlackMove ? blackMoves : whiteMoves)) {
+	public boolean increasingTurnsSeparately()
+	{
+		if (++currentNumMoves >= (isBlackMove ? blackMoves : whiteMoves))
+		{
 			isBlackMove = !isBlackMove;
 			PlayGame.turn(isBlackMove);
 			blackMoves += increment;
@@ -169,13 +193,15 @@ public class NextTurn implements Serializable {
 	}
 
 	/**
-	 * In this variant, the number of turns increases
-	 * each round by the increment, but both players
-	 * have the same number of turns.
+	 * In this variant, the number of turns increases each round by the
+	 * increment, but both players have the same number of turns.
+	 * 
 	 * @return Whose turn it is.
 	 */
-	public boolean increasingTurnsTogether() {
-		if (++currentNumMoves >= whiteMoves) {
+	public boolean increasingTurnsTogether()
+	{
+		if (++currentNumMoves >= whiteMoves)
+		{
 			isBlackMove = !isBlackMove;
 			PlayGame.turn(isBlackMove);
 			whiteMoves += increment;
@@ -183,32 +209,40 @@ public class NextTurn implements Serializable {
 		}
 		return isBlackMove;
 	}
+
 	/**
-	 * This is undone by decrementing the number
-	 * of moves made, and if necessary, decrementing the amount
-	 * of moves possible each round. Then the turn is changed, if
-	 * appropriate.
+	 * This is undone by decrementing the number of moves made, and if
+	 * necessary, decrementing the amount of moves possible each round. Then the
+	 * turn is changed, if appropriate.
+	 * 
 	 * @return Whose turn it is.
 	 */
-	public boolean undoIncreasingTurnsTogether() {
-		if (--currentNumMoves < 0) {
+	public boolean undoIncreasingTurnsTogether()
+	{
+		if (--currentNumMoves < 0)
+		{
 			isBlackMove = !isBlackMove;
 			PlayGame.turn(isBlackMove);
 			whiteMoves -= increment;
-			currentNumMoves = whiteMoves-1;
+			currentNumMoves = whiteMoves - 1;
 		}
 		return isBlackMove;
 	}
+
 	/**
 	 * @return Whose turn it is.
 	 */
-	public boolean undo() {
-		try {
-			if (undoMethod == null) {
+	public boolean undo()
+	{
+		try
+		{
+			if (undoMethod == null)
+			{
 				undoMethod = undoMethods.get(name);
 			}
 			return (Boolean) undoMethod.invoke(this, (Object[]) null);
-		} catch (Exception e) {
+		} catch (Exception e)
+		{
 			e.printStackTrace();
 		}
 		return false;
@@ -216,10 +250,13 @@ public class NextTurn implements Serializable {
 
 	/**
 	 * Undo this by changing the turn if appropriate.
+	 * 
 	 * @return Whose turn it is.
 	 */
-	public boolean undoDifferentNumTurns() {
-		if (--currentNumMoves < 0) {
+	public boolean undoDifferentNumTurns()
+	{
+		if (--currentNumMoves < 0)
+		{
 			isBlackMove = !isBlackMove;
 			PlayGame.turn(isBlackMove);
 
@@ -230,10 +267,13 @@ public class NextTurn implements Serializable {
 
 	/**
 	 * Undo the effects of increasingTurnsSeparately.
+	 * 
 	 * @return Whose turn it is.
 	 */
-	public boolean undoIncreasingTurnsSeparately() {
-		if (--currentNumMoves < 0) {
+	public boolean undoIncreasingTurnsSeparately()
+	{
+		if (--currentNumMoves < 0)
+		{
 			isBlackMove = !isBlackMove;
 			blackMoves -= increment;
 			whiteMoves -= increment;

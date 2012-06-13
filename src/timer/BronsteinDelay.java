@@ -1,12 +1,13 @@
 package timer;
 
 /**
- * A concrete class to model the
- * Bronstein Delay timer.
+ * A concrete class to model the Bronstein Delay timer.
+ * 
  * @author alisa.maas
- *
+ * 
  */
-public class BronsteinDelay extends ChessTimer {
+public class BronsteinDelay extends ChessTimer
+{
 	/**
 	 * For Serialization
 	 */
@@ -16,23 +17,23 @@ public class BronsteinDelay extends ChessTimer {
 	 */
 	private long increment;
 	/**
-	 * Whether it is the first time this timer
-	 * has been run.
+	 * Whether it is the first time this timer has been run.
 	 */
 	private boolean firstTime = true;
 	/**
-	 * The lag time - used for computing
-	 * how much time to add to the clock.
+	 * The lag time - used for computing how much time to add to the clock.
 	 */
 	private long lag;
 
 	/**
 	 * Create a new BronsteinDelay timer.
+	 * 
 	 * @param increment How much to increment by
 	 * @param startTime The start time.
 	 * @param isBlack Whether the timer is black.
 	 */
-	public BronsteinDelay(long increment, long startTime, boolean isBlack) {
+	public BronsteinDelay(long increment, long startTime, boolean isBlack)
+	{
 		this.increment = increment;
 		this.isBlack = isBlack;
 		time = startTime;
@@ -42,24 +43,32 @@ public class BronsteinDelay extends ChessTimer {
 	}
 
 	@Override
-	public void start() {
+	public void start()
+	{
 		lastUpdated = System.currentTimeMillis();
 		lag = System.currentTimeMillis();
 		timer.start();
 	}
-	public void reset(){
+
+	@Override
+	public void reset()
+	{
 		lastUpdated = System.currentTimeMillis();
 		time = startTime;
 		updateDisplay();
 		firstTime = true;
 	}
+
 	@Override
-	public void stop() {
+	public void stop()
+	{
 		lastUpdated = System.currentTimeMillis();
 		long delay = System.currentTimeMillis() - lag;
-		if (!firstTime && !timeSet) {
+		if (!firstTime && !timeSet)
+		{
 			time += (delay >= increment ? increment : delay);
-		} else {
+		} else
+		{
 			firstTime = false;
 		}
 		timeSet = false;

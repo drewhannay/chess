@@ -2,10 +2,12 @@ package timer;
 
 /**
  * A class to model the Hour Glass timer.
+ * 
  * @author alisa.maas
- *
+ * 
  */
-public class HourGlass extends ChessTimer {
+public class HourGlass extends ChessTimer
+{
 	/**
 	 * Serialization.
 	 */
@@ -13,10 +15,12 @@ public class HourGlass extends ChessTimer {
 
 	/**
 	 * Create an HourGlass timer.
+	 * 
 	 * @param startTime When to start
 	 * @param isBlack Whether the clock is black.
 	 */
-	public HourGlass(long startTime, boolean isBlack) {
+	public HourGlass(long startTime, boolean isBlack)
+	{
 		time = startTime;
 		this.isBlack = isBlack;
 		lastUpdated = System.currentTimeMillis();
@@ -25,17 +29,18 @@ public class HourGlass extends ChessTimer {
 	}
 
 	/**
-	 * Change direction; easy way to check and
-	 * see whether you've gone past the alloted
-	 * time difference between the timers.
+	 * Change direction; easy way to check and see whether you've gone past the
+	 * alloted time difference between the timers.
 	 */
-	public void reverseFlow() {
+	public void reverseFlow()
+	{
 		direction *= -1;
 
 	}
 
 	@Override
-	public void start() {
+	public void start()
+	{
 
 		direction = 1;
 		lastUpdated = System.currentTimeMillis();
@@ -43,7 +48,8 @@ public class HourGlass extends ChessTimer {
 	}
 
 	@Override
-	public void stop() {
+	public void stop()
+	{
 		direction = -1;
 		lastUpdated = System.currentTimeMillis();
 		timer.start();
