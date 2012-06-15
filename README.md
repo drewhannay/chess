@@ -15,7 +15,7 @@ _Of course, there may be alternate ways to do many of these steps, but these are
 * First things first: Install and set up [SmartGit](http://www.syntevo.com/smartgit/index.html)
  * Choose non-commercial use when the installer asks
  * The installer should automatically detect the location of your git executable _(Of course, this means if you don't have git installed, you need to go do that first)_
- * Tell the installer that your hosting provider is github and log in with your credentials (if you are running Windows, this may not work for you. See special instructions below)
+ * Tell the installer that your hosting provider is github and log in with your credentials (if this doesn't work for you, just select "no host provider" and input the URL of your fork when it asks you)
  * Also, go ahead and use SmartGit as SSH (unless you have a compelling reason not to)
 * Next, come back to github and Fork your own copy of the [chess repository](https://github.com/drewhannay/chess)
 * Back in SmartGit, choose Clone and put in the URL of your forked copy of chess
@@ -25,13 +25,7 @@ _Of course, there may be alternate ways to do many of these steps, but these are
  * Enter <code>upstream</code> as the name (no caps!) and https://github.com/drewhannay/chess as the URL, then press "Add".
  * Now close the Remote Manager and open the Branch Manager by clicking the "Branch" menu item, and then "Branch Manager". You should see an "upstream/master" remote branch with no local branch. Click on that item and click add, giving it the name "upstream-master", then click "Add Branch".
  * You can now close the Branch Manager and celebrate, knowing that you have finished setting up your repository!
-
-* If you are running SmartGit on Windows or for some other reason the program does not properly log into your github account, you will need to clone the repository manually:
- * Fork the repository on the Github site.
- * Run "Git Bash" in your Git directory and navigate to the folder you want to clone the repository into using standard command line.
- * Enter the command `git clone git@github.com:your-username\project-name.git` and fill in your SSH information.
- * The repository should be cloned now. Start up SmartGit and follow the above steps, but this time choose "no host provider" and use your local repository instead of cloning one. SmartGit should automatically detect that this is a Github project and work accordingly.  
-
+ 
 ### Running the Code
 * Download and set up [Eclipse](http://www.eclipse.org/downloads/packages/eclipse-classic-372/indigosr2)
 * In Eclipse, click New Java Project, then give the project a name and uncheck the "Use Default Location" checkbox and choose the location of your local copy of the code, then click finish.
