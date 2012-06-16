@@ -64,12 +64,12 @@ public final class FileUtility
 	{
 		if (System.getProperty("os.name").startsWith("Windows"))
 		{
-			HIDDEN_DIR = System.getProperty("user.home") + "chess";
+			HIDDEN_DIR = System.getProperty("user.home") + "/chess";
 			try
 			{
 				Runtime rt = Runtime.getRuntime();
 				// try to make our folder hidden on Windows
-				rt.exec("attrib -s -h -r " + System.getProperty("user.home") + "chess");
+				rt.exec("attrib +H " + System.getProperty("user.home") + "/chess");
 			}
 			catch (Throwable t)
 			{
