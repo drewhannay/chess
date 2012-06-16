@@ -29,6 +29,7 @@ import javax.swing.UIManager;
 
 import logic.Game;
 import timer.ChessTimer;
+import utility.FileUtility;
 
 /**
  * Driver.java
@@ -164,12 +165,8 @@ final public class Driver extends JFrame
 		BufferedImage temp = null;
 		try
 		{
-			temp = ImageIO.read(new File("./images/front_page_image.jpeg")); // Gets
-																				// it
-																				// from
-																				// the
-																				// image
-																				// folder
+			// read the image from the class resources
+			temp = ImageIO.read(getClass().getResource("/front_page_image.jpeg"));
 		} catch (IOException e1)
 		{
 			e1.printStackTrace();
@@ -214,8 +211,7 @@ final public class Driver extends JFrame
 			{
 				try
 				{
-					File dir = new File("gamesInProgress");
-					String[] files = dir.list();
+					String[] files = FileUtility.getGamesInProgressFileArray();
 
 					if (files == null)
 					{
@@ -234,8 +230,7 @@ final public class Driver extends JFrame
 							null, files, null);
 					if (choice == null)
 						return;
-					FileInputStream f_in = new FileInputStream(new File(
-							"gamesInProgress/" + choice));
+					FileInputStream f_in = new FileInputStream(FileUtility.getGamesInProgressFile(choice));
 					ObjectInputStream obj_in = new ObjectInputStream(f_in);
 					Game toPlay = (Game) obj_in.readObject();
 					// Sets the help menu info to be specific for game play
@@ -272,8 +267,7 @@ final public class Driver extends JFrame
 			{
 				try
 				{
-					File dir = new File("completedGames");
-					String[] files = dir.list();
+					String[] files = FileUtility.getCompletedGamesFileArray();
 					if (files == null)
 					{
 						JOptionPane
@@ -292,7 +286,7 @@ final public class Driver extends JFrame
 					if (choice == null)
 						return;
 
-					File file = new File("completedGames/" + choice);
+					File file = FileUtility.getCompletedGamesFile(choice);
 
 					Game toView;
 					if (choice.endsWith(".acn"))
@@ -372,8 +366,7 @@ final public class Driver extends JFrame
 		BufferedImage help = null;
 		try
 		{
-			help = ImageIO.read(new File(
-					"./images/tech_support_cheat_sheet.png"));
+			help = ImageIO.read(getClass().getResource("/tech_support_cheat_sheet.png"));
 		} catch (IOException e1)
 		{
 			e1.printStackTrace();
@@ -397,12 +390,7 @@ final public class Driver extends JFrame
 		BufferedImage helpGame = null;
 		try
 		{
-			helpGame = ImageIO.read(new File("./images/gameplay_help.png")); // Gets
-																				// it
-																				// from
-																				// the
-																				// image
-																				// folder
+			helpGame = ImageIO.read(getClass().getResource("/gameplay_help.png"));
 		} catch (IOException e1)
 		{
 			e1.printStackTrace();
@@ -432,12 +420,7 @@ final public class Driver extends JFrame
 		BufferedImage helpMe = null;
 		try
 		{
-			helpMe = ImageIO.read(new File("./images/variant_help.png")); // Gets
-																			// it
-																			// from
-																			// the
-																			// image
-																			// folder
+			helpMe = ImageIO.read(getClass().getResource("/variant_help.png"));
 		} catch (IOException e1)
 		{
 			e1.printStackTrace();

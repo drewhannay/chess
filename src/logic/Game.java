@@ -1,6 +1,5 @@
 package logic;
 
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
@@ -11,6 +10,7 @@ import java.util.List;
 import rules.Rules;
 import timer.ChessTimer;
 import timer.NoTimer;
+import utility.FileUtility;
 import ai.FakeMove;
 
 /**
@@ -677,20 +677,16 @@ public class Game implements Serializable
 	 * @param fileName The name for the game file
 	 * @param ACN Whether the game should be saved in ACN
 	 */
-	public void saveGame(String dirName, String fileName, boolean ACN)
+	public void saveGame(String fileName, boolean ACN)
 	{
 		try
 		{
-			new File(dirName).mkdir();
-
 			if (ACN)
 			{
-				AlgebraicConverter.convert(getHistory(), (dirName + "/"
-						+ fileName + ".acn"));
+				AlgebraicConverter.convert(getHistory(), (fileName + ".acn"));
 			} else
 			{
-				FileOutputStream f_out = new FileOutputStream(new File(dirName
-						+ "/" + fileName + ".var"));
+				FileOutputStream f_out = new FileOutputStream(FileUtility.getGamesInProgressFile(fileName + ".var"));
 				ObjectOutputStream out = new ObjectOutputStream(f_out);
 				out.writeObject(this);
 				out.close();

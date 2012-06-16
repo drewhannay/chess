@@ -435,8 +435,7 @@ public class PlayGame extends JPanel
 			String fileName = JOptionPane.showInputDialog(null,
 					"Enter a name for the save file:", "Saving...",
 					JOptionPane.PLAIN_MESSAGE);
-			getGame().saveGame("completedGames", fileName,
-					getGame().isClassicChess());
+			getGame().saveGame(fileName, getGame().isClassicChess());
 			g.setBlackMove(false);
 			Driver.getInstance().gamePlayHelp.setVisible(false);
 			Driver.getInstance().helpMenu.setText("Help");
@@ -573,7 +572,7 @@ public class PlayGame extends JPanel
 							JOptionPane.PLAIN_MESSAGE);
 					if (fileName == null)
 						return;
-					getGame().saveGame("gamesInProgress", fileName, false);
+					getGame().saveGame(fileName, false);
 
 					menu.setVisible(false);
 					Driver.getInstance().revertPanel();

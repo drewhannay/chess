@@ -43,6 +43,7 @@ import timer.HourGlass;
 import timer.NoTimer;
 import timer.SimpleDelay;
 import timer.Word;
+import utility.FileUtility;
 import ai.AIAdapter;
 import ai.AIPlugin;
 
@@ -329,9 +330,7 @@ public class NewGameMenu extends JPanel
 				c.gridy = 1;
 				popped.add(new JLabel("AI: "), c);
 
-				File dir = new File("AI");
-				dir.mkdir();
-				String[] allFiles = dir.list();
+				String[] allFiles = FileUtility.getAIFileList();
 				List<String> tempFiles = new ArrayList<String>();
 				for (String st : allFiles)
 					if (st.endsWith(".java"))
@@ -361,7 +360,7 @@ public class NewGameMenu extends JPanel
 					public void actionPerformed(ActionEvent arg0)
 					{
 						final String choice = (String) ai.getSelectedItem();
-						File file = new File("AI/" + choice);
+						File file = FileUtility.getAIFile(choice);
 						if (ai.getSelectedItem() == null)
 						{
 							JOptionPane.showMessageDialog(null,

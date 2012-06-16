@@ -10,6 +10,8 @@ import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import utility.FileUtility;
+
 /**
  * AlgebraicConverter.java Class to convert Move objects to Algebraic Chess
  * Notation and vice versa.
@@ -205,8 +207,7 @@ public final class AlgebraicConverter
 	{
 		try
 		{
-			BufferedWriter out = new BufferedWriter(new FileWriter(new File(
-					pathName)));
+			BufferedWriter out = new BufferedWriter(new FileWriter(FileUtility.getCompletedGamesFile(pathName)));
 			String toWrite = "";
 			for (int i = 0, j = 1; i < moves.size(); i++)
 			{
