@@ -32,6 +32,7 @@ _Of course, there may be alternate ways to do many of these steps, but these are
 * Right-click on the project folder in Eclipse and click Import
  * Choose General -> Preferences as the Import Source
  * Choose chessProject.epf from your newly downloaded local code as the input preference file, and make sure "Import All" is checked, then click Finish. This will make sure your Eclipse code clean up tools follow the code guidelines for our project.
+ * You will now need to enable the settings you just imported. Right click on the project again and click "Properties". Under the "Java Code Style" item on the left, you'll see a "Clean Up" item and a "Formatter" item. Go to each of those and check the "Enable Project Specific Settings" box and ensure that the Chess profiles are selected as the Active Profiles.
  * If you have errors in the project at this point, make sure your Eclipse is set to use the 1.6 Java Compiler (Preferences->Java->Compiler)
 * Your project will probably have one warning at this point, on the file build.xml. This is our Ant build script, (like Make, for Java) which is set to package our application into an executable jar file for Windows/Linux and a .app file for Mac OS X. That's okay, we'll be fixing the warning in the next step.
  * You now need to set up a Run Configuration for running the build.xml script. First, choose "Run -> External Tools -> External Tools Configurations" then make sure "Ant Build" is selected and click the "New" icon on the top left side of the screen.
