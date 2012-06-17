@@ -1,6 +1,5 @@
 package logic;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
@@ -13,6 +12,7 @@ import java.util.List;
 import javax.swing.ImageIcon;
 
 import rules.Rules;
+import utility.FileUtility;
 
 /**
  * Builder.java Builder class to create Game Types
@@ -266,9 +266,7 @@ public class Builder implements Serializable
 	 */
 	public static String[] getArray()
 	{
-		File f = new File("variants");
-		f.mkdir();
-		String[] vars = f.list();
+		String[] vars = FileUtility.getVariantsFileArray();
 		for (String s : vars)
 		{
 			if (s.equals("Classic"))
@@ -286,16 +284,14 @@ public class Builder implements Serializable
 	 */
 	public static Game newGame(String name)
 	{
-		new File("variants").mkdir();
-		String[] vars = new File("variants").list();
+		String[] vars = FileUtility.getVariantsFileArray();
 		for (String s : vars)
 		{
 			if (s.equals(name))
 			{
 				try
 				{
-					ObjectInputStream in = new ObjectInputStream(
-							new FileInputStream("variants/" + name));
+					ObjectInputStream in = new ObjectInputStream(new FileInputStream(FileUtility.getVariantsFile(name)));
 					Builder b = (Builder) in.readObject();
 					Game toReturn = new Game(name, b.boards, b.whiteRules,
 							b.blackRules);
@@ -343,9 +339,7 @@ public class Builder implements Serializable
 	{
 		try
 		{
-			new File("variants").mkdir();
-			FileOutputStream f_out = new FileOutputStream(new File("variants/"
-					+ name));
+			FileOutputStream f_out = new FileOutputStream(FileUtility.getVariantsFile(name));
 			ObjectOutputStream out = new ObjectOutputStream(f_out);
 			out.writeObject(new Builder(name, boards, whiteTeam, blackTeam,
 					whiteRules, blackRules));

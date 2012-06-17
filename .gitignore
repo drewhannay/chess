@@ -1,5 +1,10 @@
 *.class
 bin/*
+classes/*
+jar/*
+lib/*
+release/*
+.externalToolBuilders
 .metadata/*
 .project
 .settings/*
