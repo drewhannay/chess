@@ -1,12 +1,14 @@
 package gui;
 
 import javax.swing.JLabel;
+
 /**
- * @author jmccormi
- * Some code borrowed from http://www.java2s.com/Code/Java/Swing-JFC/Animationlabel.htm
- * Class to animate a JLabel for the net loading screen
+ * @author jmccormi Some code borrowed from
+ * http://www.java2s.com/Code/Java/Swing-JFC/Animationlabel.htm Class to animate
+ * a JLabel for the net loading screen
  */
-public class AnimatedLabel extends JLabel implements Runnable {
+public class AnimatedLabel extends JLabel implements Runnable
+{
 	/**
 	 * Serial number
 	 */
@@ -23,32 +25,44 @@ public class AnimatedLabel extends JLabel implements Runnable {
 	 * Boolean to turn off the thread when the game has started.
 	 */
 	public static boolean finished = false;
+
 	/**
 	 * Constructor
 	 */
-	public AnimatedLabel() {
-		this.setText("Waiting");
+	public AnimatedLabel()
+	{
+		setText("Waiting");
 		Thread tr = new Thread(this);
 		tr.start();
 	}
+
 	/**
-	 * Runs the thread which causes the net loading screen to have an animated "Waiting" JLabel
+	 * Runs the thread which causes the net loading screen to have an animated
+	 * "Waiting" JLabel
 	 */
-	public void run() {
+	@Override
+	public void run()
+	{
 		finished = false;
-		while (!finished) {
+		while (!finished)
+		{
 			index++;
-			if (index == 1) {
-				this.setText("Waiting. ");
-			} else if (index == 2) {
-				this.setText("Waiting.. ");
-			} else {
-				this.setText("Waiting... ");
+			if (index == 1)
+			{
+				setText("Waiting. ");
+			} else if (index == 2)
+			{
+				setText("Waiting.. ");
+			} else
+			{
+				setText("Waiting... ");
 				index = 0;
 			}
-			try {
+			try
+			{
 				Thread.sleep(1000);
-			} catch (Exception ex) {
+			} catch (Exception ex)
+			{
 			}
 		}
 	}

@@ -1,5 +1,10 @@
 *.class
 bin/*
+classes/*
+jar/*
+lib/*
+release/*
+.externalToolBuilders
 .metadata/*
 .project
 .settings/*
@@ -16,3 +21,4 @@ variants/*
 # Package Files #
 *.war
 *.ear
+/*.DS_Store

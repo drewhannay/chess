@@ -13,10 +13,12 @@ import javax.swing.JPanel;
 
 /**
  * Class to set up a small loading window for network play
+ * 
  * @author John McCormick & Andrew Wolfe & Drew Hannay
- *
+ * 
  */
-public class NetLoading extends JPanel{
+public class NetLoading extends JPanel
+{
 
 	/**
 	 * Generated Serial Version ID
@@ -37,33 +39,38 @@ public class NetLoading extends JPanel{
 	 * The button to cancel network play
 	 */
 	private JButton cancelButton;
-	
+
 	/**
-	 * Constructor.
-	 * Call initComponents to initialize the GUI.
+	 * Constructor. Call initComponents to initialize the GUI.
+	 * 
 	 * @param th The thread being passed to be loaded.
 	 */
-	public NetLoading(Thread th) {
+	public NetLoading(Thread th)
+	{
 		this.th = th;
 		initComponents();
 	}
 
 	/**
-	 * Initialize components of the GUI
-	 * Create all the GUI components, set their specific properties and add them to the 
-	 * window. Also add any necessary ActionListeners.
+	 * Initialize components of the GUI Create all the GUI components, set their
+	 * specific properties and add them to the window. Also add any necessary
+	 * ActionListeners.
 	 */
-	public void initComponents() {
-		
+	public void initComponents()
+	{
+
 		setBorder(BorderFactory.createLoweredBevelBorder());
-		
-		//Create button and add ActionListener for going back to main menu
+
+		// Create button and add ActionListener for going back to main menu
 		cancelButton = new JButton("Cancel");
 		cancelButton.setToolTipText("Press me to go back to the Main Menu");
-		cancelButton.addActionListener(new ActionListener() {
+		cancelButton.addActionListener(new ActionListener()
+		{
 
-			public void actionPerformed(ActionEvent e) {
-				//Return to the main screen.
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				// Return to the main screen.
 				AnimatedLabel.finished = true;
 				NewGameMenu.cancelled = true;
 				Driver.getInstance().gamePlayHelp.setVisible(false);
@@ -73,15 +80,14 @@ public class NetLoading extends JPanel{
 			}
 		});
 
+		// Create JLabel and JTextField.
+		waitLabel = new AnimatedLabel();
 
-		//Create JLabel and JTextField.
-		waitLabel = new AnimatedLabel();		
-		
-		//Layout stuff. Don't. Ask.
+		// Layout stuff. Don't. Ask.
 		setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
-		
-		c.insets = new Insets(3,3,3,3);
+
+		c.insets = new Insets(3, 3, 3, 3);
 		c.gridx = 0;
 		c.gridy = 0;
 		add(waitLabel, c);
@@ -89,7 +95,7 @@ public class NetLoading extends JPanel{
 		c.gridx = 0;
 		c.gridy = 1;
 		add(cancelButton, c);
-		
+
 	}
-	
+
 }

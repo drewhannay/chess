@@ -3,16 +3,16 @@ package ai;
 import java.io.Serializable;
 
 /**
- * @author Drew Hannay
- * The move to be sent across the network for trying to move
+ * @author Drew Hannay The move to be sent across the network for trying to move
  */
-public class FakeMove implements Serializable {
-	
+public class FakeMove implements Serializable
+{
+
 	/**
 	 * Serial ID
 	 */
 	private static final long serialVersionUID = -7511895104920021930L;
-	
+
 	/**
 	 * Which board number in the board[]
 	 */
@@ -37,7 +37,7 @@ public class FakeMove implements Serializable {
 	 * The name of the promotion piece
 	 */
 	public String promoName;
-	
+
 	/**
 	 * @param boardNum Which board in the board[]
 	 * @param originRow Which row it was/is on
@@ -46,7 +46,9 @@ public class FakeMove implements Serializable {
 	 * @param destCol Which col it wants to be on
 	 * @param promoName The name of the promotion piece
 	 */
-	public FakeMove(int boardNum, int originRow, int originCol, int destRow, int destCol, String promoName){
+	public FakeMove(int boardNum, int originRow, int originCol, int destRow,
+			int destCol, String promoName)
+	{
 		this.boardNum = boardNum;
 		this.originRow = originRow;
 		this.originCol = originCol;
@@ -54,14 +56,17 @@ public class FakeMove implements Serializable {
 		this.destCol = destCol;
 		this.promoName = promoName;
 	}
-	
+
 	/**
 	 * Getter method for String representation of the FakeMove
-	 * @return String String representation of the FakeMove  
+	 * 
+	 * @return String String representation of the FakeMove
 	 */
-	public String toString(){
-		return boardNum + " " + originRow + " " + originCol + " " + destRow + " " + destCol;
+	@Override
+	public String toString()
+	{
+		return boardNum + " " + originRow + " " + originCol + " " + destRow
+				+ " " + destCol;
 	}
-	
 
 }

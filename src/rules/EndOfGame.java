@@ -15,16 +15,15 @@ import logic.Result;
 /**
  * EndOfGame.java
  * 
- * Class to hold methods with various implementations of
- * determining if the end of the game should happen.
+ * Class to hold methods with various implementations of determining if the end
+ * of the game should happen.
  * 
  * @author Drew Hannay & Alisa Maas
  * 
- * CSCI 335, Wheaton College, Spring 2011
- * Phase 2
- * April 7, 2011
+ * CSCI 335, Wheaton College, Spring 2011 Phase 2 April 7, 2011
  */
-public class EndOfGame implements Serializable {
+public class EndOfGame implements Serializable
+{
 
 	/**
 	 * Generated Serial Version ID
@@ -44,8 +43,8 @@ public class EndOfGame implements Serializable {
 	 */
 	private int checks;
 	/**
-	 * The maximum number of checks to place the opponent in before
-	 * the game is over.
+	 * The maximum number of checks to place the opponent in before the game is
+	 * over.
 	 */
 	private int maxChecks;
 	/**
@@ -76,32 +75,46 @@ public class EndOfGame implements Serializable {
 	 * Is this the white or black rule set?
 	 */
 	private boolean isBlack;
-	static {
-		try {
-			doMethods.put("classic", EndOfGame.class.getMethod("classicEndOfGame", Piece.class));
+	static
+	{
+		try
+		{
+			doMethods.put("classic",
+					EndOfGame.class.getMethod("classicEndOfGame", Piece.class));
 			undoMethods.put("classic", EndOfGame.class.getMethod("dummyUndo"));
-			doMethods.put("checkNTimes", EndOfGame.class.getMethod("checkNTimes", Piece.class));
-			undoMethods.put("checkNTimes", EndOfGame.class.getMethod("undoCheckNTimes"));
-			doMethods.put("loseAllPieces", EndOfGame.class.getMethod("loseAllPieces", Piece.class));
-			undoMethods.put("loseAllPieces", EndOfGame.class.getMethod("dummyUndo"));
-			doMethods.put("captureAllPieces", EndOfGame.class.getMethod("captureAllPieces", Piece.class));
-			undoMethods.put("captureAllPieces", EndOfGame.class.getMethod("dummyUndo"));
-			doMethods.put("captureAllOfType", EndOfGame.class.getMethod("captureAllOfType", Piece.class));
-			undoMethods.put("captureAllOfType", EndOfGame.class.getMethod("dummyUndo"));
+			doMethods.put("checkNTimes",
+					EndOfGame.class.getMethod("checkNTimes", Piece.class));
+			undoMethods.put("checkNTimes",
+					EndOfGame.class.getMethod("undoCheckNTimes"));
+			doMethods.put("loseAllPieces",
+					EndOfGame.class.getMethod("loseAllPieces", Piece.class));
+			undoMethods.put("loseAllPieces",
+					EndOfGame.class.getMethod("dummyUndo"));
+			doMethods.put("captureAllPieces",
+					EndOfGame.class.getMethod("captureAllPieces", Piece.class));
+			undoMethods.put("captureAllPieces",
+					EndOfGame.class.getMethod("dummyUndo"));
+			doMethods.put("captureAllOfType",
+					EndOfGame.class.getMethod("captureAllOfType", Piece.class));
+			undoMethods.put("captureAllOfType",
+					EndOfGame.class.getMethod("dummyUndo"));
 
-		} catch (Exception e) {
+		} catch (Exception e)
+		{
 			e.printStackTrace();
 		}
 	}
 
 	/**
 	 * Create a new EndOfGame object
+	 * 
 	 * @param name The name of the method
 	 * @param maxChecks Set the instance variable
 	 * @param type Set the instance variable.
 	 * @param isBlack Is this for the black or white team?
 	 */
-	public EndOfGame(String name, int maxChecks, String type,boolean isBlack) {
+	public EndOfGame(String name, int maxChecks, String type, boolean isBlack)
+	{
 		doMethod = doMethods.get(name);
 		undoMethod = undoMethods.get(name);
 		this.name = name;
@@ -113,12 +126,16 @@ public class EndOfGame implements Serializable {
 
 	/**
 	 * Capture all of a specified type to win.
+	 * 
 	 * @param objectivePiece Unused.
 	 */
-	public void captureAllOfType(Piece objectivePiece) {
+	public void captureAllOfType(Piece objectivePiece)
+	{
 		List<Piece> team = (!isBlack ? g.getBlackTeam() : g.getWhiteTeam());
-		for (Piece p : team) {
-			if (p.getName().equals(type) && !p.isCaptured()){
+		for (Piece p : team)
+		{
+			if (p.getName().equals(type) && !p.isCaptured())
+			{
 				return;
 			}
 		}
@@ -128,14 +145,20 @@ public class EndOfGame implements Serializable {
 	}
 
 	/**
-	 * Place the opponent in check n times to
-	 * win. 
+	 * Place the opponent in check n times to win.
+	 * 
 	 * @param objectivePiece the objective piece to place in check.
 	 */
-	public void checkNTimes(Piece objectivePiece) {
-		if (g.getLastMove() != null && g.getLastMove().isVerified() && g.getLastMove().isCheck()&&g.getLastMove().getPiece().isBlack()==isBlack) {
-			if (++checks == maxChecks) {
-				Result r = new Result(!isBlack ? Result.WHITE_WIN : Result.BLACK_WIN);
+	public void checkNTimes(Piece objectivePiece)
+	{
+		if (g.getLastMove() != null && g.getLastMove().isVerified()
+				&& g.getLastMove().isCheck()
+				&& g.getLastMove().getPiece().isBlack() == isBlack)
+		{
+			if (++checks == maxChecks)
+			{
+				Result r = new Result(!isBlack ? Result.WHITE_WIN
+						: Result.BLACK_WIN);
 				r.setText("Game Over! " + r.winText() + "\n");
 				PlayGame.endOfGame(r);
 
@@ -147,43 +170,61 @@ public class EndOfGame implements Serializable {
 
 	/**
 	 * In classic chess, one wins by placing the opponent in checkmate.
+	 * 
 	 * @param objectivePiece The objective piece.
 	 */
-	public void classicEndOfGame(Piece objectivePiece) {
-		
-		if (g.getLegalMoveCount() == 0 || objectivePiece.isCaptured()) {
+	public void classicEndOfGame(Piece objectivePiece)
+	{
+
+		if (g.getLegalMoveCount() == 0 || objectivePiece.isCaptured())
+		{
 			// if the King is threatened, it's check mate.
-			if (objectivePiece == null||objectivePiece.isInCheck() || objectivePiece.isCaptured()) {
-				if (g.getLastMove() != null) {
+			if (objectivePiece == null || objectivePiece.isInCheck()
+					|| objectivePiece.isCaptured())
+			{
+				if (g.getLastMove() != null)
+				{
 					g.getLastMove().setCheckmate(true);
-					Result r = new Result(g.isBlackMove() ? Result.WHITE_WIN : Result.BLACK_WIN);
-					String s1 = "Game over! "+r.winText()+ "\n";
+					Result r = new Result(g.isBlackMove() ? Result.WHITE_WIN
+							: Result.BLACK_WIN);
+					String s1 = "Game over! " + r.winText() + "\n";
 
-					if(g.getThreats(objectivePiece) != null)
-						s1 += "The piece(s) that caused the final check are highlighted in Red. " +
-						"\nThe piece that placed the King in check was the " + g.getThreats(objectivePiece)[0].getName() + 
-						" at location " + g.getThreats(objectivePiece)[0].getSquare().toString(new boolean[]{false,false}) + "\n";
+					if (g.getThreats(objectivePiece) != null)
+						s1 += "The piece(s) that caused the final check are highlighted in Red. "
+								+ "\nThe piece that placed the King in check was the "
+								+ g.getThreats(objectivePiece)[0].getName()
+								+ " at location "
+								+ g.getThreats(objectivePiece)[0].getSquare()
+										.toString(
+												new boolean[] { false, false })
+								+ "\n";
 
-					r.setText(s1+ "What would you like to do? \n");
+					r.setText(s1 + "What would you like to do? \n");
 					g.getLastMove().setResult(r);
-					if (!g.getHistory().contains(g.getLastMove())) {
+					if (!g.getHistory().contains(g.getLastMove()))
+					{
 						g.getHistory().add(g.getLastMove());
 					}
-					PlayGame.boardRefresh(g.getBoards());// Let the user see the final move.
+					PlayGame.boardRefresh(g.getBoards());// Let the user see the
+															// final move.
 					PlayGame.endOfGame(r);
 				}
 			}
 			// if the King isn't threatened, then it's stale mate.
-			else {
-				if (g.getLastMove() != null) {
+			else
+			{
+				if (g.getLastMove() != null)
+				{
 					g.getLastMove().setStalemate(true);
 					Result r = new Result(Result.DRAW);
 					r.setText("Draw! " + "\n");
 					g.getLastMove().setResult(r);
-					if (!g.getHistory().contains(g.getLastMove())) {
+					if (!g.getHistory().contains(g.getLastMove()))
+					{
 						g.getHistory().add(g.getLastMove());
 					}
-					PlayGame.boardRefresh(g.getBoards());// Let the user see the final move.
+					PlayGame.boardRefresh(g.getBoards());// Let the user see the
+															// final move.
 					PlayGame.endOfGame(r);
 				}
 			}
@@ -193,33 +234,41 @@ public class EndOfGame implements Serializable {
 	/**
 	 * Dummy undo method for methods that do not need undoing (more than 1)
 	 */
-	public void dummyUndo() {
+	public void dummyUndo()
+	{
 	}
 
 	/**
 	 * Execute the appropriate method.
+	 * 
 	 * @param objectivePiece The objective piece.
 	 */
-	public void execute(Piece objectivePiece) {
-		try {
-			if (doMethod == null) {
+	public void execute(Piece objectivePiece)
+	{
+		try
+		{
+			if (doMethod == null)
+			{
 				doMethod = doMethods.get(name);
 			}
 			doMethod.invoke(this, objectivePiece);
-		} catch (Exception e) {
+		} catch (Exception e)
+		{
 			e.printStackTrace();
 		}
 	}
 
 	/**
-	 * In this case, the goal is either to lose
-	 * all pieces or capture all the opponent's pieces based on the 
-	 * instance variable blackLosesPieces.
+	 * In this case, the goal is either to lose all pieces or capture all the
+	 * opponent's pieces based on the instance variable blackLosesPieces.
+	 * 
 	 * @param objectivePiece The objective piece; unused.
 	 */
-	public void loseAllPieces(Piece objectivePiece) {
+	public void loseAllPieces(Piece objectivePiece)
+	{
 		List<Piece> team = (!isBlack ? g.getBlackTeam() : g.getWhiteTeam());
-		for (Piece p : team) {
+		for (Piece p : team)
+		{
 			if (!p.isCaptured())
 				return;
 		}
@@ -227,13 +276,17 @@ public class EndOfGame implements Serializable {
 		r.setText("Game Over! " + r.winText() + "\n");
 		PlayGame.endOfGame(r);
 	}
+
 	/**
 	 * Capture all the pieces.
+	 * 
 	 * @param objectivePiece Unused.
 	 */
-	public void captureAllPieces(Piece objectivePiece) {
+	public void captureAllPieces(Piece objectivePiece)
+	{
 		List<Piece> team = (isBlack ? g.getBlackTeam() : g.getWhiteTeam());
-		for (Piece p : team) {
+		for (Piece p : team)
+		{
 			if (!p.isCaptured())
 				return;
 		}
@@ -244,48 +297,60 @@ public class EndOfGame implements Serializable {
 
 	/**
 	 * Setter for g
+	 * 
 	 * @param g The new Game object.
 	 */
-	public void setGame(Game g) {
+	public void setGame(Game g)
+	{
 		this.g = g;
 	}
 
 	/**
 	 * Undo the appropriate method.
 	 */
-	public void undo() {
-		try {
-			if (undoMethod == null) {
+	public void undo()
+	{
+		try
+		{
+			if (undoMethod == null)
+			{
 				undoMethod = undoMethods.get(name);
 			}
 			undoMethod.invoke(this, (Object[]) null);
-		} catch (Exception e) {
+		} catch (Exception e)
+		{
 			e.printStackTrace();
 		}
 	}
 
 	/**
-	 * Undo checkNTimes resets the counter on the 
-	 * number of checks.
+	 * Undo checkNTimes resets the counter on the number of checks.
 	 */
-	public void undoCheckNTimes() {
-		if (m != null && m.isVerified() && m.isCheck()) {
+	public void undoCheckNTimes()
+	{
+		if (m != null && m.isVerified() && m.isCheck())
+		{
 			--checks;
 		}
 	}
 
 	/**
 	 * Getter for the method name
+	 * 
 	 * @return The method being used
 	 */
-	public String getName(){
-		return this.name;
+	public String getName()
+	{
+		return name;
 	}
+
 	/**
 	 * The type to capture all of, if any.
+	 * 
 	 * @return The string representation of the type.
 	 */
-	public String getType(){
-		return this.type;
+	public String getType()
+	{
+		return type;
 	}
 }

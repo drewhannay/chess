@@ -2,10 +2,12 @@ package timer;
 
 /**
  * A class to model the Fisher Timer.
+ * 
  * @author alisa.maas
- *
+ * 
  */
-public class Fischer extends ChessTimer {
+public class Fischer extends ChessTimer
+{
 	/**
 	 * Serialization.
 	 */
@@ -15,9 +17,8 @@ public class Fischer extends ChessTimer {
 	 */
 	private long increment;
 	/**
-	 * Whether the timer is "Fisher After", which
-	 * adds the increment at the end of each turn rather than
-	 * at the beginning.
+	 * Whether the timer is "Fisher After", which adds the increment at the end
+	 * of each turn rather than at the beginning.
 	 */
 	private boolean fisherAfter;
 	/**
@@ -27,30 +28,38 @@ public class Fischer extends ChessTimer {
 
 	/**
 	 * Create a Fisher timer.
+	 * 
 	 * @param increment How much to increment by
 	 * @param startTime When to start the timer
 	 * @param fischerAfter Whether it is Fisher after
 	 * @param isBlack Whether it is black.
 	 */
-	public Fischer(long increment, long startTime, boolean fischerAfter, boolean isBlack) {
+	public Fischer(long increment, long startTime, boolean fischerAfter,
+			boolean isBlack)
+	{
 		this.increment = increment;
 		time = startTime;
-		this.fisherAfter = fischerAfter;
+		fisherAfter = fischerAfter;
 		firstTime = true;
 		this.isBlack = isBlack;
 		this.startTime = startTime;
 		super.init();
 	}
-	
-	public void reset(){
+
+	@Override
+	public void reset()
+	{
 		lastUpdated = System.currentTimeMillis();
 		time = startTime;
 		updateDisplay();
 		firstTime = true;
 	}
+
 	@Override
-	public void start() {
-		if (!fisherAfter && !firstTime && !timeSet) {
+	public void start()
+	{
+		if (!fisherAfter && !firstTime && !timeSet)
+		{
 			time += increment;
 		}
 		timeSet = false;
@@ -61,8 +70,10 @@ public class Fischer extends ChessTimer {
 	}
 
 	@Override
-	public void stop() {
-		if (fisherAfter && !timeSet) {
+	public void stop()
+	{
+		if (fisherAfter && !timeSet)
+		{
 			time += increment;
 		}
 		timeSet = false;
