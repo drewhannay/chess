@@ -9,6 +9,8 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -31,10 +33,9 @@ import ai.FakeMove;
 /**
  * @author John McCormick
  * 
- * Class for playing network or AI games
+ *         Class for playing network or AI games
  */
-public class PlayNetGame extends PlayGame
-{
+public class PlayNetGame extends PlayGame {
 
 	/**
 	 * Generated Serial ID
@@ -67,14 +68,17 @@ public class PlayNetGame extends PlayGame
 	public boolean drawRequested = false;
 
 	/**
-	 * @param g the game to be played
-	 * @param isPlayback if this is a playback (always false)
-	 * @param isBlack if the player is black
-	 * @throws Exception Needed for dealing with super()
+	 * @param g
+	 *            the game to be played
+	 * @param isPlayback
+	 *            if this is a playback (always false)
+	 * @param isBlack
+	 *            if the player is black
+	 * @throws Exception
+	 *             Needed for dealing with super()
 	 */
 	public PlayNetGame(Game g, boolean isPlayback, boolean isBlack)
-			throws Exception
-	{
+			throws Exception {
 		super(g, isPlayback);
 		PlayNetGame.isBlack = isBlack;
 		initComponents(isPlayback);
@@ -85,16 +89,14 @@ public class PlayNetGame extends PlayGame
 	 * 
 	 * @return If the player of this game controls the white or black team
 	 */
-	public static boolean isBlack()
-	{
+	public static boolean isBlack() {
 		return isBlack;
 	}
 
 	/**
 	 * Class for button listeners
 	 */
-	class ButtonListener implements ActionListener
-	{
+	class ButtonListener implements MouseListener {
 
 		/**
 		 * The Square attached to this ButtonListener
@@ -108,11 +110,12 @@ public class PlayNetGame extends PlayGame
 		/**
 		 * Constructor. Attaches a Square to this ButtonListener
 		 * 
-		 * @param s The Square which is attached to the ButtonListener.
-		 * @param b The board that is being played on.
+		 * @param s
+		 *            The Square which is attached to the ButtonListener.
+		 * @param b
+		 *            The board that is being played on.
 		 */
-		public ButtonListener(Square s, Board b)
-		{
+		public ButtonListener(Square s, Board b) {
 			clickedSquare = s;
 			this.b = b;
 		}
@@ -122,18 +125,14 @@ public class PlayNetGame extends PlayGame
 		 * either highlight possible destinations or move the piece.
 		 */
 		@Override
-		public void actionPerformed(ActionEvent e)
-		{
-			if (getGame().isBlackMove() == isBlack)
-			{
-				if (mustPlace)
-				{
+		public void mouseClicked(MouseEvent arg0) {
+			if (getGame().isBlackMove() == isBlack) {
+				if (mustPlace) {
 					mustPlace = false;
 					getGame().nextTurn();
 					if (!clickedSquare.isOccupied()
 							&& clickedSquare.isHabitable()
-							&& placePiece != null)
-					{
+							&& placePiece != null) {
 						placePiece.setSquare(clickedSquare);
 						clickedSquare.setPiece(placePiece);
 						placePiece = null;
@@ -144,15 +143,12 @@ public class PlayNetGame extends PlayGame
 
 					return;
 				}
-				if (mustMove && clickedSquare == storedSquare)
-				{
+				if (mustMove && clickedSquare == storedSquare) {
 					boardRefresh(getGame().getBoards());
 					mustMove = false;
 				} else if (mustMove
-						&& clickedSquare.getColor() == Square.HIGHLIGHT_COLOR)
-				{
-					try
-					{
+						&& clickedSquare.getColor() == Square.HIGHLIGHT_COLOR) {
+					try {
 						Move m = new Move(b, storedSquare, clickedSquare);
 						getGame().playMove(m);
 
@@ -160,22 +156,18 @@ public class PlayNetGame extends PlayGame
 
 						mustMove = false;
 						boardRefresh(getGame().getBoards());
-					} catch (Exception e1)
-					{
+					} catch (Exception e1) {
 						System.out.println(e1.getMessage());
 						e1.printStackTrace();
 					}
 				} else if (!mustMove
 						&& clickedSquare.getPiece() != null
 						&& clickedSquare.getPiece().isBlack() == getGame()
-								.isBlackMove())
-				{
+								.isBlackMove()) {
 					List<Square> dests = clickedSquare.getPiece()
 							.getLegalDests();
-					if (dests.size() > 0)
-					{
-						for (Square dest : dests)
-						{
+					if (dests.size() > 0) {
+						for (Square dest : dests) {
 							dest.setBackgroundColor(Square.HIGHLIGHT_COLOR);
 						}
 						storedSquare = clickedSquare;
@@ -184,15 +176,32 @@ public class PlayNetGame extends PlayGame
 				}
 			}
 		}
+
+		@Override
+		public void mouseEntered(MouseEvent arg0) {
+		}
+
+		@Override
+		public void mouseExited(MouseEvent arg0) {
+		}
+
+		@Override
+		public void mousePressed(MouseEvent arg0) {
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent arg0) {
+		}
 	}
 
 	/**
-	 * @param b The board that the game is being played on.
-	 * @param isPlayback whether PlayGame is in playback mode
+	 * @param b
+	 *            The board that the game is being played on.
+	 * @param isPlayback
+	 *            whether PlayGame is in playback mode
 	 * @return the grid being created.
 	 */
-	private JPanel createGrid(Board b, boolean isPlayback)
-	{
+	private JPanel createGrid(Board b, boolean isPlayback) {
 
 		final JPanel grid = new JPanel();
 		// grid.setBorder(BorderFactory.createEtchedBorder());
@@ -210,38 +219,29 @@ public class PlayNetGame extends PlayGame
 		// ActionListener.
 		int numRows = b.numRows();
 		int numCols = b.numCols();
-		for (int i = numRows; i > 0; i--)
-		{
+		for (int i = numRows; i > 0; i--) {
 			JLabel temp = new JLabel("" + i);
 			temp.setHorizontalAlignment(SwingConstants.CENTER);
 			grid.add(temp);
-			for (int j = 1; j <= numCols; j++)
-			{
+			for (int j = 1; j <= numCols; j++) {
 
 				// grid.add(new JLabel(""+(j-1+'a')));
-				JButton jb = new JButton();
-				if (!isPlayback)
-				{
-					jb.addActionListener(new ButtonListener(b.getSquare(i, j),
-							b));
+				if (!isPlayback) {
+					b.getSquare(i, j).addMouseListener(
+							new ButtonListener(b.getSquare(i, j), b));
 				}
-				b.getSquare(i, j).setButton(jb);// Let the Square know which
-												// button it owns.
-				grid.add(jb);// Add the button to the grid.
+				grid.add(b.getSquare(i, j));// Add the button to the grid.
 
 			}
 
 		}
-		for (int k = 0; k <= numCols; k++)
-		{
-			if (k != 0)
-			{
+		for (int k = 0; k <= numCols; k++) {
+			if (k != 0) {
 				JLabel temp = new JLabel("" + (char) (k - 1 + 'A'));
 				temp.setHorizontalAlignment(SwingConstants.CENTER);
 				grid.add(temp);
 
-			} else
-			{
+			} else {
 				grid.add(new JLabel(""));
 			}
 		}
@@ -251,11 +251,11 @@ public class PlayNetGame extends PlayGame
 	/**
 	 * Setups up the window
 	 * 
-	 * @param isPlayback whether this is just a review or not
+	 * @param isPlayback
+	 *            whether this is just a review or not
 	 */
 	@SuppressWarnings("static-access")
-	private void initComponents(boolean isPlayback)
-	{
+	private void initComponents(boolean isPlayback) {
 
 		super.removeAll();
 		menu.setVisible(false);
@@ -288,8 +288,7 @@ public class PlayNetGame extends PlayGame
 		inCheck.setVisible(false);
 		this.add(inCheck, c);
 
-		if (boards.length == 1)
-		{
+		if (boards.length == 1) {
 			c.gridheight = 12;
 			c.gridy = 2;
 			c.fill = GridBagConstraints.HORIZONTAL;
@@ -301,8 +300,7 @@ public class PlayNetGame extends PlayGame
 			c.gridx = 0;
 
 			this.add(createGrid(boards[0], isPlayback), c);
-		} else
-		{
+		} else {
 			c.gridheight = 12;
 			c.gridy = 2;
 			c.fill = GridBagConstraints.HORIZONTAL;
@@ -326,35 +324,27 @@ public class PlayNetGame extends PlayGame
 		}
 
 		JButton nextButt = new JButton("Next");
-		nextButt.addActionListener(new ActionListener()
-		{
+		nextButt.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				if (index + 1 == history.length)
 					return;
-				try
-				{
+				try {
 					history[++index].execute();
-				} catch (Exception e1)
-				{
+				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
 			}
 		});
 		JButton prevButt = new JButton("Previous");
-		prevButt.addActionListener(new ActionListener()
-		{
+		prevButt.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				if (index == -1)
 					return;
-				try
-				{
+				try {
 					history[index--].undo();
-				} catch (Exception e1)
-				{
+				} catch (Exception e1) {
 
 				}
 			}
@@ -390,11 +380,9 @@ public class PlayNetGame extends PlayGame
 		 * many pieces black has. If neither team has any pieces then
 		 */
 		if (getGame().getWhiteTeam().size() <= 4
-				&& getGame().getBlackTeam().size() <= 4)
-		{
+				&& getGame().getBlackTeam().size() <= 4) {
 			k = 4;
-		} else
-		{
+		} else {
 			double o = getGame().getWhiteTeam().size() > getGame()
 					.getBlackTeam().size() ? Math.sqrt(getGame().getWhiteTeam()
 					.size()) : Math.sqrt(getGame().getBlackTeam().size());
@@ -407,27 +395,19 @@ public class PlayNetGame extends PlayGame
 		whiteCaptures = new JPanel();
 		whiteCaptures.setBorder(BorderFactory
 				.createTitledBorder("Captured Pieces"));
-		if (k < 4)
-		{
+		if (k < 4) {
 			whiteCapturesBox = new Jail(4, 4);
 			whiteCaptures.setLayout(new GridLayout(4, 4));
-		} else
-		{
+		} else {
 			whiteCapturesBox = new Jail(k, k);
 			whiteCaptures.setLayout(new GridLayout(k, k));
 		}
 		whiteCaptures.setPreferredSize(new Dimension((whiteCapturesBox
 				.numCols() + 1) * 25, (whiteCapturesBox.numRows() + 1) * 25));
-		for (int i = k; i > 0; i--)
-		{
-			for (int j = 1; j <= k; j++)
-			{
-				JButton jb = new JButton();
-				whiteCapturesBox.getSquare(i, j).setButton(jb);// Let the Square
-																// know which
-																// button it
-																// owns.
-				whiteCaptures.add(jb);
+		for (int i = k; i > 0; i--) {
+			for (int j = 1; j <= k; j++) {
+				Square square = new Square(i, j);
+				whiteCaptures.add(square);
 			}
 		}
 
@@ -437,27 +417,19 @@ public class PlayNetGame extends PlayGame
 		blackCaptures = new JPanel();
 		blackCaptures.setBorder(BorderFactory
 				.createTitledBorder("Captured Pieces"));
-		if (k < 4)
-		{
+		if (k < 4) {
 			blackCapturesBox = new Jail(4, 4);
 			blackCaptures.setLayout(new GridLayout(4, 4));
-		} else
-		{
+		} else {
 			blackCapturesBox = new Jail(k, k);
 			blackCaptures.setLayout(new GridLayout(k, k));
 		}
 		blackCaptures.setPreferredSize(new Dimension((blackCapturesBox
 				.numCols() + 1) * 25, (blackCapturesBox.numRows() + 1) * 25));
-		for (int i = k; i > 0; i--)
-		{
-			for (int j = 1; j <= k; j++)
-			{
-				JButton jb = new JButton();
-				blackCapturesBox.getSquare(i, j).setButton(jb);// Let the Square
-																// know which
-																// button it
-																// owns.
-				blackCaptures.add(jb);
+		for (int i = k; i > 0; i--) {
+			for (int j = 1; j <= k; j++) {
+				Square square = new Square(i, j);
+				blackCaptures.add(square);
 			}
 		}
 
@@ -493,8 +465,7 @@ public class PlayNetGame extends PlayGame
 		this.add(blackCaptures, c);
 
 		// If it is playback then we do not want timers.
-		if (!isPlayback)
-		{
+		if (!isPlayback) {
 			// Adds the Black timer
 			c.fill = GridBagConstraints.HORIZONTAL;
 			c.anchor = GridBagConstraints.BASELINE;
@@ -514,8 +485,7 @@ public class PlayNetGame extends PlayGame
 			c.gridx = 11 + ifDouble;
 			c.gridy = 6;
 			this.add(whiteTimer.getLabel(), c);
-		} else
-		{
+		} else {
 			// Adds the Black timer
 			c.fill = GridBagConstraints.HORIZONTAL;
 			c.anchor = GridBagConstraints.BASELINE;
@@ -545,12 +515,10 @@ public class PlayNetGame extends PlayGame
 		c.ipadx = 0;
 		c.gridx = 11 + ifDouble;
 		// Changes spacing and location if there is a timer or not.
-		if (whiteTimer instanceof NoTimer)
-		{
+		if (whiteTimer instanceof NoTimer) {
 			c.gridy = 6;
 			c.insets = new Insets(10, 25, 0, 25);
-		} else
-		{
+		} else {
 			c.gridy = 7;
 			c.insets = new Insets(0, 25, 0, 25);
 		}
@@ -565,12 +533,10 @@ public class PlayNetGame extends PlayGame
 		c.insets = new Insets(10, 0, 10, 0);
 		// Changes spacing and adds space to the bottom of the window if there
 		// is a timer.
-		if (whiteTimer instanceof NoTimer)
-		{
+		if (whiteTimer instanceof NoTimer) {
 			c.gridheight = 1;
 			c.gridy = 9;
-		} else
-		{
+		} else {
 			c.gridheight = 2;
 			c.gridy = 11;
 		}
@@ -580,29 +546,22 @@ public class PlayNetGame extends PlayGame
 	}
 
 	@Override
-	public JMenu createMenu()
-	{
+	public JMenu createMenu() {
 		menu = new JMenu("Menu");
-		if (!isPlayback)
-		{
+		if (!isPlayback) {
 			drawItem = new JMenuItem("Request Draw", KeyEvent.VK_R);
-			drawItem.addActionListener(new ActionListener()
-			{
+			drawItem.addActionListener(new ActionListener() {
 				@Override
-				public void actionPerformed(ActionEvent e)
-				{
-					if (getGame().isBlackMove() == isBlack)
-					{
-						if (AIGame)
-						{
+				public void actionPerformed(ActionEvent e) {
+					if (getGame().isBlackMove() == isBlack) {
+						if (AIGame) {
 							int surrender = requestAIDraw();
 							if (surrender != 0)
 								return;
 							Result result = new Result(Result.DRAW);
 							result.setText("You have declared a draw. What would you like to do?");
 							PlayGame.endOfGame(result);
-						} else
-						{
+						} else {
 							int surrender = requestDraw();
 
 							if (surrender != 0)
@@ -626,8 +585,7 @@ public class PlayNetGame extends PlayGame
 	/**
 	 * @return The user's choice to send a draw request, 0 or 1
 	 */
-	public int requestDraw()
-	{
+	public int requestDraw() {
 		return JOptionPane.showConfirmDialog(null,
 				"Would you like to send the other player a draw request?",
 				"Draw", JOptionPane.YES_NO_OPTION);
@@ -636,8 +594,7 @@ public class PlayNetGame extends PlayGame
 	/**
 	 * @return The user's choice to request a draw vs an AI player.
 	 */
-	public int requestAIDraw()
-	{
+	public int requestAIDraw() {
 		return JOptionPane.showConfirmDialog(null,
 				"Are you sure you would like to declare a draw?", "Draw",
 				JOptionPane.YES_NO_OPTION);
@@ -646,10 +603,10 @@ public class PlayNetGame extends PlayGame
 	/**
 	 * Setter method for boolean indicating if the current game is an AIGame.
 	 * 
-	 * @param AIGame If this game is an AIGame
+	 * @param AIGame
+	 *            If this game is an AIGame
 	 */
-	public void setAIGame(boolean AIGame)
-	{
+	public void setAIGame(boolean AIGame) {
 		this.AIGame = AIGame;
 		Driver.getInstance().fileMenu.setVisible(true);
 		drawItem.setText("Declare Draw");
