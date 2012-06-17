@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.io.Serializable;
 
 import javax.swing.BorderFactory;
-import javax.swing.JButton;
+import javax.swing.JLabel;
 
 /**
  * Square.java
@@ -13,10 +13,9 @@ import javax.swing.JButton;
  * 
  * @author Drew Hannay, Daniel Opdyke & Alisa Maas
  * 
- * CSCI 335, Wheaton College, Spring 2011 Phase 2 April 7, 2011
+ *         CSCI 335, Wheaton College, Spring 2011 Phase 2 April 7, 2011
  */
-public class Square implements Serializable
-{
+public class Square extends JLabel implements Serializable {
 
 	/**
 	 * Generated Serial Version ID
@@ -40,10 +39,6 @@ public class Square implements Serializable
 	 */
 	private Color background;
 	/**
-	 * JButton represents this Square in the GUI
-	 */
-	private JButton jb;
-	/**
 	 * If the Square is able to be occupied.
 	 */
 	private boolean isHabitable;
@@ -56,11 +51,12 @@ public class Square implements Serializable
 	/**
 	 * Constructor. Initializes Rows, Columns, and isHabitable.
 	 * 
-	 * @param row Row index.
-	 * @param col Column index.
+	 * @param row
+	 *            Row index.
+	 * @param col
+	 *            Column index.
 	 */
-	public Square(int row, int col)
-	{
+	public Square(int row, int col) {
 		this.row = row;
 		this.col = col;
 		isHabitable = true;
@@ -71,8 +67,7 @@ public class Square implements Serializable
 	 * 
 	 * @return Index to Column
 	 */
-	public int getCol()
-	{
+	public int getCol() {
 		return col;
 	}
 
@@ -81,9 +76,8 @@ public class Square implements Serializable
 	 * 
 	 * @return Square Color
 	 */
-	public Color getColor()
-	{
-		return jb.getBackground();
+	public Color getColor() {
+		return getBackground();
 	}
 
 	/**
@@ -91,8 +85,7 @@ public class Square implements Serializable
 	 * 
 	 * @return Piece occupying the Square.
 	 */
-	public Piece getPiece()
-	{
+	public Piece getPiece() {
 		return piece;
 	}
 
@@ -101,8 +94,7 @@ public class Square implements Serializable
 	 * 
 	 * @return Index to Row
 	 */
-	public int getRow()
-	{
+	public int getRow() {
 		return row;
 	}
 
@@ -111,8 +103,7 @@ public class Square implements Serializable
 	 * 
 	 * @return If Square can be occupied.
 	 */
-	public boolean isHabitable()
-	{
+	public boolean isHabitable() {
 		return isHabitable;
 	}
 
@@ -121,8 +112,7 @@ public class Square implements Serializable
 	 * 
 	 * @return If Square is occupied.
 	 */
-	public boolean isOccupied()
-	{
+	public boolean isOccupied() {
 		return (piece != null);
 	}
 
@@ -130,23 +120,17 @@ public class Square implements Serializable
 	 * Refresh the GUI's view of this Square with the current accurate
 	 * information.
 	 */
-	public void refresh()
-	{
-		jb.setContentAreaFilled(false);
-		jb.setOpaque(true);
-		if (piece != null)
-		{// If there's a Piece here
-			if (piece.getIcon() == null)
-			{// And it has no Icon
-				jb.setText(piece.getName());// Use it's name
-			} else
-			{
-				jb.setIcon(piece.getIcon());// Otherwise, use it's Icon
+	public void refresh() {
+		setOpaque(true);
+		if (piece != null) {// If there's a Piece here
+			if (piece.getIcon() == null) {// And it has no Icon
+				setText(piece.getName());// Use it's name
+			} else {
+				setIcon(piece.getIcon());// Otherwise, use it's Icon
 			}
-		} else
-		{// If there's no Piece, clear the Icon and Text of the Square.
-			jb.setIcon(null);
-			jb.setText("");
+		} else {// If there's no Piece, clear the Icon and Text of the Square.
+			setIcon(null);
+			setText("");
 		}
 		resetColor();// Then reset the color too.
 	}
@@ -154,45 +138,30 @@ public class Square implements Serializable
 	/**
 	 * Reset temporary changes to the Color of the Square
 	 */
-	public void resetColor()
-	{
-		if (background != null)
-		{
+	public void resetColor() {
+		if (background != null) {
 			// If a custom background color has been saved, use that.
-			jb.setBackground(background);
+			setBackground(background);
 			return;
 		}
-		jb.setBorder(null);
+		setBorder(null);
 		// Otherwise make our normal light/dark pattern.
-		if ((row % 2 != 0 && col % 2 != 0) || (row % 2 == 0 && col % 2 == 0))
-		{
-			jb.setBackground(Color.LIGHT_GRAY);
-			jb.setForeground(Color.getHSBColor(30, 70, 70));
-		} else
-		{
-			jb.setBackground(Color.getHSBColor(30, 70, 70));
-			jb.setForeground(Color.LIGHT_GRAY);
+		if ((row % 2 != 0 && col % 2 != 0) || (row % 2 == 0 && col % 2 == 0)) {
+			setBackground(Color.LIGHT_GRAY);
+			setForeground(Color.getHSBColor(30, 70, 70));
+		} else {
+			setBackground(Color.getHSBColor(30, 70, 70));
+			setForeground(Color.LIGHT_GRAY);
 		}
-	}
-
-	/**
-	 * Sets the JButton representing the Square.
-	 * 
-	 * @param jb Modifying JButton.
-	 */
-	public void setButton(JButton jb)
-	{
-		this.jb = jb;
-		refresh();// Refresh the view of the Square
 	}
 
 	/**
 	 * Sets index to column
 	 * 
-	 * @param col Index to column
+	 * @param col
+	 *            Index to column
 	 */
-	public void setCol(int col)
-	{
+	public void setCol(int col) {
 		// TODO Make sure they're setting a valid coordinate
 		this.col = col;
 	}
@@ -200,24 +169,23 @@ public class Square implements Serializable
 	/**
 	 * Sets the color of a square temporarily
 	 * 
-	 * @param c the color to set the background
+	 * @param c
+	 *            the color to set the background
 	 */
-	public void setColor(Color c)
-	{
-		jb.setBackground(c);
+	public void setColor(Color c) {
+		setBackground(c);
 	}
 
 	/**
 	 * Sets the background Color of the Square permanently
 	 * 
-	 * @param c New Color
+	 * @param c
+	 *            New Color
 	 */
-	public void setBackgroundColor(Color c)
-	{
-		jb.setBackground(c);// Use the given Color for the background
-		jb.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-		if (c != Square.HIGHLIGHT_COLOR)
-		{
+	public void setBackgroundColor(Color c) {
+		setBackground(c);
+		setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+		if (c != Square.HIGHLIGHT_COLOR) {
 			// If the Color is the highlight color, then change is only
 			// temporary. Don't store it.
 			background = c;
@@ -227,25 +195,24 @@ public class Square implements Serializable
 	/**
 	 * Sets if a Piece can move to Square.
 	 * 
-	 * @param isHabitable If Square can be occupied.
+	 * @param isHabitable
+	 *            If Square can be occupied.
 	 */
-	public void setHabitable(boolean isHabitable)
-	{
+	public void setHabitable(boolean isHabitable) {
 		this.isHabitable = isHabitable;
 	}
 
 	/**
 	 * Sets the Piece occupying the Square.
 	 * 
-	 * @param p New occupying Piece.
+	 * @param p
+	 *            New occupying Piece.
 	 * @return Old occupying Piece.
 	 */
-	public Piece setPiece(Piece p)
-	{
+	public Piece setPiece(Piece p) {
 		Piece oldPiece = piece;
 		piece = p;
-		if (piece != null)
-		{
+		if (piece != null) {
 			piece.setSquare(this);
 		}
 		return oldPiece;
@@ -254,10 +221,10 @@ public class Square implements Serializable
 	/**
 	 * Sets index to Row
 	 * 
-	 * @param row Index to row
+	 * @param row
+	 *            Index to row
 	 */
-	public void setRow(int row)
-	{
+	public void setRow(int row) {
 		// TODO Make sure they're setting a valid coordinate
 		this.row = row;
 	}
@@ -265,21 +232,20 @@ public class Square implements Serializable
 	/**
 	 * Get a String representation of this Square
 	 * 
-	 * @param unique If the row and/or column of this square must be shown
+	 * @param unique
+	 *            If the row and/or column of this square must be shown
 	 * @return The String representation of this Square
 	 */
-	public String toString(boolean[] unique)
-	{
+	public String toString(boolean[] unique) {
 		String files = "-abcdefgh";
 		String toReturn = "";
-		if (!unique[0])
-		{
+		if (!unique[0]) {
 			toReturn += files.charAt(col);
 		}
-		if (!unique[1])
-		{
+		if (!unique[1]) {
 			toReturn += row;
 		}
 		return toReturn;
 	}
+
 }
