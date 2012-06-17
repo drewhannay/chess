@@ -1,4 +1,4 @@
-#Sat Jun 16 13:04:11 PDT 2012
+#Sun Jun 17 16:32:59 PDT 2012
 /instance/org.eclipse.jdt.ui/cleanup.always_use_parentheses_in_expressions=false
 /instance/org.eclipse.jdt.ui/cleanup.make_parameters_final=false
 /instance/org.eclipse.jdt.core/org.eclipse.jdt.core.codeComplete.staticFieldPrefixes=
@@ -10,7 +10,7 @@
 /instance/org.eclipse.jdt.ui/cleanup.remove_trailing_whitespaces=true
 /instance/org.eclipse.jdt.ui/cleanup.make_private_fields_final=true
 /instance/org.eclipse.jdt.ui/cleanup.add_missing_override_annotations_interface_methods=true
-@org.eclipse.jdt.ui=3.7.1.r371_v20110824-0800
+@org.eclipse.jdt.ui=3.7.2.v20120109-1427
 /instance/org.eclipse.jdt.ui/cleanup.add_missing_nls_tags=false
 /instance/org.eclipse.jdt.ui/org.eclipse.jdt.ui.ignorelowercasenames=true
 /instance/org.eclipse.jdt.ui/cleanup.remove_private_constructors=true
@@ -46,7 +46,7 @@ file_export_version=3.0
 /instance/org.eclipse.jdt.ui/cleanup.organize_imports=true
 /instance/org.eclipse.jdt.ui/org.eclipse.jdt.ui.formatterprofiles.version=12
 /instance/org.eclipse.jdt.core/org.eclipse.jdt.core.compiler.codegen.inlineJsrBytecode=enabled
-@org.eclipse.jdt.core=3.7.1.v_B76_R37x
+@org.eclipse.jdt.core=3.7.3.v20120119-1537
 /instance/org.eclipse.jdt.ui/cleanup.remove_unused_private_types=true
 /instance/org.eclipse.jdt.ui/cleanup.add_missing_methods=false
 /instance/org.eclipse.jdt.ui/cleanup.remove_unused_imports=true
