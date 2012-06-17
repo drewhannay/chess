@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.io.Serializable;
 
 import javax.swing.BorderFactory;
-import javax.swing.JButton;
+import javax.swing.JLabel;
 
 /**
  * Square.java
@@ -15,7 +15,7 @@ import javax.swing.JButton;
  * 
  * CSCI 335, Wheaton College, Spring 2011 Phase 2 April 7, 2011
  */
-public class Square implements Serializable
+public class Square extends JLabel implements Serializable
 {
 
 	/**
@@ -39,10 +39,6 @@ public class Square implements Serializable
 	 * Customizable Color for this Square
 	 */
 	private Color background;
-	/**
-	 * JButton represents this Square in the GUI
-	 */
-	private JButton jb;
 	/**
 	 * If the Square is able to be occupied.
 	 */
@@ -83,7 +79,7 @@ public class Square implements Serializable
 	 */
 	public Color getColor()
 	{
-		return jb.getBackground();
+		return getBackground();
 	}
 
 	/**
@@ -132,21 +128,22 @@ public class Square implements Serializable
 	 */
 	public void refresh()
 	{
-		jb.setContentAreaFilled(false);
-		jb.setOpaque(true);
+		setOpaque(true);
 		if (piece != null)
 		{// If there's a Piece here
 			if (piece.getIcon() == null)
 			{// And it has no Icon
-				jb.setText(piece.getName());// Use it's name
-			} else
-			{
-				jb.setIcon(piece.getIcon());// Otherwise, use it's Icon
+				setText(piece.getName());// Use it's name
 			}
-		} else
+			else
+			{
+				setIcon(piece.getIcon());// Otherwise, use it's Icon
+			}
+		}
+		else
 		{// If there's no Piece, clear the Icon and Text of the Square.
-			jb.setIcon(null);
-			jb.setText("");
+			setIcon(null);
+			setText("");
 		}
 		resetColor();// Then reset the color too.
 	}
@@ -159,31 +156,21 @@ public class Square implements Serializable
 		if (background != null)
 		{
 			// If a custom background color has been saved, use that.
-			jb.setBackground(background);
+			setBackground(background);
 			return;
 		}
-		jb.setBorder(null);
+		setBorder(null);
 		// Otherwise make our normal light/dark pattern.
 		if ((row % 2 != 0 && col % 2 != 0) || (row % 2 == 0 && col % 2 == 0))
 		{
-			jb.setBackground(Color.LIGHT_GRAY);
-			jb.setForeground(Color.getHSBColor(30, 70, 70));
-		} else
-		{
-			jb.setBackground(Color.getHSBColor(30, 70, 70));
-			jb.setForeground(Color.LIGHT_GRAY);
+			setBackground(Color.LIGHT_GRAY);
+			setForeground(Color.getHSBColor(30, 70, 70));
 		}
-	}
-
-	/**
-	 * Sets the JButton representing the Square.
-	 * 
-	 * @param jb Modifying JButton.
-	 */
-	public void setButton(JButton jb)
-	{
-		this.jb = jb;
-		refresh();// Refresh the view of the Square
+		else
+		{
+			setBackground(Color.getHSBColor(30, 70, 70));
+			setForeground(Color.LIGHT_GRAY);
+		}
 	}
 
 	/**
@@ -204,7 +191,7 @@ public class Square implements Serializable
 	 */
 	public void setColor(Color c)
 	{
-		jb.setBackground(c);
+		setBackground(c);
 	}
 
 	/**
@@ -214,8 +201,8 @@ public class Square implements Serializable
 	 */
 	public void setBackgroundColor(Color c)
 	{
-		jb.setBackground(c);// Use the given Color for the background
-		jb.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+		setBackground(c);
+		setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 		if (c != Square.HIGHLIGHT_COLOR)
 		{
 			// If the Color is the highlight color, then change is only
@@ -282,4 +269,5 @@ public class Square implements Serializable
 		}
 		return toReturn;
 	}
+
 }

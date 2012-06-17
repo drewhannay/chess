@@ -9,6 +9,8 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 import java.util.List;
 
@@ -57,7 +59,7 @@ public class PlayGame extends JPanel
 	 * @author Drew Hannay & Daniel Opdyke
 	 * 
 	 */
-	class ButtonListener implements ActionListener
+	private class SquareListener implements MouseListener
 	{
 
 		/**
@@ -75,7 +77,7 @@ public class PlayGame extends JPanel
 		 * @param s The Square which is attached to the ButtonListener.
 		 * @param b The board that is being played on.
 		 */
-		public ButtonListener(Square s, Board b)
+		public SquareListener(Square s, Board b)
 		{
 			clickedSquare = s;
 			this.b = b;
@@ -86,14 +88,13 @@ public class PlayGame extends JPanel
 		 * either highlight possible destinations or move the piece.
 		 */
 		@Override
-		public void actionPerformed(ActionEvent e)
+		public void mouseClicked(MouseEvent e)
 		{
 			if (mustPlace)
 			{
 				mustPlace = false;
 				getGame().nextTurn();
-				if (!clickedSquare.isOccupied() && clickedSquare.isHabitable()
-						&& placePiece != null)
+				if (!clickedSquare.isOccupied() && clickedSquare.isHabitable() && placePiece != null)
 				{
 					placePiece.setSquare(clickedSquare);
 					clickedSquare.setPiece(placePiece);
@@ -109,24 +110,22 @@ public class PlayGame extends JPanel
 			{
 				boardRefresh(getGame().getBoards());
 				mustMove = false;
-			} else if (mustMove
-					&& clickedSquare.getColor() == Square.HIGHLIGHT_COLOR)
+			}
+			else if (mustMove && clickedSquare.getColor() == Square.HIGHLIGHT_COLOR)
 			{
 				try
 				{
-					getGame()
-							.playMove(new Move(b, storedSquare, clickedSquare));
+					getGame().playMove(new Move(b, storedSquare, clickedSquare));
 					mustMove = false;
 					boardRefresh(getGame().getBoards());
-				} catch (Exception e1)
+				}
+				catch (Exception e1)
 				{
 					System.out.println(e1.getMessage());
 					e1.printStackTrace();
 				}
-			} else if (!mustMove
-					&& clickedSquare.getPiece() != null
-					&& clickedSquare.getPiece().isBlack() == getGame()
-							.isBlackMove())
+			}
+			else if (!mustMove && clickedSquare.getPiece() != null && clickedSquare.getPiece().isBlack() == getGame().isBlackMove())
 			{
 				List<Square> dests = clickedSquare.getPiece().getLegalDests();
 				if (dests.size() > 0)
@@ -139,6 +138,26 @@ public class PlayGame extends JPanel
 					mustMove = true;
 				}
 			}
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e)
+		{
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e)
+		{
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e)
+		{
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e)
+		{
 		}
 	}
 
@@ -285,7 +304,8 @@ public class PlayGame extends JPanel
 				history[index].undo();
 				index--;
 			}
-		} else
+		}
+		else
 		{
 			mustMove = false;
 			PlayGame.whiteTimer = g.getWhiteTimer();
@@ -318,8 +338,7 @@ public class PlayGame extends JPanel
 			}
 		}
 
-		Piece objective = getGame().isBlackMove() ? getGame().getBlackRules()
-				.objectivePiece(true) : getGame().getWhiteRules()
+		Piece objective = getGame().isBlackMove() ? getGame().getBlackRules().objectivePiece(true) : getGame().getWhiteRules()
 				.objectivePiece(false);
 
 		if (objective != null && objective.isInCheck())
@@ -327,18 +346,18 @@ public class PlayGame extends JPanel
 			inCheck.setVisible(true);
 			if (getGame().getBlackRules().objectivePiece(true).isInCheck())
 			{
-				inCheck.setBorder(BorderFactory
-						.createTitledBorder("Black Team"));
-			} else
+				inCheck.setBorder(BorderFactory.createTitledBorder("Black Team"));
+			}
+			else
 			{
-				inCheck.setBorder(BorderFactory
-						.createTitledBorder("White Team"));
+				inCheck.setBorder(BorderFactory.createTitledBorder("White Team"));
 			}
 
 			for (Piece p : getGame().getThreats(objective))
 				p.getSquare().setColor(Color.red);
 
-		} else
+		}
+		else
 		{
 			inCheck.setVisible(false);
 		}
@@ -357,8 +376,7 @@ public class PlayGame extends JPanel
 			{
 				if (blackCaptured != null && index < blackCaptured.length)
 				{
-					whiteCapturesBox.getSquare(i, j).setPiece(
-							blackCaptured[index]);
+					whiteCapturesBox.getSquare(i, j).setPiece(blackCaptured[index]);
 					index++;
 				}
 				whiteCapturesBox.getSquare(i, j).refresh();
@@ -379,23 +397,17 @@ public class PlayGame extends JPanel
 			{
 				if (whiteCaptured != null && index < whiteCaptured.length)
 				{
-					blackCapturesBox.getSquare(i, j).setPiece(
-							whiteCaptured[index]);
+					blackCapturesBox.getSquare(i, j).setPiece(whiteCaptured[index]);
 					index++;
 				}
 				blackCapturesBox.getSquare(i, j).refresh();
 			}
 		}
 		// Highlight the name labels if it's their turn.
-		whiteLabel.setBackground(getGame().isBlackMove() ? null
-				: Square.HIGHLIGHT_COLOR);
-		whiteLabel.setForeground(getGame().isBlackMove() ? Color.black
-				: Color.white);
-		blackLabel
-				.setBackground(getGame().isBlackMove() ? Square.HIGHLIGHT_COLOR
-						: null);
-		blackLabel.setForeground(getGame().isBlackMove() ? Color.white
-				: Color.black);
+		whiteLabel.setBackground(getGame().isBlackMove() ? null : Square.HIGHLIGHT_COLOR);
+		whiteLabel.setForeground(getGame().isBlackMove() ? Color.black : Color.white);
+		blackLabel.setBackground(getGame().isBlackMove() ? Square.HIGHLIGHT_COLOR : null);
+		blackLabel.setForeground(getGame().isBlackMove() ? Color.white : Color.black);
 
 	}
 
@@ -407,13 +419,10 @@ public class PlayGame extends JPanel
 	{
 		PlayNetGame.running = false;
 		if (g.getHistory().size() != 0)
-			PlayNetGame.netMove = g.moveToFakeMove(g.getHistory().get(
-					g.getHistory().size() - 1));
+			PlayNetGame.netMove = g.moveToFakeMove(g.getHistory().get(g.getHistory().size() - 1));
 		else if (!r.isDraw())
 		{
-			JOptionPane
-					.showMessageDialog(null,
-							"No moves were made and the time ran out. Returning to the Main Menu.");
+			JOptionPane.showMessageDialog(null, "No moves were made and the time ran out. Returning to the Main Menu.");
 			PlayNetGame.running = false;
 			Driver.getInstance().revertPanel();
 			Driver.getInstance().gamePlayHelp.setVisible(false);
@@ -423,17 +432,14 @@ public class PlayGame extends JPanel
 		}
 		if (isPlayback)
 			return;
-		Object[] options = new String[] { "Save Record of Game", "New Game",
-				"Quit" };
+		Object[] options = new String[] { "Save Record of Game", "New Game", "Quit" };
 		menu.setVisible(false);
-		int answer = JOptionPane.showOptionDialog(null, r.text(), r.winText(),
-				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
-				null, options, options[0]);
+		int answer = JOptionPane.showOptionDialog(null, r.text(), r.winText(), JOptionPane.YES_NO_CANCEL_OPTION,
+				JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
 		switch (answer)
 		{
 		case 0:
-			String fileName = JOptionPane.showInputDialog(null,
-					"Enter a name for the save file:", "Saving...",
+			String fileName = JOptionPane.showInputDialog(null, "Enter a name for the save file:", "Saving...",
 					JOptionPane.PLAIN_MESSAGE);
 			getGame().saveGame(fileName, getGame().isClassicChess());
 			g.setBlackMove(false);
@@ -481,12 +487,10 @@ public class PlayGame extends JPanel
 
 		// Create a JPanel to hold the grid and set the layout to the number of
 		// squares in the board.
-		// final JPanel grid = new JPanel();
 		grid.setLayout(new GridLayout(b.numRows() + 1, b.numCols()));
 		// Set the size of the grid to the number of rows and columns, scaled by
 		// 48, the size of the images.
-		grid.setPreferredSize(new Dimension((b.numCols() + 1) * 48, (b
-				.numRows() + 1) * 48));
+		grid.setPreferredSize(new Dimension((b.numCols() + 1) * 48, (b.numRows() + 1) * 48));
 
 		// Loop through the board, initializing each Square and adding it's
 		// ActionListener.
@@ -499,18 +503,11 @@ public class PlayGame extends JPanel
 			grid.add(temp);
 			for (int j = 1; j <= numCols; j++)
 			{
-
-				// grid.add(new JLabel(""+(j-1+'a')));
-				JButton jb = new JButton();
 				if (!isPlayback)
 				{
-					jb.addActionListener(new ButtonListener(b.getSquare(i, j),
-							b));
+					b.getSquare(i, j).addMouseListener(new SquareListener(b.getSquare(i, j), b));
 				}
-				b.getSquare(i, j).setButton(jb);// Let the Square know which
-												// button it owns.
-				grid.add(jb);// Add the button to the grid.
-
+				grid.add(b.getSquare(i, j));// Add the button to the grid.
 			}
 
 		}
@@ -522,7 +519,8 @@ public class PlayGame extends JPanel
 				temp.setHorizontalAlignment(SwingConstants.CENTER);
 				grid.add(temp);
 
-			} else
+			}
+			else
 			{
 				grid.add(new JLabel(""));
 			}
@@ -567,8 +565,7 @@ public class PlayGame extends JPanel
 				{
 					whiteTimer.stop();
 					blackTimer.stop();
-					String fileName = JOptionPane.showInputDialog(null,
-							"Enter a name for the save file:", "Saving...",
+					String fileName = JOptionPane.showInputDialog(null, "Enter a name for the save file:", "Saving...",
 							JOptionPane.PLAIN_MESSAGE);
 					if (fileName == null)
 						return;
@@ -615,16 +612,14 @@ public class PlayGame extends JPanel
 					return;
 				try
 				{
-					getGame().getHistory()
-							.get(getGame().getHistory().size() - 1).undo();
-				} catch (Exception e)
+					getGame().getHistory().get(getGame().getHistory().size() - 1).undo();
+				}
+				catch (Exception e)
 				{
 
 				}
-				getGame().getHistory()
-						.remove(getGame().getHistory().size() - 1);
-				(getGame().isBlackMove() ? getGame().getBlackRules()
-						: getGame().getWhiteRules()).undoEndOfGame();
+				getGame().getHistory().remove(getGame().getHistory().size() - 1);
+				(getGame().isBlackMove() ? getGame().getBlackRules() : getGame().getWhiteRules()).undoEndOfGame();
 				boardRefresh(getGame().getBoards());
 			}
 		});
@@ -666,7 +661,8 @@ public class PlayGame extends JPanel
 			c.gridx = 0;
 
 			this.add(createGrid(boards[0], isPlayback), c);
-		} else
+		}
+		else
 		{
 			c.gridheight = 12;
 			c.gridy = 2;
@@ -701,7 +697,8 @@ public class PlayGame extends JPanel
 				try
 				{
 					history[++index].execute();
-				} catch (Exception e1)
+				}
+				catch (Exception e1)
 				{
 					e1.printStackTrace();
 				}
@@ -718,7 +715,8 @@ public class PlayGame extends JPanel
 				try
 				{
 					history[index--].undo();
-				} catch (Exception e1)
+				}
+				catch (Exception e1)
 				{
 				}
 			}
@@ -750,15 +748,14 @@ public class PlayGame extends JPanel
 		 * This sets k to either the size of how many pieces white has or how
 		 * many pieces black has. If neither team has any pieces then
 		 */
-		if (getGame().getWhiteTeam().size() <= 4
-				&& getGame().getBlackTeam().size() <= 4)
+		if (getGame().getWhiteTeam().size() <= 4 && getGame().getBlackTeam().size() <= 4)
 		{
 			k = 4;
-		} else
+		}
+		else
 		{
-			double o = getGame().getWhiteTeam().size() > getGame()
-					.getBlackTeam().size() ? Math.sqrt(getGame().getWhiteTeam()
-					.size()) : Math.sqrt(getGame().getBlackTeam().size());
+			double o = getGame().getWhiteTeam().size() > getGame().getBlackTeam().size() ? Math.sqrt(getGame().getWhiteTeam().size())
+					: Math.sqrt(getGame().getBlackTeam().size());
 			k = (int) Math.ceil(o);
 		}
 
@@ -766,29 +763,24 @@ public class PlayGame extends JPanel
 		 * Makes Black's jail
 		 */
 		whiteCaptures = new JPanel();
-		whiteCaptures.setBorder(BorderFactory
-				.createTitledBorder("Captured Pieces"));
+		whiteCaptures.setBorder(BorderFactory.createTitledBorder("Captured Pieces"));
 		if (k < 4)
 		{
 			whiteCapturesBox = new Jail(4, 4);
 			whiteCaptures.setLayout(new GridLayout(4, 4));
-		} else
+		}
+		else
 		{
 			whiteCapturesBox = new Jail(k, k);
 			whiteCaptures.setLayout(new GridLayout(k, k));
 		}
-		whiteCaptures.setPreferredSize(new Dimension((whiteCapturesBox
-				.numCols() + 1) * 25, (whiteCapturesBox.numRows() + 1) * 25));
+		whiteCaptures.setPreferredSize(new Dimension((whiteCapturesBox.numCols() + 1) * 25, (whiteCapturesBox.numRows() + 1) * 25));
 		for (int i = k; i > 0; i--)
 		{
 			for (int j = 1; j <= k; j++)
 			{
-				JButton jb = new JButton();
-				whiteCapturesBox.getSquare(i, j).setButton(jb);// Let the Square
-																// know which
-																// button it
-																// owns.
-				whiteCaptures.add(jb);
+				Square whiteJail = new Square(i, j);
+				whiteCaptures.add(whiteJail);
 			}
 		}
 
@@ -796,29 +788,24 @@ public class PlayGame extends JPanel
 		 * Makes White's jail
 		 */
 		blackCaptures = new JPanel();
-		blackCaptures.setBorder(BorderFactory
-				.createTitledBorder("Captured Pieces"));
+		blackCaptures.setBorder(BorderFactory.createTitledBorder("Captured Pieces"));
 		if (k < 4)
 		{
 			blackCapturesBox = new Jail(4, 4);
 			blackCaptures.setLayout(new GridLayout(4, 4));
-		} else
+		}
+		else
 		{
 			blackCapturesBox = new Jail(k, k);
 			blackCaptures.setLayout(new GridLayout(k, k));
 		}
-		blackCaptures.setPreferredSize(new Dimension((blackCapturesBox
-				.numCols() + 1) * 25, (blackCapturesBox.numRows() + 1) * 25));
+		blackCaptures.setPreferredSize(new Dimension((blackCapturesBox.numCols() + 1) * 25, (blackCapturesBox.numRows() + 1) * 25));
 		for (int i = k; i > 0; i--)
 		{
 			for (int j = 1; j <= k; j++)
 			{
-				JButton jb = new JButton();
-				blackCapturesBox.getSquare(i, j).setButton(jb);// Let the Square
-																// know which
-																// button it
-																// owns.
-				blackCaptures.add(jb);
+				Square blackJail = new Square(i, j);
+				blackCaptures.add(blackJail);
 			}
 		}
 
@@ -885,7 +872,8 @@ public class PlayGame extends JPanel
 			c.gridx = 11 + ifDouble;
 			c.gridy = 6;
 			this.add(whiteTimer.getLabel(), c);
-		} else
+		}
+		else
 		{
 			// Adds the Black timer
 			c.fill = GridBagConstraints.HORIZONTAL;
@@ -920,7 +908,8 @@ public class PlayGame extends JPanel
 		{
 			c.gridy = 6;
 			c.insets = new Insets(10, 25, 0, 25);
-		} else
+		}
+		else
 		{
 			c.gridy = 7;
 			c.insets = new Insets(0, 25, 0, 25);
@@ -940,7 +929,8 @@ public class PlayGame extends JPanel
 		{
 			c.gridheight = 1;
 			c.gridy = 9;
-		} else
+		}
+		else
 		{
 			c.gridheight = 2;
 			c.gridy = 11;

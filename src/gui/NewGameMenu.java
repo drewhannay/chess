@@ -149,8 +149,7 @@ public class NewGameMenu extends JPanel
 				pop.setResizable(false);
 				pop.setLocationRelativeTo(null);
 				JPanel options = new JPanel();
-				final JLabel label = new JLabel(
-						"Would you like to host a game or connect to one?");
+				final JLabel label = new JLabel("Would you like to host a game or connect to one?");
 				final JButton client = new JButton("Connect");
 				client.addActionListener(new ActionListener()
 				{
@@ -164,8 +163,7 @@ public class NewGameMenu extends JPanel
 						popped.setLocationRelativeTo(null);
 						GridBagConstraints c = new GridBagConstraints();
 
-						final JLabel hoster = new JLabel(
-								"Which computer would you like to connect to?");
+						final JLabel hoster = new JLabel("Which computer would you like to connect to?");
 						final JTextField computer = new JTextField("", 2);
 
 						final JButton save = new JButton("Next");
@@ -176,39 +174,36 @@ public class NewGameMenu extends JPanel
 							{
 								if (computer.getText().equals(""))
 								{
-									JOptionPane.showMessageDialog(null,
-											"Please enter a number");
+									JOptionPane.showMessageDialog(null, "Please enter a number");
 									return;
-								} else if (computer.getText().length() < 2)
+								}
+								else if (computer.getText().length() < 2)
 								{
 									try
 									{
-										int hostNumber = Integer
-												.parseInt(computer.getText());
+										int hostNumber = Integer.parseInt(computer.getText());
 										if (hostNumber > 25 || hostNumber < 1)
 											throw new Exception();
 										host = "cslab0" + hostNumber;
-									} catch (Exception ne)
+									}
+									catch (Exception ne)
 									{
-										JOptionPane
-												.showMessageDialog(null,
-														"Please enter a number between 1-25 in the box");
+										JOptionPane.showMessageDialog(null, "Please enter a number between 1-25 in the box");
 										return;
 									}
-								} else
+								}
+								else
 								{
 									try
 									{
-										int hostNumber = Integer
-												.parseInt(computer.getText());
+										int hostNumber = Integer.parseInt(computer.getText());
 										if (hostNumber > 25 || hostNumber < 1)
 											throw new Exception();
 										host = "cslab" + hostNumber;
-									} catch (Exception ne)
+									}
+									catch (Exception ne)
 									{
-										JOptionPane
-												.showMessageDialog(null,
-														"Please enter a number between 1-25 in the box");
+										JOptionPane.showMessageDialog(null, "Please enter a number between 1-25 in the box");
 										return;
 									}
 								}
@@ -224,16 +219,17 @@ public class NewGameMenu extends JPanel
 											try
 											{
 												new NetworkClient().join(host);
-											} catch (Exception e)
+											}
+											catch (Exception e)
 											{
 												e.printStackTrace();
 											}
 										}
 									});
 									client.start();
-									Driver.getInstance().setPanel(
-											new NetLoading(client));
-								} catch (Exception e1)
+									Driver.getInstance().setPanel(new NetLoading(client));
+								}
+								catch (Exception e1)
 								{
 									e1.printStackTrace();
 								}
@@ -340,11 +336,9 @@ public class NewGameMenu extends JPanel
 
 				if (files.length == 0)
 				{
-					JOptionPane
-							.showMessageDialog(
-									null,
-									"There are no AI files to use.\nPlease insert your AI java files in the AI directory.",
-									"No AI files", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null,
+							"There are no AI files to use.\nPlease insert your AI java files in the AI directory.", "No AI files",
+							JOptionPane.ERROR_MESSAGE);
 					return;
 				}
 				final JComboBox ai = new JComboBox(files);
@@ -363,50 +357,38 @@ public class NewGameMenu extends JPanel
 						File file = FileUtility.getAIFile(choice);
 						if (ai.getSelectedItem() == null)
 						{
-							JOptionPane.showMessageDialog(null,
-									"You have not selected an AI file",
-									"No AI file", JOptionPane.ERROR_MESSAGE);
+							JOptionPane.showMessageDialog(null, "You have not selected an AI file", "No AI file",
+									JOptionPane.ERROR_MESSAGE);
 							return;
 						}
-						Game toPlay = Builder.newGame((String) dropdown
-								.getSelectedItem());
+						Game toPlay = Builder.newGame((String) dropdown.getSelectedItem());
 
-						JavaCompiler compiler = ToolProvider
-								.getSystemJavaCompiler();
-						StandardJavaFileManager fileManager = compiler
-								.getStandardFileManager(null,
-										Locale.getDefault(), null);
+						JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+						StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, Locale.getDefault(), null);
 
 						String[] compileOptions = new String[] { "-d", "bin" };
-						Iterable<String> compilationOptions = Arrays
-								.asList(compileOptions);
+						Iterable<String> compilationOptions = Arrays.asList(compileOptions);
 
 						// prepare the source file to compile
 						List<File> sourceFileList = new ArrayList<File>();
 						sourceFileList.add(file);
-						Iterable<? extends JavaFileObject> compilationUnits = fileManager
-								.getJavaFileObjectsFromFiles(sourceFileList);
-						CompilationTask task = compiler.getTask(null,
-								fileManager, null, compilationOptions, null,
-								compilationUnits);
+						Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromFiles(sourceFileList);
+						CompilationTask task = compiler.getTask(null, fileManager, null, compilationOptions, null, compilationUnits);
 
 						boolean result = task.call();
 						if (!result)
 						{
-							JOptionPane
-									.showMessageDialog(
-											null,
-											"Compilation failed\n"
-													+ "Make sure your class implements the AIPlugin interface\n"
-													+ "Make sure your class includes the following imports:\n"
-													+ "import ai.*;\n"
-													+ "import ai.AIAdapter.*;\n");
+							JOptionPane.showMessageDialog(null, "Compilation failed\n"
+									+ "Make sure your class implements the AIPlugin interface\n"
+									+ "Make sure your class includes the following imports:\n" + "import ai.*;\n"
+									+ "import ai.AIAdapter.*;\n");
 							return;
 						}
 						try
 						{
 							fileManager.close();
-						} catch (IOException e)
+						}
+						catch (IOException e)
 						{
 						}
 
@@ -415,8 +397,7 @@ public class NewGameMenu extends JPanel
 						try
 						{
 							ClassLoader c = ClassLoader.getSystemClassLoader();
-							Class<?> klazz = c.loadClass(choice.substring(0,
-									choice.indexOf(".java")));
+							Class<?> klazz = c.loadClass(choice.substring(0, choice.indexOf(".java")));
 							Constructor<?> construct = klazz.getConstructor();
 							plugin = (AIPlugin) construct.newInstance();
 
@@ -429,14 +410,16 @@ public class NewGameMenu extends JPanel
 									try
 									{
 										ai.runGame(plugin);
-									} catch (Exception e)
+									}
+									catch (Exception e)
 									{
 										e.printStackTrace();
 									}
 								}
 							});
 							aiThread.start();
-						} catch (Exception e1)
+						}
+						catch (Exception e1)
 						{
 							e1.printStackTrace();
 						}
@@ -444,11 +427,11 @@ public class NewGameMenu extends JPanel
 						// System.out.println(toPlay.equals(ai.getGame()));
 						try
 						{
-							PlayNetGame png = new PlayNetGame(toPlay, false,
-									false);
+							PlayNetGame png = new PlayNetGame(toPlay, false, false);
 							png.setAIGame(true);
 							Driver.getInstance().setPanel(png);
-						} catch (Exception e)
+						}
+						catch (Exception e)
 						{
 							return;
 						}
@@ -518,7 +501,8 @@ public class NewGameMenu extends JPanel
 				c.gridx = 0;
 				c.gridy = 2;
 				add(backButton, c);
-			} else
+			}
+			else
 			{
 				// Layout stuff. Make it better later.
 				c.gridx = 0;
@@ -535,7 +519,8 @@ public class NewGameMenu extends JPanel
 				c.gridy = 2;
 				add(backButton, c);
 			}
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 
 		}
@@ -568,8 +553,7 @@ public class NewGameMenu extends JPanel
 			for (String s : gametypes)
 			{
 				Game temp = Builder.newGame(s);
-				if (temp.getWhiteRules().networkable()
-						&& temp.getBlackRules().networkable())
+				if (temp.getWhiteRules().networkable() && temp.getBlackRules().networkable())
 					filtered.add(s);
 			}
 			gametypes = new String[filtered.size()];
@@ -592,8 +576,7 @@ public class NewGameMenu extends JPanel
 
 		// Create button and add ActionListener
 		final JButton done = new JButton("Start");
-		String[] timerNames = { "No timer", "Bronstein Delay", "Fischer",
-				"Fischer After", "Hour Glass", "Simple Delay", "Word" };
+		String[] timerNames = { "No timer", "Bronstein Delay", "Fischer", "Fischer After", "Hour Glass", "Simple Delay", "Word" };
 		final JComboBox timers = new JComboBox(timerNames);
 		final JLabel totalTimeText = new JLabel("Total Time (sec): ");
 		totalTimeText.setVisible(false);
@@ -616,7 +599,8 @@ public class NewGameMenu extends JPanel
 					totalTime.setVisible(true);
 					increaseText.setVisible(true);
 					increase.setVisible(true);
-				} else
+				}
+				else
 				{
 					totalTimeText.setVisible(false);
 					totalTime.setVisible(false);
@@ -703,19 +687,23 @@ public class NewGameMenu extends JPanel
 				{
 					blackTimer = new NoTimer();
 					whiteTimer = new NoTimer();
-				} else if (timerName.equals("Bronstein Delay"))
+				}
+				else if (timerName.equals("Bronstein Delay"))
 				{
 					blackTimer = new BronsteinDelay(increment, startTime, true);
 					whiteTimer = new BronsteinDelay(increment, startTime, false);
-				} else if (timerName.equals("Fischer"))
+				}
+				else if (timerName.equals("Fischer"))
 				{
 					blackTimer = new Fischer(increment, startTime, false, true);
 					whiteTimer = new Fischer(increment, startTime, false, false);
-				} else if (timerName.equals("Fischer After"))
+				}
+				else if (timerName.equals("Fischer After"))
 				{
 					blackTimer = new Fischer(increment, startTime, true, true);
 					whiteTimer = new Fischer(increment, startTime, true, false);
-				} else if (timerName.equals("Hour Glass"))
+				}
+				else if (timerName.equals("Hour Glass"))
 				{
 					blackTimer = new HourGlass(startTime / 2, true); // time is
 																		// halved
@@ -725,11 +713,13 @@ public class NewGameMenu extends JPanel
 																		// actually
 					// the timer the player is not allowed to exceed.
 					whiteTimer = new HourGlass(startTime / 2, false);
-				} else if (timerName.equals("Simple Delay"))
+				}
+				else if (timerName.equals("Simple Delay"))
 				{
 					blackTimer = new SimpleDelay(increment, startTime, true);
 					whiteTimer = new SimpleDelay(increment, startTime, false);
-				} else
+				}
+				else
 				{
 					blackTimer = new Word(startTime);
 					whiteTimer = new Word(startTime);
@@ -739,8 +729,7 @@ public class NewGameMenu extends JPanel
 
 				if (isNetwork)
 				{
-					Game toPlay = Builder.newGame((String) dropdown
-							.getSelectedItem());
+					Game toPlay = Builder.newGame((String) dropdown.getSelectedItem());
 					toPlay.setTimers(whiteTimer, blackTimer);
 					final PlayNetGame game;
 					if (host.equals(arg0))
@@ -748,16 +737,19 @@ public class NewGameMenu extends JPanel
 						try
 						{
 							game = new PlayNetGame(toPlay, false, true);
-						} catch (Exception e)
+						}
+						catch (Exception e)
 						{
 							return;
 						}
-					} else
+					}
+					else
 					{
 						try
 						{
 							game = new PlayNetGame(toPlay, false, false);
-						} catch (Exception e)
+						}
+						catch (Exception e)
 						{
 							return;
 						}
@@ -773,7 +765,8 @@ public class NewGameMenu extends JPanel
 								try
 								{
 									new NetworkServer().host(game);
-								} catch (Exception e)
+								}
+								catch (Exception e)
 								{
 									e.printStackTrace();
 								}
@@ -782,22 +775,25 @@ public class NewGameMenu extends JPanel
 						Driver.getInstance().setPanel(new NetLoading(host));
 						host.start();
 
-					} catch (Exception e)
+					}
+					catch (Exception e)
 					{
 						System.out.println("Host");
 						e.printStackTrace();
 					}
-				} else
+				}
+				else
 				{
-					Game toPlay = Builder.newGame((String) dropdown
-							.getSelectedItem());
+					Game toPlay = Builder.newGame((String) dropdown.getSelectedItem());
 					toPlay.setTimers(whiteTimer, blackTimer);
 					PlayGame game = null;
 					try
 					{
 						game = new PlayGame(toPlay, false);
-					} catch (Exception e)
+					}
+					catch (Exception e)
 					{
+						e.printStackTrace();
 						return;
 					}
 					Driver.getInstance().setPanel(game);
