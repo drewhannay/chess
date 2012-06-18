@@ -424,9 +424,6 @@ public class CustomSetupMenu extends JPanel
 					whiteTeam.add(p);
 				square.setPiece(p);
 				square.refresh();
-				dragged.setPiece(null);
-				bShowPiece.getSquare(1, 1).resetColor();
-				bShowPiece.getSquare(2, 1).resetColor();
 			}
 			else
 			{
@@ -436,21 +433,21 @@ public class CustomSetupMenu extends JPanel
 
 		/**
 		 * Pulls up square options if no piece has been choosen to add or no
-		 * piece is present. Deletes any pieces currently on the square
+		 * piece is present. Deletes any pieces currently on the square. Or it
+		 * will just place the piece that has been selected.
 		 */
 		@Override
 		public void mousePressed(MouseEvent e)
-		{
-		}
-
-		@Override
-		public void mouseClicked(MouseEvent e)
 		{
 			if (square.isOccupied())
 			{
 				Piece toRemove = square.getPiece();
 				(toRemove.isBlack() ? blackTeam : whiteTeam).remove(toRemove);
 				square.setPiece(null);
+				if (dragged.getPiece() != null)
+				{
+					setPieceOnBoard(dragged.getPiece().isBlack());
+				}
 				square.refresh();
 			}
 			else if (dragged.isOccupied())
@@ -459,6 +456,11 @@ public class CustomSetupMenu extends JPanel
 			}
 			else
 				squareOptions();
+		}
+
+		@Override
+		public void mouseClicked(MouseEvent e)
+		{
 		}
 	}
 
@@ -526,10 +528,11 @@ public class CustomSetupMenu extends JPanel
 			@Override
 			public void mousePressed(MouseEvent arg0)
 			{
-				if (dragged.getPiece() == null)
+				if (dragged.getPiece() != bShowPiece.getSquare(1, 1).getPiece())
 				{
 					bShowPiece.getSquare(1, 1).setBackgroundColor(Square.HIGHLIGHT_COLOR);
 					dragged.setPiece(bShowPiece.getSquare(1, 1).getPiece());
+					bShowPiece.getSquare(2, 1).resetColor();
 				}
 				else
 				{
@@ -563,10 +566,11 @@ public class CustomSetupMenu extends JPanel
 			@Override
 			public void mousePressed(MouseEvent arg0)
 			{
-				if (dragged.getPiece() == null)
+				if (dragged.getPiece() != bShowPiece.getSquare(2, 1).getPiece())
 				{
 					bShowPiece.getSquare(2, 1).setBackgroundColor(Square.HIGHLIGHT_COLOR);
 					dragged.setPiece(bShowPiece.getSquare(2, 1).getPiece());
+					bShowPiece.getSquare(1, 1).resetColor();
 				}
 				else
 				{
@@ -596,6 +600,9 @@ public class CustomSetupMenu extends JPanel
 			}
 		});
 
+		bShowPiece.getSquare(1, 1).setBackgroundColor(Color.LIGHT_GRAY);
+		bShowPiece.getSquare(2, 1).setBackgroundColor(Color.getHSBColor(30, 70, 70));
+
 		showPiece.add(bShowPiece.getSquare(1, 1));
 		showPiece.add(bShowPiece.getSquare(2, 1));
 
@@ -621,6 +628,7 @@ public class CustomSetupMenu extends JPanel
 			// Create a JPanel to hold the grid and set the layout to the number
 			// of squares in the board.
 			final JPanel grid = new JPanel();
+			grid.setBorder(BorderFactory.createEtchedBorder(Color.BLACK, Color.GRAY));
 			grid.setLayout(new GridLayout(boards[n].numRows(), boards[n].numCols()));
 			// Set the size of the grid to the number of rows and columns,
 			// scaled by 48, the size of the images.
@@ -668,32 +676,22 @@ public class CustomSetupMenu extends JPanel
 				int selection = lsm.getAnchorSelectionIndex();
 				if (!lsm.getValueIsAdjusting())
 				{
-					if (((String) list.elementAt(selection)).equals("Square Options"))
-					{
-						bShowPiece.getSquare(1, 1).setPiece(null);
+					bShowPiece.getSquare(2, 1).setVisible(true);
+					bShowPiece.getSquare(1, 1).setVisible(true);
+					changePromote.setEnabled(true);
+					if (bShowPiece.getSquare(1, 1).getColor().equals(original) == false)
 						bShowPiece.getSquare(1, 1).setBackgroundColor(original);
-						bShowPiece.getSquare(1, 1).setHabitable(true);
-						bShowPiece.getSquare(1, 1).refresh();
-						bShowPiece.getSquare(1, 1).setVisible(true);
-						bShowPiece.getSquare(2, 1).setVisible(false);
-						changePromote.setEnabled(false);
-					}
-					else
-					{
-						bShowPiece.getSquare(2, 1).setVisible(true);
-						bShowPiece.getSquare(1, 1).setVisible(true);
-						changePromote.setEnabled(true);
-						if (bShowPiece.getSquare(1, 1).getColor().equals(original) == false)
-							bShowPiece.getSquare(1, 1).setBackgroundColor(original);
-						Piece toAdd = PieceBuilder.makePiece((String) list.elementAt(selection), false, bShowPiece.getSquare(1, 1),
-								bShowPiece);
-						Piece toAdd1 = PieceBuilder.makePiece((String) list.elementAt(selection), true, bShowPiece.getSquare(2, 1),
-								bShowPiece);
-						bShowPiece.getSquare(1, 1).setPiece(toAdd);
-						bShowPiece.getSquare(2, 1).setPiece(toAdd1);
-						bShowPiece.getSquare(1, 1).refresh();
-						bShowPiece.getSquare(2, 1).refresh();
-					}
+					Piece toAdd = PieceBuilder.makePiece((String) list.elementAt(selection), false, bShowPiece.getSquare(1, 1),
+							bShowPiece);
+					Piece toAdd1 = PieceBuilder.makePiece((String) list.elementAt(selection), true, bShowPiece.getSquare(2, 1),
+							bShowPiece);
+					bShowPiece.getSquare(1, 1).setPiece(toAdd);
+					bShowPiece.getSquare(2, 1).setPiece(toAdd1);
+					bShowPiece.getSquare(1, 1).resetColor();
+					bShowPiece.getSquare(2, 1).resetColor();
+					bShowPiece.getSquare(1, 1).refresh();
+					bShowPiece.getSquare(2, 1).refresh();
+					dragged.setPiece(null);
 				}
 			}
 		});
