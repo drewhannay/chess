@@ -44,32 +44,31 @@ import rules.Rules;
  * GUI to handle setup of pieces on the board and special square properties.
  * 
  * @author Drew Hannay & Daniel Opdyke & Yelemis Soung & Cheney Hester & John
- *         McCormick
+ * McCormick
  * 
- *         CSCI 335, Wheaton College, Spring 2011 Phase 1 February 25, 2011
+ * CSCI 335, Wheaton College, Spring 2011 Phase 1 February 25, 2011
  */
-public class CustomSetupMenu extends JPanel {
+public class CustomSetupMenu extends JPanel
+{
 
 	/**
-	 * @param dragged
-	 *            This is the piece getting dragged to a new location
+	 * @param dragged This is the piece getting dragged to a new location
 	 */
 	private Square dragged;
 
 	/**
-	 * @param bShowPiece
-	 *            Holder squares for placing pieces
+	 * @param bShowPiece Holder squares for placing pieces
 	 */
 	final Board bShowPiece;
 
 	/**
 	 * Creates a pop up box for the Promotion Options.
 	 * 
-	 * @param type
-	 *            The type of piece that can be promoted.
+	 * @param type The type of piece that can be promoted.
 	 * 
 	 */
-	private void promotion(final String type) {
+	private void promotion(final String type)
+	{
 		// Create the pop up and set the size, location, and layout.
 		final JFrame popup = new JFrame("Promotion Options");
 		popup.setSize(500, 300);
@@ -82,7 +81,8 @@ public class CustomSetupMenu extends JPanel {
 		// LIST - CANT PROMOTE TO
 		final DefaultListModel list = new DefaultListModel();
 		Object[] allPieces = PieceBuilder.getSet().toArray();
-		for (int i = 0; i < allPieces.length; i++) {
+		for (int i = 0; i < allPieces.length; i++)
+		{
 			if (!allPieces[i].equals(type))
 				list.addElement(allPieces[i]);
 		}
@@ -97,16 +97,21 @@ public class CustomSetupMenu extends JPanel {
 		// moveLeft This button will move a selected piece from the right list
 		// to the left list.
 		final JButton moveLeft = new JButton();
-		moveLeft.addActionListener(new ActionListener() {
+		moveLeft.addActionListener(new ActionListener()
+		{
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				try {
+			public void actionPerformed(ActionEvent arg0)
+			{
+				try
+				{
 					int index = piecesList2.getSelectedIndex();
 
 					// Add the element of the right list to the left list.
 					list.addElement(emptyList.elementAt(index));
 					emptyList.remove(index);
-				} catch (Exception e) {
+				}
+				catch (Exception e)
+				{
 				}
 			}
 		});
@@ -115,10 +120,12 @@ public class CustomSetupMenu extends JPanel {
 		// moveRight This button will move a selected piece from the left list
 		// to the right list.
 		final JButton moveRight = new JButton();
-		moveRight.addActionListener(new ActionListener() {
+		moveRight.addActionListener(new ActionListener()
+		{
 
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(ActionEvent arg0)
+			{
 				int index = piecesList.getSelectedIndex();
 
 				// Add the element of the left list to the right list.
@@ -144,19 +151,25 @@ public class CustomSetupMenu extends JPanel {
 		JScrollPane scrollPane = new JScrollPane(piecesList);
 		scrollPane.setPreferredSize(new Dimension(200, 200));
 		ListSelectionModel selectList = piecesList.getSelectionModel();
-		selectList.addListSelectionListener(new ListSelectionListener() {
+		selectList.addListSelectionListener(new ListSelectionListener()
+		{
 			@Override
-			public void valueChanged(ListSelectionEvent e) {
-				if (e.getValueIsAdjusting() == false) { // If the user is still
-														// selecting.
+			public void valueChanged(ListSelectionEvent e)
+			{
+				if (e.getValueIsAdjusting() == false)
+				{ // If the user is still
+					// selecting.
 
 					// If the user has not selected anything yet.
-					if (piecesList.getSelectedIndex() == -1) {
+					if (piecesList.getSelectedIndex() == -1)
+					{
 						// No selection, disable fire button.
 						moveLeft.setEnabled(false);
 						moveRight.setEnabled(false);
 
-					} else {
+					}
+					else
+					{
 						// Selection, enable the fire button.
 						moveLeft.setEnabled(true);
 						moveRight.setEnabled(true);
@@ -169,19 +182,25 @@ public class CustomSetupMenu extends JPanel {
 		JScrollPane scrollPane2 = new JScrollPane(piecesList2);
 		scrollPane2.setPreferredSize(new Dimension(200, 200));
 		ListSelectionModel selectList2 = piecesList2.getSelectionModel();
-		selectList2.addListSelectionListener(new ListSelectionListener() {
+		selectList2.addListSelectionListener(new ListSelectionListener()
+		{
 			@Override
-			public void valueChanged(ListSelectionEvent e) {
-				if (e.getValueIsAdjusting() == false) { // If the user is still
-														// selecting.
+			public void valueChanged(ListSelectionEvent e)
+			{
+				if (e.getValueIsAdjusting() == false)
+				{ // If the user is still
+					// selecting.
 
 					// If the user has not selected anything yet.
-					if (piecesList2.getSelectedIndex() == -1) {
+					if (piecesList2.getSelectedIndex() == -1)
+					{
 						// No selection, disable the buttons.
 						moveLeft.setEnabled(false);
 						moveRight.setEnabled(false);
 
-					} else {
+					}
+					else
+					{
 						// Selection, enable the buttons.
 						moveLeft.setEnabled(true);
 						moveRight.setEnabled(true);
@@ -194,12 +213,15 @@ public class CustomSetupMenu extends JPanel {
 		 * Add the Submit and Back Buttons.
 		 */
 		JButton submitButton = new JButton("Save");
-		submitButton.addActionListener(new ActionListener() {
+		submitButton.addActionListener(new ActionListener()
+		{
 
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(ActionEvent arg0)
+			{
 				ArrayList<String> promotesTo = new ArrayList<String>();
-				for (int i = 0; i < emptyList.size(); i++) {
+				for (int i = 0; i < emptyList.size(); i++)
+				{
 					promotesTo.add((String) emptyList.get(i));
 				}
 				promotions.put(type, promotesTo);
@@ -208,10 +230,12 @@ public class CustomSetupMenu extends JPanel {
 
 		});
 		JButton backButton = new JButton("Cancel");
-		backButton.addActionListener(new ActionListener() {
+		backButton.addActionListener(new ActionListener()
+		{
 
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e)
+			{
 				popup.dispose();
 			}
 		});
@@ -276,14 +300,12 @@ public class CustomSetupMenu extends JPanel {
 	 * Constructor. Initialize the ArrayLists and call initComponents to
 	 * initialize the GUI.
 	 * 
-	 * @param b
-	 *            The builder which is creating the new game type.
-	 * @param whiteRules
-	 *            The whiteRules object.
-	 * @param blackRules
-	 *            The blackRules object.
+	 * @param b The builder which is creating the new game type.
+	 * @param whiteRules The whiteRules object.
+	 * @param blackRules The blackRules object.
 	 */
-	public CustomSetupMenu(Builder b, Rules whiteRules, Rules blackRules) {
+	public CustomSetupMenu(Builder b, Rules whiteRules, Rules blackRules)
+	{
 		this.b = b;
 		whiteTeam = new ArrayList<Piece>();
 		blackTeam = new ArrayList<Piece>();
@@ -294,7 +316,8 @@ public class CustomSetupMenu extends JPanel {
 		initComponents();
 	}
 
-	class DragMouseAdapter extends MouseAdapter {
+	class DragMouseAdapter extends MouseAdapter
+	{
 
 		/**
 		 * The Square we are setting up.
@@ -306,50 +329,51 @@ public class CustomSetupMenu extends JPanel {
 		private Board board;
 
 		/**
-		 * @param square
-		 *            The square this is attached to
-		 * @param board
-		 *            The current board
+		 * @param square The square this is attached to
+		 * @param board The current board
 		 */
-		public DragMouseAdapter(Square square, Board board) {
+		public DragMouseAdapter(Square square, Board board)
+		{
 			this.square = square;
 			this.board = board;
 		}
 
-		private void squareOptions() {
+		private void squareOptions()
+		{
 			// Create the pop up and set the size, location and layout.
 			final JFrame popup = new JFrame("Square Options");
 			popup.setSize(370, 120);
 			popup.setLocationRelativeTo(null);
 			popup.setLayout(new FlowLayout());
 
-			final ImageIcon uninhabIcon = new ImageIcon(
-					"./images/Uninhabitable.png");
+			final ImageIcon uninhabIcon = new ImageIcon("./images/Uninhabitable.png");
 
 			// Create a JButton to hold the JColorChooser.
 			final JButton pickColor = new JButton("Set Square Color");
-			pickColor.addActionListener(new ActionListener() {
+			pickColor.addActionListener(new ActionListener()
+			{
 
 				@Override
-				public void actionPerformed(ActionEvent arg0) {
-					Color color = JColorChooser.showDialog(popup,
-							"Choose Color", square.getColor());
+				public void actionPerformed(ActionEvent arg0)
+				{
+					Color color = JColorChooser.showDialog(popup, "Choose Color", square.getColor());
 					if (color == null)
 						return;
-					if (color != Square.HIGHLIGHT_COLOR) {// Can't let them pick
-															// exactly the
-															// highlight color,
-															// or they
-															// could move to
-															// that space from
-															// anywhere.
+					if (color != Square.HIGHLIGHT_COLOR)
+					{// Can't let them pick
+						// exactly the
+						// highlight color,
+						// or they
+						// could move to
+						// that space from
+						// anywhere.
 						square.setBackgroundColor(color);
 						pickColor.setBackground(color);
-					} else {
+					}
+					else
+					{
 						// The chances of this happening is EXTREMELY small...
-						JOptionPane.showMessageDialog(popup,
-								"That color cannot be selected.",
-								"Invalid Color",
+						JOptionPane.showMessageDialog(popup, "That color cannot be selected.", "Invalid Color",
 								JOptionPane.INFORMATION_MESSAGE);
 					}
 
@@ -358,22 +382,26 @@ public class CustomSetupMenu extends JPanel {
 			popup.add(pickColor);
 
 			// Create the JCheckBox and add it to the board.
-			final JCheckBox uninhabitable = new JCheckBox("Uninhabitable",
-					!square.isHabitable());
+			final JCheckBox uninhabitable = new JCheckBox("Uninhabitable", !square.isHabitable());
 			popup.add(uninhabitable);
 
 			// Create button and add ActionListener
 			final JButton done = new JButton("Done");
-			done.addActionListener(new ActionListener() {
+			done.addActionListener(new ActionListener()
+			{
 
 				@Override
-				public void actionPerformed(ActionEvent arg0) {
+				public void actionPerformed(ActionEvent arg0)
+				{
 					// Set the Square as habitable or not, then dispose of the
 					// pop up.
-					if (uninhabitable.isSelected()) {
+					if (uninhabitable.isSelected())
+					{
 						square.setHabitable(false);
 						square.setIcon(uninhabIcon);
-					} else {
+					}
+					else
+					{
 						square.setHabitable(true);
 						square.setIcon(null);
 					}
@@ -390,48 +418,56 @@ public class CustomSetupMenu extends JPanel {
 		/**
 		 * Place the piece on the board.
 		 * 
-		 * @param isBlack
-		 *            Is this piece black?
+		 * @param isBlack Is this piece black?
 		 */
-		private void setPieceOnBoard(boolean isBlack) {
-			if (square.isHabitable()) {
-				Piece p = PieceBuilder.makePiece(dragged.getPiece().getName(),
-						isBlack, square, board);
+		private void setPieceOnBoard(boolean isBlack)
+		{
+			if (square.isHabitable())
+			{
+				Piece p = PieceBuilder.makePiece(dragged.getPiece().getName(), isBlack, square, board);
 				if (isBlack)
 					blackTeam.add(p);
 				else
 					whiteTeam.add(p);
 				square.setPiece(p);
 				square.refresh();
-				dragged.setPiece(null);
-				bShowPiece.getSquare(1, 1).resetColor();
-				bShowPiece.getSquare(2, 1).resetColor();
-			} else {
-				JOptionPane.showMessageDialog(null,
-						"This square is uninhabitable.", "Warning",
-						JOptionPane.WARNING_MESSAGE);
+			}
+			else
+			{
+				JOptionPane.showMessageDialog(null, "This square is uninhabitable.", "Warning", JOptionPane.WARNING_MESSAGE);
 			}
 		}
 
 		/**
 		 * Pulls up square options if no piece has been choosen to add or no
-		 * piece is present. Deletes any pieces currently on the square
+		 * piece is present. Deletes any pieces currently on the square. Or it
+		 * will just place the piece that has been selected.
 		 */
 		@Override
-		public void mousePressed(MouseEvent e) {
-		}
-
-		@Override
-		public void mouseClicked(MouseEvent e) {
-			if (square.isOccupied()) {
+		public void mousePressed(MouseEvent e)
+		{
+			if (square.isOccupied())
+			{
 				Piece toRemove = square.getPiece();
 				(toRemove.isBlack() ? blackTeam : whiteTeam).remove(toRemove);
 				square.setPiece(null);
+				if (dragged.getPiece() != null)
+				{
+					setPieceOnBoard(dragged.getPiece().isBlack());
+				}
 				square.refresh();
-			} else if (dragged.isOccupied()) {
+			}
+			else if (dragged.isOccupied())
+			{
 				setPieceOnBoard(dragged.getPiece().isBlack());
-			} else
+			}
+			else
 				squareOptions();
+		}
+
+		@Override
+		public void mouseClicked(MouseEvent e)
+		{
 		}
 	}
 
@@ -470,7 +506,8 @@ public class CustomSetupMenu extends JPanel {
 	 * specific properties and add them to the window. Also add any necessary
 	 * ActionListeners.
 	 */
-	private void initComponents() {
+	private void initComponents()
+	{
 
 		// Set the layout of this JPanel.
 		setLayout(new FlowLayout());
@@ -483,7 +520,8 @@ public class CustomSetupMenu extends JPanel {
 		// Create a List with a vertical ScrollBar
 		final DefaultListModel list = new DefaultListModel();
 		Object[] allPieces = PieceBuilder.getSet().toArray();
-		for (int i = 0; i < allPieces.length; i++) {
+		for (int i = 0; i < allPieces.length; i++)
+		{
 			list.addElement(allPieces[i]);
 		}
 		final JList piecesList = new JList(list);
@@ -492,77 +530,95 @@ public class CustomSetupMenu extends JPanel {
 		showPiece.setLayout(new GridLayout(2, 1));
 		showPiece.setPreferredSize(new Dimension(50, 100));
 
-		bShowPiece.getSquare(1, 1).addMouseListener(new MouseListener() {
+		bShowPiece.getSquare(1, 1).addMouseListener(new MouseListener()
+		{
 			@Override
-			public void mousePressed(MouseEvent arg0) {
-				if (dragged.getPiece() == null) {
-					bShowPiece.getSquare(1, 1).setBackgroundColor(
-							Square.HIGHLIGHT_COLOR);
+			public void mousePressed(MouseEvent arg0)
+			{
+				if (dragged.getPiece() != bShowPiece.getSquare(1, 1).getPiece())
+				{
+					bShowPiece.getSquare(1, 1).setBackgroundColor(Square.HIGHLIGHT_COLOR);
 					dragged.setPiece(bShowPiece.getSquare(1, 1).getPiece());
-				} else {
+					bShowPiece.getSquare(2, 1).resetColor();
+				}
+				else
+				{
 					dragged.setPiece(null);
 					bShowPiece.getSquare(1, 1).resetColor();
 				}
 			}
 
 			@Override
-			public void mouseReleased(MouseEvent arg0) {
+			public void mouseReleased(MouseEvent arg0)
+			{
 			}
 
 			@Override
-			public void mouseExited(MouseEvent arg0) {
+			public void mouseExited(MouseEvent arg0)
+			{
 			}
 
 			@Override
-			public void mouseEntered(MouseEvent arg0) {
+			public void mouseEntered(MouseEvent arg0)
+			{
 			}
 
 			@Override
-			public void mouseClicked(MouseEvent arg0) {
+			public void mouseClicked(MouseEvent arg0)
+			{
 			}
 		});
-		bShowPiece.getSquare(2, 1).addMouseListener(new MouseListener() {
+		bShowPiece.getSquare(2, 1).addMouseListener(new MouseListener()
+		{
 			@Override
-			public void mousePressed(MouseEvent arg0) {
-				if (dragged.getPiece() == null) {
-					bShowPiece.getSquare(2, 1).setBackgroundColor(
-							Square.HIGHLIGHT_COLOR);
+			public void mousePressed(MouseEvent arg0)
+			{
+				if (dragged.getPiece() != bShowPiece.getSquare(2, 1).getPiece())
+				{
+					bShowPiece.getSquare(2, 1).setBackgroundColor(Square.HIGHLIGHT_COLOR);
 					dragged.setPiece(bShowPiece.getSquare(2, 1).getPiece());
-				} else {
+					bShowPiece.getSquare(1, 1).resetColor();
+				}
+				else
+				{
 					dragged.setPiece(null);
 					bShowPiece.getSquare(2, 1).resetColor();
 				}
 			}
 
 			@Override
-			public void mouseReleased(MouseEvent arg0) {
+			public void mouseReleased(MouseEvent arg0)
+			{
 			}
 
 			@Override
-			public void mouseExited(MouseEvent arg0) {
+			public void mouseExited(MouseEvent arg0)
+			{
 			}
 
 			@Override
-			public void mouseEntered(MouseEvent arg0) {
+			public void mouseEntered(MouseEvent arg0)
+			{
 			}
 
 			@Override
-			public void mouseClicked(MouseEvent arg0) {
+			public void mouseClicked(MouseEvent arg0)
+			{
 			}
 		});
+
+		bShowPiece.getSquare(1, 1).setBackgroundColor(Color.LIGHT_GRAY);
+		bShowPiece.getSquare(2, 1).setBackgroundColor(Color.getHSBColor(30, 70, 70));
 
 		showPiece.add(bShowPiece.getSquare(1, 1));
 		showPiece.add(bShowPiece.getSquare(2, 1));
 
-		piecesList
-				.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		piecesList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		piecesList.setLayoutOrientation(JList.VERTICAL);
 		piecesList.setVisibleRowCount(-1);
 		piecesList.setSelectedIndex(0);
-		Piece toAdd = PieceBuilder.makePiece((String) list.elementAt(0), false,
-				bShowPiece.getSquare(1, 1), bShowPiece);
-		Piece toAdd1 = PieceBuilder.makePiece((String) list.elementAt(0), true,
-				bShowPiece.getSquare(2, 1), bShowPiece);
+		Piece toAdd = PieceBuilder.makePiece((String) list.elementAt(0), false, bShowPiece.getSquare(1, 1), bShowPiece);
+		Piece toAdd1 = PieceBuilder.makePiece((String) list.elementAt(0), true, bShowPiece.getSquare(2, 1), bShowPiece);
 		bShowPiece.getSquare(1, 1).setPiece(toAdd);
 		bShowPiece.getSquare(2, 1).setPiece(toAdd1);
 		bShowPiece.getSquare(1, 1).refresh();
@@ -574,26 +630,26 @@ public class CustomSetupMenu extends JPanel {
 		JScrollPane scrollPane = new JScrollPane(piecesList);
 		scrollPane.setPreferredSize(new Dimension(200, 200));
 		// Loop through the array of boards for setup.
-		for (int n = 0; n < boards.length; n++) {
+		for (int n = 0; n < boards.length; n++)
+		{
 			// Create a JPanel to hold the grid and set the layout to the number
 			// of squares in the board.
 			final JPanel grid = new JPanel();
-			grid.setLayout(new GridLayout(boards[n].numRows(), boards[n]
-					.numCols()));
+			grid.setBorder(BorderFactory.createEtchedBorder(Color.BLACK, Color.GRAY));
+			grid.setLayout(new GridLayout(boards[n].numRows(), boards[n].numCols()));
 			// Set the size of the grid to the number of rows and columns,
 			// scaled by 48, the size of the images.
-			grid.setPreferredSize(new Dimension(boards[n].numCols() * 48,
-					boards[n].numRows() * 48));
+			grid.setPreferredSize(new Dimension(boards[n].numCols() * 48, boards[n].numRows() * 48));
 
 			// Loop through the board, initializing each Square and adding it's
 			// ActionListener.
 			int numRows = boards[n].numRows();
 			int numCols = boards[n].numCols();
-			for (int i = numRows; i > 0; i--) {
-				for (int j = 1; j <= numCols; j++) {
-					boards[n].getSquare(i, j).addMouseListener(
-							new DragMouseAdapter(boards[n].getSquare(i, j),
-									boards[n]));
+			for (int i = numRows; i > 0; i--)
+			{
+				for (int j = 1; j <= numCols; j++)
+				{
+					boards[n].getSquare(i, j).addMouseListener(new DragMouseAdapter(boards[n].getSquare(i, j), boards[n]));
 					grid.add(boards[n].getSquare(i, j));
 					boards[n].getSquare(i, j).refresh(); // Have the square
 															// refresh all it's
@@ -606,51 +662,43 @@ public class CustomSetupMenu extends JPanel {
 		}
 
 		final JButton changePromote = new JButton("Promote This Piece");
-		changePromote
-				.setToolTipText("Press me to set up promotion for the above selected piece");
-		changePromote.addActionListener(new ActionListener() {
+		changePromote.setToolTipText("Press me to set up promotion for the above selected piece");
+		changePromote.addActionListener(new ActionListener()
+		{
 
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(ActionEvent arg0)
+			{
 				promotion((String) piecesList.getSelectedValue());
 			}
 
 		});
-		selectList.addListSelectionListener(new ListSelectionListener() {
+		selectList.addListSelectionListener(new ListSelectionListener()
+		{
 			@Override
-			public void valueChanged(ListSelectionEvent e) {
+			public void valueChanged(ListSelectionEvent e)
+			{
 				ListSelectionModel lsm = (ListSelectionModel) e.getSource();
 
 				int selection = lsm.getAnchorSelectionIndex();
-				if (!lsm.getValueIsAdjusting()) {
-					if (((String) list.elementAt(selection))
-							.equals("Square Options")) {
-						bShowPiece.getSquare(1, 1).setPiece(null);
+				if (!lsm.getValueIsAdjusting())
+				{
+					bShowPiece.getSquare(2, 1).setVisible(true);
+					bShowPiece.getSquare(1, 1).setVisible(true);
+					changePromote.setEnabled(true);
+					if (bShowPiece.getSquare(1, 1).getColor().equals(original) == false)
 						bShowPiece.getSquare(1, 1).setBackgroundColor(original);
-						bShowPiece.getSquare(1, 1).setHabitable(true);
-						bShowPiece.getSquare(1, 1).refresh();
-						bShowPiece.getSquare(1, 1).setVisible(true);
-						bShowPiece.getSquare(2, 1).setVisible(false);
-						changePromote.setEnabled(false);
-					} else {
-						bShowPiece.getSquare(2, 1).setVisible(true);
-						bShowPiece.getSquare(1, 1).setVisible(true);
-						changePromote.setEnabled(true);
-						if (bShowPiece.getSquare(1, 1).getColor()
-								.equals(original) == false)
-							bShowPiece.getSquare(1, 1).setBackgroundColor(
-									original);
-						Piece toAdd = PieceBuilder.makePiece(
-								(String) list.elementAt(selection), false,
-								bShowPiece.getSquare(1, 1), bShowPiece);
-						Piece toAdd1 = PieceBuilder.makePiece(
-								(String) list.elementAt(selection), true,
-								bShowPiece.getSquare(2, 1), bShowPiece);
-						bShowPiece.getSquare(1, 1).setPiece(toAdd);
-						bShowPiece.getSquare(2, 1).setPiece(toAdd1);
-						bShowPiece.getSquare(1, 1).refresh();
-						bShowPiece.getSquare(2, 1).refresh();
-					}
+					Piece toAdd = PieceBuilder.makePiece((String) list.elementAt(selection), false, bShowPiece.getSquare(1, 1),
+							bShowPiece);
+					Piece toAdd1 = PieceBuilder.makePiece((String) list.elementAt(selection), true, bShowPiece.getSquare(2, 1),
+							bShowPiece);
+					bShowPiece.getSquare(1, 1).setPiece(toAdd);
+					bShowPiece.getSquare(2, 1).setPiece(toAdd1);
+					bShowPiece.getSquare(1, 1).resetColor();
+					bShowPiece.getSquare(2, 1).resetColor();
+					bShowPiece.getSquare(1, 1).refresh();
+					bShowPiece.getSquare(2, 1).refresh();
+					dragged.setPiece(null);
 				}
 			}
 		});
@@ -670,61 +718,68 @@ public class CustomSetupMenu extends JPanel {
 
 		// Create button and add ActionListener
 		backButton = new JButton("Back");
-		backButton
-				.setToolTipText("Press me to go back to the Turn setup window");
-		backButton.addActionListener(new ActionListener() {
+		backButton.setToolTipText("Press me to go back to the Turn setup window");
+		backButton.addActionListener(new ActionListener()
+		{
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				Driver.getInstance().setPanel(
-						new PlayerCustomMenu(b, whiteRules, blackRules));
+			public void actionPerformed(ActionEvent arg0)
+			{
+				Driver.getInstance().setPanel(new PlayerCustomMenu(b, whiteRules, blackRules));
 			}
 		});
 
 		// Create button and add ActionListener
 		submitButton = new JButton("Save and Quit");
 		submitButton.setToolTipText("Press me to save your finished variant");
-		submitButton.addActionListener(new ActionListener() {
+		submitButton.addActionListener(new ActionListener()
+		{
 
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				for (Piece p : whiteTeam) {
+			public void actionPerformed(ActionEvent arg0)
+			{
+				for (Piece p : whiteTeam)
+				{
 					p.setPromotesTo(promotions.get(p.getName()));
 				}
-				for (Piece p : blackTeam) {
+				for (Piece p : blackTeam)
+				{
 					p.setPromotesTo(promotions.get(p.getName()));
 				}
 				int numObjectives = 0;
-				if (!whiteRules.getObjectiveName().equals("")) {
-					for (Piece p : whiteTeam) {
+				if (!whiteRules.getObjectiveName().equals(""))
+				{
+					for (Piece p : whiteTeam)
+					{
 						if (p.getName().equals(whiteRules.getObjectiveName()))
 							numObjectives++;
 					}
-					if (numObjectives != 1) {
-						JOptionPane
-								.showMessageDialog(null,
-										"Please place exactly one White Objective Piece");
+					if (numObjectives != 1)
+					{
+						JOptionPane.showMessageDialog(null, "Please place exactly one White Objective Piece");
 						return;
 					}
 				}
 				numObjectives = 0;
-				if (!blackRules.getObjectiveName().equals("")) {
-					for (Piece p : blackTeam) {
+				if (!blackRules.getObjectiveName().equals(""))
+				{
+					for (Piece p : blackTeam)
+					{
 						if (p.getName().equals(blackRules.getObjectiveName()))
 							numObjectives++;
 					}
-					if (numObjectives != 1) {
-						JOptionPane
-								.showMessageDialog(null,
-										"Please place exactly one Black Objective Piece");
+					if (numObjectives != 1)
+					{
+						JOptionPane.showMessageDialog(null, "Please place exactly one Black Objective Piece");
 						return;
 					}
 				}
 				b.whiteTeam = whiteTeam;
 				boolean set = false;
-				for (Piece p : whiteTeam) {
-					if (p.getName().equals("King")) {
-						whiteRules.setObjectivePiece(new ObjectivePiece(
-								"classic", "King"));
+				for (Piece p : whiteTeam)
+				{
+					if (p.getName().equals("King"))
+					{
+						whiteRules.setObjectivePiece(new ObjectivePiece("classic", "King"));
 						set = true;
 						break;
 					}
@@ -737,16 +792,17 @@ public class CustomSetupMenu extends JPanel {
 					// break;
 					// }
 				}
-				if (!set) {
-					whiteRules.setObjectivePiece(new ObjectivePiece(
-							"no objective", ""));
+				if (!set)
+				{
+					whiteRules.setObjectivePiece(new ObjectivePiece("no objective", ""));
 				}
 				b.blackTeam = blackTeam;
 				set = false;
-				for (Piece p : blackTeam) {
-					if (p.getName().equals("King")) {
-						blackRules.setObjectivePiece(new ObjectivePiece(
-								"classic", "King"));
+				for (Piece p : blackTeam)
+				{
+					if (p.getName().equals("King"))
+					{
+						blackRules.setObjectivePiece(new ObjectivePiece("classic", "King"));
 						set = true;
 						break;
 					}
@@ -758,9 +814,9 @@ public class CustomSetupMenu extends JPanel {
 					// break;
 					// }
 				}
-				if (!set) {
-					blackRules.setObjectivePiece(new ObjectivePiece(
-							"no objective", ""));
+				if (!set)
+				{
+					blackRules.setObjectivePiece(new ObjectivePiece("no objective", ""));
 				}
 				b.writeFile(whiteRules, blackRules);
 				// Return to the main screen.
