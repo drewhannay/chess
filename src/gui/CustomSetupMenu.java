@@ -157,7 +157,8 @@ public class CustomSetupMenu extends JPanel
 			public void valueChanged(ListSelectionEvent e)
 			{
 				if (e.getValueIsAdjusting() == false)
-				{ // If the user is still selecting.
+				{ // If the user is still
+					// selecting.
 
 					// If the user has not selected anything yet.
 					if (piecesList.getSelectedIndex() == -1)
@@ -187,7 +188,8 @@ public class CustomSetupMenu extends JPanel
 			public void valueChanged(ListSelectionEvent e)
 			{
 				if (e.getValueIsAdjusting() == false)
-				{ // If the user is still selecting.
+				{ // If the user is still
+					// selecting.
 
 					// If the user has not selected anything yet.
 					if (piecesList2.getSelectedIndex() == -1)
@@ -358,8 +360,13 @@ public class CustomSetupMenu extends JPanel
 					if (color == null)
 						return;
 					if (color != Square.HIGHLIGHT_COLOR)
-					{// Can't let them pick exactly the highlight color, or they
-						// could move to that space from anywhere.
+					{// Can't let them pick
+						// exactly the
+						// highlight color,
+						// or they
+						// could move to
+						// that space from
+						// anywhere.
 						square.setBackgroundColor(color);
 						pickColor.setBackground(color);
 					}
