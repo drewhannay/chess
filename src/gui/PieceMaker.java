@@ -8,7 +8,6 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -437,12 +436,7 @@ public class PieceMaker extends JPanel
 		BufferedImage helpMe = null;
 		try
 		{
-			helpMe = ImageIO.read(new File("./images/piece_help.png")); // Gets
-																		// it
-																		// from
-																		// the
-																		// image
-																		// folder
+			helpMe = ImageIO.read(getClass().getResource("/piece_help.png"));
 		} catch (IOException e1)
 		{
 			e1.printStackTrace();

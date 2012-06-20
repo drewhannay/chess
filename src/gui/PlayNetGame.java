@@ -9,6 +9,8 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -72,8 +74,7 @@ public class PlayNetGame extends PlayGame
 	 * @param isBlack if the player is black
 	 * @throws Exception Needed for dealing with super()
 	 */
-	public PlayNetGame(Game g, boolean isPlayback, boolean isBlack)
-			throws Exception
+	public PlayNetGame(Game g, boolean isPlayback, boolean isBlack) throws Exception
 	{
 		super(g, isPlayback);
 		PlayNetGame.isBlack = isBlack;
@@ -93,7 +94,7 @@ public class PlayNetGame extends PlayGame
 	/**
 	 * Class for button listeners
 	 */
-	class ButtonListener implements ActionListener
+	class ButtonListener implements MouseListener
 	{
 
 		/**
@@ -122,7 +123,7 @@ public class PlayNetGame extends PlayGame
 		 * either highlight possible destinations or move the piece.
 		 */
 		@Override
-		public void actionPerformed(ActionEvent e)
+		public void mouseClicked(MouseEvent arg0)
 		{
 			if (getGame().isBlackMove() == isBlack)
 			{
@@ -130,9 +131,7 @@ public class PlayNetGame extends PlayGame
 				{
 					mustPlace = false;
 					getGame().nextTurn();
-					if (!clickedSquare.isOccupied()
-							&& clickedSquare.isHabitable()
-							&& placePiece != null)
+					if (!clickedSquare.isOccupied() && clickedSquare.isHabitable() && placePiece != null)
 					{
 						placePiece.setSquare(clickedSquare);
 						clickedSquare.setPiece(placePiece);
@@ -148,8 +147,8 @@ public class PlayNetGame extends PlayGame
 				{
 					boardRefresh(getGame().getBoards());
 					mustMove = false;
-				} else if (mustMove
-						&& clickedSquare.getColor() == Square.HIGHLIGHT_COLOR)
+				}
+				else if (mustMove && clickedSquare.getColor() == Square.HIGHLIGHT_COLOR)
 				{
 					try
 					{
@@ -160,18 +159,17 @@ public class PlayNetGame extends PlayGame
 
 						mustMove = false;
 						boardRefresh(getGame().getBoards());
-					} catch (Exception e1)
+					}
+					catch (Exception e1)
 					{
 						System.out.println(e1.getMessage());
 						e1.printStackTrace();
 					}
-				} else if (!mustMove
-						&& clickedSquare.getPiece() != null
-						&& clickedSquare.getPiece().isBlack() == getGame()
-								.isBlackMove())
+				}
+				else if (!mustMove && clickedSquare.getPiece() != null
+						&& clickedSquare.getPiece().isBlack() == getGame().isBlackMove())
 				{
-					List<Square> dests = clickedSquare.getPiece()
-							.getLegalDests();
+					List<Square> dests = clickedSquare.getPiece().getLegalDests();
 					if (dests.size() > 0)
 					{
 						for (Square dest : dests)
@@ -183,6 +181,26 @@ public class PlayNetGame extends PlayGame
 					}
 				}
 			}
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent arg0)
+		{
+		}
+
+		@Override
+		public void mouseExited(MouseEvent arg0)
+		{
+		}
+
+		@Override
+		public void mousePressed(MouseEvent arg0)
+		{
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent arg0)
+		{
 		}
 	}
 
@@ -203,8 +221,7 @@ public class PlayNetGame extends PlayGame
 		grid.setLayout(new GridLayout(b.numRows() + 1, b.numCols()));
 		// Set the size of the grid to the number of rows and columns, scaled by
 		// 48, the size of the images.
-		grid.setPreferredSize(new Dimension((b.numCols() + 1) * 48, (b
-				.numRows() + 1) * 48));
+		grid.setPreferredSize(new Dimension((b.numCols() + 1) * 48, (b.numRows() + 1) * 48));
 
 		// Loop through the board, initializing each Square and adding it's
 		// ActionListener.
@@ -219,15 +236,11 @@ public class PlayNetGame extends PlayGame
 			{
 
 				// grid.add(new JLabel(""+(j-1+'a')));
-				JButton jb = new JButton();
 				if (!isPlayback)
 				{
-					jb.addActionListener(new ButtonListener(b.getSquare(i, j),
-							b));
+					b.getSquare(i, j).addMouseListener(new ButtonListener(b.getSquare(i, j), b));
 				}
-				b.getSquare(i, j).setButton(jb);// Let the Square know which
-												// button it owns.
-				grid.add(jb);// Add the button to the grid.
+				grid.add(b.getSquare(i, j));// Add the button to the grid.
 
 			}
 
@@ -240,7 +253,8 @@ public class PlayNetGame extends PlayGame
 				temp.setHorizontalAlignment(SwingConstants.CENTER);
 				grid.add(temp);
 
-			} else
+			}
+			else
 			{
 				grid.add(new JLabel(""));
 			}
@@ -301,7 +315,8 @@ public class PlayNetGame extends PlayGame
 			c.gridx = 0;
 
 			this.add(createGrid(boards[0], isPlayback), c);
-		} else
+		}
+		else
 		{
 			c.gridheight = 12;
 			c.gridy = 2;
@@ -336,7 +351,8 @@ public class PlayNetGame extends PlayGame
 				try
 				{
 					history[++index].execute();
-				} catch (Exception e1)
+				}
+				catch (Exception e1)
 				{
 					e1.printStackTrace();
 				}
@@ -353,7 +369,8 @@ public class PlayNetGame extends PlayGame
 				try
 				{
 					history[index--].undo();
-				} catch (Exception e1)
+				}
+				catch (Exception e1)
 				{
 
 				}
@@ -377,8 +394,7 @@ public class PlayNetGame extends PlayGame
 		whiteLabel.setOpaque(true);
 		blackLabel.setOpaque(true);
 
-		whiteLabel.setBackground(getGame().isBlackMove() ? null
-				: Square.HIGHLIGHT_COLOR);
+		whiteLabel.setBackground(getGame().isBlackMove() ? null : Square.HIGHLIGHT_COLOR);
 
 		/**
 		 * int to hold the size of the jail board.
@@ -389,15 +405,14 @@ public class PlayNetGame extends PlayGame
 		 * This sets k to either the size of how many pieces white has or how
 		 * many pieces black has. If neither team has any pieces then
 		 */
-		if (getGame().getWhiteTeam().size() <= 4
-				&& getGame().getBlackTeam().size() <= 4)
+		if (getGame().getWhiteTeam().size() <= 4 && getGame().getBlackTeam().size() <= 4)
 		{
 			k = 4;
-		} else
+		}
+		else
 		{
-			double o = getGame().getWhiteTeam().size() > getGame()
-					.getBlackTeam().size() ? Math.sqrt(getGame().getWhiteTeam()
-					.size()) : Math.sqrt(getGame().getBlackTeam().size());
+			double o = getGame().getWhiteTeam().size() > getGame().getBlackTeam().size() ? Math.sqrt(getGame().getWhiteTeam().size())
+					: Math.sqrt(getGame().getBlackTeam().size());
 			k = (int) Math.ceil(o);
 		}
 
@@ -405,29 +420,24 @@ public class PlayNetGame extends PlayGame
 		 * Makes Black's jail
 		 */
 		whiteCaptures = new JPanel();
-		whiteCaptures.setBorder(BorderFactory
-				.createTitledBorder("Captured Pieces"));
+		whiteCaptures.setBorder(BorderFactory.createTitledBorder("Captured Pieces"));
 		if (k < 4)
 		{
 			whiteCapturesBox = new Jail(4, 4);
 			whiteCaptures.setLayout(new GridLayout(4, 4));
-		} else
+		}
+		else
 		{
 			whiteCapturesBox = new Jail(k, k);
 			whiteCaptures.setLayout(new GridLayout(k, k));
 		}
-		whiteCaptures.setPreferredSize(new Dimension((whiteCapturesBox
-				.numCols() + 1) * 25, (whiteCapturesBox.numRows() + 1) * 25));
+		whiteCaptures.setPreferredSize(new Dimension((whiteCapturesBox.numCols() + 1) * 25, (whiteCapturesBox.numRows() + 1) * 25));
 		for (int i = k; i > 0; i--)
 		{
 			for (int j = 1; j <= k; j++)
 			{
-				JButton jb = new JButton();
-				whiteCapturesBox.getSquare(i, j).setButton(jb);// Let the Square
-																// know which
-																// button it
-																// owns.
-				whiteCaptures.add(jb);
+				Square square = new Square(i, j);
+				whiteCaptures.add(square);
 			}
 		}
 
@@ -435,29 +445,24 @@ public class PlayNetGame extends PlayGame
 		 * Makes White's jail
 		 */
 		blackCaptures = new JPanel();
-		blackCaptures.setBorder(BorderFactory
-				.createTitledBorder("Captured Pieces"));
+		blackCaptures.setBorder(BorderFactory.createTitledBorder("Captured Pieces"));
 		if (k < 4)
 		{
 			blackCapturesBox = new Jail(4, 4);
 			blackCaptures.setLayout(new GridLayout(4, 4));
-		} else
+		}
+		else
 		{
 			blackCapturesBox = new Jail(k, k);
 			blackCaptures.setLayout(new GridLayout(k, k));
 		}
-		blackCaptures.setPreferredSize(new Dimension((blackCapturesBox
-				.numCols() + 1) * 25, (blackCapturesBox.numRows() + 1) * 25));
+		blackCaptures.setPreferredSize(new Dimension((blackCapturesBox.numCols() + 1) * 25, (blackCapturesBox.numRows() + 1) * 25));
 		for (int i = k; i > 0; i--)
 		{
 			for (int j = 1; j <= k; j++)
 			{
-				JButton jb = new JButton();
-				blackCapturesBox.getSquare(i, j).setButton(jb);// Let the Square
-																// know which
-																// button it
-																// owns.
-				blackCaptures.add(jb);
+				Square square = new Square(i, j);
+				blackCaptures.add(square);
 			}
 		}
 
@@ -514,7 +519,8 @@ public class PlayNetGame extends PlayGame
 			c.gridx = 11 + ifDouble;
 			c.gridy = 6;
 			this.add(whiteTimer.getLabel(), c);
-		} else
+		}
+		else
 		{
 			// Adds the Black timer
 			c.fill = GridBagConstraints.HORIZONTAL;
@@ -549,7 +555,8 @@ public class PlayNetGame extends PlayGame
 		{
 			c.gridy = 6;
 			c.insets = new Insets(10, 25, 0, 25);
-		} else
+		}
+		else
 		{
 			c.gridy = 7;
 			c.insets = new Insets(0, 25, 0, 25);
@@ -569,7 +576,8 @@ public class PlayNetGame extends PlayGame
 		{
 			c.gridheight = 1;
 			c.gridy = 9;
-		} else
+		}
+		else
 		{
 			c.gridheight = 2;
 			c.gridy = 11;
@@ -601,7 +609,8 @@ public class PlayNetGame extends PlayGame
 							Result result = new Result(Result.DRAW);
 							result.setText("You have declared a draw. What would you like to do?");
 							PlayGame.endOfGame(result);
-						} else
+						}
+						else
 						{
 							int surrender = requestDraw();
 
@@ -628,9 +637,8 @@ public class PlayNetGame extends PlayGame
 	 */
 	public int requestDraw()
 	{
-		return JOptionPane.showConfirmDialog(null,
-				"Would you like to send the other player a draw request?",
-				"Draw", JOptionPane.YES_NO_OPTION);
+		return JOptionPane.showConfirmDialog(null, "Would you like to send the other player a draw request?", "Draw",
+				JOptionPane.YES_NO_OPTION);
 	}
 
 	/**
@@ -638,9 +646,8 @@ public class PlayNetGame extends PlayGame
 	 */
 	public int requestAIDraw()
 	{
-		return JOptionPane.showConfirmDialog(null,
-				"Are you sure you would like to declare a draw?", "Draw",
-				JOptionPane.YES_NO_OPTION);
+		return JOptionPane
+				.showConfirmDialog(null, "Are you sure you would like to declare a draw?", "Draw", JOptionPane.YES_NO_OPTION);
 	}
 
 	/**

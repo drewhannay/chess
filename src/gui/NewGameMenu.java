@@ -43,6 +43,7 @@ import timer.HourGlass;
 import timer.NoTimer;
 import timer.SimpleDelay;
 import timer.Word;
+import utility.FileUtility;
 import ai.AIAdapter;
 import ai.AIPlugin;
 
@@ -51,7 +52,7 @@ import ai.AIPlugin;
  * 
  * GUI to initiate the a new game.
  * 
- * @author Drew Hannay & Daniel Opdyke & John McCormick
+ * @author Drew Hannay & Daniel Opdyke & John McCormick & Jonathan Miller
  * 
  * CSCI 335, Wheaton College, Spring 2011 Phase 1 February 24, 2011
  */
@@ -81,9 +82,9 @@ public class NewGameMenu extends JPanel
 	 */
 	private JButton backButton;
 	/**
-	 * The host of the game for playing
+	 * The IP address of the network game host
 	 */
-	private String host = "";
+	private InetAddress host;
 	/**
 	 * The boolean for whether a user wishes to stay in the program but cancel
 	 * out of the current box.
@@ -114,7 +115,6 @@ public class NewGameMenu extends JPanel
 	 */
 	public void initComponents()
 	{
-
 		setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 
@@ -165,7 +165,7 @@ public class NewGameMenu extends JPanel
 
 						final JLabel hoster = new JLabel(
 								"Which computer would you like to connect to?");
-						final JTextField computer = new JTextField("", 2);
+						final JTextField computer = new JTextField("", 20);
 
 						final JButton save = new JButton("Next");
 						save.addActionListener(new ActionListener()
@@ -173,41 +173,23 @@ public class NewGameMenu extends JPanel
 							@Override
 							public void actionPerformed(ActionEvent e)
 							{
-								if (computer.getText().equals(""))
+								String text = computer.getText();
+								if (text.equals(""))
 								{
 									JOptionPane.showMessageDialog(null,
-											"Please enter a number");
+											"Please enter an IP address or host name");
 									return;
-								} else if (computer.getText().length() < 2)
-								{
-									try
-									{
-										int hostNumber = Integer
-												.parseInt(computer.getText());
-										if (hostNumber > 25 || hostNumber < 1)
-											throw new Exception();
-										host = "cslab0" + hostNumber;
-									} catch (Exception ne)
-									{
-										JOptionPane
-												.showMessageDialog(null,
-														"Please enter a number between 1-25 in the box");
-										return;
-									}
 								} else
 								{
 									try
 									{
-										int hostNumber = Integer
-												.parseInt(computer.getText());
-										if (hostNumber > 25 || hostNumber < 1)
-											throw new Exception();
-										host = "cslab" + hostNumber;
+										host = InetAddress.getByName(text);
+										
 									} catch (Exception ne)
 									{
 										JOptionPane
 												.showMessageDialog(null,
-														"Please enter a number between 1-25 in the box");
+														"Please enter a valid IP address or host name");
 										return;
 									}
 								}
@@ -263,7 +245,7 @@ public class NewGameMenu extends JPanel
 						c.gridx = 0;
 						c.gridy = 1;
 						c.gridwidth = 1;
-						everything.add(new JLabel("cslab: "), c);
+						everything.add(new JLabel("IP: "), c);
 						c.gridx = 1;
 						c.gridy = 1;
 						c.gridwidth = 1;
@@ -329,9 +311,7 @@ public class NewGameMenu extends JPanel
 				c.gridy = 1;
 				popped.add(new JLabel("AI: "), c);
 
-				File dir = new File("AI");
-				dir.mkdir();
-				String[] allFiles = dir.list();
+				String[] allFiles = FileUtility.getAIFileList();
 				List<String> tempFiles = new ArrayList<String>();
 				for (String st : allFiles)
 					if (st.endsWith(".java"))
@@ -361,7 +341,7 @@ public class NewGameMenu extends JPanel
 					public void actionPerformed(ActionEvent arg0)
 					{
 						final String choice = (String) ai.getSelectedItem();
-						File file = new File("AI/" + choice);
+						File file = FileUtility.getAIFile(choice);
 						if (ai.getSelectedItem() == null)
 						{
 							JOptionPane.showMessageDialog(null,
@@ -498,44 +478,25 @@ public class NewGameMenu extends JPanel
 
 		try
 		{
-			if (InetAddress.getLocalHost().getHostName().contains("cslab"))
-			{
-				c.gridx = 0;
-				c.gridy = 0;
-				c.fill = GridBagConstraints.HORIZONTAL;
-				c.insets = new Insets(5, 5, 0, 0);
-				add(humanPlay, c);
-				c.gridx = 1;
-				c.gridy = 0;
-				c.fill = GridBagConstraints.HORIZONTAL;
-				c.insets = new Insets(5, 5, 0, 5);
-				add(networkPlay, c);
-				c.gridx = 0;
-				c.gridy = 1;
-				c.gridwidth = 2;
-				c.insets = new Insets(0, 5, 20, 5);
-				c.fill = GridBagConstraints.HORIZONTAL;
-				add(AIPlay, c);
-				c.gridx = 0;
-				c.gridy = 2;
-				add(backButton, c);
-			} else
-			{
-				// Layout stuff. Make it better later.
-				c.gridx = 0;
-				c.gridy = 0;
-				c.fill = GridBagConstraints.HORIZONTAL;
-				c.insets = new Insets(5, 5, 0, 5);
-				add(humanPlay, c);
-				c.gridx = 0;
-				c.gridy = 1;
-				c.insets = new Insets(0, 5, 20, 5);
-				c.fill = GridBagConstraints.HORIZONTAL;
-				add(AIPlay, c);
-				c.gridx = 0;
-				c.gridy = 2;
-				add(backButton, c);
-			}
+			c.gridx = 0;
+			c.gridy = 0;
+			c.fill = GridBagConstraints.HORIZONTAL;
+			c.insets = new Insets(5, 5, 0, 0);
+			add(humanPlay, c);
+			c.gridx = 1;
+			c.gridy = 0;
+			c.fill = GridBagConstraints.HORIZONTAL;
+			c.insets = new Insets(5, 5, 0, 5);
+			add(networkPlay, c);
+			c.gridx = 0;
+			c.gridy = 1;
+			c.gridwidth = 2;
+			c.insets = new Insets(0, 5, 20, 5);
+			c.fill = GridBagConstraints.HORIZONTAL;
+			add(AIPlay, c);
+			c.gridx = 0;
+			c.gridy = 2;
+			add(backButton, c);
 		} catch (Exception e)
 		{
 
@@ -744,7 +705,9 @@ public class NewGameMenu extends JPanel
 							.getSelectedItem());
 					toPlay.setTimers(whiteTimer, blackTimer);
 					final PlayNetGame game;
-					if (host.equals(arg0))
+
+					System.out.println("Ha" + host.getHostName());
+					if (host.getHostName().equals(arg0))
 					{
 						try
 						{
@@ -799,6 +762,7 @@ public class NewGameMenu extends JPanel
 						game = new PlayGame(toPlay, false);
 					} catch (Exception e)
 					{
+						e.printStackTrace();
 						return;
 					}
 					Driver.getInstance().setPanel(game);
