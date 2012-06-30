@@ -119,8 +119,7 @@ public class Board implements Serializable
 	 * @param dest The Square where the Piece is moving to
 	 * @return The origin Square of the Piece that is moving
 	 */
-	public Square getOriginSquare(String pieceKlass, int origCol, int origRow,
-			Square dest)
+	public Square getOriginSquare(String pieceKlass, int origCol, int origRow, Square dest)
 	{
 
 		// This method should never be called for anything but Classic chess
@@ -130,8 +129,7 @@ public class Board implements Serializable
 		if (origRow > getMaxRow() || origCol > getMaxCol())
 			return null;
 
-		List<Piece> movingTeam = (getGame().isBlackMove()) ? getGame()
-				.getBlackTeam() : getGame().getWhiteTeam();
+		List<Piece> movingTeam = (getGame().isBlackMove()) ? getGame().getBlackTeam() : getGame().getWhiteTeam();
 
 		Piece p = null;
 		Piece mover = null;
@@ -143,10 +141,15 @@ public class Board implements Serializable
 			{
 				if ((p.getName().equals(pieceKlass)) && p.isLegalDest(dest))
 				{
-					if ((origCol < 1 && origRow < 1)
-							|| // If the origCol and origRow were both zero
-							(origCol < 1 && p.getSquare().getRow() == origRow)
-							|| // If just the origCol was zero
+					if ((origCol < 1 && origRow < 1) || // If the origCol and
+														// origRow were both
+														// zero
+							(origCol < 1 && p.getSquare().getRow() == origRow) || // If
+																					// just
+																					// the
+																					// origCol
+																					// was
+																					// zero
 							(origRow < 1 && p.getSquare().getCol() == origCol))
 					{ // If
 						// just the origRow was zero
@@ -205,8 +208,7 @@ public class Board implements Serializable
 	protected boolean[] isDestUniqueForClass(Square dest, Piece p)
 	{
 		boolean[] unique = { true, true }; // Row, Column
-		List<Piece> movingTeam = (getGame().isBlackMove()) ? getGame()
-				.getBlackTeam() : getGame().getWhiteTeam();
+		List<Piece> movingTeam = (getGame().isBlackMove()) ? getGame().getBlackTeam() : getGame().getWhiteTeam();
 		List<Square> dests = null;
 		Piece piece = null;
 
@@ -217,8 +219,7 @@ public class Board implements Serializable
 		{
 			piece = movingTeam.get(i);
 
-			if (piece != p && !piece.isCaptured()
-					&& piece.getClass() == p.getClass())
+			if (piece != p && !piece.isCaptured() && piece.getClass() == p.getClass())
 			{
 				dests = piece.getLegalDests();
 

@@ -76,24 +76,18 @@ public class ObjectiveMaker extends JPanel
 		final JPanel objectiveWhiteCheckBox = new JPanel();
 		objectiveWhiteCheckBox.setLayout(new GridLayout(5, 1));
 		final JRadioButton wCaptureAll = new JRadioButton("Capture All", false);
-		wCaptureAll
-				.setToolTipText("Press me if you want the objective to be capturing all enemy pieces");
+		wCaptureAll.setToolTipText("Press me if you want the objective to be capturing all enemy pieces");
 		objectiveWhiteCheckBox.add(wCaptureAll);
-		final JRadioButton wCaptureAllType = new JRadioButton(
-				"Capture All of Type", false);
-		wCaptureAllType
-				.setToolTipText("Press me if you want the objective to be capturing all enemy pieces of a certain type");
+		final JRadioButton wCaptureAllType = new JRadioButton("Capture All of Type", false);
+		wCaptureAllType.setToolTipText("Press me if you want the objective to be capturing all enemy pieces of a certain type");
 		objectiveWhiteCheckBox.add(wCaptureAllType);
-		final JRadioButton wProtectObj = new JRadioButton("Protect Objective",
-				true);
-		wProtectObj
-				.setToolTipText("Press me if you want the objective to be protecting your own objective");
+		final JRadioButton wProtectObj = new JRadioButton("Protect Objective", true);
+		wProtectObj.setToolTipText("Press me if you want the objective to be protecting your own objective");
 		objectiveWhiteCheckBox.add(wProtectObj);
 		final JRadioButton wLoseAll = new JRadioButton("Lose All Pieces", false);
 		wLoseAll.setToolTipText("Press me if you want the objective to be losing all of your pieces");
 		objectiveWhiteCheckBox.add(wLoseAll);
-		final JRadioButton wCheckTimes = new JRadioButton("Check # Times",
-				false);
+		final JRadioButton wCheckTimes = new JRadioButton("Check # Times", false);
 		wCheckTimes
 				.setToolTipText("Press me if you want the objective to be putting the other team in check a certain amount of times");
 		objectiveWhiteCheckBox.add(wCheckTimes);
@@ -109,24 +103,18 @@ public class ObjectiveMaker extends JPanel
 		final JPanel objectiveBlackCheckBox = new JPanel();
 		objectiveBlackCheckBox.setLayout(new GridLayout(5, 1));
 		final JRadioButton bCaptureAll = new JRadioButton("Capture All", false);
-		bCaptureAll
-				.setToolTipText("Press me if you want the objective to be capturing all enemy pieces");
+		bCaptureAll.setToolTipText("Press me if you want the objective to be capturing all enemy pieces");
 		objectiveBlackCheckBox.add(bCaptureAll);
-		final JRadioButton bCaptureAllType = new JRadioButton(
-				"Capture All of Type", false);
-		bCaptureAllType
-				.setToolTipText("Press me if you want the objective to be capturing all enemy pieces of a certain type");
+		final JRadioButton bCaptureAllType = new JRadioButton("Capture All of Type", false);
+		bCaptureAllType.setToolTipText("Press me if you want the objective to be capturing all enemy pieces of a certain type");
 		objectiveBlackCheckBox.add(bCaptureAllType);
-		final JRadioButton bProtectObj = new JRadioButton("Protect Objective",
-				true);
-		bProtectObj
-				.setToolTipText("Press me if you want the objective to be protecting your own objective");
+		final JRadioButton bProtectObj = new JRadioButton("Protect Objective", true);
+		bProtectObj.setToolTipText("Press me if you want the objective to be protecting your own objective");
 		objectiveBlackCheckBox.add(bProtectObj);
 		final JRadioButton bLoseAll = new JRadioButton("Lose All Pieces", false);
 		bLoseAll.setToolTipText("Press me if you want the objective to be losing all of your pieces");
 		objectiveBlackCheckBox.add(bLoseAll);
-		final JRadioButton bCheckTimes = new JRadioButton("Check # Times",
-				false);
+		final JRadioButton bCheckTimes = new JRadioButton("Check # Times", false);
 		bCheckTimes
 				.setToolTipText("Press me if you want the objective to be putting the other team in check a certain amount of times");
 		objectiveBlackCheckBox.add(bCheckTimes);
@@ -165,22 +153,17 @@ public class ObjectiveMaker extends JPanel
 				{
 					if (!(wProtectObj.isSelected() && bProtectObj.isSelected()))
 					{
-						int answer = JOptionPane
-								.showConfirmDialog(
-										null,
-										"Using Protect Objective combined with another objective style is not recommended.\n"
-												+ "Do you want to continue anyways?",
-										"Continue?", JOptionPane.YES_NO_OPTION);
+						int answer = JOptionPane.showConfirmDialog(null,
+								"Using Protect Objective combined with another objective style is not recommended.\n"
+										+ "Do you want to continue anyways?", "Continue?", JOptionPane.YES_NO_OPTION);
 						if (answer != 0)
 							return;
 					}
 				}
-				if ((wCaptureAll.isSelected() && bLoseAll.isSelected())
-						|| (bCaptureAll.isSelected() && wLoseAll.isSelected()))
+				if ((wCaptureAll.isSelected() && bLoseAll.isSelected()) || (bCaptureAll.isSelected() && wLoseAll.isSelected()))
 				{
-					JOptionPane.showMessageDialog(null,
-							"Capture All and Lose All is not a valid combination of objectives.\n"
-									+ "Please choose another combination.");
+					JOptionPane.showMessageDialog(null, "Capture All and Lose All is not a valid combination of objectives.\n"
+							+ "Please choose another combination.");
 					return;
 				}
 
@@ -188,12 +171,9 @@ public class ObjectiveMaker extends JPanel
 				{
 					if (!(wCheckTimes.isSelected() && bCheckTimes.isSelected()))
 					{
-						int answer = JOptionPane
-								.showConfirmDialog(
-										null,
-										"Using Check N Times combined with another objective style is not recommended.\n"
-												+ "Do you want to continue anyways?",
-										"Continue?", JOptionPane.YES_NO_OPTION);
+						int answer = JOptionPane.showConfirmDialog(null,
+								"Using Check N Times combined with another objective style is not recommended.\n"
+										+ "Do you want to continue anyways?", "Continue?", JOptionPane.YES_NO_OPTION);
 						if (answer != 0)
 							return;
 					}
@@ -201,61 +181,50 @@ public class ObjectiveMaker extends JPanel
 
 				if (wCaptureAll.isSelected())
 				{
-					whiteRules.addEndOfGame(new EndOfGame("captureAllPieces",
-							0, "", false));
+					whiteRules.addEndOfGame(new EndOfGame("captureAllPieces", 0, "", false));
 				}
 				if (wCaptureAllType.isSelected())
 				{
-					whiteRules.addEndOfGame(new EndOfGame("captureAllOfType",
-							0, "Knight", false));
+					whiteRules.addEndOfGame(new EndOfGame("captureAllOfType", 0, "Knight", false));
 				}
 				if (wProtectObj.isSelected())
 				{
-					whiteRules.addEndOfGame(new EndOfGame("classic", 0, "",
-							false));
+					whiteRules.addEndOfGame(new EndOfGame("classic", 0, "", false));
 					needsObj = true;
 				}
 				if (wLoseAll.isSelected())
 				{
-					whiteRules.addEndOfGame(new EndOfGame("loseAllPieces", 0,
-							"", false));
+					whiteRules.addEndOfGame(new EndOfGame("loseAllPieces", 0, "", false));
 				}
 				if (wCheckTimes.isSelected())
 				{
-					whiteRules.addEndOfGame(new EndOfGame("checkNTimes", 3, "",
-							false));
+					whiteRules.addEndOfGame(new EndOfGame("checkNTimes", 3, "", false));
 					needsObj = true;
 				}
 
 				if (bCaptureAll.isSelected())
 				{
-					blackRules.addEndOfGame(new EndOfGame("captureAllPieces",
-							0, "", true));
+					blackRules.addEndOfGame(new EndOfGame("captureAllPieces", 0, "", true));
 				}
 				if (bCaptureAllType.isSelected())
 				{
-					blackRules.addEndOfGame(new EndOfGame("captureAllOfType",
-							0, "Knight", true));
+					blackRules.addEndOfGame(new EndOfGame("captureAllOfType", 0, "Knight", true));
 					needsObj = false;
 				}
 				if (bProtectObj.isSelected())
 				{
-					blackRules.addEndOfGame(new EndOfGame("classic", 0, "",
-							true));
+					blackRules.addEndOfGame(new EndOfGame("classic", 0, "", true));
 				}
 				if (bLoseAll.isSelected())
 				{
-					blackRules.addEndOfGame(new EndOfGame("loseAllPieces", 0,
-							"", true));
+					blackRules.addEndOfGame(new EndOfGame("loseAllPieces", 0, "", true));
 				}
 				if (bCheckTimes.isSelected())
 				{
-					blackRules.addEndOfGame(new EndOfGame("checkNTimes", 3, "",
-							true));
+					blackRules.addEndOfGame(new EndOfGame("checkNTimes", 3, "", true));
 					needsObj = true;
 				}
-				Driver.getInstance().setPanel(
-						new RuleMaker(b, whiteRules, blackRules));
+				Driver.getInstance().setPanel(new RuleMaker(b, whiteRules, blackRules));
 			}
 		});
 

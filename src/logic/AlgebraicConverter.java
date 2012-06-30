@@ -70,15 +70,15 @@ public final class AlgebraicConverter
 		result = getPattern().matcher(s);
 		if (result.find())
 		{
-			if (result.group(1).equals("O-O-O")
-					|| result.group(1).equals("0-0-0"))
+			if (result.group(1).equals("O-O-O") || result.group(1).equals("0-0-0"))
 			{
 				move = new Move(board, Move.CASTLE_QUEEN_SIDE);
-			} else if (result.group(1).equals("O-O")
-					|| result.group(1).equals("0-0"))
+			}
+			else if (result.group(1).equals("O-O") || result.group(1).equals("0-0"))
 			{
 				move = new Move(board, Move.CASTLE_KING_SIDE);
-			} else
+			}
+			else
 			{
 				if (result.group(2) != null)
 				{
@@ -87,8 +87,7 @@ public final class AlgebraicConverter
 
 				if (result.group(3) != null)
 				{
-					origCol = columns.indexOf((result.group(3).charAt(0) + "")
-							.toLowerCase());
+					origCol = columns.indexOf((result.group(3).charAt(0) + "").toLowerCase());
 				}
 
 				if (result.group(4) != null)
@@ -96,10 +95,8 @@ public final class AlgebraicConverter
 					origRow = Integer.parseInt(result.group(4).charAt(0) + "");
 				}
 
-				dest = board.getSquare(Integer.parseInt(result.group(7).charAt(
-						0)
-						+ ""), columns.indexOf((result.group(6).charAt(0) + "")
-						.toLowerCase()));
+				dest = board.getSquare(Integer.parseInt(result.group(7).charAt(0) + ""),
+						columns.indexOf((result.group(6).charAt(0) + "").toLowerCase()));
 
 				if (origCol < 1 || origRow < 1)
 				{
@@ -107,23 +104,23 @@ public final class AlgebraicConverter
 					{
 						pieceKlass = "Pawn";
 					}
-					orig = board.getOriginSquare(pieceKlass, origCol, origRow,
-							dest);
-				} else
+					orig = board.getOriginSquare(pieceKlass, origCol, origRow, dest);
+				}
+				else
 				{
 					orig = board.getSquare(origRow, origCol);
 				}
 
 				if (result.group(8) != null)
 				{ // promotion
-					if (result.group(8).contains("=")
-							|| result.group(8).contains("("))
+					if (result.group(8).contains("=") || result.group(8).contains("("))
 					{
 						promo = map.get(result.group(8).charAt(1)); // 0 is
 						// '='
 						// or
 						// '('
-					} else
+					}
+					else
 					{
 						promo = map.get(result.group(8).charAt(0));
 					}
@@ -131,7 +128,8 @@ public final class AlgebraicConverter
 				if (promo == null)
 				{
 					move = new Move(board, orig, dest);
-				} else
+				}
+				else
 				{
 					move = new Move(board, orig, dest, promo);
 				}
@@ -188,7 +186,8 @@ public final class AlgebraicConverter
 				g.playMove(temp);
 			}
 			in.close();
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			return null;
 		}
@@ -214,23 +213,23 @@ public final class AlgebraicConverter
 				String turn = moves.get(i).toString();
 				if (moves.get(i).result != null)
 				{
-					turn = moves.get(i)
-							+ (i % 2 == 0 ? (" " + moves.get(i).result) : ("\n"
-									+ (j + 1) + " " + moves.get(i).result));
+					turn = moves.get(i) + (i % 2 == 0 ? (" " + moves.get(i).result) : ("\n" + (j + 1) + " " + moves.get(i).result));
 				}
 				if (i % 2 == 1 || moves.get(i).result != null)
 				{
 					out.write(j + " " + toWrite + " " + turn + '\n');
 					toWrite = "";
 					j++;
-				} else
+				}
+				else
 				{
 					toWrite += turn;
 				}
 
 			}
 			out.close();
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			e.printStackTrace();
 		}

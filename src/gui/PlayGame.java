@@ -425,8 +425,6 @@ public class PlayGame extends JPanel
 			JOptionPane.showMessageDialog(null, "No moves were made and the time ran out. Returning to the Main Menu.");
 			PlayNetGame.running = false;
 			Driver.getInstance().revertPanel();
-			Driver.getInstance().gamePlayHelp.setVisible(false);
-			Driver.getInstance().helpMenu.setText("Help");
 			Driver.getInstance().fileMenu.setVisible(true);
 			return;
 		}
@@ -443,8 +441,6 @@ public class PlayGame extends JPanel
 					JOptionPane.PLAIN_MESSAGE);
 			getGame().saveGame(fileName, getGame().isClassicChess());
 			g.setBlackMove(false);
-			Driver.getInstance().gamePlayHelp.setVisible(false);
-			Driver.getInstance().helpMenu.setText("Help");
 			Driver.getInstance().fileMenu.setVisible(true);
 			Driver.getInstance().revertPanel();
 			break;
@@ -455,10 +451,6 @@ public class PlayGame extends JPanel
 		default:
 			g.setBlackMove(false);
 			Driver.getInstance().newGame();
-			// Driver.getInstance().gamePlayHelp.setVisible(false);
-			// Driver.getInstance().fileMenu.setVisible(true);
-			// Driver.getInstance().helpMenu.setText("Help");
-			// Driver.getInstance().revertPanel();
 		}
 	}
 
@@ -629,6 +621,8 @@ public class PlayGame extends JPanel
 			Driver.getInstance().setMenu(createMenu());
 		else if (!menu.isVisible())
 			Driver.getInstance().setMenu(createMenu());
+
+		Driver.gameOptions.setVisible(true); // Turns on the game options
 
 		// Set the layout of the JPanel.
 		setLayout(new GridBagLayout());

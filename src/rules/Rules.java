@@ -201,8 +201,7 @@ public class Rules implements Serializable
 	 * @param toAdjust The piece to adjust
 	 * @param enemyTeam The enemy team.
 	 */
-	public void cropLegalDests(Piece movingObjectivePiece, Piece toAdjust,
-			List<Piece> enemyTeam)
+	public void cropLegalDests(Piece movingObjectivePiece, Piece toAdjust, List<Piece> enemyTeam)
 	{
 		cropLegalDests.execute(movingObjectivePiece, toAdjust, enemyTeam);
 	}
@@ -387,7 +386,6 @@ public class Rules implements Serializable
 	public boolean networkable()
 	{
 		List<String> afterMoves = afterMove.getMethods();
-		return !(afterMoves.contains("placeCaptured") || afterMoves
-				.contains("placeCapturedSwitch"));
+		return !(afterMoves.contains("placeCaptured") || afterMoves.contains("placeCapturedSwitch"));
 	}
 }

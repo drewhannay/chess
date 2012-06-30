@@ -217,7 +217,8 @@ public abstract class ChessTimer implements ActionListener, Serializable
 		if (!delay)
 		{
 			time -= elapsed * direction; // to account for SimpleDelay
-		} else
+		}
+		else
 		{
 			delay = false;
 		}

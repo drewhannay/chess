@@ -92,8 +92,7 @@ public class PieceMaker extends JPanel
 		piecePanel.add(namePanel, c);
 
 		final ImageIcon temp = new ImageIcon("./images/WhiteSquare.gif");
-		temp.setImage(temp.getImage().getScaledInstance(48, 48,
-				Image.SCALE_SMOOTH));
+		temp.setImage(temp.getImage().getScaledInstance(48, 48, Image.SCALE_SMOOTH));
 		final JPanel lightIconPanel = new JPanel();
 		lightIconPanel.setLayout(new FlowLayout());
 		final JButton lightIconButton = new JButton();
@@ -101,10 +100,8 @@ public class PieceMaker extends JPanel
 		lightIconButton.setIcon(temp);
 
 		// Add JButtons for choosing the images for the new type.
-		final JButton chooseLightImage = new JButton(
-				"Choose image for light piece");
-		chooseLightImage
-				.setToolTipText("Click me to choose an Light Colored Icon for this piece");
+		final JButton chooseLightImage = new JButton("Choose image for light piece");
+		chooseLightImage.setToolTipText("Click me to choose an Light Colored Icon for this piece");
 		chooseLightImage.addActionListener(new ActionListener()
 		{
 
@@ -140,10 +137,8 @@ public class PieceMaker extends JPanel
 		darkIconButton.setSize(48, 48);
 		darkIconButton.setIcon(temp);
 
-		final JButton chooseDarkImage = new JButton(
-				"Choose image for dark piece");
-		chooseDarkImage
-				.setToolTipText("Click me to choose an Dark Colored Icon for this piece");
+		final JButton chooseDarkImage = new JButton("Choose image for dark piece");
+		chooseDarkImage.setToolTipText("Click me to choose an Dark Colored Icon for this piece");
 		chooseDarkImage.addActionListener(new ActionListener()
 		{
 
@@ -175,8 +170,8 @@ public class PieceMaker extends JPanel
 
 		// Add components for collecting the directions of movement.
 
-		final String[] directions = new String[] { "North", "Northeast",
-				"East", "Southeast", "South", "Southwest", "West", "Northwest" };
+		final String[] directions = new String[] { "North", "Northeast", "East", "Southeast", "South", "Southwest", "West",
+				"Northwest" };
 		final JComboBox dropdown = new JComboBox(directions);
 		dropdown.setToolTipText("This dropdown has all of the valid directions you can still set movement for");
 
@@ -189,8 +184,7 @@ public class PieceMaker extends JPanel
 		knight.setEnabled(false);
 
 		final JTextField knightSecond = new JTextField(2);
-		knightSecond
-				.setToolTipText("Enter the other direction for the knight-like piece");
+		knightSecond.setToolTipText("Enter the other direction for the knight-like piece");
 		knightSecond.setEnabled(false);
 
 		final JCheckBox knightOn = new JCheckBox("Knight-like Movements", false);
@@ -206,7 +200,8 @@ public class PieceMaker extends JPanel
 				{
 					knight.setEnabled(true);
 					knightSecond.setEnabled(true);
-				} else
+				}
+				else
 				{
 					knight.setEnabled(false);
 					knightSecond.setEnabled(false);
@@ -218,8 +213,7 @@ public class PieceMaker extends JPanel
 		leaper.setToolTipText("Press me to allow this piece to jump others");
 
 		final JPanel knightMoving = new JPanel();
-		knightMoving
-				.setToolTipText("Use me to set up Knight Like Movements. See Variant Help for instructions");
+		knightMoving.setToolTipText("Use me to set up Knight Like Movements. See Variant Help for instructions");
 		knightMoving.setLayout(new FlowLayout());
 		knightMoving.add(knight);
 		knightMoving.add(new JLabel("x"));
@@ -227,10 +221,8 @@ public class PieceMaker extends JPanel
 
 		// Create button and add ActionListener for adding movement directions
 		// to a piece
-		final JButton addInstruction = new JButton(
-				"Add Movement Directions to this Piece");
-		addInstruction
-				.setToolTipText("Pressing this will add movement direction and max distance in that direction.");
+		final JButton addInstruction = new JButton("Add Movement Directions to this Piece");
+		addInstruction.setToolTipText("Pressing this will add movement direction and max distance in that direction.");
 		addInstruction.addActionListener(new ActionListener()
 		{
 
@@ -243,9 +235,7 @@ public class PieceMaker extends JPanel
 					{// Make sure there's directions left in the drop down.
 						// Add the move to the piece type and remove that
 						// direction from the drop down.
-						builder.addMove(stringToChar((String) dropdown
-								.getSelectedItem()), Integer.parseInt(dist
-								.getText()));
+						builder.addMove(stringToChar((String) dropdown.getSelectedItem()), Integer.parseInt(dist.getText()));
 						dropdown.removeItemAt(dropdown.getSelectedIndex());
 						dist.setText(""); // Clear their int distance.
 
@@ -264,7 +254,8 @@ public class PieceMaker extends JPanel
 				{
 					Integer.parseInt(dist.getText());
 					return true;
-				} catch (Exception e)
+				}
+				catch (Exception e)
 				{
 					return false;
 				}
@@ -311,8 +302,7 @@ public class PieceMaker extends JPanel
 		c.insets = new Insets(5, 0, 5, 0);
 		c.gridx = 0;
 		c.gridy = 0;
-		movementSetup.add(new JLabel(
-				"<html><u>Normal Movement Setup:</u></br></html>"), c);
+		movementSetup.add(new JLabel("<html><u>Normal Movement Setup:</u></br></html>"), c);
 		c.insets = new Insets(5, 0, 0, 0);
 		c.gridx = 0;
 		c.gridy = 1;
@@ -345,10 +335,7 @@ public class PieceMaker extends JPanel
 		c.insets = new Insets(5, 0, 5, 0);
 		c.gridx = 0;
 		c.gridy = 7;
-		movementSetup
-				.add(new JLabel(
-						"<html><u>Knight-like Movement Directions:</u></br></html>"),
-						c);
+		movementSetup.add(new JLabel("<html><u>Knight-like Movement Directions:</u></br></html>"), c);
 		c.gridx = 0;
 		c.gridy = 8;
 		movementSetup.add(knightMoving, c);
@@ -367,12 +354,9 @@ public class PieceMaker extends JPanel
 			public void actionPerformed(ActionEvent arg0)
 			{
 
-				if (name.getText() == ""
-						|| PieceBuilder.isPieceType(name.getText()))
+				if (name.getText() == "" || PieceBuilder.isPieceType(name.getText()))
 				{ // Make sure the name is valid.
-					JOptionPane.showMessageDialog(null,
-							"Please enter a unique piece name.",
-							"Invalid Piece Name",
+					JOptionPane.showMessageDialog(null, "Please enter a unique piece name.", "Invalid Piece Name",
 							JOptionPane.INFORMATION_MESSAGE);
 					return;
 				}
@@ -386,8 +370,7 @@ public class PieceMaker extends JPanel
 																					// stored
 																					// in
 																					// builder.
-						builder.addMove('y',
-								Integer.parseInt(knightSecond.getText()));
+						builder.addMove('y', Integer.parseInt(knightSecond.getText()));
 					}
 				}
 				builder.setName(name.getText());// Set the name in the
@@ -426,7 +409,8 @@ public class PieceMaker extends JPanel
 					Integer.parseInt(knight.getText());
 					Integer.parseInt(knightSecond.getText());
 					return true;
-				} catch (Exception e)
+				}
+				catch (Exception e)
 				{
 					return false;
 				}
@@ -437,14 +421,14 @@ public class PieceMaker extends JPanel
 		try
 		{
 			helpMe = ImageIO.read(getClass().getResource("/piece_help.png"));
-		} catch (IOException e1)
+		}
+		catch (IOException e1)
 		{
 			e1.printStackTrace();
 		}
 		// Makes the image an icon and ands it to a JLabel
 		final ImageIcon picture = new ImageIcon(helpMe);
-		picture.setImage(picture.getImage().getScaledInstance(700, 500,
-				Image.SCALE_SMOOTH));
+		picture.setImage(picture.getImage().getScaledInstance(700, 500, Image.SCALE_SMOOTH));
 
 		final JButton help = new JButton("Help");
 		help.setToolTipText("Press me for help in setting up a piece type");
@@ -454,8 +438,7 @@ public class PieceMaker extends JPanel
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
-				JOptionPane.showMessageDialog(null, "", "Piece Making Help", 0,
-						picture);
+				JOptionPane.showMessageDialog(null, "", "Piece Making Help", 0, picture);
 			}
 
 		});
@@ -470,13 +453,12 @@ public class PieceMaker extends JPanel
 				if (name.getText().equals(""))
 				{
 					Driver.getInstance().setPanel(new ObjectiveMaker(b));
-				} else
+				}
+				else
 				{
-					int answer = JOptionPane
-							.showConfirmDialog(
-									null,
-									"If you continue the piece you are working on will not be saved. Continue?",
-									"Piece Maker", JOptionPane.YES_NO_OPTION);
+					int answer = JOptionPane.showConfirmDialog(null,
+							"If you continue the piece you are working on will not be saved. Continue?", "Piece Maker",
+							JOptionPane.YES_NO_OPTION);
 					if (answer == 0)
 						Driver.getInstance().setPanel(new ObjectiveMaker(b));
 				}
@@ -539,8 +521,7 @@ public class PieceMaker extends JPanel
 		// default center section
 		ImageIcon icon = new ImageIcon(file);
 		// Scale the image to 48x48.
-		icon.setImage(icon.getImage().getScaledInstance(48, 48,
-				Image.SCALE_SMOOTH));
+		icon.setImage(icon.getImage().getScaledInstance(48, 48, Image.SCALE_SMOOTH));
 		return icon;
 	}
 

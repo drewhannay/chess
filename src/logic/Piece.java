@@ -102,8 +102,7 @@ public class Piece implements Serializable
 	 * @param board The Board this Piece occupies
 	 * @param movements HashMap of legal movements for this Piece
 	 */
-	public Piece(String name, ImageIcon darkIcon, ImageIcon lightIcon,
-			boolean isBlack, Square curSquare, Board board,
+	public Piece(String name, ImageIcon darkIcon, ImageIcon lightIcon, boolean isBlack, Square curSquare, Board board,
 			HashMap<Character, Integer> movements)
 	{
 		this.name = name;
@@ -133,8 +132,7 @@ public class Piece implements Serializable
 			// If the Square is not habitable, don't add it, but return true so
 			// we can move past it.
 			return true;
-		if (dest.getRow() == curSquare.getRow()
-				&& dest.getCol() == curSquare.getCol())
+		if (dest.getRow() == curSquare.getRow() && dest.getCol() == curSquare.getCol())
 			return false;
 		if (dest.isOccupied() && dest.getPiece().isBlack() == isBlack())
 		{
@@ -158,8 +156,7 @@ public class Piece implements Serializable
 	public void adjustPinsLegalDests(Piece objectivePiece, List<Piece> enemyTeam)
 	{
 
-		if (((isBlack() ? board.getGame().getBlackRules() : board.getGame()
-				.getWhiteRules()).objectivePiece(isBlack()) == this)
+		if (((isBlack() ? board.getGame().getBlackRules() : board.getGame().getWhiteRules()).objectivePiece(isBlack()) == this)
 				&& (board.getGame().isBlackMove() == isBlack()))
 		{
 			List<Square> tmpLegalDests = getLegalDests();
@@ -173,8 +170,7 @@ public class Piece implements Serializable
 			{
 				dest = perlimMoves.next();
 
-				if (!board.getGame().isThreatened(dest, !isBlack())
-						&& !board.getGame().isGuarded(dest, !isBlack()))
+				if (!board.getGame().isThreatened(dest, !isBlack()) && !board.getGame().isGuarded(dest, !isBlack()))
 				{
 					addLegalDest(dest);
 				}
@@ -187,67 +183,53 @@ public class Piece implements Serializable
 				{
 					boolean blocked = false;
 					// Castle Queen side
-					Piece rook = board.getSquare(curSquare.getRow(), 1)
-							.getPiece();
+					Piece rook = board.getSquare(curSquare.getRow(), 1).getPiece();
 					if (rook != null && rook.getMoveCount() == 0)
 					{
 						blocked = false;
 
-						for (int c = (rook.getSquare().getCol() + 1); c <= curSquare
-								.getCol() && !blocked; c++)
+						for (int c = (rook.getSquare().getCol() + 1); c <= curSquare.getCol() && !blocked; c++)
 						{
 
 							if (c < curSquare.getCol())
 							{
-								blocked = board
-										.getSquare(curSquare.getRow(), c)
-										.isOccupied();
+								blocked = board.getSquare(curSquare.getRow(), c).isOccupied();
 							}
 							if (!blocked)
 							{
-								blocked = board.getGame().isThreatened(
-										board.getSquare(curSquare.getRow(), c),
-										!isBlack());
+								blocked = board.getGame().isThreatened(board.getSquare(curSquare.getRow(), c), !isBlack());
 							}
 						}
 
 						if (!blocked)
 						{
-							addLegalDest(board.getSquare(((isBlack()) ? 8 : 1),
-									3));
+							addLegalDest(board.getSquare(((isBlack()) ? 8 : 1), 3));
 						}
 					}
 
 					// Castle King side
-					rook = board.getSquare(curSquare.getRow(),
-							board.getMaxCol()).getPiece();
+					rook = board.getSquare(curSquare.getRow(), board.getMaxCol()).getPiece();
 					if (rook != null && rook.getMoveCount() == 0)
 					{
 						blocked = false;
 
-						for (int c = (rook.getSquare().getCol() - 1); c >= curSquare
-								.getCol() && !blocked; c--)
+						for (int c = (rook.getSquare().getCol() - 1); c >= curSquare.getCol() && !blocked; c--)
 						{
 
 							if (c > curSquare.getCol())
 							{
-								blocked = board
-										.getSquare(curSquare.getRow(), c)
-										.isOccupied();
+								blocked = board.getSquare(curSquare.getRow(), c).isOccupied();
 							}
 
 							if (!blocked)
 							{
-								blocked = board.getGame().isThreatened(
-										board.getSquare(curSquare.getRow(), c),
-										!isBlack());
+								blocked = board.getGame().isThreatened(board.getSquare(curSquare.getRow(), c), !isBlack());
 							}
 						}
 
 						if (!blocked)
 						{
-							addLegalDest(board.getSquare(((isBlack()) ? 8 : 1),
-									7));
+							addLegalDest(board.getSquare(((isBlack()) ? 8 : 1), 7));
 						}
 					}
 				}
@@ -299,7 +281,8 @@ public class Piece implements Serializable
 					else if (tmp.isBlack() == isBlack())
 					{
 						done = true;
-					} else
+					}
+					else
 					{
 						pin = tmp;
 					}
@@ -348,8 +331,7 @@ public class Piece implements Serializable
 			// Take one step forward
 			if (board.isRowValid(curSquare.getRow() + dir))
 			{
-				dest = board.getSquare(curSquare.getRow() + dir,
-						curSquare.getCol());
+				dest = board.getSquare(curSquare.getRow() + dir, curSquare.getCol());
 				if (!dest.isOccupied() && !getLegalDests().contains(dest))
 				{
 					addLegalDest(dest);
@@ -365,28 +347,24 @@ public class Piece implements Serializable
 				// and the square is occupied (by the other team)
 				// or it's not my move (so I'm threatening the square)
 				if (board.isColValid((col + 1))
-						&& ((board.getSquare(row, col + 1).isOccupied() && isBlack() != board
-								.getSquare(row, col + 1).getPiece().isBlack())))
+						&& ((board.getSquare(row, col + 1).isOccupied() && isBlack() != board.getSquare(row, col + 1).getPiece()
+								.isBlack())))
 				{
 					addLegalDest(board.getSquare(row, col + 1));
 				}
 				if (board.isColValid((col - 1))
-						&& ((board.getSquare(row, col - 1).isOccupied() && isBlack() != board
-								.getSquare(row, col - 1).getPiece().isBlack())))
+						&& ((board.getSquare(row, col - 1).isOccupied() && isBlack() != board.getSquare(row, col - 1).getPiece()
+								.isBlack())))
 				{
 					addLegalDest(board.getSquare(row, col - 1));
 				}
 			}
 
 			// two step
-			if (getMoveCount() == 0
-					&& board.isRowValid((curSquare.getRow() + (2 * dir))))
+			if (getMoveCount() == 0 && board.isRowValid((curSquare.getRow() + (2 * dir))))
 			{
-				dest = board.getSquare((curSquare.getRow() + (2 * dir)),
-						curSquare.getCol());
-				if (!dest.isOccupied()
-						&& !board.getSquare((curSquare.getRow() + dir),
-								curSquare.getCol()).isOccupied()
+				dest = board.getSquare((curSquare.getRow() + (2 * dir)), curSquare.getCol());
+				if (!dest.isOccupied() && !board.getSquare((curSquare.getRow() + dir), curSquare.getCol()).isOccupied()
 						&& !getLegalDests().contains(dest))
 				{
 					addLegalDest(dest);
@@ -397,20 +375,16 @@ public class Piece implements Serializable
 			{
 				// enPassant
 				if (isBlack() == board.isBlackTurn()
-						&& ((!isBlack() && curSquare.getRow() == 5) || (isBlack() && curSquare
-								.getRow() == 4)))
+						&& ((!isBlack() && curSquare.getRow() == 5) || (isBlack() && curSquare.getRow() == 4)))
 				{
 					col = curSquare.getCol();
-					row = isBlack() ? curSquare.getRow() - 1 : curSquare
-							.getRow() + 1;
-					if (board.isColValid(col + 1)
-							&& board.getEnpassantCol() == (col + 1))
+					row = isBlack() ? curSquare.getRow() - 1 : curSquare.getRow() + 1;
+					if (board.isColValid(col + 1) && board.getEnpassantCol() == (col + 1))
 					{
 						addLegalDest(board.getSquare(row, (col + 1)));
 					}
 
-					if (board.isColValid(col - 1)
-							&& board.getEnpassantCol() == (col - 1))
+					if (board.isColValid(col - 1) && board.getEnpassantCol() == (col - 1))
 					{
 						addLegalDest(board.getSquare(row, (col - 1)));
 					}
@@ -433,9 +407,7 @@ public class Piece implements Serializable
 				{
 					northMax = board.getMaxCol();
 				}
-			for (int c = curSquare.getCol() + 1; ((movements.get('E') == -1 && wraparound) ? true
-					: c <= northMax)
-					&& !done; c++)
+			for (int c = curSquare.getCol() + 1; ((movements.get('E') == -1 && wraparound) ? true : c <= northMax) && !done; c++)
 			{
 				int j = c;
 				if (wraparound)
@@ -449,8 +421,7 @@ public class Piece implements Serializable
 				}
 				dest = board.getSquare(curSquare.getRow(), j);
 				done = !addLegalDest(dest);
-				done = leaper ? false : (done || (dest.isOccupied() && !(board
-						.isBlackTurn() != isBlack() && dest.getPiece().equals(
+				done = leaper ? false : (done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece().equals(
 						board.getGame().getOtherObjectivePiece(isBlack())))));
 			}
 		}
@@ -466,9 +437,7 @@ public class Piece implements Serializable
 				{
 					southMax = 1;
 				}
-			for (int c = curSquare.getCol() - 1; ((movements.get('W') == -1 && wraparound) ? true
-					: c >= southMax)
-					&& !done; c--)
+			for (int c = curSquare.getCol() - 1; ((movements.get('W') == -1 && wraparound) ? true : c >= southMax) && !done; c--)
 			{
 				int j = c;
 				if (wraparound)
@@ -479,8 +448,7 @@ public class Piece implements Serializable
 
 				dest = board.getSquare(curSquare.getRow(), j);
 				done = !addLegalDest(dest);
-				done = leaper ? false : (done || (dest.isOccupied() && !(board
-						.isBlackTurn() != isBlack() && dest.getPiece().equals(
+				done = leaper ? false : (done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece().equals(
 						board.getGame().getOtherObjectivePiece(isBlack())))));
 			}
 		}
@@ -500,8 +468,7 @@ public class Piece implements Serializable
 				int j = r;
 				dest = board.getSquare(j, curSquare.getCol());
 				done = !addLegalDest(dest);
-				done = leaper ? false : (done || (dest.isOccupied() && !(board
-						.isBlackTurn() != isBlack() && dest.getPiece().equals(
+				done = leaper ? false : (done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece().equals(
 						board.getGame().getOtherObjectivePiece(isBlack())))));
 			}
 		}
@@ -521,8 +488,7 @@ public class Piece implements Serializable
 				int j = r;
 				dest = board.getSquare(j, curSquare.getCol());
 				done = !addLegalDest(dest);
-				done = leaper ? false : (done || (dest.isOccupied() && !(board
-						.isBlackTurn() != isBlack() && dest.getPiece().equals(
+				done = leaper ? false : (done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece().equals(
 						board.getGame().getOtherObjectivePiece(isBlack())))));
 			}
 		}
@@ -532,8 +498,7 @@ public class Piece implements Serializable
 		done = false;
 		if (movements.containsKey('R'))
 		{
-			int neMax = ((curSquare.getRow() >= curSquare.getCol()) ? curSquare
-					.getRow() : curSquare.getCol()) + movements.get('R');
+			int neMax = ((curSquare.getRow() >= curSquare.getCol()) ? curSquare.getRow() : curSquare.getCol()) + movements.get('R');
 			if (neMax >= board.getMaxCol() || movements.get('R') == -1)
 			{
 				neMax = board.getMaxCol();
@@ -542,13 +507,11 @@ public class Piece implements Serializable
 			{
 				neMax = board.getMaxRow();
 			}
-			for (int r = curSquare.getRow() + 1, c = curSquare.getCol() + 1; r <= neMax
-					&& c <= neMax && !done; r++, c++)
+			for (int r = curSquare.getRow() + 1, c = curSquare.getCol() + 1; r <= neMax && c <= neMax && !done; r++, c++)
 			{
 				dest = board.getSquare(r, c);
 				done = !addLegalDest(dest);
-				done = leaper ? false : (done || (dest.isOccupied() && !(board
-						.isBlackTurn() != isBlack() && dest.getPiece().equals(
+				done = leaper ? false : (done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece().equals(
 						board.getGame().getOtherObjectivePiece(isBlack())))));
 			}
 		}
@@ -569,14 +532,12 @@ public class Piece implements Serializable
 			{
 				southMin = 1;
 			}
-			for (int r = curSquare.getRow() - 1, c = curSquare.getCol() + 1; r >= southMin
-					&& c <= eastMax && !done; r--, c++)
+			for (int r = curSquare.getRow() - 1, c = curSquare.getCol() + 1; r >= southMin && c <= eastMax && !done; r--, c++)
 			{
 
 				dest = board.getSquare(r, c);
 				done = !addLegalDest(dest);
-				done = leaper ? false : (done || (dest.isOccupied() && !(board
-						.isBlackTurn() != isBlack() && dest.getPiece().equals(
+				done = leaper ? false : (done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece().equals(
 						board.getGame().getOtherObjectivePiece(isBlack())))));
 			}
 		}
@@ -596,14 +557,12 @@ public class Piece implements Serializable
 			{
 				NorthMax = board.getMaxRow();
 			}
-			for (int r = curSquare.getRow() + 1, c = curSquare.getCol() - 1; r <= NorthMax
-					&& c >= westMin && !done; r++, c--)
+			for (int r = curSquare.getRow() + 1, c = curSquare.getCol() - 1; r <= NorthMax && c >= westMin && !done; r++, c--)
 			{
 
 				dest = board.getSquare(r, c);
 				done = !addLegalDest(dest);
-				done = leaper ? false : (done || (dest.isOccupied() && !(board
-						.isBlackTurn() != isBlack() && dest.getPiece().equals(
+				done = leaper ? false : (done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece().equals(
 						board.getGame().getOtherObjectivePiece(isBlack())))));
 			}
 		}
@@ -623,13 +582,11 @@ public class Piece implements Serializable
 			{
 				southMin = 1;
 			}
-			for (int r = curSquare.getRow() - 1, c = curSquare.getCol() - 1; r >= southMin
-					&& c >= westMin && !done; r--, c--)
+			for (int r = curSquare.getRow() - 1, c = curSquare.getCol() - 1; r >= southMin && c >= westMin && !done; r--, c--)
 			{
 				dest = board.getSquare(r, c);
 				done = !addLegalDest(dest);
-				done = leaper ? false : (done || (dest.isOccupied() && !(board
-						.isBlackTurn() != isBlack() && dest.getPiece().equals(
+				done = leaper ? false : (done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece().equals(
 						board.getGame().getOtherObjectivePiece(isBlack())))));
 			}
 		}
@@ -778,8 +735,7 @@ public class Piece implements Serializable
 	 */
 	protected void genLegalDestsSaveKing(Piece king, Piece threat)
 	{
-		if ((isBlack() ? board.getGame().getBlackRules() : board.getGame()
-				.getWhiteRules()).objectivePiece(isBlack()) == this)
+		if ((isBlack() ? board.getGame().getBlackRules() : board.getGame().getWhiteRules()).objectivePiece(isBlack()) == this)
 			return;
 		if (king == null)
 			return;
@@ -798,7 +754,8 @@ public class Piece implements Serializable
 			if (threat.isBlockable(sq, king))
 			{
 				getLegalDests().add(sq);
-			} else if (sq.equals(threat.getSquare()))
+			}
+			else if (sq.equals(threat.getSquare()))
 			{
 				getLegalDests().add(sq);
 			}
@@ -855,13 +812,11 @@ public class Piece implements Serializable
 	 * @param inclusive Whether or not to include the target piece square
 	 * @return The Squares between this Piece and the target piece
 	 */
-	public Square[] getLineOfSight(int targetRow, int targetCol,
-			boolean inclusive)
+	public Square[] getLineOfSight(int targetRow, int targetCol, boolean inclusive)
 	{
 		if (name.equals("Pawn"))
 			return null;
-		if ((isBlack ? board.getGame().getBlackRules() : board.getGame()
-				.getWhiteRules()).objectivePiece(isBlack).equals(this))
+		if ((isBlack ? board.getGame().getBlackRules() : board.getGame().getWhiteRules()).objectivePiece(isBlack).equals(this))
 			return null;
 		Square[] returnSet = null;
 		ArrayList<Square> returnTemp = new ArrayList<Square>();
@@ -952,8 +907,7 @@ public class Piece implements Serializable
 		else if ((originCol - targetCol) == ((originRow - targetRow) * -1))
 		{
 			// Northwest
-			if ((originRow - targetRow) < 0
-					&& canAttack(targetRow, targetCol, 'L'))
+			if ((originRow - targetRow) < 0 && canAttack(targetRow, targetCol, 'L'))
 			{
 				for (c = (originCol - 1), r = (originRow + 1); r <= targetRow; c--, r++)
 					if (r != targetRow || inclusive)
@@ -1003,39 +957,31 @@ public class Piece implements Serializable
 		{
 		case 'S': // South
 			if (movements.containsKey('S'))
-				return (destRow - curSquare.getRow()) < movements.get('S')
-						|| movements.get('S') == -1;
+				return (destRow - curSquare.getRow()) < movements.get('S') || movements.get('S') == -1;
 
 		case 'N': // North
 			if (movements.containsKey('N'))
-				return (curSquare.getRow() - destRow) < movements.get('N')
-						|| movements.get('N') == -1;
+				return (curSquare.getRow() - destRow) < movements.get('N') || movements.get('N') == -1;
 
 		case 'E': // East
 			if (movements.containsKey('E'))
-				return (destCol - curSquare.getCol()) < movements.get('E')
-						|| movements.get('E') == -1;
+				return (destCol - curSquare.getCol()) < movements.get('E') || movements.get('E') == -1;
 
 		case 'W': // West
 			if (movements.containsKey('W'))
-				return (curSquare.getCol() - destCol) < movements.get('W')
-						|| movements.get('W') == -1;
+				return (curSquare.getCol() - destCol) < movements.get('W') || movements.get('W') == -1;
 		case 'R': // NorthEast
 			if (movements.containsKey('R'))
-				return (curSquare.getCol() - destCol) < movements.get('R')
-						|| movements.get('R') == -1;
+				return (curSquare.getCol() - destCol) < movements.get('R') || movements.get('R') == -1;
 		case 'r': // SouthEast
 			if (movements.containsKey('r'))
-				return (curSquare.getCol() - destCol) < movements.get('r')
-						|| movements.get('r') == -1;
+				return (curSquare.getCol() - destCol) < movements.get('r') || movements.get('r') == -1;
 		case 'L': // NorthWest
 			if (movements.containsKey('L'))
-				return (destCol - curSquare.getCol()) < movements.get('L')
-						|| movements.get('L') == -1;
+				return (destCol - curSquare.getCol()) < movements.get('L') || movements.get('L') == -1;
 		case 'l': // SouthWest
 			if (movements.containsKey('l'))
-				return (destCol - curSquare.getCol()) < movements.get('l')
-						|| movements.get('l') == -1;
+				return (destCol - curSquare.getCol()) < movements.get('l') || movements.get('l') == -1;
 		default:
 			return false;
 		}
@@ -1051,8 +997,7 @@ public class Piece implements Serializable
 	 */
 	public Square[] getLineOfSight(Piece target, boolean inclusive)
 	{
-		return getLineOfSight(target.getSquare().getRow(), target.getSquare()
-				.getCol(), inclusive);
+		return getLineOfSight(target.getSquare().getRow(), target.getSquare().getCol(), inclusive);
 	}
 
 	/**
@@ -1164,7 +1109,8 @@ public class Piece implements Serializable
 				board.getGame().genLegalDests();
 			}
 			return getGuardSquares().contains(sq);
-		} else
+		}
+		else
 			return false;
 	}
 
@@ -1199,8 +1145,7 @@ public class Piece implements Serializable
 				return false;
 
 			else
-				return (isLegalDest(threatened) || (threatened.getRow()
-						- curSquare.getRow() == ((isBlack()) ? -1 : 1) && Math
+				return (isLegalDest(threatened) || (threatened.getRow() - curSquare.getRow() == ((isBlack()) ? -1 : 1) && Math
 						.abs(threatened.getCol() - curSquare.getCol()) == 1));
 		}
 		return isLegalDest(threatened);
@@ -1221,7 +1166,8 @@ public class Piece implements Serializable
 				board.getGame().genLegalDests();
 			}
 			return getLegalDests().contains(dest);
-		} else
+		}
+		else
 			return false;
 	}
 

@@ -49,11 +49,10 @@ public class GetPromotionSquares implements Serializable
 	{
 		try
 		{
-			doMethods.put("classic", GetPromotionSquares.class.getMethod(
-					"classicPromoSquares", Piece.class));
-			doMethods.put("noPromos", GetPromotionSquares.class.getMethod(
-					"noPromos", Piece.class));
-		} catch (Exception e)
+			doMethods.put("classic", GetPromotionSquares.class.getMethod("classicPromoSquares", Piece.class));
+			doMethods.put("noPromos", GetPromotionSquares.class.getMethod("noPromos", Piece.class));
+		}
+		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
@@ -86,7 +85,8 @@ public class GetPromotionSquares implements Serializable
 			if (p.isBlack())
 			{
 				toReturn.add(g.getBoards()[0].getSquare(1, i));
-			} else
+			}
+			else
 			{
 				toReturn.add(g.getBoards()[0].getSquare(8, i));
 			}
@@ -110,7 +110,8 @@ public class GetPromotionSquares implements Serializable
 				doMethod = doMethods.get(name);
 			}
 			return (List<Square>) doMethod.invoke(this, p);
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			e.printStackTrace();
 			return null;

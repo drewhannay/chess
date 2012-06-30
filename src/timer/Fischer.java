@@ -34,8 +34,7 @@ public class Fischer extends ChessTimer
 	 * @param fischerAfter Whether it is Fisher after
 	 * @param isBlack Whether it is black.
 	 */
-	public Fischer(long increment, long startTime, boolean fischerAfter,
-			boolean isBlack)
+	public Fischer(long increment, long startTime, boolean fischerAfter, boolean isBlack)
 	{
 		this.increment = increment;
 		time = startTime;

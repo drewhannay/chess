@@ -92,7 +92,8 @@ public class PieceBuilder implements Serializable
 		{
 
 			movements = new HashMap<Character, Integer>();
-		} else
+		}
+		else
 		{
 			movements = pieceTypes.get(name).movements;
 		}
@@ -128,8 +129,7 @@ public class PieceBuilder implements Serializable
 	 * @param board The Board the Piece occupies
 	 * @return The new Piece
 	 */
-	public static Piece makePiece(String name, boolean isBlack, Square origin,
-			Board board)
+	public static Piece makePiece(String name, boolean isBlack, Square origin, Board board)
 	{
 		return pieceTypes.get(name).makePiece(isBlack, origin, board);
 	}
@@ -183,8 +183,7 @@ public class PieceBuilder implements Serializable
 		if (name.equals("Rook"))
 			return Builder.createRook(isBlack, origin, board);
 		else
-			return new Piece(name, darkImage, lightImage, isBlack, origin,
-					board, movements);
+			return new Piece(name, darkImage, lightImage, isBlack, origin, board, movements);
 		// try {
 		//
 		// Class<?> klazz = Class.forName("logic." + name);

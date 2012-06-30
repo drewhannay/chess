@@ -44,13 +44,11 @@ public class CropLegalDests implements Serializable
 	{
 		try
 		{
-			doMethods.put("classic", CropLegalDests.class.getMethod(
-					"classicCropLegalDests", Piece.class, Piece.class,
-					List.class));
-			doMethods.put("stationaryObjective", CropLegalDests.class
-					.getMethod("stationaryObjective", Piece.class, Piece.class,
-							List.class));
-		} catch (Exception e)
+			doMethods.put("classic", CropLegalDests.class.getMethod("classicCropLegalDests", Piece.class, Piece.class, List.class));
+			doMethods.put("stationaryObjective",
+					CropLegalDests.class.getMethod("stationaryObjective", Piece.class, Piece.class, List.class));
+		}
+		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
@@ -74,8 +72,7 @@ public class CropLegalDests implements Serializable
 	 * @param toAdjust The piece to adjust the dests of.
 	 * @param enemyTeam The enemy team.
 	 */
-	public void classicCropLegalDests(Piece movingObjective, Piece toAdjust,
-			List<Piece> enemyTeam)
+	public void classicCropLegalDests(Piece movingObjective, Piece toAdjust, List<Piece> enemyTeam)
 	{
 		toAdjust.adjustPinsLegalDests(movingObjective, enemyTeam);
 	}
@@ -87,8 +84,7 @@ public class CropLegalDests implements Serializable
 	 * @param toAdjust The piece to adjust the legal destinations.
 	 * @param enemyTeam The opposite team.
 	 */
-	public void execute(Piece movingObjectivePiece, Piece toAdjust,
-			List<Piece> enemyTeam)
+	public void execute(Piece movingObjectivePiece, Piece toAdjust, List<Piece> enemyTeam)
 	{
 		try
 		{
@@ -104,7 +100,8 @@ public class CropLegalDests implements Serializable
 			{
 				m.invoke(this, movingObjectivePiece, toAdjust, enemyTeam);
 			}
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
@@ -118,13 +115,13 @@ public class CropLegalDests implements Serializable
 	 * @param toAdjust The piece to adjust.
 	 * @param enemyTeam The enemy team.
 	 */
-	public void stationaryObjective(Piece movingObjective, Piece toAdjust,
-			List<Piece> enemyTeam)
+	public void stationaryObjective(Piece movingObjective, Piece toAdjust, List<Piece> enemyTeam)
 	{
 		if (toAdjust == movingObjective)
 		{
 			toAdjust.getLegalDests().clear();
-		} else
+		}
+		else
 		{
 			toAdjust.adjustPinsLegalDests(movingObjective, enemyTeam);
 		}

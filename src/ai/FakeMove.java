@@ -46,8 +46,7 @@ public class FakeMove implements Serializable
 	 * @param destCol Which col it wants to be on
 	 * @param promoName The name of the promotion piece
 	 */
-	public FakeMove(int boardNum, int originRow, int originCol, int destRow,
-			int destCol, String promoName)
+	public FakeMove(int boardNum, int originRow, int originCol, int destRow, int destCol, String promoName)
 	{
 		this.boardNum = boardNum;
 		this.originRow = originRow;
@@ -65,8 +64,7 @@ public class FakeMove implements Serializable
 	@Override
 	public String toString()
 	{
-		return boardNum + " " + originRow + " " + originCol + " " + destRow
-				+ " " + destCol;
+		return boardNum + " " + originRow + " " + originCol + " " + destRow + " " + destCol;
 	}
 
 }

@@ -43,11 +43,10 @@ public class AdjustTeamDests implements Serializable
 	{
 		try
 		{
-			doMethods.put("classic", AdjustTeamDests.class.getMethod(
-					"classicAdjustTeamDests", List.class));
-			doMethods.put("mustCapture",
-					AdjustTeamDests.class.getMethod("mustCapture", List.class));
-		} catch (Exception e)
+			doMethods.put("classic", AdjustTeamDests.class.getMethod("classicAdjustTeamDests", List.class));
+			doMethods.put("mustCapture", AdjustTeamDests.class.getMethod("mustCapture", List.class));
+		}
+		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
@@ -89,7 +88,8 @@ public class AdjustTeamDests implements Serializable
 				doMethod = doMethods.get(name);
 			}
 			doMethod.invoke(this, team);
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
