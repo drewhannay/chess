@@ -87,14 +87,15 @@ public class JailSquare implements Serializable
 				if (piece.getIcon() == null)
 				{// And it has no Icon
 					jb.setText(piece.getName());// Use it's name
-				} else
+				}
+				else
 				{
-					Image temp = piece.getIcon().getImage()
-							.getScaledInstance(25, 25, Image.SCALE_SMOOTH);
+					Image temp = piece.getIcon().getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
 					jb.setIcon(new ImageIcon(temp));// Otherwise, use it's Icon
 
 				}
-			} else
+			}
+			else
 			{// If there's no Piece, clear the Icon and Text of the Square.
 				jb.setIcon(null);
 				jb.setText("");
@@ -120,7 +121,8 @@ public class JailSquare implements Serializable
 		{
 			// jb.setBackground(Color.GRAY);
 			// jb.setForeground(Color.LIGHT_GRAY);
-		} else
+		}
+		else
 		{
 			// jb.setBackground(Color.LIGHT_GRAY);
 			// jb.setForeground(Color.GRAY);

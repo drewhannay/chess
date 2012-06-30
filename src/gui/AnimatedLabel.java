@@ -50,10 +50,12 @@ public class AnimatedLabel extends JLabel implements Runnable
 			if (index == 1)
 			{
 				setText("Waiting. ");
-			} else if (index == 2)
+			}
+			else if (index == 2)
 			{
 				setText("Waiting.. ");
-			} else
+			}
+			else
 			{
 				setText("Waiting... ");
 				index = 0;
@@ -61,7 +63,8 @@ public class AnimatedLabel extends JLabel implements Runnable
 			try
 			{
 				Thread.sleep(1000);
-			} catch (Exception ex)
+			}
+			catch (Exception ex)
 			{
 			}
 		}

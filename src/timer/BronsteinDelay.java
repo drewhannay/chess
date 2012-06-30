@@ -67,7 +67,8 @@ public class BronsteinDelay extends ChessTimer
 		if (!firstTime && !timeSet)
 		{
 			time += (delay >= increment ? increment : delay);
-		} else
+		}
+		else
 		{
 			firstTime = false;
 		}

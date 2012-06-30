@@ -1,6 +1,8 @@
 package gui;
 
+import java.awt.Desktop;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
@@ -12,6 +14,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -24,7 +28,10 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
 import javax.swing.UIManager;
+import javax.swing.WindowConstants;
 
 import logic.Game;
 import timer.ChessTimer;
@@ -77,18 +84,6 @@ final public class Driver extends JFrame
 	 */
 	private JMenuBar menuBar;
 	/**
-	 * Menu Item for explaining gameplay
-	 */
-	public JMenuItem gamePlayHelp;
-	/**
-	 * Menu item to explain making variants
-	 */
-	public JMenuItem variantHelp;
-	/**
-	 * Menu item to display help on the completed games window
-	 */
-	public JMenuItem completedHelp;
-	/**
 	 * Menu to diplay the help items
 	 */
 	public JMenu helpMenu;
@@ -100,7 +95,7 @@ final public class Driver extends JFrame
 	/**
 	 * Menu to hold the options created in playGame for saving and such in game.
 	 */
-	public JMenu gameOptions;
+	public static JMenu gameOptions;
 	/**
 	 * Menu item for the File options
 	 */
@@ -139,6 +134,7 @@ final public class Driver extends JFrame
 		setTitle("Chess Master 9001");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(325, 340);
+		setResizable(false);
 		setLocationRelativeTo(null);// This line makes the window show up in the
 									// center of the user's screen, regardless
 									// of resolution.
@@ -188,10 +184,6 @@ final public class Driver extends JFrame
 			public void actionPerformed(ActionEvent e)
 			{
 				// Remove the current panel, set otherPanel, repaint.
-				helpMenu.setText("Game Help"); // Sets the help menu to say Game
-												// Help
-				gamePlayHelp.setVisible(true); // Shows the help for general
-												// game play
 				remove(mainPanel);
 				otherPanel = new NewGameMenu();
 				setPanel(otherPanel);
@@ -227,8 +219,6 @@ final public class Driver extends JFrame
 					ObjectInputStream obj_in = new ObjectInputStream(f_in);
 					Game toPlay = (Game) obj_in.readObject();
 					// Sets the help menu info to be specific for game play
-					helpMenu.setText("Game Help");
-					gamePlayHelp.setVisible(true);
 					if (gameOptions != null)
 						gameOptions.setVisible(true);
 
@@ -295,9 +285,6 @@ final public class Driver extends JFrame
 						otherPanel = new PlayGame(toView, true);
 					}
 					// Sets up the help for playng back and changes the window
-					completedHelp.setVisible(true);
-					helpMenu.setText("Playback Help");
-					;
 					remove(mainPanel);
 					setPanel(otherPanel);
 					pack();
@@ -321,8 +308,6 @@ final public class Driver extends JFrame
 			public void actionPerformed(ActionEvent e)
 			{
 				// Remove the current panel, set otherPanel, repaint.
-				variantHelp.setVisible(true);
-				helpMenu.setText("Variant Help");
 				remove(mainPanel);
 				otherPanel = new NewTypeMenu();
 				setPanel(otherPanel);
@@ -339,107 +324,34 @@ final public class Driver extends JFrame
 		helpMenu = new JMenu("Help");
 		helpMenu.setMnemonic('H');
 
-		// Adding Help to menu with xkcd.com picture. will remove later
-		JMenuItem helpMenuItem = new JMenuItem("General Help", KeyEvent.VK_H);
-		helpMenuItem.setToolTipText("Press me to get general help");
+		// Sets up the Help Menu items
+		final JFrame help = setUpHelp();
+		final JFrame about = setUpAbout();
 
-		BufferedImage help = null;
-		try
-		{
-			help = ImageIO.read(getClass().getResource("/tech_support_cheat_sheet.png"));
-		}
-		catch (IOException e1)
-		{
-			e1.printStackTrace();
-		}
-		// Making the icon and adding it to the appropriate menu item
-		final ImageIcon helpPicture = new ImageIcon(help);
-		helpPicture.setImage(helpPicture.getImage().getScaledInstance(600, 600, Image.SCALE_SMOOTH));
+		// Adding Help to menu
+		JMenuItem helpMenuItem = new JMenuItem("Browse Help", KeyEvent.VK_H);
+		helpMenuItem.setToolTipText("Click on me to get help");
 		helpMenuItem.addActionListener(new ActionListener()
 		{
 			@Override
-			public void actionPerformed(ActionEvent arg0)
+			public void actionPerformed(ActionEvent e)
 			{
-				JOptionPane.showMessageDialog(Driver.this, "", "Help", 0, helpPicture);
+				help.setVisible(true);
 			}
-
 		});
 		helpMenu.add(helpMenuItem);
 
-		BufferedImage helpGame = null;
-		try
+		JMenuItem aboutItem = new JMenuItem("About Chess Master 9001", KeyEvent.VK_A);
+		aboutItem.setToolTipText("Information about Chess Master 9001");
+		aboutItem.addActionListener(new ActionListener()
 		{
-			helpGame = ImageIO.read(getClass().getResource("/gameplay_help.png"));
-		}
-		catch (IOException e1)
-		{
-			e1.printStackTrace();
-		}
-		// Makes the image an icon and ands it to a JLabel
-		final ImageIcon gameHelpPicture = new ImageIcon(helpGame);
-		gameHelpPicture.setImage(gameHelpPicture.getImage().getScaledInstance(700, 375, Image.SCALE_SMOOTH));
-
-		// Adding the menu item to display help specific for normal game play
-		gamePlayHelp = new JMenuItem("Game Play Help", KeyEvent.VK_G);
-		gamePlayHelp.setToolTipText("Press if you need help with game play");
-		gamePlayHelp.addActionListener(new ActionListener()
-		{
-
-			@Override
-			public void actionPerformed(ActionEvent arg0)
-			{
-				JOptionPane.showMessageDialog(null, "", "Game Play Help", 0, gameHelpPicture);
-			}
-
-		});
-		helpMenu.add(gamePlayHelp);
-		gamePlayHelp.setVisible(false);
-
-		BufferedImage helpMe = null;
-		try
-		{
-			helpMe = ImageIO.read(getClass().getResource("/variant_help.png"));
-		}
-		catch (IOException e1)
-		{
-			e1.printStackTrace();
-		}
-		// Makes the image an icon and ands it to a JLabel
-		final ImageIcon variantPicture = new ImageIcon(helpMe);
-		variantPicture.setImage(variantPicture.getImage().getScaledInstance(650, 300, Image.SCALE_SMOOTH));
-
-		// Adds the menu item to help for specific instructions on making
-		// variants
-		variantHelp = new JMenuItem("Variant Making Help", KeyEvent.VK_V);
-		variantHelp.setToolTipText("Press me for help setting up your chess game");
-		variantHelp.addActionListener(new ActionListener()
-		{
-
-			@Override
-			public void actionPerformed(ActionEvent arg0)
-			{
-				JOptionPane.showMessageDialog(null, "", "Variant Help", 0, variantPicture);
-			}
-
-		});
-		helpMenu.add(variantHelp);
-		variantHelp.setVisible(false);
-
-		// Menu item for making the help item to explain playing back a game
-		completedHelp = new JMenuItem("Game Review Help", KeyEvent.VK_R);
-		completedHelp.setToolTipText("Press me for help playing back completed games");
-		completedHelp.addActionListener(new ActionListener()
-		{
-
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				JOptionPane.showMessageDialog(Driver.this, "To play back a move press the Next Move button\n"
-						+ "or press the Last Move button to rewind one move.\n");
+				about.setVisible(true);
 			}
 		});
-		helpMenu.add(completedHelp);
-		completedHelp.setVisible(false);
+		helpMenu.add(aboutItem);
 
 		// Adds menu item to load a new game
 		JMenuItem newGameItem = new JMenuItem("New Game", KeyEvent.VK_N);
@@ -450,11 +362,6 @@ final public class Driver extends JFrame
 			public void actionPerformed(ActionEvent e)
 			{
 				// Remove the current panel, set otherPanel, repaint.
-				helpMenu.setText("Game Help"); // Sets the help menu to say Game
-												// Help
-				gamePlayHelp.setVisible(true); // Shows the help for general
-												// game play
-				// gameOptions.setVisible(true); //Turns on the game options
 				remove(mainPanel);
 				otherPanel = new NewGameMenu();
 				setPanel(otherPanel);
@@ -473,12 +380,6 @@ final public class Driver extends JFrame
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
-				// Changes help to only be the general help and displays the
-				// main panel
-				helpMenu.setText("Help");
-				variantHelp.setVisible(false);
-				gamePlayHelp.setVisible(false);
-				completedHelp.setVisible(false);
 				if (gameOptions != null)
 					gameOptions.setVisible(false);
 				if (otherPanel != null)
@@ -560,11 +461,6 @@ final public class Driver extends JFrame
 	public void newGame()
 	{
 
-		variantHelp.setVisible(false); // Makes sure that the appropriate help
-										// menus are displayed
-		helpMenu.setText("Game Help");
-		gamePlayHelp.setVisible(true);
-
 		if (PlayGame.menu != null)
 			PlayGame.menu.setVisible(false);
 		// Resets the panels being displayed to only contain the new game
@@ -575,7 +471,6 @@ final public class Driver extends JFrame
 		otherPanel = new NewGameMenu();
 		add(otherPanel);
 		ChessTimer.stopTimers();
-		gamePlayHelp.setVisible(true);
 		pack();
 	}
 
@@ -630,4 +525,166 @@ final public class Driver extends JFrame
 		gameOptions.setToolTipText("Use me to access game options");
 	}
 
+	/**
+	 * Method for setting up the Help window
+	 */
+	private JFrame setUpHelp()
+	{
+		JFrame helpPop = new JFrame();
+		helpPop.setTitle("Help");
+		helpPop.setSize(775, 525);
+		helpPop.setResizable(false);
+		helpPop.setLocationRelativeTo(this);
+		helpPop.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		helpPop.setLayout(new GridBagLayout());
+		GridBagConstraints h = new GridBagConstraints();
+
+		JPanel gamePlayHelp = new JPanel();
+		JPanel variantMakingHelp = new JPanel();
+		JPanel generalHelp = new JPanel();
+
+		JTabbedPane helpTypes = new JTabbedPane();
+		helpTypes.addTab("General Help", null, generalHelp, "Click for General Help with Chess Master 9001");
+		helpTypes.addTab("Game Play Help", null, gamePlayHelp, "Click for help playing Chess");
+		helpTypes.addTab("New Game Type Help", null, variantMakingHelp, "Click for help making a new Game Type");
+		helpTypes.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+
+		h.gridy = 0;
+		h.fill = GridBagConstraints.HORIZONTAL;
+		helpPop.add(helpTypes, h);
+		h.fill = GridBagConstraints.HORIZONTAL;
+		h.gridy = 1;
+
+		JTextArea gamePlayText = new JTextArea();
+		gamePlayText.setEditable(false);
+		gamePlayText.setText("To move a piece simply click on it and the places you can move it will be highlighted.\n"
+				+ "\tIf that piece has no moves, no squares will be highlighted.\n\n" + "For games with an objective piece:\n"
+				+ "\tIf the Objective is in check the attacking piece will be highlighted in Red\n"
+				+ "\tWhile the piece is in check, only moves that break check are allowed\n\n"
+				+ "If you want to undo a move simply press Undo\n" + "\tThis feature is unavailable in Network Play\n\n"
+				+ "Options specific to the game can be found under Options:\n"
+				+ "\t1. Save and Quit will save your current game and return to the main menu\n"
+				+ "\t\t- This feature is unavailable in Network Play\n" + "\t2. Declare Draw will declare the game to be a draw\n"
+				+ "\t\t- In network Play this feature will request a draw from the other player\n\n"
+				+ "Once a game has been completed or decalred a draw it can no longer be played,\n"
+				+ "but it can be reviewed from the View Completed Games on the Main Menu");
+		gamePlayHelp.add(gamePlayText);
+
+		JTextArea generalHelpText = new JTextArea();
+		generalHelpText.setEditable(false);
+		generalHelpText.setText("Thanks for playing Chess Master 9001!\n\n"
+				+ "Our Main Menu is designed to quickly guide you to the major 4 features of Chess Master 9001:\n"
+				+ "\t1. New Game - This will start a new game of Chess which you can play against\n"
+				+ "\t\t\tanother person or against an AI\n"
+				+ "\t2. Create New Game Type - This will allow you create a Chess Variant of your own\n"
+				+ "\t3. View Completed Games - This will let you watch games you've already completed\n"
+				+ "\t4. Load Game - This will load a game you were previously playing\n" + "\t\t\tso you can keep playing\n\n"
+				+ "Also at any time you can use the File menu or the Options menu to see what\n" + "options are available to you.");
+		generalHelp.add(generalHelpText);
+
+		JTextArea variantMakingHelpText = new JTextArea();
+		variantMakingHelpText.setEditable(false);
+		variantMakingHelpText.setText("Once you choose to create a new Game Type you will need to choose a few options:\n"
+				+ "\t1. Create a Name for your game\n" + "\t2. Set up what the board will look like\n"
+				+ "\t3. Create any custom pieces you need\n" + "\t4. Determine the rules and how to win of your game\n"
+				+ "\t5. Determine how many turns each player should get per round\n\n" + "To place a piece on the board:\n"
+				+ "\t1. Click on the piece name from the list of piece types\n"
+				+ "\t2. Click on the Square containing the piece color type you want to place\n"
+				+ "\t3. Click anywhere on the board to drop the piece\n" + "\t\t- You can keep clicking other squares to drop more\n"
+				+ "\t4. To change what piece you are dropping choose a new one from the list\n\n"
+				+ "To Remove pieces or change squares on the board:\n" + "\t1. Clear your piece selection\n"
+				+ "\t\t - You can do this by clicking on the piece that has a Blue background\n"
+				+ "\t2. Click on any square with a piece in it to remove the piece\n"
+				+ "\t3. Click on any empty square to change it's color or whether it is habitable\n\n"
+				+ "To allow a piece to promote to something else. Simply click on the piece in the list\n"
+				+ "and choose Promote This Piece\n\n"
+				+ "When you are completly finished press the Save button to save your variant.\n"
+				+ "You can then play it from the New Game option on the home page just like normal chess.");
+		variantMakingHelp.add(variantMakingHelpText);
+
+		return helpPop;
+	}
+
+	private JFrame setUpAbout()
+	{
+
+		JFrame aboutPop = new JFrame("About Chess Master 9001");
+		aboutPop.setTitle("Help");
+		aboutPop.setSize(350, 375);
+		aboutPop.setResizable(false);
+		aboutPop.setLocationRelativeTo(this);
+		aboutPop.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		aboutPop.setLayout(new GridBagLayout());
+		GridBagConstraints a = new GridBagConstraints();
+
+		BufferedImage temp = null;
+		BufferedImage iconPiece = null;
+		try
+		{
+			// read the image from the class resources
+			temp = ImageIO.read(getClass().getResource("/front_page_image.jpeg"));
+			iconPiece = ImageIO.read(getClass().getResource("/king_dark.png"));
+		}
+		catch (IOException e1)
+		{
+			e1.printStackTrace();
+		}
+		// Makes the image an icon and ands it to a JLabel
+		ImageIcon picture = new ImageIcon(temp);
+		JLabel pictureHolder = new JLabel();
+		picture.setImage(picture.getImage().getScaledInstance(300, 200, Image.SCALE_SMOOTH));
+		pictureHolder.setIcon(picture);
+
+		ImageIcon piecePicture = new ImageIcon(iconPiece);
+		piecePicture.setImage(piecePicture.getImage());
+
+		Font font = new Font("Verdana", Font.BOLD, 18);
+		JLabel title = new JLabel("Chess Master 9001\n");
+		title.setFont(font);
+
+		JPanel top = new JPanel();
+		top.add(title);
+		top.add(pictureHolder);
+
+		JTextArea info = new JTextArea();
+		info.setEditable(false);
+		info.setText("Version 1.1\n\n" + "Visit our project site");
+
+		JButton site = new JButton();
+		site.setIcon(piecePicture);
+		site.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent arg0)
+			{
+				if (Desktop.isDesktopSupported())
+				{
+					try
+					{
+						URI uri = new URI("https://github.com/drewhannay/chess");
+						Desktop.getDesktop().browse(uri);
+					}
+					catch (IOException e)
+					{
+						e.printStackTrace();
+					}
+					catch (URISyntaxException e)
+					{
+						e.printStackTrace();
+					}
+				}
+			}
+		});
+
+		a.gridy = 0;
+		aboutPop.add(title, a);
+		a.gridy = 1;
+		aboutPop.add(pictureHolder, a);
+		a.gridy = 2;
+		aboutPop.add(info, a);
+		a.gridy = 3;
+		aboutPop.add(site, a);
+
+		return aboutPop;
+	}
 }

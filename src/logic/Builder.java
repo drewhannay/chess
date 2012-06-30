@@ -80,8 +80,7 @@ public class Builder implements Serializable
 	 * @param blackRules The rules for the black team
 	 * @param whiteRules The rules for the white team
 	 */
-	public Builder(String name, Board[] boards, List<Piece> whiteTeam,
-			List<Piece> blackTeam, Rules whiteRules, Rules blackRules)
+	public Builder(String name, Board[] boards, List<Piece> whiteTeam, List<Piece> blackTeam, Rules whiteRules, Rules blackRules)
 	{
 		this.name = name;
 		this.boards = boards;
@@ -141,9 +140,8 @@ public class Builder implements Serializable
 		bishopMovement.put('r', -1);
 		bishopMovement.put('L', -1);
 		bishopMovement.put('l', -1);
-		return new Piece("Bishop", new ImageIcon("./images/bishop_dark.png"),
-				new ImageIcon("./images/bishop_light.png"), isBlack, square,
-				board, bishopMovement);
+		return new Piece("Bishop", new ImageIcon("./images/bishop_dark.png"), new ImageIcon("./images/bishop_light.png"), isBlack,
+				square, board, bishopMovement);
 	}
 
 	/**
@@ -166,8 +164,7 @@ public class Builder implements Serializable
 		kingMovement.put('r', 1);
 		kingMovement.put('L', 1);
 		kingMovement.put('l', 1);
-		return new Piece("King", new ImageIcon("./images/king_dark.png"),
-				new ImageIcon("./images/king_light.png"), isBlack, square,
+		return new Piece("King", new ImageIcon("./images/king_dark.png"), new ImageIcon("./images/king_light.png"), isBlack, square,
 				board, kingMovement);
 	}
 
@@ -185,9 +182,8 @@ public class Builder implements Serializable
 		HashMap<Character, Integer> knightMovement = new HashMap<Character, Integer>();
 		knightMovement.put('x', 1);
 		knightMovement.put('y', 2);
-		return new Piece("Knight", new ImageIcon("./images/knight_dark.png"),
-				new ImageIcon("./images/knight_light.png"), isBlack, square,
-				board, knightMovement);
+		return new Piece("Knight", new ImageIcon("./images/knight_dark.png"), new ImageIcon("./images/knight_light.png"), isBlack,
+				square, board, knightMovement);
 	}
 
 	/**
@@ -201,9 +197,8 @@ public class Builder implements Serializable
 	 */
 	public static Piece createPawn(boolean isBlack, Square square, Board board)
 	{
-		Piece pawn = new Piece("Pawn", new ImageIcon("./images/pawn_dark.png"),
-				new ImageIcon("./images/pawn_light.png"), isBlack, square,
-				board, null);
+		Piece pawn = new Piece("Pawn", new ImageIcon("./images/pawn_dark.png"), new ImageIcon("./images/pawn_light.png"), isBlack,
+				square, board, null);
 		ArrayList<String> promotesTo = new ArrayList<String>();
 		promotesTo.add("Queen");
 		promotesTo.add("Bishop");
@@ -233,9 +228,8 @@ public class Builder implements Serializable
 		queenMovement.put('r', -1);
 		queenMovement.put('L', -1);
 		queenMovement.put('l', -1);
-		return new Piece("Queen", new ImageIcon("./images/queen_dark.png"),
-				new ImageIcon("./images/queen_light.png"), isBlack, square,
-				board, queenMovement);
+		return new Piece("Queen", new ImageIcon("./images/queen_dark.png"), new ImageIcon("./images/queen_light.png"), isBlack,
+				square, board, queenMovement);
 	}
 
 	/**
@@ -254,8 +248,7 @@ public class Builder implements Serializable
 		rookMovement.put('S', -1);
 		rookMovement.put('W', -1);
 		rookMovement.put('E', -1);
-		return new Piece("Rook", new ImageIcon("./images/rook_dark.png"),
-				new ImageIcon("./images/rook_light.png"), isBlack, square,
+		return new Piece("Rook", new ImageIcon("./images/rook_dark.png"), new ImageIcon("./images/rook_light.png"), isBlack, square,
 				board, rookMovement);
 	}
 
@@ -293,13 +286,13 @@ public class Builder implements Serializable
 				{
 					ObjectInputStream in = new ObjectInputStream(new FileInputStream(FileUtility.getVariantsFile(name)));
 					Builder b = (Builder) in.readObject();
-					Game toReturn = new Game(name, b.boards, b.whiteRules,
-							b.blackRules);
+					Game toReturn = new Game(name, b.boards, b.whiteRules, b.blackRules);
 					toReturn.setWhiteTeam(b.whiteTeam);
 					toReturn.setBlackTeam(b.blackTeam);
 
 					return toReturn;
-				} catch (Exception e)
+				}
+				catch (Exception e)
 				{
 					e.printStackTrace();
 					return null;
@@ -341,11 +334,11 @@ public class Builder implements Serializable
 		{
 			FileOutputStream f_out = new FileOutputStream(FileUtility.getVariantsFile(name));
 			ObjectOutputStream out = new ObjectOutputStream(f_out);
-			out.writeObject(new Builder(name, boards, whiteTeam, blackTeam,
-					whiteRules, blackRules));
+			out.writeObject(new Builder(name, boards, whiteTeam, blackTeam, whiteRules, blackRules));
 			out.close();
 			f_out.close();
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 		}
 	}

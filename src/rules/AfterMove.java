@@ -64,32 +64,21 @@ public class AfterMove implements Serializable
 	{
 		try
 		{
-			doMethods.put("classic",
-					AfterMove.class.getMethod("classicAfterMove", Move.class));
-			doMethods.put("captureTeamSwap",
-					AfterMove.class.getMethod("captureTeamSwap", Move.class));
-			doMethods.put("goHome",
-					AfterMove.class.getMethod("goHome", Move.class));
-			doMethods.put("placeCapturedSwitch", AfterMove.class.getMethod(
-					"placeCapturedSwitch", Move.class));
-			doMethods.put("placeCaptured",
-					AfterMove.class.getMethod("placeCaptured", Move.class));
-			doMethods.put("atomicCapture",
-					AfterMove.class.getMethod("atomicCapture", Move.class));
+			doMethods.put("classic", AfterMove.class.getMethod("classicAfterMove", Move.class));
+			doMethods.put("captureTeamSwap", AfterMove.class.getMethod("captureTeamSwap", Move.class));
+			doMethods.put("goHome", AfterMove.class.getMethod("goHome", Move.class));
+			doMethods.put("placeCapturedSwitch", AfterMove.class.getMethod("placeCapturedSwitch", Move.class));
+			doMethods.put("placeCaptured", AfterMove.class.getMethod("placeCaptured", Move.class));
+			doMethods.put("atomicCapture", AfterMove.class.getMethod("atomicCapture", Move.class));
 
-			undoMethods.put("placeCapturedSwitch", AfterMove.class.getMethod(
-					"undoPlaceCapturedSwitch", Move.class));
-			undoMethods.put("placeCaptured",
-					AfterMove.class.getMethod("undoPlaceCaptured", Move.class));
-			undoMethods.put("classic",
-					AfterMove.class.getMethod("classicUndo", Move.class));
-			undoMethods.put("captureTeamSwap",
-					AfterMove.class.getMethod("captureTeamSwap", Move.class));
-			undoMethods.put("goHome",
-					AfterMove.class.getMethod("undoGoHome", Move.class));
-			undoMethods.put("atomicCapture",
-					AfterMove.class.getMethod("undoAtomicCapture", Move.class));
-		} catch (Exception e)
+			undoMethods.put("placeCapturedSwitch", AfterMove.class.getMethod("undoPlaceCapturedSwitch", Move.class));
+			undoMethods.put("placeCaptured", AfterMove.class.getMethod("undoPlaceCaptured", Move.class));
+			undoMethods.put("classic", AfterMove.class.getMethod("classicUndo", Move.class));
+			undoMethods.put("captureTeamSwap", AfterMove.class.getMethod("captureTeamSwap", Move.class));
+			undoMethods.put("goHome", AfterMove.class.getMethod("undoGoHome", Move.class));
+			undoMethods.put("atomicCapture", AfterMove.class.getMethod("undoAtomicCapture", Move.class));
+		}
+		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
@@ -178,7 +167,8 @@ public class AfterMove implements Serializable
 			{
 				curr.invoke(this, m);
 			}
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
@@ -208,8 +198,7 @@ public class AfterMove implements Serializable
 		m.setRemoved(toHome.getOriginalSquare().getPiece());
 		if (m.getRemoved() != null)
 		{
-			(m.getRemoved().isBlack() ? g.getBlackTeam() : g.getWhiteTeam())
-					.remove(m.getRemoved());
+			(m.getRemoved().isBlack() ? g.getBlackTeam() : g.getWhiteTeam()).remove(m.getRemoved());
 		}
 
 		// Actually set the captured piece on it's home square
@@ -231,17 +220,14 @@ public class AfterMove implements Serializable
 		toPlace.getLegalDests().clear();
 		toPlace.getGuardSquares().clear();
 		toPlace.setPinnedBy(null);
-		(toPlace.isBlack() ? g.getBlackTeam() : g.getWhiteTeam())
-				.remove(toPlace);
+		(toPlace.isBlack() ? g.getBlackTeam() : g.getWhiteTeam()).remove(toPlace);
 		(!toPlace.isBlack() ? g.getBlackTeam() : g.getWhiteTeam()).add(toPlace);
 		toPlace.setBlack(!toPlace.isBlack());
 		toPlace.setCaptured(false);
 		m.setOldPos(toPlace.getSquare());
 		if (m.isVerified())
 		{
-			JOptionPane
-					.showMessageDialog(null,
-							"This piece is now on your side. Place it in an empty square.");
+			JOptionPane.showMessageDialog(null, "This piece is now on your side. Place it in an empty square.");
 			PlayGame.setMustPlace(true);
 			PlayGame.setPlacePiece(toPlace);
 		}
@@ -263,10 +249,8 @@ public class AfterMove implements Serializable
 			toPlace.getLegalDests().clear();
 			toPlace.getGuardSquares().clear();
 			toPlace.setPinnedBy(null);
-			(toPlace.isBlack() ? g.getBlackTeam() : g.getWhiteTeam())
-					.remove(toPlace);
-			(!toPlace.isBlack() ? g.getBlackTeam() : g.getWhiteTeam())
-					.add(toPlace);
+			(toPlace.isBlack() ? g.getBlackTeam() : g.getWhiteTeam()).remove(toPlace);
+			(!toPlace.isBlack() ? g.getBlackTeam() : g.getWhiteTeam()).add(toPlace);
 			toPlace.setBlack(!toPlace.isBlack());
 			toPlace.setCaptured(false);
 			toPlace.getSquare().setPiece(null);
@@ -295,15 +279,12 @@ public class AfterMove implements Serializable
 		toPlace.setPinnedBy(null);
 
 		m.setOldPos(toPlace.getSquare());
-		Piece objectivePiece = toPlace.isBlack() ? g.getBlackRules()
-				.objectivePiece(toPlace.isBlack()) : g.getWhiteRules()
+		Piece objectivePiece = toPlace.isBlack() ? g.getBlackRules().objectivePiece(toPlace.isBlack()) : g.getWhiteRules()
 				.objectivePiece(toPlace.isBlack());
 		if (m.isVerified() && !(objectivePiece == toPlace))
 		{
 			toPlace.setCaptured(false);
-			JOptionPane
-					.showMessageDialog(null,
-							"You have captured this piece. Now place it in an empty square.");
+			JOptionPane.showMessageDialog(null, "You have captured this piece. Now place it in an empty square.");
 			PlayGame.setMustPlace(true);
 			PlayGame.setPlacePiece(toPlace);
 		}
@@ -368,7 +349,8 @@ public class AfterMove implements Serializable
 				curr.invoke(this, m);
 			}
 
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
@@ -388,8 +370,7 @@ public class AfterMove implements Serializable
 		restore.setCaptured(false);
 		if (m.getRemoved() != null)
 		{
-			(m.getRemoved().isBlack() ? g.getBlackTeam() : g.getWhiteTeam())
-					.add(m.getRemoved());
+			(m.getRemoved().isBlack() ? g.getBlackTeam() : g.getWhiteTeam()).add(m.getRemoved());
 			m.getRemoved().setCaptured(false);
 		}
 		m.getCaptured().getSquare().setPiece(m.getRemoved());
@@ -431,7 +412,8 @@ public class AfterMove implements Serializable
 					{
 						k = board.getMaxCol();
 						upperCol = board.getMaxCol() + 1;
-					} else if (k > board.getMaxCol())
+					}
+					else if (k > board.getMaxCol())
 					{
 						k = 1;
 					}
@@ -445,8 +427,7 @@ public class AfterMove implements Serializable
 			if (s == null)
 				continue;
 			Piece p = s.getPiece();
-			if (p != null && (!(p.getName().equals("Pawn")) && p != suicide)
-					&& p != captured)
+			if (p != null && (!(p.getName().equals("Pawn")) && p != suicide) && p != captured)
 			{
 				exploded.add(p);
 				p.setCaptured(true);
@@ -477,8 +458,7 @@ public class AfterMove implements Serializable
 				p.setCaptured(false);
 				p.getSquare().setPiece(p);
 			}
-			exploded[exploded.length - 1]
-					.setMoveCount(exploded[exploded.length - 1].getMoveCount() - 1);
+			exploded[exploded.length - 1].setMoveCount(exploded[exploded.length - 1].getMoveCount() - 1);
 			m.setExploded(null);
 		}
 	}

@@ -113,8 +113,7 @@ public class BoardCustomMenu extends JPanel
 	{
 		if (!oneBoard.isSelected() && !twoBoards.isSelected())
 		{
-			JOptionPane.showMessageDialog(null,
-					"Please select the number of boards.", "Incomplete Form",
+			JOptionPane.showMessageDialog(null, "Please select the number of boards.", "Incomplete Form",
 					JOptionPane.INFORMATION_MESSAGE);
 			return false;
 		}
@@ -124,14 +123,11 @@ public class BoardCustomMenu extends JPanel
 			int b = Integer.parseInt(numCols.getText());
 			if (a < 3 || b < 3 || a > 16 || b > 16)
 				throw new Exception();
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
-			JOptionPane
-					.showMessageDialog(
-							null,
-							"Enter a valid number between 3 and 16 for the dimensions of the board.",
-							"Invalid Submission",
-							JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Enter a valid number between 3 and 16 for the dimensions of the board.",
+					"Invalid Submission", JOptionPane.INFORMATION_MESSAGE);
 			return false;
 		}
 		try
@@ -140,14 +136,11 @@ public class BoardCustomMenu extends JPanel
 			int b = Integer.parseInt(numCols.getText());
 			if (twoBoards.isSelected() && (a < 3 || b < 3 || a > 10 || b > 10))
 				throw new Exception();
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
-			JOptionPane
-					.showMessageDialog(
-							null,
-							"Enter a valid number between 3 and 10 for the dimensions of the board.",
-							"Invalid Submission",
-							JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Enter a valid number between 3 and 10 for the dimensions of the board.",
+					"Invalid Submission", JOptionPane.INFORMATION_MESSAGE);
 			return false;
 		}
 		return true;
@@ -202,11 +195,9 @@ public class BoardCustomMenu extends JPanel
 		numCols.setToolTipText("Enter the amount of columns you would like");
 
 		// Create JLabel and JCheckBox
-		wraparoundLabel = new JLabel("<html>Should boards wrap <br />"
-				+ "around horizontally?</html>");
+		wraparoundLabel = new JLabel("<html>Should boards wrap <br />" + "around horizontally?</html>");
 		wraparound = new JCheckBox("Yes");
-		wraparound
-				.setToolTipText("Press me to have boards that wrap around on the edges");
+		wraparound.setToolTipText("Press me to have boards that wrap around on the edges");
 
 		// Create button and add ActionListener
 		submitButton = new JButton("Next");
@@ -220,16 +211,13 @@ public class BoardCustomMenu extends JPanel
 				if (formComplete())
 				{// Make sure the form is complete.
 					// Create Board[] based on which radio button is selected.
-					Board[] boards = (oneBoard.isSelected()) ? new Board[1]
-							: new Board[2];
+					Board[] boards = (oneBoard.isSelected()) ? new Board[1] : new Board[2];
 					for (int i = 0; i < boards.length; i++)
 					{
 						// Initialize each board with the given rows and columns
 						// and wraparound boolean.
-						boards[i] = new Board(Integer.parseInt(numRows
-								.getText()),
-								Integer.parseInt(numCols.getText()), wraparound
-										.isSelected());
+						boards[i] = new Board(Integer.parseInt(numRows.getText()), Integer.parseInt(numCols.getText()), wraparound
+								.isSelected());
 					}
 					b.setBoards(boards);// Add the Board[] to the Builder and
 										// pass it on to the next step.
@@ -249,32 +237,25 @@ public class BoardCustomMenu extends JPanel
 						GroupLayout.Alignment.TRAILING,
 						layout.createSequentialGroup()
 								.addGroup(
-										layout.createParallelGroup(
-												GroupLayout.Alignment.LEADING)
+										layout.createParallelGroup(GroupLayout.Alignment.LEADING)
 												.addGroup(
 														layout.createSequentialGroup()
 																.addContainerGap()
 																.addGroup(
-																		layout.createParallelGroup(
-																				GroupLayout.Alignment.LEADING)
+																		layout.createParallelGroup(GroupLayout.Alignment.LEADING)
 																				.addGroup(
 																						layout.createSequentialGroup()
-																								.addComponent(
-																										numBoardsLabel,
-																										GroupLayout.DEFAULT_SIZE,
-																										157,
+																								.addComponent(numBoardsLabel,
+																										GroupLayout.DEFAULT_SIZE, 157,
 																										Short.MAX_VALUE)
 																								.addPreferredGap(
 																										LayoutStyle.ComponentPlacement.RELATED)
-																								.addComponent(
-																										oneBoard))
+																								.addComponent(oneBoard))
 																				.addGroup(
 																						GroupLayout.Alignment.TRAILING,
 																						layout.createSequentialGroup()
-																								.addComponent(
-																										dimensionsLabel,
-																										GroupLayout.DEFAULT_SIZE,
-																										157,
+																								.addComponent(dimensionsLabel,
+																										GroupLayout.DEFAULT_SIZE, 157,
 																										Short.MAX_VALUE)
 																								.addPreferredGap(
 																										LayoutStyle.ComponentPlacement.RELATED)
@@ -285,121 +266,72 @@ public class BoardCustomMenu extends JPanel
 																														numColsLabel)
 																												.addComponent(
 																														numRowsLabel))))
-																.addGap(20, 20,
-																		20))
+																.addGap(20, 20, 20))
 												.addGroup(
-														layout.createSequentialGroup()
-																.addGap(105,
-																		105,
-																		105)
-																.addComponent(
-																		backButton)
-																.addComponent(
-																		submitButton))
+														layout.createSequentialGroup().addGap(105, 105, 105).addComponent(backButton)
+																.addComponent(submitButton))
 												.addGroup(
 														layout.createSequentialGroup()
 																.addContainerGap()
-																.addComponent(
-																		wraparoundLabel,
-																		GroupLayout.PREFERRED_SIZE,
-																		144,
+																.addComponent(wraparoundLabel, GroupLayout.PREFERRED_SIZE, 144,
 																		GroupLayout.PREFERRED_SIZE)))
 								.addGroup(
-										layout.createParallelGroup(
-												GroupLayout.Alignment.LEADING)
+										layout.createParallelGroup(GroupLayout.Alignment.LEADING)
 												.addGroup(
 														layout.createSequentialGroup()
 																.addGroup(
-																		layout.createParallelGroup(
-																				GroupLayout.Alignment.LEADING)
+																		layout.createParallelGroup(GroupLayout.Alignment.LEADING)
 																				.addGroup(
 																						layout.createSequentialGroup()
 																								.addPreferredGap(
 																										LayoutStyle.ComponentPlacement.RELATED)
-																								.addComponent(
-																										wraparound)))
-																.addContainerGap(
-																		10,
-																		Short.MAX_VALUE))
+																								.addComponent(wraparound)))
+																.addContainerGap(10, Short.MAX_VALUE))
 												.addGroup(
 														GroupLayout.Alignment.TRAILING,
 														layout.createSequentialGroup()
 																.addGroup(
-																		layout.createParallelGroup(
-																				GroupLayout.Alignment.TRAILING)
-																				.addComponent(
-																						numCols,
-																						GroupLayout.PREFERRED_SIZE,
-																						46,
+																		layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+																				.addComponent(numCols, GroupLayout.PREFERRED_SIZE, 46,
 																						GroupLayout.PREFERRED_SIZE)
 																				.addGroup(
 																						layout.createParallelGroup(
 																								GroupLayout.Alignment.LEADING)
-																								.addComponent(
-																										twoBoards)
-																								.addComponent(
-																										numRows,
+																								.addComponent(twoBoards)
+																								.addComponent(numRows,
 																										GroupLayout.PREFERRED_SIZE,
-																										46,
-																										GroupLayout.PREFERRED_SIZE)))
-																.addGap(10, 10,
-																		10)))));
-		layout.setVerticalGroup(layout
-				.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addGroup(
-						layout.createSequentialGroup()
-								.addGap(15, 15, 15)
-								.addGroup(
-										layout.createParallelGroup(
-												GroupLayout.Alignment.BASELINE)
-												.addComponent(numBoardsLabel)
-												.addComponent(oneBoard)
-												.addComponent(twoBoards))
-								.addPreferredGap(
-										LayoutStyle.ComponentPlacement.RELATED)
-								.addGroup(
-										layout.createParallelGroup(
-												GroupLayout.Alignment.BASELINE)
-												.addComponent(dimensionsLabel)
-												.addComponent(numRowsLabel)
-												.addComponent(
-														numRows,
-														GroupLayout.PREFERRED_SIZE,
-														GroupLayout.DEFAULT_SIZE,
-														GroupLayout.PREFERRED_SIZE))
-								.addPreferredGap(
-										LayoutStyle.ComponentPlacement.RELATED)
-								.addGroup(
-										layout.createParallelGroup(
-												GroupLayout.Alignment.TRAILING)
-												.addGroup(
-														layout.createSequentialGroup()
-																.addGroup(
-																		layout.createParallelGroup(
-																				GroupLayout.Alignment.BASELINE)
-																				.addComponent(
-																						numColsLabel)
-																				.addComponent(
-																						numCols,
-																						GroupLayout.PREFERRED_SIZE,
-																						GroupLayout.DEFAULT_SIZE,
-																						GroupLayout.PREFERRED_SIZE))
-																.addGap(5, 5, 5)
-																.addComponent(
-																		wraparound)
-																.addGap(5, 5, 5))
-												.addComponent(
-														wraparoundLabel,
-														GroupLayout.PREFERRED_SIZE,
-														GroupLayout.DEFAULT_SIZE,
-														GroupLayout.PREFERRED_SIZE))
-								.addGap(20, 20, 20)
-								.addGroup(
-										layout.createParallelGroup(
-												GroupLayout.Alignment.BASELINE)
-												.addComponent(backButton)
-												.addComponent(submitButton))
-								.addContainerGap(15, Short.MAX_VALUE)));
+																										46, GroupLayout.PREFERRED_SIZE)))
+																.addGap(10, 10, 10)))));
+		layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(
+				layout.createSequentialGroup()
+						.addGap(15, 15, 15)
+						.addGroup(
+								layout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(numBoardsLabel)
+										.addComponent(oneBoard).addComponent(twoBoards))
+						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+						.addGroup(
+								layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+										.addComponent(dimensionsLabel)
+										.addComponent(numRowsLabel)
+										.addComponent(numRows, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+												GroupLayout.PREFERRED_SIZE))
+						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+						.addGroup(
+								layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+										.addGroup(
+												layout.createSequentialGroup()
+														.addGroup(
+																layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+																		.addComponent(numColsLabel)
+																		.addComponent(numCols, GroupLayout.PREFERRED_SIZE,
+																				GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+														.addGap(5, 5, 5).addComponent(wraparound).addGap(5, 5, 5))
+										.addComponent(wraparoundLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+												GroupLayout.PREFERRED_SIZE))
+						.addGap(20, 20, 20)
+						.addGroup(
+								layout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(backButton)
+										.addComponent(submitButton)).addContainerGap(15, Short.MAX_VALUE)));
 	}
 
 }
