@@ -79,27 +79,19 @@ public class EndOfGame implements Serializable
 	{
 		try
 		{
-			doMethods.put("classic",
-					EndOfGame.class.getMethod("classicEndOfGame", Piece.class));
+			doMethods.put("classic", EndOfGame.class.getMethod("classicEndOfGame", Piece.class));
 			undoMethods.put("classic", EndOfGame.class.getMethod("dummyUndo"));
-			doMethods.put("checkNTimes",
-					EndOfGame.class.getMethod("checkNTimes", Piece.class));
-			undoMethods.put("checkNTimes",
-					EndOfGame.class.getMethod("undoCheckNTimes"));
-			doMethods.put("loseAllPieces",
-					EndOfGame.class.getMethod("loseAllPieces", Piece.class));
-			undoMethods.put("loseAllPieces",
-					EndOfGame.class.getMethod("dummyUndo"));
-			doMethods.put("captureAllPieces",
-					EndOfGame.class.getMethod("captureAllPieces", Piece.class));
-			undoMethods.put("captureAllPieces",
-					EndOfGame.class.getMethod("dummyUndo"));
-			doMethods.put("captureAllOfType",
-					EndOfGame.class.getMethod("captureAllOfType", Piece.class));
-			undoMethods.put("captureAllOfType",
-					EndOfGame.class.getMethod("dummyUndo"));
+			doMethods.put("checkNTimes", EndOfGame.class.getMethod("checkNTimes", Piece.class));
+			undoMethods.put("checkNTimes", EndOfGame.class.getMethod("undoCheckNTimes"));
+			doMethods.put("loseAllPieces", EndOfGame.class.getMethod("loseAllPieces", Piece.class));
+			undoMethods.put("loseAllPieces", EndOfGame.class.getMethod("dummyUndo"));
+			doMethods.put("captureAllPieces", EndOfGame.class.getMethod("captureAllPieces", Piece.class));
+			undoMethods.put("captureAllPieces", EndOfGame.class.getMethod("dummyUndo"));
+			doMethods.put("captureAllOfType", EndOfGame.class.getMethod("captureAllOfType", Piece.class));
+			undoMethods.put("captureAllOfType", EndOfGame.class.getMethod("dummyUndo"));
 
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
@@ -151,14 +143,12 @@ public class EndOfGame implements Serializable
 	 */
 	public void checkNTimes(Piece objectivePiece)
 	{
-		if (g.getLastMove() != null && g.getLastMove().isVerified()
-				&& g.getLastMove().isCheck()
+		if (g.getLastMove() != null && g.getLastMove().isVerified() && g.getLastMove().isCheck()
 				&& g.getLastMove().getPiece().isBlack() == isBlack)
 		{
 			if (++checks == maxChecks)
 			{
-				Result r = new Result(!isBlack ? Result.WHITE_WIN
-						: Result.BLACK_WIN);
+				Result r = new Result(!isBlack ? Result.WHITE_WIN : Result.BLACK_WIN);
 				r.setText("Game Over! " + r.winText() + "\n");
 				PlayGame.endOfGame(r);
 
@@ -179,25 +169,19 @@ public class EndOfGame implements Serializable
 		if (g.getLegalMoveCount() == 0 || objectivePiece.isCaptured())
 		{
 			// if the King is threatened, it's check mate.
-			if (objectivePiece == null || objectivePiece.isInCheck()
-					|| objectivePiece.isCaptured())
+			if (objectivePiece == null || objectivePiece.isInCheck() || objectivePiece.isCaptured())
 			{
 				if (g.getLastMove() != null)
 				{
 					g.getLastMove().setCheckmate(true);
-					Result r = new Result(g.isBlackMove() ? Result.WHITE_WIN
-							: Result.BLACK_WIN);
+					Result r = new Result(g.isBlackMove() ? Result.WHITE_WIN : Result.BLACK_WIN);
 					String s1 = "Game over! " + r.winText() + "\n";
 
 					if (g.getThreats(objectivePiece) != null)
 						s1 += "The piece(s) that caused the final check are highlighted in Red. "
-								+ "\nThe piece that placed the King in check was the "
-								+ g.getThreats(objectivePiece)[0].getName()
+								+ "\nThe piece that placed the King in check was the " + g.getThreats(objectivePiece)[0].getName()
 								+ " at location "
-								+ g.getThreats(objectivePiece)[0].getSquare()
-										.toString(
-												new boolean[] { false, false })
-								+ "\n";
+								+ g.getThreats(objectivePiece)[0].getSquare().toString(new boolean[] { false, false }) + "\n";
 
 					r.setText(s1 + "What would you like to do? \n");
 					g.getLastMove().setResult(r);
@@ -252,7 +236,8 @@ public class EndOfGame implements Serializable
 				doMethod = doMethods.get(name);
 			}
 			doMethod.invoke(this, objectivePiece);
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
@@ -317,7 +302,8 @@ public class EndOfGame implements Serializable
 				undoMethod = undoMethods.get(name);
 			}
 			undoMethod.invoke(this, (Object[]) null);
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			e.printStackTrace();
 		}

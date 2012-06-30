@@ -65,7 +65,8 @@ public class AIAdapter
 				try
 				{
 					Thread.sleep(200);
-				} catch (InterruptedException e)
+				}
+				catch (InterruptedException e)
 				{
 				}
 				AIBoard[] boards = getBoards();
@@ -75,7 +76,8 @@ public class AIAdapter
 			try
 			{
 				Thread.sleep(0);
-			} catch (InterruptedException e)
+			}
+			catch (InterruptedException e)
 			{
 				e.printStackTrace();
 			}
@@ -91,10 +93,10 @@ public class AIAdapter
 		try
 		{
 			Board b = g.getBoards()[m.boardNum];
-			g.playMove(new Move(b, b.getSquare(m.originRow, m.originCol), b
-					.getSquare(m.destRow, m.destCol), m.promoName));
+			g.playMove(new Move(b, b.getSquare(m.originRow, m.originCol), b.getSquare(m.destRow, m.destCol), m.promoName));
 			return true;
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			return false;
 		}
@@ -157,8 +159,7 @@ public class AIAdapter
 				{
 					// Initialize the AISquares.
 					// ignore counting from zero.
-					squares[row - 1][col - 1] = new AISquare((row), (col), b
-							.getSquare(row, col).isHabitable(), null);
+					squares[row - 1][col - 1] = new AISquare((row), (col), b.getSquare(row, col).isHabitable(), null);
 				}
 			}
 			for (int row = 1, col = 1; row <= b.getMaxRow(); row++)
@@ -168,8 +169,7 @@ public class AIAdapter
 					// Initialize the AISquares.
 					// ignore counting from zero.
 					if (b.getSquare(row, col).getPiece() != null)
-						squares[row - 1][col - 1].setPiece(new AIPiece(b
-								.getSquare(row, col).getPiece(), this));
+						squares[row - 1][col - 1].setPiece(new AIPiece(b.getSquare(row, col).getPiece(), this));
 				}
 			}
 		}
@@ -351,8 +351,7 @@ public class AIAdapter
 		 * terms
 		 * @return The legal destinations of the piece in terms of AI Squares
 		 */
-		private synchronized List<AISquare> transformLegalDests(
-				List<Square> legalDests)
+		private synchronized List<AISquare> transformLegalDests(List<Square> legalDests)
 		{
 			List<AISquare> toReturn = new ArrayList<AISquare>();
 			for (Square s : legalDests)

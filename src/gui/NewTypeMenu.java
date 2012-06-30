@@ -79,8 +79,6 @@ public class NewTypeMenu extends JPanel
 			public void actionPerformed(ActionEvent e)
 			{
 				// Return to the main screen.
-				Driver.getInstance().variantHelp.setVisible(false);
-				Driver.getInstance().helpMenu.setText("Help");
 				Driver.getInstance().revertPanel();
 			}
 		});
@@ -99,17 +97,16 @@ public class NewTypeMenu extends JPanel
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				if (!nameField.getText().equals("")
-						&& !nameField.getText().equals(" "))
+				if (!nameField.getText().equals("") && !nameField.getText().equals(" "))
 				{
 					// Make a new Builder with the given name and send it on to
 					// the next GUI class.
 					Builder b = new Builder(nameField.getText());
 					Driver.getInstance().setPanel(new BoardCustomMenu(b));
-				} else
+				}
+				else
 				{
-					JOptionPane.showMessageDialog(NewTypeMenu.this,
-							"Please enter a name for this game");
+					JOptionPane.showMessageDialog(NewTypeMenu.this, "Please enter a name for this game");
 				}
 			}
 		});

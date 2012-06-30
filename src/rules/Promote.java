@@ -70,16 +70,12 @@ public class Promote implements Serializable
 	{
 		try
 		{
-			doMethods.put("classic", Promote.class.getMethod(
-					"classicPromotion", Piece.class, boolean.class,
-					String.class));
-			undoMethods.put("classic",
-					Promote.class.getMethod("classicUndo", Piece.class));
-			doMethods.put("noPromos", Promote.class.getMethod("noPromo",
-					Piece.class, boolean.class, String.class));
-			undoMethods.put("noPromos",
-					Promote.class.getMethod("noPromoUndo", Piece.class));
-		} catch (Exception e)
+			doMethods.put("classic", Promote.class.getMethod("classicPromotion", Piece.class, boolean.class, String.class));
+			undoMethods.put("classic", Promote.class.getMethod("classicUndo", Piece.class));
+			doMethods.put("noPromos", Promote.class.getMethod("noPromo", Piece.class, boolean.class, String.class));
+			undoMethods.put("noPromos", Promote.class.getMethod("noPromoUndo", Piece.class));
+		}
+		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
@@ -106,8 +102,7 @@ public class Promote implements Serializable
 	 */
 	public Piece classicPromotion(Piece p, boolean verified, String promo)
 	{
-		if (!verified
-				&& (p.getPromotesTo() == null || p.getPromotesTo().size() == 0))
+		if (!verified && (p.getPromotesTo() == null || p.getPromotesTo().size() == 0))
 			return p;
 		if (!verified)
 		{
@@ -119,25 +114,25 @@ public class Promote implements Serializable
 			try
 			{
 
-				Piece promoted = PieceBuilder.makePiece(promo, p.isBlack(),
-						p.getSquare(), p.getBoard());
+				Piece promoted = PieceBuilder.makePiece(promo, p.isBlack(), p.getSquare(), p.getBoard());
 				if (promoted.isBlack())
 				{
 					g.getBlackTeam().set(g.getBlackTeam().indexOf(p), promoted);
-				} else
+				}
+				else
 				{
 					g.getWhiteTeam().set(g.getWhiteTeam().indexOf(p), promoted);
 				}
 				promoted.getLegalDests().clear();
 				promoted.setMoveCount(p.getMoveCount());
 				return promoted;
-			} catch (Exception e)
+			}
+			catch (Exception e)
 			{
 				e.printStackTrace();
 			}
 		}
-		if (!verified
-				&& (p.getPromotesTo() == null || p.getPromotesTo().size() == 0))
+		if (!verified && (p.getPromotesTo() == null || p.getPromotesTo().size() == 0))
 			return p;
 		if (!verified && promo == null && g.isBlackMove() == p.isBlack())
 		{
@@ -146,10 +141,8 @@ public class Promote implements Serializable
 				klazz = p.getPromotesTo().get(0);
 			while (klazz.equals(""))
 			{
-				String result = (String) JOptionPane.showInputDialog(null,
-						"Select the Promotion type:", "Promo choice",
-						JOptionPane.PLAIN_MESSAGE, null, p.getPromotesTo()
-								.toArray(), null);
+				String result = (String) JOptionPane.showInputDialog(null, "Select the Promotion type:", "Promo choice",
+						JOptionPane.PLAIN_MESSAGE, null, p.getPromotesTo().toArray(), null);
 
 				if (result == null)
 				{
@@ -159,8 +152,8 @@ public class Promote implements Serializable
 				klazz = result;
 				promo = result;
 			}
-		} else if (promo != null && p.getPromotesTo() != null
-				&& p.getPromotesTo().contains(promo))
+		}
+		else if (promo != null && p.getPromotesTo() != null && p.getPromotesTo().contains(promo))
 		{
 			klazz = promo;
 		}
@@ -168,19 +161,20 @@ public class Promote implements Serializable
 		try
 		{
 
-			Piece promoted = PieceBuilder.makePiece(klazz, p.isBlack(),
-					p.getSquare(), p.getBoard());
+			Piece promoted = PieceBuilder.makePiece(klazz, p.isBlack(), p.getSquare(), p.getBoard());
 			if (promoted.isBlack())
 			{
 				g.getBlackTeam().set(g.getBlackTeam().indexOf(p), promoted);
-			} else
+			}
+			else
 			{
 				g.getWhiteTeam().set(g.getWhiteTeam().indexOf(p), promoted);
 			}
 			promoted.getLegalDests().clear();
 			promoted.setMoveCount(p.getMoveCount());
 			return promoted;
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			return p;
 		}
@@ -207,7 +201,8 @@ public class Promote implements Serializable
 			// promoted.getLegalDests().clear();
 			// promoted.setMoveCount(p.getMoveCount());
 			return promoted;
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
@@ -234,7 +229,8 @@ public class Promote implements Serializable
 			Piece toReturn = (Piece) doMethod.invoke(this, p, verified, promo);
 			resetLastPromoted = lastPromoted;
 			return toReturn;
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			e.printStackTrace();
 			return null;
@@ -290,7 +286,8 @@ public class Promote implements Serializable
 			Piece toReturn = (Piece) undoMethod.invoke(this, p);
 			// resetLastPromoted = lastPromoted;
 			return toReturn;
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			e.printStackTrace();
 			return null;

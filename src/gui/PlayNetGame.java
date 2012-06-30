@@ -284,6 +284,8 @@ public class PlayNetGame extends PlayGame
 		int ifDouble = 0;
 		Driver.getInstance().setMenu(createMenu());
 
+		Driver.gameOptions.setVisible(true); // Turns on the game options
+
 		// Set the layout of the JPanel.
 		setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();

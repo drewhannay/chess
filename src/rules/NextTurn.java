@@ -68,22 +68,16 @@ public class NextTurn implements Serializable
 	{
 		try
 		{
-			doMethods.put("classic",
-					NextTurn.class.getMethod("classicNextTurn"));
+			doMethods.put("classic", NextTurn.class.getMethod("classicNextTurn"));
 			undoMethods.put("classic", NextTurn.class.getMethod("classicUndo"));
-			doMethods.put("increasing together",
-					NextTurn.class.getMethod("increasingTurnsTogether"));
-			undoMethods.put("increasing together",
-					NextTurn.class.getMethod("undoIncreasingTurnsTogether"));
-			doMethods.put("different turns",
-					NextTurn.class.getMethod("differentNumTurns"));
-			undoMethods.put("different turns",
-					NextTurn.class.getMethod("undoDifferentNumTurns"));
-			doMethods.put("increasing separately",
-					NextTurn.class.getMethod("increasingTurnsSeparately"));
-			undoMethods.put("increasing separately",
-					NextTurn.class.getMethod("undoIncreasingTurnsSeparately"));
-		} catch (Exception e)
+			doMethods.put("increasing together", NextTurn.class.getMethod("increasingTurnsTogether"));
+			undoMethods.put("increasing together", NextTurn.class.getMethod("undoIncreasingTurnsTogether"));
+			doMethods.put("different turns", NextTurn.class.getMethod("differentNumTurns"));
+			undoMethods.put("different turns", NextTurn.class.getMethod("undoDifferentNumTurns"));
+			doMethods.put("increasing separately", NextTurn.class.getMethod("increasingTurnsSeparately"));
+			undoMethods.put("increasing separately", NextTurn.class.getMethod("undoIncreasingTurnsSeparately"));
+		}
+		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
@@ -166,7 +160,8 @@ public class NextTurn implements Serializable
 				doMethod = doMethods.get(name);
 			}
 			return (Boolean) doMethod.invoke(this, (Object[]) null);
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
@@ -241,7 +236,8 @@ public class NextTurn implements Serializable
 				undoMethod = undoMethods.get(name);
 			}
 			return (Boolean) undoMethod.invoke(this, (Object[]) null);
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			e.printStackTrace();
 		}

@@ -46,11 +46,10 @@ public class GetBoard implements Serializable
 	{
 		try
 		{
-			doMethods.put("classic",
-					GetBoard.class.getMethod("classicGetBoard", Board.class));
-			doMethods.put("oppositeBoard",
-					GetBoard.class.getMethod("oppositeBoard", Board.class));
-		} catch (Exception e)
+			doMethods.put("classic", GetBoard.class.getMethod("classicGetBoard", Board.class));
+			doMethods.put("oppositeBoard", GetBoard.class.getMethod("oppositeBoard", Board.class));
+		}
+		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
@@ -89,7 +88,8 @@ public class GetBoard implements Serializable
 				doMethod = doMethods.get(name);
 			}
 			return (Board) doMethod.invoke(this, startBoard);
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			e.printStackTrace();
 			return null;

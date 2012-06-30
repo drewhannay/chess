@@ -109,35 +109,30 @@ public class PlayerCustomMenu extends JPanel
 			{
 				if (increment > 0)
 				{
-					whiteRules.setNextTurn(new NextTurn("increasing together",
-							whiteTurns, blackTurns, increment));
-					blackRules.setNextTurn(new NextTurn("increasing together",
-							whiteTurns, blackTurns, increment));
-				} else
-				{
-					whiteRules.setNextTurn(new NextTurn("different turns",
-							whiteTurns, blackTurns, increment));
-					blackRules.setNextTurn(new NextTurn("different turns",
-							whiteTurns, blackTurns, increment));
+					whiteRules.setNextTurn(new NextTurn("increasing together", whiteTurns, blackTurns, increment));
+					blackRules.setNextTurn(new NextTurn("increasing together", whiteTurns, blackTurns, increment));
 				}
-			} else if (increment > 0)
-			{
-				whiteRules.setNextTurn(new NextTurn("increasing separately",
-						whiteTurns, blackTurns, increment));
-				blackRules.setNextTurn(new NextTurn("increasing separately",
-						whiteTurns, blackTurns, increment));
-			} else
-			{
-				whiteRules.setNextTurn(new NextTurn("different turns",
-						whiteTurns, blackTurns, increment));
-				blackRules.setNextTurn(new NextTurn("different turns",
-						whiteTurns, blackTurns, increment));
+				else
+				{
+					whiteRules.setNextTurn(new NextTurn("different turns", whiteTurns, blackTurns, increment));
+					blackRules.setNextTurn(new NextTurn("different turns", whiteTurns, blackTurns, increment));
+				}
 			}
-		} catch (Exception e)
+			else if (increment > 0)
+			{
+				whiteRules.setNextTurn(new NextTurn("increasing separately", whiteTurns, blackTurns, increment));
+				blackRules.setNextTurn(new NextTurn("increasing separately", whiteTurns, blackTurns, increment));
+			}
+			else
+			{
+				whiteRules.setNextTurn(new NextTurn("different turns", whiteTurns, blackTurns, increment));
+				blackRules.setNextTurn(new NextTurn("different turns", whiteTurns, blackTurns, increment));
+			}
+		}
+		catch (Exception e)
 		{
-			JOptionPane.showMessageDialog(null,
-					"Enter a valid number of turns for both players.",
-					"Incomplete Form", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Enter a valid number of turns for both players.", "Incomplete Form",
+					JOptionPane.INFORMATION_MESSAGE);
 			return false;
 		}
 		return true;
@@ -158,29 +153,22 @@ public class PlayerCustomMenu extends JPanel
 		setBorder(BorderFactory.createLoweredBevelBorder());
 
 		// Create JLabels and JTextFields.
-		numTurnsOneLabel = new JLabel("<html>How many turns in a <br/> "
-				+ "row for White? </html>");
-		numTurnsTwoLabel = new JLabel("<html>How many turns in a <br/> "
-				+ "row for Black? </html>");
+		numTurnsOneLabel = new JLabel("<html>How many turns in a <br/> " + "row for White? </html>");
+		numTurnsTwoLabel = new JLabel("<html>How many turns in a <br/> " + "row for Black? </html>");
 		numTurnsOne = new JTextField(4);
 		numTurnsOne.setText("1");
-		numTurnsOne
-				.setToolTipText("This will be the amount of turns for the First Player (white in classic)");
+		numTurnsOne.setToolTipText("This will be the amount of turns for the First Player (white in classic)");
 		numTurnsTwo = new JTextField(4);
 		numTurnsTwo.setText("1");
-		numTurnsTwo
-				.setToolTipText("This will be the amount of turns for the First Player (white in classic)");
-		incrementTurnsLabel = new JLabel("<html>Increase turns by <br/>"
-				+ "how many each round?");
+		numTurnsTwo.setToolTipText("This will be the amount of turns for the First Player (white in classic)");
+		incrementTurnsLabel = new JLabel("<html>Increase turns by <br/>" + "how many each round?");
 		incrementTurns = new JTextField(4);
 		incrementTurns.setText("0");
-		incrementTurns
-				.setToolTipText("This will be the number of turns each player gains for each time their turn occurs");
+		incrementTurns.setToolTipText("This will be the number of turns each player gains for each time their turn occurs");
 
 		// Create button and add ActionListener
 		backButton = new JButton("Back");
-		backButton
-				.setToolTipText("Press me to return to the Rule making window");
+		backButton.setToolTipText("Press me to return to the Rule making window");
 		backButton.addActionListener(new ActionListener()
 		{
 
@@ -188,8 +176,7 @@ public class PlayerCustomMenu extends JPanel
 			public void actionPerformed(ActionEvent e)
 			{
 				// Return to the BoardCustomMenu screen.
-				Driver.getInstance().setPanel(
-						new RuleMaker(b, whiteRules, blackRules));
+				Driver.getInstance().setPanel(new RuleMaker(b, whiteRules, blackRules));
 			}
 		});
 
@@ -205,9 +192,7 @@ public class PlayerCustomMenu extends JPanel
 				if (formComplete(whiteRules, blackRules))
 				{// Make sure the form is complete.
 					// TODO parse form here
-					Driver.getInstance().setPanel(
-							new CustomSetupMenu(b, whiteRules, blackRules));
-					Driver.getInstance().variantHelp.doClick();
+					Driver.getInstance().setPanel(new CustomSetupMenu(b, whiteRules, blackRules));
 				}
 			}
 		});

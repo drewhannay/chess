@@ -191,8 +191,7 @@ public class Move implements Serializable
 	 * @param promo The Class to which the moving Piece will be promoted
 	 * @throws Exception If this move was illegal
 	 */
-	public Move(Board board, Square origin, Square dest, String promo)
-			throws Exception
+	public Move(Board board, Square origin, Square dest, String promo) throws Exception
 	{
 		this.board = board;
 		this.origin = origin;
@@ -219,18 +218,21 @@ public class Move implements Serializable
 				{
 					origin = board.getSquare(8, 5);
 					setDest(board.getSquare(8, 7));
-				} else
+				}
+				else
 				{
 					origin = board.getSquare(1, 5);
 					setDest(board.getSquare(1, 7));
 				}
-			} else if (castleQueenside)
+			}
+			else if (castleQueenside)
 			{
 				if (board.isBlackTurn())
 				{
 					origin = board.getSquare(8, 5);
 					setDest(board.getSquare(8, 3));
-				} else
+				}
+				else
 				{
 					origin = board.getSquare(1, 5);
 					setDest(board.getSquare(1, 3));
@@ -251,14 +253,11 @@ public class Move implements Serializable
 
 		if (board.getGame().isClassicChess())
 		{
-			if (origin.getPiece().getName().equals("Pawn")
-					&& getCaptured() == null
-					&& origin.getCol() != getDest().getCol())
+			if (origin.getPiece().getName().equals("Pawn") && getCaptured() == null && origin.getCol() != getDest().getCol())
 			{
-				setCaptured(board
-						.getSquare(origin.getRow(), getDest().getCol())
-						.getPiece());
-			} else
+				setCaptured(board.getSquare(origin.getRow(), getDest().getCol()).getPiece());
+			}
+			else
 			{
 				board.setEnpassantCol(Board.NO_ENPASSANT);
 			}
@@ -276,15 +275,13 @@ public class Move implements Serializable
 		if (board.getGame().isClassicChess())
 		{
 			// Mark enpassant on the board
-			if (origin.getPiece().getName().equals("Pawn")
-					&& Math.abs(origin.getRow() - getDest().getRow()) == 2)
+			if (origin.getPiece().getName().equals("Pawn") && Math.abs(origin.getRow() - getDest().getRow()) == 2)
 			{
 				board.setEnpassantCol(origin.getCol());
 			}
 
 			// Castling
-			if (origin.getPiece().getName().equals("King")
-					&& origin.getPiece().getMoveCount() == 0)
+			if (origin.getPiece().getName().equals("King") && origin.getPiece().getMoveCount() == 0)
 			{
 
 				Square rookOrigin;
@@ -295,8 +292,7 @@ public class Move implements Serializable
 					rookOrigin = board.getSquare(origin.getRow(), 1); // a
 					rookDest = board.getSquare(origin.getRow(), 4); // d
 					rookDest.setPiece(rookOrigin.setPiece(null));
-					rookDest.getPiece().setMoveCount(
-							rookDest.getPiece().getMoveCount() + 1);
+					rookDest.getPiece().setMoveCount(rookDest.getPiece().getMoveCount() + 1);
 					castleQueenside = true;
 				}
 				// Short
@@ -305,8 +301,7 @@ public class Move implements Serializable
 					rookOrigin = board.getSquare(origin.getRow(), 8); // h
 					rookDest = board.getSquare(origin.getRow(), 6); // f
 					rookDest.setPiece(rookOrigin.setPiece(null));
-					rookDest.getPiece().setMoveCount(
-							rookDest.getPiece().getMoveCount() + 1);
+					rookDest.getPiece().setMoveCount(rookDest.getPiece().getMoveCount() + 1);
 					castleKingside = true;
 				}
 			}
@@ -322,14 +317,12 @@ public class Move implements Serializable
 		p.setPinnedBy(null);
 		p.setMoveCount(p.getMoveCount() + 1);
 
-		List<Square> promoSquares = (board.isBlackTurn() ? board.getGame()
-				.getBlackRules() : board.getGame().getWhiteRules())
+		List<Square> promoSquares = (board.isBlackTurn() ? board.getGame().getBlackRules() : board.getGame().getWhiteRules())
 				.getPromotionSquares(p);
 		if (promoSquares != null && promoSquares.contains(getDest()))
 		{
-			promotion = (board.isBlackTurn() ? board.getGame().getBlackRules()
-					: board.getGame().getWhiteRules()).promote(p, isVerified(),
-					promo);
+			promotion = (board.isBlackTurn() ? board.getGame().getBlackRules() : board.getGame().getWhiteRules()).promote(p,
+					isVerified(), promo);
 		}
 
 		board.getGame().afterMove(this);
@@ -340,7 +333,8 @@ public class Move implements Serializable
 		if (isVerified() && prev == null)
 		{
 			oldWhiteTime = oldBlackTime = -1;
-		} else
+		}
+		else
 		{
 			oldWhiteTime = board.getGame().getWhiteTimer().getTime();
 			oldBlackTime = board.getGame().getBlackTimer().getTime();
@@ -446,8 +440,7 @@ public class Move implements Serializable
 	 */
 	public boolean isEndOfGame()
 	{
-		return (checkmate || stalemate || result != null || !result
-				.isUndecided());
+		return (checkmate || stalemate || result != null || !result.isUndecided());
 	}
 
 	/**
@@ -510,9 +503,9 @@ public class Move implements Serializable
 		checkmate = b;
 		if (result == null && checkmate)
 		{
-			result = new Result(board.isBlackTurn() ? Result.BLACK_WIN
-					: Result.WHITE_WIN);
-		} else
+			result = new Result(board.isBlackTurn() ? Result.BLACK_WIN : Result.WHITE_WIN);
+		}
+		else
 		{
 			result = null;
 		}
@@ -577,7 +570,8 @@ public class Move implements Serializable
 		if (result == null && stalemate)
 		{
 			result = new Result(Result.DRAW);
-		} else
+		}
+		else
 		{
 			result = null;
 		}
@@ -604,16 +598,15 @@ public class Move implements Serializable
 		if (castleQueenside)
 		{
 			s = "O-O-O";
-		} else if (castleKingside)
+		}
+		else if (castleKingside)
 		{
 			s = "O-O";
-		} else
+		}
+		else
 		{
-			s = ((getPiece() != null && !(getPiece().getName().equals("Pawn"))) ? (pieceToChar(getPiece()))
-					+ ""
-					: " ")
-					+ origin.toString(unique)
-					+ ((getCaptured() != null) ? "x" : "")
+			s = ((getPiece() != null && !(getPiece().getName().equals("Pawn"))) ? (pieceToChar(getPiece())) + "" : " ")
+					+ origin.toString(unique) + ((getCaptured() != null) ? "x" : "")
 					+ getDest().toString(new boolean[] { false, false });
 
 			if (promotion != null)
@@ -624,7 +617,8 @@ public class Move implements Serializable
 			if (checkmate)
 			{
 				s += "#";
-			} else
+			}
+			else
 			{
 				if (check)
 				{
@@ -652,8 +646,7 @@ public class Move implements Serializable
 		if (board.getGame().isClassicChess())
 		{
 			// Castling
-			if (getPiece().getName().equals("King")
-					&& getPiece().getMoveCount() == 1)
+			if (getPiece().getName().equals("King") && getPiece().getMoveCount() == 1)
 			{
 				Square rookOrigin;
 				Square rookDest;
@@ -664,8 +657,7 @@ public class Move implements Serializable
 					rookDest = board.getSquare(origin.getRow(), 4);// d
 					rookOrigin.setPiece(rookDest.setPiece(null));
 					rookOrigin.getPiece().setSquare(rookOrigin);
-					rookOrigin.getPiece().setMoveCount(
-							rookOrigin.getPiece().getMoveCount() - 1);
+					rookOrigin.getPiece().setMoveCount(rookOrigin.getPiece().getMoveCount() - 1);
 				}
 				// Short
 				else if (getDest().getCol() == 7)
@@ -674,23 +666,19 @@ public class Move implements Serializable
 					rookDest = board.getSquare(origin.getRow(), 6);// f
 					rookOrigin.setPiece(rookDest.setPiece(null));
 					rookOrigin.getPiece().setSquare(rookOrigin);
-					rookOrigin.getPiece().setMoveCount(
-							rookOrigin.getPiece().getMoveCount() - 1);
+					rookOrigin.getPiece().setMoveCount(rookOrigin.getPiece().getMoveCount() - 1);
 				}
 			}
 		}
 
-		List<Square> promoSquares = (board.isBlackTurn() ? board.getGame()
-				.getBlackRules() : board.getGame().getWhiteRules())
+		List<Square> promoSquares = (board.isBlackTurn() ? board.getGame().getBlackRules() : board.getGame().getWhiteRules())
 				.getPromotionSquares(getPiece());
 		if (promoSquares != null && promoSquares.contains(getDest()))
 		{
-			(board.isBlackTurn() ? board.getGame().getBlackRules() : board
-					.getGame().getWhiteRules()).undoPromote(promotion);
+			(board.isBlackTurn() ? board.getGame().getBlackRules() : board.getGame().getWhiteRules()).undoPromote(promotion);
 		}
 		if (getDest().getPiece() != null)
-			getDest().getPiece().setMoveCount(
-					getDest().getPiece().getMoveCount() - 1);
+			getDest().getPiece().setMoveCount(getDest().getPiece().getMoveCount() - 1);
 
 		origin.setPiece(getDest().setPiece(null));
 		getPiece().setSquare(origin);

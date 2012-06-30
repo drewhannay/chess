@@ -49,13 +49,11 @@ public class ObjectivePiece implements Serializable
 	{
 		try
 		{
-			doMethods.put("classic", ObjectivePiece.class.getMethod(
-					"classicObjectivePiece", boolean.class));
-			doMethods.put("no objective", ObjectivePiece.class.getMethod(
-					"noObjectivePiece", boolean.class));
-			doMethods.put("custom objective", ObjectivePiece.class.getMethod(
-					"customObjectivePiece", boolean.class));
-		} catch (Exception e)
+			doMethods.put("classic", ObjectivePiece.class.getMethod("classicObjectivePiece", boolean.class));
+			doMethods.put("no objective", ObjectivePiece.class.getMethod("noObjectivePiece", boolean.class));
+			doMethods.put("custom objective", ObjectivePiece.class.getMethod("customObjectivePiece", boolean.class));
+		}
+		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
@@ -93,7 +91,8 @@ public class ObjectivePiece implements Serializable
 				if (p.getName().equals("King"))
 					return p;
 			return null;
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			e.printStackTrace();
 			return null;
@@ -120,7 +119,8 @@ public class ObjectivePiece implements Serializable
 				if (p.getName().equals(objectiveName))
 					return p;
 			return null;
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			e.printStackTrace();
 			return null;
@@ -142,7 +142,8 @@ public class ObjectivePiece implements Serializable
 				doMethod = doMethods.get(name);
 			}
 			return (Piece) doMethod.invoke(this, isBlack);
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
