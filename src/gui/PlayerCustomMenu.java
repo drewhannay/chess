@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 import logic.Builder;
 import rules.NextTurn;
@@ -150,18 +151,28 @@ public class PlayerCustomMenu extends JPanel
 	{
 
 		// Set the layout and size of this JPanel.
+		setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
 		setBorder(BorderFactory.createLoweredBevelBorder());
 
 		// Create JLabels and JTextFields.
-		numTurnsOneLabel = new JLabel("<html>How many turns in a <br/> " + "row for White? </html>");
-		numTurnsTwoLabel = new JLabel("<html>How many turns in a <br/> " + "row for Black? </html>");
+		numTurnsOneLabel = new JLabel("How many turns in a row for White? ");
+		numTurnsTwoLabel = new JLabel("How many turns in a row for Black? ");
 		numTurnsOne = new JTextField(4);
+		SwingUtilities.invokeLater(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				numTurnsOne.requestFocus();
+			}
+		});
 		numTurnsOne.setText("1");
 		numTurnsOne.setToolTipText("This will be the amount of turns for the First Player (white in classic)");
 		numTurnsTwo = new JTextField(4);
 		numTurnsTwo.setText("1");
 		numTurnsTwo.setToolTipText("This will be the amount of turns for the First Player (white in classic)");
-		incrementTurnsLabel = new JLabel("<html>Increase turns by <br/>" + "how many each round?");
+		incrementTurnsLabel = new JLabel("Increase turns by how many each round? ");
 		incrementTurns = new JTextField(4);
 		incrementTurns.setText("0");
 		incrementTurns.setToolTipText("This will be the number of turns each player gains for each time their turn occurs");
@@ -201,9 +212,6 @@ public class PlayerCustomMenu extends JPanel
 		buttons.setLayout(new FlowLayout());
 		buttons.add(backButton);
 		buttons.add(submitButton);
-
-		setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
 
 		c.insets = new Insets(3, 3, 3, 3);
 		c.gridx = 0;

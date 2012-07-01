@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 import logic.Builder;
 
@@ -87,6 +88,14 @@ public class NewTypeMenu extends JPanel
 		nameLabel = new JLabel(" Please enter a name for your new game type: ");
 		nameField = new JTextField(20);
 		nameField.setToolTipText("Please enter a name for this variant here");
+		SwingUtilities.invokeLater(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				nameField.requestFocus();
+			}
+		});
 
 		// Create button and add ActionListener
 		submitButton = new JButton("Next");
