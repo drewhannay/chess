@@ -363,6 +363,8 @@ final public class Driver extends JFrame
 			{
 				// Remove the current panel, set otherPanel, repaint.
 				remove(mainPanel);
+				if (otherPanel != null)
+					remove(otherPanel);
 				otherPanel = new NewGameMenu();
 				setPanel(otherPanel);
 				pack();

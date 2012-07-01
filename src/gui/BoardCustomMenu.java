@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle;
+import javax.swing.SwingUtilities;
 
 import logic.Board;
 import logic.Builder;
@@ -173,6 +174,14 @@ public class BoardCustomMenu extends JPanel
 		// Create JLabels and JRadioButtons.
 		numBoardsLabel = new JLabel("How many boards?");
 		oneBoard = new JRadioButton("1");
+		SwingUtilities.invokeLater(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				oneBoard.requestFocus();
+			}
+		});
 		oneBoard.setToolTipText("Choose me for one Board");
 		// Set oneBoard to be initially selected.
 		oneBoard.setSelected(true);

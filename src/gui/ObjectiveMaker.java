@@ -15,6 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.SwingUtilities;
 
 import logic.Builder;
 import rules.EndOfGame;
@@ -76,6 +77,14 @@ public class ObjectiveMaker extends JPanel
 		final JPanel objectiveWhiteCheckBox = new JPanel();
 		objectiveWhiteCheckBox.setLayout(new GridLayout(5, 1));
 		final JRadioButton wCaptureAll = new JRadioButton("Capture All", false);
+		SwingUtilities.invokeLater(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				wCaptureAll.requestFocus();
+			}
+		});
 		wCaptureAll.setToolTipText("Press me if you want the objective to be capturing all enemy pieces");
 		objectiveWhiteCheckBox.add(wCaptureAll);
 		final JRadioButton wCaptureAllType = new JRadioButton("Capture All of Type", false);
