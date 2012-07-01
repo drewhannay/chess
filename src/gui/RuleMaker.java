@@ -16,6 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 import logic.Board;
 import logic.Builder;
@@ -87,6 +88,14 @@ public class RuleMaker extends JPanel
 		final JPanel legalDestWhiteCheckBox = new JPanel();
 		legalDestWhiteCheckBox.setLayout(new GridLayout(2, 1));
 		final JCheckBox wCaptureMand = new JCheckBox("Capture Mandatory");
+		SwingUtilities.invokeLater(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				wCaptureMand.requestFocus();
+			}
+		});
 		wCaptureMand.setToolTipText("Capturing moves must be performed");
 		legalDestWhiteCheckBox.add(wCaptureMand);
 		final JCheckBox wNoMoveObj = new JCheckBox("Can't Move Objective");

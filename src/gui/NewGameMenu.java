@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -476,46 +477,51 @@ public class NewGameMenu extends JPanel
 			}
 		});
 
+		JPanel buttons = new JPanel();
+		buttons.setBorder(BorderFactory.createLoweredBevelBorder());
+		buttons.setLayout(new GridBagLayout());
+		c.gridy = 1;
+		c.ipadx = 7;
+		c.insets = new Insets(5, 5, 0, 5);
+		buttons.add(humanPlay, c);
+		c.gridy = 2;
+		c.ipadx = 0;
+		c.insets = new Insets(2, 5, 0, 5);
+		buttons.add(networkPlay, c);
+		c.gridy = 3;
+		c.ipadx = 28;
+		c.insets = new Insets(2, 5, 5, 5);
+		buttons.add(AIPlay, c);
+
 		try
 		{
 			if (InetAddress.getLocalHost().getHostName().contains("cslab"))
 			{
-				c.gridx = 0;
 				c.gridy = 0;
-				c.fill = GridBagConstraints.HORIZONTAL;
-				c.insets = new Insets(5, 5, 0, 0);
-				add(humanPlay, c);
-				c.gridx = 1;
-				c.gridy = 0;
-				c.fill = GridBagConstraints.HORIZONTAL;
-				c.insets = new Insets(5, 5, 0, 5);
-				add(networkPlay, c);
-				c.gridx = 0;
+				c.ipadx = 0;
+				c.insets = new Insets(5, 50, 5, 50);
+				c.anchor = GridBagConstraints.CENTER;
+				add(new JLabel("How would you like to play?"), c);
 				c.gridy = 1;
-				c.gridwidth = 2;
-				c.insets = new Insets(0, 5, 20, 5);
-				c.fill = GridBagConstraints.HORIZONTAL;
-				add(AIPlay, c);
-				c.gridx = 0;
+				add(buttons, c);
 				c.gridy = 2;
 				add(backButton, c);
 			}
 			else
 			{
-				// Layout stuff. Make it better later.
-				c.gridx = 0;
+				// Layout stuff
 				c.gridy = 0;
-				c.fill = GridBagConstraints.HORIZONTAL;
-				c.insets = new Insets(5, 5, 0, 5);
-				add(humanPlay, c);
-				c.gridx = 0;
+				c.ipadx = 0;
+				c.insets = new Insets(5, 50, 5, 50);
+				c.anchor = GridBagConstraints.CENTER;
+				add(new JLabel("How would you like to play?"), c);
 				c.gridy = 1;
-				c.insets = new Insets(0, 5, 20, 5);
-				c.fill = GridBagConstraints.HORIZONTAL;
-				add(AIPlay, c);
-				c.gridx = 0;
+				c.ipadx = 0;
+				add(buttons, c);
 				c.gridy = 2;
 				add(backButton, c);
+
+				networkPlay.setVisible(false);
 			}
 		}
 		catch (Exception e)
