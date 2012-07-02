@@ -90,6 +90,21 @@ public class PlayGame extends JPanel
 		@Override
 		public void mouseClicked(MouseEvent e)
 		{
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e)
+		{
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e)
+		{
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e)
+		{
 			if (mustPlace)
 			{
 				mustPlace = false;
@@ -138,21 +153,6 @@ public class PlayGame extends JPanel
 					mustMove = true;
 				}
 			}
-		}
-
-		@Override
-		public void mouseEntered(MouseEvent e)
-		{
-		}
-
-		@Override
-		public void mouseExited(MouseEvent e)
-		{
-		}
-
-		@Override
-		public void mousePressed(MouseEvent e)
-		{
 		}
 
 		@Override
@@ -622,7 +622,14 @@ public class PlayGame extends JPanel
 		else if (!menu.isVisible())
 			Driver.getInstance().setMenu(createMenu());
 
-		Driver.gameOptions.setVisible(true); // Turns on the game options
+		if (!isPlayback)
+		{
+			Driver.gameOptions.setVisible(true); // Turns on the game options
+		}
+		else
+		{
+			Driver.gameOptions.setVisible(false);
+		}
 
 		// Set the layout of the JPanel.
 		setLayout(new GridBagLayout());
