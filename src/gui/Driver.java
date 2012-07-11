@@ -1,11 +1,14 @@
 package gui;
 
+import java.awt.AWTException;
 import java.awt.Desktop;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
+import java.awt.SystemTray;
+import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -162,7 +165,7 @@ final public class Driver extends JFrame
 		try
 		{
 			// read the image from the class resources
-			temp = ImageIO.read(getClass().getResource("/front_page_image.jpeg"));
+			temp = ImageIO.read(getClass().getResource("/chess_picture.png"));
 		}
 		catch (IOException e1)
 		{
@@ -174,6 +177,22 @@ final public class Driver extends JFrame
 		picture.setImage(picture.getImage().getScaledInstance(300, 200, Image.SCALE_SMOOTH));
 		pictureHolder.setIcon(picture);
 
+		//Code for adding System Tray icon for Windows
+		final SystemTray sysTray = SystemTray.getSystemTray();
+		TrayIcon tray = new TrayIcon(picture.getImage().getScaledInstance(25, 18, Image.SCALE_SMOOTH));
+		try
+		{
+			sysTray.add(tray);
+		}
+		catch (AWTException e1)
+		{
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		//Set Icon Program icon to be Main picture
+		setIconImage(temp);
+		
 		// Creates the button to make a new game
 		newGame = new JButton("New Game");
 		newGame.setToolTipText("Press to start a new game of Chess");
