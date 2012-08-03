@@ -177,7 +177,7 @@ final public class Driver extends JFrame
 		picture.setImage(picture.getImage().getScaledInstance(300, 200, Image.SCALE_SMOOTH));
 		pictureHolder.setIcon(picture);
 
-		//Code for adding System Tray icon for Windows
+		// Code for adding System Tray icon for Windows
 		final SystemTray sysTray = SystemTray.getSystemTray();
 		TrayIcon tray = new TrayIcon(picture.getImage().getScaledInstance(25, 18, Image.SCALE_SMOOTH));
 		try
@@ -189,10 +189,10 @@ final public class Driver extends JFrame
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
-		//Set Icon Program icon to be Main picture
+
+		// Set Icon Program icon to be Main picture
 		setIconImage(temp);
-		
+
 		// Creates the button to make a new game
 		newGame = new JButton("New Game");
 		newGame.setToolTipText("Press to start a new game of Chess");
@@ -328,7 +328,7 @@ final public class Driver extends JFrame
 			{
 				// Remove the current panel, set otherPanel, repaint.
 				remove(mainPanel);
-				otherPanel = new NewTypeMenu();
+				otherPanel = new CustomSetupMenu();
 				setPanel(otherPanel);
 				pack();
 			}
@@ -519,6 +519,7 @@ final public class Driver extends JFrame
 		mainMenu.setVisible(false);
 		add(mainPanel);
 		pack();
+		setLocationRelativeTo(null);
 	}
 
 	/**

@@ -9,13 +9,13 @@ import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-import logic.Builder;
 import rules.NextTurn;
 import rules.Rules;
 
@@ -38,9 +38,13 @@ public class PlayerCustomMenu extends JPanel
 
 	// Variables declaration - do not modify
 	/**
-	 * Builder used to progressively create the new game type.
+	 * Rules for the White Team
 	 */
-	private Builder b;
+	private Rules whiteRules = new Rules(false, false);
+	/**
+	 * Rules for the Black Team
+	 */
+	private Rules blackRules = new Rules(false, false);
 	/**
 	 * JLabel with instructions for the number of turns for Player 1.
 	 */
@@ -73,6 +77,10 @@ public class PlayerCustomMenu extends JPanel
 	 * JButton to submit Player customizations and move to next screen.
 	 */
 	private JButton submitButton;
+	/**
+	 * Frame to hold the window
+	 */
+	private JFrame frame;
 
 	// End of variables declaration
 
@@ -83,10 +91,21 @@ public class PlayerCustomMenu extends JPanel
 	 * @param blackRules The whiteRules object.
 	 * @param whiteRules The blackRules object.
 	 */
-	public PlayerCustomMenu(Builder b, Rules whiteRules, Rules blackRules)
+	/*
+	 * public PlayerCustomMenu(Builder b, Rules whiteRules, Rules blackRules) {
+	 * this.b = b; initComponents(whiteRules, blackRules); }
+	 */
+
+	public PlayerCustomMenu(CustomSetupMenu variant)
 	{
-		this.b = b;
-		initComponents(whiteRules, blackRules);
+		whiteRules = variant.whiteRules;
+		blackRules = variant.blackRules;
+		frame = new JFrame();
+		frame.add(this);
+		frame.setVisible(true);
+		frame.setSize(300, 200);
+		frame.setLocationRelativeTo(Driver.getInstance());
+		initComponents(variant);
 	}
 
 	/**
@@ -147,7 +166,7 @@ public class PlayerCustomMenu extends JPanel
 	 * @param whiteRules The whiteRules object.
 	 * @param blackRules The blackRules object.
 	 */
-	private void initComponents(final Rules whiteRules, final Rules blackRules)
+	private void initComponents(final CustomSetupMenu variant)
 	{
 
 		// Set the layout and size of this JPanel.
@@ -178,8 +197,8 @@ public class PlayerCustomMenu extends JPanel
 		incrementTurns.setToolTipText("This will be the number of turns each player gains for each time their turn occurs");
 
 		// Create button and add ActionListener
-		backButton = new JButton("Back");
-		backButton.setToolTipText("Press me to return to the Rule making window");
+		backButton = new JButton("Cancel");
+		backButton.setToolTipText("Press me to return to the main Variant window");
 		backButton.addActionListener(new ActionListener()
 		{
 
@@ -187,12 +206,15 @@ public class PlayerCustomMenu extends JPanel
 			public void actionPerformed(ActionEvent e)
 			{
 				// Return to the BoardCustomMenu screen.
-				Driver.getInstance().setPanel(new RuleMaker(b, whiteRules, blackRules));
+				// Driver.getInstance().setPanel(new RuleMaker(b, whiteRules,
+				// blackRules));
+				frame.removeAll();
+				frame.dispose();
 			}
 		});
 
 		// Create button and add ActionListener
-		submitButton = new JButton("Next");
+		submitButton = new JButton("Save");
 		submitButton.setToolTipText("Press me to save these turn settings");
 		submitButton.addActionListener(new ActionListener()
 		{
@@ -203,7 +225,13 @@ public class PlayerCustomMenu extends JPanel
 				if (formComplete(whiteRules, blackRules))
 				{// Make sure the form is complete.
 					// TODO parse form here
-					Driver.getInstance().setPanel(new CustomSetupMenu(b, whiteRules, blackRules));
+					// Driver.getInstance().setPanel(new CustomSetupMenu(b,
+					// whiteRules, blackRules));
+
+					variant.whiteRules = whiteRules;
+					variant.blackRules = blackRules;
+					frame.removeAll();
+					frame.dispose();
 				}
 			}
 		});

@@ -6,6 +6,8 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Insets;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -26,6 +28,7 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -35,6 +38,7 @@ import logic.Builder;
 import logic.Piece;
 import logic.PieceBuilder;
 import logic.Square;
+import rules.EndOfGame;
 import rules.ObjectivePiece;
 import rules.Rules;
 
@@ -129,8 +133,14 @@ public class CustomSetupMenu extends JPanel
 				int index = piecesList.getSelectedIndex();
 
 				// Add the element of the left list to the right list.
-				emptyList.addElement(list.elementAt(index));
-				list.remove(index);
+				try
+				{
+					emptyList.addElement(list.elementAt(index));
+					list.remove(index);
+				}
+				catch (Exception e)
+				{
+				}
 
 			}
 		});
@@ -284,11 +294,24 @@ public class CustomSetupMenu extends JPanel
 	/**
 	 * Rules holder for the white rules
 	 */
-	private Rules whiteRules;
+	public Rules whiteRules = new Rules(false, false);
 	/**
 	 * Rules holder for the black rules
 	 */
-	private Rules blackRules;
+	public Rules blackRules = new Rules(false, true);
+	/**
+	 * Panel for the chess grid
+	 */
+	private JPanel grid = new JPanel();
+	/**
+	 * Panel for the 2nd chess grid if needed
+	 */
+	private JPanel grid2 = new JPanel();
+	/**
+	 * Panel for holding the list of pieces
+	 */
+	private JPanel pieceHolder = new JPanel();
+
 	/**
 	 * Hashmap for keeping track of what types promote to which pieces.
 	 */
@@ -302,13 +325,11 @@ public class CustomSetupMenu extends JPanel
 	 * @param whiteRules The whiteRules object.
 	 * @param blackRules The blackRules object.
 	 */
-	public CustomSetupMenu(Builder b, Rules whiteRules, Rules blackRules)
+	public CustomSetupMenu()
 	{
-		this.b = b;
+		b = new Builder("New Variant");
 		whiteTeam = new ArrayList<Piece>();
 		blackTeam = new ArrayList<Piece>();
-		this.whiteRules = whiteRules;
-		this.blackRules = blackRules;
 		bShowPiece = new Board(2, 1, false);
 		dragged = new Square(0, 0);
 		initComponents();
@@ -493,6 +514,14 @@ public class CustomSetupMenu extends JPanel
 	 * JButton to submit Board setup and return to the main screen.
 	 */
 	private JButton submitButton;
+	/**
+	 * JButton to change promotion for pieces
+	 */
+	private JButton changePromote;
+	/**
+	 * List that holds the piece types
+	 */
+	private JList piecesList;
 
 	/**
 	 * Initialize components of the GUI Create all the GUI components, set their
@@ -503,25 +532,34 @@ public class CustomSetupMenu extends JPanel
 	{
 
 		// Set the layout of this JPanel.
-		setLayout(new FlowLayout());
+		setLayout(new GridBagLayout());
+		GridBagConstraints a = new GridBagConstraints();
 
 		setBorder(BorderFactory.createLoweredBevelBorder());
-
-		// Get the array of boards from the builder so we can modify it.
-		final Board[] boards = b.getBoards();
-
-		// Create a List with a vertical ScrollBar
-		final DefaultListModel list = new DefaultListModel();
-		Object[] allPieces = PieceBuilder.getSet().toArray();
-		for (int i = 0; i < allPieces.length; i++)
-		{
-			list.addElement(allPieces[i]);
-		}
-		final JList piecesList = new JList(list);
 
 		final JPanel showPiece = new JPanel();
 		showPiece.setLayout(new GridLayout(2, 1));
 		showPiece.setPreferredSize(new Dimension(50, 100));
+
+		showPiece.add(bShowPiece.getSquare(1, 1));
+		showPiece.add(bShowPiece.getSquare(2, 1));
+		a.gridx = 5;
+		a.gridy = 1;
+		a.gridwidth = 1;
+		add(showPiece, a);
+
+		changePromote = new JButton("Promote This Piece");
+		changePromote.setToolTipText("Press me to set up promotion for the above selected piece");
+		changePromote.addActionListener(new ActionListener()
+		{
+
+			@Override
+			public void actionPerformed(ActionEvent arg0)
+			{
+				promotion((String) piecesList.getSelectedValue());
+			}
+
+		});
 
 		bShowPiece.getSquare(1, 1).addMouseListener(new MouseListener()
 		{
@@ -603,8 +641,357 @@ public class CustomSetupMenu extends JPanel
 		bShowPiece.getSquare(1, 1).setBackgroundColor(Color.LIGHT_GRAY);
 		bShowPiece.getSquare(2, 1).setBackgroundColor(Color.getHSBColor(30, 70, 70));
 
-		showPiece.add(bShowPiece.getSquare(1, 1));
-		showPiece.add(bShowPiece.getSquare(2, 1));
+		whiteRules.addEndOfGame(new EndOfGame("classic", 0, "", false));
+		blackRules.addEndOfGame(new EndOfGame("classic", 0, "", true));
+
+		a.gridx = 1;
+		a.gridy = 0;
+		a.fill = GridBagConstraints.HORIZONTAL;
+		a.insets = new Insets(10, 0, 10, 5);
+		add(new JLabel("Variant Name"), a);
+		final JTextField name = new JTextField(25);
+		a.gridx = 2;
+		a.gridy = 0;
+		a.fill = GridBagConstraints.HORIZONTAL;
+		a.insets = new Insets(0, 0, 0, 0);
+		add(name, a);
+
+		Board[] temp = new Board[1];
+		temp[0] = new Board(8, 8, false);
+
+		setupPieces();
+		drawBoard(temp, false);
+
+		// Create button and add ActionListener
+		backButton = new JButton("Back");
+		backButton.setToolTipText("Press me to go back to the Turn setup window");
+		backButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent arg0)
+			{
+				Driver.getInstance().revertPanel();
+			}
+		});
+
+		// Create button and add ActionListener
+		submitButton = new JButton("Save and Quit");
+		submitButton.setToolTipText("Press me to save your finished variant");
+		submitButton.addActionListener(new ActionListener()
+		{
+
+			@Override
+			public void actionPerformed(ActionEvent arg0)
+			{
+
+				if (name.getText().equals("") || name.getText().equals(" "))
+				{
+					JOptionPane.showMessageDialog(getInstance(), "Please enter a name for this game.");
+				}
+				else
+				{
+					b.setName(name.getText());
+
+					for (Piece p : whiteTeam)
+					{
+						p.setPromotesTo(promotions.get(p.getName()));
+					}
+					for (Piece p : blackTeam)
+					{
+						p.setPromotesTo(promotions.get(p.getName()));
+					}
+					int numObjectives = 0;
+					if (!whiteRules.getObjectiveName().equals(""))
+					{
+						for (Piece p : whiteTeam)
+						{
+							if (p.getName().equals(whiteRules.getObjectiveName()))
+								numObjectives++;
+						}
+						if (numObjectives != 1)
+						{
+							JOptionPane.showMessageDialog(null, "Please place exactly one White Objective Piece");
+							return;
+						}
+					}
+					numObjectives = 0;
+					if (!blackRules.getObjectiveName().equals(""))
+					{
+						for (Piece p : blackTeam)
+						{
+							if (p.getName().equals(blackRules.getObjectiveName()))
+								numObjectives++;
+						}
+						if (numObjectives != 1)
+						{
+							JOptionPane.showMessageDialog(null, "Please place exactly one Black Objective Piece");
+							return;
+						}
+					}
+					b.whiteTeam = whiteTeam;
+					boolean set = false;
+					for (Piece p : whiteTeam)
+					{
+						if (p.getName().equals("King"))
+						{
+							whiteRules.setObjectivePiece(new ObjectivePiece("classic", "King"));
+							set = true;
+							break;
+						}
+						// TODO Fix this.
+						// else if (p.isObjective()) {
+						// whiteRules.setObjectivePiece(new
+						// ObjectivePiece("custom objective", p.getName()));
+						// System.out.println(p.getName());
+						// set = true;
+						// break;
+						// }
+					}
+					if (!set)
+					{
+						whiteRules.setObjectivePiece(new ObjectivePiece("no objective", ""));
+					}
+					b.blackTeam = blackTeam;
+					set = false;
+					for (Piece p : blackTeam)
+					{
+						if (p.getName().equals("King"))
+						{
+							blackRules.setObjectivePiece(new ObjectivePiece("classic", "King"));
+							set = true;
+							break;
+						}
+						// TODO Fix this
+						// else if (p.isObjective()) {
+						// blackRules.setObjectivePiece(new
+						// ObjectivePiece("custom objective", p.getName()));
+						// set = true;
+						// break;
+						// }
+					}
+					if (!set)
+					{
+						blackRules.setObjectivePiece(new ObjectivePiece("no objective", ""));
+					}
+					b.writeFile(whiteRules, blackRules);
+					// Return to the main screen.
+					Driver.getInstance().revertPanel();
+				}
+			}
+
+		});
+
+		JButton boardSetup = new JButton("Customize Game Board");
+		boardSetup.addActionListener(new ActionListener()
+		{
+
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				@SuppressWarnings("unused")
+				BoardCustomMenu makeObj = new BoardCustomMenu(getInstance());
+			}
+		});
+		JButton objectivesSetup = new JButton("Set up Game Objectives");
+		objectivesSetup.addActionListener(new ActionListener()
+		{
+
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				@SuppressWarnings("unused")
+				ObjectiveMaker makeObj = new ObjectiveMaker(getInstance());
+			}
+		});
+		JButton ruleSetup = new JButton("Set up Game Rules");
+		ruleSetup.addActionListener(new ActionListener()
+		{
+
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				@SuppressWarnings("unused")
+				RuleMaker makeRules = new RuleMaker(getInstance(), b);
+			}
+		});
+
+		JButton playerSetup = new JButton("Set up Player Rules");
+		playerSetup.addActionListener(new ActionListener()
+		{
+
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				@SuppressWarnings("unused")
+				PlayerCustomMenu makeObj = new PlayerCustomMenu(getInstance());
+			}
+		});
+		JButton pieceSetup = new JButton("Make New Pieces");
+		pieceSetup.addActionListener(new ActionListener()
+		{
+
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				@SuppressWarnings("unused")
+				PieceMaker makeObj = new PieceMaker(getInstance());
+			}
+		});
+		a.gridx = 1;
+		a.gridy = 1;
+		pieceHolder.add(pieceSetup, a);
+
+		JPanel rules = new JPanel();
+		rules.setLayout(new GridBagLayout());
+		rules.setBorder(BorderFactory.createTitledBorder("Rules and Board Set up"));
+
+		GridBagConstraints c = new GridBagConstraints();
+
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 0;
+		c.gridy = 0;
+		rules.add(boardSetup, c);
+
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 0;
+		c.gridy = 1;
+		rules.add(objectivesSetup, c);
+
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 0;
+		c.gridy = 2;
+		rules.add(ruleSetup, c);
+
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 0;
+		c.gridy = 3;
+		rules.add(playerSetup, c);
+
+		JPanel options = new JPanel();
+		options.setLayout(new GridBagLayout());
+		options.setBorder(BorderFactory.createTitledBorder("Options"));
+
+		c.fill = GridBagConstraints.CENTER;
+		c.gridx = 0;
+		c.gridy = 1;
+		options.add(backButton, c);
+
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 1;
+		c.gridy = 1;
+		options.add(submitButton, c);
+
+		a.gridy = 1;
+		a.gridx = 0;
+		a.gridwidth = 1;
+		add(rules, a);
+
+		a.gridy = 2;
+		a.gridx = 1;
+		a.gridwidth = 2;
+		a.insets = new Insets(10, 0, 10, 5);
+		add(options, a);
+
+		Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+		int x = (int) ((dimension.getWidth() / 4));
+		int y = (int) ((dimension.getHeight() / 4));
+		Driver.getInstance().setLocation(x, y);
+	}
+
+	/**
+	 * Loop through the array of boards for setup
+	 */
+	public void drawBoard(Board[] boards, Boolean multiple)
+	{
+
+		// Get the set the board into the builder.
+		b.setBoards(boards);
+
+		grid.removeAll();
+		remove(grid);
+		grid2.removeAll();
+		remove(grid2);
+
+		GridBagConstraints a = new GridBagConstraints();
+
+		for (int n = 0; n < boards.length; n++)
+		{
+			// Create a JPanel to hold the grid and set the layout to the number
+			// of squares in the board.
+
+			JPanel gridHolder = new JPanel();
+			gridHolder.setLayout(new GridLayout(boards[n].numRows(), boards[n].numCols()));
+
+			// Loop through the board, initializing each Square and adding it's
+			// ActionListener.
+			int numRows = boards[n].numRows();
+			int numCols = boards[n].numCols();
+			for (int i = numRows; i > 0; i--)
+			{
+				for (int j = 1; j <= numCols; j++)
+				{
+					boards[n].getSquare(i, j).addMouseListener(new DragMouseAdapter(boards[n].getSquare(i, j), boards[n]));
+					gridHolder.add(boards[n].getSquare(i, j));
+					boards[n].getSquare(i, j).refresh(); // Have the square
+															// refresh all it's
+															// properties
+				}
+			}
+			if (n == 0)
+			{
+				grid = gridHolder;
+
+				grid.setBorder(BorderFactory.createEtchedBorder(Color.BLACK, Color.GRAY));
+				grid.setLayout(new GridLayout(boards[n].numRows(), boards[n].numCols()));
+				// Set the size of the grid to the number of rows and columns,
+				// scaled by 48, the size of the images.
+				grid.setPreferredSize(new Dimension(boards[n].numCols() * 48, boards[n].numRows() * 48));
+
+				a.gridx = 1;
+				a.gridy = 1;
+				a.gridwidth = 2;
+				add(grid, a);// Add the grid to the main JPanel.
+			}
+			else
+			{
+				grid2 = gridHolder;
+
+				grid2.setBorder(BorderFactory.createEtchedBorder(Color.BLACK, Color.GRAY));
+				grid2.setLayout(new GridLayout(boards[n].numRows(), boards[n].numCols()));
+				// Set the size of the grid to the number of rows and columns,
+				// scaled by 48, the size of the images.
+				grid2.setPreferredSize(new Dimension(boards[n].numCols() * 48, boards[n].numRows() * 48));
+
+				a.gridx = 3;
+				a.gridy = 1;
+				a.gridwidth = 2;
+				add(grid2, a);// Add the grid to the main JPanel.
+			}
+		}
+		grid.revalidate();
+		grid.repaint();
+		grid2.revalidate();
+		grid2.repaint();
+
+		Driver.getInstance().pack();
+	}
+
+	/**
+	 * Set Up pieces list
+	 */
+	public void setupPieces()
+	{
+
+		pieceHolder.removeAll();
+
+		// Create a List with a vertical ScrollBar
+		final DefaultListModel list = new DefaultListModel();
+		Object[] allPieces = PieceBuilder.getSet().toArray();
+		for (int i = 0; i < allPieces.length; i++)
+		{
+			list.addElement(allPieces[i]);
+		}
+		piecesList = new JList(list);
 
 		piecesList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		piecesList.setLayoutOrientation(JList.VERTICAL);
@@ -622,50 +1009,7 @@ public class CustomSetupMenu extends JPanel
 
 		JScrollPane scrollPane = new JScrollPane(piecesList);
 		scrollPane.setPreferredSize(new Dimension(200, 200));
-		// Loop through the array of boards for setup.
-		for (int n = 0; n < boards.length; n++)
-		{
-			// Create a JPanel to hold the grid and set the layout to the number
-			// of squares in the board.
-			final JPanel grid = new JPanel();
-			grid.setBorder(BorderFactory.createEtchedBorder(Color.BLACK, Color.GRAY));
-			grid.setLayout(new GridLayout(boards[n].numRows(), boards[n].numCols()));
-			// Set the size of the grid to the number of rows and columns,
-			// scaled by 48, the size of the images.
-			grid.setPreferredSize(new Dimension(boards[n].numCols() * 48, boards[n].numRows() * 48));
 
-			// Loop through the board, initializing each Square and adding it's
-			// ActionListener.
-			int numRows = boards[n].numRows();
-			int numCols = boards[n].numCols();
-			for (int i = numRows; i > 0; i--)
-			{
-				for (int j = 1; j <= numCols; j++)
-				{
-					boards[n].getSquare(i, j).addMouseListener(new DragMouseAdapter(boards[n].getSquare(i, j), boards[n]));
-					grid.add(boards[n].getSquare(i, j));
-					boards[n].getSquare(i, j).refresh(); // Have the square
-															// refresh all it's
-															// properties now
-															// that they're
-															// created.
-				}
-			}
-			add(grid);// Add the grid to the main JPanel.
-		}
-
-		final JButton changePromote = new JButton("Promote This Piece");
-		changePromote.setToolTipText("Press me to set up promotion for the above selected piece");
-		changePromote.addActionListener(new ActionListener()
-		{
-
-			@Override
-			public void actionPerformed(ActionEvent arg0)
-			{
-				promotion((String) piecesList.getSelectedValue());
-			}
-
-		});
 		selectList.addListSelectionListener(new ListSelectionListener()
 		{
 			@Override
@@ -697,140 +1041,39 @@ public class CustomSetupMenu extends JPanel
 		});
 
 		GridBagConstraints c = new GridBagConstraints();
-		JPanel pieceHolder = new JPanel();
 		pieceHolder.setLayout(new GridBagLayout());
 		c.gridx = 0;
 		c.gridy = 0;
+		c.gridwidth = 2;
 		pieceHolder.add(scrollPane, c);
 		c.gridx = 0;
 		c.gridy = 1;
+		c.gridwidth = 1;
 		pieceHolder.add(changePromote, c);
 
-		add(showPiece);
-		add(pieceHolder);
+		c.gridx = 6;
+		c.gridy = 1;
+		add(pieceHolder, c);
 
-		// Create button and add ActionListener
-		backButton = new JButton("Back");
-		backButton.setToolTipText("Press me to go back to the Turn setup window");
-		backButton.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent arg0)
-			{
-				Driver.getInstance().setPanel(new PlayerCustomMenu(b, whiteRules, blackRules));
-			}
-		});
+		pieceHolder.revalidate();
+		pieceHolder.repaint();
 
-		// Create button and add ActionListener
-		submitButton = new JButton("Save and Quit");
-		submitButton.setToolTipText("Press me to save your finished variant");
-		submitButton.addActionListener(new ActionListener()
-		{
+		Driver.getInstance().pack();
+	}
 
-			@Override
-			public void actionPerformed(ActionEvent arg0)
-			{
-				for (Piece p : whiteTeam)
-				{
-					p.setPromotesTo(promotions.get(p.getName()));
-				}
-				for (Piece p : blackTeam)
-				{
-					p.setPromotesTo(promotions.get(p.getName()));
-				}
-				int numObjectives = 0;
-				if (!whiteRules.getObjectiveName().equals(""))
-				{
-					for (Piece p : whiteTeam)
-					{
-						if (p.getName().equals(whiteRules.getObjectiveName()))
-							numObjectives++;
-					}
-					if (numObjectives != 1)
-					{
-						JOptionPane.showMessageDialog(null, "Please place exactly one White Objective Piece");
-						return;
-					}
-				}
-				numObjectives = 0;
-				if (!blackRules.getObjectiveName().equals(""))
-				{
-					for (Piece p : blackTeam)
-					{
-						if (p.getName().equals(blackRules.getObjectiveName()))
-							numObjectives++;
-					}
-					if (numObjectives != 1)
-					{
-						JOptionPane.showMessageDialog(null, "Please place exactly one Black Objective Piece");
-						return;
-					}
-				}
-				b.whiteTeam = whiteTeam;
-				boolean set = false;
-				for (Piece p : whiteTeam)
-				{
-					if (p.getName().equals("King"))
-					{
-						whiteRules.setObjectivePiece(new ObjectivePiece("classic", "King"));
-						set = true;
-						break;
-					}
-					// TODO Fix this.
-					// else if (p.isObjective()) {
-					// whiteRules.setObjectivePiece(new
-					// ObjectivePiece("custom objective", p.getName()));
-					// System.out.println(p.getName());
-					// set = true;
-					// break;
-					// }
-				}
-				if (!set)
-				{
-					whiteRules.setObjectivePiece(new ObjectivePiece("no objective", ""));
-				}
-				b.blackTeam = blackTeam;
-				set = false;
-				for (Piece p : blackTeam)
-				{
-					if (p.getName().equals("King"))
-					{
-						blackRules.setObjectivePiece(new ObjectivePiece("classic", "King"));
-						set = true;
-						break;
-					}
-					// TODO Fix this
-					// else if (p.isObjective()) {
-					// blackRules.setObjectivePiece(new
-					// ObjectivePiece("custom objective", p.getName()));
-					// set = true;
-					// break;
-					// }
-				}
-				if (!set)
-				{
-					blackRules.setObjectivePiece(new ObjectivePiece("no objective", ""));
-				}
-				b.writeFile(whiteRules, blackRules);
-				// Return to the main screen.
-				Driver.getInstance().revertPanel();
-			}
+	/**
+	 * Getter method for this particular instance of CustomSetupMenu
+	 * 
+	 * @return this CustomSetupMenu object
+	 */
 
-		});
+	public CustomSetupMenu getInstance()
+	{
+		return this;
+	}
 
-		JPanel options = new JPanel();
-		options.setLayout(new GridBagLayout());
-
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 0;
-		c.gridy = 2;
-		options.add(submitButton, c);
-
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 0;
-		c.gridy = 3;
-		options.add(backButton, c);
-
-		add(options);
+	public Builder getBuilder()
+	{
+		return b;
 	}
 }

@@ -18,13 +18,13 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-import logic.Builder;
 import logic.PieceBuilder;
 
 /**
@@ -38,10 +38,6 @@ public class PieceMaker extends JPanel
 	 */
 	private static final long serialVersionUID = -6530771731937840358L;
 	/**
-	 * Builder for the new variant
-	 */
-	private Builder b;
-	/**
 	 * New Piece builder for the new.... piece
 	 */
 	private PieceBuilder builder;
@@ -49,23 +45,35 @@ public class PieceMaker extends JPanel
 	 * Boolean to see if we are making a knight piece
 	 */
 	private boolean knightLike = false;
+	/**
+	 * Frame to hold the window
+	 */
+	private JFrame frame;
 
 	/**
 	 * Constructor for piece making window
 	 * 
 	 * @param b reference to the builder
 	 */
-	public PieceMaker(Builder b)
+	/*
+	 * public PieceMaker(Builder b) { this.b = b; PieceBuilder.initPieceTypes();
+	 * initComponents(); }
+	 */
+	public PieceMaker(CustomSetupMenu variant)
 	{
-		this.b = b;
+		frame = new JFrame();
+		frame.add(this);
+		frame.setVisible(true);
+		frame.setSize(400, 600);
+		frame.setLocationRelativeTo(Driver.getInstance());
 		PieceBuilder.initPieceTypes();
-		initComponents();
+		initComponents(variant);
 	}
 
 	/**
 	 * Method to set up the piece making window.
 	 */
-	public void initComponents()
+	public void initComponents(final CustomSetupMenu variant)
 	{
 		// Create a new PieceBuilder.
 		builder = new PieceBuilder();
@@ -452,7 +460,7 @@ public class PieceMaker extends JPanel
 
 		});
 
-		final JButton next = new JButton("Next");
+		final JButton next = new JButton("Done");
 		next.setToolTipText("Press me when you have made all of your pieces");
 		next.addActionListener(new ActionListener()
 		{
@@ -461,7 +469,10 @@ public class PieceMaker extends JPanel
 			{
 				if (name.getText().equals(""))
 				{
-					Driver.getInstance().setPanel(new ObjectiveMaker(b));
+					variant.setupPieces();
+					frame.removeAll();
+					frame.dispose();
+					// Driver.getInstance().setPanel(new ObjectiveMaker(b));
 				}
 				else
 				{
@@ -469,7 +480,12 @@ public class PieceMaker extends JPanel
 							"If you continue the piece you are working on will not be saved. Continue?", "Piece Maker",
 							JOptionPane.YES_NO_OPTION);
 					if (answer == 0)
-						Driver.getInstance().setPanel(new ObjectiveMaker(b));
+					{
+						variant.setupPieces();
+						frame.removeAll();
+						frame.dispose();
+					}
+					// Driver.getInstance().setPanel(new ObjectiveMaker(b));
 				}
 			}
 		});
@@ -483,7 +499,7 @@ public class PieceMaker extends JPanel
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
-				Driver.getInstance().setPanel(new BoardCustomMenu(b));
+				// Driver.getInstance().setPanel(new BoardCustomMenu(b));
 			}
 		});
 
