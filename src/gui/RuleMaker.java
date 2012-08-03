@@ -12,6 +12,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -44,16 +45,20 @@ public class RuleMaker extends JPanel
 	/**
 	 * Rules for the White Team
 	 */
-	private Rules whiteRules;
+	private Rules whiteRules = new Rules(false, false);
 	/**
 	 * Rules for the Black Team
 	 */
-	private Rules blackRules;
+	private Rules blackRules = new Rules(false, false);
 	/**
 	 * This is a boolean to see if we need to force a piece to be set as an
 	 * Objective
 	 */
 	static boolean needsObj = false;
+	/**
+	 * Frame to hold the window
+	 */
+	private JFrame frame;
 
 	/**
 	 * Constructor for setting up the rules window
@@ -62,21 +67,34 @@ public class RuleMaker extends JPanel
 	 * @param whiteRules The container for the white Rules
 	 * @param blackRules the container for the black rules
 	 */
-	public RuleMaker(Builder b, Rules whiteRules, Rules blackRules)
+	/*
+	 * public RuleMaker(Builder b, Rules whiteRules, Rules blackRules) { this.b
+	 * = b; this.whiteRules = whiteRules; this.blackRules = blackRules;
+	 * initComponents(); }
+	 */
+
+	public RuleMaker(CustomSetupMenu variant, Builder b)
 	{
+		frame = new JFrame();
+		frame.add(this);
+		frame.setVisible(true);
+		frame.setSize(600, 500);
+		frame.setLocationRelativeTo(Driver.getInstance());
 		this.b = b;
-		this.whiteRules = whiteRules;
-		this.blackRules = blackRules;
-		initComponents();
+		whiteRules = variant.whiteRules;
+		blackRules = variant.blackRules;
+		initComponents(variant);
 	}
 
 	/**
 	 * Setting up the window and rules
 	 */
-	public void initComponents()
+	public void initComponents(final CustomSetupMenu variant)
 	{
 
 		// Setting up the panel
+		revalidate();
+		repaint();
 		setLayout(new GridBagLayout());
 		setSize(600, 600);
 		setBorder(BorderFactory.createLoweredBevelBorder());
@@ -267,20 +285,22 @@ public class RuleMaker extends JPanel
 		}
 
 		// Create button and add ActionListener for going back
-		final JButton back = new JButton("Back");
-		back.setToolTipText("Press me to return to the Objective setup window");
+		final JButton back = new JButton("Cancel");
+		back.setToolTipText("Press me to return to the main Variant window");
 		back.addActionListener(new ActionListener()
 		{
 
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
-				Driver.getInstance().setPanel(new ObjectiveMaker(b));
+				// Driver.getInstance().setPanel(new ObjectiveMaker(b));
+				frame.removeAll();
+				frame.dispose();
 			}
 		});
 
 		// Button to move to save and move on
-		JButton save = new JButton("Next");
+		JButton save = new JButton("Save");
 		save.setToolTipText("Press me to save these rules");
 		save.addActionListener(new ActionListener()
 		{
@@ -411,7 +431,12 @@ public class RuleMaker extends JPanel
 					}
 				}
 
-				Driver.getInstance().setPanel(new PlayerCustomMenu(b, whiteRules, blackRules));
+				// Driver.getInstance().setPanel(new PlayerCustomMenu(b,
+				// whiteRules, blackRules));
+				variant.whiteRules = whiteRules;
+				variant.blackRules = blackRules;
+				frame.removeAll();
+				frame.dispose();
 			}
 		});
 
