@@ -15,8 +15,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-import logic.Builder;
-
 /**
  * NewTypeMenu.java
  * 
@@ -110,8 +108,8 @@ public class NewTypeMenu extends JPanel
 				{
 					// Make a new Builder with the given name and send it on to
 					// the next GUI class.
-					Builder b = new Builder(nameField.getText());
-					Driver.getInstance().setPanel(new BoardCustomMenu(b));
+					// Builder b = new Builder(nameField.getText());
+					// Driver.getInstance().setPanel(new BoardCustomMenu(b));
 				}
 				else
 				{

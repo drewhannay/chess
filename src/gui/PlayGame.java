@@ -6,6 +6,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -939,6 +940,11 @@ public class PlayGame extends JPanel
 		c.ipadx = 100;
 		c.gridx = 11 + ifDouble;
 		this.add(whiteLabel, c);
+
+		Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+		int x = (int) ((dimension.getWidth() / 3.3));
+		int y = (int) ((dimension.getHeight() / 4));
+		Driver.getInstance().setLocation(x, y);
 	}
 
 	/**

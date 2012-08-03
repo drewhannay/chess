@@ -8,6 +8,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -17,7 +18,6 @@ import javax.swing.LayoutStyle;
 import javax.swing.SwingUtilities;
 
 import logic.Board;
-import logic.Builder;
 
 /**
  * BoardCustomMenu.java
@@ -37,10 +37,6 @@ public class BoardCustomMenu extends JPanel
 	private static final long serialVersionUID = 5842202724028685933L;
 
 	// Variables declaration - do not modify
-	/**
-	 * Builder used to progressively create the new game type.
-	 */
-	private Builder b;
 	/**
 	 * JLabel with instructions for the number of boards fields.
 	 */
@@ -89,6 +85,10 @@ public class BoardCustomMenu extends JPanel
 	 * JButton to submit board customizations and move to next screen.
 	 */
 	private JButton submitButton;
+	/**
+	 * Frame to hold the window
+	 */
+	private JFrame frame;
 
 	// End of variables declaration
 
@@ -97,10 +97,18 @@ public class BoardCustomMenu extends JPanel
 	 * 
 	 * @param b The builder which is creating the new game type.
 	 */
-	public BoardCustomMenu(Builder b)
+	/*
+	 * public BoardCustomMenu(Builder b) { this.b = b; initComponents(); }
+	 */
+
+	public BoardCustomMenu(CustomSetupMenu variant)
 	{
-		this.b = b;
-		initComponents();
+		frame = new JFrame();
+		frame.add(this);
+		frame.setVisible(true);
+		frame.setSize(300, 250);
+		frame.setLocationRelativeTo(Driver.getInstance());
+		initComponents(variant);
 	}
 
 	/**
@@ -152,14 +160,16 @@ public class BoardCustomMenu extends JPanel
 	 * specific properties and add them to the window. Also add any necessary
 	 * ActionListeners.
 	 */
-	private void initComponents()
+	private void initComponents(final CustomSetupMenu variant)
 	{
 
 		setBorder(BorderFactory.createLoweredBevelBorder());
 
+		revalidate();
+		repaint();
 		// Create button and add ActionListener
-		backButton = new JButton("Back");
-		backButton.setToolTipText("Press me to go back to the name setup");
+		backButton = new JButton("Cancel");
+		backButton.setToolTipText("Press me to go back to the main variant setup");
 		backButton.addActionListener(new ActionListener()
 		{
 
@@ -167,7 +177,9 @@ public class BoardCustomMenu extends JPanel
 			public void actionPerformed(ActionEvent e)
 			{
 				// Return to the NewTypeMenu screen.
-				Driver.getInstance().setPanel(new NewTypeMenu());
+				// Driver.getInstance().setPanel(new NewTypeMenu());
+				frame.removeAll();
+				frame.dispose();
 			}
 		});
 
@@ -184,9 +196,19 @@ public class BoardCustomMenu extends JPanel
 		});
 		oneBoard.setToolTipText("Choose me for one Board");
 		// Set oneBoard to be initially selected.
-		oneBoard.setSelected(true);
 		twoBoards = new JRadioButton("2");
 		twoBoards.setToolTipText("Choose me for two boards");
+
+		Board[] board = variant.getBuilder().getBoards();
+
+		if (board.length == 1)
+		{
+			oneBoard.setSelected(true);
+		}
+		else
+		{
+			twoBoards.setSelected(true);
+		}
 
 		// This is important! Add the buttons to a group so only one can be
 		// selected at a time.
@@ -197,10 +219,10 @@ public class BoardCustomMenu extends JPanel
 		// Create JLabels and JTextFields. Default size 8*8
 		dimensionsLabel = new JLabel("Dimensions?");
 		numRowsLabel = new JLabel("Rows:");
-		numRows = new JTextField("8");
+		numRows = new JTextField(board[0].numRows() + "");
 		numRows.setToolTipText("Enter the amount of rows you would like");
 		numColsLabel = new JLabel("Columns:");
-		numCols = new JTextField("8");
+		numCols = new JTextField(board[0].numCols() + "");
 		numCols.setToolTipText("Enter the amount of columns you would like");
 
 		// Create JLabel and JCheckBox
@@ -209,7 +231,7 @@ public class BoardCustomMenu extends JPanel
 		wraparound.setToolTipText("Press me to have boards that wrap around on the edges");
 
 		// Create button and add ActionListener
-		submitButton = new JButton("Next");
+		submitButton = new JButton("Save");
 		submitButton.setToolTipText("Press me to save these board settings");
 		submitButton.addActionListener(new ActionListener()
 		{
@@ -228,10 +250,13 @@ public class BoardCustomMenu extends JPanel
 						boards[i] = new Board(Integer.parseInt(numRows.getText()), Integer.parseInt(numCols.getText()), wraparound
 								.isSelected());
 					}
-					b.setBoards(boards);// Add the Board[] to the Builder and
-										// pass it on to the next step.
-
-					Driver.getInstance().setPanel(new PieceMaker(b));
+					// Driver.getInstance().setPanel(new PieceMaker(b));
+					if (twoBoards.isSelected())
+						variant.drawBoard(boards, true);
+					else
+						variant.drawBoard(boards, false);
+					frame.removeAll();
+					frame.dispose();
 				}
 			}
 
