@@ -329,6 +329,16 @@ public class Rules implements Serializable
 	}
 
 	/**
+	 * Setter for nextTurn
+	 * 
+	 * @param n The new nextTurn object.
+	 */
+	public NextTurn getNextTurn()
+	{
+		return nextTurn;
+	}
+
+	/**
 	 * Setter for objectivePiece
 	 * 
 	 * @param objectivePiece The new objectivePiece.

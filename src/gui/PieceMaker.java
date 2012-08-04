@@ -7,10 +7,7 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -49,6 +46,10 @@ public class PieceMaker extends JPanel
 	 * Frame to hold the window
 	 */
 	private JFrame frame;
+	/**
+	 * holder for this PieceMaker
+	 */
+	private PieceMaker holder = this;
 
 	/**
 	 * Constructor for piece making window
@@ -59,9 +60,10 @@ public class PieceMaker extends JPanel
 	 * public PieceMaker(Builder b) { this.b = b; PieceBuilder.initPieceTypes();
 	 * initComponents(); }
 	 */
-	public PieceMaker(CustomSetupMenu variant)
+	public PieceMaker(CustomSetupMenu variant, JFrame optionsFrame)
 	{
-		frame = new JFrame();
+		frame = optionsFrame;
+		frame.setVisible(true);
 		frame.add(this);
 		frame.setVisible(true);
 		frame.setSize(400, 600);
@@ -362,7 +364,7 @@ public class PieceMaker extends JPanel
 		piecePanel.add(movementSetup, c);
 
 		// Create button and add ActionListener
-		final JButton done = new JButton("Save Piece Type");
+		final JButton done = new JButton("Save Piece");
 		done.setToolTipText("Press me to save this Piece type");
 		done.addActionListener(new ActionListener()
 		{
@@ -434,32 +436,6 @@ public class PieceMaker extends JPanel
 			}
 		});
 
-		BufferedImage helpMe = null;
-		try
-		{
-			helpMe = ImageIO.read(getClass().getResource("/piece_help.png"));
-		}
-		catch (IOException e1)
-		{
-			e1.printStackTrace();
-		}
-		// Makes the image an icon and ands it to a JLabel
-		final ImageIcon picture = new ImageIcon(helpMe);
-		picture.setImage(picture.getImage().getScaledInstance(700, 500, Image.SCALE_SMOOTH));
-
-		final JButton help = new JButton("Help");
-		help.setToolTipText("Press me for help in setting up a piece type");
-		help.addActionListener(new ActionListener()
-		{
-
-			@Override
-			public void actionPerformed(ActionEvent arg0)
-			{
-				JOptionPane.showMessageDialog(null, "", "Piece Making Help", 0, picture);
-			}
-
-		});
-
 		final JButton next = new JButton("Done");
 		next.setToolTipText("Press me when you have made all of your pieces");
 		next.addActionListener(new ActionListener()
@@ -470,9 +446,8 @@ public class PieceMaker extends JPanel
 				if (name.getText().equals(""))
 				{
 					variant.setupPieces();
-					frame.removeAll();
-					frame.dispose();
-					// Driver.getInstance().setPanel(new ObjectiveMaker(b));
+					holder.removeAll();
+					frame.setVisible(false);
 				}
 				else
 				{
@@ -482,16 +457,15 @@ public class PieceMaker extends JPanel
 					if (answer == 0)
 					{
 						variant.setupPieces();
-						frame.removeAll();
-						frame.dispose();
+						holder.removeAll();
+						frame.setVisible(false);
 					}
-					// Driver.getInstance().setPanel(new ObjectiveMaker(b));
 				}
 			}
 		});
 
 		// Create button and add ActionListener
-		final JButton cancel = new JButton("Back");
+		final JButton cancel = new JButton("Cancel");
 		cancel.setToolTipText("Press me to return to board setup window");
 		cancel.addActionListener(new ActionListener()
 		{
@@ -499,13 +473,13 @@ public class PieceMaker extends JPanel
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
-				// Driver.getInstance().setPanel(new BoardCustomMenu(b));
+				holder.removeAll();
+				frame.setVisible(false);
 			}
 		});
 
 		JPanel buttons = new JPanel();
 		buttons.setLayout(new FlowLayout());
-		buttons.add(help);
 		buttons.add(done);
 
 		c.gridx = 0;
@@ -528,6 +502,7 @@ public class PieceMaker extends JPanel
 		c.gridy = 1;
 		add(mainButtons, c);
 
+		frame.pack();
 	}
 
 	/**
