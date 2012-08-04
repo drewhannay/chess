@@ -280,4 +280,28 @@ public class NextTurn implements Serializable
 		return isBlackMove;
 	}
 
+	/**
+	 * Getter method for White's moves
+	 */
+	public int getWhiteMoves()
+	{
+		return whiteMoves;
+	}
+
+	/**
+	 * Getter method for Black's moves
+	 */
+	public int getBlackMoves()
+	{
+		return blackMoves;
+	}
+
+	/**
+	 * Getter method for the increment
+	 */
+	public int getIncrement()
+	{
+		return increment;
+	}
+
 }
