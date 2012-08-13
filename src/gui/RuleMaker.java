@@ -59,6 +59,10 @@ public class RuleMaker extends JPanel
 	 * Frame to hold the window
 	 */
 	private JFrame frame;
+	/**
+	 * holder for this RuleMaker
+	 */
+	private RuleMaker holder = this;
 
 	/**
 	 * Constructor for setting up the rules window
@@ -73,14 +77,15 @@ public class RuleMaker extends JPanel
 	 * initComponents(); }
 	 */
 
-	public RuleMaker(CustomSetupMenu variant, Builder b)
+	public RuleMaker(CustomSetupMenu variant, JFrame optionsFrame)
 	{
-		frame = new JFrame();
+		frame = optionsFrame;
+		frame.setVisible(true);
 		frame.add(this);
 		frame.setVisible(true);
 		frame.setSize(600, 500);
 		frame.setLocationRelativeTo(Driver.getInstance());
-		this.b = b;
+		b = variant.getBuilder();
 		whiteRules = variant.whiteRules;
 		blackRules = variant.blackRules;
 		initComponents(variant);
@@ -293,9 +298,8 @@ public class RuleMaker extends JPanel
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
-				// Driver.getInstance().setPanel(new ObjectiveMaker(b));
-				frame.removeAll();
-				frame.dispose();
+				holder.removeAll();
+				frame.setVisible(false);
 			}
 		});
 
@@ -431,12 +435,10 @@ public class RuleMaker extends JPanel
 					}
 				}
 
-				// Driver.getInstance().setPanel(new PlayerCustomMenu(b,
-				// whiteRules, blackRules));
 				variant.whiteRules = whiteRules;
 				variant.blackRules = blackRules;
-				frame.removeAll();
-				frame.dispose();
+				holder.removeAll();
+				frame.setVisible(false);
 			}
 		});
 
@@ -776,5 +778,6 @@ public class RuleMaker extends JPanel
 		{
 			switchBoard.setEnabled(true);
 		}
+		frame.pack();
 	}
 }

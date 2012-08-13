@@ -49,6 +49,10 @@ public class ObjectiveMaker extends JPanel
 	 * Frame to hold the window
 	 */
 	private JFrame frame;
+	/**
+	 * holder for this ObjectiveMaker
+	 */
+	private ObjectiveMaker holder = this;
 
 	/**
 	 * Constructor for setting up the rules window
@@ -59,9 +63,10 @@ public class ObjectiveMaker extends JPanel
 	 * public ObjectiveMaker(Builder b) { this.b = b; initComponents(); }
 	 */
 
-	public ObjectiveMaker(CustomSetupMenu variant)
+	public ObjectiveMaker(CustomSetupMenu variant, JFrame optionsFrame)
 	{
-		frame = new JFrame();
+		frame = optionsFrame;
+		frame.setVisible(true);
 		frame.add(this);
 		frame.setVisible(true);
 		frame.setSize(400, 300);
@@ -182,9 +187,8 @@ public class ObjectiveMaker extends JPanel
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
-				// Driver.getInstance().setPanel(new PieceMaker(b));
-				frame.removeAll();
-				frame.dispose();
+				holder.removeAll();
+				frame.setVisible(false);
 			}
 		});
 
@@ -273,13 +277,11 @@ public class ObjectiveMaker extends JPanel
 					blackRules.addEndOfGame(new EndOfGame("checkNTimes", 3, "", true));
 					needsObj = true;
 				}
-				// Driver.getInstance().setPanel(new RuleMaker(b, whiteRules,
-				// blackRules));
 
 				variant.whiteRules = whiteRules;
 				variant.blackRules = blackRules;
-				frame.removeAll();
-				frame.dispose();
+				holder.removeAll();
+				frame.setVisible(false);
 			}
 		});
 
@@ -353,5 +355,6 @@ public class ObjectiveMaker extends JPanel
 		c.gridwidth = 2;
 		add(buttons, c);
 
+		frame.pack();
 	}
 }

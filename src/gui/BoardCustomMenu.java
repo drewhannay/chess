@@ -89,6 +89,10 @@ public class BoardCustomMenu extends JPanel
 	 * Frame to hold the window
 	 */
 	private JFrame frame;
+	/**
+	 * holder for this BoardCustomMenu
+	 */
+	private BoardCustomMenu holder = this;
 
 	// End of variables declaration
 
@@ -101,9 +105,10 @@ public class BoardCustomMenu extends JPanel
 	 * public BoardCustomMenu(Builder b) { this.b = b; initComponents(); }
 	 */
 
-	public BoardCustomMenu(CustomSetupMenu variant)
+	public BoardCustomMenu(CustomSetupMenu variant, JFrame optionsFrame)
 	{
-		frame = new JFrame();
+		frame = optionsFrame;
+		frame.setVisible(true);
 		frame.add(this);
 		frame.setVisible(true);
 		frame.setSize(300, 250);
@@ -176,10 +181,8 @@ public class BoardCustomMenu extends JPanel
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				// Return to the NewTypeMenu screen.
-				// Driver.getInstance().setPanel(new NewTypeMenu());
-				frame.removeAll();
-				frame.dispose();
+				holder.removeAll();
+				frame.setVisible(false);
 			}
 		});
 
@@ -250,13 +253,12 @@ public class BoardCustomMenu extends JPanel
 						boards[i] = new Board(Integer.parseInt(numRows.getText()), Integer.parseInt(numCols.getText()), wraparound
 								.isSelected());
 					}
-					// Driver.getInstance().setPanel(new PieceMaker(b));
 					if (twoBoards.isSelected())
 						variant.drawBoard(boards, true);
 					else
 						variant.drawBoard(boards, false);
-					frame.removeAll();
-					frame.dispose();
+					holder.removeAll();
+					frame.setVisible(false);
 				}
 			}
 
@@ -366,6 +368,8 @@ public class BoardCustomMenu extends JPanel
 						.addGroup(
 								layout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(backButton)
 										.addComponent(submitButton)).addContainerGap(15, Short.MAX_VALUE)));
+
+		frame.pack();
 	}
 
 }

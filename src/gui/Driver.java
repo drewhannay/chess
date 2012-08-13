@@ -554,7 +554,7 @@ final public class Driver extends JFrame
 	{
 		JFrame helpPop = new JFrame();
 		helpPop.setTitle("Help");
-		helpPop.setSize(775, 525);
+		helpPop.setSize(825, 525);
 		helpPop.setResizable(false);
 		helpPop.setLocationRelativeTo(this);
 		helpPop.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -564,11 +564,13 @@ final public class Driver extends JFrame
 		JPanel gamePlayHelp = new JPanel();
 		JPanel variantMakingHelp = new JPanel();
 		JPanel generalHelp = new JPanel();
+		JPanel pieceMakingHelp = new JPanel();
 
 		JTabbedPane helpTypes = new JTabbedPane();
 		helpTypes.addTab("General Help", null, generalHelp, "Click for General Help with Chess Master 9001");
 		helpTypes.addTab("Game Play Help", null, gamePlayHelp, "Click for help playing Chess");
 		helpTypes.addTab("New Game Type Help", null, variantMakingHelp, "Click for help making a new Game Type");
+		helpTypes.addTab("Piece Making Help", null, pieceMakingHelp, "Click for help making new Game Pieces");
 		helpTypes.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 
 		h.gridy = 0;
@@ -623,6 +625,26 @@ final public class Driver extends JFrame
 				+ "When you are completly finished press the Save button to save your variant.\n"
 				+ "You can then play it from the New Game option on the home page just like normal chess.");
 		variantMakingHelp.add(variantMakingHelpText);
+
+		JTextArea pieceMakingHelpText = new JTextArea();
+		pieceMakingHelpText.setEditable(false);
+		pieceMakingHelpText.setText("When you make a new Chess variant you can make your own custom pieces! Follow these steps:\n"
+				+ "\t1. Create a name and choose the icons for your new piece\n"
+				+ "\t2. Enter the specific movement directions/distances you would like it to have\n"
+				+ "\t\t - To add instructions for a direction choose it from the drop down, then fill in\n"
+				+ "\t\t the farthest distance that piece should move in that direction into the box\n"
+				+ "\t\t - When you are finished with that particular direction press\n"
+				+ "\t\t the \"Add Movement\" button to add it to the piece\n"
+				+ "\t\t - Repeat this process for each direction the piece needs\n"
+				+ "\t 3. If you would like your piece to be able to jump over other pieces, check the box\n"
+				+ "\t 4. If you want this piece to move like a Knight does enter the directions in this format:\n\n"
+				+ "\t\t\t\t\t\t 3 x 2\n\n" + "\t\t - Enter movements either by column and then row or vice versa.\n"
+				+ "\t\t As an example a normal knight moves 2 x 1 squares\n"
+				+ "\t\t - Entering one combination (e.g. 3 x 2) will allow the piece\n" + "\t\t to move both 3 x 2 and 2 x 3 spaces\n"
+				+ "\t 5. When you have finished making your piece press \"Save Piece\"\n"
+				+ "\t\t - This piece will then be available for you to use in your variant\n"
+				+ "\t 6. Repeat this process for all pieces that you need and then press\n" + "\t the \"Done\" button at the bottom");
+		pieceMakingHelp.add(pieceMakingHelpText);
 
 		return helpPop;
 	}
