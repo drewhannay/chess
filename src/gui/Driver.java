@@ -2,11 +2,13 @@ package gui;
 
 import java.awt.AWTException;
 import java.awt.Desktop;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
+import java.awt.Insets;
 import java.awt.SystemTray;
 import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
@@ -26,11 +28,13 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.UIManager;
@@ -186,7 +190,6 @@ final public class Driver extends JFrame
 		}
 		catch (AWTException e1)
 		{
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 
@@ -219,40 +222,138 @@ final public class Driver extends JFrame
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
-				try
-				{
-					String[] files = FileUtility.getGamesInProgressFileArray();
+				String[] files = FileUtility.getGamesInProgressFileArray();
 
-					if (files == null)
+				if (files.length == 0)
+				{
+					JOptionPane.showMessageDialog(null, "There are no saved games. Try starting a new game instead.",
+							"No Completed Games", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+
+				final JFrame popped = new JFrame("Load Saved Game");
+				popped.setLayout(new GridBagLayout());
+				popped.setSize(225, 200);
+				popped.setResizable(false);
+				popped.setLocationRelativeTo(null);
+				GridBagConstraints c = new GridBagConstraints();
+
+				final JList list = new JList(FileUtility.getGamesInProgressFileArray());
+				final JScrollPane scrollPane = new JScrollPane(list);
+				scrollPane.setPreferredSize(new Dimension(200, 200));
+
+				JButton next = new JButton("Next");
+				next.addActionListener(new ActionListener()
+				{
+
+					@Override
+					public void actionPerformed(ActionEvent arg0)
 					{
-						JOptionPane.showMessageDialog(null, "There are no saved games. Try starting a new game instead.",
-								"No Completed Games", JOptionPane.ERROR_MESSAGE);
-						return;
+						FileInputStream f_in;
+						ObjectInputStream obj_in;
+						Game toPlay;
+						try
+						{
+							if (list.getSelectedValue() == null)
+							{
+								JOptionPane.showMessageDialog(Driver.getInstance(), "Please select a game", "Error", -1);
+								return;
+							}
+							f_in = new FileInputStream(FileUtility.getGamesInProgressFile(list.getSelectedValue().toString()));
+							obj_in = new ObjectInputStream(f_in);
+							toPlay = (Game) obj_in.readObject();
+							// Sets the help menu info to be specific for game
+							// play
+							if (gameOptions != null)
+								gameOptions.setVisible(true);
+
+							// Changes panels
+							remove(mainPanel);
+							otherPanel = new PlayGame(toPlay, false);
+							setPanel(otherPanel);
+							pack();
+							popped.dispose();
+						}
+						catch (Exception e)
+						{
+							e.printStackTrace();
+							JOptionPane.showMessageDialog(null, "There are no valid saved games. Start a New Game instead.",
+									"Invalid Saved Games", JOptionPane.ERROR_MESSAGE);
+						}
 					}
+				});
 
-					String choice = (String) JOptionPane.showInputDialog(Driver.getInstance(), "Please select a save file:",
-							"Save File Select", JOptionPane.PLAIN_MESSAGE, null, files, null);
-					if (choice == null)
-						return;
-					FileInputStream f_in = new FileInputStream(FileUtility.getGamesInProgressFile(choice));
-					ObjectInputStream obj_in = new ObjectInputStream(f_in);
-					Game toPlay = (Game) obj_in.readObject();
-					// Sets the help menu info to be specific for game play
-					if (gameOptions != null)
-						gameOptions.setVisible(true);
-
-					// Changes panels
-					remove(mainPanel);
-					otherPanel = new PlayGame(toPlay, false);
-					setPanel(otherPanel);
-					pack();
-				}
-				catch (Exception e)
+				JButton cancel = new JButton("Cancel");
+				cancel.addActionListener(new ActionListener()
 				{
-					e.printStackTrace();
-					JOptionPane.showMessageDialog(null, "There is no saved game. Start a New Game instead.", "No Saved Game",
-							JOptionPane.ERROR_MESSAGE);
-				}
+
+					@Override
+					public void actionPerformed(ActionEvent arg0)
+					{
+						popped.dispose();
+					}
+				});
+
+				JButton delete = new JButton("Delete Saved Game");
+				delete.addActionListener(new ActionListener()
+				{
+
+					@Override
+					public void actionPerformed(ActionEvent e)
+					{
+						if (list.getSelectedValue() != null)
+						{
+							boolean success = FileUtility.getGamesInProgressFile(list.getSelectedValue().toString()).delete();
+							if (!success)
+							{
+								JOptionPane.showMessageDialog(Driver.getInstance(), "Saved game was not deleted successfully",
+										"Error", -1);
+							}
+							else
+							{
+								list.setListData(FileUtility.getGamesInProgressFileArray());
+								list.setSelectedIndex(0);
+								if (list.getSelectedValue() == null)
+								{
+									JOptionPane.showMessageDialog(Driver.getInstance(),
+											"There are no more completed games. Returning to Main Menu", "No Completed Games", -1);
+									popped.dispose();
+								}
+								scrollPane.getViewport().add(list, null);
+							}
+						}
+						else
+						{
+							JOptionPane.showMessageDialog(null, "There are currently no save files!", "No save file selected!", -1);
+						}
+					}
+				});
+
+				c.gridx = 0;
+				c.gridy = 0;
+				c.gridwidth = 2;
+				c.insets = new Insets(5, 5, 5, 5);
+				popped.add(scrollPane, c);
+
+				c.gridx = 0;
+				c.gridy = 1;
+				popped.add(delete, c);
+
+				c.weighty = 1.0;
+				c.weightx = 1.0;
+				c.gridx = 0;
+				c.gridy = 2;
+				c.gridwidth = 1;
+				c.anchor = GridBagConstraints.EAST;
+				popped.add(next, c);
+
+				c.gridx = 1;
+				c.gridy = 2;
+				c.anchor = GridBagConstraints.WEST;
+				popped.add(cancel, c);
+
+				popped.setVisible(true);
+				popped.pack();
 			}
 		});
 
@@ -268,45 +369,157 @@ final public class Driver extends JFrame
 				try
 				{
 					String[] files = FileUtility.getCompletedGamesFileArray();
-					if (files == null)
+					if (files.length == 0)
 					{
 						JOptionPane.showMessageDialog(null, "There are no completed games to display.", "No Completed Games",
 								JOptionPane.ERROR_MESSAGE);
 						return;
 					}
 
-					String choice = (String) JOptionPane.showInputDialog(Driver.getInstance(), "Please select a file:", "File Select",
-							JOptionPane.PLAIN_MESSAGE, null, files, null);
-					if (choice == null)
-						return;
+					final JFrame popped = new JFrame("View Completed Game");
+					popped.setLayout(new GridBagLayout());
+					popped.setSize(225, 200);
+					popped.setResizable(false);
+					popped.setLocationRelativeTo(null);
+					GridBagConstraints c = new GridBagConstraints();
 
-					File file = FileUtility.getCompletedGamesFile(choice);
+					final JList list = new JList(FileUtility.getCompletedGamesFileArray());
+					final JScrollPane scrollPane = new JScrollPane(list);
+					scrollPane.setPreferredSize(new Dimension(200, 200));
 
-					Game toView;
-					if (choice.endsWith(".acn"))
+					JButton next = new JButton("Next");
+					next.addActionListener(new ActionListener()
 					{
-						try
+
+						@Override
+						public void actionPerformed(ActionEvent arg0)
 						{
-							otherPanel = new PlayGame(true, file);
+							if (list.getSelectedValue() == null)
+							{
+								JOptionPane.showMessageDialog(Driver.getInstance(), "Please select a game", "Error", -1);
+								return;
+							}
+							File file = FileUtility.getCompletedGamesFile(list.getSelectedValue().toString());
+							FileInputStream f_in;
+							ObjectInputStream obj_in;
+							Game toView;
+							if (list.getSelectedValue().toString().endsWith(".acn"))
+							{
+								try
+								{
+									otherPanel = new PlayGame(true, file);
+								}
+								catch (Exception e)
+								{
+									JOptionPane.showMessageDialog(null,
+											"This file contains invalid ACN notation. Please check the format and try again");
+									return;
+								}
+							}
+							else
+							{
+								try
+								{
+									f_in = new FileInputStream(file);
+									obj_in = new ObjectInputStream(f_in);
+									toView = (Game) obj_in.readObject();
+
+									// Changes panels
+									remove(mainPanel);
+									otherPanel = new PlayGame(toView, false);
+									setPanel(otherPanel);
+									pack();
+									popped.dispose();
+								}
+								catch (Exception e)
+								{
+									e.printStackTrace();
+									JOptionPane.showMessageDialog(null,
+											"This game is corrupted, please choose another or start a New Game instead.",
+											"Invalid Completed Game", JOptionPane.ERROR_MESSAGE);
+								}
+							}
+							// Changes panels
+							remove(mainPanel);
+							setPanel(otherPanel);
+							pack();
+							popped.dispose();
 						}
-						catch (Exception e)
-						{
-							JOptionPane.showMessageDialog(null,
-									"This file contains invalid ACN notation. Please check the format and try again");
-							return;
-						}
-					}
-					else
+					});
+
+					JButton cancel = new JButton("Cancel");
+					cancel.addActionListener(new ActionListener()
 					{
-						FileInputStream f_in = new FileInputStream(file);
-						ObjectInputStream obj_in = new ObjectInputStream(f_in);
-						toView = (Game) obj_in.readObject();
-						otherPanel = new PlayGame(toView, true);
-					}
-					// Sets up the help for playng back and changes the window
-					remove(mainPanel);
-					setPanel(otherPanel);
-					pack();
+
+						@Override
+						public void actionPerformed(ActionEvent arg0)
+						{
+							popped.dispose();
+						}
+					});
+
+					JButton delete = new JButton("Delete Completed Game");
+					delete.addActionListener(new ActionListener()
+					{
+
+						@Override
+						public void actionPerformed(ActionEvent e)
+						{
+							if (list.getSelectedValue() != null)
+							{
+								boolean success = FileUtility.getCompletedGamesFile(list.getSelectedValue().toString()).delete();
+								if (!success)
+								{
+									JOptionPane.showMessageDialog(Driver.getInstance(), "Saved game was not deleted successfully",
+											"Error", -1);
+								}
+								else
+								{
+									list.removeAll();
+									list.setListData(FileUtility.getCompletedGamesFileArray());
+									list.setSelectedIndex(0);
+									if (list.getSelectedValue() == null)
+									{
+										JOptionPane.showMessageDialog(Driver.getInstance(),
+												"There are no more completed games. Returning to Main Menu", "No Completed Games", -1);
+										popped.dispose();
+									}
+									scrollPane.getViewport().add(list, null);
+								}
+							}
+							else
+							{
+								JOptionPane
+										.showMessageDialog(null, "There are currently no save files!", "No save file selected!", -1);
+							}
+						}
+					});
+
+					c.gridx = 0;
+					c.gridy = 0;
+					c.gridwidth = 2;
+					c.insets = new Insets(5, 5, 5, 5);
+					popped.add(scrollPane, c);
+
+					c.gridx = 0;
+					c.gridy = 1;
+					popped.add(delete, c);
+
+					c.weighty = 1.0;
+					c.weightx = 1.0;
+					c.gridx = 0;
+					c.gridy = 2;
+					c.gridwidth = 1;
+					c.anchor = GridBagConstraints.EAST;
+					popped.add(next, c);
+
+					c.gridx = 1;
+					c.gridy = 2;
+					c.anchor = GridBagConstraints.WEST;
+					popped.add(cancel, c);
+
+					popped.setVisible(true);
+					popped.pack();
 				}
 				catch (Exception e)
 				{
@@ -731,4 +944,5 @@ final public class Driver extends JFrame
 
 		return aboutPop;
 	}
+
 }
