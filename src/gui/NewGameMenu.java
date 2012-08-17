@@ -21,6 +21,7 @@ import java.util.Locale;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -310,7 +311,7 @@ public class NewGameMenu extends JPanel
 			{
 				final JFrame popped = new JFrame("New Game");
 				popped.setLayout(new GridBagLayout());
-				popped.setSize(225, 150);
+				popped.setSize(225, 200);
 				popped.setResizable(false);
 				popped.setLocationRelativeTo(null);
 				GridBagConstraints c = new GridBagConstraints();
@@ -318,7 +319,7 @@ public class NewGameMenu extends JPanel
 				final JComboBox dropdown = new JComboBox(Builder.getArray());
 				c.gridx = 0;
 				c.gridy = 0;
-				popped.add(new JLabel("Type: "), c);
+				popped.add(new JLabel("Game Type: "), c);
 				c.gridx = 1;
 				c.gridy = 0;
 				c.insets = new Insets(3, 0, 3, 0);
@@ -327,26 +328,87 @@ public class NewGameMenu extends JPanel
 				c.gridy = 1;
 				popped.add(new JLabel("AI: "), c);
 
-				String[] allFiles = FileUtility.getAIFileList();
-				List<String> tempFiles = new ArrayList<String>();
-				for (String st : allFiles)
-					if (st.endsWith(".java"))
-						tempFiles.add(st);
-				String[] files = new String[tempFiles.size()];
-				tempFiles.toArray(files);
-
-				if (files.length == 0)
+				if (getAIFiles().length == 0)
 				{
-					JOptionPane.showMessageDialog(null,
-							"There are no AI files to use.\nPlease insert your AI java files in the AI directory.", "No AI files",
-							JOptionPane.ERROR_MESSAGE);
-					return;
+					int answer = JOptionPane.showConfirmDialog(null,
+							"There are no AI files installed. Would you like to install one?", "Install AI Files?",
+							JOptionPane.YES_NO_OPTION);
+					if (answer == 0)
+					{
+						JFileChooser fc = new JFileChooser();
+						int returnVal = fc.showOpenDialog(Driver.getInstance());
+						File file = fc.getSelectedFile();
+
+						// Destination directory
+						File dir = new File(System.getProperty("user.home") + "/chess/AI");
+
+						// Move file to new directory
+						if (returnVal == JFileChooser.APPROVE_OPTION)
+						{
+							boolean success = file.renameTo(new File(dir, file.getName()));
+							if (!success)
+							{
+								// File was not successfully moved
+								JOptionPane.showMessageDialog(Driver.getInstance(), Driver.getInstance(),
+										"File was not installed successfully", -1);
+							}
+						}
+						else
+						{
+							return;
+						}
+					}
+					else
+					{
+						return;
+					}
 				}
-				final JComboBox ai = new JComboBox(files);
+
+				final JComboBox ai = new JComboBox(getAIFiles());
 				c.gridx = 1;
 				c.gridy = 1;
 				c.fill = GridBagConstraints.HORIZONTAL;
 				popped.add(ai, c);
+
+				JButton add = new JButton("Install New AI");
+				add.addActionListener(new ActionListener()
+				{
+
+					@Override
+					public void actionPerformed(ActionEvent arg0)
+					{
+						JFileChooser fc = new JFileChooser();
+						int returnVal = fc.showOpenDialog(Driver.getInstance());
+						File file = fc.getSelectedFile();
+
+						// Destination directory
+						File dir = new File(System.getProperty("user.home") + "/chess/AI");
+
+						// Move file to new directory
+						if (returnVal == JFileChooser.APPROVE_OPTION)
+						{
+							boolean success = file.renameTo(new File(dir, file.getName()));
+							if (!success)
+							{
+								// File was not successfully moved
+								JOptionPane.showMessageDialog(Driver.getInstance(), Driver.getInstance(),
+										"File was not installed successfully", -1);
+							}
+							else
+							{
+								ai.removeAllItems();
+								for (String s : getAIFiles())
+								{
+									ai.addItem(s);
+								}
+							}
+						}
+						else
+						{
+							return;
+						}
+					}
+				});
 
 				JButton next = new JButton("Next");
 				next.addActionListener(new ActionListener()
@@ -458,6 +520,11 @@ public class NewGameMenu extends JPanel
 				c.gridx = 0;
 				c.gridy = 2;
 				c.gridwidth = 2;
+				c.insets = new Insets(5, 0, 5, 0);
+				popped.add(add, c);
+
+				c.gridx = 0;
+				c.gridy = 3;
 				popped.add(buttons, c);
 
 				popped.setVisible(true);
@@ -529,6 +596,22 @@ public class NewGameMenu extends JPanel
 
 		}
 
+	}
+
+	/**
+	 * Method for getting AI files
+	 */
+	private String[] getAIFiles()
+	{
+		String[] allFiles = FileUtility.getAIFileList();
+		allFiles = FileUtility.getAIFileList();
+		List<String> tempFiles = new ArrayList<String>();
+		for (String st : allFiles)
+			if (st.endsWith(".java"))
+				tempFiles.add(st);
+		String[] files = new String[tempFiles.size()];
+		tempFiles.toArray(files);
+		return files;
 	}
 
 	/**
