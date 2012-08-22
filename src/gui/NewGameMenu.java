@@ -340,7 +340,7 @@ public class NewGameMenu extends JPanel
 						File file = fc.getSelectedFile();
 
 						// Destination directory
-						File dir = new File(System.getProperty("user.home") + "/chess/AI");
+						File dir = new File(FileUtility.getHiddenDir() + "/AI");
 
 						// Move file to new directory
 						if (returnVal == JFileChooser.APPROVE_OPTION)

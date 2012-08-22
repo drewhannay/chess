@@ -15,10 +15,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
+import java.io.PrintWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -26,6 +32,7 @@ import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -37,6 +44,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 
@@ -470,7 +478,7 @@ final public class Driver extends JFrame
 								boolean success = FileUtility.getCompletedGamesFile(list.getSelectedValue().toString()).delete();
 								if (!success)
 								{
-									JOptionPane.showMessageDialog(Driver.getInstance(), "Saved game was not deleted successfully",
+									JOptionPane.showMessageDialog(Driver.getInstance(), "Completed game was not deleted successfully",
 											"Error", -1);
 								}
 								else
@@ -490,7 +498,7 @@ final public class Driver extends JFrame
 							else
 							{
 								JOptionPane
-										.showMessageDialog(null, "There are currently no save files!", "No save file selected!", -1);
+										.showMessageDialog(null, "There are currently no completed games!", "No completed game selected!", -1);
 							}
 						}
 					});
@@ -626,6 +634,171 @@ final public class Driver extends JFrame
 		});
 		mainMenu.setVisible(false);
 		fileMenu.add(mainMenu);
+		
+		JMenuItem preferences = new JMenuItem("Preferences", KeyEvent.VK_P);
+		preferences.setToolTipText("Press me to change your preferences");
+		preferences.addActionListener(new ActionListener()
+		{
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0)
+			{
+				final JFrame popup = new JFrame("Square Options");
+				popup.setSize(370, 120);
+				popup.setLocationRelativeTo(null);
+				popup.setLayout(new GridBagLayout());
+				popup.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+				GridBagConstraints c = new GridBagConstraints();
+				
+				final JPanel holder = new JPanel();
+				holder.setBorder(BorderFactory.createTitledBorder("Default Completed Game Save Location"));
+				final JLabel currentLabel = new JLabel("Current Save Location");
+				final JTextField current = new JTextField(FileUtility.getDefaultCompletedLocation());
+				current.setEditable(false);
+				final JButton changeLocation = new JButton("Choose New Save Location");
+				final JButton reset = new JButton("Reset to Default Location");
+				final JButton cancel = new JButton("Cancel");
+				cancel.addActionListener(new ActionListener(){
+						
+					@Override
+					public void actionPerformed(ActionEvent e)
+					{
+						popup.dispose();
+					}
+				});
+				
+				holder.add(currentLabel);
+				holder.add(current);
+				
+				try{
+					 final File pref = FileUtility.getPreferencesFile();
+						if(!pref.exists()){
+							try
+							{
+								pref.createNewFile();
+								BufferedWriter bw = new BufferedWriter(new FileWriter(pref, true));
+					            bw.write("DefaultPreferencesSet = true");
+					            bw.newLine();
+					            bw.write("DefaultSaveLocation = " + FileUtility.getDefaultCompletedLocation());
+					            bw.close();
+							}
+							catch (IOException e)
+							{
+								e.printStackTrace();
+							}
+						}
+					FileInputStream fstream = null;
+					fstream = new FileInputStream(pref);
+					DataInputStream in = new DataInputStream(fstream);
+					BufferedReader br = new BufferedReader(new InputStreamReader(in));
+					String line;
+					line = br.readLine();
+					line = br.readLine();
+					fstream.close();
+					in.close();
+					br.close();
+					current.setText(line.substring(22));
+					
+					reset.addActionListener(new ActionListener()
+					{
+						
+						@Override
+						public void actionPerformed(ActionEvent arg0)
+						{
+							try
+							{
+								BufferedWriter bw = new BufferedWriter(new FileWriter(pref, true));
+					            bw.write("DefaultPreferencesSet = true");
+					            bw.newLine();
+					            bw.write("DefaultSaveLocation = " + FileUtility.getDefaultCompletedLocation());
+					            bw.close();
+							}
+							catch (IOException ae)
+							{
+								ae.printStackTrace();
+							}
+						}
+					});
+					
+					changeLocation.addActionListener(new ActionListener()
+					{
+						
+						@Override
+						public void actionPerformed(ActionEvent e)
+						{
+								if(!pref.exists()){
+									try
+									{
+										pref.createNewFile();
+										BufferedWriter bw = new BufferedWriter(new FileWriter(pref, true));
+							            bw.write("DefaultPreferencesSet = false");
+							            bw.newLine();
+							            bw.write("DefaultSaveLocation = " + FileUtility.getDefaultCompletedLocation());
+							            bw.close();
+									}
+									catch (IOException ae)
+									{
+										ae.printStackTrace();
+									}
+								}
+							try{
+								PrintWriter writer = new PrintWriter(pref);
+								JFileChooser fc = new JFileChooser();
+								fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+								int returnVal = fc.showOpenDialog(Driver.getInstance());
+								BufferedWriter bw = new BufferedWriter(new FileWriter(pref, true));
+					            bw.write("DefaultPreferencesSet = true");
+					            bw.newLine();
+								if(returnVal == JFileChooser.APPROVE_OPTION){
+									writer.print("");
+									writer.close();
+						            bw.write("DefaultSaveLocation = " + fc.getSelectedFile().getAbsolutePath());
+						            bw.close();
+						            current.setText(fc.getSelectedFile().getAbsolutePath());
+								}
+								else{
+									bw.close();
+						            return;
+								}
+							}
+							catch(Exception ae){
+								ae.printStackTrace();
+							}
+						}
+					});
+				}
+				catch (Exception e)
+				{
+					JOptionPane.showMessageDialog(null, "That is not a valid location to save your completed games.");
+					e.printStackTrace();
+				}
+				
+				c.gridx = 0;
+				c.gridy = 0;
+				c.gridwidth = 2;
+				c.insets = new Insets(5, 5, 5, 5);
+				popup.add(holder, c);
+				c.gridx = 0;
+				c.gridy = 1;
+				c.weightx = 1;
+				c.gridwidth = 1;
+				c.anchor = GridBagConstraints.EAST;
+				popup.add(changeLocation, c);
+				c.gridx = 1;
+				c.gridy = 1;
+				c.anchor = GridBagConstraints.WEST;
+				popup.add(reset, c);
+				c.gridx = 0;
+				c.gridy = 2;
+				c.gridwidth = 2;
+				c.anchor = GridBagConstraints.CENTER;
+				popup.add(cancel, c);
+				
+				popup.pack();
+				popup.setVisible(true);
+			}
+		});
+		fileMenu.add(preferences);
 
 		// Adds menu item to quit the program
 		JMenuItem exitMenuItem = new JMenuItem("Quit", KeyEvent.VK_Q);

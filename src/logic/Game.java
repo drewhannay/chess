@@ -670,6 +670,11 @@ public class Game implements Serializable
 		{
 			if (ACN)
 			{
+				FileOutputStream f_out = new FileOutputStream(FileUtility.getCompletedGamesFile(fileName + ".acn"));
+				ObjectOutputStream out = new ObjectOutputStream(f_out);
+				out.writeObject(this);
+				out.close();
+				f_out.close();
 				AlgebraicConverter.convert(getHistory(), (fileName + ".acn"));
 			}
 			else
