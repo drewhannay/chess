@@ -12,11 +12,20 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -34,6 +43,7 @@ import logic.Result;
 import logic.Square;
 import timer.ChessTimer;
 import timer.NoTimer;
+import utility.FileUtility;
 
 /**
  * PlayGame.java
@@ -438,6 +448,62 @@ public class PlayGame extends JPanel
 		switch (answer)
 		{
 		case 0:
+		    File pref = FileUtility.getPreferencesFile();
+			if(!pref.exists()){
+				try
+				{
+					pref.createNewFile();
+					BufferedWriter bw = new BufferedWriter(new FileWriter(pref, true));
+		            bw.write("DefaultPreferencesSet = false");
+		            bw.newLine();
+		            bw.write("DefaultSaveLocation = " + FileUtility.getDefaultCompletedLocation());
+		            bw.close();
+				}
+				catch (IOException e)
+				{
+					e.printStackTrace();
+				}
+			}
+			
+			FileInputStream fstream = null;
+			try
+			{
+				fstream = new FileInputStream(pref);
+				DataInputStream in = new DataInputStream(fstream);
+				BufferedReader br = new BufferedReader(new InputStreamReader(in));
+				String line;
+				line = br.readLine();
+				fstream.close();
+				in.close();
+				br.close();
+				if(line.contains("false")){
+					PrintWriter writer = new PrintWriter(pref);
+					writer.print("");
+					writer.close();
+					JOptionPane.showMessageDialog(null, "Since this is your first time playing Chess, please choose a default completed game save location.\n" +
+							"Pressing cancel will use the default save location.");
+					JFileChooser fc = new JFileChooser();
+					fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+					int returnVal = fc.showOpenDialog(Driver.getInstance());
+					BufferedWriter bw = new BufferedWriter(new FileWriter(pref, true));
+		            bw.write("DefaultPreferencesSet = true");
+		            bw.newLine();
+					if(returnVal == JFileChooser.APPROVE_OPTION){
+			            bw.write("DefaultSaveLocation = " + fc.getSelectedFile().getAbsolutePath());
+			            bw.close();
+					}
+					else{
+			            bw.write("DefaultSaveLocation = " + FileUtility.getDefaultCompletedLocation());
+			            bw.close();
+					}
+				}
+			}
+			catch (Exception e)
+			{
+				JOptionPane.showMessageDialog(null, "That is not a valid location to save your completed games.");
+				e.printStackTrace();
+			}
+			
 			String fileName = JOptionPane.showInputDialog(null, "Enter a name for the save file:", "Saving...",
 					JOptionPane.PLAIN_MESSAGE);
 			getGame().saveGame(fileName, getGame().isClassicChess());
@@ -740,6 +806,8 @@ public class PlayGame extends JPanel
 		// Needed for highlighting the names when it's their turn.
 		whiteLabel.setOpaque(true);
 		blackLabel.setOpaque(true);
+		whiteLabel.setVisible(true);
+		blackLabel.setVisible(true);
 
 		/**
 		 * int to hold the size of the jail board.
