@@ -1,11 +1,13 @@
 package gui;
 
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
-import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
@@ -14,7 +16,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
-import javax.swing.LayoutStyle;
 import javax.swing.SwingUtilities;
 
 import logic.Board;
@@ -169,7 +170,8 @@ public class BoardCustomMenu extends JPanel
 	{
 
 		setBorder(BorderFactory.createLoweredBevelBorder());
-
+		setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
 		revalidate();
 		repaint();
 		// Create button and add ActionListener
@@ -202,6 +204,10 @@ public class BoardCustomMenu extends JPanel
 		twoBoards = new JRadioButton("2");
 		twoBoards.setToolTipText("Choose me for two boards");
 
+		JPanel boards = new JPanel();
+		boards.add(oneBoard);
+		boards.add(twoBoards);
+
 		Board[] board = variant.getBuilder().getBoards();
 
 		if (board.length == 1)
@@ -222,11 +228,32 @@ public class BoardCustomMenu extends JPanel
 		// Create JLabels and JTextFields. Default size 8*8
 		dimensionsLabel = new JLabel("Dimensions?");
 		numRowsLabel = new JLabel("Rows:");
-		numRows = new JTextField(board[0].numRows() + "");
+		numRows = new JTextField(5);
+		numRows.setText(board[0].numRows() + "");
 		numRows.setToolTipText("Enter the amount of rows you would like");
 		numColsLabel = new JLabel("Columns:");
-		numCols = new JTextField(board[0].numCols() + "");
+		numCols = new JTextField(5);
+		numCols.setText(board[0].numCols() + "");
 		numCols.setToolTipText("Enter the amount of columns you would like");
+
+		JPanel rowCol = new JPanel();
+		rowCol.setLayout(new GridBagLayout());
+		c.gridx = 0;
+		c.gridy = 0;
+		c.insets = new Insets(2, 15, 1, 5);
+		rowCol.add(numRowsLabel, c);
+		c.gridx = 1;
+		c.gridy = 0;
+		c.fill = GridBagConstraints.BOTH;
+		rowCol.add(numRows, c);
+		c.gridx = 0;
+		c.gridy = 1;
+		c.fill = GridBagConstraints.NONE;
+		rowCol.add(numColsLabel, c);
+		c.gridx = 1;
+		c.gridy = 1;
+		c.fill = GridBagConstraints.BOTH;
+		rowCol.add(numCols, c);
 
 		// Create JLabel and JCheckBox
 		wraparoundLabel = new JLabel("<html>Should boards wrap <br />" + "around horizontally?</html>");
@@ -264,110 +291,35 @@ public class BoardCustomMenu extends JPanel
 
 		});
 
-		// Layout stuff. Don't. Ask.
-		GroupLayout layout = new GroupLayout(this);
-		setLayout(layout);
-		layout.setHorizontalGroup(layout
-				.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addGroup(
-						GroupLayout.Alignment.TRAILING,
-						layout.createSequentialGroup()
-								.addGroup(
-										layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-												.addGroup(
-														layout.createSequentialGroup()
-																.addContainerGap()
-																.addGroup(
-																		layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-																				.addGroup(
-																						layout.createSequentialGroup()
-																								.addComponent(numBoardsLabel,
-																										GroupLayout.DEFAULT_SIZE, 157,
-																										Short.MAX_VALUE)
-																								.addPreferredGap(
-																										LayoutStyle.ComponentPlacement.RELATED)
-																								.addComponent(oneBoard))
-																				.addGroup(
-																						GroupLayout.Alignment.TRAILING,
-																						layout.createSequentialGroup()
-																								.addComponent(dimensionsLabel,
-																										GroupLayout.DEFAULT_SIZE, 157,
-																										Short.MAX_VALUE)
-																								.addPreferredGap(
-																										LayoutStyle.ComponentPlacement.RELATED)
-																								.addGroup(
-																										layout.createParallelGroup(
-																												GroupLayout.Alignment.TRAILING)
-																												.addComponent(
-																														numColsLabel)
-																												.addComponent(
-																														numRowsLabel))))
-																.addGap(20, 20, 20))
-												.addGroup(
-														layout.createSequentialGroup().addGap(105, 105, 105).addComponent(backButton)
-																.addComponent(submitButton))
-												.addGroup(
-														layout.createSequentialGroup()
-																.addContainerGap()
-																.addComponent(wraparoundLabel, GroupLayout.PREFERRED_SIZE, 144,
-																		GroupLayout.PREFERRED_SIZE)))
-								.addGroup(
-										layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-												.addGroup(
-														layout.createSequentialGroup()
-																.addGroup(
-																		layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-																				.addGroup(
-																						layout.createSequentialGroup()
-																								.addPreferredGap(
-																										LayoutStyle.ComponentPlacement.RELATED)
-																								.addComponent(wraparound)))
-																.addContainerGap(10, Short.MAX_VALUE))
-												.addGroup(
-														GroupLayout.Alignment.TRAILING,
-														layout.createSequentialGroup()
-																.addGroup(
-																		layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-																				.addComponent(numCols, GroupLayout.PREFERRED_SIZE, 46,
-																						GroupLayout.PREFERRED_SIZE)
-																				.addGroup(
-																						layout.createParallelGroup(
-																								GroupLayout.Alignment.LEADING)
-																								.addComponent(twoBoards)
-																								.addComponent(numRows,
-																										GroupLayout.PREFERRED_SIZE,
-																										46, GroupLayout.PREFERRED_SIZE)))
-																.addGap(10, 10, 10)))));
-		layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(
-				layout.createSequentialGroup()
-						.addGap(15, 15, 15)
-						.addGroup(
-								layout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(numBoardsLabel)
-										.addComponent(oneBoard).addComponent(twoBoards))
-						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-						.addGroup(
-								layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-										.addComponent(dimensionsLabel)
-										.addComponent(numRowsLabel)
-										.addComponent(numRows, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-												GroupLayout.PREFERRED_SIZE))
-						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-						.addGroup(
-								layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-										.addGroup(
-												layout.createSequentialGroup()
-														.addGroup(
-																layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-																		.addComponent(numColsLabel)
-																		.addComponent(numCols, GroupLayout.PREFERRED_SIZE,
-																				GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-														.addGap(5, 5, 5).addComponent(wraparound).addGap(5, 5, 5))
-										.addComponent(wraparoundLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-												GroupLayout.PREFERRED_SIZE))
-						.addGap(20, 20, 20)
-						.addGroup(
-								layout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(backButton)
-										.addComponent(submitButton)).addContainerGap(15, Short.MAX_VALUE)));
+		JPanel buttons = new JPanel();
+		buttons.add(submitButton);
+		buttons.add(backButton);
+
+		c.gridx = 0;
+		c.gridy = 0;
+		add(numBoardsLabel, c);
+		c.gridx = 1;
+		c.gridy = 0;
+		add(boards, c);
+		c.gridx = 0;
+		c.gridy = 1;
+		add(dimensionsLabel, c);
+		c.gridx = 1;
+		c.gridy = 1;
+		add(rowCol, c);
+		c.gridx = 0;
+		c.gridy = 2;
+		add(wraparoundLabel, c);
+		c.gridx = 1;
+		c.gridy = 2;
+		c.anchor = GridBagConstraints.CENTER;
+		c.fill = GridBagConstraints.NONE;
+		add(wraparound, c);
+		c.gridx = 0;
+		c.gridy = 3;
+		c.gridwidth = 2;
+		c.insets = new Insets(10, 0, 10, 0);
+		add(buttons, c);
 
 		frame.pack();
 	}

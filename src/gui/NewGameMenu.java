@@ -270,11 +270,11 @@ public class NewGameMenu extends JPanel
 						c.gridx = 0;
 						c.gridy = 2;
 						c.gridwidth = 1;
-						everything.add(back, c);
+						everything.add(save, c);
 						c.gridx = 1;
 						c.gridy = 2;
 						c.gridwidth = 1;
-						everything.add(save, c);
+						everything.add(back, c);
 
 						c.gridx = 0;
 						c.gridy = 1;
@@ -514,8 +514,8 @@ public class NewGameMenu extends JPanel
 
 				JPanel buttons = new JPanel();
 				buttons.setLayout(new FlowLayout());
-				buttons.add(back);
 				buttons.add(next);
+				buttons.add(back);
 
 				c.gridx = 0;
 				c.gridy = 2;
@@ -905,8 +905,8 @@ public class NewGameMenu extends JPanel
 
 		JPanel buttons = new JPanel();
 		buttons.setLayout(new FlowLayout());
-		buttons.add(back);
 		buttons.add(done);
+		buttons.add(back);
 
 		c.gridx = 0;
 		c.gridy = 4;
