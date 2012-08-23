@@ -61,7 +61,8 @@ public final class FileUtility
 	{
 		String path = HIDDEN_DIR + "/" + COMPLETED_GAMES;
 		new File(path).mkdirs();
-		try{
+		try
+		{
 			FileInputStream fstream = null;
 			fstream = new FileInputStream(getPreferencesFile());
 			DataInputStream in = new DataInputStream(fstream);
@@ -71,22 +72,27 @@ public final class FileUtility
 			line = br.readLine();
 			path = line.substring(22);
 		}
-		catch(Exception e){
+		catch (Exception e)
+		{
 			e.printStackTrace();
 		}
 		return new File(path + "/" + completedGameFileName);
 	}
+
 	public static File getPreferencesFile()
 	{
 		String path = HIDDEN_DIR;
 		new File(path).mkdirs();
 		return new File(path + "/" + PREFERENCES);
 	}
-	public static String getHiddenDir(){
+
+	public static String getHiddenDir()
+	{
 		return HIDDEN_DIR;
 	}
-	
-	public static String getDefaultCompletedLocation(){
+
+	public static String getDefaultCompletedLocation()
+	{
 		return HIDDEN_DIR + "/" + COMPLETED_GAMES;
 	}
 

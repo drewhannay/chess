@@ -30,6 +30,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -276,6 +277,14 @@ public class CustomSetupMenu extends JPanel
 		a.fill = GridBagConstraints.HORIZONTAL;
 		a.insets = new Insets(0, 0, 0, 0);
 		add(name, a);
+		SwingUtilities.invokeLater(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				name.requestFocus();
+			}
+		});
 
 		Board[] temp = new Board[1];
 		temp[0] = new Board(8, 8, false);
@@ -507,12 +516,12 @@ public class CustomSetupMenu extends JPanel
 		c.fill = GridBagConstraints.CENTER;
 		c.gridx = 0;
 		c.gridy = 1;
-		options.add(backButton, c);
+		options.add(submitButton, c);
 
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 1;
 		c.gridy = 1;
-		options.add(submitButton, c);
+		options.add(backButton, c);
 
 		a.gridy = 2;
 		a.gridx = 1;
@@ -1044,8 +1053,8 @@ public class CustomSetupMenu extends JPanel
 
 		// This adds a new Panel with the option buttons.
 		JPanel options = new JPanel();
-		options.add(backButton);
 		options.add(submitButton);
+		options.add(backButton);
 
 		// This panel holds just the arrows. This will be placed
 		// in between the two lists.
