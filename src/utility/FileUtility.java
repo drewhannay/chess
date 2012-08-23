@@ -1,6 +1,10 @@
 package utility;
 
+import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 
 public final class FileUtility
 {
@@ -57,7 +61,33 @@ public final class FileUtility
 	{
 		String path = HIDDEN_DIR + "/" + COMPLETED_GAMES;
 		new File(path).mkdirs();
+		try{
+			FileInputStream fstream = null;
+			fstream = new FileInputStream(getPreferencesFile());
+			DataInputStream in = new DataInputStream(fstream);
+			BufferedReader br = new BufferedReader(new InputStreamReader(in));
+			String line;
+			line = br.readLine();
+			line = br.readLine();
+			path = line.substring(22);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
 		return new File(path + "/" + completedGameFileName);
+	}
+	public static File getPreferencesFile()
+	{
+		String path = HIDDEN_DIR;
+		new File(path).mkdirs();
+		return new File(path + "/" + PREFERENCES);
+	}
+	public static String getHiddenDir(){
+		return HIDDEN_DIR;
+	}
+	
+	public static String getDefaultCompletedLocation(){
+		return HIDDEN_DIR + "/" + COMPLETED_GAMES;
 	}
 
 	static
@@ -88,4 +118,5 @@ public final class FileUtility
 	private static final String VARIANTS = "variants";
 	private static final String GAMES_IN_PROGRESS = "gamesInProgress";
 	private static final String COMPLETED_GAMES = "completedGames";
+	private static final String PREFERENCES = "preferences.txt";
 }
