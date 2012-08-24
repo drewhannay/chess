@@ -448,23 +448,24 @@ public class PlayGame extends JPanel
 		switch (answer)
 		{
 		case 0:
-		    File pref = FileUtility.getPreferencesFile();
-			if(!pref.exists()){
+			File pref = FileUtility.getPreferencesFile();
+			if (!pref.exists())
+			{
 				try
 				{
 					pref.createNewFile();
 					BufferedWriter bw = new BufferedWriter(new FileWriter(pref, true));
-		            bw.write("DefaultPreferencesSet = false");
-		            bw.newLine();
-		            bw.write("DefaultSaveLocation = " + FileUtility.getDefaultCompletedLocation());
-		            bw.close();
+					bw.write("DefaultPreferencesSet = false");
+					bw.newLine();
+					bw.write("DefaultSaveLocation = " + FileUtility.getDefaultCompletedLocation());
+					bw.close();
 				}
 				catch (IOException e)
 				{
 					e.printStackTrace();
 				}
 			}
-			
+
 			FileInputStream fstream = null;
 			try
 			{
@@ -476,25 +477,29 @@ public class PlayGame extends JPanel
 				fstream.close();
 				in.close();
 				br.close();
-				if(line.contains("false")){
+				if (line.contains("false"))
+				{
 					PrintWriter writer = new PrintWriter(pref);
 					writer.print("");
 					writer.close();
-					JOptionPane.showMessageDialog(null, "Since this is your first time playing Chess, please choose a default completed game save location.\n" +
-							"Pressing cancel will use the default save location.");
+					JOptionPane.showMessageDialog(null,
+							"Since this is your first time playing Chess, please choose a default completed game save location.\n"
+									+ "Pressing cancel will use the default save location.");
 					JFileChooser fc = new JFileChooser();
 					fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 					int returnVal = fc.showOpenDialog(Driver.getInstance());
 					BufferedWriter bw = new BufferedWriter(new FileWriter(pref, true));
-		            bw.write("DefaultPreferencesSet = true");
-		            bw.newLine();
-					if(returnVal == JFileChooser.APPROVE_OPTION){
-			            bw.write("DefaultSaveLocation = " + fc.getSelectedFile().getAbsolutePath());
-			            bw.close();
+					bw.write("DefaultPreferencesSet = true");
+					bw.newLine();
+					if (returnVal == JFileChooser.APPROVE_OPTION)
+					{
+						bw.write("DefaultSaveLocation = " + fc.getSelectedFile().getAbsolutePath());
+						bw.close();
 					}
-					else{
-			            bw.write("DefaultSaveLocation = " + FileUtility.getDefaultCompletedLocation());
-			            bw.close();
+					else
+					{
+						bw.write("DefaultSaveLocation = " + FileUtility.getDefaultCompletedLocation());
+						bw.close();
 					}
 				}
 			}
@@ -503,7 +508,7 @@ public class PlayGame extends JPanel
 				JOptionPane.showMessageDialog(null, "That is not a valid location to save your completed games.");
 				e.printStackTrace();
 			}
-			
+
 			String fileName = JOptionPane.showInputDialog(null, "Enter a name for the save file:", "Saving...",
 					JOptionPane.PLAIN_MESSAGE);
 			getGame().saveGame(fileName, getGame().isClassicChess());

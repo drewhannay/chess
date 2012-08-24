@@ -247,8 +247,8 @@ public class PlayerCustomMenu extends JPanel
 
 		JPanel buttons = new JPanel();
 		buttons.setLayout(new FlowLayout());
-		buttons.add(backButton);
 		buttons.add(submitButton);
+		buttons.add(backButton);
 
 		c.insets = new Insets(3, 3, 3, 3);
 		c.gridx = 0;

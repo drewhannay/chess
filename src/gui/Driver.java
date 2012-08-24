@@ -249,6 +249,7 @@ final public class Driver extends JFrame
 				final JList list = new JList(FileUtility.getGamesInProgressFileArray());
 				final JScrollPane scrollPane = new JScrollPane(list);
 				scrollPane.setPreferredSize(new Dimension(200, 200));
+				list.setSelectedIndex(0);
 
 				JButton next = new JButton("Next");
 				next.addActionListener(new ActionListener()
@@ -394,6 +395,7 @@ final public class Driver extends JFrame
 					final JList list = new JList(FileUtility.getCompletedGamesFileArray());
 					final JScrollPane scrollPane = new JScrollPane(list);
 					scrollPane.setPreferredSize(new Dimension(200, 200));
+					list.setSelectedIndex(0);
 
 					JButton next = new JButton("Next");
 					next.addActionListener(new ActionListener()
@@ -497,8 +499,8 @@ final public class Driver extends JFrame
 							}
 							else
 							{
-								JOptionPane
-										.showMessageDialog(null, "There are currently no completed games!", "No completed game selected!", -1);
+								JOptionPane.showMessageDialog(null, "There are currently no completed games!",
+										"No completed game selected!", -1);
 							}
 						}
 					});
@@ -634,12 +636,12 @@ final public class Driver extends JFrame
 		});
 		mainMenu.setVisible(false);
 		fileMenu.add(mainMenu);
-		
+
 		JMenuItem preferences = new JMenuItem("Preferences", KeyEvent.VK_P);
 		preferences.setToolTipText("Press me to change your preferences");
 		preferences.addActionListener(new ActionListener()
 		{
-			
+
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
@@ -647,9 +649,9 @@ final public class Driver extends JFrame
 				popup.setSize(370, 120);
 				popup.setLocationRelativeTo(null);
 				popup.setLayout(new GridBagLayout());
-				popup.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+				popup.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 				GridBagConstraints c = new GridBagConstraints();
-				
+
 				final JPanel holder = new JPanel();
 				holder.setBorder(BorderFactory.createTitledBorder("Default Completed Game Save Location"));
 				final JLabel currentLabel = new JLabel("Current Save Location");
@@ -658,35 +660,38 @@ final public class Driver extends JFrame
 				final JButton changeLocation = new JButton("Choose New Save Location");
 				final JButton reset = new JButton("Reset to Default Location");
 				final JButton cancel = new JButton("Cancel");
-				cancel.addActionListener(new ActionListener(){
-						
+				cancel.addActionListener(new ActionListener()
+				{
+
 					@Override
 					public void actionPerformed(ActionEvent e)
 					{
 						popup.dispose();
 					}
 				});
-				
+
 				holder.add(currentLabel);
 				holder.add(current);
-				
-				try{
-					 final File pref = FileUtility.getPreferencesFile();
-						if(!pref.exists()){
-							try
-							{
-								pref.createNewFile();
-								BufferedWriter bw = new BufferedWriter(new FileWriter(pref, true));
-					            bw.write("DefaultPreferencesSet = true");
-					            bw.newLine();
-					            bw.write("DefaultSaveLocation = " + FileUtility.getDefaultCompletedLocation());
-					            bw.close();
-							}
-							catch (IOException e)
-							{
-								e.printStackTrace();
-							}
+
+				try
+				{
+					final File pref = FileUtility.getPreferencesFile();
+					if (!pref.exists())
+					{
+						try
+						{
+							pref.createNewFile();
+							BufferedWriter bw = new BufferedWriter(new FileWriter(pref, true));
+							bw.write("DefaultPreferencesSet = true");
+							bw.newLine();
+							bw.write("DefaultSaveLocation = " + FileUtility.getDefaultCompletedLocation());
+							bw.close();
 						}
+						catch (IOException e)
+						{
+							e.printStackTrace();
+						}
+					}
 					FileInputStream fstream = null;
 					fstream = new FileInputStream(pref);
 					DataInputStream in = new DataInputStream(fstream);
@@ -698,20 +703,20 @@ final public class Driver extends JFrame
 					in.close();
 					br.close();
 					current.setText(line.substring(22));
-					
+
 					reset.addActionListener(new ActionListener()
 					{
-						
+
 						@Override
 						public void actionPerformed(ActionEvent arg0)
 						{
 							try
 							{
 								BufferedWriter bw = new BufferedWriter(new FileWriter(pref, true));
-					            bw.write("DefaultPreferencesSet = true");
-					            bw.newLine();
-					            bw.write("DefaultSaveLocation = " + FileUtility.getDefaultCompletedLocation());
-					            bw.close();
+								bw.write("DefaultPreferencesSet = true");
+								bw.newLine();
+								bw.write("DefaultSaveLocation = " + FileUtility.getDefaultCompletedLocation());
+								bw.close();
 							}
 							catch (IOException ae)
 							{
@@ -719,49 +724,54 @@ final public class Driver extends JFrame
 							}
 						}
 					});
-					
+
 					changeLocation.addActionListener(new ActionListener()
 					{
-						
+
 						@Override
 						public void actionPerformed(ActionEvent e)
 						{
-								if(!pref.exists()){
-									try
-									{
-										pref.createNewFile();
-										BufferedWriter bw = new BufferedWriter(new FileWriter(pref, true));
-							            bw.write("DefaultPreferencesSet = false");
-							            bw.newLine();
-							            bw.write("DefaultSaveLocation = " + FileUtility.getDefaultCompletedLocation());
-							            bw.close();
-									}
-									catch (IOException ae)
-									{
-										ae.printStackTrace();
-									}
+							if (!pref.exists())
+							{
+								try
+								{
+									pref.createNewFile();
+									BufferedWriter bw = new BufferedWriter(new FileWriter(pref, true));
+									bw.write("DefaultPreferencesSet = false");
+									bw.newLine();
+									bw.write("DefaultSaveLocation = " + FileUtility.getDefaultCompletedLocation());
+									bw.close();
 								}
-							try{
+								catch (IOException ae)
+								{
+									ae.printStackTrace();
+								}
+							}
+							try
+							{
 								PrintWriter writer = new PrintWriter(pref);
 								JFileChooser fc = new JFileChooser();
 								fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 								int returnVal = fc.showOpenDialog(Driver.getInstance());
 								BufferedWriter bw = new BufferedWriter(new FileWriter(pref, true));
-					            bw.write("DefaultPreferencesSet = true");
-					            bw.newLine();
-								if(returnVal == JFileChooser.APPROVE_OPTION){
+								bw.write("DefaultPreferencesSet = true");
+								bw.newLine();
+								if (returnVal == JFileChooser.APPROVE_OPTION)
+								{
 									writer.print("");
 									writer.close();
-						            bw.write("DefaultSaveLocation = " + fc.getSelectedFile().getAbsolutePath());
-						            bw.close();
-						            current.setText(fc.getSelectedFile().getAbsolutePath());
-								}
-								else{
+									bw.write("DefaultSaveLocation = " + fc.getSelectedFile().getAbsolutePath());
 									bw.close();
-						            return;
+									current.setText(fc.getSelectedFile().getAbsolutePath());
+								}
+								else
+								{
+									bw.close();
+									return;
 								}
 							}
-							catch(Exception ae){
+							catch (Exception ae)
+							{
 								ae.printStackTrace();
 							}
 						}
@@ -772,7 +782,7 @@ final public class Driver extends JFrame
 					JOptionPane.showMessageDialog(null, "That is not a valid location to save your completed games.");
 					e.printStackTrace();
 				}
-				
+
 				c.gridx = 0;
 				c.gridy = 0;
 				c.gridwidth = 2;
@@ -793,7 +803,7 @@ final public class Driver extends JFrame
 				c.gridwidth = 2;
 				c.anchor = GridBagConstraints.CENTER;
 				popup.add(cancel, c);
-				
+
 				popup.pack();
 				popup.setVisible(true);
 			}

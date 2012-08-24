@@ -550,8 +550,8 @@ public class RuleMaker extends JPanel
 		// Adding Buttons to the window
 		JPanel buttons = new JPanel();
 		buttons.setLayout(new FlowLayout());
-		buttons.add(back);
 		buttons.add(save);
+		buttons.add(back);
 
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;

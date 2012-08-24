@@ -494,10 +494,10 @@ public class PieceMaker extends JPanel
 		mainButtons.setLayout(new FlowLayout());
 		c.gridx = 0;
 		c.gridy = 1;
-		mainButtons.add(cancel, c);
+		mainButtons.add(next, c);
 		c.gridx = 1;
 		c.gridy = 1;
-		mainButtons.add(next, c);
+		mainButtons.add(cancel, c);
 		c.gridx = 0;
 		c.gridy = 1;
 		add(mainButtons, c);
