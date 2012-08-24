@@ -203,6 +203,16 @@ public class RuleMaker extends JPanel
 		final JTextField wNumChecks = new JTextField(2);
 		Object[] allPieces = PieceBuilder.getSet().toArray();
 		final JComboBox wPiecesList = new JComboBox(allPieces);
+		int whiteObjectiveIndex = 0;
+		int blackObjectiveIndex = 0;
+
+		for (int i = 0; i < allPieces.length; i++)
+		{
+			if (allPieces[i].equals(whiteRules.getObjectiveName()))
+				whiteObjectiveIndex = i;
+			if (allPieces[i].equals(blackRules.getObjectiveName()))
+				blackObjectiveIndex = i;
+		}
 
 		JLabel wChecksLabel = new JLabel("How many times for check?");
 		JLabel wPiecesLabel = new JLabel("Which piece is the objective?");
@@ -215,7 +225,7 @@ public class RuleMaker extends JPanel
 			if (whiteRules.theEndIsNigh().equals("captureAllOfType"))
 				wPiecesLabel.setText("Which Piece type will be captured?");
 			wPiecesList.setVisible(true);
-			wPiecesList.setSelectedIndex(4);
+			wPiecesList.setSelectedIndex(whiteObjectiveIndex);
 			c.gridx = 0;
 			c.gridy = 1;
 			c.insets = new Insets(1, 1, 1, 1);
@@ -228,7 +238,7 @@ public class RuleMaker extends JPanel
 		{
 			wNumChecks.setVisible(true);
 			wPiecesList.setVisible(true);
-			wPiecesList.setSelectedIndex(4);
+			wPiecesList.setSelectedIndex(whiteObjectiveIndex);
 			c.gridx = 0;
 			c.gridy = 0;
 			wExtras.add(wChecksLabel, c);
@@ -260,7 +270,7 @@ public class RuleMaker extends JPanel
 			if (blackRules.theEndIsNigh().equals("captureAllOfType"))
 				bPiecesLabel.setText("Which Piece type will be captured?");
 			bPiecesList.setVisible(true);
-			bPiecesList.setSelectedIndex(4);
+			bPiecesList.setSelectedIndex(blackObjectiveIndex);
 			c.gridx = 0;
 			c.gridy = 1;
 			c.insets = new Insets(1, 1, 1, 1);
@@ -273,7 +283,7 @@ public class RuleMaker extends JPanel
 		{
 			bNumChecks.setVisible(true);
 			bPiecesList.setVisible(true);
-			bPiecesList.setSelectedIndex(4);
+			bPiecesList.setSelectedIndex(blackObjectiveIndex);
 			c.gridx = 0;
 			c.gridy = 0;
 			bExtras.add(bChecksLabel, c);
