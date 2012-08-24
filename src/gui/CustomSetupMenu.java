@@ -266,6 +266,9 @@ public class CustomSetupMenu extends JPanel
 		whiteRules.addEndOfGame(new EndOfGame("classic", 0, "", false));
 		blackRules.addEndOfGame(new EndOfGame("classic", 0, "", true));
 
+		whiteRules.setObjectivePiece(new ObjectivePiece("classic", "King"));
+		blackRules.setObjectivePiece(new ObjectivePiece("classic", "King"));
+
 		a.gridx = 1;
 		a.gridy = 0;
 		a.fill = GridBagConstraints.HORIZONTAL;
