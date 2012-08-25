@@ -124,6 +124,10 @@ public class CustomSetupMenu extends JPanel
 	 * Frame for holding options windows
 	 */
 	private JFrame optionsFrame;
+	/**
+	 * Scrollpane for holding pieces
+	 */
+	JScrollPane scrollPane = new JScrollPane();
 
 	/**
 	 * Constructor. Initialize the ArrayLists and call initComponents to
@@ -142,6 +146,7 @@ public class CustomSetupMenu extends JPanel
 		dragged = new Square(0, 0);
 		optionsFrame = new JFrame();
 		optionsFrame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+		scrollPane.setPreferredSize(new Dimension(200, 200));
 		initComponents();
 	}
 
@@ -168,6 +173,7 @@ public class CustomSetupMenu extends JPanel
 		a.gridx = 5;
 		a.gridy = 1;
 		a.gridwidth = 1;
+		a.insets = new Insets(0, 10, 100, 0);
 		add(showPiece, a);
 
 		changePromote = new JButton("Promote This Piece");
@@ -273,6 +279,7 @@ public class CustomSetupMenu extends JPanel
 		a.gridy = 0;
 		a.fill = GridBagConstraints.HORIZONTAL;
 		a.insets = new Insets(10, 10, 10, 5);
+		a.anchor = GridBagConstraints.CENTER;
 		add(new JLabel("Variant Name"), a);
 		final JTextField name = new JTextField(25);
 		a.gridx = 2;
@@ -491,10 +498,21 @@ public class CustomSetupMenu extends JPanel
 
 		GridBagConstraints c = new GridBagConstraints();
 
+		pieceHolder.setLayout(new GridBagLayout());
+		c.gridx = 0;
+		c.gridy = 0;
+		c.gridwidth = 2;
+		pieceHolder.add(scrollPane, c);
+
 		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 0;
+		c.gridy = 1;
+		c.gridwidth = 1;
+		c.insets = new Insets(5, 3, 3, 3);
+		pieceHolder.add(changePromote, c);
+
 		c.gridx = 1;
 		c.gridy = 1;
-		c.insets = new Insets(5, 3, 3, 3);
 		pieceHolder.add(pieceSetup, c);
 
 		c.gridx = 0;
@@ -531,6 +549,13 @@ public class CustomSetupMenu extends JPanel
 		a.gridwidth = 2;
 		a.insets = new Insets(10, 0, 10, 5);
 		add(options, a);
+
+		c.fill = GridBagConstraints.NONE;
+		c.insets = new Insets(0, 0, 0, 0);
+		c.gridwidth = 1;
+		c.gridx = 6;
+		c.gridy = 1;
+		add(pieceHolder, c);
 
 		Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
 		int x = (int) ((dimension.getWidth() / 4));
@@ -624,8 +649,6 @@ public class CustomSetupMenu extends JPanel
 	public void setupPieces()
 	{
 
-		pieceHolder.removeAll();
-
 		// Create a List with a vertical ScrollBar
 		final DefaultListModel list = new DefaultListModel();
 		Object[] allPieces = PieceBuilder.getSet().toArray();
@@ -649,8 +672,7 @@ public class CustomSetupMenu extends JPanel
 		ListSelectionModel selectList = piecesList.getSelectionModel();
 		final Color original = bShowPiece.getSquare(1, 1).getColor();
 
-		JScrollPane scrollPane = new JScrollPane(piecesList);
-		scrollPane.setPreferredSize(new Dimension(200, 200));
+		scrollPane.getViewport().add(piecesList, null);
 
 		selectList.addListSelectionListener(new ListSelectionListener()
 		{
@@ -681,23 +703,6 @@ public class CustomSetupMenu extends JPanel
 				}
 			}
 		});
-
-		GridBagConstraints c = new GridBagConstraints();
-		pieceHolder.setLayout(new GridBagLayout());
-		c.gridx = 0;
-		c.gridy = 0;
-		c.gridwidth = 2;
-		pieceHolder.add(scrollPane, c);
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 0;
-		c.gridy = 1;
-		c.gridwidth = 1;
-		pieceHolder.add(changePromote, c);
-
-		c.gridwidth = 1;
-		c.gridx = 6;
-		c.gridy = 1;
-		add(pieceHolder, c);
 
 		pieceHolder.revalidate();
 		pieceHolder.repaint();
