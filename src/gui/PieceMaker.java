@@ -7,7 +7,10 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -194,6 +197,82 @@ public class PieceMaker extends JPanel
 		final JComboBox dropdown = new JComboBox(directions);
 		dropdown.setToolTipText("This dropdown has all of the valid directions you can still set movement for");
 
+		final JTextField north = new JTextField(4);
+		north.setToolTipText("North");
+		north.setText("0");
+		final JTextField northeast = new JTextField(4);
+		northeast.setToolTipText("Northeast");
+		northeast.setText("0");
+		final JTextField northwest = new JTextField(4);
+		northwest.setToolTipText("Northwest");
+		northwest.setText("0");
+		final JTextField east = new JTextField(4);
+		east.setToolTipText("East");
+		east.setText("0");
+		final JTextField southeast = new JTextField(4);
+		southeast.setToolTipText("Southeast");
+		southeast.setText("0");
+		final JTextField south = new JTextField(4);
+		south.setToolTipText("South");
+		south.setText("0");
+		final JTextField southwest = new JTextField(4);
+		southwest.setToolTipText("Southwest");
+		southwest.setText("0");
+		final JTextField west = new JTextField(4);
+		west.setToolTipText("West");
+		west.setText("0");
+
+		BufferedImage bi = null;
+		try
+		{
+			// read the image from the class resources
+			bi = ImageIO.read(getClass().getResource("/movement_directions.png"));
+		}
+		catch (IOException e1)
+		{
+			e1.printStackTrace();
+		}
+		// Makes the image an icon and ands it to a JLabel
+		ImageIcon picture = new ImageIcon(bi);
+		JLabel pictureHolder = new JLabel();
+		picture.setImage(picture.getImage().getScaledInstance(130, 130, Image.SCALE_SMOOTH));
+		pictureHolder.setIcon(picture);
+
+		JPanel movement = new JPanel();
+		movement.setLayout(new GridBagLayout());
+
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weightx = 1;
+		c.anchor = GridBagConstraints.EAST;
+		movement.add(northwest, c);
+		c.gridx = 1;
+		c.anchor = GridBagConstraints.CENTER;
+		movement.add(north, c);
+		c.gridx = 2;
+		c.anchor = GridBagConstraints.WEST;
+		movement.add(northeast, c);
+		c.gridx = 0;
+		c.gridy = 1;
+		c.anchor = GridBagConstraints.EAST;
+		movement.add(west, c);
+		c.gridx = 1;
+		c.anchor = GridBagConstraints.CENTER;
+		movement.add(pictureHolder, c);
+		c.gridx = 2;
+		c.anchor = GridBagConstraints.WEST;
+		movement.add(east, c);
+		c.gridx = 0;
+		c.gridy = 2;
+		c.anchor = GridBagConstraints.EAST;
+		movement.add(southwest, c);
+		c.gridx = 1;
+		c.anchor = GridBagConstraints.CENTER;
+		movement.add(south, c);
+		c.gridx = 2;
+		c.anchor = GridBagConstraints.WEST;
+		movement.add(southeast, c);
+
 		// Collect max distance of movement, -1 for infinity.
 		final JTextField dist = new JTextField(3);
 		dist.setToolTipText("Greatest amount of spaces piece can travel in chosen direction");
@@ -238,80 +317,6 @@ public class PieceMaker extends JPanel
 		knightMoving.add(new JLabel("x"));
 		knightMoving.add(knightSecond);
 
-		// Create button and add ActionListener for adding movement directions
-		// to a piece
-		final JButton addInstruction = new JButton("Add Movement Directions to this Piece");
-		addInstruction.setToolTipText("Pressing this will add movement direction and max distance in that direction.");
-		addInstruction.addActionListener(new ActionListener()
-		{
-
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				if (isIntDist())
-				{// Make sure their number is an int.
-					if (dropdown.getSelectedItem() != null)
-					{// Make sure there's directions left in the drop down.
-						// Add the move to the piece type and remove that
-						// direction from the drop down.
-						builder.addMove(stringToChar((String) dropdown.getSelectedItem()), Integer.parseInt(dist.getText()));
-						dropdown.removeItemAt(dropdown.getSelectedIndex());
-						dist.setText(""); // Clear their int distance.
-
-					}
-				}
-			}
-
-			/**
-			 * Determine if the user entered a valid integer.
-			 * 
-			 * @return If the text is a valid integer
-			 */
-			private boolean isIntDist()
-			{
-				try
-				{
-					Integer.parseInt(dist.getText());
-					return true;
-				}
-				catch (Exception e)
-				{
-					return false;
-				}
-			}
-
-			/**
-			 * Translate a direction string to it's corresponding char.
-			 * 
-			 * @param s The string to translate
-			 * @return The char corresponding to the given String.
-			 */
-			private char stringToChar(String s)
-			{
-				// TODO Can this be any better?
-				if (s.equals("North"))
-					return 'N';
-				if (s.equals("South"))
-					return 'S';
-				if (s.equals("East"))
-					return 'E';
-				if (s.equals("West"))
-					return 'W';
-				if (s.equals("Northeast"))
-					return 'R';
-				if (s.equals("Northwest"))
-					return 'L';
-				if (s.equals("Southeast"))
-					return 'r';
-				else
-					return 'l';
-			}
-		});
-
-		c.gridx = 0;
-		c.gridy = 4;
-		piecePanel.add(addInstruction, c);
-
 		// Setting up a panel handle movement instructions
 		JPanel movementSetup = new JPanel();
 		movementSetup.setLayout(new BoxLayout(movementSetup, BoxLayout.Y_AXIS));
@@ -321,28 +326,13 @@ public class PieceMaker extends JPanel
 		c.insets = new Insets(5, 0, 5, 0);
 		c.gridx = 0;
 		c.gridy = 0;
+		c.anchor = GridBagConstraints.CENTER;
 		movementSetup.add(new JLabel("<html><u>Normal Movement Setup:</u></br></html>"), c);
 		c.insets = new Insets(5, 0, 0, 0);
 		c.gridx = 0;
 		c.gridy = 1;
-		movementSetup.add(new JLabel("Direction of Movement: "), c);
-		c.insets = new Insets(5, 0, 0, 0);
-		c.gridx = 1;
-		c.gridy = 1;
-		movementSetup.add(dropdown, c);
-		c.insets = new Insets(5, 0, 0, 0);
-		c.gridx = 0;
-		c.gridy = 2;
-		movementSetup.add(new JLabel("Max Distance of Movement: "), c);
-		c.insets = new Insets(5, 0, 0, 0);
-		c.gridx = 1;
-		c.gridy = 2;
-		movementSetup.add(dist, c);
-		c.insets = new Insets(5, 0, 0, 0);
-		c.gridx = 0;
-		c.gridy = 3;
-		c.gridwidth = 3;
-		movementSetup.add(addInstruction, c);
+		c.gridwidth = 2;
+		movementSetup.add(movement, c);
 		c.insets = new Insets(5, 0, 0, 0);
 		c.gridx = 0;
 		c.gridy = 5;
@@ -378,6 +368,19 @@ public class PieceMaker extends JPanel
 					JOptionPane.showMessageDialog(null, "Please enter a unique piece name.", "Invalid Piece Name",
 							JOptionPane.INFORMATION_MESSAGE);
 					return;
+				}
+
+				if (isIntDist(north) && isIntDist(northeast) && isIntDist(northwest) && isIntDist(east) && isIntDist(west)
+						&& isIntDist(south) && isIntDist(southeast) && isIntDist(southwest))
+				{
+					builder.addMove('N', Integer.parseInt(north.getText()));
+					builder.addMove('R', Integer.parseInt(northeast.getText()));
+					builder.addMove('L', Integer.parseInt(northwest.getText()));
+					builder.addMove('E', Integer.parseInt(east.getText()));
+					builder.addMove('W', Integer.parseInt(west.getText()));
+					builder.addMove('S', Integer.parseInt(south.getText()));
+					builder.addMove('r', Integer.parseInt(southeast.getText()));
+					builder.addMove('l', Integer.parseInt(southwest.getText()));
 				}
 
 				if (knight.isEnabled())
@@ -523,6 +526,27 @@ public class PieceMaker extends JPanel
 		// Scale the image to 48x48.
 		icon.setImage(icon.getImage().getScaledInstance(48, 48, Image.SCALE_SMOOTH));
 		return icon;
+	}
+
+	/**
+	 * Determine if the user entered a valid integer.
+	 * 
+	 * @return If the text is a valid integer
+	 */
+	private boolean isIntDist(JTextField name)
+	{
+		try
+		{
+			Integer.parseInt(name.getText());
+			return true;
+		}
+		catch (Exception e)
+		{
+			JOptionPane.showMessageDialog(null,
+					"All movement distances must be a number. Please enter a number in the " + name.getToolTipText()
+							+ " direction box.", "Error", 1, null);
+			return false;
+		}
 	}
 
 }
