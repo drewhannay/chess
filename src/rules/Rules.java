@@ -81,8 +81,7 @@ public class Rules implements Serializable
 		endOfGame = new EndOfGame("classic", 3, "Queen", isBlack);
 		cropLegalDests = new CropLegalDests();
 		cropLegalDests.addMethod("classic");
-		objectivePiece = new ObjectivePiece("classic", ""); // TODO error
-															// handling, in GUI
+		objectivePiece = new ObjectivePiece("classic", "");
 		afterMove = new AfterMove();
 		afterMove.addMethod("classic");
 		getBoard = new GetBoard("classic");
