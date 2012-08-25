@@ -366,7 +366,7 @@ public class PieceMaker extends JPanel
 				if (name.getText() == "" || PieceBuilder.isPieceType(name.getText()))
 				{ // Make sure the name is valid.
 					JOptionPane.showMessageDialog(null, "Please enter a unique piece name.", "Invalid Piece Name",
-							JOptionPane.INFORMATION_MESSAGE);
+							JOptionPane.PLAIN_MESSAGE);
 					return;
 				}
 
@@ -456,7 +456,7 @@ public class PieceMaker extends JPanel
 				{
 					int answer = JOptionPane.showConfirmDialog(null,
 							"If you continue the piece you are working on will not be saved. Continue?", "Piece Maker",
-							JOptionPane.YES_NO_OPTION);
+							JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
 					if (answer == 0)
 					{
 						variant.setupPieces();
@@ -464,20 +464,6 @@ public class PieceMaker extends JPanel
 						frame.setVisible(false);
 					}
 				}
-			}
-		});
-
-		// Create button and add ActionListener
-		final JButton cancel = new JButton("Cancel");
-		cancel.setToolTipText("Press me to return to board setup window");
-		cancel.addActionListener(new ActionListener()
-		{
-
-			@Override
-			public void actionPerformed(ActionEvent arg0)
-			{
-				holder.removeAll();
-				frame.setVisible(false);
 			}
 		});
 
@@ -498,9 +484,6 @@ public class PieceMaker extends JPanel
 		c.gridx = 0;
 		c.gridy = 1;
 		mainButtons.add(next, c);
-		c.gridx = 1;
-		c.gridy = 1;
-		mainButtons.add(cancel, c);
 		c.gridx = 0;
 		c.gridy = 1;
 		add(mainButtons, c);
@@ -544,7 +527,7 @@ public class PieceMaker extends JPanel
 		{
 			JOptionPane.showMessageDialog(null,
 					"All movement distances must be a number. Please enter a number in the " + name.getToolTipText()
-							+ " direction box.", "Error", 1, null);
+							+ " direction box.", "Error", JOptionPane.PLAIN_MESSAGE);
 			return false;
 		}
 	}

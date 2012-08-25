@@ -128,8 +128,7 @@ public class BoardCustomMenu extends JPanel
 	{
 		if (!oneBoard.isSelected() && !twoBoards.isSelected())
 		{
-			JOptionPane.showMessageDialog(null, "Please select the number of boards.", "Incomplete Form",
-					JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Please select the number of boards.", "Incomplete Form", JOptionPane.PLAIN_MESSAGE);
 			return false;
 		}
 		try
@@ -142,7 +141,7 @@ public class BoardCustomMenu extends JPanel
 		catch (Exception e)
 		{
 			JOptionPane.showMessageDialog(null, "Enter a valid number between 3 and 16 for the dimensions of the board.",
-					"Invalid Submission", JOptionPane.INFORMATION_MESSAGE);
+					"Invalid Submission", JOptionPane.PLAIN_MESSAGE);
 			return false;
 		}
 		try
@@ -155,7 +154,7 @@ public class BoardCustomMenu extends JPanel
 		catch (Exception e)
 		{
 			JOptionPane.showMessageDialog(null, "Enter a valid number between 3 and 10 for the dimensions of the board.",
-					"Invalid Submission", JOptionPane.INFORMATION_MESSAGE);
+					"Invalid Submission", JOptionPane.PLAIN_MESSAGE);
 			return false;
 		}
 		return true;

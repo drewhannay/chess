@@ -326,7 +326,8 @@ public class CustomSetupMenu extends JPanel
 
 				if (name.getText().equals("") || name.getText().equals(" "))
 				{
-					JOptionPane.showMessageDialog(getInstance(), "Please enter a name for this game.");
+					JOptionPane.showMessageDialog(getInstance(), "Please enter a name for this game.", "Enter Name",
+							JOptionPane.PLAIN_MESSAGE);
 				}
 				else
 				{
@@ -350,7 +351,8 @@ public class CustomSetupMenu extends JPanel
 						}
 						if (numObjectives != 1)
 						{
-							JOptionPane.showMessageDialog(null, "Please place exactly one White Objective Piece");
+							JOptionPane.showMessageDialog(null, "Please place exactly one White Objective Piece", "Objective Missing",
+									JOptionPane.PLAIN_MESSAGE);
 							return;
 						}
 					}
@@ -364,7 +366,8 @@ public class CustomSetupMenu extends JPanel
 						}
 						if (numObjectives != 1)
 						{
-							JOptionPane.showMessageDialog(null, "Please place exactly one Black Objective Piece");
+							JOptionPane.showMessageDialog(null, "Please place exactly one Black Objective Piece", "Objective Missing",
+									JOptionPane.PLAIN_MESSAGE);
 							return;
 						}
 					}
@@ -779,7 +782,7 @@ public class CustomSetupMenu extends JPanel
 					{
 						// The chances of this happening is EXTREMELY small...
 						JOptionPane.showMessageDialog(popup, "That color cannot be selected.", "Invalid Color",
-								JOptionPane.INFORMATION_MESSAGE);
+								JOptionPane.PLAIN_MESSAGE);
 					}
 
 				}
@@ -839,7 +842,7 @@ public class CustomSetupMenu extends JPanel
 			}
 			else
 			{
-				JOptionPane.showMessageDialog(null, "This square is uninhabitable.", "Warning", JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(null, "This square is uninhabitable.", "Warning", JOptionPane.PLAIN_MESSAGE);
 			}
 		}
 
