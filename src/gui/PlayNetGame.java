@@ -640,7 +640,7 @@ public class PlayNetGame extends PlayGame
 	public int requestDraw()
 	{
 		return JOptionPane.showConfirmDialog(null, "Would you like to send the other player a draw request?", "Draw",
-				JOptionPane.YES_NO_OPTION);
+				JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
 	}
 
 	/**
@@ -648,8 +648,8 @@ public class PlayNetGame extends PlayGame
 	 */
 	public int requestAIDraw()
 	{
-		return JOptionPane
-				.showConfirmDialog(null, "Are you sure you would like to declare a draw?", "Draw", JOptionPane.YES_NO_OPTION);
+		return JOptionPane.showConfirmDialog(null, "Are you sure you would like to declare a draw?", "Draw",
+				JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
 	}
 
 	/**

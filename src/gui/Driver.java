@@ -325,7 +325,8 @@ final public class Driver extends JFrame
 								if (list.getSelectedValue() == null)
 								{
 									JOptionPane.showMessageDialog(Driver.getInstance(),
-											"There are no more completed games. Returning to Main Menu", "No Completed Games", -1);
+											"There are no more completed games. Returning to Main Menu", "No Completed Games",
+											JOptionPane.PLAIN_MESSAGE);
 									popped.dispose();
 								}
 								scrollPane.getViewport().add(list, null);
@@ -333,7 +334,8 @@ final public class Driver extends JFrame
 						}
 						else
 						{
-							JOptionPane.showMessageDialog(null, "There are currently no save files!", "No save file selected!", -1);
+							JOptionPane.showMessageDialog(null, "There are currently no save files!", "No save file selected!",
+									JOptionPane.PLAIN_MESSAGE);
 						}
 					}
 				});
@@ -381,7 +383,7 @@ final public class Driver extends JFrame
 					if (files.length == 0)
 					{
 						JOptionPane.showMessageDialog(null, "There are no completed games to display.", "No Completed Games",
-								JOptionPane.ERROR_MESSAGE);
+								JOptionPane.PLAIN_MESSAGE);
 						return;
 					}
 
@@ -406,7 +408,8 @@ final public class Driver extends JFrame
 						{
 							if (list.getSelectedValue() == null)
 							{
-								JOptionPane.showMessageDialog(Driver.getInstance(), "Please select a game", "Error", -1);
+								JOptionPane.showMessageDialog(Driver.getInstance(), "Please select a game", "Error",
+										JOptionPane.PLAIN_MESSAGE);
 								return;
 							}
 							File file = FileUtility.getCompletedGamesFile(list.getSelectedValue().toString());
@@ -422,7 +425,8 @@ final public class Driver extends JFrame
 								catch (Exception e)
 								{
 									JOptionPane.showMessageDialog(null,
-											"This file contains invalid ACN notation. Please check the format and try again");
+											"This file contains invalid ACN notation. Please check the format and try again",
+											"Invalid Notation", JOptionPane.PLAIN_MESSAGE);
 									return;
 								}
 							}
@@ -446,7 +450,7 @@ final public class Driver extends JFrame
 									e.printStackTrace();
 									JOptionPane.showMessageDialog(null,
 											"This game is corrupted, please choose another or start a New Game instead.",
-											"Invalid Completed Game", JOptionPane.ERROR_MESSAGE);
+											"Invalid Completed Game", JOptionPane.PLAIN_MESSAGE);
 								}
 							}
 							// Changes panels
@@ -481,7 +485,7 @@ final public class Driver extends JFrame
 								if (!success)
 								{
 									JOptionPane.showMessageDialog(Driver.getInstance(), "Completed game was not deleted successfully",
-											"Error", -1);
+											"Error", JOptionPane.PLAIN_MESSAGE);
 								}
 								else
 								{
@@ -491,7 +495,8 @@ final public class Driver extends JFrame
 									if (list.getSelectedValue() == null)
 									{
 										JOptionPane.showMessageDialog(Driver.getInstance(),
-												"There are no more completed games. Returning to Main Menu", "No Completed Games", -1);
+												"There are no more completed games. Returning to Main Menu", "No Completed Games",
+												JOptionPane.PLAIN_MESSAGE);
 										popped.dispose();
 									}
 									scrollPane.getViewport().add(list, null);
@@ -500,7 +505,7 @@ final public class Driver extends JFrame
 							else
 							{
 								JOptionPane.showMessageDialog(null, "There are currently no completed games!",
-										"No completed game selected!", -1);
+										"No completed game selected!", JOptionPane.PLAIN_MESSAGE);
 							}
 						}
 					});
@@ -535,7 +540,7 @@ final public class Driver extends JFrame
 				{
 					e.printStackTrace();
 					JOptionPane.showMessageDialog(null, "Either there are no completed games or the game file is missing.",
-							"No Completed Games", JOptionPane.ERROR_MESSAGE);
+							"No Completed Games", JOptionPane.PLAIN_MESSAGE);
 				}
 			}
 		});
@@ -779,7 +784,8 @@ final public class Driver extends JFrame
 				}
 				catch (Exception e)
 				{
-					JOptionPane.showMessageDialog(null, "That is not a valid location to save your completed games.");
+					JOptionPane.showMessageDialog(null, "That is not a valid location to save your completed games.",
+							"Invalid Location", JOptionPane.PLAIN_MESSAGE);
 					e.printStackTrace();
 				}
 
@@ -819,7 +825,8 @@ final public class Driver extends JFrame
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				int answer = JOptionPane.showConfirmDialog(null, "Are you sure you want to Quit?", "Quit?", JOptionPane.YES_NO_OPTION);
+				int answer = JOptionPane.showConfirmDialog(null, "Are you sure you want to Quit?", "Quit?", JOptionPane.YES_NO_OPTION,
+						JOptionPane.PLAIN_MESSAGE);
 				if (answer == 0)
 					System.exit(0);
 			}

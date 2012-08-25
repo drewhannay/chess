@@ -433,7 +433,8 @@ public class PlayGame extends JPanel
 			PlayNetGame.netMove = g.moveToFakeMove(g.getHistory().get(g.getHistory().size() - 1));
 		else if (!r.isDraw())
 		{
-			JOptionPane.showMessageDialog(null, "No moves were made and the time ran out. Returning to the Main Menu.");
+			JOptionPane.showMessageDialog(null, "No moves were made and the time ran out. Returning to the Main Menu.",
+					"Time Ran Out", JOptionPane.PLAIN_MESSAGE);
 			PlayNetGame.running = false;
 			Driver.getInstance().revertPanel();
 			Driver.getInstance().fileMenu.setVisible(true);
@@ -484,7 +485,8 @@ public class PlayGame extends JPanel
 					writer.close();
 					JOptionPane.showMessageDialog(null,
 							"Since this is your first time playing Chess, please choose a default completed game save location.\n"
-									+ "Pressing cancel will use the default save location.");
+									+ "Pressing cancel will use the default save location.", "Save Location",
+							JOptionPane.PLAIN_MESSAGE);
 					JFileChooser fc = new JFileChooser();
 					fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 					int returnVal = fc.showOpenDialog(Driver.getInstance());
@@ -505,7 +507,8 @@ public class PlayGame extends JPanel
 			}
 			catch (Exception e)
 			{
-				JOptionPane.showMessageDialog(null, "That is not a valid location to save your completed games.");
+				JOptionPane.showMessageDialog(null, "That is not a valid location to save your completed games.", "Invalid Location",
+						JOptionPane.PLAIN_MESSAGE);
 				e.printStackTrace();
 			}
 
