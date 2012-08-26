@@ -389,14 +389,16 @@ public class RuleMaker extends JPanel
 						int answer = Integer.parseInt(wNumChecked);
 						if (answer < 1)
 						{
-							JOptionPane.showMessageDialog(null, "Please enter a number greater than 1 into the Number of Checks box.");
+							JOptionPane.showMessageDialog(null, "Please enter a number greater than 1 into the Number of Checks box.",
+									"Number of Checks", JOptionPane.PLAIN_MESSAGE);
 							return;
 						}
 						whiteRules.addEndOfGame(new EndOfGame("checkNTimes", answer, "", false));
 					}
 					catch (Exception ne)
 					{
-						JOptionPane.showMessageDialog(null, "Please enter a number into the Number of Checks box.");
+						JOptionPane.showMessageDialog(null, "Please enter a number into the Number of Checks box.",
+								"Number of Checks", JOptionPane.PLAIN_MESSAGE);
 						return;
 					}
 				}
@@ -420,14 +422,16 @@ public class RuleMaker extends JPanel
 						int answer = Integer.parseInt(bNumChecked);
 						if (answer < 1)
 						{
-							JOptionPane.showMessageDialog(null, "Please enter a number greater than 1 into the Number of Checks box.");
+							JOptionPane.showMessageDialog(null, "Please enter a number greater than 1 into the Number of Checks box.",
+									"Number of Checks", JOptionPane.PLAIN_MESSAGE);
 							return;
 						}
 						blackRules.addEndOfGame(new EndOfGame("checkNTimes", answer, "", true));
 					}
 					catch (Exception ne)
 					{
-						JOptionPane.showMessageDialog(null, "Please enter a number into the Number of Checks box.");
+						JOptionPane.showMessageDialog(null, "Please enter a number into the Number of Checks box.",
+								"Number of Checks", JOptionPane.PLAIN_MESSAGE);
 						return;
 					}
 				}

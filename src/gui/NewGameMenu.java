@@ -176,7 +176,8 @@ public class NewGameMenu extends JPanel
 							{
 								if (computer.getText().equals(""))
 								{
-									JOptionPane.showMessageDialog(null, "Please enter a number");
+									JOptionPane.showMessageDialog(null, "Please enter a number", "Number Needed",
+											JOptionPane.PLAIN_MESSAGE);
 									return;
 								}
 								else if (computer.getText().length() < 2)
@@ -190,7 +191,8 @@ public class NewGameMenu extends JPanel
 									}
 									catch (Exception ne)
 									{
-										JOptionPane.showMessageDialog(null, "Please enter a number between 1-25 in the box");
+										JOptionPane.showMessageDialog(null, "Please enter a number between 1-25 in the box",
+												"Number Needed", JOptionPane.PLAIN_MESSAGE);
 										return;
 									}
 								}
@@ -205,7 +207,8 @@ public class NewGameMenu extends JPanel
 									}
 									catch (Exception ne)
 									{
-										JOptionPane.showMessageDialog(null, "Please enter a number between 1-25 in the box");
+										JOptionPane.showMessageDialog(null, "Please enter a number between 1-25 in the box",
+												"Number Needed", JOptionPane.PLAIN_MESSAGE);
 										return;
 									}
 								}
@@ -332,7 +335,7 @@ public class NewGameMenu extends JPanel
 				{
 					int answer = JOptionPane.showConfirmDialog(null,
 							"There are no AI files installed. Would you like to install one?", "Install AI Files?",
-							JOptionPane.YES_NO_OPTION);
+							JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
 					if (answer == 0)
 					{
 						JFileChooser fc = new JFileChooser();
@@ -349,8 +352,8 @@ public class NewGameMenu extends JPanel
 							if (!success)
 							{
 								// File was not successfully moved
-								JOptionPane.showMessageDialog(Driver.getInstance(), Driver.getInstance(),
-										"File was not installed successfully", -1);
+								JOptionPane.showMessageDialog(Driver.getInstance(), "File was not installed successfully", "Error",
+										JOptionPane.PLAIN_MESSAGE);
 							}
 						}
 						else
@@ -391,8 +394,8 @@ public class NewGameMenu extends JPanel
 							if (!success)
 							{
 								// File was not successfully moved
-								JOptionPane.showMessageDialog(Driver.getInstance(), Driver.getInstance(),
-										"File was not installed successfully", -1);
+								JOptionPane.showMessageDialog(Driver.getInstance(), "File was not installed successfully", "Error",
+										JOptionPane.PLAIN_MESSAGE);
 							}
 							else
 							{
@@ -421,7 +424,7 @@ public class NewGameMenu extends JPanel
 						if (ai.getSelectedItem() == null)
 						{
 							JOptionPane.showMessageDialog(null, "You have not selected an AI file", "No AI file",
-									JOptionPane.ERROR_MESSAGE);
+									JOptionPane.PLAIN_MESSAGE);
 							return;
 						}
 						Game toPlay = Builder.newGame((String) dropdown.getSelectedItem());
@@ -444,7 +447,7 @@ public class NewGameMenu extends JPanel
 							JOptionPane.showMessageDialog(null, "Compilation failed\n"
 									+ "Make sure your class implements the AIPlugin interface\n"
 									+ "Make sure your class includes the following imports:\n" + "import ai.*;\n"
-									+ "import ai.AIAdapter.*;\n");
+									+ "import ai.AIAdapter.*;\n", "Compilation Failure", JOptionPane.PLAIN_MESSAGE);
 							return;
 						}
 						try

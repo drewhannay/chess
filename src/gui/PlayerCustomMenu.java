@@ -130,12 +130,14 @@ public class PlayerCustomMenu extends JPanel
 			int increment = Integer.parseInt(incrementTurns.getText());
 			if (whiteTurns < 0)
 			{
-				JOptionPane.showMessageDialog(this, "The White team's turns cannot be negative");
+				JOptionPane.showMessageDialog(this, "The White team's turns cannot be negative", "No Negatives",
+						JOptionPane.PLAIN_MESSAGE);
 				return false;
 			}
 			else if (blackTurns < 0)
 			{
-				JOptionPane.showMessageDialog(this, "The Black team's turns cannot be negative");
+				JOptionPane.showMessageDialog(this, "The Black team's turns cannot be negative", "No Negatives",
+						JOptionPane.PLAIN_MESSAGE);
 				return false;
 			}
 			else
@@ -168,7 +170,7 @@ public class PlayerCustomMenu extends JPanel
 		catch (Exception e)
 		{
 			JOptionPane.showMessageDialog(null, "Enter a valid number of turns for both players.", "Incomplete Form",
-					JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.PLAIN_MESSAGE);
 			return false;
 		}
 		return true;
