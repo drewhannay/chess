@@ -371,7 +371,7 @@ public class CustomSetupMenu extends JPanel
 							return;
 						}
 					}
-					b.whiteTeam = whiteTeam;
+					b.m_whiteTeam = whiteTeam;
 					boolean set = false;
 					for (Piece p : whiteTeam)
 					{
@@ -394,7 +394,7 @@ public class CustomSetupMenu extends JPanel
 					{
 						whiteRules.setObjectivePiece(new ObjectivePiece("no objective", ""));
 					}
-					b.blackTeam = blackTeam;
+					b.m_blackTeam = blackTeam;
 					set = false;
 					for (Piece p : blackTeam)
 					{
@@ -805,12 +805,12 @@ public class CustomSetupMenu extends JPanel
 					// pop up.
 					if (uninhabitable.isSelected())
 					{
-						square.setHabitable(false);
+						square.setIsHabitable(false);
 						square.setIcon(uninhabIcon);
 					}
 					else
 					{
-						square.setHabitable(true);
+						square.setIsHabitable(true);
 						square.setIcon(null);
 					}
 					popup.dispose();

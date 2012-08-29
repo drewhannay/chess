@@ -13,85 +13,34 @@ import java.io.Serializable;
  */
 public class Result implements Serializable
 {
-
-	/**
-	 * Generated Serial Version ID
-	 */
-	private static final long serialVersionUID = -6844368741916902616L;
-	/**
-	 * Indicate an undecided result
-	 */
 	public static final int UNDECIDED = 0;
-	/**
-	 * Indicate a draw
-	 */
 	public static final int DRAW = 1;
-	/**
-	 * Indicate a white win
-	 */
 	public static final int WHITE_WIN = 2;
-	/**
-	 * Indicate a black win
-	 */
 	public static final int BLACK_WIN = 3;
 
-	/**
-	 * Indicate the choice for this Result
-	 */
-	protected int choice = UNDECIDED;
-	/**
-	 * The text to print for this Result
-	 */
-	protected String text = "";
-
-	/**
-	 * Constructor
-	 * 
-	 * @param i The choice for this Result
-	 */
-	public Result(int i)
+	public Result(int choice)
 	{
-		choice = i;
+		m_choice = choice;
 	}
 
-	/**
-	 * Check if this game is a black win
-	 * 
-	 * @return If this game is a black win
-	 */
 	public boolean isBlackWin()
 	{
-		return choice == BLACK_WIN;
+		return m_choice == BLACK_WIN;
 	}
 
-	/**
-	 * Check if this game is a draw
-	 * 
-	 * @return If this game is a draw
-	 */
 	public boolean isDraw()
 	{
-		return choice == DRAW;
+		return m_choice == DRAW;
 	}
 
-	/**
-	 * Check if this game is undecided
-	 * 
-	 * @return If this game is undecided
-	 */
 	public boolean isUndecided()
 	{
-		return choice == UNDECIDED;
+		return m_choice == UNDECIDED;
 	}
 
-	/**
-	 * Check if this game is a white win
-	 * 
-	 * @return If this game is a white win
-	 */
 	public boolean isWhiteWin()
 	{
-		return choice == WHITE_WIN;
+		return m_choice == WHITE_WIN;
 	}
 
 	/**
@@ -99,7 +48,7 @@ public class Result implements Serializable
 	 */
 	public String winText()
 	{
-		switch (choice)
+		switch (m_choice)
 		{
 		case Result.DRAW:
 			return "Draw!";
@@ -112,36 +61,23 @@ public class Result implements Serializable
 		}
 	}
 
-	/**
-	 * Getter method for the text of this Result
-	 * 
-	 * @return The text of this Result
-	 */
 	public String text()
 	{
-		return text;
+		return m_text;
 	}
 
-	/**
-	 * Setter method for the text of this Result
-	 * 
-	 * @param text The text of this Result
-	 */
 	public void setText(String text)
 	{
-		this.text = text;
+		m_text = text;
 	}
 
-	/**
-	 * @return The String representation of this Result
-	 */
 	@Override
 	public String toString()
 	{
 		@SuppressWarnings("unused")
 		String s = "";
 
-		switch (choice)
+		switch (m_choice)
 		{
 		case UNDECIDED:
 			s = "?";
@@ -158,7 +94,11 @@ public class Result implements Serializable
 		default:
 			s = "?";
 		}
-		return text;
+		return m_text;
 	}
 
+	private static final long serialVersionUID = -6844368741916902616L;
+
+	protected int m_choice = UNDECIDED;
+	protected String m_text = "";
 }

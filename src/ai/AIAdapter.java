@@ -149,7 +149,7 @@ public class AIAdapter
 		 */
 		public AIBoard(Board b)
 		{
-			wraparound = b.isWraparound();
+			wraparound = b.isWrapAround();
 			squares = new AISquare[b.getMaxRow()][b.getMaxCol()];
 			maxCol = b.getMaxCol();
 			maxRow = b.getMaxRow();

@@ -266,7 +266,7 @@ public class Move implements Serializable
 		// Take the captured Piece off the board
 		if (getCaptured() != null)
 		{
-			getCaptured().setCaptured(true);
+			getCaptured().setIsCaptured(true);
 			Square capSquare = getCaptured().getSquare();
 			capSquare.setPiece(null);
 		}
@@ -686,7 +686,7 @@ public class Move implements Serializable
 		// Put any captured Pieces back on the board.
 		if (getCaptured() != null)
 		{
-			getCaptured().setCaptured(false);
+			getCaptured().setIsCaptured(false);
 			getCaptured().getSquare().setPiece(getCaptured());
 			getCaptured().getLegalDests().clear();
 		}

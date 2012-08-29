@@ -203,7 +203,7 @@ public class AfterMove implements Serializable
 
 		// Actually set the captured piece on it's home square
 		toHome.getOriginalSquare().setPiece(toHome);
-		toHome.setCaptured(false);
+		toHome.setIsCaptured(false);
 	}
 
 	/**
@@ -223,7 +223,7 @@ public class AfterMove implements Serializable
 		(toPlace.isBlack() ? g.getBlackTeam() : g.getWhiteTeam()).remove(toPlace);
 		(!toPlace.isBlack() ? g.getBlackTeam() : g.getWhiteTeam()).add(toPlace);
 		toPlace.setBlack(!toPlace.isBlack());
-		toPlace.setCaptured(false);
+		toPlace.setIsCaptured(false);
 		m.setOldPos(toPlace.getSquare());
 		if (m.isVerified())
 		{
@@ -252,11 +252,11 @@ public class AfterMove implements Serializable
 			(toPlace.isBlack() ? g.getBlackTeam() : g.getWhiteTeam()).remove(toPlace);
 			(!toPlace.isBlack() ? g.getBlackTeam() : g.getWhiteTeam()).add(toPlace);
 			toPlace.setBlack(!toPlace.isBlack());
-			toPlace.setCaptured(false);
+			toPlace.setIsCaptured(false);
 			toPlace.getSquare().setPiece(null);
 			toPlace.setSquare(m.getOldPos());
 			m.getOldPos().setPiece(toPlace);
-			toPlace.setCaptured(false);
+			toPlace.setIsCaptured(false);
 			PlayGame.setMustPlace(false);
 			PlayGame.setPlacePiece(null);
 			m.setOldPos(null);
@@ -283,7 +283,7 @@ public class AfterMove implements Serializable
 				.objectivePiece(toPlace.isBlack());
 		if (m.isVerified() && !(objectivePiece == toPlace))
 		{
-			toPlace.setCaptured(false);
+			toPlace.setIsCaptured(false);
 			JOptionPane.showMessageDialog(null, "You have captured this piece. Now place it in an empty square.");
 			PlayGame.setMustPlace(true);
 			PlayGame.setPlacePiece(toPlace);
@@ -306,11 +306,11 @@ public class AfterMove implements Serializable
 			toPlace.getLegalDests().clear();
 			toPlace.getGuardSquares().clear();
 			toPlace.setPinnedBy(null);
-			toPlace.setCaptured(false);
+			toPlace.setIsCaptured(false);
 			toPlace.getSquare().setPiece(null);
 			toPlace.setSquare(m.getOldPos());
 			m.getOldPos().setPiece(toPlace);
-			toPlace.setCaptured(false);
+			toPlace.setIsCaptured(false);
 			PlayGame.setMustPlace(false);
 			PlayGame.setPlacePiece(null);
 			m.setOldPos(null);
@@ -367,11 +367,11 @@ public class AfterMove implements Serializable
 		if (m.getCaptured() == null)
 			return;
 		Piece restore = m.getCaptured();
-		restore.setCaptured(false);
+		restore.setIsCaptured(false);
 		if (m.getRemoved() != null)
 		{
 			(m.getRemoved().isBlack() ? g.getBlackTeam() : g.getWhiteTeam()).add(m.getRemoved());
-			m.getRemoved().setCaptured(false);
+			m.getRemoved().setIsCaptured(false);
 		}
 		m.getCaptured().getSquare().setPiece(m.getRemoved());
 		m.getDest().setPiece(restore);
@@ -394,7 +394,7 @@ public class AfterMove implements Serializable
 		Board board = captured.getBoard();
 		Square[] squares = new Square[9];
 		int n = 0;
-		boolean wraparound = board.isWraparound();
+		boolean wraparound = board.isWrapAround();
 		int upperCol = curSquare.getCol() + 1;
 		for (int i = curSquare.getRow() - 1; i <= 1 + curSquare.getRow(); i++)
 		{
@@ -430,12 +430,12 @@ public class AfterMove implements Serializable
 			if (p != null && (!(p.getName().equals("Pawn")) && p != suicide) && p != captured)
 			{
 				exploded.add(p);
-				p.setCaptured(true);
+				p.setIsCaptured(true);
 				p.getSquare().setPiece(null);
 			}
 		}
 		exploded.add(suicide);
-		suicide.setCaptured(true);
+		suicide.setIsCaptured(true);
 		suicide.getSquare().setPiece(null);
 		Piece[] toReturn = new Piece[exploded.size()];
 		m.setExploded(exploded.toArray(toReturn));
@@ -455,7 +455,7 @@ public class AfterMove implements Serializable
 			Piece[] exploded = m.getExploded();
 			for (Piece p : exploded)
 			{
-				p.setCaptured(false);
+				p.setIsCaptured(false);
 				p.getSquare().setPiece(p);
 			}
 			exploded[exploded.length - 1].setMoveCount(exploded[exploded.length - 1].getMoveCount() - 1);

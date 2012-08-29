@@ -80,9 +80,9 @@ public class Game implements Serializable
 			{
 				for (c = 0; c < m_boards[i].getMaxCol(); c++)
 				{
-					if (m_boards[i].squares[r][c].getPiece() != null)
+					if (m_boards[i].m_squares[r][c].getPiece() != null)
 					{
-						m_boards[i].squares[r][c].getPiece().genLegalDests(
+						m_boards[i].m_squares[r][c].getPiece().genLegalDests(
 								(isBlackMove() ? getBlackRules() : getWhiteRules()).getBoard(m_boards[i]));
 					}
 				}

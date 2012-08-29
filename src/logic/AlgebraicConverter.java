@@ -3,12 +3,14 @@ package logic;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import com.google.common.collect.Maps;
 
 import utility.FileUtility;
 
@@ -28,14 +30,10 @@ public final class AlgebraicConverter
 	private static final String columns = "%abcdefgh";
 
 	/**
-	 * HashMap to move from the char representation of a Class to the actual
-	 * Class
+	 * HashMap to move from the char representation of a Class to the actual Class
 	 */
-	private static HashMap<Character, String> map = new HashMap<Character, String>();
+	private static Map<Character, String> map = Maps.newHashMap();
 
-	/**
-	 * Static initializer to build the HashMap
-	 */
 	static
 	{
 		map.put('B', "Bishop");
@@ -115,10 +113,7 @@ public final class AlgebraicConverter
 				{ // promotion
 					if (result.group(8).contains("=") || result.group(8).contains("("))
 					{
-						promo = map.get(result.group(8).charAt(1)); // 0 is
-						// '='
-						// or
-						// '('
+						promo = map.get(result.group(8).charAt(1)); // 0 is '=' or '('
 					}
 					else
 					{
@@ -152,8 +147,8 @@ public final class AlgebraicConverter
 	public static Game convert(Game g, File f) throws Exception
 	{
 		Game game = g;
-		Board board = game.getBoards()[0];// Since this is Classic chess, it'll
-		// always be Boards[0]
+		// Since this is Classic chess, it'll always be Boards[0]
+		Board board = game.getBoards()[0];
 		try
 		{
 			StringTokenizer st;
@@ -162,8 +157,8 @@ public final class AlgebraicConverter
 			while (in.hasNext())
 			{
 				st = new StringTokenizer(in.nextLine());
-				st.nextToken();// Move past the turn number...we don't care
-				// about that
+				// Move past the turn number...we don't care about that
+				st.nextToken();
 				String whiteMove = st.nextToken();
 				if (!st.hasMoreTokens())
 				{
@@ -175,8 +170,8 @@ public final class AlgebraicConverter
 				{
 					break;
 				}
-				g.playMove(temp);// Play the Move on the Board so it'll be added
-				// the history
+				// Play the Move on the Board so it'll be added the history
+				g.playMove(temp);
 
 				temp = algToMove(blackMove, board);
 				if (temp == null)
@@ -246,8 +241,7 @@ public final class AlgebraicConverter
 	{
 		String pat = "";
 		pat += "([O0]-[O0]-[O0]|[O0]-[O0]";// Check for castling (Group 1)
-		pat += "|^([KNQRB])?";// Check for the type of piece that's moving, null
-		// if pawn
+		pat += "|^([KNQRB])?";// Check for the type of piece that's moving, null if pawn
 		pat += "([A-Ha-h])?";// Check for the origin column of the moving piece
 		pat += "([1-8])?";// Check for the origin row of the moving piece
 		pat += "([x:])?";// Check if the move is a capture
