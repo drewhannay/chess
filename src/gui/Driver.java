@@ -14,6 +14,8 @@ import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -115,11 +117,14 @@ final public class Driver extends JFrame
 	 * Menu item for the File options
 	 */
 	public JMenu fileMenu;
-
 	/**
 	 * Menu item for returning to main menu
 	 */
 	public JMenuItem mainMenu;
+	/**
+	 * Window Listener to prevent closing during playgame
+	 */
+	public WindowListener windowListener;
 
 	/**
 	 * Initiate the program by creating a new Driver.
@@ -456,6 +461,7 @@ final public class Driver extends JFrame
 							// Changes panels
 							remove(mainPanel);
 							setPanel(otherPanel);
+							deactivateWindowListener();
 							pack();
 							popped.dispose();
 						}
@@ -634,7 +640,7 @@ final public class Driver extends JFrame
 				if (otherPanel != null)
 					remove(otherPanel);
 				ChessTimer.stopTimers();
-				add(mainPanel);
+				revertPanel();
 				pack();
 			}
 
@@ -910,6 +916,8 @@ final public class Driver extends JFrame
 		mainMenu.setVisible(true);
 		otherPanel = panel;
 		add(otherPanel);
+		if (otherPanel.toString().contains("PlayGame") || otherPanel.toString().contains("PlayNetGame"))
+			activateWindowListener();
 		pack();
 	}
 
@@ -921,6 +929,7 @@ final public class Driver extends JFrame
 		remove(otherPanel);
 		mainMenu.setVisible(false);
 		add(mainPanel);
+		deactivateWindowListener();
 		pack();
 		setLocationRelativeTo(null);
 	}
@@ -1133,6 +1142,71 @@ final public class Driver extends JFrame
 		aboutPop.add(site, a);
 
 		return aboutPop;
+	}
+
+	public void activateWindowListener()
+	{
+		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+		removeWindowListener(windowListener);
+		windowListener = new WindowListener()
+		{
+
+			@Override
+			public void windowOpened(WindowEvent e)
+			{
+			}
+
+			@Override
+			public void windowIconified(WindowEvent e)
+			{
+			}
+
+			@Override
+			public void windowDeiconified(WindowEvent e)
+			{
+			}
+
+			@Override
+			public void windowDeactivated(WindowEvent e)
+			{
+			}
+
+			@Override
+			public void windowClosing(WindowEvent e)
+			{
+				Object[] options = new String[] { "Save Game", "Don't Save", "Cancel" };
+				int answer = JOptionPane.showOptionDialog(null, "Would you like to save your game before you quit?", "Quit?",
+						JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+				switch (answer)
+				{
+				case 0:
+					((PlayGame) otherPanel).saveGame();
+					break;
+				case 2:
+					break;
+				default:
+					System.exit(0);
+					break;
+				}
+			}
+
+			@Override
+			public void windowClosed(WindowEvent e)
+			{
+			}
+
+			@Override
+			public void windowActivated(WindowEvent e)
+			{
+			}
+		};
+		addWindowListener(windowListener);
+	}
+
+	public void deactivateWindowListener()
+	{
+		removeWindowListener(windowListener);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
 }

@@ -530,6 +530,17 @@ public class PlayGame extends JPanel
 	}
 
 	/**
+	 * Saves current game
+	 */
+	public void saveGame()
+	{
+		String fileName = JOptionPane.showInputDialog(null, "Enter a name for the save file:", "Saving...", JOptionPane.PLAIN_MESSAGE);
+		if (fileName == null)
+			return;
+		getGame().saveGame(fileName, false);
+	}
+
+	/**
 	 * @param b Whose turn it is for which timer need to be running.
 	 */
 	public static void turn(boolean b)
@@ -632,11 +643,7 @@ public class PlayGame extends JPanel
 				{
 					whiteTimer.stop();
 					blackTimer.stop();
-					String fileName = JOptionPane.showInputDialog(null, "Enter a name for the save file:", "Saving...",
-							JOptionPane.PLAIN_MESSAGE);
-					if (fileName == null)
-						return;
-					getGame().saveGame(fileName, false);
+					saveGame();
 
 					menu.setVisible(false);
 					Driver.getInstance().revertPanel();
