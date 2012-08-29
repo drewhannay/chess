@@ -3,7 +3,6 @@ package logic;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -13,6 +12,8 @@ import timer.NoTimer;
 import utility.FileUtility;
 import ai.FakeMove;
 
+import com.google.common.collect.Lists;
+
 /**
  * Game.java Object to save Game state.
  * 
@@ -21,73 +22,6 @@ import ai.FakeMove;
  */
 public class Game implements Serializable
 {
-
-	/**
-	 * Generated Serial Version ID
-	 */
-	private static final long serialVersionUID = -4564453748576017108L;
-
-	/**
-	 * Array of Boards for this Game
-	 */
-	private Board[] boards;
-
-	/**
-	 * Rules for the white team
-	 */
-	private Rules whiteRules;
-	/**
-	 * Rules for the black team
-	 */
-	private Rules blackRules;
-
-	/**
-	 * The name of this Game type
-	 */
-	private String gameType;
-
-	/**
-	 * Timer for the white team
-	 */
-	private ChessTimer whiteTimer;
-	/**
-	 * Timer for the black team
-	 */
-	private ChessTimer blackTimer;
-	/**
-	 * Boolean indicating who's turn it is
-	 */
-	private boolean isBlackMove;
-	/**
-	 * List of white Pieces
-	 */
-	private List<Piece> whiteTeam;
-	/**
-	 * List of black Pieces
-	 */
-	private List<Piece> blackTeam;
-	/**
-	 * The objective piece for the black team
-	 */
-	private Piece blackObjectivePiece;
-	/**
-	 * The objective piece for the white team
-	 */
-	private Piece whiteObjectivePiece;
-	/**
-	 * Boolean indicating if the legal destinations need to be generated again.
-	 */
-	private boolean staleLegalDests = true;
-
-	/**
-	 * List of Moves played in this Game
-	 */
-	private List<Move> history;
-	/**
-	 * Reference to the last completed move.
-	 */
-	private Move lastMove = null;
-
 	/**
 	 * Constructor. Initializes and saves state of Game information.
 	 * 
@@ -98,20 +32,20 @@ public class Game implements Serializable
 	 */
 	public Game(String gameType, Board[] boards, Rules whiteRules, Rules blackRules)
 	{
-		this.gameType = gameType;
-		this.boards = boards;
-		whiteTimer = new NoTimer();
-		blackTimer = new NoTimer();
+		m_gameType = gameType;
+		m_boards = boards;
+		m_whiteTimer = new NoTimer();
+		m_blackTimer = new NoTimer();
 		setWhiteRules(whiteRules);
 		whiteRules.setGame(this);
 		setBlackRules(blackRules);
 		blackRules.setGame(this);
 		setBlackMove(false);
-		for (Board b : this.boards)
-		{
+
+		for (Board b : m_boards)
 			b.setGame(this);
-		}
-		setHistory(new ArrayList<Move>());
+
+		m_history = Lists.newArrayList();
 	}
 
 	/**
@@ -122,13 +56,9 @@ public class Game implements Serializable
 	public void afterMove(Move m)
 	{
 		if (isBlackMove())
-		{
 			getBlackRules().afterMove(m);
-		}
 		else
-		{
 			getWhiteRules().afterMove(m);
-		}
 	}
 
 	/**
@@ -144,24 +74,24 @@ public class Game implements Serializable
 
 		setStaleLegalDests(false);
 
-		for (int i = 0; i < boards.length; i++)
+		for (int i = 0; i < m_boards.length; i++)
 		{
-			for (int r = 0, c = 0; r < boards[i].getMaxRow(); r++)
+			for (int r = 0, c = 0; r < m_boards[i].getMaxRow(); r++)
 			{
-				for (c = 0; c < boards[i].getMaxCol(); c++)
+				for (c = 0; c < m_boards[i].getMaxCol(); c++)
 				{
-					if (boards[i].squares[r][c].getPiece() != null)
+					if (m_boards[i].squares[r][c].getPiece() != null)
 					{
-						boards[i].squares[r][c].getPiece().genLegalDests(
-								(isBlackMove() ? getBlackRules() : getWhiteRules()).getBoard(boards[i]));
+						m_boards[i].squares[r][c].getPiece().genLegalDests(
+								(isBlackMove() ? getBlackRules() : getWhiteRules()).getBoard(m_boards[i]));
 					}
 				}
 			}
 		}
 
-		movingObjectivePiece = (isBlackMove()) ? blackObjectivePiece : whiteObjectivePiece;
+		movingObjectivePiece = (isBlackMove()) ? m_blackObjectivePiece : m_whiteObjectivePiece;
 		movingTeam = (isBlackMove()) ? getBlackTeam() : getWhiteTeam();
-		otherObjectivePiece = (isBlackMove()) ? blackObjectivePiece : whiteObjectivePiece;
+		otherObjectivePiece = (isBlackMove()) ? m_blackObjectivePiece : m_whiteObjectivePiece;
 		otherTeam = (isBlackMove()) ? getWhiteTeam() : getBlackTeam();
 
 		// Make sure the objective piece doesn't put himself in check
@@ -183,13 +113,9 @@ public class Game implements Serializable
 			for (int i = 0; i < otherTeam.size(); i++)
 			{
 				if (otherTeam.equals(getWhiteTeam()))
-				{
 					getWhiteRules().cropLegalDests(movingObjectivePiece, otherTeam.get(i), movingTeam);
-				}
 				else
-				{
 					getBlackRules().cropLegalDests(movingObjectivePiece, otherTeam.get(i), movingTeam);
-				}
 			}
 		}
 
@@ -200,23 +126,20 @@ public class Game implements Serializable
 		if (movingObjectivePiece != null && movingObjectivePiece.isInCheck())
 		{
 			if (getLastMove() != null)
-			{
 				getLastMove().setCheck(true);
-			}
+
 			threats = getThreats(movingObjectivePiece);
 
 			switch (threats.length)
 			{
 			case 1:
-				// There's only one threat, so another Piece could block, or the
-				// King could move.
+				// there is only one threat, so another Piece could block, or the King could move
 				for (int i = 0; i < movingTeam.size(); i++)
-				{
 					movingTeam.get(i).genLegalDestsSaveKing(movingObjectivePiece, threats[0]);
-				}
+
 				break;
 			case 2:
-				// Since there's two threats, the objective piece is the only
+				// since there is two threats, the objective piece is the only
 				// one who can get himself out of check.
 				for (int i = 0; i < movingTeam.size(); i++)
 				{
@@ -227,49 +150,33 @@ public class Game implements Serializable
 						p.getGuardSquares().clear();
 					}
 				}
+
 				if (getLastMove() != null)
-				{
 					getLastMove().setDoubleCheck(true);
-				}
+
 				break;
 			}
 		}
 	}
 
-	/**
-	 * @return the blackRules
-	 */
 	public Rules getBlackRules()
 	{
-		return blackRules;
+		return m_blackRules;
 	}
 
-	/**
-	 * @return the blackTeam
-	 */
 	public List<Piece> getBlackTeam()
 	{
-		return blackTeam;
+		return m_blackTeam;
 	}
 
-	/**
-	 * Getter method for the Black timer
-	 * 
-	 * @return The timer for the black team
-	 */
 	public ChessTimer getBlackTimer()
 	{
-		return blackTimer;
+		return m_blackTimer;
 	}
 
-	/**
-	 * Getter method to retrieve boards.
-	 * 
-	 * @return Reference to Array of Boards.
-	 */
 	public Board[] getBoards()
 	{
-		return boards;
+		return m_boards;
 	}
 
 	/**
@@ -300,9 +207,7 @@ public class Game implements Serializable
 		for (int i = 0; i < team.size(); i++)
 		{
 			if (team.get(i).isCaptured() == isCaptured)
-			{
 				count++;
-			}
 		}
 
 		if (count > 0)
@@ -313,10 +218,7 @@ public class Game implements Serializable
 			{
 				piece = team.get(i);
 				if (piece.isCaptured() == isCaptured)
-				{
 					pows[count++] = piece;
-				}
-
 			}
 		}
 		return pows;
@@ -332,21 +234,17 @@ public class Game implements Serializable
 	public Piece[] getGuards(Square sq, boolean isBlack)
 	{
 		Iterator<Piece> team = (isBlack) ? getBlackTeam().iterator() : getWhiteTeam().iterator();
-		List<Piece> attackers = new ArrayList<Piece>();
+		List<Piece> attackers = Lists.newArrayList();
 
 		if (isStaleLegalDests())
-		{
 			genLegalDests();
-		}
 
 		Piece piece = null;
 		while (team.hasNext())
 		{
 			piece = team.next();
 			if (piece.isGuarding(sq))
-			{
 				attackers.add(piece);
-			}
 		}
 
 		Piece[] guards = null;
@@ -358,20 +256,14 @@ public class Game implements Serializable
 		return guards;
 	}
 
-	/**
-	 * @return the history
-	 */
 	public List<Move> getHistory()
 	{
-		return history;
+		return m_history;
 	}
 
-	/**
-	 * @return the lastMove
-	 */
 	public Move getLastMove()
 	{
-		return lastMove;
+		return m_lastMove;
 	}
 
 	/**
@@ -385,14 +277,10 @@ public class Game implements Serializable
 		List<Piece> movingTeam = (isBlackMove()) ? getBlackTeam() : getWhiteTeam();
 
 		if (isStaleLegalDests())
-		{
 			genLegalDests();
-		}
 
 		for (int i = 0; i < movingTeam.size(); i++)
-		{
 			count += (movingTeam.get(i)).getLegalDests().size();
-		}
 
 		return count;
 	}
@@ -405,7 +293,7 @@ public class Game implements Serializable
 	 */
 	public Piece getOtherObjectivePiece(boolean isBlack)
 	{
-		return isBlack ? whiteObjectivePiece : blackObjectivePiece;
+		return isBlack ? m_whiteObjectivePiece : m_blackObjectivePiece;
 	}
 
 	/**
@@ -439,23 +327,18 @@ public class Game implements Serializable
 	 */
 	public Piece[] getThreats(Square threatened, boolean attackerIsBlack)
 	{
-
 		Iterator<Piece> team = (attackerIsBlack) ? getBlackTeam().iterator() : getWhiteTeam().iterator();
-		List<Piece> attackers = new ArrayList<Piece>();
+		List<Piece> attackers = Lists.newArrayList();
 
 		if (isStaleLegalDests())
-		{
 			genLegalDests();
-		}
 
 		Piece piece = null;
 		while (team.hasNext())
 		{
 			piece = team.next();
 			if (piece.isLegalAttack(threatened))
-			{
 				attackers.add(piece);
-			}
 		}
 
 		Piece[] threats = null;
@@ -469,38 +352,24 @@ public class Game implements Serializable
 		return threats;
 	}
 
-	/**
-	 * @return the whiteRules
-	 */
 	public Rules getWhiteRules()
 	{
-		return whiteRules;
+		return m_whiteRules;
 	}
 
-	/**
-	 * @return the whiteTeam
-	 */
 	public List<Piece> getWhiteTeam()
 	{
-		return whiteTeam;
+		return m_whiteTeam;
 	}
 
-	/**
-	 * Get the timer for the white team
-	 * 
-	 * @return The timer for the white team
-	 */
 	public ChessTimer getWhiteTimer()
 	{
-		return whiteTimer;
+		return m_whiteTimer;
 	}
 
-	/**
-	 * @return the isBlackMove
-	 */
 	public boolean isBlackMove()
 	{
-		return isBlackMove;
+		return m_isBlackMove;
 	}
 
 	/**
@@ -516,9 +385,7 @@ public class Game implements Serializable
 			return getLastMove().isCheck();
 
 		if (isStaleLegalDests())
-		{
 			genLegalDests();
-		}
 
 		check = (isBlackMove()) ? getBlackRules().objectivePiece(true).isInCheck() : getWhiteRules().objectivePiece(false).isInCheck();
 
@@ -536,9 +403,7 @@ public class Game implements Serializable
 			return getLastMove().isCheckmate();
 
 		if (isStaleLegalDests())
-		{
 			genLegalDests();
-		}
 
 		if (getLegalMoveCount() == 0 && isCheck())
 			return true;
@@ -553,7 +418,7 @@ public class Game implements Serializable
 	 */
 	public boolean isClassicChess()
 	{
-		return gameType.equals("Classic");
+		return m_gameType.equals("Classic");
 	}
 
 	/**
@@ -561,19 +426,16 @@ public class Game implements Serializable
 	 * 
 	 * @param sq The square to assess
 	 * @param isBlack The team to assess
-	 * @return If the square is guarded by the gived team
+	 * @return If the square is guarded by the given team
 	 */
 	public boolean isGuarded(Square sq, boolean isBlack)
 	{
 		return (getGuards(sq, isBlack) != null);
 	}
 
-	/**
-	 * @return the staleLegalDests
-	 */
 	public boolean isStaleLegalDests()
 	{
-		return staleLegalDests;
+		return m_staleLegalDests;
 	}
 
 	/**
@@ -587,9 +449,7 @@ public class Game implements Serializable
 			return getLastMove().isStalemate();
 
 		if (isStaleLegalDests())
-		{
 			genLegalDests();
-		}
 
 		if (getLegalMoveCount() == 0 && !isCheck())
 			return true;
@@ -639,14 +499,13 @@ public class Game implements Serializable
 	{
 		Move m = move;
 		m.execute();
+
 		if (getHistory().contains(m))
 			return;
+
 		getHistory().add(m);
-		// if (isBlackMove()) {
-		getBlackRules().endOfGame(blackObjectivePiece);
-		// } else {
-		getWhiteRules().endOfGame(whiteObjectivePiece);
-		// }
+		getBlackRules().endOfGame(m_blackObjectivePiece);
+		getWhiteRules().endOfGame(m_whiteObjectivePiece);
 	}
 
 	/**
@@ -691,47 +550,30 @@ public class Game implements Serializable
 		}
 	}
 
-	/**
-	 * @param isBlackMove the isBlackMove to set
-	 */
 	public void setBlackMove(boolean isBlackMove)
 	{
-		this.isBlackMove = isBlackMove;
+		m_isBlackMove = isBlackMove;
 	}
 
-	/**
-	 * @param blackRules the blackRules to set
-	 */
 	public void setBlackRules(Rules blackRules)
 	{
-		this.blackRules = blackRules;
+		m_blackRules = blackRules;
 	}
 
 	/**
-	 * Sets the ArrayList of Pieces for the black team.
+	 * Sets the List of Pieces for the black team.
 	 * 
-	 * @param blackTeam ArrayList of black team pieces.
+	 * @param blackTeam List of black team pieces.
 	 */
 	public void setBlackTeam(List<Piece> blackTeam)
 	{
-		this.blackTeam = blackTeam;
-		blackObjectivePiece = getBlackRules().objectivePiece(true);
+		m_blackTeam = blackTeam;
+		m_blackObjectivePiece = getBlackRules().objectivePiece(true);
 	}
 
-	/**
-	 * @param history the history to set
-	 */
-	public void setHistory(List<Move> history)
-	{
-		this.history = history;
-	}
-
-	/**
-	 * @param lastMove the lastMove to set
-	 */
 	public void setLastMove(Move lastMove)
 	{
-		this.lastMove = lastMove;
+		m_lastMove = lastMove;
 	}
 
 	/**
@@ -750,7 +592,7 @@ public class Game implements Serializable
 	 */
 	public void setStaleLegalDests(boolean staleLegalDests)
 	{
-		this.staleLegalDests = staleLegalDests;
+		m_staleLegalDests = staleLegalDests;
 	}
 
 	/**
@@ -761,16 +603,13 @@ public class Game implements Serializable
 	 */
 	public void setTimers(ChessTimer whiteTimer, ChessTimer blackTimer)
 	{
-		this.whiteTimer = whiteTimer;
-		this.blackTimer = blackTimer;
+		m_whiteTimer = whiteTimer;
+		m_blackTimer = blackTimer;
 	}
 
-	/**
-	 * @param whiteRules the whiteRules to set
-	 */
 	public void setWhiteRules(Rules whiteRules)
 	{
-		this.whiteRules = whiteRules;
+		m_whiteRules = whiteRules;
 	}
 
 	/**
@@ -780,8 +619,8 @@ public class Game implements Serializable
 	 */
 	public void setWhiteTeam(List<Piece> whiteTeam)
 	{
-		this.whiteTeam = whiteTeam;
-		whiteObjectivePiece = getWhiteRules().objectivePiece(false);
+		m_whiteTeam = whiteTeam;
+		m_whiteObjectivePiece = getWhiteRules().objectivePiece(false);
 	}
 
 	/**
@@ -792,13 +631,9 @@ public class Game implements Serializable
 	public void undoAfterMove(Move m)
 	{
 		if (isBlackMove())
-		{
 			getBlackRules().undoAfterMove(m);
-		}
 		else
-		{
 			getWhiteRules().undoAfterMove(m);
-		}
 	}
 
 	/**
@@ -808,8 +643,8 @@ public class Game implements Serializable
 	 */
 	public Move fakeToRealMove(FakeMove m) throws Exception
 	{
-		Board to = boards[m.boardNum];
-		Board from = ((isBlackMove) ? blackRules : whiteRules).getBoard(to);
+		Board to = m_boards[m.boardNum];
+		Board from = ((m_isBlackMove) ? m_blackRules : m_whiteRules).getBoard(to);
 		return new Move(from, from.getSquare(m.originRow, m.originCol), to.getSquare(m.destRow, m.destCol), m.promoName);
 	}
 
@@ -819,13 +654,29 @@ public class Game implements Serializable
 	 */
 	public FakeMove moveToFakeMove(Move m)
 	{
-		int boardNum = (m.board == boards[0]) ? 0 : 1;
+		int boardNum = (m.board == m_boards[0]) ? 0 : 1;
 		String promoName = null;
-		if (history.get(history.size() - 1).getPromoPiece() != null)
-		{
-			promoName = history.get(history.size() - 1).getPromoPiece().getName();
-		}
+
+		if (m_history.get(m_history.size() - 1).getPromoPiece() != null)
+			promoName = m_history.get(m_history.size() - 1).getPromoPiece().getName();
+
 		return new FakeMove(boardNum, m.origin.getRow(), m.origin.getCol(), m.getDest().getRow(), m.getDest().getCol(), promoName);
 	}
 
+	private static final long serialVersionUID = 7291801823624891384L;
+
+	private Board[] m_boards;
+	private Rules m_whiteRules;
+	private Rules m_blackRules;
+	private String m_gameType;
+	private ChessTimer m_whiteTimer;
+	private ChessTimer m_blackTimer;
+	private boolean m_isBlackMove;
+	private List<Piece> m_whiteTeam;
+	private List<Piece> m_blackTeam;
+	private Piece m_blackObjectivePiece;
+	private Piece m_whiteObjectivePiece;
+	private boolean m_staleLegalDests = true;
+	private List<Move> m_history;
+	private Move m_lastMove = null;
 }
