@@ -4,7 +4,6 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
@@ -670,11 +669,11 @@ public class NewGameMenu extends JPanel
 		final JComboBox timers = new JComboBox(timerNames);
 		final JLabel totalTimeText = new JLabel("Total Time (sec): ");
 		totalTimeText.setVisible(false);
-		final TextField totalTime = new TextField("120", 3);
+		final JTextField totalTime = new JTextField("120", 3);
 		totalTime.setVisible(false);
 		final JLabel increaseText = new JLabel("Increment/delay (sec): ");
 		increaseText.setVisible(false);
-		final TextField increase = new TextField("10", 3);
+		final JTextField increase = new JTextField("10", 3);
 		increase.setVisible(false);
 
 		timers.addActionListener(new ActionListener()
