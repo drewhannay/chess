@@ -13,8 +13,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
@@ -43,6 +43,9 @@ import logic.Square;
 import rules.EndOfGame;
 import rules.ObjectivePiece;
 import rules.Rules;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 /**
  * PieceCustomMenu.java
@@ -89,9 +92,9 @@ public class CustomSetupMenu extends JPanel
 	 */
 	private JPanel pieceHolder = new JPanel();
 	/**
-	 * Hashmap for keeping track of what types promote to which pieces.
+	 * Map for keeping track of what types promote to which pieces.
 	 */
-	private HashMap<String, ArrayList<String>> promotions = new HashMap<String, ArrayList<String>>();
+	private Map<String, List<String>> promotions = Maps.newHashMap();
 	/**
 	 * Builder used to progressively create the new game type.
 	 */
@@ -99,11 +102,11 @@ public class CustomSetupMenu extends JPanel
 	/**
 	 * ArrayList to hold the pieces on the white team.
 	 */
-	private ArrayList<Piece> whiteTeam;
+	private List<Piece> whiteTeam;
 	/**
 	 * ArrayList to hold the pieces on the black team.
 	 */
-	private ArrayList<Piece> blackTeam;
+	private List<Piece> blackTeam;
 	/**
 	 * JButton to return to previous screen.
 	 */
@@ -140,8 +143,8 @@ public class CustomSetupMenu extends JPanel
 	public CustomSetupMenu()
 	{
 		b = new Builder("New Variant");
-		whiteTeam = new ArrayList<Piece>();
-		blackTeam = new ArrayList<Piece>();
+		whiteTeam = Lists.newArrayList();
+		blackTeam = Lists.newArrayList();
 		bShowPiece = new Board(2, 1, false);
 		dragged = new Square(0, 0);
 		optionsFrame = new JFrame();
@@ -1041,7 +1044,7 @@ public class CustomSetupMenu extends JPanel
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
-				ArrayList<String> promotesTo = new ArrayList<String>();
+				List<String> promotesTo = Lists.newArrayList();
 				for (int i = 0; i < emptyList.size(); i++)
 				{
 					promotesTo.add((String) emptyList.get(i));

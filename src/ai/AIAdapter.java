@@ -2,8 +2,9 @@ package ai;
 
 import gui.PlayNetGame;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import com.google.common.collect.Lists;
 
 import logic.Board;
 import logic.Game;
@@ -353,7 +354,7 @@ public class AIAdapter
 		 */
 		private synchronized List<AISquare> transformLegalDests(List<Square> legalDests)
 		{
-			List<AISquare> toReturn = new ArrayList<AISquare>();
+			List<AISquare> toReturn = Lists.newArrayList();
 			for (Square s : legalDests)
 				if (board.getSquare(s.getRow(), s.getCol()) != null)
 					toReturn.add(board.getSquare(s.getRow(), s.getCol()));

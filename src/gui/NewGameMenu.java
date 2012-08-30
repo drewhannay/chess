@@ -12,7 +12,6 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.net.InetAddress;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -32,6 +31,8 @@ import javax.tools.JavaCompiler.CompilationTask;
 import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
+
+import com.google.common.collect.Lists;
 
 import logic.Builder;
 import logic.Game;
@@ -435,7 +436,7 @@ public class NewGameMenu extends JPanel
 						Iterable<String> compilationOptions = Arrays.asList(compileOptions);
 
 						// prepare the source file to compile
-						List<File> sourceFileList = new ArrayList<File>();
+						List<File> sourceFileList = Lists.newArrayList();
 						sourceFileList.add(file);
 						Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromFiles(sourceFileList);
 						CompilationTask task = compiler.getTask(null, fileManager, null, compilationOptions, null, compilationUnits);
@@ -607,7 +608,7 @@ public class NewGameMenu extends JPanel
 	{
 		String[] allFiles = FileUtility.getAIFileList();
 		allFiles = FileUtility.getAIFileList();
-		List<String> tempFiles = new ArrayList<String>();
+		List<String> tempFiles = Lists.newArrayList();
 		for (String st : allFiles)
 			if (st.endsWith(".java"))
 				tempFiles.add(st);
@@ -638,7 +639,7 @@ public class NewGameMenu extends JPanel
 		String[] gametypes = Builder.getArray();
 		if (isNetwork)
 		{
-			ArrayList<String> filtered = new ArrayList<String>();
+			List<String> filtered = Lists.newArrayList();
 			for (String s : gametypes)
 			{
 				Game temp = Builder.newGame(s);
