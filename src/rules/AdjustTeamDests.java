@@ -2,12 +2,14 @@ package rules;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import logic.Piece;
 import logic.Square;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 /**
  * AdjustTeamDests.java
@@ -21,46 +23,10 @@ import logic.Square;
  */
 public class AdjustTeamDests implements Serializable
 {
-
-	/**
-	 * Generated Serial Version ID
-	 */
-	private static final long serialVersionUID = 8968867943548622826L;
-
-	/**
-	 * The name of the method used; for reading it back in.
-	 */
-	private String name;
-	/**
-	 * Which method to use; reflection so we didn't write nxm classes.
-	 */
-	private transient Method doMethod;
-	/**
-	 * To conveniently look up the methods.
-	 */
-	private static HashMap<String, Method> doMethods = new HashMap<String, Method>();
-	static
-	{
-		try
-		{
-			doMethods.put("classic", AdjustTeamDests.class.getMethod("classicAdjustTeamDests", List.class));
-			doMethods.put("mustCapture", AdjustTeamDests.class.getMethod("mustCapture", List.class));
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Create the AdjustTeamDests object.
-	 * 
-	 * @param name The method to use.
-	 */
 	public AdjustTeamDests(String name)
 	{
-		doMethod = doMethods.get(name);
-		this.name = name;
+		m_doMethod = m_doMethods.get(name);
+		m_methodName = name;
 	}
 
 	/**
@@ -83,11 +49,10 @@ public class AdjustTeamDests implements Serializable
 	{
 		try
 		{
-			if (doMethod == null)
-			{
-				doMethod = doMethods.get(name);
-			}
-			doMethod.invoke(this, team);
+			if (m_doMethod == null)
+				m_doMethod = m_doMethods.get(m_methodName);
+
+			m_doMethod.invoke(this, team);
 		}
 		catch (Exception e)
 		{
@@ -115,27 +80,43 @@ public class AdjustTeamDests implements Serializable
 					break;
 				}
 			}
+
 			if (foundCapture)
-			{
 				break;
-			}
 		}
 		if (foundCapture)
 		{
 			for (int i = 0; i < team.size(); i++)
 			{
 				Piece current = team.get(i);
-				ArrayList<Square> adjusted = new ArrayList<Square>();
+				List<Square> adjusted = Lists.newArrayList();
 				for (Square s : current.getLegalDests())
 				{
 					if (s.isOccupied())
-					{
 						adjusted.add(s);
-					}
 				}
 				current.setLegalDests(adjusted);
 			}
 		}
 	}
 
+	private static final long serialVersionUID = 8968867943548622826L;
+
+	private static Map<String, Method> m_doMethods = Maps.newHashMap();
+
+	static
+	{
+		try
+		{
+			m_doMethods.put("classic", AdjustTeamDests.class.getMethod("classicAdjustTeamDests", List.class));
+			m_doMethods.put("mustCapture", AdjustTeamDests.class.getMethod("mustCapture", List.class));
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	private String m_methodName;
+	private transient Method m_doMethod;
 }

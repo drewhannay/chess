@@ -2,10 +2,12 @@ package rules;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
-import java.util.HashMap;
+import java.util.Map;
 
 import logic.Board;
 import logic.Game;
+
+import com.google.common.collect.Maps;
 
 /**
  * GetBoard.java
@@ -19,49 +21,13 @@ import logic.Game;
  */
 public class GetBoard implements Serializable
 {
-
-	/**
-	 * Generated Serial Version ID
-	 */
-	private static final long serialVersionUID = -2155872379580860065L;
-
-	/**
-	 * The current Game object.
-	 */
-	private Game g;
-
-	/**
-	 * The name of the method; for reading in the object.
-	 */
-	private String name;
-	/**
-	 * The method to perform
-	 */
-	private transient Method doMethod;
-	/**
-	 * A hashmap for convience's sake to look up the method by name.
-	 */
-	private static HashMap<String, Method> doMethods = new HashMap<String, Method>();
-	static
-	{
-		try
-		{
-			doMethods.put("classic", GetBoard.class.getMethod("classicGetBoard", Board.class));
-			doMethods.put("oppositeBoard", GetBoard.class.getMethod("oppositeBoard", Board.class));
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-	}
-
 	/**
 	 * @param name The name of the method.
 	 */
 	public GetBoard(String name)
 	{
-		doMethod = doMethods.get(name);
-		this.name = name;
+		m_doMethod = m_doMethods.get(name);
+		m_methodName = name;
 	}
 
 	/**
@@ -83,11 +49,10 @@ public class GetBoard implements Serializable
 	{
 		try
 		{
-			if (doMethod == null)
-			{
-				doMethod = doMethods.get(name);
-			}
-			return (Board) doMethod.invoke(this, startBoard);
+			if (m_doMethod == null)
+				m_doMethod = m_doMethods.get(m_methodName);
+
+			return (Board) m_doMethod.invoke(this, startBoard);
 		}
 		catch (Exception e)
 		{
@@ -102,17 +67,35 @@ public class GetBoard implements Serializable
 	 */
 	public Board oppositeBoard(Board startBoard)
 	{
-		if (startBoard.equals(g.getBoards()[0]))
-			return g.getBoards()[1];
-		return g.getBoards()[0];
+		if (startBoard.equals(m_game.getBoards()[0]))
+			return m_game.getBoards()[1];
+		return m_game.getBoards()[0];
 	}
 
-	/**
-	 * @param g Setter for g.
-	 */
-	public void setGame(Game g)
+	public void setGame(Game game)
 	{
-		this.g = g;
+		m_game = game;
 	}
 
+	private static final long serialVersionUID = -2155872379580860065L;
+
+	private static Map<String, Method> m_doMethods = Maps.newHashMap();
+
+	static
+	{
+		try
+		{
+			m_doMethods.put("classic", GetBoard.class.getMethod("classicGetBoard", Board.class));
+			m_doMethods.put("oppositeBoard", GetBoard.class.getMethod("oppositeBoard", Board.class));
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	private transient Method m_doMethod;
+
+	private Game m_game;
+	private String m_methodName;
 }

@@ -2,11 +2,13 @@ package rules;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import logic.Piece;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 /**
  * CropLegalDests.java
@@ -20,40 +22,6 @@ import logic.Piece;
  */
 public class CropLegalDests implements Serializable
 {
-
-	/**
-	 * Generated Serial Version ID
-	 */
-	private static final long serialVersionUID = -2048642921268915519L;
-
-	/**
-	 * The names of the methods to do. Used to read back in during
-	 * Serialization.
-	 */
-	private ArrayList<String> names = new ArrayList<String>();
-	/**
-	 * The methods to perform, since there can be more than one compatable
-	 * method.
-	 */
-	private transient ArrayList<Method> methods = new ArrayList<Method>();
-	/**
-	 * A hashmap to conveniently look up methods.
-	 */
-	private static HashMap<String, Method> doMethods = new HashMap<String, Method>();
-	static
-	{
-		try
-		{
-			doMethods.put("classic", CropLegalDests.class.getMethod("classicCropLegalDests", Piece.class, Piece.class, List.class));
-			doMethods.put("stationaryObjective",
-					CropLegalDests.class.getMethod("stationaryObjective", Piece.class, Piece.class, List.class));
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-	}
-
 	/**
 	 * Add a method to the list of performable methods.
 	 * 
@@ -61,8 +29,8 @@ public class CropLegalDests implements Serializable
 	 */
 	public void addMethod(String name)
 	{
-		methods.add(doMethods.get(name));
-		names.add(name);
+		m_methods.add(m_doMethods.get(name));
+		m_methodNames.add(name);
 	}
 
 	/**
@@ -88,18 +56,14 @@ public class CropLegalDests implements Serializable
 	{
 		try
 		{
-			if (methods == null || methods.size() == 0)
+			if (m_methods == null || m_methods.size() == 0)
 			{
-				methods = new ArrayList<Method>();
-				for (String s : names)
-				{
-					methods.add(doMethods.get(s));
-				}
+				m_methods = Lists.newArrayList();
+				for (String methodName : m_methodNames)
+					m_methods.add(m_doMethods.get(methodName));
 			}
-			for (Method m : methods)
-			{
-				m.invoke(this, movingObjectivePiece, toAdjust, enemyTeam);
-			}
+			for (Method method : m_methods)
+				method.invoke(this, movingObjectivePiece, toAdjust, enemyTeam);
 		}
 		catch (Exception e)
 		{
@@ -118,14 +82,30 @@ public class CropLegalDests implements Serializable
 	public void stationaryObjective(Piece movingObjective, Piece toAdjust, List<Piece> enemyTeam)
 	{
 		if (toAdjust == movingObjective)
-		{
 			toAdjust.getLegalDests().clear();
-		}
 		else
-		{
 			toAdjust.adjustPinsLegalDests(movingObjective, enemyTeam);
-		}
 		return;
 	}
 
+	private static final long serialVersionUID = -2048642921268915519L;
+
+	private static Map<String, Method> m_doMethods = Maps.newHashMap();
+
+	static
+	{
+		try
+		{
+			m_doMethods.put("classic", CropLegalDests.class.getMethod("classicCropLegalDests", Piece.class, Piece.class, List.class));
+			m_doMethods.put("stationaryObjective",
+					CropLegalDests.class.getMethod("stationaryObjective", Piece.class, Piece.class, List.class));
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	private List<String> m_methodNames = Lists.newArrayList();
+	private transient List<Method> m_methods = Lists.newArrayList();
 }

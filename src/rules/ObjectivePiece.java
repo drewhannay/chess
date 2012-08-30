@@ -2,10 +2,12 @@ package rules;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
-import java.util.HashMap;
+import java.util.Map;
 
 import logic.Game;
 import logic.Piece;
+
+import com.google.common.collect.Maps;
 
 /**
  * ObjectivePiece.java
@@ -18,56 +20,11 @@ import logic.Piece;
  */
 public class ObjectivePiece implements Serializable
 {
-
-	/**
-	 * Generated Serial Version ID
-	 */
-	private static final long serialVersionUID = 6945649584920313635L;
-
-	/**
-	 * The current game.
-	 */
-	private Game g;
-
-	/**
-	 * The name of the method to perform.
-	 */
-	private String name;
-	/**
-	 * The name of the objective piece.
-	 */
-	private String objectiveName;
-	/**
-	 * The method to perform.
-	 */
-	private transient Method doMethod;
-	/**
-	 * A hashmap for convenience.
-	 */
-	private static HashMap<String, Method> doMethods = new HashMap<String, Method>();
-	static
+	public ObjectivePiece(String methodName, String objectivePieceName)
 	{
-		try
-		{
-			doMethods.put("classic", ObjectivePiece.class.getMethod("classicObjectivePiece", boolean.class));
-			doMethods.put("no objective", ObjectivePiece.class.getMethod("noObjectivePiece", boolean.class));
-			doMethods.put("custom objective", ObjectivePiece.class.getMethod("customObjectivePiece", boolean.class));
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * @param name The name of the method.
-	 * @param objectiveName The name of the objective piece.
-	 */
-	public ObjectivePiece(String name, String objectiveName)
-	{
-		doMethod = doMethods.get(name);
-		this.name = name;
-		this.objectiveName = objectiveName;
+		m_doMethod = m_doMethods.get(methodName);
+		m_methodName = methodName;
+		m_objectivePieceName = objectivePieceName;
 	}
 
 	/**
@@ -82,14 +39,17 @@ public class ObjectivePiece implements Serializable
 		{
 			if (isBlack)
 			{
-				for (Piece p : g.getBlackTeam())
+				for (Piece p : m_game.getBlackTeam())
+				{
 					if (p.getName().equals("King"))
 						return p;
-
+				}
 			}
-			for (Piece p : g.getWhiteTeam())
+			for (Piece p : m_game.getWhiteTeam())
+			{
 				if (p.getName().equals("King"))
 					return p;
+			}
 			return null;
 		}
 		catch (Exception e)
@@ -111,13 +71,17 @@ public class ObjectivePiece implements Serializable
 		{
 			if (isBlack)
 			{
-				for (Piece p : g.getBlackTeam())
-					if (p.getName().equals(objectiveName))
+				for (Piece p : m_game.getBlackTeam())
+				{
+					if (p.getName().equals(m_objectivePieceName))
 						return p;
+				}
 			}
-			for (Piece p : g.getWhiteTeam())
-				if (p.getName().equals(objectiveName))
+			for (Piece p : m_game.getWhiteTeam())
+			{
+				if (p.getName().equals(m_objectivePieceName))
 					return p;
+			}
 			return null;
 		}
 		catch (Exception e)
@@ -137,11 +101,9 @@ public class ObjectivePiece implements Serializable
 	{
 		try
 		{
-			if (doMethod == null)
-			{
-				doMethod = doMethods.get(name);
-			}
-			return (Piece) doMethod.invoke(this, isBlack);
+			if (m_doMethod == null)
+				m_doMethod = m_doMethods.get(m_methodName);
+			return (Piece) m_doMethod.invoke(this, isBlack);
 		}
 		catch (Exception e)
 		{
@@ -161,22 +123,37 @@ public class ObjectivePiece implements Serializable
 		return null;
 	}
 
-	/**
-	 * @param g Setter for g.
-	 */
-	public void setGame(Game g)
+	public void setGame(Game game)
 	{
-		this.g = g;
+		m_game = game;
 	}
 
-	/**
-	 * Getter for objective name
-	 * 
-	 * @return The name of the objective.
-	 */
-	public String getObjectiveName()
+	public String getObjectivePieceName()
 	{
-		return objectiveName;
+		return m_objectivePieceName;
 	}
 
+	private static final long serialVersionUID = 6945649584920313635L;
+
+	private static Map<String, Method> m_doMethods = Maps.newHashMap();
+
+	static
+	{
+		try
+		{
+			m_doMethods.put("classic", ObjectivePiece.class.getMethod("classicObjectivePiece", boolean.class));
+			m_doMethods.put("no objective", ObjectivePiece.class.getMethod("noObjectivePiece", boolean.class));
+			m_doMethods.put("custom objective", ObjectivePiece.class.getMethod("customObjectivePiece", boolean.class));
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	private transient Method m_doMethod;
+
+	private Game m_game;
+	private String m_methodName;
+	private String m_objectivePieceName;
 }

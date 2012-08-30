@@ -20,56 +20,6 @@ import logic.Square;
  */
 public class Rules implements Serializable
 {
-
-	/**
-	 * Generated Serial Version ID
-	 */
-	private static final long serialVersionUID = -7895448383101471186L;
-
-	// Variables Declaration
-	/**
-	 * Whether it is classic chess or not.
-	 */
-	private boolean isClassic;
-	/**
-	 * An object to determine whose turn it is.
-	 */
-	private NextTurn nextTurn;
-	/**
-	 * An object to determine if the game is over.
-	 */
-	private EndOfGame endOfGame;
-	/**
-	 * An object to crop the legal dests of a piece
-	 */
-	private CropLegalDests cropLegalDests;
-	/**
-	 * An object to determine which piece is the objective.
-	 */
-	private ObjectivePiece objectivePiece;
-	/**
-	 * An object to determine what happens after a move.
-	 */
-	private AfterMove afterMove;
-	/**
-	 * An object to get the board.
-	 */
-	private GetBoard getBoard;
-	/**
-	 * An object to promote a piece.
-	 */
-	private Promote promote;
-	/**
-	 * An object to get the promotion squares of a piece.
-	 */
-	private GetPromotionSquares getPromotionSquares;
-	/**
-	 * An object to adjust the team's dests.
-	 */
-	private AdjustTeamDests adjustTeamDests;
-
-	// End Variables Declaration
-
 	/**
 	 * @param isClassic Whether the game is classic chess.
 	 * @param isBlack is this for the black or white player?
@@ -77,18 +27,17 @@ public class Rules implements Serializable
 	public Rules(boolean isClassic, boolean isBlack)
 	{
 		// Initialize everything to classic to ensure nothing can be null.
-		nextTurn = new NextTurn("classic", 1, 1, 0);
-		endOfGame = new EndOfGame("classic", 3, "Queen", isBlack);
-		cropLegalDests = new CropLegalDests();
-		cropLegalDests.addMethod("classic");
-		objectivePiece = new ObjectivePiece("classic", "");
-		afterMove = new AfterMove();
-		afterMove.addMethod("classic");
-		getBoard = new GetBoard("classic");
-		promote = new Promote("classic");
-		getPromotionSquares = new GetPromotionSquares("classic");
-		adjustTeamDests = new AdjustTeamDests("classic");
-
+		m_nextTurn = new NextTurn("classic", 1, 1, 0);
+		m_endOfGame = new EndOfGame("classic", 3, "Queen", isBlack);
+		m_cropLegalDests = new CropLegalDests();
+		m_cropLegalDests.addMethod("classic");
+		m_objectivePiece = new ObjectivePiece("classic", "");
+		m_afterMove = new AfterMove();
+		m_afterMove.addMethod("classic");
+		m_getBoard = new GetBoard("classic");
+		m_promote = new Promote("classic");
+		m_getPromotionSquares = new GetPromotionSquares("classic");
+		m_adjustTeamDests = new AdjustTeamDests("classic");
 	}
 
 	/**
@@ -98,7 +47,7 @@ public class Rules implements Serializable
 	 */
 	public void addAdjustTeamDests(AdjustTeamDests dests)
 	{
-		adjustTeamDests = dests;
+		m_adjustTeamDests = dests;
 	}
 
 	/**
@@ -108,12 +57,11 @@ public class Rules implements Serializable
 	 */
 	public void addAfterMove(String string)
 	{
-		if (afterMove == null)
+		if (m_afterMove == null)
 		{
-			afterMove = new AfterMove();
+			m_afterMove = new AfterMove();
 		}
-		afterMove.addMethod(string);
-
+		m_afterMove.addMethod(string);
 	}
 
 	/**
@@ -123,12 +71,11 @@ public class Rules implements Serializable
 	 */
 	public void addCropLegalDests(String string)
 	{
-		if (cropLegalDests == null)
+		if (m_cropLegalDests == null)
 		{
-			cropLegalDests = new CropLegalDests();
+			m_cropLegalDests = new CropLegalDests();
 		}
-		cropLegalDests.addMethod(string);
-
+		m_cropLegalDests.addMethod(string);
 	}
 
 	/**
@@ -138,7 +85,7 @@ public class Rules implements Serializable
 	 */
 	public void addEndOfGame(EndOfGame eog)
 	{
-		endOfGame = eog;
+		m_endOfGame = eog;
 	}
 
 	/**
@@ -148,7 +95,7 @@ public class Rules implements Serializable
 	 */
 	public String theEndIsNigh()
 	{
-		return endOfGame.getName();
+		return m_endOfGame.getMethodName();
 	}
 
 	/**
@@ -158,7 +105,7 @@ public class Rules implements Serializable
 	 */
 	public void addGetPromotionSquares(String string)
 	{
-		getPromotionSquares = new GetPromotionSquares(string);
+		m_getPromotionSquares = new GetPromotionSquares(string);
 
 	}
 
@@ -169,8 +116,7 @@ public class Rules implements Serializable
 	 */
 	public void addPromote(String string)
 	{
-		promote = new Promote(string);
-
+		m_promote = new Promote(string);
 	}
 
 	/**
@@ -180,7 +126,7 @@ public class Rules implements Serializable
 	 */
 	public void adjustTeamDests(List<Piece> team)
 	{
-		adjustTeamDests.execute(team);
+		m_adjustTeamDests.execute(team);
 	}
 
 	/**
@@ -190,7 +136,7 @@ public class Rules implements Serializable
 	 */
 	public void afterMove(Move m)
 	{
-		afterMove.execute(m);
+		m_afterMove.execute(m);
 	}
 
 	/**
@@ -202,7 +148,7 @@ public class Rules implements Serializable
 	 */
 	public void cropLegalDests(Piece movingObjectivePiece, Piece toAdjust, List<Piece> enemyTeam)
 	{
-		cropLegalDests.execute(movingObjectivePiece, toAdjust, enemyTeam);
+		m_cropLegalDests.execute(movingObjectivePiece, toAdjust, enemyTeam);
 	}
 
 	/**
@@ -212,7 +158,7 @@ public class Rules implements Serializable
 	 */
 	public void endOfGame(Piece objectivePiece)
 	{
-		endOfGame.execute(objectivePiece);
+		m_endOfGame.execute(objectivePiece);
 	}
 
 	/**
@@ -223,8 +169,7 @@ public class Rules implements Serializable
 	 */
 	public Board getBoard(Board startBoard)
 	{
-		return getBoard.execute(startBoard);
-
+		return m_getBoard.execute(startBoard);
 	}
 
 	/**
@@ -233,7 +178,7 @@ public class Rules implements Serializable
 	 */
 	public List<Square> getPromotionSquares(Piece toPromote)
 	{
-		return getPromotionSquares.execute(toPromote);
+		return m_getPromotionSquares.execute(toPromote);
 	}
 
 	/**
@@ -241,7 +186,7 @@ public class Rules implements Serializable
 	 */
 	public boolean isClassic()
 	{
-		return isClassic;
+		return m_isClassic;
 	}
 
 	/**
@@ -251,8 +196,7 @@ public class Rules implements Serializable
 	 */
 	public boolean nextTurn()
 	{
-		return nextTurn.execute();
-
+		return m_nextTurn.execute();
 	}
 
 	/**
@@ -263,8 +207,7 @@ public class Rules implements Serializable
 	 */
 	public Piece objectivePiece(boolean isBlack)
 	{
-		return objectivePiece.execute(isBlack);
-
+		return m_objectivePiece.execute(isBlack);
 	}
 
 	/**
@@ -274,7 +217,7 @@ public class Rules implements Serializable
 	 */
 	public boolean prevTurn()
 	{
-		return nextTurn.undo();
+		return m_nextTurn.undo();
 	}
 
 	/**
@@ -287,7 +230,7 @@ public class Rules implements Serializable
 	 */
 	public Piece promote(Piece toPromote, boolean verified, String promo)
 	{
-		return promote.execute(toPromote, verified, promo);
+		return m_promote.execute(toPromote, verified, promo);
 	}
 
 	/**
@@ -298,12 +241,12 @@ public class Rules implements Serializable
 	 */
 	public void setGame(Game g)
 	{
-		endOfGame.setGame(g);
-		objectivePiece.setGame(g);
-		afterMove.setGame(g);
-		getBoard.setGame(g);
-		getPromotionSquares.setGame(g);
-		promote.setGame(g);
+		m_endOfGame.setGame(g);
+		m_objectivePiece.setGame(g);
+		m_afterMove.setGame(g);
+		m_getBoard.setGame(g);
+		m_getPromotionSquares.setGame(g);
+		m_promote.setGame(g);
 	}
 
 	/**
@@ -313,8 +256,7 @@ public class Rules implements Serializable
 	 */
 	public void setGetBoard(GetBoard getBoard)
 	{
-		this.getBoard = getBoard;
-
+		m_getBoard = getBoard;
 	}
 
 	/**
@@ -324,7 +266,7 @@ public class Rules implements Serializable
 	 */
 	public void setNextTurn(NextTurn n)
 	{
-		nextTurn = n;
+		m_nextTurn = n;
 	}
 
 	/**
@@ -334,7 +276,7 @@ public class Rules implements Serializable
 	 */
 	public NextTurn getNextTurn()
 	{
-		return nextTurn;
+		return m_nextTurn;
 	}
 
 	/**
@@ -344,8 +286,7 @@ public class Rules implements Serializable
 	 */
 	public void setObjectivePiece(ObjectivePiece objectivePiece)
 	{
-		this.objectivePiece = objectivePiece;
-
+		m_objectivePiece = objectivePiece;
 	}
 
 	/**
@@ -355,7 +296,7 @@ public class Rules implements Serializable
 	 */
 	public void undoAfterMove(Move m)
 	{
-		afterMove.undo(m);
+		m_afterMove.undo(m);
 	}
 
 	/**
@@ -363,7 +304,7 @@ public class Rules implements Serializable
 	 */
 	public void undoEndOfGame()
 	{
-		endOfGame.undo();
+		m_endOfGame.undo();
 	}
 
 	/**
@@ -374,7 +315,7 @@ public class Rules implements Serializable
 	 */
 	public Piece undoPromote(Piece p)
 	{
-		return promote.undo(p);
+		return m_promote.undo(p);
 	}
 
 	/**
@@ -384,7 +325,7 @@ public class Rules implements Serializable
 	 */
 	public String getObjectiveName()
 	{
-		return objectivePiece.getObjectiveName();
+		return m_objectivePiece.getObjectivePieceName();
 	}
 
 	/**
@@ -394,7 +335,20 @@ public class Rules implements Serializable
 	 */
 	public boolean networkable()
 	{
-		List<String> afterMoves = afterMove.getMethods();
+		List<String> afterMoves = m_afterMove.getMethods();
 		return !(afterMoves.contains("placeCaptured") || afterMoves.contains("placeCapturedSwitch"));
 	}
+
+	private static final long serialVersionUID = -7895448383101471186L;
+
+	private boolean m_isClassic;
+	private NextTurn m_nextTurn;
+	private EndOfGame m_endOfGame;
+	private CropLegalDests m_cropLegalDests;
+	private ObjectivePiece m_objectivePiece;
+	private AfterMove m_afterMove;
+	private GetBoard m_getBoard;
+	private Promote m_promote;
+	private GetPromotionSquares m_getPromotionSquares;
+	private AdjustTeamDests m_adjustTeamDests;
 }
