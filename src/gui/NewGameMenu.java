@@ -38,13 +38,13 @@ import logic.Builder;
 import logic.Game;
 import net.NetworkClient;
 import net.NetworkServer;
-import timer.BronsteinDelay;
+import timer.BronsteinDelayTimer;
 import timer.ChessTimer;
-import timer.Fischer;
-import timer.HourGlass;
+import timer.FischerTimer;
+import timer.HourGlassTimer;
 import timer.NoTimer;
-import timer.SimpleDelay;
-import timer.Word;
+import timer.SimpleDelayTimer;
+import timer.WordTimer;
 import utility.FileUtility;
 import ai.AIAdapter;
 import ai.AIPlugin;
@@ -780,39 +780,39 @@ public class NewGameMenu extends JPanel
 				}
 				else if (timerName.equals("Bronstein Delay"))
 				{
-					blackTimer = new BronsteinDelay(increment, startTime, true);
-					whiteTimer = new BronsteinDelay(increment, startTime, false);
+					blackTimer = new BronsteinDelayTimer(increment, startTime, true);
+					whiteTimer = new BronsteinDelayTimer(increment, startTime, false);
 				}
 				else if (timerName.equals("Fischer"))
 				{
-					blackTimer = new Fischer(increment, startTime, false, true);
-					whiteTimer = new Fischer(increment, startTime, false, false);
+					blackTimer = new FischerTimer(increment, startTime, false, true);
+					whiteTimer = new FischerTimer(increment, startTime, false, false);
 				}
 				else if (timerName.equals("Fischer After"))
 				{
-					blackTimer = new Fischer(increment, startTime, true, true);
-					whiteTimer = new Fischer(increment, startTime, true, false);
+					blackTimer = new FischerTimer(increment, startTime, true, true);
+					whiteTimer = new FischerTimer(increment, startTime, true, false);
 				}
 				else if (timerName.equals("Hour Glass"))
 				{
-					blackTimer = new HourGlass(startTime / 2, true); // time is
+					blackTimer = new HourGlassTimer(startTime / 2, true); // time is
 																		// halved
 																		// since
 																		// this
 																		// is
 																		// actually
 					// the timer the player is not allowed to exceed.
-					whiteTimer = new HourGlass(startTime / 2, false);
+					whiteTimer = new HourGlassTimer(startTime / 2, false);
 				}
 				else if (timerName.equals("Simple Delay"))
 				{
-					blackTimer = new SimpleDelay(increment, startTime, true);
-					whiteTimer = new SimpleDelay(increment, startTime, false);
+					blackTimer = new SimpleDelayTimer(increment, startTime, true);
+					whiteTimer = new SimpleDelayTimer(increment, startTime, false);
 				}
 				else
 				{
-					blackTimer = new Word(startTime);
-					whiteTimer = new Word(startTime);
+					blackTimer = new WordTimer(startTime);
+					whiteTimer = new WordTimer(startTime);
 				}
 				// Create the new panel and display it, then get rid of this pop
 				// up.

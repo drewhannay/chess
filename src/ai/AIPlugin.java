@@ -12,7 +12,6 @@ import ai.AIAdapter.AIBoard;
  */
 public interface AIPlugin
 {
-
 	/**
 	 * Method to determine and return the next move for the AI to make.
 	 * 

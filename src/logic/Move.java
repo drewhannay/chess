@@ -5,7 +5,7 @@ import gui.PlayGame;
 import java.io.Serializable;
 import java.util.List;
 
-import timer.Word;
+import timer.WordTimer;
 
 /**
  * Move.java
@@ -336,13 +336,13 @@ public class Move implements Serializable
 		}
 		else
 		{
-			oldWhiteTime = board.getGame().getWhiteTimer().getTime();
-			oldBlackTime = board.getGame().getBlackTimer().getTime();
+			oldWhiteTime = board.getGame().getWhiteTimer().getRawTime();
+			oldBlackTime = board.getGame().getBlackTimer().getRawTime();
 		}
-		if (board.getGame().getWhiteTimer() instanceof Word)
+		if (board.getGame().getWhiteTimer() instanceof WordTimer)
 		{
-			oldWhiteDirection = board.getGame().getWhiteTimer().getDirection();
-			oldBlackDirection = board.getGame().getBlackTimer().getDirection();
+			oldWhiteDirection = board.getGame().getWhiteTimer().getClockDirection();
+			oldBlackDirection = board.getGame().getBlackTimer().getClockDirection();
 		}
 
 		prev = board.getGame().getLastMove();
@@ -692,12 +692,12 @@ public class Move implements Serializable
 		}
 
 		board.getGame().undoAfterMove(this);
-		board.getGame().getWhiteTimer().setTime(oldWhiteTime);
-		board.getGame().getBlackTimer().setTime(oldBlackTime);
-		if (board.getGame().getWhiteTimer() instanceof Word)
+		board.getGame().getWhiteTimer().setClockTime(oldWhiteTime);
+		board.getGame().getBlackTimer().setClockTime(oldBlackTime);
+		if (board.getGame().getWhiteTimer() instanceof WordTimer)
 		{
-			board.getGame().getWhiteTimer().setDirection(oldWhiteDirection);
-			board.getGame().getBlackTimer().setDirection(oldBlackDirection);
+			board.getGame().getWhiteTimer().setClockDirection(oldWhiteDirection);
+			board.getGame().getBlackTimer().setClockDirection(oldBlackDirection);
 		}
 		board.getGame().prevTurn();
 		board.getGame().setLastMove(prev);

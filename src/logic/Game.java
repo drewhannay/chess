@@ -643,9 +643,9 @@ public class Game implements Serializable
 	 */
 	public Move fakeToRealMove(FakeMove m) throws Exception
 	{
-		Board to = m_boards[m.boardNum];
+		Board to = m_boards[m.m_boardIndex];
 		Board from = ((m_isBlackMove) ? m_blackRules : m_whiteRules).getBoard(to);
-		return new Move(from, from.getSquare(m.originRow, m.originCol), to.getSquare(m.destRow, m.destCol), m.promoName);
+		return new Move(from, from.getSquare(m.m_originRow, m.m_originColumn), to.getSquare(m.m_destinationRow, m.m_destinationColumn), m.m_promotionPieceName);
 	}
 
 	/**

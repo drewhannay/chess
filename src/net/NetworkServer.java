@@ -87,7 +87,7 @@ public class NetworkServer
 				{
 					fromUser = in.readObject();
 					FakeMove toMove = (FakeMove) fromUser;
-					if (toMove.originCol == -1)
+					if (toMove.m_originColumn == -1)
 					{
 						int surrender = JOptionPane.showConfirmDialog(null, "The other player has requested a Draw. Do you accept?",
 								"Draw", JOptionPane.YES_NO_OPTION);
@@ -144,7 +144,7 @@ public class NetworkServer
 					{
 						fromUser = in.readObject();
 						FakeMove toMove = (FakeMove) fromUser;
-						if (toMove.originCol == -2)
+						if (toMove.m_originColumn == -2)
 						{
 							Result r = new Result(Result.DRAW);
 							r.setText("The game has ended in a Draw!");
@@ -153,7 +153,7 @@ public class NetworkServer
 							png.drawRequested = false;
 							throw new Exception();
 						}
-						else if (toMove.originCol == -3)
+						else if (toMove.m_originColumn == -3)
 						{ // If the response is an unaccepted Draw request, do
 							// not perform the Move.
 							JOptionPane.showMessageDialog(null, "Your request for a draw has been denied. Continue play as normal.",
@@ -166,7 +166,7 @@ public class NetworkServer
 					fromServer = PlayNetGame.netMove;
 					PlayNetGame.netMove = null;
 
-					if (((FakeMove) fromServer).originCol == -1)
+					if (((FakeMove) fromServer).m_originColumn == -1)
 						png.drawRequested = true;
 
 					out.writeObject(fromServer);
@@ -193,8 +193,8 @@ public class NetworkServer
 			if (g.getHistory().size() != 0 && g.getHistory().get(g.getHistory().size() - 1).getResult() != null)
 				return;
 			JOptionPane.showMessageDialog(null, "Your opponent closed the game", "Oops!", JOptionPane.ERROR_MESSAGE);
-			g.getBlackTimer().stop();
-			g.getWhiteTimer().stop();
+			g.getBlackTimer().stopTimer();
+			g.getWhiteTimer().stopTimer();
 			Driver.getInstance().fileMenu.setVisible(true);
 			Driver.getInstance();
 			Driver.gameOptions.setVisible(false);

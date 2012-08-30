@@ -13,139 +13,58 @@ import javax.swing.Timer;
 
 import logic.Result;
 
-/**
- * An abstract class to contain information about the current timer.
- * 
- * @author alisa.maas
- * 
- */
 public abstract class ChessTimer implements ActionListener, Serializable
 {
-	/**
-	 * The current time on the clock, in ms.
-	 */
-	protected long time;
-	/**
-	 * The time the clock was last updated.
-	 */
-	protected long lastUpdated;
-
-	/**
-	 * The label to display
-	 */
-	protected JLabel label;
-	/**
-	 * To correctly format the time displayed to the user.
-	 */
-	protected NumberFormat nf;
-
-	/**
-	 * The timer object; calls the actionPerformed method every second.
-	 */
-	protected Timer timer;
-
-	/**
-	 * Whether the timer is delayed.
-	 */
-	protected boolean delay;
-	/**
-	 * Whose team this clock belongs to.
-	 */
-	protected boolean isBlack;
-	/**
-	 * Tells whether the time has recently been reset; used for undo.
-	 */
-	protected boolean timeSet;
-	/**
-	 * The initial start time; also for undo.
-	 */
-	protected long startTime;
-	/**
-	 * Which direction is the clock moving?
-	 */
-	protected int direction = 1; // should be 1 or -1 to account for timer
-	// counting up instead. -1 to count up since it gets subtracted.
-	/**
-	 * If the timers have been stopped or not.
-	 */
-	protected static boolean stopTimers;
-	/**
-	 * For Serialization.
-	 */
-	private static final long serialVersionUID = -1195203886987180343L;
-
+	public void init()
+	{
+		m_displayLabel = new JLabel();
+		m_displayLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		m_displayLabel.setOpaque(true);
+		m_numberFormat = NumberFormat.getNumberInstance();
+		m_numberFormat.setMinimumIntegerDigits(2);
+		m_timer = new Timer(1000, this);
+		m_timer.setInitialDelay(0);
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent ae)
 	{
 		updateDisplay();
 	}
 
-	/**
-	 * Will change the stopTimers boolean to true.
-	 */
 	public static void stopTimers()
 	{
-		stopTimers = true;
+		m_isStopped = true;
 	}
 
-	/**
-	 * @return The direction the clock is proceeding.
-	 */
-	public int getDirection()
+	public int getClockDirection()
 	{
-		return direction;
+		return m_clockDirection;
 	}
 
-	/**
-	 * @return the label; for displaying.
-	 */
-	public JLabel getLabel()
+	public JLabel getDisplayLabel()
 	{
-		return label;
+		return m_displayLabel;
 	}
 
-	/**
-	 * Get the start time.
-	 * 
-	 * @return The time the clock started at.
-	 */
 	public long getStartTime()
 	{
-		return startTime;
+		return m_initialStartTime;
 	}
 
-	/**
-	 * 
-	 * @return The time on the clock (not formatted)
-	 */
-	public long getTime()
+	public long getRawTime()
 	{
-		return time;
+		return m_currentTime;
 	}
 
 	/**
-	 * Reset the timer to its original settings
+	 * Reset the timer to the original settings
 	 */
 	public void reset()
 	{
-		lastUpdated = System.currentTimeMillis();
-		time = startTime;
+		m_clockLastUpdatedTime = System.currentTimeMillis();
+		m_currentTime = m_initialStartTime;
 		updateDisplay();
-	}
-
-	/**
-	 * Initialize the components of the timer.
-	 */
-	public void init()
-	{
-		label = new JLabel();
-		label.setHorizontalAlignment(SwingConstants.CENTER);
-		label.setOpaque(true);
-		// getContentPane().add(label, BorderLayout.CENTER);
-		nf = NumberFormat.getNumberInstance();
-		nf.setMinimumIntegerDigits(2);
-		timer = new Timer(1000, this);
-		timer.setInitialDelay(0);
 	}
 
 	/**
@@ -153,86 +72,73 @@ public abstract class ChessTimer implements ActionListener, Serializable
 	 */
 	public void restart()
 	{
-		timer = new Timer(1000, this);
-		timer.setInitialDelay(0);
-		lastUpdated = System.currentTimeMillis();
+		m_timer = new Timer(1000, this);
+		m_timer.setInitialDelay(0);
+		m_clockLastUpdatedTime = System.currentTimeMillis();
 	}
 
-	/**
-	 * Set the direction of the clock; for undo.
-	 * 
-	 * @param newDirection The new direction.
-	 */
-	public void setDirection(int newDirection)
+	public void setClockDirection(int newDirection)
 	{
-		direction = newDirection;
+		m_clockDirection = newDirection;
 	}
 
-	/**
-	 * Set the time on the clock; for undo.
-	 * 
-	 * @param newTime The new time to display.
-	 */
-	public void setTime(long newTime)
+	public void setClockTime(long newTime)
 	{
-		time = newTime == -1 ? startTime : newTime;
-		timeSet = true;
+		m_currentTime = newTime == -1 ? m_initialStartTime : newTime;
+		m_timeWasRecentlyReset = true;
 	}
 
-	/**
-	 * Start the timer
-	 */
-	public abstract void start();
+	public abstract void startTimer();
 
-	/**
-	 * Stop the timer.
-	 */
-	public abstract void stop();
+	public abstract void stopTimer();
 
-	/**
-	 * Respond to the time running out; shared code among all the classes except
-	 * NoTimer, which overrides this method.
-	 */
 	public void timeElapsed()
 	{
-		Result r = new Result(isBlack ? Result.WHITE_WIN : Result.BLACK_WIN);
+		Result r = new Result(m_isBlackTeamTimer ? Result.WHITE_WIN : Result.BLACK_WIN);
 		r.setText("Time has run out. " + r.winText() + "\n");
 		PlayGame.endOfGame(r);
-		timer.stop();
-
+		m_timer.stop();
 	}
 
-	/**
-	 * Updates the display in response to the time passing.
-	 */
 	protected void updateDisplay()
 	{
-		if (stopTimers)
+		if (m_isStopped)
 		{
-			timer.stop();
+			m_timer.stop();
 			return;
 		}
 		long now = System.currentTimeMillis();
-		long elapsed = now - lastUpdated;
-		if (!delay)
-		{
-			time -= elapsed * direction; // to account for SimpleDelay
-		}
+		long elapsed = now - m_clockLastUpdatedTime;
+
+		if (!m_isDelayedTimer)
+			m_currentTime -= elapsed * m_clockDirection;
 		else
-		{
-			delay = false;
-		}
-		lastUpdated = now;
+			m_isDelayedTimer = false;
 
-		int minutes = (int) (time / 60000);
-		int seconds = (int) ((time % 60000) / 1000);
-		label.setText(nf.format(minutes) + ":" + nf.format(seconds));
-		if (time <= 0)
+		m_clockLastUpdatedTime = now;
+
+		int minutes = (int) (m_currentTime / 60000);
+		int seconds = (int) ((m_currentTime % 60000) / 1000);
+		m_displayLabel.setText(m_numberFormat.format(minutes) + ":" + m_numberFormat.format(seconds));
+		if (m_currentTime <= 0)
 		{
-			time = Math.abs(time);
+			m_currentTime = Math.abs(m_currentTime);
 			timeElapsed();
-
 		}
 	}
 
+	private static final long serialVersionUID = -1195203886987180343L;
+
+	protected long m_currentTime;
+	protected long m_clockLastUpdatedTime;
+	protected JLabel m_displayLabel;
+	protected NumberFormat m_numberFormat;
+	protected Timer m_timer;
+	protected boolean m_isDelayedTimer;
+	protected boolean m_isBlackTeamTimer;
+	protected boolean m_timeWasRecentlyReset;
+	protected long m_initialStartTime;
+	// should be 1 or -1 to account for timer counting up instead. -1 to count up since it gets subtracted
+	protected int m_clockDirection = 1;
+	protected static boolean m_isStopped;
 }

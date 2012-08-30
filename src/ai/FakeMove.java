@@ -7,53 +7,22 @@ import java.io.Serializable;
  */
 public class FakeMove implements Serializable
 {
-
 	/**
-	 * Serial ID
-	 */
-	private static final long serialVersionUID = -7511895104920021930L;
-
-	/**
-	 * Which board number in the board[]
-	 */
-	public int boardNum;
-	/**
-	 * Which row it is coming from
-	 */
-	public int originRow;
-	/**
-	 * Which col it is coming from
-	 */
-	public int originCol;
-	/**
-	 * Which row it wants to go to
-	 */
-	public int destRow;
-	/**
-	 * Which col it wants to go to
-	 */
-	public int destCol;
-	/**
-	 * The name of the promotion piece
-	 */
-	public String promoName;
-
-	/**
-	 * @param boardNum Which board in the board[]
+	 * @param boardIndex Which board in the board[]
 	 * @param originRow Which row it was/is on
-	 * @param originCol Which col it was/is on
-	 * @param destRow Which row it wants to be on
-	 * @param destCol Which col it wants to be on
-	 * @param promoName The name of the promotion piece
+	 * @param originColumn Which col it was/is on
+	 * @param destinationRow Which row it wants to be on
+	 * @param destinationColumn Which col it wants to be on
+	 * @param promotionPieceName The name of the promotion piece
 	 */
-	public FakeMove(int boardNum, int originRow, int originCol, int destRow, int destCol, String promoName)
+	public FakeMove(int boardIndex, int originRow, int originColumn, int destinationRow, int destinationColumn, String promotionPieceName)
 	{
-		this.boardNum = boardNum;
-		this.originRow = originRow;
-		this.originCol = originCol;
-		this.destRow = destRow;
-		this.destCol = destCol;
-		this.promoName = promoName;
+		m_boardIndex = boardIndex;
+		m_originRow = originRow;
+		m_originColumn = originColumn;
+		m_destinationRow = destinationRow;
+		m_destinationColumn = destinationColumn;
+		m_promotionPieceName = promotionPieceName;
 	}
 
 	/**
@@ -64,7 +33,15 @@ public class FakeMove implements Serializable
 	@Override
 	public String toString()
 	{
-		return boardNum + " " + originRow + " " + originCol + " " + destRow + " " + destCol;
+		return m_boardIndex + " " + m_originRow + " " + m_originColumn + " " + m_destinationRow + " " + m_destinationColumn;
 	}
 
+	private static final long serialVersionUID = -7511895104920021930L;
+
+	public int m_boardIndex;
+	public int m_originRow;
+	public int m_originColumn;
+	public int m_destinationRow;
+	public int m_destinationColumn;
+	public String m_promotionPieceName;
 }

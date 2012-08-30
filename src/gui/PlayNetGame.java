@@ -510,7 +510,7 @@ public class PlayNetGame extends PlayGame
 			c.ipadx = 100;
 			c.gridx = 11 + ifDouble;
 			c.gridy = 4;
-			this.add(blackTimer.getLabel(), c);
+			this.add(blackTimer.getDisplayLabel(), c);
 
 			// Adds the White timer
 			c.fill = GridBagConstraints.HORIZONTAL;
@@ -520,7 +520,7 @@ public class PlayNetGame extends PlayGame
 			c.ipadx = 100;
 			c.gridx = 11 + ifDouble;
 			c.gridy = 6;
-			this.add(whiteTimer.getLabel(), c);
+			this.add(whiteTimer.getDisplayLabel(), c);
 		}
 		else
 		{

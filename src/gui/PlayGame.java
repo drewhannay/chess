@@ -547,8 +547,8 @@ public class PlayGame extends JPanel
 	{
 		if (whiteTimer != null && blackTimer != null)
 		{
-			(!b ? whiteTimer : blackTimer).start();
-			(b ? whiteTimer : blackTimer).stop();
+			(!b ? whiteTimer : blackTimer).startTimer();
+			(b ? whiteTimer : blackTimer).stopTimer();
 		}
 	}
 
@@ -641,8 +641,8 @@ public class PlayGame extends JPanel
 				@Override
 				public void actionPerformed(ActionEvent e)
 				{
-					whiteTimer.stop();
-					blackTimer.stop();
+					whiteTimer.stopTimer();
+					blackTimer.stopTimer();
 					saveGame();
 
 					menu.setVisible(false);
@@ -936,7 +936,7 @@ public class PlayGame extends JPanel
 			c.ipadx = 100;
 			c.gridx = 11 + ifDouble;
 			c.gridy = 4;
-			this.add(blackTimer.getLabel(), c);
+			this.add(blackTimer.getDisplayLabel(), c);
 
 			// Adds the UNDO button
 			c.fill = GridBagConstraints.HORIZONTAL;
@@ -956,7 +956,7 @@ public class PlayGame extends JPanel
 			c.ipadx = 100;
 			c.gridx = 11 + ifDouble;
 			c.gridy = 6;
-			this.add(whiteTimer.getLabel(), c);
+			this.add(whiteTimer.getDisplayLabel(), c);
 		}
 		else
 		{
