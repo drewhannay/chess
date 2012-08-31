@@ -16,7 +16,8 @@ public class Board implements Serializable
 
 		for (int row = 0, column = 0; row < numRows; row++)
 		{
-			// Initialize the Squares. Add one to the row and column to ignore counting from zero
+			// Initialize the Squares. Add one to the row and column to ignore
+			// counting from zero
 			for (column = 0; column < numColumns; column++)
 				m_squares[row][column] = new Square((row + 1), (column + 1));
 		}
@@ -74,9 +75,21 @@ public class Board implements Serializable
 			{
 				if ((p.getName().equals(pieceKlass)) && p.isLegalDest(dest))
 				{
-					if ((origCol < 1 && origRow < 1) || // If the origCol and origRow were both zero
-							(origCol < 1 && p.getSquare().getRow() == origRow) || // If just the origCol was zero
-							(origRow < 1 && p.getSquare().getCol() == origCol)) // If just the origRow was zero
+					if ((origCol < 1 && origRow < 1) || // If the origCol and
+														// origRow were both
+														// zero
+							(origCol < 1 && p.getSquare().getRow() == origRow) || // If
+																					// just
+																					// the
+																					// origCol
+																					// was
+																					// zero
+							(origRow < 1 && p.getSquare().getCol() == origCol)) // If
+																				// just
+																				// the
+																				// origRow
+																				// was
+																				// zero
 					{
 						mover = p;
 						break;
@@ -92,7 +105,8 @@ public class Board implements Serializable
 
 	public Square getSquare(int row, int col)
 	{
-		// Use x-1 and y-1 so that we can maintain the illusion of counting from 1
+		// Use x-1 and y-1 so that we can maintain the illusion of counting from
+		// 1
 		return m_squares[row - 1][col - 1];
 	}
 

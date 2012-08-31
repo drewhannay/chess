@@ -118,7 +118,8 @@ public class AfterMove implements Serializable
 		if (m.getCaptured() == null)
 			return;
 		Piece toHome = m.getCaptured();
-		// if you captured a piece on it's original square, let capturing work as normal
+		// if you captured a piece on it's original square, let capturing work
+		// as normal
 		if (toHome.getOriginalSquare() == toHome.getSquare())
 			return;
 		// otherwise, move the captured piece to it's original square
@@ -126,7 +127,8 @@ public class AfterMove implements Serializable
 		toHome.getGuardSquares().clear();
 		toHome.setPinnedBy(null);
 
-		// if there was a piece on the original square, save it so we can put it back if we undo
+		// if there was a piece on the original square, save it so we can put it
+		// back if we undo
 		m.setRemoved(toHome.getOriginalSquare().getPiece());
 		if (m.getRemoved() != null)
 			(m.getRemoved().isBlack() ? m_game.getBlackTeam() : m_game.getWhiteTeam()).remove(m.getRemoved());

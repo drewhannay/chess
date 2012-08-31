@@ -72,7 +72,8 @@ public class NextTurn implements Serializable
 	 */
 	public boolean differentNumTurns()
 	{
-		if (++m_currentNumberOfMovesMade >= (m_isBlackMove ? m_numberOfBlackMovesBeforeTurnChange : m_numberOfWhiteMovesBeforeTurnChange))
+		if (++m_currentNumberOfMovesMade >= (m_isBlackMove ? m_numberOfBlackMovesBeforeTurnChange
+				: m_numberOfWhiteMovesBeforeTurnChange))
 		{
 			m_isBlackMove = !m_isBlackMove;
 			PlayGame.turn(m_isBlackMove);
@@ -108,7 +109,8 @@ public class NextTurn implements Serializable
 	 */
 	public boolean increasingTurnsSeparately()
 	{
-		if (++m_currentNumberOfMovesMade >= (m_isBlackMove ? m_numberOfBlackMovesBeforeTurnChange : m_numberOfWhiteMovesBeforeTurnChange))
+		if (++m_currentNumberOfMovesMade >= (m_isBlackMove ? m_numberOfBlackMovesBeforeTurnChange
+				: m_numberOfWhiteMovesBeforeTurnChange))
 		{
 			m_isBlackMove = !m_isBlackMove;
 			PlayGame.turn(m_isBlackMove);

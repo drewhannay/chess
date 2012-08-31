@@ -151,7 +151,7 @@ final public class Driver extends JFrame
 	private void initComponents()
 	{
 
-		setTitle("Chess Master 9001");
+		setTitle("Chess Crafter");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(325, 340);
 		setResizable(false);
@@ -553,7 +553,7 @@ final public class Driver extends JFrame
 
 		// Creates a button to allow creation of variants
 		createType = new JButton("Create New Game Type");
-		createType.setToolTipText("Press to make up a new kind of chess game");
+		createType.setToolTipText("Press to craft a new kind of chess game");
 		createType.addActionListener(new ActionListener()
 		{
 
@@ -594,8 +594,8 @@ final public class Driver extends JFrame
 		});
 		helpMenu.add(helpMenuItem);
 
-		JMenuItem aboutItem = new JMenuItem("About Chess Master 9001", KeyEvent.VK_A);
-		aboutItem.setToolTipText("Information about Chess Master 9001");
+		JMenuItem aboutItem = new JMenuItem("About Chess Crafter", KeyEvent.VK_A);
+		aboutItem.setToolTipText("Information about Chess Crafter");
 		aboutItem.addActionListener(new ActionListener()
 		{
 			@Override
@@ -979,7 +979,7 @@ final public class Driver extends JFrame
 		JPanel pieceMakingHelp = new JPanel();
 
 		JTabbedPane helpTypes = new JTabbedPane();
-		helpTypes.addTab("General Help", null, generalHelp, "Click for General Help with Chess Master 9001");
+		helpTypes.addTab("General Help", null, generalHelp, "Click for General Help with Chess Crafter");
 		helpTypes.addTab("Game Play Help", null, gamePlayHelp, "Click for help playing Chess");
 		helpTypes.addTab("New Game Type Help", null, variantMakingHelp, "Click for help making a new Game Type");
 		helpTypes.addTab("Piece Making Help", null, pieceMakingHelp, "Click for help making new Game Pieces");
@@ -1008,11 +1008,11 @@ final public class Driver extends JFrame
 
 		JTextArea generalHelpText = new JTextArea();
 		generalHelpText.setEditable(false);
-		generalHelpText.setText("Thanks for playing Chess Master 9001!\n\n"
-				+ "Our Main Menu is designed to quickly guide you to the major 4 features of Chess Master 9001:\n"
+		generalHelpText.setText("Thanks for playing Chess Crafter!\n\n"
+				+ "Our Main Menu is designed to quickly guide you to the major 4 features of Chess Crafter:\n"
 				+ "\t1. New Game - This will start a new game of Chess which you can play against\n"
 				+ "\t\t\tanother person or against an AI\n"
-				+ "\t2. Create New Game Type - This will allow you create a Chess Variant of your own\n"
+				+ "\t2. Create New Game Type - This will allow you craft a Chess Variant of your own\n"
 				+ "\t3. View Completed Games - This will let you watch games you've already completed\n"
 				+ "\t4. Load Game - This will load a game you were previously playing\n" + "\t\t\tso you can keep playing\n\n"
 				+ "Also at any time you can use the File menu or the Options menu to see what\n" + "options are available to you.");
@@ -1040,7 +1040,7 @@ final public class Driver extends JFrame
 
 		JTextArea pieceMakingHelpText = new JTextArea();
 		pieceMakingHelpText.setEditable(false);
-		pieceMakingHelpText.setText("When you make a new Chess variant you can make your own custom pieces! Follow these steps:\n"
+		pieceMakingHelpText.setText("When you craft a new Chess variant you can make your own custom pieces! Follow these steps:\n"
 				+ "\t1. Create a name and choose the icons for your new piece\n"
 				+ "\t2. Enter the specific movement directions/distances you would like it to have\n"
 				+ "\t\t - To add instructions for a direction choose it from the drop down, then fill in\n"
@@ -1064,7 +1064,7 @@ final public class Driver extends JFrame
 	private JFrame setUpAbout()
 	{
 
-		JFrame aboutPop = new JFrame("About Chess Master 9001");
+		JFrame aboutPop = new JFrame("About Chess Crafter");
 		aboutPop.setTitle("Help");
 		aboutPop.setSize(350, 375);
 		aboutPop.setResizable(false);
@@ -1095,7 +1095,7 @@ final public class Driver extends JFrame
 		piecePicture.setImage(piecePicture.getImage());
 
 		Font font = new Font("Verdana", Font.BOLD, 18);
-		JLabel title = new JLabel("Chess Master 9001\n");
+		JLabel title = new JLabel("Chess Crafter\n");
 		title.setFont(font);
 
 		JPanel top = new JPanel();

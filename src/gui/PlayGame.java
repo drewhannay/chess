@@ -484,7 +484,7 @@ public class PlayGame extends JPanel
 					writer.print("");
 					writer.close();
 					JOptionPane.showMessageDialog(null,
-							"Since this is your first time playing Chess, please choose a default completed game save location.\n"
+							"Since this is your first time playing Chess Crafter, please choose a default completed game save location.\n"
 									+ "Pressing cancel will use the default save location.", "Save Location",
 							JOptionPane.PLAIN_MESSAGE);
 					JFileChooser fc = new JFileChooser();

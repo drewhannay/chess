@@ -15,7 +15,8 @@ public class FakeMove implements Serializable
 	 * @param destinationColumn Which col it wants to be on
 	 * @param promotionPieceName The name of the promotion piece
 	 */
-	public FakeMove(int boardIndex, int originRow, int originColumn, int destinationRow, int destinationColumn, String promotionPieceName)
+	public FakeMove(int boardIndex, int originRow, int originColumn, int destinationRow, int destinationColumn,
+			String promotionPieceName)
 	{
 		m_boardIndex = boardIndex;
 		m_originRow = originRow;
