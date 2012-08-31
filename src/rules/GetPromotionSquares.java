@@ -111,5 +111,5 @@ public class GetPromotionSquares implements Serializable
 	private transient Method m_doMethod;
 
 	private Game m_game;
-	private String m_methodName;	
+	private String m_methodName;
 }

@@ -4,13 +4,13 @@ import gui.PlayNetGame;
 
 import java.util.List;
 
-import com.google.common.collect.Lists;
-
 import logic.Board;
 import logic.Game;
 import logic.Move;
 import logic.Piece;
 import logic.Square;
+
+import com.google.common.collect.Lists;
 
 /**
  * AIAdapter.java
@@ -93,7 +93,8 @@ public class AIAdapter
 		try
 		{
 			Board board = m_game.getBoards()[move.m_boardIndex];
-			m_game.playMove(new Move(board, board.getSquare(move.m_originRow, move.m_originColumn), board.getSquare(move.m_destinationRow, move.m_destinationColumn), move.m_promotionPieceName));
+			m_game.playMove(new Move(board, board.getSquare(move.m_originRow, move.m_originColumn), board.getSquare(
+					move.m_destinationRow, move.m_destinationColumn), move.m_promotionPieceName));
 			return true;
 		}
 		catch (Exception e)

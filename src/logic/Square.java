@@ -115,7 +115,8 @@ public class Square extends JLabel implements Serializable
 	{
 		setBackground(c);
 		setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-		// if the Color is the highlight color then change is only temporary, don't store it.
+		// if the Color is the highlight color then change is only temporary,
+		// don't store it.
 		if (c != Square.HIGHLIGHT_COLOR)
 			m_backgroundColor = c;
 	}
@@ -179,5 +180,5 @@ public class Square extends JLabel implements Serializable
 	private int m_row;// File
 	private int m_column;// Rank
 	private Color m_backgroundColor;
-	private boolean m_isHabitable;	
+	private boolean m_isHabitable;
 }

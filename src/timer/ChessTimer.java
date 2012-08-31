@@ -25,7 +25,7 @@ public abstract class ChessTimer implements ActionListener, Serializable
 		m_timer = new Timer(1000, this);
 		m_timer.setInitialDelay(0);
 	}
-	
+
 	@Override
 	public void actionPerformed(ActionEvent ae)
 	{
@@ -138,7 +138,8 @@ public abstract class ChessTimer implements ActionListener, Serializable
 	protected boolean m_isBlackTeamTimer;
 	protected boolean m_timeWasRecentlyReset;
 	protected long m_initialStartTime;
-	// should be 1 or -1 to account for timer counting up instead. -1 to count up since it gets subtracted
+	// should be 1 or -1 to account for timer counting up instead. -1 to count
+	// up since it gets subtracted
 	protected int m_clockDirection = 1;
 	protected static boolean m_isStopped;
 }
