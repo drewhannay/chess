@@ -54,7 +54,8 @@ public class Piece implements Serializable
 	 */
 	public boolean addLegalDest(Square dest)
 	{
-		// If the Square is not habitable, don't add it, but return true so we can move past it.
+		// If the Square is not habitable, don't add it, but return true so we
+		// can move past it.
 		if (!dest.isHabitable())
 			return true;
 
@@ -63,7 +64,8 @@ public class Piece implements Serializable
 
 		if (dest.isOccupied() && dest.getPiece().isBlack() == isBlack())
 		{
-			// If the destination has a Piece from the same team, we must be guarding that Piece
+			// If the destination has a Piece from the same team, we must be
+			// guarding that Piece
 			getGuardSquares().add(dest);
 			return false;
 		}
@@ -311,7 +313,8 @@ public class Piece implements Serializable
 			{
 				int j = c;
 				if (wraparound)
-				{	if (j > board.getMaxCol())
+				{
+					if (j > board.getMaxCol())
 						j = j % board.getMaxCol();
 				}
 
@@ -320,8 +323,8 @@ public class Piece implements Serializable
 
 				dest = board.getSquare(m_curSquare.getRow(), j);
 				done = !addLegalDest(dest);
-				done = m_isLeaper ? false : (done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece().equals(
-						board.getGame().getOtherObjectivePiece(isBlack())))));
+				done = m_isLeaper ? false : (done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece()
+						.equals(board.getGame().getOtherObjectivePiece(isBlack())))));
 			}
 		}
 		done = false;
@@ -347,8 +350,8 @@ public class Piece implements Serializable
 
 				dest = board.getSquare(m_curSquare.getRow(), j);
 				done = !addLegalDest(dest);
-				done = m_isLeaper ? false : (done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece().equals(
-						board.getGame().getOtherObjectivePiece(isBlack())))));
+				done = m_isLeaper ? false : (done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece()
+						.equals(board.getGame().getOtherObjectivePiece(isBlack())))));
 			}
 		}
 		done = false;
@@ -367,8 +370,8 @@ public class Piece implements Serializable
 				int j = r;
 				dest = board.getSquare(j, m_curSquare.getCol());
 				done = !addLegalDest(dest);
-				done = m_isLeaper ? false : (done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece().equals(
-						board.getGame().getOtherObjectivePiece(isBlack())))));
+				done = m_isLeaper ? false : (done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece()
+						.equals(board.getGame().getOtherObjectivePiece(isBlack())))));
 			}
 		}
 		done = false;
@@ -387,8 +390,8 @@ public class Piece implements Serializable
 				int j = r;
 				dest = board.getSquare(j, m_curSquare.getCol());
 				done = !addLegalDest(dest);
-				done = m_isLeaper ? false : (done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece().equals(
-						board.getGame().getOtherObjectivePiece(isBlack())))));
+				done = m_isLeaper ? false : (done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece()
+						.equals(board.getGame().getOtherObjectivePiece(isBlack())))));
 			}
 		}
 		/*
@@ -397,7 +400,8 @@ public class Piece implements Serializable
 		done = false;
 		if (m_movements.containsKey('R'))
 		{
-			int neMax = ((m_curSquare.getRow() >= m_curSquare.getCol()) ? m_curSquare.getRow() : m_curSquare.getCol()) + m_movements.get('R');
+			int neMax = ((m_curSquare.getRow() >= m_curSquare.getCol()) ? m_curSquare.getRow() : m_curSquare.getCol())
+					+ m_movements.get('R');
 
 			if (neMax >= board.getMaxCol() || m_movements.get('R') == -1)
 				neMax = board.getMaxCol();
@@ -408,8 +412,8 @@ public class Piece implements Serializable
 			{
 				dest = board.getSquare(r, c);
 				done = !addLegalDest(dest);
-				done = m_isLeaper ? false : (done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece().equals(
-						board.getGame().getOtherObjectivePiece(isBlack())))));
+				done = m_isLeaper ? false : (done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece()
+						.equals(board.getGame().getOtherObjectivePiece(isBlack())))));
 			}
 		}
 
@@ -433,8 +437,8 @@ public class Piece implements Serializable
 			{
 				dest = board.getSquare(r, c);
 				done = !addLegalDest(dest);
-				done = m_isLeaper ? false : (done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece().equals(
-						board.getGame().getOtherObjectivePiece(isBlack())))));
+				done = m_isLeaper ? false : (done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece()
+						.equals(board.getGame().getOtherObjectivePiece(isBlack())))));
 			}
 		}
 		/*
@@ -455,8 +459,8 @@ public class Piece implements Serializable
 			{
 				dest = board.getSquare(r, c);
 				done = !addLegalDest(dest);
-				done = m_isLeaper ? false : (done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece().equals(
-						board.getGame().getOtherObjectivePiece(isBlack())))));
+				done = m_isLeaper ? false : (done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece()
+						.equals(board.getGame().getOtherObjectivePiece(isBlack())))));
 			}
 		}
 		/*
@@ -477,8 +481,8 @@ public class Piece implements Serializable
 			{
 				dest = board.getSquare(r, c);
 				done = !addLegalDest(dest);
-				done = m_isLeaper ? false : (done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece().equals(
-						board.getGame().getOtherObjectivePiece(isBlack())))));
+				done = m_isLeaper ? false : (done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece()
+						.equals(board.getGame().getOtherObjectivePiece(isBlack())))));
 			}
 		}
 

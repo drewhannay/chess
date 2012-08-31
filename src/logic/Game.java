@@ -133,7 +133,8 @@ public class Game implements Serializable
 			switch (threats.length)
 			{
 			case 1:
-				// there is only one threat, so another Piece could block, or the King could move
+				// there is only one threat, so another Piece could block, or
+				// the King could move
 				for (int i = 0; i < movingTeam.size(); i++)
 					movingTeam.get(i).genLegalDestsSaveKing(movingObjectivePiece, threats[0]);
 
@@ -645,7 +646,8 @@ public class Game implements Serializable
 	{
 		Board to = m_boards[m.m_boardIndex];
 		Board from = ((m_isBlackMove) ? m_blackRules : m_whiteRules).getBoard(to);
-		return new Move(from, from.getSquare(m.m_originRow, m.m_originColumn), to.getSquare(m.m_destinationRow, m.m_destinationColumn), m.m_promotionPieceName);
+		return new Move(from, from.getSquare(m.m_originRow, m.m_originColumn),
+				to.getSquare(m.m_destinationRow, m.m_destinationColumn), m.m_promotionPieceName);
 	}
 
 	/**

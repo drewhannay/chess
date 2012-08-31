@@ -32,8 +32,6 @@ import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 
-import com.google.common.collect.Lists;
-
 import logic.Builder;
 import logic.Game;
 import net.NetworkClient;
@@ -48,6 +46,8 @@ import timer.WordTimer;
 import utility.FileUtility;
 import ai.AIAdapter;
 import ai.AIPlugin;
+
+import com.google.common.collect.Lists;
 
 /**
  * NewGameMenu.java
@@ -795,12 +795,13 @@ public class NewGameMenu extends JPanel
 				}
 				else if (timerName.equals("Hour Glass"))
 				{
-					blackTimer = new HourGlassTimer(startTime / 2, true); // time is
-																		// halved
-																		// since
-																		// this
-																		// is
-																		// actually
+					blackTimer = new HourGlassTimer(startTime / 2, true); // time
+																			// is
+																			// halved
+																			// since
+																			// this
+																			// is
+																			// actually
 					// the timer the player is not allowed to exceed.
 					whiteTimer = new HourGlassTimer(startTime / 2, false);
 				}

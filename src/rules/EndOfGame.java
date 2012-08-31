@@ -105,8 +105,8 @@ public class EndOfGame implements Serializable
 					if (m_game.getThreats(objectivePiece) != null)
 					{
 						resultText += "The piece(s) that caused the final check are highlighted in Red. "
-								+ "\nThe piece that placed the King in check was the " + m_game.getThreats(objectivePiece)[0].getName()
-								+ " at location "
+								+ "\nThe piece that placed the King in check was the "
+								+ m_game.getThreats(objectivePiece)[0].getName() + " at location "
 								+ m_game.getThreats(objectivePiece)[0].getSquare().toString(new boolean[] { false, false }) + "\n";
 					}
 					result.setText(resultText + "What would you like to do? \n");

@@ -10,9 +10,9 @@ import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.google.common.collect.Maps;
-
 import utility.FileUtility;
+
+import com.google.common.collect.Maps;
 
 /**
  * AlgebraicConverter.java Class to convert Move objects to Algebraic Chess
@@ -30,7 +30,8 @@ public final class AlgebraicConverter
 	private static final String columns = "%abcdefgh";
 
 	/**
-	 * HashMap to move from the char representation of a Class to the actual Class
+	 * HashMap to move from the char representation of a Class to the actual
+	 * Class
 	 */
 	private static Map<Character, String> map = Maps.newHashMap();
 
@@ -113,7 +114,8 @@ public final class AlgebraicConverter
 				{ // promotion
 					if (result.group(8).contains("=") || result.group(8).contains("("))
 					{
-						promo = map.get(result.group(8).charAt(1)); // 0 is '=' or '('
+						promo = map.get(result.group(8).charAt(1)); // 0 is '='
+																	// or '('
 					}
 					else
 					{
@@ -241,7 +243,8 @@ public final class AlgebraicConverter
 	{
 		String pat = "";
 		pat += "([O0]-[O0]-[O0]|[O0]-[O0]";// Check for castling (Group 1)
-		pat += "|^([KNQRB])?";// Check for the type of piece that's moving, null if pawn
+		pat += "|^([KNQRB])?";// Check for the type of piece that's moving, null
+								// if pawn
 		pat += "([A-Ha-h])?";// Check for the origin column of the moving piece
 		pat += "([1-8])?";// Check for the origin row of the moving piece
 		pat += "([x:])?";// Check if the move is a capture
