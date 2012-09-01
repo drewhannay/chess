@@ -448,7 +448,7 @@ public class PieceMaker extends JPanel
 			{
 				if (name.getText().equals(""))
 				{
-					variant.setupPieces();
+					variant.setupPiecesList();
 					holder.removeAll();
 					frame.setVisible(false);
 				}
@@ -459,7 +459,7 @@ public class PieceMaker extends JPanel
 							JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
 					if (answer == 0)
 					{
-						variant.setupPieces();
+						variant.setupPiecesList();
 						holder.removeAll();
 						frame.setVisible(false);
 					}

@@ -71,8 +71,8 @@ public class ObjectiveMaker extends JPanel
 		frame.setVisible(true);
 		frame.setSize(400, 300);
 		frame.setLocationRelativeTo(Driver.getInstance());
-		whiteRules = variant.whiteRules;
-		blackRules = variant.blackRules;
+		whiteRules = variant.m_whiteRules;
+		blackRules = variant.m_blackRules;
 		initComponents(variant);
 	}
 
@@ -102,32 +102,32 @@ public class ObjectiveMaker extends JPanel
 		});
 		wCaptureAll.setToolTipText("Press me if you want the objective to be capturing all enemy pieces");
 		objectiveWhiteCheckBox.add(wCaptureAll);
-		if (variant.whiteRules.theEndIsNigh().equals("captureAllPieces"))
+		if (variant.m_whiteRules.theEndIsNigh().equals("captureAllPieces"))
 			wCaptureAll.setSelected(true);
 
 		final JRadioButton wCaptureAllType = new JRadioButton("Capture All of Type", false);
 		wCaptureAllType.setToolTipText("Press me if you want the objective to be capturing all enemy pieces of a certain type");
 		objectiveWhiteCheckBox.add(wCaptureAllType);
-		if (variant.whiteRules.theEndIsNigh().equals("captureAllOfType"))
+		if (variant.m_whiteRules.theEndIsNigh().equals("captureAllOfType"))
 			wCaptureAllType.setSelected(true);
 
 		final JRadioButton wProtectObj = new JRadioButton("Protect Objective", false);
 		wProtectObj.setToolTipText("Press me if you want the objective to be protecting your own objective");
 		objectiveWhiteCheckBox.add(wProtectObj);
-		if (variant.whiteRules.theEndIsNigh().equals("classic"))
+		if (variant.m_whiteRules.theEndIsNigh().equals("classic"))
 			wProtectObj.setSelected(true);
 
 		final JRadioButton wLoseAll = new JRadioButton("Lose All Pieces", false);
 		wLoseAll.setToolTipText("Press me if you want the objective to be losing all of your pieces");
 		objectiveWhiteCheckBox.add(wLoseAll);
-		if (variant.whiteRules.theEndIsNigh().equals("loseAllPieces"))
+		if (variant.m_whiteRules.theEndIsNigh().equals("loseAllPieces"))
 			wLoseAll.setSelected(true);
 
 		final JRadioButton wCheckTimes = new JRadioButton("Check # Times", false);
 		wCheckTimes
 				.setToolTipText("Press me if you want the objective to be putting the other team in check a certain amount of times");
 		objectiveWhiteCheckBox.add(wCheckTimes);
-		if (variant.whiteRules.theEndIsNigh().equals("checkNTimes"))
+		if (variant.m_whiteRules.theEndIsNigh().equals("checkNTimes"))
 			wCheckTimes.setSelected(true);
 
 		final ButtonGroup white = new ButtonGroup();
@@ -143,32 +143,32 @@ public class ObjectiveMaker extends JPanel
 		final JRadioButton bCaptureAll = new JRadioButton("Capture All", false);
 		bCaptureAll.setToolTipText("Press me if you want the objective to be capturing all enemy pieces");
 		objectiveBlackCheckBox.add(bCaptureAll);
-		if (variant.blackRules.theEndIsNigh().equals("captureAllPieces"))
+		if (variant.m_blackRules.theEndIsNigh().equals("captureAllPieces"))
 			bCaptureAll.setSelected(true);
 
 		final JRadioButton bCaptureAllType = new JRadioButton("Capture All of Type", false);
 		bCaptureAllType.setToolTipText("Press me if you want the objective to be capturing all enemy pieces of a certain type");
 		objectiveBlackCheckBox.add(bCaptureAllType);
-		if (variant.blackRules.theEndIsNigh().equals("captureAllOfType"))
+		if (variant.m_blackRules.theEndIsNigh().equals("captureAllOfType"))
 			bCaptureAllType.setSelected(true);
 
 		final JRadioButton bProtectObj = new JRadioButton("Protect Objective", false);
 		bProtectObj.setToolTipText("Press me if you want the objective to be protecting your own objective");
 		objectiveBlackCheckBox.add(bProtectObj);
-		if (variant.blackRules.theEndIsNigh().equals("classic"))
+		if (variant.m_blackRules.theEndIsNigh().equals("classic"))
 			bProtectObj.setSelected(true);
 
 		final JRadioButton bLoseAll = new JRadioButton("Lose All Pieces", false);
 		bLoseAll.setToolTipText("Press me if you want the objective to be losing all of your pieces");
 		objectiveBlackCheckBox.add(bLoseAll);
-		if (variant.blackRules.theEndIsNigh().equals("loseAllPieces"))
+		if (variant.m_blackRules.theEndIsNigh().equals("loseAllPieces"))
 			bLoseAll.setSelected(true);
 
 		final JRadioButton bCheckTimes = new JRadioButton("Check # Times", false);
 		bCheckTimes
 				.setToolTipText("Press me if you want the objective to be putting the other team in check a certain amount of times");
 		objectiveBlackCheckBox.add(bCheckTimes);
-		if (variant.blackRules.theEndIsNigh().equals("checkNTimes"))
+		if (variant.m_blackRules.theEndIsNigh().equals("checkNTimes"))
 			bCheckTimes.setSelected(true);
 
 		final ButtonGroup black = new ButtonGroup();
@@ -278,8 +278,8 @@ public class ObjectiveMaker extends JPanel
 					needsObj = true;
 				}
 
-				variant.whiteRules = whiteRules;
-				variant.blackRules = blackRules;
+				variant.m_whiteRules = whiteRules;
+				variant.m_blackRules = blackRules;
 				holder.removeAll();
 				frame.setVisible(false);
 			}

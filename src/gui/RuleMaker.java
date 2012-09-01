@@ -68,8 +68,8 @@ public class RuleMaker extends JPanel
 	 * Constructor for setting up the rules window
 	 * 
 	 * @param b the builder containing everything
-	 * @param whiteRules The container for the white Rules
-	 * @param blackRules the container for the black rules
+	 * @param m_whiteRules The container for the white Rules
+	 * @param m_blackRules the container for the black rules
 	 */
 	/*
 	 * public RuleMaker(Builder b, Rules whiteRules, Rules blackRules) { this.b
@@ -86,8 +86,8 @@ public class RuleMaker extends JPanel
 		frame.setSize(600, 500);
 		frame.setLocationRelativeTo(Driver.getInstance());
 		b = variant.getBuilder();
-		whiteRules = variant.whiteRules;
-		blackRules = variant.blackRules;
+		whiteRules = variant.m_whiteRules;
+		blackRules = variant.m_blackRules;
 		initComponents(variant);
 	}
 
@@ -449,8 +449,8 @@ public class RuleMaker extends JPanel
 					}
 				}
 
-				variant.whiteRules = whiteRules;
-				variant.blackRules = blackRules;
+				variant.m_whiteRules = whiteRules;
+				variant.m_blackRules = blackRules;
 				holder.removeAll();
 				frame.setVisible(false);
 			}

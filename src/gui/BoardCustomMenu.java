@@ -139,9 +139,9 @@ public class BoardCustomMenu extends JPanel
 								.isSelected());
 					}
 					if (m_twoBoardsButton.isSelected())
-						variant.drawBoard(boards, true);
+						variant.drawBoards(boards, true);
 					else
-						variant.drawBoard(boards, false);
+						variant.drawBoards(boards, false);
 					m_holder.removeAll();
 					m_frame.setVisible(false);
 				}

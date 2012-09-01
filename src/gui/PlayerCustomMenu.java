@@ -92,8 +92,8 @@ public class PlayerCustomMenu extends JPanel
 	 * Constructor. Call initComponents to initialize the GUI.
 	 * 
 	 * @param b The builder which is creating the new game type.
-	 * @param blackRules The whiteRules object.
-	 * @param whiteRules The blackRules object.
+	 * @param m_blackRules The whiteRules object.
+	 * @param m_whiteRules The blackRules object.
 	 */
 	/*
 	 * public PlayerCustomMenu(Builder b, Rules whiteRules, Rules blackRules) {
@@ -102,8 +102,8 @@ public class PlayerCustomMenu extends JPanel
 
 	public PlayerCustomMenu(CustomSetupMenu variant, JFrame optionsFrame)
 	{
-		whiteRules = variant.whiteRules;
-		blackRules = variant.blackRules;
+		whiteRules = variant.m_whiteRules;
+		blackRules = variant.m_blackRules;
 		frame = optionsFrame;
 		frame.setVisible(true);
 		frame.add(this);
@@ -181,8 +181,8 @@ public class PlayerCustomMenu extends JPanel
 	 * specific properties and add them to the window. Also add any necessary
 	 * ActionListeners.
 	 * 
-	 * @param whiteRules The whiteRules object.
-	 * @param blackRules The blackRules object.
+	 * @param m_whiteRules The whiteRules object.
+	 * @param m_blackRules The blackRules object.
 	 */
 	private void initComponents(final CustomSetupMenu variant)
 	{
@@ -239,8 +239,8 @@ public class PlayerCustomMenu extends JPanel
 			{
 				if (formComplete(whiteRules, blackRules))
 				{// Make sure the form is complete.
-					variant.whiteRules = whiteRules;
-					variant.blackRules = blackRules;
+					variant.m_whiteRules = whiteRules;
+					variant.m_blackRules = blackRules;
 					holder.removeAll();
 					frame.setVisible(false);
 				}
