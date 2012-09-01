@@ -1,4 +1,4 @@
-Chess Master 9001
+Chess Crafter
 =====
 A Java application which allows users to design variants on chess, specifying new kinds of pieces and how they move, the board layout, the initial positions of pieces, how the game is won, and special rules.
 Users can play either as two humans at one computer, two humans at different computers through a network connection, or one human versus the computer.
