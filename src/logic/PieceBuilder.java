@@ -174,7 +174,7 @@ public class PieceBuilder implements Serializable
 
 	private static final long serialVersionUID = -1351201562740885961L;
 
-	private static Map<String, PieceBuilder> m_pieceTypes = Maps.newHashMap();
+	private static Map<String, PieceBuilder> m_pieceTypes;
 
 	private String m_name;
 	private ImageIcon m_lightImage;
