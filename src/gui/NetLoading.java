@@ -71,7 +71,7 @@ public class NetLoading extends JPanel
 			public void actionPerformed(ActionEvent e)
 			{
 				// Return to the main screen.
-				AnimatedLabel.finished = true;
+				AnimatedLabel.m_isFinished = true;
 				NewGameMenu.cancelled = true;
 				Driver.getInstance().fileMenu.setVisible(true);
 				Driver.getInstance().revertPanel();

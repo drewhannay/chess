@@ -51,7 +51,7 @@ public class NetworkClient
 					return;
 			}
 		}
-		AnimatedLabel.finished = true;
+		AnimatedLabel.m_isFinished = true;
 		out = new ObjectOutputStream(socket.getOutputStream());
 		in = new ObjectInputStream(socket.getInputStream());
 

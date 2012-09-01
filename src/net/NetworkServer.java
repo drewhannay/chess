@@ -55,7 +55,7 @@ public class NetworkServer
 			}
 		}
 
-		AnimatedLabel.finished = true;
+		AnimatedLabel.m_isFinished = true;
 		ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());
 		ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream());
 

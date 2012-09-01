@@ -9,31 +9,10 @@ import javax.swing.JLabel;
  */
 public class AnimatedLabel extends JLabel implements Runnable
 {
-	/**
-	 * Serial number
-	 */
-	private static final long serialVersionUID = 7373349083032786721L;
-	/**
-	 * String Array to hold the various moving parts
-	 */
-	protected String[] strings;
-	/**
-	 * Faux timer to keep track of which string is being used
-	 */
-	protected int index = 0;
-	/**
-	 * Boolean to turn off the thread when the game has started.
-	 */
-	public static boolean finished = false;
-
-	/**
-	 * Constructor
-	 */
 	public AnimatedLabel()
 	{
 		setText("Waiting");
-		Thread tr = new Thread(this);
-		tr.start();
+		new Thread(this).start();
 	}
 
 	/**
@@ -43,22 +22,22 @@ public class AnimatedLabel extends JLabel implements Runnable
 	@Override
 	public void run()
 	{
-		finished = false;
-		while (!finished)
+		m_isFinished = false;
+		while (!m_isFinished)
 		{
-			index++;
-			if (index == 1)
+			m_stringIndex++;
+			if (m_stringIndex == 1)
 			{
 				setText("Waiting. ");
 			}
-			else if (index == 2)
+			else if (m_stringIndex == 2)
 			{
 				setText("Waiting.. ");
 			}
 			else
 			{
 				setText("Waiting... ");
-				index = 0;
+				m_stringIndex = 0;
 			}
 			try
 			{
@@ -69,4 +48,11 @@ public class AnimatedLabel extends JLabel implements Runnable
 			}
 		}
 	}
+
+	private static final long serialVersionUID = 7373349083032786721L;
+
+	public static boolean m_isFinished = false;
+
+	protected String[] m_strings;
+	protected int m_stringIndex = 0;
 }
