@@ -375,44 +375,44 @@ public class PlayGame extends JPanel
 		}
 		for (int i = 1; i <= whiteCapturesBox.getMaxRow(); i++)
 		{
-			for (int j = 1; j <= whiteCapturesBox.maxCol; j++)
+			for (int j = 1; j <= whiteCapturesBox.m_maxNumberOfColumns; j++)
 			{
-				whiteCapturesBox.getSquare(i, j).setPiece(null);
+				whiteCapturesBox.getJailSquare(i, j).setOccupyingPiece(null);
 			}
 		}
 		int index = 0;
 		Piece[] blackCaptured = getGame().getCapturedPieces(true);
 		for (int i = 1; i <= whiteCapturesBox.getMaxRow(); i++)
 		{
-			for (int j = 1; j <= whiteCapturesBox.maxCol; j++)
+			for (int j = 1; j <= whiteCapturesBox.m_maxNumberOfColumns; j++)
 			{
 				if (blackCaptured != null && index < blackCaptured.length)
 				{
-					whiteCapturesBox.getSquare(i, j).setPiece(blackCaptured[index]);
+					whiteCapturesBox.getJailSquare(i, j).setOccupyingPiece(blackCaptured[index]);
 					index++;
 				}
-				whiteCapturesBox.getSquare(i, j).refresh();
+				whiteCapturesBox.getJailSquare(i, j).refreshSquareGUI();
 			}
 		}
 		for (int i = 1; i <= blackCapturesBox.getMaxRow(); i++)
 		{
-			for (int j = 1; j <= blackCapturesBox.maxCol; j++)
+			for (int j = 1; j <= blackCapturesBox.m_maxNumberOfColumns; j++)
 			{
-				blackCapturesBox.getSquare(i, j).setPiece(null);
+				blackCapturesBox.getJailSquare(i, j).setOccupyingPiece(null);
 			}
 		}
 		index = 0;
 		Piece[] whiteCaptured = getGame().getCapturedPieces(false);
 		for (int i = 1; i <= blackCapturesBox.getMaxRow(); i++)
 		{
-			for (int j = 1; j <= blackCapturesBox.maxCol; j++)
+			for (int j = 1; j <= blackCapturesBox.m_maxNumberOfColumns; j++)
 			{
 				if (whiteCaptured != null && index < whiteCaptured.length)
 				{
-					blackCapturesBox.getSquare(i, j).setPiece(whiteCaptured[index]);
+					blackCapturesBox.getJailSquare(i, j).setOccupyingPiece(whiteCaptured[index]);
 					index++;
 				}
-				blackCapturesBox.getSquare(i, j).refresh();
+				blackCapturesBox.getJailSquare(i, j).refreshSquareGUI();
 			}
 		}
 		// Highlight the name labels if it's their turn.
@@ -860,7 +860,7 @@ public class PlayGame extends JPanel
 			whiteCapturesBox = new Jail(k, k);
 			whiteCaptures.setLayout(new GridLayout(k, k));
 		}
-		whiteCaptures.setPreferredSize(new Dimension((whiteCapturesBox.numCols() + 1) * 25, (whiteCapturesBox.numRows() + 1) * 25));
+		whiteCaptures.setPreferredSize(new Dimension((whiteCapturesBox.getMaxColumn() + 1) * 25, (whiteCapturesBox.getMaxRow() + 1) * 25));
 		for (int i = k; i > 0; i--)
 		{
 			for (int j = 1; j <= k; j++)
@@ -885,7 +885,7 @@ public class PlayGame extends JPanel
 			blackCapturesBox = new Jail(k, k);
 			blackCaptures.setLayout(new GridLayout(k, k));
 		}
-		blackCaptures.setPreferredSize(new Dimension((blackCapturesBox.numCols() + 1) * 25, (blackCapturesBox.numRows() + 1) * 25));
+		blackCaptures.setPreferredSize(new Dimension((blackCapturesBox.getMaxColumn() + 1) * 25, (blackCapturesBox.getMaxRow() + 1) * 25));
 		for (int i = k; i > 0; i--)
 		{
 			for (int j = 1; j <= k; j++)

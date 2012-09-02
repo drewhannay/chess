@@ -433,7 +433,7 @@ public class PlayNetGame extends PlayGame
 			whiteCapturesBox = new Jail(k, k);
 			whiteCaptures.setLayout(new GridLayout(k, k));
 		}
-		whiteCaptures.setPreferredSize(new Dimension((whiteCapturesBox.numCols() + 1) * 25, (whiteCapturesBox.numRows() + 1) * 25));
+		whiteCaptures.setPreferredSize(new Dimension((whiteCapturesBox.getMaxColumn() + 1) * 25, (whiteCapturesBox.getMaxRow() + 1) * 25));
 		for (int i = k; i > 0; i--)
 		{
 			for (int j = 1; j <= k; j++)
@@ -458,7 +458,7 @@ public class PlayNetGame extends PlayGame
 			blackCapturesBox = new Jail(k, k);
 			blackCaptures.setLayout(new GridLayout(k, k));
 		}
-		blackCaptures.setPreferredSize(new Dimension((blackCapturesBox.numCols() + 1) * 25, (blackCapturesBox.numRows() + 1) * 25));
+		blackCaptures.setPreferredSize(new Dimension((blackCapturesBox.getMaxColumn() + 1) * 25, (blackCapturesBox.getMaxRow() + 1) * 25));
 		for (int i = k; i > 0; i--)
 		{
 			for (int j = 1; j <= k; j++)

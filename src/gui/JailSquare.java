@@ -17,173 +17,96 @@ import logic.Square;
  */
 public class JailSquare implements Serializable
 {
-	/**
-	 * Because it told me to.
-	 */
-	private static final long serialVersionUID = -6328168977600352667L;
-	/**
-	 * The Piece occupying this Square
-	 */
-	private Piece piece;
-	/**
-	 * Customizable Color for this Square
-	 */
-	private Color background;
-	/**
-	 * JButton represents this Square in the GUI
-	 */
-	private JButton jb;
-	/**
-	 * Row Index of Square
-	 */
-	private int row;// File
-	/**
-	 * Column Index of Square
-	 */
-	private int col;// Rank
-
-	/**
-	 * @param row the row of the Jail objects
-	 * @param column the column of the Jail object
-	 */
 	public JailSquare(int row, int column)
 	{
-		this.row = row;
-		col = column;
+		m_row = row;
+		m_column = column;
 	}
 
-	/**
-	 * Getter method for Color of the Square
-	 * 
-	 * @return Square Color
-	 */
 	public Color getColor()
 	{
-		return jb.getBackground();
+		return m_button.getBackground();
 	}
 
-	/**
-	 * Getter method for Piece occupying the Square
-	 * 
-	 * @return Piece occupying the Square.
-	 */
-	public Piece getPiece()
+	public Piece getOccupyingPiece()
 	{
-		return piece;
+		return m_piece;
 	}
 
-	/**
-	 * Refresh the GUI's view of this Square with the current accurate
-	 * information.
-	 */
-	public void refresh()
+	public void refreshSquareGUI()
 	{
-		if (jb != null)
+		if (m_button != null)
 		{
-			jb.setContentAreaFilled(false);
-			jb.setOpaque(true);
-			if (piece != null)
-			{// If there's a Piece here
-				if (piece.getIcon() == null)
-				{// And it has no Icon
-					jb.setText(piece.getName());// Use it's name
-				}
+			m_button.setContentAreaFilled(false);
+			m_button.setOpaque(true);
+			if (m_piece != null)
+			{
+				if (m_piece.getIcon() == null)
+					m_button.setText(m_piece.getName());
 				else
-				{
-					Image temp = piece.getIcon().getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
-					jb.setIcon(new ImageIcon(temp));// Otherwise, use it's Icon
-
-				}
+					m_button.setIcon(new ImageIcon(m_piece.getIcon().getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH)));
 			}
 			else
-			{// If there's no Piece, clear the Icon and Text of the Square.
-				jb.setIcon(null);
-				jb.setText("");
+			{
+				m_button.setIcon(null);
+				m_button.setText("");
 			}
-			resetColor();// Then reset the color too.
+
+			resetColor();
 		}
 	}
 
-	/**
-	 * Reset temporary changes to the Color of the Square
-	 */
 	public void resetColor()
 	{
-		if (background != null)
+		if (m_backgroundColor != null)
 		{
-			// If a custom background color has been saved, use that.
-			jb.setBackground(background);
+			m_button.setBackground(m_backgroundColor);
 			return;
 		}
-		jb.setBorder(null);
-		// Otherwise make our normal light/dark pattern.
-		if ((row % 2 != 0 && col % 2 != 0) || (row % 2 == 0 && col % 2 == 0))
+		m_button.setBorder(null);
+	}
+
+	public void setButton(JButton button)
+	{
+		m_button = button;
+		refreshSquareGUI();
+	}
+
+	public void setColor(Color color)
+	{
+		m_button.setBackground(color);
+		m_button.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		if (color != Square.HIGHLIGHT_COLOR)
 		{
-			// jb.setBackground(Color.GRAY);
-			// jb.setForeground(Color.LIGHT_GRAY);
-		}
-		else
-		{
-			// jb.setBackground(Color.LIGHT_GRAY);
-			// jb.setForeground(Color.GRAY);
+			m_backgroundColor = color;
 		}
 	}
 
-	/**
-	 * Sets the JButton representing the Square.
-	 * 
-	 * @param jb Modifying JButton.
-	 */
-	public void setButton(JButton jb)
+	public void setOccupyingPiece(Piece piece)
 	{
-		this.jb = jb;
-		refresh();// Refresh the view of the Square
+		m_piece = piece;
 	}
 
-	/**
-	 * Sets the Color of the Square
-	 * 
-	 * @param c New Color
-	 */
-	public void setColor(Color c)
+	// TODO: this method doesn't seem right...it probably shouldn't be in JailSquare
+	public String toACNString(boolean[] shouldPrintRowAndColumn)
 	{
-		jb.setBackground(c);// Use the given Color for the background
-		jb.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		if (c != Square.HIGHLIGHT_COLOR)
-		{
-			// If the Color is the highlight color, then change is only
-			// temporary. Don't store it.
-			background = c;
-		}
+		StringBuilder builder = new StringBuilder();
+
+		if (shouldPrintRowAndColumn[0])
+			builder.append(m_row);
+		if (shouldPrintRowAndColumn[1])
+			builder.append(COLUMNS.charAt(m_column));
+
+		return builder.toString();
 	}
 
-	/**
-	 * Sets the Piece occupying the Square.
-	 * 
-	 * @param p New occupying Piece.
-	 */
-	public void setPiece(Piece p)
-	{
-		piece = p;
-	}
+	private static final long serialVersionUID = -6328168977600352667L;
+	private static final String COLUMNS = "-abcdefgh";
 
-	/**
-	 * @param unique A boolean for what piece this is and its move sets.
-	 * @return The name of the piece
-	 */
-	public String toString(boolean[] unique)
-	{
-		String cols = "-abcdefgh";
-		String toReturn = "";
-		if (unique[0])
-		{
-			toReturn += row;
-		}
-		if (unique[1])
-		{
-			toReturn += cols.charAt(col);
-		}
-		return toReturn;
-	}
+	private Piece m_piece;
+	private Color m_backgroundColor;
+	private JButton m_button;
+	private int m_row;
+	private int m_column;
 
 }
