@@ -232,7 +232,7 @@ public class NewGameMenu extends JPanel
 										}
 									});
 									client.start();
-									Driver.getInstance().setPanel(new NetLoading(client));
+									Driver.getInstance().setPanel(new NetLoading());
 								}
 								catch (Exception e1)
 								{
@@ -863,7 +863,7 @@ public class NewGameMenu extends JPanel
 								}
 							}
 						});
-						Driver.getInstance().setPanel(new NetLoading(host));
+						Driver.getInstance().setPanel(new NetLoading());
 						host.start();
 
 					}

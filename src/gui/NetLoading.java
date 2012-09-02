@@ -11,89 +11,48 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-/**
- * Class to set up a small loading window for network play
- * 
- * @author John McCormick & Andrew Wolfe & Drew Hannay
- * 
- */
 public class NetLoading extends JPanel
 {
-
-	/**
-	 * Generated Serial Version ID
-	 */
-	private static final long serialVersionUID = 8365806731061105369L;
-
-	/**
-	 * JLabel with instructions for the name field.
-	 */
-	private JLabel waitLabel;
-
-	/**
-	 * The thread that is running the networking.
-	 */
-	@SuppressWarnings("unused")
-	private Thread th;
-	/**
-	 * The button to cancel network play
-	 */
-	private JButton cancelButton;
-
-	/**
-	 * Constructor. Call initComponents to initialize the GUI.
-	 * 
-	 * @param th The thread being passed to be loaded.
-	 */
-	public NetLoading(Thread th)
+	public NetLoading()
 	{
-		this.th = th;
-		initComponents();
+		initGUIComponents();
 	}
 
-	/**
-	 * Initialize components of the GUI Create all the GUI components, set their
-	 * specific properties and add them to the window. Also add any necessary
-	 * ActionListeners.
-	 */
-	public void initComponents()
+	public void initGUIComponents()
 	{
-
 		setBorder(BorderFactory.createLoweredBevelBorder());
 
-		// Create button and add ActionListener for going back to main menu
-		cancelButton = new JButton("Cancel");
-		cancelButton.setToolTipText("Press me to go back to the Main Menu");
-		cancelButton.addActionListener(new ActionListener()
+		m_cancelButton = new JButton("Cancel");
+		m_cancelButton.setToolTipText("Press me to go back to the Main Menu");
+		m_cancelButton.addActionListener(new ActionListener()
 		{
-
 			@Override
-			public void actionPerformed(ActionEvent e)
+			public void actionPerformed(ActionEvent event)
 			{
-				// Return to the main screen.
 				AnimatedLabel.m_isFinished = true;
-				NewGameMenu.cancelled = true;
+				NewGameMenu.m_isCancelled = true;
 				Driver.getInstance().m_fileMenu.setVisible(true);
 				Driver.getInstance().revertToMainPanel();
 			}
 		});
 
-		// Create JLabel and JTextField.
-		waitLabel = new AnimatedLabel();
+		m_waitLabel = new AnimatedLabel();
 
-		// Layout stuff. Don't. Ask.
 		setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
+		GridBagConstraints constraints = new GridBagConstraints();
 
-		c.insets = new Insets(3, 3, 3, 3);
-		c.gridx = 0;
-		c.gridy = 0;
-		add(waitLabel, c);
+		constraints.insets = new Insets(3, 3, 3, 3);
+		constraints.gridx = 0;
+		constraints.gridy = 0;
+		add(m_waitLabel, constraints);
 
-		c.gridx = 0;
-		c.gridy = 1;
-		add(cancelButton, c);
-
+		constraints.gridx = 0;
+		constraints.gridy = 1;
+		add(m_cancelButton, constraints);
 	}
 
+	private static final long serialVersionUID = 8365806731061105369L;
+
+	private JLabel m_waitLabel;
+	private JButton m_cancelButton;
 }
