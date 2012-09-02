@@ -47,7 +47,7 @@ public class NetworkClient
 			}
 			catch (Exception e)
 			{
-				if (NewGameMenu.cancelled)
+				if (NewGameMenu.m_isCancelled)
 					return;
 			}
 		}

@@ -223,7 +223,7 @@ public class Builder implements Serializable
 	 * 
 	 * @return A Set containing the names of Game types
 	 */
-	public static String[] getArray()
+	public static String[] getVariantFileArray()
 	{
 		String[] vars = FileUtility.getVariantsFileArray();
 		for (String s : vars)
@@ -232,7 +232,7 @@ public class Builder implements Serializable
 				return vars;
 		}
 		buildClassic();
-		return getArray();
+		return getVariantFileArray();
 	}
 
 	/**

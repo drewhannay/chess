@@ -50,7 +50,7 @@ public class NetworkServer
 			}
 			catch (Exception e)
 			{
-				if (NewGameMenu.cancelled)
+				if (NewGameMenu.m_isCancelled)
 					return;
 			}
 		}
