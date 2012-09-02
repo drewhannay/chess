@@ -8,7 +8,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
+import java.net.URL;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -28,14 +28,11 @@ import javax.swing.SwingUtilities;
 import logic.PieceBuilder;
 
 /**
- * @author John mcCormick Class to make new pieces for new variants
+ * Class to make new pieces for new variants
+ * @author John mcCormick 
  */
 public class PieceMaker extends JPanel
 {
-
-	/**
-	 * Because it told me to
-	 */
 	private static final long serialVersionUID = -6530771731937840358L;
 	/**
 	 * New Piece builder for the new.... piece
@@ -57,11 +54,8 @@ public class PieceMaker extends JPanel
 	/**
 	 * Constructor for piece making window
 	 * 
-	 * @param b reference to the builder
-	 */
-	/*
-	 * public PieceMaker(Builder b) { this.b = b; PieceBuilder.initPieceTypes();
-	 * initComponents(); }
+	 * @param variant CustomSetupMenu that we came from
+	 * @param optionsFrame Frame that is holding this PieceMaker window
 	 */
 	public PieceMaker(CustomSetupMenu variant, JFrame optionsFrame)
 	{
@@ -88,9 +82,9 @@ public class PieceMaker extends JPanel
 		setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 
-		JPanel piecePanel = new JPanel();
-		piecePanel.setLayout(new GridBagLayout());
-		piecePanel.setBorder(BorderFactory.createTitledBorder("New Piece"));
+		JPanel pieceCreationPanel = new JPanel();
+		pieceCreationPanel.setLayout(new GridBagLayout());
+		pieceCreationPanel.setBorder(BorderFactory.createTitledBorder("New Piece"));
 
 		// Add a JLabel and JTextField for the Piece name.
 		JPanel namePanel = new JPanel();
@@ -111,84 +105,123 @@ public class PieceMaker extends JPanel
 
 		c.gridx = 0;
 		c.gridy = 0;
-		piecePanel.add(namePanel, c);
+		pieceCreationPanel.add(namePanel, c);
 
-		final ImageIcon temp = new ImageIcon("./images/WhiteSquare.gif");
-		temp.setImage(temp.getImage().getScaledInstance(48, 48, Image.SCALE_SMOOTH));
+		final ImageIcon blankSquare = new ImageIcon("./images/WhiteSquare.gif");
+		blankSquare.setImage(blankSquare.getImage().getScaledInstance(48, 48, Image.SCALE_SMOOTH));
 		final JPanel lightIconPanel = new JPanel();
 		lightIconPanel.setLayout(new FlowLayout());
-		final JButton lightIconButton = new JButton();
-		lightIconButton.setSize(48, 48);
-		lightIconButton.setIcon(temp);
+		final JLabel lightIconLabel = new JLabel();
+		lightIconLabel.setSize(48, 48);
+		lightIconLabel.setIcon(blankSquare);
 
 		// Add JButtons for choosing the images for the new type.
-		final JButton chooseLightImage = new JButton("Choose image for light piece");
-		chooseLightImage.setToolTipText("Click me to choose an Light Colored Icon for this piece");
-		chooseLightImage.addActionListener(new ActionListener()
+		final JButton lightImageButton = new JButton("Choose image for light piece");
+		lightImageButton.setToolTipText("Click me to choose an Light Colored Icon for this piece");
+		lightImageButton.addActionListener(new ActionListener()
 		{
 
 			@Override
-			public void actionPerformed(ActionEvent arg0)
+			public void actionPerformed(ActionEvent event)
 			{
-				// Create the JFileChooser and add image for the new piece
-				final JFileChooser fc = new JFileChooser("~/"); // default
-																// directory is
-																// in the images
-																// folder
-				int returnVal = fc.showOpenDialog(null);
-				if (returnVal == JFileChooser.APPROVE_OPTION)
+				Object[] options = new String[] { "Browse My Computer", "Image from Internet", "Cancel" };
+
+				switch (JOptionPane.showOptionDialog(null, "Where would you like to get the image from?", "Choose Image",
+						JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]))
 				{
-					ImageIcon icon = makeIcon(fc, builder);
-					lightIconButton.setIcon(icon); // Adds icon to button
-					builder.setLightImage(icon);
+				case JOptionPane.YES_OPTION:
+					final JFileChooser fileChooser = new JFileChooser("~/");
+					int returnVal = fileChooser.showOpenDialog(null);
+					if (returnVal == JFileChooser.APPROVE_OPTION)
+					{
+						ImageIcon icon = makeIcon(fileChooser, builder);
+						lightIconLabel.setIcon(icon); // Adds icon to button
+						builder.setLightImage(icon);
+					}
+					break;
+				case JOptionPane.NO_OPTION:
+					String url = JOptionPane.showInputDialog(null, "Enter URL of the image:", "Input URL", JOptionPane.PLAIN_MESSAGE);
+					try
+					{
+						ImageIcon image = new ImageIcon(ImageIO.read(new URL(url)).getScaledInstance(48, 48, Image.SCALE_SMOOTH));
+						lightIconLabel.setIcon(image);
+						builder.setLightImage(image);
+					}
+					catch (Exception e)
+					{
+						e.printStackTrace();
+					}
+					break;
+				case JOptionPane.CANCEL_OPTION:
+					break;
 				}
 			}
 		});
-		lightIconPanel.add(chooseLightImage);
-		lightIconPanel.add(lightIconButton);
+		lightIconPanel.add(lightImageButton);
+		lightIconPanel.add(lightIconLabel);
 
-		builder.setLightImage(temp);
+		builder.setLightImage(blankSquare);
 
 		c.gridx = 0;
 		c.gridy = 3;
-		piecePanel.add(lightIconPanel, c);
+		pieceCreationPanel.add(lightIconPanel, c);
 
 		final JPanel darkIconPanel = new JPanel();
 		darkIconPanel.setLayout(new FlowLayout());
-		final JButton darkIconButton = new JButton();
-		darkIconButton.setSize(48, 48);
-		darkIconButton.setIcon(temp);
+		final JLabel darkIconLabel = new JLabel();
+		darkIconLabel.setSize(48, 48);
+		darkIconLabel.setIcon(blankSquare);
 
-		final JButton chooseDarkImage = new JButton("Choose image for dark piece");
-		chooseDarkImage.setToolTipText("Click me to choose an Dark Colored Icon for this piece");
-		chooseDarkImage.addActionListener(new ActionListener()
+		final JButton darkImageButton = new JButton("Choose image for dark piece");
+		darkImageButton.setToolTipText("Click me to choose an Dark Colored Icon for this piece");
+		darkImageButton.addActionListener(new ActionListener()
 		{
 
 			@Override
-			public void actionPerformed(ActionEvent arg0)
+			public void actionPerformed(ActionEvent event)
 			{
-				// Create the JFileChooser and add image for the new piece
-				final JFileChooser fc = new JFileChooser("~/"); // default
-																// directory is
-																// in the images
-																// folder
-				int returnVal = fc.showOpenDialog(null);
-				if (returnVal == JFileChooser.APPROVE_OPTION)
+				Object[] options = new String[] { "Browse My Computer", "Image from Internet", "Cancel" };
+
+				switch (JOptionPane.showOptionDialog(null, "Where would you like to get the image from?", "Choose Image",
+						JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]))
 				{
-					ImageIcon icon = makeIcon(fc, builder);
-					darkIconButton.setIcon(icon); // Adds icon to button
-					builder.setDarkImage(icon);
+				case JOptionPane.YES_OPTION:
+					final JFileChooser fileChooser = new JFileChooser("~/");
+					int returnVal = fileChooser.showOpenDialog(null);
+					if (returnVal == JFileChooser.APPROVE_OPTION)
+					{
+						ImageIcon icon = makeIcon(fileChooser, builder);
+						darkIconLabel.setIcon(icon); // Adds icon to button
+						builder.setDarkImage(icon);
+					}
+					break;
+				case JOptionPane.NO_OPTION:
+					String url = JOptionPane.showInputDialog(null, "Enter the URL of the image:", "Input URL",
+							JOptionPane.PLAIN_MESSAGE);
+					try
+					{
+						ImageIcon image = new ImageIcon(ImageIO.read(new URL(url)).getScaledInstance(48, 48, Image.SCALE_SMOOTH));
+						darkIconLabel.setIcon(image);
+						builder.setDarkImage(image);
+					}
+					catch (Exception e)
+					{
+						e.printStackTrace();
+					}
+					break;
+				case JOptionPane.CANCEL_OPTION:
+					break;
 				}
 			}
 		});
-		darkIconPanel.add(chooseDarkImage);
-		darkIconPanel.add(darkIconButton);
+		darkIconPanel.add(darkImageButton);
+		darkIconPanel.add(darkIconLabel);
 
-		builder.setDarkImage(temp);
+		builder.setDarkImage(blankSquare);
 
 		c.gridx = 0;
 		c.gridy = 2;
-		piecePanel.add(darkIconPanel, c);
+		pieceCreationPanel.add(darkIconPanel, c);
 
 		// Add components for collecting the directions of movement.
 
@@ -228,15 +261,15 @@ public class PieceMaker extends JPanel
 			// read the image from the class resources
 			bi = ImageIO.read(getClass().getResource("/movement_directions.png"));
 		}
-		catch (IOException e1)
+		catch (Exception ex)
 		{
-			e1.printStackTrace();
+			ex.printStackTrace();
 		}
 		// Makes the image an icon and ands it to a JLabel
-		ImageIcon picture = new ImageIcon(bi);
-		JLabel pictureHolder = new JLabel();
-		picture.setImage(picture.getImage().getScaledInstance(130, 130, Image.SCALE_SMOOTH));
-		pictureHolder.setIcon(picture);
+		ImageIcon movementPicture = new ImageIcon(bi);
+		JLabel movementPictureHolder = new JLabel();
+		movementPicture.setImage(movementPicture.getImage().getScaledInstance(130, 130, Image.SCALE_SMOOTH));
+		movementPictureHolder.setIcon(movementPicture);
 
 		JPanel movement = new JPanel();
 		movement.setLayout(new GridBagLayout());
@@ -258,7 +291,7 @@ public class PieceMaker extends JPanel
 		movement.add(west, c);
 		c.gridx = 1;
 		c.anchor = GridBagConstraints.CENTER;
-		movement.add(pictureHolder, c);
+		movement.add(movementPictureHolder, c);
 		c.gridx = 2;
 		c.anchor = GridBagConstraints.WEST;
 		movement.add(east, c);
@@ -274,35 +307,35 @@ public class PieceMaker extends JPanel
 		movement.add(southeast, c);
 
 		// Collect max distance of movement, -1 for infinity.
-		final JTextField dist = new JTextField(3);
-		dist.setToolTipText("Greatest amount of spaces piece can travel in chosen direction");
+		final JTextField distance = new JTextField(3);
+		distance.setToolTipText("Greatest amount of spaces piece can travel in chosen direction");
 
-		final JTextField knight = new JTextField(2);
-		knight.setToolTipText("Enter the knight-like directions you would like");
-		knight.setEnabled(false);
+		final JTextField firstKnightDirection = new JTextField(2);
+		firstKnightDirection.setToolTipText("Enter the knight-like directions you would like");
+		firstKnightDirection.setEnabled(false);
 
-		final JTextField knightSecond = new JTextField(2);
-		knightSecond.setToolTipText("Enter the other direction for the knight-like piece");
-		knightSecond.setEnabled(false);
+		final JTextField secondKnightDirection = new JTextField(2);
+		secondKnightDirection.setToolTipText("Enter the other direction for the knight-like piece");
+		secondKnightDirection.setEnabled(false);
 
-		final JCheckBox knightOn = new JCheckBox("Knight-like Movements", false);
-		knightOn.setToolTipText("Press me to turn on Knight-Like Movements for this piece");
-		knightOn.addActionListener(new ActionListener()
+		final JCheckBox knightMovements = new JCheckBox("Knight-like Movements", false);
+		knightMovements.setToolTipText("Press me to turn on Knight-Like Movements for this piece");
+		knightMovements.addActionListener(new ActionListener()
 		{
 
 			@Override
-			public void actionPerformed(ActionEvent arg0)
+			public void actionPerformed(ActionEvent event)
 			{
 				knightLike = !knightLike;
 				if (knightLike)
 				{
-					knight.setEnabled(true);
-					knightSecond.setEnabled(true);
+					firstKnightDirection.setEnabled(true);
+					secondKnightDirection.setEnabled(true);
 				}
 				else
 				{
-					knight.setEnabled(false);
-					knightSecond.setEnabled(false);
+					firstKnightDirection.setEnabled(false);
+					secondKnightDirection.setEnabled(false);
 				}
 			}
 		});
@@ -310,57 +343,57 @@ public class PieceMaker extends JPanel
 		final JCheckBox leaper = new JCheckBox("Can jump other Pieces", false);
 		leaper.setToolTipText("Press me to allow this piece to jump others");
 
-		final JPanel knightMoving = new JPanel();
-		knightMoving.setToolTipText("Use me to set up Knight Like Movements. See Variant Help for instructions");
-		knightMoving.setLayout(new FlowLayout());
-		knightMoving.add(knight);
-		knightMoving.add(new JLabel("x"));
-		knightMoving.add(knightSecond);
+		final JPanel knightMovementPanel = new JPanel();
+		knightMovementPanel.setToolTipText("Use me to set up Knight Like Movements. See Variant Help for instructions");
+		knightMovementPanel.setLayout(new FlowLayout());
+		knightMovementPanel.add(firstKnightDirection);
+		knightMovementPanel.add(new JLabel("x"));
+		knightMovementPanel.add(secondKnightDirection);
 
 		// Setting up a panel handle movement instructions
-		JPanel movementSetup = new JPanel();
-		movementSetup.setLayout(new BoxLayout(movementSetup, BoxLayout.Y_AXIS));
-		movementSetup.setLayout(new GridBagLayout());
+		JPanel movementPanel = new JPanel();
+		movementPanel.setLayout(new BoxLayout(movementPanel, BoxLayout.Y_AXIS));
+		movementPanel.setLayout(new GridBagLayout());
 
 		// Adds options and labels for setting up movement for the new piece
 		c.insets = new Insets(5, 0, 5, 0);
 		c.gridx = 0;
 		c.gridy = 0;
 		c.anchor = GridBagConstraints.CENTER;
-		movementSetup.add(new JLabel("<html><u>Normal Movement Setup:</u></br></html>"), c);
+		movementPanel.add(new JLabel("<html><u>Normal Movement Setup:</u></br></html>"), c);
 		c.insets = new Insets(5, 0, 0, 0);
 		c.gridx = 0;
 		c.gridy = 1;
 		c.gridwidth = 2;
-		movementSetup.add(movement, c);
+		movementPanel.add(movement, c);
 		c.insets = new Insets(5, 0, 0, 0);
 		c.gridx = 0;
 		c.gridy = 5;
-		movementSetup.add(leaper, c);
+		movementPanel.add(leaper, c);
 		c.insets = new Insets(5, 0, 0, 0);
 		c.gridx = 0;
 		c.gridy = 6;
-		movementSetup.add(knightOn, c);
+		movementPanel.add(knightMovements, c);
 		c.insets = new Insets(5, 0, 5, 0);
 		c.gridx = 0;
 		c.gridy = 7;
-		movementSetup.add(new JLabel("<html><u>Knight-like Movement Directions:</u></br></html>"), c);
+		movementPanel.add(new JLabel("<html><u>Knight-like Movement Directions:</u></br></html>"), c);
 		c.gridx = 0;
 		c.gridy = 8;
-		movementSetup.add(knightMoving, c);
+		movementPanel.add(knightMovementPanel, c);
 
 		c.gridx = 0;
 		c.gridy = 5;
-		piecePanel.add(movementSetup, c);
+		pieceCreationPanel.add(movementPanel, c);
 
 		// Create button and add ActionListener
-		final JButton done = new JButton("Save Piece");
-		done.setToolTipText("Press me to save this Piece type");
-		done.addActionListener(new ActionListener()
+		final JButton savePieceButton = new JButton("Save Piece");
+		savePieceButton.setToolTipText("Press me to save this Piece type");
+		savePieceButton.addActionListener(new ActionListener()
 		{
 
 			@Override
-			public void actionPerformed(ActionEvent arg0)
+			public void actionPerformed(ActionEvent event)
 			{
 
 				if (name.getText() == "" || PieceBuilder.isPieceType(name.getText()))
@@ -383,16 +416,16 @@ public class PieceMaker extends JPanel
 					builder.addMove('l', Integer.parseInt(southwest.getText()));
 				}
 
-				if (knight.isEnabled())
+				if (firstKnightDirection.isEnabled())
 				{
 					if (isIntKnights())
 					{
-						builder.addMove('x', Integer.parseInt(knight.getText())); // Knight
-																					// movements
-																					// stored
-																					// in
-																					// builder.
-						builder.addMove('y', Integer.parseInt(knightSecond.getText()));
+						builder.addMove('x', Integer.parseInt(firstKnightDirection.getText())); // Knight
+						// movements
+						// stored
+						// in
+						// builder.
+						builder.addMove('y', Integer.parseInt(secondKnightDirection.getText()));
 					}
 				}
 				builder.setName(name.getText());// Set the name in the
@@ -403,15 +436,15 @@ public class PieceMaker extends JPanel
 				// Refreshing the window
 				builder = new PieceBuilder();
 				name.setText("");
-				lightIconButton.setIcon(temp);
-				darkIconButton.setIcon(temp);
-				dist.setText("");
+				lightIconLabel.setIcon(blankSquare);
+				darkIconLabel.setIcon(blankSquare);
+				distance.setText("");
 				leaper.setSelected(false);
-				knightOn.setSelected(false);
-				knight.setText("");
-				knight.setEnabled(false);
-				knightSecond.setText("");
-				knightSecond.setEnabled(false);
+				knightMovements.setSelected(false);
+				firstKnightDirection.setText("");
+				firstKnightDirection.setEnabled(false);
+				secondKnightDirection.setText("");
+				secondKnightDirection.setEnabled(false);
 				knightLike = false;
 				dropdown.removeAllItems();
 				for (int i = 0; i < directions.length; i++)
@@ -428,8 +461,8 @@ public class PieceMaker extends JPanel
 			{
 				try
 				{
-					Integer.parseInt(knight.getText());
-					Integer.parseInt(knightSecond.getText());
+					Integer.parseInt(firstKnightDirection.getText());
+					Integer.parseInt(secondKnightDirection.getText());
 					return true;
 				}
 				catch (Exception e)
@@ -439,9 +472,9 @@ public class PieceMaker extends JPanel
 			}
 		});
 
-		final JButton next = new JButton("Done");
-		next.setToolTipText("Press me when you have made all of your pieces");
-		next.addActionListener(new ActionListener()
+		final JButton doneButton = new JButton("Done");
+		doneButton.setToolTipText("Press me when you have made all of your pieces");
+		doneButton.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent e)
@@ -467,26 +500,17 @@ public class PieceMaker extends JPanel
 			}
 		});
 
-		JPanel buttons = new JPanel();
-		buttons.setLayout(new FlowLayout());
-		buttons.add(done);
-
 		c.gridx = 0;
 		c.gridy = 7;
-		piecePanel.add(buttons, c);
+		pieceCreationPanel.add(savePieceButton, c);
 
 		c.gridx = 0;
 		c.gridy = 0;
-		add(piecePanel, c);
+		add(pieceCreationPanel, c);
 
-		JPanel mainButtons = new JPanel();
-		mainButtons.setLayout(new FlowLayout());
 		c.gridx = 0;
 		c.gridy = 1;
-		mainButtons.add(next, c);
-		c.gridx = 0;
-		c.gridy = 1;
-		add(mainButtons, c);
+		add(doneButton, c);
 
 		frame.pack();
 	}
@@ -494,15 +518,15 @@ public class PieceMaker extends JPanel
 	/**
 	 * Makes the icon for the for the new piece
 	 * 
-	 * @param fc The file chooser to select the piece
+	 * @param fileChooser The file chooser to select the piece
 	 * @param builder The builder that is building the piece
 	 * @return the icon to add to the button displaying the icon for the new
 	 * piece
 	 */
-	public ImageIcon makeIcon(JFileChooser fc, PieceBuilder builder)
+	public ImageIcon makeIcon(JFileChooser fileChooser, PieceBuilder builder)
 	{
 		// If a valid File was chosen, make an ImageIcon from the file path.
-		String file = fc.getSelectedFile().getAbsolutePath();
+		String file = fileChooser.getSelectedFile().getAbsolutePath();
 
 		// default center section
 		ImageIcon icon = new ImageIcon(file);
