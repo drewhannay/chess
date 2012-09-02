@@ -19,115 +19,126 @@ import javax.swing.SwingUtilities;
 import rules.NextTurn;
 import rules.Rules;
 
-/**
- * PlayerCustomMenu.java
- * 
- * GUI to handle customization of Players.
- * 
- * @author Drew Hannay & Daniel Opdyke & John McCormick
- * 
- * CSCI 335, Wheaton College, Spring 2011 Phase 1 February 24, 2011
- */
 public class PlayerCustomMenu extends JPanel
 {
-
-	/**
-	 * Generated Serial Version ID
-	 */
-	private static final long serialVersionUID = -5035641594159934814L;
-
-	// Variables declaration - do not modify
-	/**
-	 * Rules for the White Team
-	 */
-	private Rules whiteRules = new Rules(false, false);
-	/**
-	 * Rules for the Black Team
-	 */
-	private Rules blackRules = new Rules(false, false);
-	/**
-	 * JLabel with instructions for the number of turns for Player 1.
-	 */
-	private JLabel numTurnsOneLabel;
-	/**
-	 * JTextField to collect the number of turns for Player 1.
-	 */
-	private JTextField numTurnsOne;
-	/**
-	 * JLabel with instructions for the number of turns for Player 1.
-	 */
-	private JLabel numTurnsTwoLabel;
-	/**
-	 * A label for the incrementing turns option.
-	 */
-	private JLabel incrementTurnsLabel;
-	/**
-	 * A label for the incrementTurns field.
-	 */
-	private JTextField incrementTurns;
-	/**
-	 * JTextField to collect the number of turns for Player 1.
-	 */
-	private JTextField numTurnsTwo;
-	/**
-	 * JButton to return to previous screen.
-	 */
-	private JButton backButton;
-	/**
-	 * JButton to submit Player customizations and move to next screen.
-	 */
-	private JButton submitButton;
-	/**
-	 * Frame to hold the window
-	 */
-	private JFrame frame;
-	/**
-	 * holder for this PlayerCustomMenu
-	 */
-	private PlayerCustomMenu holder = this;
-
-	// End of variables declaration
-
-	/**
-	 * Constructor. Call initComponents to initialize the GUI.
-	 * 
-	 * @param b The builder which is creating the new game type.
-	 * @param m_blackRules The whiteRules object.
-	 * @param m_whiteRules The blackRules object.
-	 */
-	/*
-	 * public PlayerCustomMenu(Builder b, Rules whiteRules, Rules blackRules) {
-	 * this.b = b; initComponents(whiteRules, blackRules); }
-	 */
-
-	public PlayerCustomMenu(CustomSetupMenu variant, JFrame optionsFrame)
+	public PlayerCustomMenu(CustomSetupMenu customSetupMenu, JFrame optionsFrame)
 	{
-		whiteRules = variant.m_whiteRules;
-		blackRules = variant.m_blackRules;
-		frame = optionsFrame;
-		frame.setVisible(true);
-		frame.add(this);
-		frame.setVisible(true);
-		frame.setSize(300, 200);
-		frame.setLocationRelativeTo(Driver.getInstance());
-		initComponents(variant);
+		whiteRules = customSetupMenu.m_whiteRules;
+		blackRules = customSetupMenu.m_blackRules;
+		m_frame = optionsFrame;
+		m_frame.setVisible(true);
+		m_frame.add(this);
+		m_frame.setVisible(true);
+		m_frame.setSize(300, 200);
+		m_frame.setLocationRelativeTo(Driver.getInstance());
+		initGUIComponents(customSetupMenu);
 	}
 
-	/**
-	 * Determine if this form has been correctly filled out. Check that valid
-	 * integers have been selected for the number of turns for each Player.
-	 * 
-	 * @param whiteRules The whiteRules object.
-	 * @param blackRules The blackRules object.
-	 * @return Whether or not the form is complete.
-	 */
-	private boolean formComplete(Rules whiteRules, Rules blackRules)
+	private void initGUIComponents(final CustomSetupMenu customSetupMenu)
+	{
+		setLayout(new GridBagLayout());
+		GridBagConstraints constraints = new GridBagConstraints();
+		setBorder(BorderFactory.createLoweredBevelBorder());
+
+		JLabel playerOneTurnsLabel = new JLabel("How many turns in a row for White? ");
+		JLabel playerTwoTurnsLabel = new JLabel("How many turns in a row for Black? ");
+		m_playerOneTurnsField = new JTextField(4);
+		SwingUtilities.invokeLater(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				m_playerOneTurnsField.requestFocus();
+			}
+		});
+		m_playerOneTurnsField.setText(Integer.toString(whiteRules.getNextTurn().getWhiteMoves()));
+		m_playerOneTurnsField.setToolTipText("This will be the amount of turns for the First Player (white in classic)");
+		m_playerTwoTurnsField = new JTextField(4);
+		m_playerTwoTurnsField.setText(Integer.toString(whiteRules.getNextTurn().getBlackMoves()));
+		m_playerTwoTurnsField.setToolTipText("This will be the amount of turns for the First Player (white in classic)");
+		m_incrementTurnsLabel = new JLabel("Increase turns by how many each round? ");
+		m_incrementTurnsField = new JTextField(4);
+		m_incrementTurnsField.setText(Integer.toString(whiteRules.getNextTurn().getIncrement()));
+		m_incrementTurnsField.setToolTipText("This will be the number of turns each player gains for each time their turn occurs");
+
+		JButton backButton = new JButton("Cancel");
+		backButton.setToolTipText("Press me to return to the main Variant window");
+		backButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent event)
+			{
+				PlayerCustomMenu.this.removeAll();
+				m_frame.setVisible(false);
+			}
+		});
+
+		JButton submitButton = new JButton("Save");
+		submitButton.setToolTipText("Press me to save these turn settings");
+		submitButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent event)
+			{
+				if (formIsComplete(whiteRules, blackRules))
+				{
+					customSetupMenu.m_whiteRules = whiteRules;
+					customSetupMenu.m_blackRules = blackRules;
+					PlayerCustomMenu.this.removeAll();
+					m_frame.setVisible(false);
+				}
+			}
+		});
+
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.setLayout(new FlowLayout());
+		buttonPanel.add(submitButton);
+		buttonPanel.add(backButton);
+
+		constraints.insets = new Insets(3, 3, 3, 3);
+		constraints.gridx = 0;
+		constraints.gridy = 0;
+		add(playerOneTurnsLabel, constraints);
+
+		constraints.insets = new Insets(3, 3, 3, 3);
+		constraints.gridx = 2;
+		constraints.gridy = 0;
+		add(m_playerOneTurnsField, constraints);
+
+		constraints.insets = new Insets(3, 3, 3, 3);
+		constraints.gridx = 0;
+		constraints.gridy = 1;
+		add(playerTwoTurnsLabel, constraints);
+
+		constraints.insets = new Insets(3, 3, 3, 3);
+		constraints.gridx = 2;
+		constraints.gridy = 1;
+		add(m_playerTwoTurnsField, constraints);
+
+		constraints.insets = new Insets(3, 3, 3, 3);
+		constraints.gridx = 0;
+		constraints.gridy = 2;
+		add(m_incrementTurnsLabel, constraints);
+
+		constraints.insets = new Insets(3, 3, 3, 3);
+		constraints.gridx = 2;
+		constraints.gridy = 2;
+		add(m_incrementTurnsField, constraints);
+
+		constraints.gridwidth = 3;
+		constraints.gridx = 0;
+		constraints.gridy = 3;
+		add(buttonPanel, constraints);
+
+	}
+
+	private boolean formIsComplete(Rules whiteRules, Rules blackRules)
 	{
 		try
 		{
-			int whiteTurns = Integer.parseInt(numTurnsOne.getText());
-			int blackTurns = Integer.parseInt(numTurnsTwo.getText());
-			int increment = Integer.parseInt(incrementTurns.getText());
+			int whiteTurns = Integer.parseInt(m_playerOneTurnsField.getText());
+			int blackTurns = Integer.parseInt(m_playerTwoTurnsField.getText());
+			int increment = Integer.parseInt(m_incrementTurnsField.getText());
 			if (whiteTurns < 0)
 			{
 				JOptionPane.showMessageDialog(this, "The White team's turns cannot be negative", "No Negatives",
@@ -176,117 +187,13 @@ public class PlayerCustomMenu extends JPanel
 		return true;
 	}
 
-	/**
-	 * Initialize components of the GUI Create all the GUI components, set their
-	 * specific properties and add them to the window. Also add any necessary
-	 * ActionListeners.
-	 * 
-	 * @param m_whiteRules The whiteRules object.
-	 * @param m_blackRules The blackRules object.
-	 */
-	private void initComponents(final CustomSetupMenu variant)
-	{
+	private static final long serialVersionUID = -5035641594159934814L;
 
-		// Set the layout and size of this JPanel.
-		setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
-		setBorder(BorderFactory.createLoweredBevelBorder());
-
-		// Create JLabels and JTextFields.
-		numTurnsOneLabel = new JLabel("How many turns in a row for White? ");
-		numTurnsTwoLabel = new JLabel("How many turns in a row for Black? ");
-		numTurnsOne = new JTextField(4);
-		SwingUtilities.invokeLater(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				numTurnsOne.requestFocus();
-			}
-		});
-		numTurnsOne.setText(Integer.toString(whiteRules.getNextTurn().getWhiteMoves()));
-		numTurnsOne.setToolTipText("This will be the amount of turns for the First Player (white in classic)");
-		numTurnsTwo = new JTextField(4);
-		numTurnsTwo.setText(Integer.toString(whiteRules.getNextTurn().getBlackMoves()));
-		numTurnsTwo.setToolTipText("This will be the amount of turns for the First Player (white in classic)");
-		incrementTurnsLabel = new JLabel("Increase turns by how many each round? ");
-		incrementTurns = new JTextField(4);
-		incrementTurns.setText(Integer.toString(whiteRules.getNextTurn().getIncrement()));
-		incrementTurns.setToolTipText("This will be the number of turns each player gains for each time their turn occurs");
-
-		// Create button and add ActionListener
-		backButton = new JButton("Cancel");
-		backButton.setToolTipText("Press me to return to the main Variant window");
-		backButton.addActionListener(new ActionListener()
-		{
-
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				holder.removeAll();
-				frame.setVisible(false);
-			}
-		});
-
-		// Create button and add ActionListener
-		submitButton = new JButton("Save");
-		submitButton.setToolTipText("Press me to save these turn settings");
-		submitButton.addActionListener(new ActionListener()
-		{
-
-			@Override
-			public void actionPerformed(ActionEvent arg0)
-			{
-				if (formComplete(whiteRules, blackRules))
-				{// Make sure the form is complete.
-					variant.m_whiteRules = whiteRules;
-					variant.m_blackRules = blackRules;
-					holder.removeAll();
-					frame.setVisible(false);
-				}
-			}
-		});
-
-		JPanel buttons = new JPanel();
-		buttons.setLayout(new FlowLayout());
-		buttons.add(submitButton);
-		buttons.add(backButton);
-
-		c.insets = new Insets(3, 3, 3, 3);
-		c.gridx = 0;
-		c.gridy = 0;
-		add(numTurnsOneLabel, c);
-
-		c.insets = new Insets(3, 3, 3, 3);
-		c.gridx = 2;
-		c.gridy = 0;
-		add(numTurnsOne, c);
-
-		c.insets = new Insets(3, 3, 3, 3);
-		c.gridx = 0;
-		c.gridy = 1;
-		add(numTurnsTwoLabel, c);
-
-		c.insets = new Insets(3, 3, 3, 3);
-		c.gridx = 2;
-		c.gridy = 1;
-		add(numTurnsTwo, c);
-
-		c.insets = new Insets(3, 3, 3, 3);
-		c.gridx = 0;
-		c.gridy = 2;
-		add(incrementTurnsLabel, c);
-
-		c.insets = new Insets(3, 3, 3, 3);
-		c.gridx = 2;
-		c.gridy = 2;
-		add(incrementTurns, c);
-
-		c.gridwidth = 3;
-		c.gridx = 0;
-		c.gridy = 3;
-		add(buttons, c);
-
-	}
-
+	private Rules whiteRules = new Rules(false, false);
+	private Rules blackRules = new Rules(false, false);
+	private JTextField m_playerOneTurnsField;
+	private JTextField m_playerTwoTurnsField;
+	private JLabel m_incrementTurnsLabel;
+	private JTextField m_incrementTurnsField;
+	private JFrame m_frame;
 }
