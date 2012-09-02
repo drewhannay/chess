@@ -30,7 +30,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
-import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -43,6 +42,7 @@ import logic.Square;
 import rules.EndOfGame;
 import rules.ObjectivePiece;
 import rules.Rules;
+import utility.GUIUtility;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -193,14 +193,7 @@ public class CustomSetupMenu extends JPanel
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.insets = new Insets(0, 0, 0, 0);
 		add(variantNameField, constraints);
-		SwingUtilities.invokeLater(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				variantNameField.requestFocus();
-			}
-		});
+		GUIUtility.requestFocus(variantNameField);
 
 		Board[] temp = new Board[1];
 		temp[0] = new Board(8, 8, false);

@@ -16,10 +16,10 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.SwingUtilities;
 
 import rules.EndOfGame;
 import rules.Rules;
+import utility.GUIUtility;
 
 public class ObjectiveMaker extends JPanel
 {
@@ -46,14 +46,7 @@ public class ObjectiveMaker extends JPanel
 		final JPanel objectiveWhitePanel = new JPanel();
 		objectiveWhitePanel.setLayout(new GridLayout(5, 1));
 		final JRadioButton whiteCaptureAllButton = new JRadioButton("Capture All", false);
-		SwingUtilities.invokeLater(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				whiteCaptureAllButton.requestFocus();
-			}
-		});
+		GUIUtility.requestFocus(whiteCaptureAllButton);
 		whiteCaptureAllButton.setToolTipText("Press me if you want the objective to be capturing all enemy pieces");
 		objectiveWhitePanel.add(whiteCaptureAllButton);
 		if (customSetupMenu.m_whiteRules.theEndIsNigh().equals("captureAllPieces"))

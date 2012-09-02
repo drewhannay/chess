@@ -17,7 +17,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 
 import logic.Board;
 import logic.Builder;
@@ -27,6 +26,7 @@ import rules.EndOfGame;
 import rules.GetBoard;
 import rules.ObjectivePiece;
 import rules.Rules;
+import utility.GUIUtility;
 
 public class RuleMaker extends JPanel
 {
@@ -58,14 +58,7 @@ public class RuleMaker extends JPanel
 		final JPanel whiteLegalDestinationPanel = new JPanel();
 		whiteLegalDestinationPanel.setLayout(new GridLayout(2, 1));
 		final JCheckBox whiteCaptureMandatoryCheckBox = new JCheckBox("Capture Mandatory");
-		SwingUtilities.invokeLater(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				whiteCaptureMandatoryCheckBox.requestFocus();
-			}
-		});
+		GUIUtility.requestFocus(whiteCaptureMandatoryCheckBox);
 		whiteCaptureMandatoryCheckBox.setToolTipText("Capturing moves must be performed");
 		whiteLegalDestinationPanel.add(whiteCaptureMandatoryCheckBox);
 

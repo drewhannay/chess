@@ -23,9 +23,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 
 import logic.PieceBuilder;
+import utility.GUIUtility;
 
 public class PieceMaker extends JPanel
 {
@@ -59,14 +59,7 @@ public class PieceMaker extends JPanel
 		namePanel.add(new JLabel("Piece Name:"));
 		final JTextField pieceNameField = new JTextField(15);
 		pieceNameField.setToolTipText("Enter the name of the new piece here");
-		SwingUtilities.invokeLater(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				pieceNameField.requestFocus();
-			}
-		});
+		GUIUtility.requestFocus(pieceNameField);
 		namePanel.add(pieceNameField);
 
 		constraints.gridx = 0;

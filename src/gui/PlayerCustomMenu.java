@@ -14,10 +14,10 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 
 import rules.NextTurn;
 import rules.Rules;
+import utility.GUIUtility;
 
 public class PlayerCustomMenu extends JPanel
 {
@@ -43,14 +43,7 @@ public class PlayerCustomMenu extends JPanel
 		JLabel playerOneTurnsLabel = new JLabel("How many turns in a row for White? ");
 		JLabel playerTwoTurnsLabel = new JLabel("How many turns in a row for Black? ");
 		m_playerOneTurnsField = new JTextField(4);
-		SwingUtilities.invokeLater(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				m_playerOneTurnsField.requestFocus();
-			}
-		});
+		GUIUtility.requestFocus(m_playerOneTurnsField);
 		m_playerOneTurnsField.setText(Integer.toString(whiteRules.getNextTurn().getWhiteMoves()));
 		m_playerOneTurnsField.setToolTipText("This will be the amount of turns for the First Player (white in classic)");
 		m_playerTwoTurnsField = new JTextField(4);
