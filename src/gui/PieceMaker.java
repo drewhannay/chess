@@ -9,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -117,72 +119,120 @@ public class PieceMaker extends JPanel
 		temp.setImage(temp.getImage().getScaledInstance(48, 48, Image.SCALE_SMOOTH));
 		final JPanel lightIconPanel = new JPanel();
 		lightIconPanel.setLayout(new FlowLayout());
-		final JButton lightIconButton = new JButton();
-		lightIconButton.setSize(48, 48);
-		lightIconButton.setIcon(temp);
+		final JLabel lightIcon = new JLabel();
+		lightIcon.setSize(48, 48);
+		lightIcon.setIcon(temp);
 
 		// Add JButtons for choosing the images for the new type.
-		final JButton chooseLightImage = new JButton("Choose image for light piece");
-		chooseLightImage.setToolTipText("Click me to choose an Light Colored Icon for this piece");
-		chooseLightImage.addActionListener(new ActionListener()
-		{
-
-			@Override
-			public void actionPerformed(ActionEvent arg0)
-			{
-				// Create the JFileChooser and add image for the new piece
-				final JFileChooser fc = new JFileChooser("~/"); // default
-																// directory is
-																// in the images
-																// folder
-				int returnVal = fc.showOpenDialog(null);
-				if (returnVal == JFileChooser.APPROVE_OPTION)
+				final JButton chooseLightImage = new JButton("Choose image for light piece");
+				chooseLightImage.setToolTipText("Click me to choose an Light Colored Icon for this piece");
+				chooseLightImage.addActionListener(new ActionListener()
 				{
-					ImageIcon icon = makeIcon(fc, builder);
-					lightIconButton.setIcon(icon); // Adds icon to button
-					builder.setLightImage(icon);
-				}
-			}
-		});
-		lightIconPanel.add(chooseLightImage);
-		lightIconPanel.add(lightIconButton);
 
-		builder.setLightImage(temp);
+					@Override
+					public void actionPerformed(ActionEvent arg0)
+					{
+						Object[] options = new String[] { "Browse My Computer", "Image from Internet", "Invert Dark Image" };
+						int answer = JOptionPane.showOptionDialog(null, "Where would you like to get the image from?", "Choose Image",
+								JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+						switch (answer)
+						{
+						case 0:
+							final JFileChooser fc = new JFileChooser("~/"); 
+							int returnVal = fc.showOpenDialog(null);
+							if (returnVal == JFileChooser.APPROVE_OPTION)
+							{
+								ImageIcon icon = makeIcon(fc, builder);
+								lightIcon.setIcon(icon); // Adds icon to button
+								builder.setLightImage(icon);
+							}
+							break;
+						case 2:
+							break;
+						default:
+							String url = JOptionPane.showInputDialog(null, "Enter URL of the image:", "Input URL",
+									JOptionPane.PLAIN_MESSAGE);
+							try
+							{
+								ImageIcon image = new ImageIcon(ImageIO.read(new URL(url)).getScaledInstance(48, 48, Image.SCALE_SMOOTH));
+								lightIcon.setIcon(image);
+								builder.setLightImage(image);
+							}
+							catch (MalformedURLException e)
+							{
+								e.printStackTrace();
+							}
+							catch (IOException e)
+							{
+								e.printStackTrace();
+							}
+							break;
+						}
+					}
+				});
+				lightIconPanel.add(chooseLightImage);
+				lightIconPanel.add(lightIcon);
 
-		c.gridx = 0;
-		c.gridy = 3;
-		piecePanel.add(lightIconPanel, c);
+				builder.setLightImage(temp);
 
-		final JPanel darkIconPanel = new JPanel();
-		darkIconPanel.setLayout(new FlowLayout());
-		final JButton darkIconButton = new JButton();
-		darkIconButton.setSize(48, 48);
-		darkIconButton.setIcon(temp);
+				c.gridx = 0;
+				c.gridy = 3;
+				piecePanel.add(lightIconPanel, c);
 
-		final JButton chooseDarkImage = new JButton("Choose image for dark piece");
-		chooseDarkImage.setToolTipText("Click me to choose an Dark Colored Icon for this piece");
-		chooseDarkImage.addActionListener(new ActionListener()
-		{
+				final JPanel darkIconPanel = new JPanel();
+				darkIconPanel.setLayout(new FlowLayout());
+				final JLabel darkIcon = new JLabel();
+				darkIcon.setSize(48, 48);
+				darkIcon.setIcon(temp);
 
-			@Override
-			public void actionPerformed(ActionEvent arg0)
-			{
-				// Create the JFileChooser and add image for the new piece
-				final JFileChooser fc = new JFileChooser("~/"); // default
-																// directory is
-																// in the images
-																// folder
-				int returnVal = fc.showOpenDialog(null);
-				if (returnVal == JFileChooser.APPROVE_OPTION)
+				final JButton chooseDarkImage = new JButton("Choose image for dark piece");
+				chooseDarkImage.setToolTipText("Click me to choose an Dark Colored Icon for this piece");
+				chooseDarkImage.addActionListener(new ActionListener()
 				{
-					ImageIcon icon = makeIcon(fc, builder);
-					darkIconButton.setIcon(icon); // Adds icon to button
-					builder.setDarkImage(icon);
-				}
-			}
-		});
-		darkIconPanel.add(chooseDarkImage);
-		darkIconPanel.add(darkIconButton);
+
+					@Override
+					public void actionPerformed(ActionEvent arg0)
+					{
+						Object[] options = new String[] { "Browse My Computer", "Image from Internet", "Cancel" };
+						int answer = JOptionPane.showOptionDialog(null, "Where would you like to get the image from?", "Choose Image",
+								JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+						switch (answer)
+						{
+						case 0:
+							final JFileChooser fc = new JFileChooser("~/"); 
+							int returnVal = fc.showOpenDialog(null);
+							if (returnVal == JFileChooser.APPROVE_OPTION)
+							{
+								ImageIcon icon = makeIcon(fc, builder);
+								darkIcon.setIcon(icon); // Adds icon to button
+								builder.setDarkImage(icon);
+							}
+							break;
+						case 2:
+							break;
+						default:
+							String url = JOptionPane.showInputDialog(null, "Enter URL of the image:", "Input URL",
+									JOptionPane.PLAIN_MESSAGE);
+							try
+							{
+								ImageIcon image = new ImageIcon(ImageIO.read(new URL(url)).getScaledInstance(48, 48, Image.SCALE_SMOOTH));
+								darkIcon.setIcon(image);
+								builder.setDarkImage(image);
+							}
+							catch (MalformedURLException e)
+							{
+								e.printStackTrace();
+							}
+							catch (IOException e)
+							{
+								e.printStackTrace();
+							}
+							break;
+						}
+					}
+				});
+				darkIconPanel.add(chooseDarkImage);
+				darkIconPanel.add(darkIcon);
 
 		builder.setDarkImage(temp);
 
@@ -403,8 +453,8 @@ public class PieceMaker extends JPanel
 				// Refreshing the window
 				builder = new PieceBuilder();
 				name.setText("");
-				lightIconButton.setIcon(temp);
-				darkIconButton.setIcon(temp);
+				lightIcon.setIcon(temp);
+				darkIcon.setIcon(temp);
 				dist.setText("");
 				leaper.setSelected(false);
 				knightOn.setSelected(false);
