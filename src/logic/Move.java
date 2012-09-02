@@ -326,7 +326,7 @@ public class Move implements Serializable
 		}
 
 		board.getGame().afterMove(this);
-		if (!PlayGame.getMustPlace())
+		if (!PlayGame.getNextMoveMustPlacePiece())
 		{
 			board.getGame().nextTurn();
 		}

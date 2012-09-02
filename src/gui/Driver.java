@@ -762,8 +762,8 @@ final public class Driver extends JFrame
 
 	public void setUpNewGame()
 	{
-		if (PlayGame.menu != null)
-			PlayGame.menu.setVisible(false);
+		if (PlayGame.m_optionsMenu != null)
+			PlayGame.m_optionsMenu.setVisible(false);
 
 		// reset the panels being displayed to only contain the new game
 		if (m_otherPanel != null)

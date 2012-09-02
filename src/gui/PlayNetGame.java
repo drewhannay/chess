@@ -127,37 +127,37 @@ public class PlayNetGame extends PlayGame
 		{
 			if (getGame().isBlackMove() == isBlack)
 			{
-				if (mustPlace)
+				if (m_nextMoveMustPlacePiece)
 				{
-					mustPlace = false;
+					m_nextMoveMustPlacePiece = false;
 					getGame().nextTurn();
-					if (!clickedSquare.isOccupied() && clickedSquare.isHabitable() && placePiece != null)
+					if (!clickedSquare.isOccupied() && clickedSquare.isHabitable() && m_pieceToPlace != null)
 					{
-						placePiece.setSquare(clickedSquare);
-						clickedSquare.setPiece(placePiece);
-						placePiece = null;
-						mustPlace = false;
+						m_pieceToPlace.setSquare(clickedSquare);
+						clickedSquare.setPiece(m_pieceToPlace);
+						m_pieceToPlace = null;
+						m_nextMoveMustPlacePiece = false;
 						boardRefresh(getGame().getBoards());
 						getGame().genLegalDests();
 					}
 
 					return;
 				}
-				if (mustMove && clickedSquare == storedSquare)
+				if (m_mustMove && clickedSquare == m_storedSquare)
 				{
 					boardRefresh(getGame().getBoards());
-					mustMove = false;
+					m_mustMove = false;
 				}
-				else if (mustMove && clickedSquare.getColor() == Square.HIGHLIGHT_COLOR)
+				else if (m_mustMove && clickedSquare.getColor() == Square.HIGHLIGHT_COLOR)
 				{
 					try
 					{
-						Move m = new Move(b, storedSquare, clickedSquare);
+						Move m = new Move(b, m_storedSquare, clickedSquare);
 						getGame().playMove(m);
 
-						netMove = g.moveToFakeMove(m);
+						netMove = m_game.moveToFakeMove(m);
 
-						mustMove = false;
+						m_mustMove = false;
 						boardRefresh(getGame().getBoards());
 					}
 					catch (Exception e1)
@@ -166,7 +166,7 @@ public class PlayNetGame extends PlayGame
 						e1.printStackTrace();
 					}
 				}
-				else if (!mustMove && clickedSquare.getPiece() != null
+				else if (!m_mustMove && clickedSquare.getPiece() != null
 						&& clickedSquare.getPiece().isBlack() == getGame().isBlackMove())
 				{
 					List<Square> dests = clickedSquare.getPiece().getLegalDests();
@@ -176,8 +176,8 @@ public class PlayNetGame extends PlayGame
 						{
 							dest.setBackgroundColor(Square.HIGHLIGHT_COLOR);
 						}
-						storedSquare = clickedSquare;
-						mustMove = true;
+						m_storedSquare = clickedSquare;
+						m_mustMove = true;
 					}
 				}
 			}
@@ -272,17 +272,17 @@ public class PlayNetGame extends PlayGame
 	{
 
 		super.removeAll();
-		menu.setVisible(false);
+		m_optionsMenu.setVisible(false);
 
 		Driver.getInstance().m_fileMenu.setVisible(false);
 
 		// Has spaces to hax0r fix centering.
-		inCheck = new JLabel("You're In Check!");
-		inCheck.setHorizontalTextPosition(inCheck.CENTER);
-		inCheck.setForeground(Color.RED);
+		m_inCheckLabel = new JLabel("You're In Check!");
+		m_inCheckLabel.setHorizontalTextPosition(m_inCheckLabel.CENTER);
+		m_inCheckLabel.setForeground(Color.RED);
 
 		int ifDouble = 0;
-		Driver.getInstance().setMenu(createMenu());
+		Driver.getInstance().setMenu(createMenuBar());
 
 		Driver.m_gameOptionsMenu.setVisible(true); // Turns on the game options
 
@@ -296,13 +296,13 @@ public class PlayNetGame extends PlayGame
 		// Adds the grid
 
 		// Adds the inCheck notification.
-		inCheck.setHorizontalTextPosition(SwingConstants.CENTER);
-		inCheck.setHorizontalAlignment(SwingConstants.CENTER);
+		m_inCheckLabel.setHorizontalTextPosition(SwingConstants.CENTER);
+		m_inCheckLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		c.fill = GridBagConstraints.NONE;
 		c.gridy = 0;
 		c.gridx = 9;
-		inCheck.setVisible(false);
-		this.add(inCheck, c);
+		m_inCheckLabel.setVisible(false);
+		this.add(m_inCheckLabel, c);
 
 		if (boards.length == 1)
 		{
@@ -348,11 +348,11 @@ public class PlayNetGame extends PlayGame
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				if (index + 1 == history.length)
+				if (m_historyIndex + 1 == m_history.length)
 					return;
 				try
 				{
-					history[++index].execute();
+					m_history[++m_historyIndex].execute();
 				}
 				catch (Exception e1)
 				{
@@ -366,11 +366,11 @@ public class PlayNetGame extends PlayGame
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				if (index == -1)
+				if (m_historyIndex == -1)
 					return;
 				try
 				{
-					history[index--].undo();
+					m_history[m_historyIndex--].undo();
 				}
 				catch (Exception e1)
 				{
@@ -383,20 +383,20 @@ public class PlayNetGame extends PlayGame
 		// highlight them
 		// when it's their turn.
 
-		whiteLabel = new JLabel("WHITE");
-		whiteLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		m_whiteLabel = new JLabel("WHITE");
+		m_whiteLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
-		whiteLabel.setBorder(BorderFactory.createTitledBorder(""));
+		m_whiteLabel.setBorder(BorderFactory.createTitledBorder(""));
 
-		blackLabel = new JLabel("BLACK");
-		blackLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		blackLabel.setBorder(BorderFactory.createTitledBorder(""));
+		m_blackLabel = new JLabel("BLACK");
+		m_blackLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		m_blackLabel.setBorder(BorderFactory.createTitledBorder(""));
 
 		// Needed for highlighting the names when it's their turn.
-		whiteLabel.setOpaque(true);
-		blackLabel.setOpaque(true);
+		m_whiteLabel.setOpaque(true);
+		m_blackLabel.setOpaque(true);
 
-		whiteLabel.setBackground(getGame().isBlackMove() ? null : Square.HIGHLIGHT_COLOR);
+		m_whiteLabel.setBackground(getGame().isBlackMove() ? null : Square.HIGHLIGHT_COLOR);
 
 		/**
 		 * int to hold the size of the jail board.
@@ -421,50 +421,50 @@ public class PlayNetGame extends PlayGame
 		/**
 		 * Makes Black's jail
 		 */
-		whiteCaptures = new JPanel();
-		whiteCaptures.setBorder(BorderFactory.createTitledBorder("Captured Pieces"));
+		m_whiteCapturePanel = new JPanel();
+		m_whiteCapturePanel.setBorder(BorderFactory.createTitledBorder("Captured Pieces"));
 		if (k < 4)
 		{
-			whiteCapturesBox = new Jail(4, 4);
-			whiteCaptures.setLayout(new GridLayout(4, 4));
+			m_whiteCapturesJail = new Jail(4, 4);
+			m_whiteCapturePanel.setLayout(new GridLayout(4, 4));
 		}
 		else
 		{
-			whiteCapturesBox = new Jail(k, k);
-			whiteCaptures.setLayout(new GridLayout(k, k));
+			m_whiteCapturesJail = new Jail(k, k);
+			m_whiteCapturePanel.setLayout(new GridLayout(k, k));
 		}
-		whiteCaptures.setPreferredSize(new Dimension((whiteCapturesBox.getMaxColumn() + 1) * 25, (whiteCapturesBox.getMaxRow() + 1) * 25));
+		m_whiteCapturePanel.setPreferredSize(new Dimension((m_whiteCapturesJail.getMaxColumn() + 1) * 25, (m_whiteCapturesJail.getMaxRow() + 1) * 25));
 		for (int i = k; i > 0; i--)
 		{
 			for (int j = 1; j <= k; j++)
 			{
 				Square square = new Square(i, j);
-				whiteCaptures.add(square);
+				m_whiteCapturePanel.add(square);
 			}
 		}
 
 		/**
 		 * Makes White's jail
 		 */
-		blackCaptures = new JPanel();
-		blackCaptures.setBorder(BorderFactory.createTitledBorder("Captured Pieces"));
+		m_blackCapturePanel = new JPanel();
+		m_blackCapturePanel.setBorder(BorderFactory.createTitledBorder("Captured Pieces"));
 		if (k < 4)
 		{
-			blackCapturesBox = new Jail(4, 4);
-			blackCaptures.setLayout(new GridLayout(4, 4));
+			m_blackCapturesJail = new Jail(4, 4);
+			m_blackCapturePanel.setLayout(new GridLayout(4, 4));
 		}
 		else
 		{
-			blackCapturesBox = new Jail(k, k);
-			blackCaptures.setLayout(new GridLayout(k, k));
+			m_blackCapturesJail = new Jail(k, k);
+			m_blackCapturePanel.setLayout(new GridLayout(k, k));
 		}
-		blackCaptures.setPreferredSize(new Dimension((blackCapturesBox.getMaxColumn() + 1) * 25, (blackCapturesBox.getMaxRow() + 1) * 25));
+		m_blackCapturePanel.setPreferredSize(new Dimension((m_blackCapturesJail.getMaxColumn() + 1) * 25, (m_blackCapturesJail.getMaxRow() + 1) * 25));
 		for (int i = k; i > 0; i--)
 		{
 			for (int j = 1; j <= k; j++)
 			{
 				Square square = new Square(i, j);
-				blackCaptures.add(square);
+				m_blackCapturePanel.add(square);
 			}
 		}
 
@@ -486,7 +486,7 @@ public class PlayNetGame extends PlayGame
 		c.ipadx = 100;
 		c.gridx = 11 + ifDouble;
 		c.gridy = 0;
-		this.add(blackLabel, c);
+		this.add(m_blackLabel, c);
 
 		// Adds the Black Jail
 		c.fill = GridBagConstraints.NONE;
@@ -497,7 +497,7 @@ public class PlayNetGame extends PlayGame
 		c.insets = new Insets(0, 25, 10, 25);
 		c.gridx = 11 + ifDouble;
 		c.gridy = 1;
-		this.add(blackCaptures, c);
+		this.add(m_blackCapturePanel, c);
 
 		// If it is playback then we do not want timers.
 		if (!isPlayback)
@@ -510,7 +510,7 @@ public class PlayNetGame extends PlayGame
 			c.ipadx = 100;
 			c.gridx = 11 + ifDouble;
 			c.gridy = 4;
-			this.add(blackTimer.getDisplayLabel(), c);
+			this.add(m_blackTimer.getDisplayLabel(), c);
 
 			// Adds the White timer
 			c.fill = GridBagConstraints.HORIZONTAL;
@@ -520,7 +520,7 @@ public class PlayNetGame extends PlayGame
 			c.ipadx = 100;
 			c.gridx = 11 + ifDouble;
 			c.gridy = 6;
-			this.add(whiteTimer.getDisplayLabel(), c);
+			this.add(m_whiteTimer.getDisplayLabel(), c);
 		}
 		else
 		{
@@ -553,7 +553,7 @@ public class PlayNetGame extends PlayGame
 		c.ipadx = 0;
 		c.gridx = 11 + ifDouble;
 		// Changes spacing and location if there is a timer or not.
-		if (whiteTimer instanceof NoTimer)
+		if (m_whiteTimer instanceof NoTimer)
 		{
 			c.gridy = 6;
 			c.insets = new Insets(10, 25, 0, 25);
@@ -563,7 +563,7 @@ public class PlayNetGame extends PlayGame
 			c.gridy = 7;
 			c.insets = new Insets(0, 25, 0, 25);
 		}
-		this.add(whiteCaptures, c);
+		this.add(m_whiteCapturePanel, c);
 
 		// Adds the White Name
 		c.fill = GridBagConstraints.NONE;
@@ -574,7 +574,7 @@ public class PlayNetGame extends PlayGame
 		c.insets = new Insets(10, 0, 10, 0);
 		// Changes spacing and adds space to the bottom of the window if there
 		// is a timer.
-		if (whiteTimer instanceof NoTimer)
+		if (m_whiteTimer instanceof NoTimer)
 		{
 			c.gridheight = 1;
 			c.gridy = 9;
@@ -586,17 +586,17 @@ public class PlayNetGame extends PlayGame
 		}
 		c.ipadx = 100;
 		c.gridx = 11 + ifDouble;
-		this.add(whiteLabel, c);
+		this.add(m_whiteLabel, c);
 	}
 
 	@Override
-	public JMenu createMenu()
+	public JMenu createMenuBar()
 	{
-		menu = new JMenu("Menu");
-		if (!isPlayback)
+		m_optionsMenu = new JMenu("Menu");
+		if (!m_isPlayback)
 		{
-			drawItem = new JMenuItem("Request Draw", KeyEvent.VK_R);
-			drawItem.addActionListener(new ActionListener()
+			m_drawMenuItem = new JMenuItem("Request Draw", KeyEvent.VK_R);
+			m_drawMenuItem.addActionListener(new ActionListener()
 			{
 				@Override
 				public void actionPerformed(ActionEvent e)
@@ -628,10 +628,10 @@ public class PlayNetGame extends PlayGame
 				}
 			});
 
-			menu.add(drawItem);
+			m_optionsMenu.add(m_drawMenuItem);
 		}
 
-		return menu;
+		return m_optionsMenu;
 	}
 
 	/**
@@ -661,7 +661,7 @@ public class PlayNetGame extends PlayGame
 	{
 		this.AIGame = AIGame;
 		Driver.getInstance().m_fileMenu.setVisible(true);
-		drawItem.setText("Declare Draw");
+		m_drawMenuItem.setText("Declare Draw");
 	}
 
 }

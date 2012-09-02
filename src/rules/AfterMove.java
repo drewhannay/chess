@@ -160,8 +160,8 @@ public class AfterMove implements Serializable
 		if (move.isVerified())
 		{
 			JOptionPane.showMessageDialog(null, "This piece is now on your side. Place it in an empty square.");
-			PlayGame.setMustPlace(true);
-			PlayGame.setPlacePiece(toPlace);
+			PlayGame.setNextMoveMustPlacePiece(true);
+			PlayGame.setPieceToPlace(toPlace);
 		}
 
 	}
@@ -191,8 +191,8 @@ public class AfterMove implements Serializable
 			toPlace.setSquare(move.getOldPos());
 			move.getOldPos().setPiece(toPlace);
 			toPlace.setIsCaptured(false);
-			PlayGame.setMustPlace(false);
-			PlayGame.setPlacePiece(null);
+			PlayGame.setNextMoveMustPlacePiece(false);
+			PlayGame.setPieceToPlace(null);
 			move.setOldPos(null);
 		}
 	}
@@ -218,8 +218,8 @@ public class AfterMove implements Serializable
 		{
 			toPlace.setIsCaptured(false);
 			JOptionPane.showMessageDialog(null, "You have captured this piece. Now place it in an empty square.");
-			PlayGame.setMustPlace(true);
-			PlayGame.setPlacePiece(toPlace);
+			PlayGame.setNextMoveMustPlacePiece(true);
+			PlayGame.setPieceToPlace(toPlace);
 		}
 
 	}
@@ -246,8 +246,8 @@ public class AfterMove implements Serializable
 			toPlace.setSquare(move.getOldPos());
 			move.getOldPos().setPiece(toPlace);
 			toPlace.setIsCaptured(false);
-			PlayGame.setMustPlace(false);
-			PlayGame.setPlacePiece(null);
+			PlayGame.setNextMoveMustPlacePiece(false);
+			PlayGame.setPieceToPlace(null);
 			move.setOldPos(null);
 		}
 	}
