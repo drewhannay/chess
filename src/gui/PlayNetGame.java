@@ -274,7 +274,7 @@ public class PlayNetGame extends PlayGame
 		super.removeAll();
 		menu.setVisible(false);
 
-		Driver.getInstance().fileMenu.setVisible(false);
+		Driver.getInstance().m_fileMenu.setVisible(false);
 
 		// Has spaces to hax0r fix centering.
 		inCheck = new JLabel("You're In Check!");
@@ -284,7 +284,7 @@ public class PlayNetGame extends PlayGame
 		int ifDouble = 0;
 		Driver.getInstance().setMenu(createMenu());
 
-		Driver.gameOptions.setVisible(true); // Turns on the game options
+		Driver.m_gameOptionsMenu.setVisible(true); // Turns on the game options
 
 		// Set the layout of the JPanel.
 		setLayout(new GridBagLayout());
@@ -660,7 +660,7 @@ public class PlayNetGame extends PlayGame
 	public void setAIGame(boolean AIGame)
 	{
 		this.AIGame = AIGame;
-		Driver.getInstance().fileMenu.setVisible(true);
+		Driver.getInstance().m_fileMenu.setVisible(true);
 		drawItem.setText("Declare Draw");
 	}
 

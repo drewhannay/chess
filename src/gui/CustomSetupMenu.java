@@ -216,7 +216,7 @@ public class CustomSetupMenu extends JPanel
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
-				Driver.getInstance().revertPanel();
+				Driver.getInstance().revertToMainPanel();
 			}
 		});
 
@@ -320,7 +320,7 @@ public class CustomSetupMenu extends JPanel
 
 					m_builder.writeFile(m_whiteRules, m_blackRules);
 					// Return to the main screen.
-					Driver.getInstance().revertPanel();
+					Driver.getInstance().revertToMainPanel();
 				}
 			}
 		});

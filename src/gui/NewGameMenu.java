@@ -543,7 +543,7 @@ public class NewGameMenu extends JPanel
 			public void actionPerformed(ActionEvent e)
 			{
 				// Return to the main screen.
-				Driver.getInstance().revertPanel();
+				Driver.getInstance().revertToMainPanel();
 			}
 		});
 

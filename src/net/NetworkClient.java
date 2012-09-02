@@ -163,10 +163,10 @@ public class NetworkClient
 		{
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(null, "Your opponent closed the game", "Oops!", JOptionPane.ERROR_MESSAGE);
-			Driver.getInstance().fileMenu.setVisible(true);
+			Driver.getInstance().m_fileMenu.setVisible(true);
 			Driver.getInstance();
-			Driver.gameOptions.setVisible(false);
-			Driver.getInstance().revertPanel();
+			Driver.m_gameOptionsMenu.setVisible(false);
+			Driver.getInstance().revertToMainPanel();
 			return;
 		}
 		catch (EOFException e)
@@ -179,10 +179,10 @@ public class NetworkClient
 			JOptionPane.showMessageDialog(null, "Your opponent closed the game", "Oops!", JOptionPane.ERROR_MESSAGE);
 			g.getBlackTimer().stopTimer();
 			g.getWhiteTimer().stopTimer();
-			Driver.getInstance().fileMenu.setVisible(true);
+			Driver.getInstance().m_fileMenu.setVisible(true);
 			Driver.getInstance();
-			Driver.gameOptions.setVisible(false);
-			Driver.getInstance().revertPanel();
+			Driver.m_gameOptionsMenu.setVisible(false);
+			Driver.getInstance().revertToMainPanel();
 			return;
 		}
 		catch (Exception e)

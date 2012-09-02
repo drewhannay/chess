@@ -43,6 +43,7 @@ import logic.Result;
 import logic.Square;
 import timer.ChessTimer;
 import timer.NoTimer;
+import utility.AppConstants;
 import utility.FileUtility;
 
 /**
@@ -436,8 +437,8 @@ public class PlayGame extends JPanel
 			JOptionPane.showMessageDialog(null, "No moves were made and the time ran out. Returning to the Main Menu.",
 					"Time Ran Out", JOptionPane.PLAIN_MESSAGE);
 			PlayNetGame.running = false;
-			Driver.getInstance().revertPanel();
-			Driver.getInstance().fileMenu.setVisible(true);
+			Driver.getInstance().revertToMainPanel();
+			Driver.getInstance().m_fileMenu.setVisible(true);
 			return;
 		}
 		if (isPlayback)
@@ -484,7 +485,7 @@ public class PlayGame extends JPanel
 					writer.print("");
 					writer.close();
 					JOptionPane.showMessageDialog(null,
-							"Since this is your first time playing Chess Crafter, please choose a default completed game save location.\n"
+							"Since this is your first time playing " + AppConstants.APP_NAME + ", please choose a default completed game save location.\n"
 									+ "Pressing cancel will use the default save location.", "Save Location",
 							JOptionPane.PLAIN_MESSAGE);
 					JFileChooser fc = new JFileChooser();
@@ -516,8 +517,8 @@ public class PlayGame extends JPanel
 					JOptionPane.PLAIN_MESSAGE);
 			getGame().saveGame(fileName, getGame().isClassicChess());
 			g.setBlackMove(false);
-			Driver.getInstance().fileMenu.setVisible(true);
-			Driver.getInstance().revertPanel();
+			Driver.getInstance().m_fileMenu.setVisible(true);
+			Driver.getInstance().revertToMainPanel();
 			break;
 		case 2:
 			g.setBlackMove(false);
@@ -525,7 +526,7 @@ public class PlayGame extends JPanel
 			break;
 		default:
 			g.setBlackMove(false);
-			Driver.getInstance().newGame();
+			Driver.getInstance().setUpNewGame();
 		}
 	}
 
@@ -646,7 +647,7 @@ public class PlayGame extends JPanel
 					saveGame();
 
 					menu.setVisible(false);
-					Driver.getInstance().revertPanel();
+					Driver.getInstance().revertToMainPanel();
 				}
 			});
 
@@ -706,11 +707,11 @@ public class PlayGame extends JPanel
 
 		if (!isPlayback)
 		{
-			Driver.gameOptions.setVisible(true); // Turns on the game options
+			Driver.m_gameOptionsMenu.setVisible(true); // Turns on the game options
 		}
 		else
 		{
-			Driver.gameOptions.setVisible(false);
+			Driver.m_gameOptionsMenu.setVisible(false);
 		}
 
 		// Set the layout of the JPanel.
