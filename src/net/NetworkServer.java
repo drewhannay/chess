@@ -72,18 +72,18 @@ public class NetworkServer
 		{
 			while (g.isBlackMove() == false)
 			{
-				while (PlayNetGame.netMove == null)
+				while (PlayNetGame.m_netMove == null)
 					Thread.sleep(0);
-				fromServer = PlayNetGame.netMove;
-				PlayNetGame.netMove = null;
+				fromServer = PlayNetGame.m_netMove;
+				PlayNetGame.m_netMove = null;
 
 				out.writeObject(fromServer);
 				out.flush();
 			}
 
-			while (PlayNetGame.running)
+			while (PlayNetGame.m_isRunning)
 			{
-				while (g.isBlackMove() == true && PlayNetGame.running)
+				while (g.isBlackMove() == true && PlayNetGame.m_isRunning)
 				{
 					fromUser = in.readObject();
 					FakeMove toMove = (FakeMove) fromUser;
@@ -136,11 +136,11 @@ public class NetworkServer
 					}
 				}
 
-				while (g.isBlackMove() == false && PlayNetGame.running)
+				while (g.isBlackMove() == false && PlayNetGame.m_isRunning)
 				{
-					while (PlayNetGame.netMove == null && !png.drawRequested && PlayNetGame.running)
+					while (PlayNetGame.m_netMove == null && !png.m_drawRequested && PlayNetGame.m_isRunning)
 						Thread.sleep(0);
-					if (png.drawRequested)
+					if (png.m_drawRequested)
 					{
 						fromUser = in.readObject();
 						FakeMove toMove = (FakeMove) fromUser;
@@ -150,7 +150,7 @@ public class NetworkServer
 							r.setText("The game has ended in a Draw!");
 							g.getLastMove().setResult(r);
 							PlayGame.endOfGame(r);
-							png.drawRequested = false;
+							png.m_drawRequested = false;
 							throw new Exception();
 						}
 						else if (toMove.m_originColumn == -3)
@@ -158,16 +158,16 @@ public class NetworkServer
 							// not perform the Move.
 							JOptionPane.showMessageDialog(null, "Your request for a draw has been denied. Continue play as normal.",
 									"Denied", JOptionPane.PLAIN_MESSAGE);
-							png.drawRequested = false;
+							png.m_drawRequested = false;
 							continue;
 						}
 					}
 
-					fromServer = PlayNetGame.netMove;
-					PlayNetGame.netMove = null;
+					fromServer = PlayNetGame.m_netMove;
+					PlayNetGame.m_netMove = null;
 
 					if (((FakeMove) fromServer).m_originColumn == -1)
-						png.drawRequested = true;
+						png.m_drawRequested = true;
 
 					out.writeObject(fromServer);
 					out.flush();

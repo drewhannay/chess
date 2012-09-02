@@ -419,7 +419,7 @@ public class NewGameMenu extends JPanel
 						try
 						{
 							PlayNetGame playNetGame = new PlayNetGame(gameToPlay, false, false);
-							playNetGame.setAIGame(true);
+							playNetGame.setIsAIGame(true);
 							Driver.getInstance().setPanel(playNetGame);
 						}
 						catch (Exception e)

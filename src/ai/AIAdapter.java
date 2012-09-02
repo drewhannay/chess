@@ -57,8 +57,8 @@ public class AIAdapter
 	 */
 	public void runGame(AIPlugin aiPlugin)
 	{
-		PlayNetGame.running = true;
-		while (PlayNetGame.running)
+		PlayNetGame.m_isRunning = true;
+		while (PlayNetGame.m_isRunning)
 		{
 			while (m_game.isBlackMove())
 			{

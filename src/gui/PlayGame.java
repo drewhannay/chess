@@ -183,16 +183,16 @@ public class PlayGame extends JPanel
 
 	public static void endOfGame(Result result)
 	{
-		PlayNetGame.running = false;
+		PlayNetGame.m_isRunning = false;
 		if (m_game.getHistory().size() != 0)
 		{
-			PlayNetGame.netMove = m_game.moveToFakeMove(m_game.getHistory().get(m_game.getHistory().size() - 1));
+			PlayNetGame.m_netMove = m_game.moveToFakeMove(m_game.getHistory().get(m_game.getHistory().size() - 1));
 		}
 		else if (!result.isDraw())
 		{
 			JOptionPane.showMessageDialog(null, "No moves were made and the time ran out. Returning to the Main Menu.",
 					"Time Ran Out", JOptionPane.PLAIN_MESSAGE);
-			PlayNetGame.running = false;
+			PlayNetGame.m_isRunning = false;
 			Driver.getInstance().revertToMainPanel();
 			Driver.getInstance().m_fileMenu.setVisible(true);
 			return;

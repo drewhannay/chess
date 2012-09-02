@@ -65,9 +65,9 @@ public class NetworkClient
 
 		try
 		{
-			while (PlayNetGame.running)
+			while (PlayNetGame.m_isRunning)
 			{
-				while (g.isBlackMove() == false && PlayNetGame.running)
+				while (g.isBlackMove() == false && PlayNetGame.m_isRunning)
 				{
 					fromServer = in.readObject();
 					FakeMove toMove = (FakeMove) fromServer;
@@ -120,11 +120,11 @@ public class NetworkClient
 							continue;
 					}
 				}
-				while (g.isBlackMove() == true && PlayNetGame.running)
+				while (g.isBlackMove() == true && PlayNetGame.m_isRunning)
 				{
-					while (PlayNetGame.netMove == null && !png.drawRequested && PlayNetGame.running)
+					while (PlayNetGame.m_netMove == null && !png.m_drawRequested && PlayNetGame.m_isRunning)
 						Thread.sleep(0);
-					if (png.drawRequested)
+					if (png.m_drawRequested)
 					{
 						fromServer = in.readObject();
 						FakeMove toMove = (FakeMove) fromServer;
@@ -134,7 +134,7 @@ public class NetworkClient
 							r.setText("The game has ended in a Draw!");
 							g.getLastMove().setResult(r);
 							PlayGame.endOfGame(r);
-							png.drawRequested = false;
+							png.m_drawRequested = false;
 							throw new Exception();
 						}
 						else if (toMove.m_originColumn == -3)
@@ -142,16 +142,16 @@ public class NetworkClient
 							// not perform the Move.
 							JOptionPane.showMessageDialog(null, "Your request for a draw has been denied. Continue play as normal.",
 									"Denied", JOptionPane.PLAIN_MESSAGE);
-							png.drawRequested = false;
+							png.m_drawRequested = false;
 							continue;
 						}
 					}
 
-					fromUser = PlayNetGame.netMove;
-					PlayNetGame.netMove = null;
+					fromUser = PlayNetGame.m_netMove;
+					PlayNetGame.m_netMove = null;
 
 					if (fromUser != null && ((FakeMove) fromUser).m_originColumn == -1)
-						png.drawRequested = true;
+						png.m_drawRequested = true;
 					out.writeObject(fromUser);
 					out.flush();
 					if (g.getLastMove().getResult() != null)
@@ -174,7 +174,7 @@ public class NetworkClient
 			e.printStackTrace();
 			if (g.getHistory().size() != 0 && g.getHistory().get(g.getHistory().size() - 1).getResult() != null)
 				return;
-			if (!PlayNetGame.running)
+			if (!PlayNetGame.m_isRunning)
 				return;
 			JOptionPane.showMessageDialog(null, "Your opponent closed the game", "Oops!", JOptionPane.ERROR_MESSAGE);
 			g.getBlackTimer().stopTimer();
