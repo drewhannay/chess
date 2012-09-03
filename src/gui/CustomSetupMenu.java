@@ -734,7 +734,7 @@ public class CustomSetupMenu extends JPanel
 		private Board m_board;
 	}
 
-	public void putPromotionMap(String pieceName, List promotesTo)
+	public void putPromotionMap(String pieceName, List<String> promotesTo)
 	{
 		m_promotionMap.put(pieceName, promotesTo);
 	}
