@@ -20,17 +20,12 @@ import utility.GUIUtility;
 
 public class AboutMenu extends JFrame
 {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 7316549497827793096L;
-
 	public AboutMenu(JPanel mainPanel)
 	{
-		initComponents(mainPanel);
+		initGUIComponents(mainPanel);
 	}
 
-	private void initComponents(JPanel mainPanel)
+	private void initGUIComponents(JPanel mainPanel)
 	{
 		setTitle("About " + AppConstants.APP_NAME);
 		setSize(350, 375);
@@ -66,7 +61,7 @@ public class AboutMenu extends JFrame
 				{
 					try
 					{
-						Desktop.getDesktop().browse(new URI("https://github.com/drewhannay/chess"));
+						Desktop.getDesktop().browse(new URI(AppConstants.PROJECT_URL));
 					}
 					catch (Exception e)
 					{
@@ -87,4 +82,6 @@ public class AboutMenu extends JFrame
 
 		setVisible(true);
 	}
+
+	private static final long serialVersionUID = 7316549497827793096L;
 }

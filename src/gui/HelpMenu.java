@@ -13,17 +13,12 @@ import utility.AppConstants;
 
 public class HelpMenu extends JFrame
 {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -3375921014569944071L;
-
 	public HelpMenu()
 	{
-		initComponents();
+		initGUIComponents();
 	}
 
-	private void initComponents()
+	private void initGUIComponents()
 	{
 		setTitle("Help");
 		setSize(825, 525);
@@ -123,4 +118,6 @@ public class HelpMenu extends JFrame
 
 		setVisible(true);
 	}
+	
+	private static final long serialVersionUID = -3375921014569944071L;
 }

@@ -436,8 +436,7 @@ final public class Driver extends JFrame
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				@SuppressWarnings("unused")
-				HelpMenu helpMenu = new HelpMenu();
+				new HelpMenu();
 			}
 		});
 		m_helpMenu.add(helpMenuItem);
@@ -449,8 +448,7 @@ final public class Driver extends JFrame
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				@SuppressWarnings("unused")
-				AboutMenu aboutMenu = new AboutMenu(m_mainPanel);
+				new AboutMenu(m_mainPanel);
 			}
 		});
 		m_helpMenu.add(aboutItem);
@@ -753,7 +751,7 @@ final public class Driver extends JFrame
 		m_gameOptionsMenu.setText("Options");
 		m_gameOptionsMenu.setToolTipText("Use me to access game options");
 	}
-
+	
 	public void activateWindowListener()
 	{
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
