@@ -1,17 +1,21 @@
 package gui;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.DataInputStream;
@@ -24,6 +28,7 @@ import java.io.PrintWriter;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -32,6 +37,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 import logic.AlgebraicConverter;
 import logic.Board;
@@ -45,11 +51,18 @@ import timer.ChessTimer;
 import timer.NoTimer;
 import utility.AppConstants;
 import utility.FileUtility;
+import dragNdrop.DropAdapter;
+import dragNdrop.DropEvent;
+import dragNdrop.GlassPane;
 
 public class PlayGame extends JPanel
 {
 	public PlayGame(boolean isPlayback, File acnFile) throws Exception
 	{
+		m_globalGlassPane = new GlassPane();
+		m_globalGlassPane.setOpaque(false);
+		Driver.getInstance().setGlassPane(m_globalGlassPane);
+
 		setGame(Builder.newGame("Classic"));
 		PlayGame.m_isPlayback = isPlayback;
 		m_mustMove = false;
@@ -91,6 +104,10 @@ public class PlayGame extends JPanel
 		}
 		else
 		{
+			m_globalGlassPane = new GlassPane();
+			m_globalGlassPane.setOpaque(false);
+			Driver.getInstance().setGlassPane(m_globalGlassPane);
+
 			m_mustMove = false;
 			PlayGame.m_whiteTimer = game.getWhiteTimer();
 			PlayGame.m_blackTimer = game.getBlackTimer();
@@ -320,10 +337,14 @@ public class PlayGame extends JPanel
 
 			for (int j = 1; j <= numOfColumns; j++)
 			{
+				Square square = board.getSquare(i, j);
 				if (!isPlayback)
-					board.getSquare(i, j).addMouseListener(new SquareListener(board.getSquare(i, j), board));
+				{
+					square.addMouseListener(new SquareListener(square, board));
+					square.addMouseMotionListener(new MotionAdapter(m_globalGlassPane));
+				}
 
-				gridPanel.add(board.getSquare(i, j));
+				gridPanel.add(square);
 			}
 
 		}
@@ -721,10 +742,11 @@ public class PlayGame extends JPanel
 		m_blackTimer.reset();
 	}
 
-	private class SquareListener implements MouseListener
+	private class SquareListener extends DropAdapter implements MouseListener
 	{
 		public SquareListener(Square square, Board board)
 		{
+			super(PlayGame.this.m_globalGlassPane, square.toString());
 			m_clickedSquare = square;
 			m_board = board;
 		}
@@ -795,11 +817,51 @@ public class PlayGame extends JPanel
 					m_mustMove = true;
 				}
 			}
+
+			if(m_clickedSquare.getPiece() == null)
+				return;
+
+			Driver.getInstance().setGlassPane(m_glassPane);
+			Component component = event.getComponent();
+
+			m_glassPane.setVisible(true);
+
+			Point point = (Point) event.getPoint().clone();
+			SwingUtilities.convertPointToScreen(point, component);
+			SwingUtilities.convertPointFromScreen(point, m_glassPane);
+
+			m_glassPane.setPoint(point);
+
+			BufferedImage image = null;
+			ImageIcon imageIcon = m_clickedSquare.getPiece().getIcon();
+			int width = imageIcon.getIconWidth();
+			int height = imageIcon.getIconHeight();
+			image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+			Graphics2D graphics2D = (Graphics2D) image.getGraphics();
+			imageIcon.paintIcon(null, graphics2D, 0, 0);
+			graphics2D.dispose();
+
+			m_glassPane.setImage(image);
+			m_glassPane.repaint();
 		}
 
 		@Override
 		public void mouseReleased(MouseEvent event)
 		{
+			System.out.println(m_clickedSquare.getRow() + " " + m_clickedSquare.getCol());
+			Component component = event.getComponent();
+
+			Point point = (Point) event.getPoint().clone();
+			SwingUtilities.convertPointToScreen(point, component);
+
+			Point eventPoint = (Point) point.clone();
+			SwingUtilities.convertPointFromScreen(point, PlayGame.this);
+
+			m_glassPane.setPoint(point);
+			m_glassPane.setImage(null);
+			m_glassPane.setVisible(false);
+
+			fireDropEvent(new DropEvent(m_actionString, eventPoint));
 		}
 
 		private Square m_clickedSquare;
@@ -826,6 +888,7 @@ public class PlayGame extends JPanel
 	protected static Move[] m_history;
 	protected static int m_historyIndex;
 
+	protected GlassPane m_globalGlassPane;
 	protected Square m_storedSquare;
 	protected JButton m_undoButton;
 	protected JMenuItem m_saveMenuItem;
