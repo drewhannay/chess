@@ -259,7 +259,7 @@ public class CustomSetupMenu extends JPanel
 							objectivePieceIsSet = true;
 							break;
 						}
-						// TODO Fix this.
+						// TODO Fix custom Objective Piece
 						// else if (p.isObjective()) {
 						// whiteRules.setObjectivePiece(new
 						// ObjectivePiece("custom objective", p.getName()));
@@ -281,7 +281,7 @@ public class CustomSetupMenu extends JPanel
 							objectivePieceIsSet = true;
 							break;
 						}
-						// TODO Fix this
+						// TODO Fix custom Objective Piece
 						// else if (p.isObjective()) {
 						// blackRules.setObjectivePiece(new
 						// ObjectivePiece("custom objective", p.getName()));
@@ -384,55 +384,53 @@ public class CustomSetupMenu extends JPanel
 			}
 		});
 
-		// TODO: this variable should have a more descriptive name; so should
-		// the other GridBagConstraints
-		GridBagConstraints c = new GridBagConstraints();
+		GridBagConstraints mainPanelConstraints = new GridBagConstraints();
 
 		m_pieceListPanel.setLayout(new GridBagLayout());
-		c.gridx = 0;
-		c.gridy = 0;
-		c.gridwidth = 2;
-		m_pieceListPanel.add(m_scrollPane, c);
+		mainPanelConstraints.gridx = 0;
+		mainPanelConstraints.gridy = 0;
+		mainPanelConstraints.gridwidth = 2;
+		m_pieceListPanel.add(m_scrollPane, mainPanelConstraints);
 
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 0;
-		c.gridy = 1;
-		c.gridwidth = 1;
-		c.insets = new Insets(5, 3, 3, 3);
-		m_pieceListPanel.add(m_changePromotionButton, c);
+		mainPanelConstraints.fill = GridBagConstraints.HORIZONTAL;
+		mainPanelConstraints.gridx = 0;
+		mainPanelConstraints.gridy = 1;
+		mainPanelConstraints.gridwidth = 1;
+		mainPanelConstraints.insets = new Insets(5, 3, 3, 3);
+		m_pieceListPanel.add(m_changePromotionButton, mainPanelConstraints);
 
-		c.gridx = 1;
-		c.gridy = 1;
-		m_pieceListPanel.add(pieceSetupButton, c);
+		mainPanelConstraints.gridx = 1;
+		mainPanelConstraints.gridy = 1;
+		m_pieceListPanel.add(pieceSetupButton, mainPanelConstraints);
 
-		c.gridx = 0;
-		c.gridy = 2;
-		m_pieceListPanel.add(boardSetupButton, c);
+		mainPanelConstraints.gridx = 0;
+		mainPanelConstraints.gridy = 2;
+		m_pieceListPanel.add(boardSetupButton, mainPanelConstraints);
 
-		c.gridx = 0;
-		c.gridy = 3;
-		m_pieceListPanel.add(objectiveSetupButton, c);
+		mainPanelConstraints.gridx = 0;
+		mainPanelConstraints.gridy = 3;
+		m_pieceListPanel.add(objectiveSetupButton, mainPanelConstraints);
 
-		c.gridx = 1;
-		c.gridy = 3;
-		m_pieceListPanel.add(ruleSetupButton, c);
+		mainPanelConstraints.gridx = 1;
+		mainPanelConstraints.gridy = 3;
+		m_pieceListPanel.add(ruleSetupButton, mainPanelConstraints);
 
-		c.gridx = 1;
-		c.gridy = 2;
-		m_pieceListPanel.add(playerSetupButton, c);
+		mainPanelConstraints.gridx = 1;
+		mainPanelConstraints.gridy = 2;
+		m_pieceListPanel.add(playerSetupButton, mainPanelConstraints);
 
 		JPanel optionsPanel = new JPanel();
 		optionsPanel.setLayout(new GridBagLayout());
 
-		c.fill = GridBagConstraints.CENTER;
-		c.gridx = 0;
-		c.gridy = 1;
-		optionsPanel.add(m_submitButton, c);
+		mainPanelConstraints.fill = GridBagConstraints.CENTER;
+		mainPanelConstraints.gridx = 0;
+		mainPanelConstraints.gridy = 1;
+		optionsPanel.add(m_submitButton, mainPanelConstraints);
 
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 1;
-		c.gridy = 1;
-		optionsPanel.add(m_returnToMainButton, c);
+		mainPanelConstraints.fill = GridBagConstraints.HORIZONTAL;
+		mainPanelConstraints.gridx = 1;
+		mainPanelConstraints.gridy = 1;
+		optionsPanel.add(m_returnToMainButton, mainPanelConstraints);
 
 		constraints.gridy = 2;
 		constraints.gridx = 1;
@@ -440,12 +438,12 @@ public class CustomSetupMenu extends JPanel
 		constraints.insets = new Insets(10, 0, 10, 5);
 		add(optionsPanel, constraints);
 
-		c.fill = GridBagConstraints.NONE;
-		c.insets = new Insets(0, 0, 0, 0);
-		c.gridwidth = 1;
-		c.gridx = 6;
-		c.gridy = 1;
-		add(m_pieceListPanel, c);
+		mainPanelConstraints.fill = GridBagConstraints.NONE;
+		mainPanelConstraints.insets = new Insets(0, 0, 0, 0);
+		mainPanelConstraints.gridwidth = 1;
+		mainPanelConstraints.gridx = 6;
+		mainPanelConstraints.gridy = 1;
+		add(m_pieceListPanel, mainPanelConstraints);
 
 		Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
 		int x = (int) ((dimension.getWidth() / 4));
@@ -546,13 +544,12 @@ public class CustomSetupMenu extends JPanel
 		m_pieceTypeList.setVisibleRowCount(-1);
 		m_pieceTypeList.setSelectedIndex(0);
 
-		// TODO: these need better names
-		Piece toAdd = PieceBuilder.makePiece((String) list.elementAt(0), false, m_pieceDisplayBoard.getSquare(1, 1),
+		Piece whitePieceBeingDisplayed = PieceBuilder.makePiece((String) list.elementAt(0), false, m_pieceDisplayBoard.getSquare(1, 1),
 				m_pieceDisplayBoard);
-		Piece toAdd1 = PieceBuilder.makePiece((String) list.elementAt(0), true, m_pieceDisplayBoard.getSquare(2, 1),
+		Piece blackPieceBeingDisplayed = PieceBuilder.makePiece((String) list.elementAt(0), true, m_pieceDisplayBoard.getSquare(2, 1),
 				m_pieceDisplayBoard);
-		m_pieceDisplayBoard.getSquare(1, 1).setPiece(toAdd);
-		m_pieceDisplayBoard.getSquare(2, 1).setPiece(toAdd1);
+		m_pieceDisplayBoard.getSquare(1, 1).setPiece(whitePieceBeingDisplayed);
+		m_pieceDisplayBoard.getSquare(2, 1).setPiece(blackPieceBeingDisplayed);
 
 		m_pieceDisplayBoard.getSquare(1, 1).refresh();
 		m_pieceDisplayBoard.getSquare(2, 1).refresh();
@@ -578,13 +575,12 @@ public class CustomSetupMenu extends JPanel
 					if (m_pieceDisplayBoard.getSquare(1, 1).getColor().equals(originalColor) == false)
 						m_pieceDisplayBoard.getSquare(1, 1).setBackgroundColor(originalColor);
 
-					// TODO: these need better names
-					Piece toAdd = PieceBuilder.makePiece((String) list.elementAt(selection), false,
+					Piece whitePieceBeingDisplayed = PieceBuilder.makePiece((String) list.elementAt(selection), false,
 							m_pieceDisplayBoard.getSquare(1, 1), m_pieceDisplayBoard);
-					Piece toAdd1 = PieceBuilder.makePiece((String) list.elementAt(selection), true,
+					Piece blackPieceBeingDisplayed = PieceBuilder.makePiece((String) list.elementAt(selection), true,
 							m_pieceDisplayBoard.getSquare(2, 1), m_pieceDisplayBoard);
-					m_pieceDisplayBoard.getSquare(1, 1).setPiece(toAdd);
-					m_pieceDisplayBoard.getSquare(2, 1).setPiece(toAdd1);
+					m_pieceDisplayBoard.getSquare(1, 1).setPiece(whitePieceBeingDisplayed);
+					m_pieceDisplayBoard.getSquare(2, 1).setPiece(blackPieceBeingDisplayed);
 
 					m_pieceDisplayBoard.getSquare(1, 1).resetColor();
 					m_pieceDisplayBoard.getSquare(2, 1).resetColor();
@@ -728,8 +724,8 @@ public class CustomSetupMenu extends JPanel
 		{
 		}
 
-		private final ImageIcon uninhabitableIcon = new ImageIcon("./images/Uninhabitable.png");
-
+		private ImageIcon uninhabitableIcon = GUIUtility.createImageIcon(48, 48, "/Uninhabitable.png", CustomSetupMenu.this);
+		
 		private Square m_square;
 		private Board m_board;
 	}

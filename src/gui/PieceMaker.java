@@ -7,7 +7,6 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.net.URL;
 
 import javax.imageio.ImageIO;
@@ -90,9 +89,9 @@ public class PieceMaker extends JPanel
 					final JFileChooser fileChooser = new JFileChooser("~/");
 					if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
 					{
-						ImageIcon icon = makeIcon(fileChooser, m_builder);
-						lightIconLabel.setIcon(icon);
-						m_builder.setLightImage(icon);
+						ImageIcon lightIcon = GUIUtility.createImageIcon(48, 48, fileChooser.toString(), PieceMaker.this);
+						lightIconLabel.setIcon(lightIcon);
+						m_builder.setLightImage(lightIcon);
 					}
 					break;
 				case JOptionPane.NO_OPTION:
@@ -144,7 +143,7 @@ public class PieceMaker extends JPanel
 					JFileChooser fileChooser = new JFileChooser("~/");
 					if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
 					{
-						ImageIcon icon = makeIcon(fileChooser, m_builder);
+						ImageIcon icon = GUIUtility.createImageIcon(48, 48, fileChooser.toString(), PieceMaker.this);
 						darkIconLabel.setIcon(icon);
 						m_builder.setDarkImage(icon);
 					}
@@ -205,19 +204,7 @@ public class PieceMaker extends JPanel
 		westField.setToolTipText("West");
 		westField.setText("0");
 
-		BufferedImage bufferedImage = null;
-		try
-		{
-			bufferedImage = ImageIO.read(getClass().getResource("/movement_directions.png"));
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-		ImageIcon movementPicture = new ImageIcon(bufferedImage);
-		JLabel movementPictureHolder = new JLabel();
-		movementPicture.setImage(movementPicture.getImage().getScaledInstance(130, 130, Image.SCALE_SMOOTH));
-		movementPictureHolder.setIcon(movementPicture);
+		JLabel movementPictureHolder = new JLabel(GUIUtility.createImageIcon(130, 130, "/movement_directions.png", this));
 
 		JPanel movement = new JPanel();
 		movement.setLayout(new GridBagLayout());
@@ -394,15 +381,17 @@ public class PieceMaker extends JPanel
 				}
 				else
 				{
-					int answer = JOptionPane.showConfirmDialog(null,
+					switch (JOptionPane.showConfirmDialog(null,
 							"If you continue the piece you are working on will not be saved. Continue?", "Piece Maker",
-							JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
-					// TODO: remove magic number
-					if (answer == 0)
+							JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE))
 					{
+					case JOptionPane.YES_OPTION:
 						customSetupMenu.setupPiecesList();
 						PieceMaker.this.removeAll();
 						m_frame.setVisible(false);
+						break;
+					case JOptionPane.NO_OPTION:
+						break;
 					}
 				}
 			}
@@ -421,15 +410,6 @@ public class PieceMaker extends JPanel
 		add(doneButton, constraints);
 
 		m_frame.pack();
-	}
-
-	public ImageIcon makeIcon(JFileChooser fileChooser, PieceBuilder builder)
-	{
-		String file = fileChooser.getSelectedFile().getAbsolutePath();
-
-		ImageIcon icon = new ImageIcon(file);
-		icon.setImage(icon.getImage().getScaledInstance(48, 48, Image.SCALE_SMOOTH));
-		return icon;
 	}
 
 	private boolean isIntegerDistance(JTextField textField)
