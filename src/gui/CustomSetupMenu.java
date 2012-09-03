@@ -202,16 +202,9 @@ public class CustomSetupMenu extends JPanel
 		drawBoards(temp, false);
 
 		// Create button and add ActionListener
-		m_backButton = new JButton("Back");
-		m_backButton.setToolTipText("Press me to go back to the Turn setup window");
-		m_backButton.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent arg0)
-			{
-				Driver.getInstance().revertToMainPanel();
-			}
-		});
+		m_returnToMainButton = new JButton("Return to Main Menu");
+		m_returnToMainButton.setToolTipText("Press me to go back to the Turn setup window");
+		GUIUtility.setupReturnToMainButton(m_returnToMainButton);
 
 		// Create button and add ActionListener
 		m_submitButton = new JButton("Save and Quit");
@@ -388,7 +381,8 @@ public class CustomSetupMenu extends JPanel
 			}
 		});
 
-		// TODO: this variable should have a more descriptive name; so should the other GridBagConstraints
+		// TODO: this variable should have a more descriptive name; so should
+		// the other GridBagConstraints
 		GridBagConstraints c = new GridBagConstraints();
 
 		m_pieceListPanel.setLayout(new GridBagLayout());
@@ -435,7 +429,7 @@ public class CustomSetupMenu extends JPanel
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 1;
 		c.gridy = 1;
-		optionsPanel.add(m_backButton, c);
+		optionsPanel.add(m_returnToMainButton, c);
 
 		constraints.gridy = 2;
 		constraints.gridx = 1;
@@ -470,11 +464,13 @@ public class CustomSetupMenu extends JPanel
 
 		for (int n = 0; n < boards.length; n++)
 		{
-			// create a JPanel to hold the grid and set the layout to the number of squares in the board
+			// create a JPanel to hold the grid and set the layout to the number
+			// of squares in the board
 			JPanel gridHolder = new JPanel();
 			gridHolder.setLayout(new GridLayout(boards[n].numRows(), boards[n].numCols()));
 
-			// loop through the board, initializing each Square and adding ActionListeners
+			// loop through the board, initializing each Square and adding
+			// ActionListeners
 			int numberOfRows = boards[n].numRows();
 			int numberOfColumns = boards[n].numCols();
 			for (int i = numberOfRows; i > 0; i--)
@@ -493,7 +489,8 @@ public class CustomSetupMenu extends JPanel
 
 				m_boardOnePanel.setBorder(BorderFactory.createEtchedBorder(Color.BLACK, Color.GRAY));
 				m_boardOnePanel.setLayout(new GridLayout(boards[n].numRows(), boards[n].numCols()));
-				// set the size of the grid to the number of rows and columns, scaled by 48, the size of the images
+				// set the size of the grid to the number of rows and columns,
+				// scaled by 48, the size of the images
 				m_boardOnePanel.setPreferredSize(new Dimension(boards[n].numCols() * 48, boards[n].numRows() * 48));
 
 				constraints.insets = new Insets(3, 5, 3, 10);
@@ -509,7 +506,8 @@ public class CustomSetupMenu extends JPanel
 
 				m_boardTwoPanel.setBorder(BorderFactory.createEtchedBorder(Color.BLACK, Color.GRAY));
 				m_boardTwoPanel.setLayout(new GridLayout(boards[n].numRows(), boards[n].numCols()));
-				// set the size of the grid to the number of rows and columns, scaled by 48, the size of the images
+				// set the size of the grid to the number of rows and columns,
+				// scaled by 48, the size of the images
 				m_boardTwoPanel.setPreferredSize(new Dimension(boards[n].numCols() * 48, boards[n].numRows() * 48));
 
 				constraints.insets = new Insets(3, 5, 3, 10);
@@ -546,8 +544,10 @@ public class CustomSetupMenu extends JPanel
 		m_pieceTypeList.setSelectedIndex(0);
 
 		// TODO: these need better names
-		Piece toAdd = PieceBuilder.makePiece((String) list.elementAt(0), false, m_pieceDisplayBoard.getSquare(1, 1), m_pieceDisplayBoard);
-		Piece toAdd1 = PieceBuilder.makePiece((String) list.elementAt(0), true, m_pieceDisplayBoard.getSquare(2, 1), m_pieceDisplayBoard);
+		Piece toAdd = PieceBuilder.makePiece((String) list.elementAt(0), false, m_pieceDisplayBoard.getSquare(1, 1),
+				m_pieceDisplayBoard);
+		Piece toAdd1 = PieceBuilder.makePiece((String) list.elementAt(0), true, m_pieceDisplayBoard.getSquare(2, 1),
+				m_pieceDisplayBoard);
 		m_pieceDisplayBoard.getSquare(1, 1).setPiece(toAdd);
 		m_pieceDisplayBoard.getSquare(2, 1).setPiece(toAdd1);
 
@@ -576,10 +576,10 @@ public class CustomSetupMenu extends JPanel
 						m_pieceDisplayBoard.getSquare(1, 1).setBackgroundColor(originalColor);
 
 					// TODO: these need better names
-					Piece toAdd = PieceBuilder.makePiece((String) list.elementAt(selection), false, m_pieceDisplayBoard.getSquare(1, 1),
-							m_pieceDisplayBoard);
-					Piece toAdd1 = PieceBuilder.makePiece((String) list.elementAt(selection), true, m_pieceDisplayBoard.getSquare(2, 1),
-							m_pieceDisplayBoard);
+					Piece toAdd = PieceBuilder.makePiece((String) list.elementAt(selection), false,
+							m_pieceDisplayBoard.getSquare(1, 1), m_pieceDisplayBoard);
+					Piece toAdd1 = PieceBuilder.makePiece((String) list.elementAt(selection), true,
+							m_pieceDisplayBoard.getSquare(2, 1), m_pieceDisplayBoard);
 					m_pieceDisplayBoard.getSquare(1, 1).setPiece(toAdd);
 					m_pieceDisplayBoard.getSquare(2, 1).setPiece(toAdd1);
 
@@ -628,7 +628,8 @@ public class CustomSetupMenu extends JPanel
 					Color color = JColorChooser.showDialog(popupFrame, "Choose Color", m_square.getColor());
 					if (color == null)
 						return;
-					// can't let them pick exactly the highlight color, or they could move to that space from anywhere
+					// can't let them pick exactly the highlight color, or they
+					// could move to that space from anywhere
 					if (color != Square.HIGHLIGHT_COLOR)
 					{
 						m_square.setBackgroundColor(color);
@@ -893,19 +894,12 @@ public class CustomSetupMenu extends JPanel
 			}
 
 		});
-		JButton backButton = new JButton("Cancel");
-		backButton.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				popupFrame.dispose();
-			}
-		});
+		JButton cancelButton = new JButton("Cancel");
+		GUIUtility.setupCancelButton(cancelButton, popupFrame);
 
 		JPanel optionsPanel = new JPanel();
 		optionsPanel.add(submitButton);
-		optionsPanel.add(backButton);
+		optionsPanel.add(cancelButton);
 
 		JPanel arrowsPanel = new JPanel();
 		arrowsPanel.setLayout(new GridBagLayout());
@@ -950,7 +944,7 @@ public class CustomSetupMenu extends JPanel
 	public Rules m_whiteRules = new Rules(false, false);
 	public Rules m_blackRules = new Rules(false, true);
 
-	private Square m_draggedSquare;	
+	private Square m_draggedSquare;
 	private JPanel m_boardOnePanel = new JPanel();
 	private JPanel m_boardTwoPanel = new JPanel();
 	private JPanel m_pieceListPanel = new JPanel();
@@ -958,7 +952,7 @@ public class CustomSetupMenu extends JPanel
 	private Builder m_builder;
 	private List<Piece> m_whiteTeam;
 	private List<Piece> m_blackTeam;
-	private JButton m_backButton;
+	private JButton m_returnToMainButton;
 	private JButton m_submitButton;
 	private JButton m_changePromotionButton;
 	private JList m_pieceTypeList;

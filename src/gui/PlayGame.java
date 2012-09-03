@@ -203,12 +203,10 @@ public class PlayGame extends JPanel
 
 		Object[] options = new String[] { "Save Record of Game", "New Game", "Quit" };
 		m_optionsMenu.setVisible(false);
-		int answer = JOptionPane.showOptionDialog(null, result.text(), result.winText(), JOptionPane.YES_NO_CANCEL_OPTION,
-				JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
-		switch (answer)
+		switch (JOptionPane.showOptionDialog(null, result.text(), result.winText(), JOptionPane.YES_NO_CANCEL_OPTION,
+				JOptionPane.PLAIN_MESSAGE, null, options, options[0]))
 		{
-		// TODO: get rid of the magic numbers
-		case 0:
+		case JOptionPane.YES_OPTION:
 			File preferencesFile = FileUtility.getPreferencesFile();
 			if (!preferencesFile.exists())
 			{
@@ -242,10 +240,9 @@ public class PlayGame extends JPanel
 					PrintWriter printWriter = new PrintWriter(preferencesFile);
 					printWriter.print("");
 					printWriter.close();
-					JOptionPane.showMessageDialog(null,
-							"Since this is your first time playing " + AppConstants.APP_NAME + ", please choose a default completed game save location.\n"
-									+ "Pressing cancel will use the default save location.", "Save Location",
-							JOptionPane.PLAIN_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Since this is your first time playing " + AppConstants.APP_NAME
+							+ ", please choose a default completed game save location.\n"
+							+ "Pressing cancel will use the default save location.", "Save Location", JOptionPane.PLAIN_MESSAGE);
 					JFileChooser fileChooser = new JFileChooser();
 					fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 					int returnVal = fileChooser.showOpenDialog(Driver.getInstance());
@@ -278,14 +275,14 @@ public class PlayGame extends JPanel
 			Driver.getInstance().m_fileMenu.setVisible(true);
 			Driver.getInstance().revertToMainPanel();
 			break;
-		// TODO: magic number
-		case 2:
+		case JOptionPane.NO_OPTION:
+			m_game.setBlackMove(false);
+			Driver.getInstance().setUpNewGame();
+			break;
+		case JOptionPane.CANCEL_OPTION:
 			m_game.setBlackMove(false);
 			System.exit(0);
 			break;
-		default:
-			m_game.setBlackMove(false);
-			Driver.getInstance().setUpNewGame();
 		}
 	}
 
@@ -536,8 +533,8 @@ public class PlayGame extends JPanel
 		}
 		else
 		{
-			double size = getGame().getWhiteTeam().size() > getGame().getBlackTeam().size() ? Math.sqrt(getGame().getWhiteTeam().size())
-					: Math.sqrt(getGame().getBlackTeam().size());
+			double size = getGame().getWhiteTeam().size() > getGame().getBlackTeam().size() ? Math.sqrt(getGame().getWhiteTeam()
+					.size()) : Math.sqrt(getGame().getBlackTeam().size());
 			jailBoardSize = (int) Math.ceil(size);
 		}
 
@@ -555,7 +552,8 @@ public class PlayGame extends JPanel
 			m_whiteCapturePanel.setLayout(new GridLayout(jailBoardSize, jailBoardSize));
 		}
 
-		m_whiteCapturePanel.setPreferredSize(new Dimension((m_whiteCapturesJail.getMaxColumn() + 1) * 25, (m_whiteCapturesJail.getMaxRow() + 1) * 25));
+		m_whiteCapturePanel.setPreferredSize(new Dimension((m_whiteCapturesJail.getMaxColumn() + 1) * 25, (m_whiteCapturesJail
+				.getMaxRow() + 1) * 25));
 		for (int i = jailBoardSize; i > 0; i--)
 		{
 			for (int j = 1; j <= jailBoardSize; j++)
@@ -576,7 +574,8 @@ public class PlayGame extends JPanel
 			m_blackCapturePanel.setLayout(new GridLayout(jailBoardSize, jailBoardSize));
 		}
 
-		m_blackCapturePanel.setPreferredSize(new Dimension((m_blackCapturesJail.getMaxColumn() + 1) * 25, (m_blackCapturesJail.getMaxRow() + 1) * 25));
+		m_blackCapturePanel.setPreferredSize(new Dimension((m_blackCapturesJail.getMaxColumn() + 1) * 25, (m_blackCapturesJail
+				.getMaxRow() + 1) * 25));
 		for (int i = jailBoardSize; i > 0; i--)
 		{
 			for (int j = 1; j <= jailBoardSize; j++)
@@ -802,7 +801,8 @@ public class PlayGame extends JPanel
 					e.printStackTrace();
 				}
 			}
-			else if (!m_mustMove && m_clickedSquare.getPiece() != null && m_clickedSquare.getPiece().isBlack() == getGame().isBlackMove())
+			else if (!m_mustMove && m_clickedSquare.getPiece() != null
+					&& m_clickedSquare.getPiece().isBlack() == getGame().isBlackMove())
 			{
 				List<Square> destinationlist = m_clickedSquare.getPiece().getLegalDests();
 				if (destinationlist.size() > 0)
