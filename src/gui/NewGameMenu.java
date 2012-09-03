@@ -300,9 +300,7 @@ public class NewGameMenu extends JPanel
 				constraints.fill = GridBagConstraints.HORIZONTAL;
 				poppedFrame.add(aiComboBox, constraints);
 
-				// TODO: this code is almost the same as the code above...we
-				// should be able to
-				// extract it to a method
+				// TODO: this code is almost the same as the code above. we should be able to extract it to a method
 				JButton addAIFileButton = new JButton("Install New AI");
 				addAIFileButton.addActionListener(new ActionListener()
 				{
@@ -447,7 +445,6 @@ public class NewGameMenu extends JPanel
 			}
 		});
 
-		m_returnToMainButton = new JButton("Return to Main Menu");
 		GUIUtility.setupReturnToMainButton(m_returnToMainButton);
 
 		JPanel buttonPanel = new JPanel();

@@ -33,7 +33,6 @@ public final class GUIUtility
 	{
 		cancelButton.addActionListener(new ActionListener()
 		{
-
 			@Override
 			public void actionPerformed(ActionEvent event)
 			{
@@ -46,7 +45,6 @@ public final class GUIUtility
 	{
 		cancelButton.addActionListener(new ActionListener()
 		{
-
 			@Override
 			public void actionPerformed(ActionEvent event)
 			{
@@ -58,6 +56,7 @@ public final class GUIUtility
 
 	public static void setupReturnToMainButton(JButton backButton)
 	{
+		backButton.setToolTipText("Press me to go back to the Main Menu");
 		backButton.addActionListener(new ActionListener()
 		{
 			@Override

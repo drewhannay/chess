@@ -123,7 +123,7 @@ final public class Driver extends JFrame
 		m_newGameButton.addActionListener(new ActionListener()
 		{
 			@Override
-			public void actionPerformed(ActionEvent e)
+			public void actionPerformed(ActionEvent event)
 			{
 				setPanel(new NewGameMenu());
 			}
@@ -170,7 +170,7 @@ final public class Driver extends JFrame
 						{
 							if (gamesInProgressList.getSelectedValue() == null)
 							{
-								JOptionPane.showMessageDialog(Driver.getInstance(), "Please select a game", "Error", -1);
+								JOptionPane.showMessageDialog(Driver.getInstance(), "Please select a game", "Error", JOptionPane.PLAIN_MESSAGE);
 								return;
 							}
 							fileInputStream = new FileInputStream(FileUtility.getGamesInProgressFile(gamesInProgressList
@@ -190,7 +190,7 @@ final public class Driver extends JFrame
 						{
 							e.printStackTrace();
 							JOptionPane.showMessageDialog(null, "There are no valid saved games. Start a New Game instead.",
-									"Invalid Saved Games", JOptionPane.ERROR_MESSAGE);
+									"Invalid Saved Games", JOptionPane.PLAIN_MESSAGE);
 						}
 					}
 				});

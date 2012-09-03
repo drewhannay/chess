@@ -192,7 +192,6 @@ public class CustomSetupMenu extends JPanel
 
 		// Create button and add ActionListener
 		m_returnToMainButton = new JButton("Return to Main Menu");
-		m_returnToMainButton.setToolTipText("Press me to go back to the Turn setup window");
 		GUIUtility.setupReturnToMainButton(m_returnToMainButton);
 
 		// Create button and add ActionListener
