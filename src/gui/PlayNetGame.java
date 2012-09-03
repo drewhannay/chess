@@ -164,8 +164,8 @@ public class PlayNetGame extends PlayGame
 		}
 		else
 		{
-			double size = getGame().getWhiteTeam().size() > getGame().getBlackTeam().size() ? Math.sqrt(getGame().getWhiteTeam().size())
-					: Math.sqrt(getGame().getBlackTeam().size());
+			double size = getGame().getWhiteTeam().size() > getGame().getBlackTeam().size() ? Math.sqrt(getGame().getWhiteTeam()
+					.size()) : Math.sqrt(getGame().getBlackTeam().size());
 			jailBoardSize = (int) Math.ceil(size);
 		}
 
@@ -182,7 +182,8 @@ public class PlayNetGame extends PlayGame
 			m_whiteCapturesJail = new Jail(jailBoardSize, jailBoardSize);
 			m_whiteCapturePanel.setLayout(new GridLayout(jailBoardSize, jailBoardSize));
 		}
-		m_whiteCapturePanel.setPreferredSize(new Dimension((m_whiteCapturesJail.getMaxColumn() + 1) * 25, (m_whiteCapturesJail.getMaxRow() + 1) * 25));
+		m_whiteCapturePanel.setPreferredSize(new Dimension((m_whiteCapturesJail.getMaxColumn() + 1) * 25, (m_whiteCapturesJail
+				.getMaxRow() + 1) * 25));
 		for (int i = jailBoardSize; i > 0; i--)
 		{
 			for (int j = 1; j <= jailBoardSize; j++)
@@ -202,7 +203,8 @@ public class PlayNetGame extends PlayGame
 			m_blackCapturesJail = new Jail(jailBoardSize, jailBoardSize);
 			m_blackCapturePanel.setLayout(new GridLayout(jailBoardSize, jailBoardSize));
 		}
-		m_blackCapturePanel.setPreferredSize(new Dimension((m_blackCapturesJail.getMaxColumn() + 1) * 25, (m_blackCapturesJail.getMaxRow() + 1) * 25));
+		m_blackCapturePanel.setPreferredSize(new Dimension((m_blackCapturesJail.getMaxColumn() + 1) * 25, (m_blackCapturesJail
+				.getMaxRow() + 1) * 25));
 		for (int i = jailBoardSize; i > 0; i--)
 		{
 			for (int j = 1; j <= jailBoardSize; j++)

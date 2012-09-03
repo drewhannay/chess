@@ -44,6 +44,7 @@ import timer.NoTimer;
 import timer.SimpleDelayTimer;
 import timer.WordTimer;
 import utility.FileUtility;
+import utility.GUIUtility;
 import ai.AIAdapter;
 import ai.AIPlugin;
 
@@ -181,15 +182,8 @@ public class NewGameMenu extends JPanel
 							}
 						});
 
-						final JButton backButton = new JButton("Back");
-						backButton.addActionListener(new ActionListener()
-						{
-							@Override
-							public void actionPerformed(ActionEvent event)
-							{
-								poppedFrame.dispose();
-							}
-						});
+						final JButton cancelButton = new JButton("Cancel");
+						GUIUtility.setupCancelButton(cancelButton, popupFrame);
 
 						JPanel topLevelPanel = new JPanel();
 						topLevelPanel.setLayout(new GridBagLayout());
@@ -214,7 +208,7 @@ public class NewGameMenu extends JPanel
 						c.gridx = 1;
 						c.gridy = 2;
 						c.gridwidth = 1;
-						topLevelPanel.add(backButton, c);
+						topLevelPanel.add(cancelButton, c);
 
 						c.gridx = 0;
 						c.gridy = 1;
@@ -306,8 +300,7 @@ public class NewGameMenu extends JPanel
 				constraints.fill = GridBagConstraints.HORIZONTAL;
 				poppedFrame.add(aiComboBox, constraints);
 
-				// TODO: this code is almost the same as the code above...we should be able to 
-				// extract it to a method
+				// TODO: this code is almost the same as the code above. we should be able to extract it to a method
 				JButton addAIFileButton = new JButton("Install New AI");
 				addAIFileButton.addActionListener(new ActionListener()
 				{
@@ -430,20 +423,13 @@ public class NewGameMenu extends JPanel
 					}
 				});
 
-				JButton backButton = new JButton("Back");
-				backButton.addActionListener(new ActionListener()
-				{
-					@Override
-					public void actionPerformed(ActionEvent event)
-					{
-						poppedFrame.dispose();
-					}
-				});
+				JButton cancelButton = new JButton("Cancel");
+				GUIUtility.setupCancelButton(cancelButton, poppedFrame);
 
 				JPanel buttonPanel = new JPanel();
 				buttonPanel.setLayout(new FlowLayout());
 				buttonPanel.add(nextButton);
-				buttonPanel.add(backButton);
+				buttonPanel.add(cancelButton);
 
 				constraints.gridx = 0;
 				constraints.gridy = 2;
@@ -459,15 +445,7 @@ public class NewGameMenu extends JPanel
 			}
 		});
 
-		m_backButton = new JButton("Back");
-		m_backButton.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent event)
-			{
-				Driver.getInstance().revertToMainPanel();
-			}
-		});
+		GUIUtility.setupReturnToMainButton(m_returnToMainButton);
 
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setBorder(BorderFactory.createLoweredBevelBorder());
@@ -497,7 +475,7 @@ public class NewGameMenu extends JPanel
 				constraints.gridy = 1;
 				add(buttonPanel, constraints);
 				constraints.gridy = 2;
-				add(m_backButton, constraints);
+				add(m_returnToMainButton, constraints);
 			}
 			else
 			{
@@ -510,7 +488,7 @@ public class NewGameMenu extends JPanel
 				constraints.ipadx = 0;
 				add(buttonPanel, constraints);
 				constraints.gridy = 2;
-				add(m_backButton, constraints);
+				add(m_returnToMainButton, constraints);
 
 				m_networkPlayButton.setVisible(false);
 			}
@@ -545,7 +523,8 @@ public class NewGameMenu extends JPanel
 		popupFrame.setLayout(new GridBagLayout());
 		popupFrame.setSize(325, 225);
 		popupFrame.setResizable(false);
-		// make the window show up in the center of the screen regardless of resolution
+		// make the window show up in the center of the screen regardless of
+		// resolution
 		popupFrame.setLocationRelativeTo(null);
 		GridBagConstraints constraints = new GridBagConstraints();
 
@@ -710,7 +689,8 @@ public class NewGameMenu extends JPanel
 				}
 				else if (timerName.equals("Hour Glass"))
 				{
-					// time is halved since it is actually the time the player is not allowed to exceed
+					// time is halved since it is actually the time the player
+					// is not allowed to exceed
 					blackTimer = new HourGlassTimer(startTime / 2, true);
 					whiteTimer = new HourGlassTimer(startTime / 2, false);
 				}
@@ -799,8 +779,8 @@ public class NewGameMenu extends JPanel
 			}
 		});
 
-		final JButton backButton = new JButton("Back");
-		backButton.addActionListener(new ActionListener()
+		final JButton Button = new JButton("Back");
+		Button.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent event)
@@ -813,7 +793,7 @@ public class NewGameMenu extends JPanel
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new FlowLayout());
 		buttonPanel.add(doneButton);
-		buttonPanel.add(backButton);
+		buttonPanel.add(Button);
 
 		constraints.gridx = 0;
 		constraints.gridy = 4;
@@ -824,15 +804,15 @@ public class NewGameMenu extends JPanel
 	}
 
 	private static final long serialVersionUID = -6371389704966320508L;
-	private static final String[] TIMER_NAMES = { "No timer", "Bronstein Delay", "Fischer", "Fischer After",
-		"Hour Glass", "Simple Delay", "Word" };
+	private static final String[] TIMER_NAMES = { "No timer", "Bronstein Delay", "Fischer", "Fischer After", "Hour Glass",
+			"Simple Delay", "Word" };
 
 	public static boolean m_isCancelled = false;
 
 	private JButton m_aiPlayButton;
 	private JButton m_humanPlayButton;
 	private JButton m_networkPlayButton;
-	private JButton m_backButton;
+	private JButton m_returnToMainButton;
 	private String m_hostName = "";
 	private boolean m_isWorking;
 }

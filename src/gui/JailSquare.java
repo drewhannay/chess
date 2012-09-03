@@ -87,7 +87,8 @@ public class JailSquare implements Serializable
 		m_piece = piece;
 	}
 
-	// TODO: this method doesn't seem right...it probably shouldn't be in JailSquare
+	// TODO: this method doesn't seem right...it probably shouldn't be in
+	// JailSquare
 	public String toACNString(boolean[] shouldPrintRowAndColumn)
 	{
 		StringBuilder builder = new StringBuilder();
