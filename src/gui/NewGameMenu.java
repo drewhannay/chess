@@ -19,7 +19,6 @@ import java.util.Locale;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -54,6 +53,7 @@ public class NewGameMenu extends JPanel
 {
 	public NewGameMenu()
 	{
+		m_returnToMainButton = new JButton("Return to Main Menu");
 		initGUIComponents();
 	}
 
@@ -101,8 +101,7 @@ public class NewGameMenu extends JPanel
 						poppedFrame.setSize(370, 150);
 						poppedFrame.setResizable(false);
 						poppedFrame.setLocationRelativeTo(null);
-						// TODO: this needs a better name
-						GridBagConstraints c = new GridBagConstraints();
+						GridBagConstraints netGameConstraints = new GridBagConstraints();
 
 						final JLabel connectToLabel = new JLabel("Which computer would you like to connect to?");
 						final JTextField connectToField = new JTextField("", 2);
@@ -188,32 +187,32 @@ public class NewGameMenu extends JPanel
 						JPanel topLevelPanel = new JPanel();
 						topLevelPanel.setLayout(new GridBagLayout());
 
-						c.gridx = 0;
-						c.gridy = 0;
-						c.gridwidth = 2;
-						c.insets = new Insets(3, 3, 3, 3);
-						poppedFrame.add(connectToLabel, c);
-						c.gridx = 0;
-						c.gridy = 1;
-						c.gridwidth = 1;
-						topLevelPanel.add(new JLabel("cslab: "), c);
-						c.gridx = 1;
-						c.gridy = 1;
-						c.gridwidth = 1;
-						topLevelPanel.add(connectToField, c);
-						c.gridx = 0;
-						c.gridy = 2;
-						c.gridwidth = 1;
-						topLevelPanel.add(nextButton, c);
-						c.gridx = 1;
-						c.gridy = 2;
-						c.gridwidth = 1;
-						topLevelPanel.add(cancelButton, c);
+						netGameConstraints.gridx = 0;
+						netGameConstraints.gridy = 0;
+						netGameConstraints.gridwidth = 2;
+						netGameConstraints.insets = new Insets(3, 3, 3, 3);
+						poppedFrame.add(connectToLabel, netGameConstraints);
+						netGameConstraints.gridx = 0;
+						netGameConstraints.gridy = 1;
+						netGameConstraints.gridwidth = 1;
+						topLevelPanel.add(new JLabel("cslab: "), netGameConstraints);
+						netGameConstraints.gridx = 1;
+						netGameConstraints.gridy = 1;
+						netGameConstraints.gridwidth = 1;
+						topLevelPanel.add(connectToField, netGameConstraints);
+						netGameConstraints.gridx = 0;
+						netGameConstraints.gridy = 2;
+						netGameConstraints.gridwidth = 1;
+						topLevelPanel.add(nextButton, netGameConstraints);
+						netGameConstraints.gridx = 1;
+						netGameConstraints.gridy = 2;
+						netGameConstraints.gridwidth = 1;
+						topLevelPanel.add(cancelButton, netGameConstraints);
 
-						c.gridx = 0;
-						c.gridy = 1;
-						c.gridwidth = 2;
-						poppedFrame.add(topLevelPanel, c);
+						netGameConstraints.gridx = 0;
+						netGameConstraints.gridy = 1;
+						netGameConstraints.gridwidth = 2;
+						poppedFrame.add(topLevelPanel, netGameConstraints);
 						poppedFrame.setVisible(true);
 					}
 				});
@@ -262,75 +261,33 @@ public class NewGameMenu extends JPanel
 				constraints.gridy = 1;
 				poppedFrame.add(new JLabel("AI: "), constraints);
 
-				if (getAIFiles().length == 0)
-				{
-					int answer = JOptionPane.showConfirmDialog(null,
-							"There are no AI files installed. Would you like to install one?", "Install AI Files?",
-							JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
-					if (answer == 0)
-					{
-						JFileChooser fileChooser = new JFileChooser();
-						int returnVal = fileChooser.showOpenDialog(Driver.getInstance());
-						File aiFile = fileChooser.getSelectedFile();
-
-						File destinationDirectory = new File(FileUtility.getHiddenDir() + "/AI");
-
-						if (returnVal == JFileChooser.APPROVE_OPTION)
-						{
-							if (!aiFile.renameTo(new File(destinationDirectory, aiFile.getName())))
-							{
-								JOptionPane.showMessageDialog(Driver.getInstance(), "File was not installed successfully", "Error",
-										JOptionPane.PLAIN_MESSAGE);
-							}
-						}
-						else
-						{
-							return;
-						}
-					}
-					else
-					{
-						return;
-					}
-				}
-
 				final JComboBox aiComboBox = new JComboBox(getAIFiles());
 				constraints.gridx = 1;
 				constraints.gridy = 1;
 				constraints.fill = GridBagConstraints.HORIZONTAL;
 				poppedFrame.add(aiComboBox, constraints);
+				
+				if (getAIFiles().length == 0)
+				{
+					switch (JOptionPane.showConfirmDialog(null,
+							"There are no AI files installed. Would you like to install one?", "Install AI Files?",
+							JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE))
+					{
+					case JOptionPane.YES_OPTION:
+						GUIUtility.installAIFiles(aiComboBox, NewGameMenu.this, getAIFiles());
+						break;
+					case JOptionPane.NO_OPTION:
+						break;
+					}
+				}
 
-				// TODO: this code is almost the same as the code above. we should be able to extract it to a method
 				JButton addAIFileButton = new JButton("Install New AI");
 				addAIFileButton.addActionListener(new ActionListener()
 				{
 					@Override
 					public void actionPerformed(ActionEvent event)
 					{
-						JFileChooser fileChooser = new JFileChooser();
-						int returnVal = fileChooser.showOpenDialog(Driver.getInstance());
-						File file = fileChooser.getSelectedFile();
-
-						File destinationDirectory = new File(System.getProperty("user.home") + "/chess/AI");
-
-						if (returnVal == JFileChooser.APPROVE_OPTION)
-						{
-							if (!file.renameTo(new File(destinationDirectory, file.getName())))
-							{
-								JOptionPane.showMessageDialog(Driver.getInstance(), "File was not installed successfully", "Error",
-										JOptionPane.PLAIN_MESSAGE);
-							}
-							else
-							{
-								aiComboBox.removeAllItems();
-								for (String fileName : getAIFiles())
-									aiComboBox.addItem(fileName);
-							}
-						}
-						else
-						{
-							return;
-						}
+						GUIUtility.installAIFiles(aiComboBox, NewGameMenu.this, getAIFiles());
 					}
 				});
 
@@ -779,7 +736,7 @@ public class NewGameMenu extends JPanel
 			}
 		});
 
-		final JButton Button = new JButton("Back");
+		final JButton Button = new JButton("Cancel");
 		Button.addActionListener(new ActionListener()
 		{
 			@Override

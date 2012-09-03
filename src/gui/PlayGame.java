@@ -420,8 +420,7 @@ public class PlayGame extends JPanel
 			}
 		});
 
-		// TODO: give this a better name...no idea what it means
-		int ifDouble = 0;
+		int twoBoardsGridBagOffset = 0;
 		if (m_optionsMenu == null || !m_optionsMenu.isVisible())
 			Driver.getInstance().setMenu(createMenuBar());
 
@@ -470,7 +469,7 @@ public class PlayGame extends JPanel
 			constraints.gridx = 11;
 			add(createGrid(boards[1], isPlayback), constraints);
 
-			ifDouble += 10;
+			twoBoardsGridBagOffset += 10;
 		}
 
 		JButton nextButton = new JButton("Next");
@@ -540,17 +539,8 @@ public class PlayGame extends JPanel
 
 		m_whiteCapturePanel = new JPanel();
 		m_whiteCapturePanel.setBorder(BorderFactory.createTitledBorder("Captured Pieces"));
-		// TODO: is the if necessary? Won't jailBoardSize always be > 4
-		if (jailBoardSize < 4)
-		{
-			m_whiteCapturesJail = new Jail(4, 4);
-			m_whiteCapturePanel.setLayout(new GridLayout(4, 4));
-		}
-		else
-		{
-			m_whiteCapturesJail = new Jail(jailBoardSize, jailBoardSize);
-			m_whiteCapturePanel.setLayout(new GridLayout(jailBoardSize, jailBoardSize));
-		}
+		m_whiteCapturesJail = new Jail(jailBoardSize, jailBoardSize);
+		m_whiteCapturePanel.setLayout(new GridLayout(jailBoardSize, jailBoardSize));
 
 		m_whiteCapturePanel.setPreferredSize(new Dimension((m_whiteCapturesJail.getMaxColumn() + 1) * 25, (m_whiteCapturesJail
 				.getMaxRow() + 1) * 25));
@@ -562,17 +552,8 @@ public class PlayGame extends JPanel
 
 		m_blackCapturePanel = new JPanel();
 		m_blackCapturePanel.setBorder(BorderFactory.createTitledBorder("Captured Pieces"));
-		// TODO: is the if necessary? Won't jailBoardSize always be > 4
-		if (jailBoardSize < 4)
-		{
-			m_blackCapturesJail = new Jail(4, 4);
-			m_blackCapturePanel.setLayout(new GridLayout(4, 4));
-		}
-		else
-		{
-			m_blackCapturesJail = new Jail(jailBoardSize, jailBoardSize);
-			m_blackCapturePanel.setLayout(new GridLayout(jailBoardSize, jailBoardSize));
-		}
+		m_blackCapturesJail = new Jail(jailBoardSize, jailBoardSize);
+		m_blackCapturePanel.setLayout(new GridLayout(jailBoardSize, jailBoardSize));
 
 		m_blackCapturePanel.setPreferredSize(new Dimension((m_blackCapturesJail.getMaxColumn() + 1) * 25, (m_blackCapturesJail
 				.getMaxRow() + 1) * 25));
@@ -589,7 +570,7 @@ public class PlayGame extends JPanel
 		constraints.gridheight = 1;
 		constraints.insets = new Insets(10, 10, 10, 0);
 		constraints.ipadx = 100;
-		constraints.gridx = 11 + ifDouble;
+		constraints.gridx = 11 + twoBoardsGridBagOffset;
 		constraints.gridy = 0;
 		add(m_blackLabel, constraints);
 
@@ -600,7 +581,7 @@ public class PlayGame extends JPanel
 		constraints.gridheight = 3;
 		constraints.ipadx = 0;
 		constraints.insets = new Insets(0, 25, 10, 25);
-		constraints.gridx = 11 + ifDouble;
+		constraints.gridx = 11 + twoBoardsGridBagOffset;
 		constraints.gridy = 1;
 		add(m_blackCapturePanel, constraints);
 
@@ -612,7 +593,7 @@ public class PlayGame extends JPanel
 			constraints.gridwidth = 3;
 			constraints.gridheight = 1;
 			constraints.ipadx = 100;
-			constraints.gridx = 11 + ifDouble;
+			constraints.gridx = 11 + twoBoardsGridBagOffset;
 			constraints.gridy = 4;
 			add(m_blackTimer.getDisplayLabel(), constraints);
 
@@ -622,7 +603,7 @@ public class PlayGame extends JPanel
 			constraints.gridwidth = 3;
 			constraints.gridheight = 1;
 			constraints.ipadx = 100;
-			constraints.gridx = 11 + ifDouble;
+			constraints.gridx = 11 + twoBoardsGridBagOffset;
 			constraints.gridy = 5;
 			add(m_undoButton, constraints);
 
@@ -632,7 +613,7 @@ public class PlayGame extends JPanel
 			constraints.gridwidth = 3;
 			constraints.gridheight = 1;
 			constraints.ipadx = 100;
-			constraints.gridx = 11 + ifDouble;
+			constraints.gridx = 11 + twoBoardsGridBagOffset;
 			constraints.gridy = 6;
 			add(m_whiteTimer.getDisplayLabel(), constraints);
 		}
@@ -644,7 +625,7 @@ public class PlayGame extends JPanel
 			constraints.gridwidth = 3;
 			constraints.gridheight = 1;
 			constraints.ipadx = 100;
-			constraints.gridx = 11 + ifDouble;
+			constraints.gridx = 11 + twoBoardsGridBagOffset;
 			constraints.gridy = 4;
 			add(nextButton, constraints);
 
@@ -654,7 +635,7 @@ public class PlayGame extends JPanel
 			constraints.gridwidth = 3;
 			constraints.gridheight = 1;
 			constraints.ipadx = 100;
-			constraints.gridx = 11 + ifDouble;
+			constraints.gridx = 11 + twoBoardsGridBagOffset;
 			constraints.gridy = 5;
 			add(prevButton, constraints);
 		}
@@ -665,7 +646,7 @@ public class PlayGame extends JPanel
 		constraints.gridwidth = 3;
 		constraints.gridheight = 3;
 		constraints.ipadx = 0;
-		constraints.gridx = 11 + ifDouble;
+		constraints.gridx = 11 + twoBoardsGridBagOffset;
 
 		// change spacing and location if there is a timer or not.
 		if (m_whiteTimer instanceof NoTimer)
@@ -700,7 +681,7 @@ public class PlayGame extends JPanel
 			constraints.gridy = 11;
 		}
 		constraints.ipadx = 100;
-		constraints.gridx = 11 + ifDouble;
+		constraints.gridx = 11 + twoBoardsGridBagOffset;
 		add(m_whiteLabel, constraints);
 
 		Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
