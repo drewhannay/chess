@@ -53,7 +53,8 @@ public class ObjectiveMaker extends JPanel
 			whiteCaptureAllButton.setSelected(true);
 
 		final JRadioButton whiteCaptureAllTypeButton = new JRadioButton("Capture All of Type", false);
-		whiteCaptureAllTypeButton.setToolTipText("Press me if you want the objective to be capturing all enemy pieces of a certain type");
+		whiteCaptureAllTypeButton
+				.setToolTipText("Press me if you want the objective to be capturing all enemy pieces of a certain type");
 		objectiveWhitePanel.add(whiteCaptureAllTypeButton);
 		if (customSetupMenu.m_whiteRules.theEndIsNigh().equals("captureAllOfType"))
 			whiteCaptureAllTypeButton.setSelected(true);
@@ -93,7 +94,8 @@ public class ObjectiveMaker extends JPanel
 			blackCaptureAllButton.setSelected(true);
 
 		final JRadioButton blackCaptureAllTypeButton = new JRadioButton("Capture All of Type", false);
-		blackCaptureAllTypeButton.setToolTipText("Press me if you want the objective to be capturing all enemy pieces of a certain type");
+		blackCaptureAllTypeButton
+				.setToolTipText("Press me if you want the objective to be capturing all enemy pieces of a certain type");
 		objectiveBlackPanel.add(blackCaptureAllTypeButton);
 		if (customSetupMenu.m_blackRules.theEndIsNigh().equals("captureAllOfType"))
 			blackCaptureAllTypeButton.setSelected(true);
@@ -124,17 +126,9 @@ public class ObjectiveMaker extends JPanel
 		blackButtonGroup.add(blackLoseAllButton);
 		blackButtonGroup.add(blackCheckTimesButton);
 
-		final JButton backButton = new JButton("Cancel");
-		backButton.setToolTipText("Press me to return to the piece creation window");
-		backButton.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent event)
-			{
-				ObjectiveMaker.this.removeAll();
-				m_frame.setVisible(false);
-			}
-		});
+		final JButton cancelButton = new JButton("Cancel");
+		cancelButton.setToolTipText("Press me to return to the piece creation window");
+		GUIUtility.setupVariantCancelButton(cancelButton, this, m_frame);
 
 		JButton saveButton = new JButton("Save");
 		saveButton.setToolTipText("Press me to save these objective settings");
@@ -156,7 +150,8 @@ public class ObjectiveMaker extends JPanel
 					}
 				}
 
-				if ((whiteCaptureAllButton.isSelected() && blackLoseAllButton.isSelected()) || (blackCaptureAllButton.isSelected() && whiteLoseAllButton.isSelected()))
+				if ((whiteCaptureAllButton.isSelected() && blackLoseAllButton.isSelected())
+						|| (blackCaptureAllButton.isSelected() && whiteLoseAllButton.isSelected()))
 				{
 					JOptionPane.showMessageDialog(null, "Capture All and Lose All is not a valid combination of objectives.\n"
 							+ "Please choose another combination.");
@@ -284,7 +279,7 @@ public class ObjectiveMaker extends JPanel
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new FlowLayout());
 		buttonPanel.add(saveButton);
-		buttonPanel.add(backButton);
+		buttonPanel.add(cancelButton);
 
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 0;

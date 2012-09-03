@@ -54,17 +54,9 @@ public class PlayerCustomMenu extends JPanel
 		m_incrementTurnsField.setText(Integer.toString(whiteRules.getNextTurn().getIncrement()));
 		m_incrementTurnsField.setToolTipText("This will be the number of turns each player gains for each time their turn occurs");
 
-		JButton backButton = new JButton("Cancel");
-		backButton.setToolTipText("Press me to return to the main Variant window");
-		backButton.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent event)
-			{
-				PlayerCustomMenu.this.removeAll();
-				m_frame.setVisible(false);
-			}
-		});
+		JButton cancelButton = new JButton("Cancel");
+		cancelButton.setToolTipText("Press me to return to the main Variant window");
+		GUIUtility.setupVariantCancelButton(cancelButton, this, m_frame);
 
 		JButton submitButton = new JButton("Save");
 		submitButton.setToolTipText("Press me to save these turn settings");
@@ -86,7 +78,7 @@ public class PlayerCustomMenu extends JPanel
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new FlowLayout());
 		buttonPanel.add(submitButton);
-		buttonPanel.add(backButton);
+		buttonPanel.add(cancelButton);
 
 		constraints.insets = new Insets(3, 3, 3, 3);
 		constraints.gridx = 0;

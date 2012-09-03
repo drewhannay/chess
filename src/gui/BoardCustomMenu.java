@@ -41,17 +41,9 @@ public class BoardCustomMenu extends JPanel
 		revalidate();
 		repaint();
 		// create button and add ActionListener
-		m_backButton = new JButton("Cancel");
-		m_backButton.setToolTipText("Press me to go back to the main variant setup");
-		m_backButton.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				m_holder.removeAll();
-				m_frame.setVisible(false);
-			}
-		});
+		m_cancelButton = new JButton("Cancel");
+		m_cancelButton.setToolTipText("Press me to go back to the main variant setup");
+		GUIUtility.setupVariantCancelButton(m_cancelButton, this, m_frame);
 
 		// Create JLabels and JRadioButtons.
 		m_numberOfBoardsLabel = new JLabel("How many boards?");
@@ -73,7 +65,8 @@ public class BoardCustomMenu extends JPanel
 		else
 			m_twoBoardsButton.setSelected(true);
 
-		// important: add the buttons to a group so only one can be selected at a time
+		// important: add the buttons to a group so only one can be selected at
+		// a time
 		ButtonGroup group = new ButtonGroup();
 		group.add(m_oneBoardButton);
 		group.add(m_twoBoardsButton);
@@ -127,9 +120,10 @@ public class BoardCustomMenu extends JPanel
 					Board[] boards = (m_oneBoardButton.isSelected()) ? new Board[1] : new Board[2];
 					for (int i = 0; i < boards.length; i++)
 					{
-						// initialize each board with the given rows and columns and wraparound boolean.
-						boards[i] = new Board(Integer.parseInt(m_numberOfRowsTextField.getText()), Integer.parseInt(m_numberOfColumnsTextField.getText()), m_wrapAroundCheckBox
-								.isSelected());
+						// initialize each board with the given rows and columns
+						// and wraparound boolean.
+						boards[i] = new Board(Integer.parseInt(m_numberOfRowsTextField.getText()), Integer
+								.parseInt(m_numberOfColumnsTextField.getText()), m_wrapAroundCheckBox.isSelected());
 					}
 					if (m_twoBoardsButton.isSelected())
 						variant.drawBoards(boards, true);
@@ -144,7 +138,7 @@ public class BoardCustomMenu extends JPanel
 
 		JPanel buttons = new JPanel();
 		buttons.add(m_submitButton);
-		buttons.add(m_backButton);
+		buttons.add(m_cancelButton);
 
 		constraints.gridx = 0;
 		constraints.gridy = 0;
@@ -199,7 +193,8 @@ public class BoardCustomMenu extends JPanel
 		{
 			int numberOfRows = Integer.parseInt(m_numberOfRowsTextField.getText());
 			int numberOfColumns = Integer.parseInt(m_numberOfColumnsTextField.getText());
-			if (m_twoBoardsButton.isSelected() && (numberOfRows < 3 || numberOfColumns < 3 || numberOfRows > 10 || numberOfColumns > 10))
+			if (m_twoBoardsButton.isSelected()
+					&& (numberOfRows < 3 || numberOfColumns < 3 || numberOfRows > 10 || numberOfColumns > 10))
 				throw new Exception();
 		}
 		catch (Exception e)
@@ -223,7 +218,7 @@ public class BoardCustomMenu extends JPanel
 	private JTextField m_numberOfColumnsTextField;
 	private JLabel m_wrapAroundLabel;
 	private JCheckBox m_wrapAroundCheckBox;
-	private JButton m_backButton;
+	private JButton m_cancelButton;
 	private JButton m_submitButton;
 	private JFrame m_frame;
 	private BoardCustomMenu m_holder = this;

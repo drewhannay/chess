@@ -336,14 +336,9 @@ public class PieceMaker extends JPanel
 					return;
 				}
 
-				if (isIntegerDistance(northField)
-						&& isIntegerDistance(northEastField)
-						&& isIntegerDistance(northWestField)
-						&& isIntegerDistance(eastField)
-						&& isIntegerDistance(westField)
-						&& isIntegerDistance(southField)
-						&& isIntegerDistance(southEastField)
-						&& isIntegerDistance(southWestField))
+				if (isIntegerDistance(northField) && isIntegerDistance(northEastField) && isIntegerDistance(northWestField)
+						&& isIntegerDistance(eastField) && isIntegerDistance(westField) && isIntegerDistance(southField)
+						&& isIntegerDistance(southEastField) && isIntegerDistance(southWestField))
 				{
 					m_builder.addMove('N', Integer.parseInt(northField.getText()));
 					m_builder.addMove('R', Integer.parseInt(northEastField.getText()));
@@ -446,16 +441,15 @@ public class PieceMaker extends JPanel
 		}
 		catch (Exception e)
 		{
-			JOptionPane.showMessageDialog(null,
-					"All movement distances must be whole numbers. Please enter a number in the " + textField.getToolTipText()
-							+ " direction box.", "Error", JOptionPane.PLAIN_MESSAGE);
+			JOptionPane.showMessageDialog(null, "All movement distances must be whole numbers. Please enter a number in the "
+					+ textField.getToolTipText() + " direction box.", "Error", JOptionPane.PLAIN_MESSAGE);
 			return false;
 		}
 	}
 
 	private static final long serialVersionUID = -6530771731937840358L;
 	private static final String[] DIRECTIONS = new String[] { "North", "Northeast", "East", "Southeast", "South", "Southwest", "West",
-	"Northwest" };
+			"Northwest" };
 
 	private PieceBuilder m_builder;
 	private boolean m_isKnightLikePiece;

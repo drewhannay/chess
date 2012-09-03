@@ -123,7 +123,8 @@ public class RuleMaker extends JPanel
 		specialRulesPanel.setLayout(new GridLayout(2, 1));
 
 		final JCheckBox atomicChessCheckBox = new JCheckBox("Atomic Chess");
-		atomicChessCheckBox.setToolTipText("Capture removes from play both capturer and the captured piece,\nas well as the pieces in the 8 surrounding squares (except for pawns)");
+		atomicChessCheckBox
+				.setToolTipText("Capture removes from play both capturer and the captured piece,\nas well as the pieces in the 8 surrounding squares (except for pawns)");
 		specialRulesPanel.add(atomicChessCheckBox);
 
 		final JCheckBox switchBoardsCheckBox = new JCheckBox("Move to other board");
@@ -237,17 +238,9 @@ public class RuleMaker extends JPanel
 			blackExtrasPanel.add(blackPiecesList, constraints);
 		}
 
-		final JButton backButton = new JButton("Cancel");
-		backButton.setToolTipText("Press me to return to the main Variant window");
-		backButton.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent event)
-			{
-				RuleMaker.this.removeAll();
-				m_frame.setVisible(false);
-			}
-		});
+		final JButton cancelButton = new JButton("Cancel");
+		cancelButton.setToolTipText("Press me to return to the main Variant window");
+		GUIUtility.setupVariantCancelButton(cancelButton, this, m_frame);
 
 		JButton saveButton = new JButton("Save");
 		saveButton.setToolTipText("Press me to save these rules");
@@ -341,11 +334,13 @@ public class RuleMaker extends JPanel
 					if (m_whiteRules.theEndIsNigh().equals("classic"))
 					{
 						m_whiteRules.addEndOfGame(new EndOfGame("classic", 0, "", false));
-						m_whiteRules.setObjectivePiece(new ObjectivePiece("custom objective", whitePieceList.getSelectedItem().toString()));
+						m_whiteRules.setObjectivePiece(new ObjectivePiece("custom objective", whitePieceList.getSelectedItem()
+								.toString()));
 					}
 					else
 					{
-						m_whiteRules.addEndOfGame(new EndOfGame("captureAllOfType", 0, whitePieceList.getSelectedItem().toString(), false));
+						m_whiteRules.addEndOfGame(new EndOfGame("captureAllOfType", 0, whitePieceList.getSelectedItem().toString(),
+								false));
 					}
 				}
 				if (blackNumberOfChecksField.isVisible())
@@ -375,11 +370,13 @@ public class RuleMaker extends JPanel
 					if (m_blackRules.theEndIsNigh().equals("classic"))
 					{
 						m_blackRules.addEndOfGame(new EndOfGame("classic", 0, "", true));
-						m_blackRules.setObjectivePiece(new ObjectivePiece("custom objective", blackPiecesList.getSelectedItem().toString()));
+						m_blackRules.setObjectivePiece(new ObjectivePiece("custom objective", blackPiecesList.getSelectedItem()
+								.toString()));
 					}
 					else
 					{
-						m_blackRules.addEndOfGame(new EndOfGame("captureAllOfType", 0, blackPiecesList.getSelectedItem().toString(), true));
+						m_blackRules.addEndOfGame(new EndOfGame("captureAllOfType", 0, blackPiecesList.getSelectedItem().toString(),
+								true));
 					}
 				}
 
@@ -491,7 +488,7 @@ public class RuleMaker extends JPanel
 		JPanel buttonsPanel = new JPanel();
 		buttonsPanel.setLayout(new FlowLayout());
 		buttonsPanel.add(saveButton);
-		buttonsPanel.add(backButton);
+		buttonsPanel.add(cancelButton);
 
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 0;

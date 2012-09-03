@@ -52,6 +52,7 @@ import logic.Game;
 import timer.ChessTimer;
 import utility.AppConstants;
 import utility.FileUtility;
+import utility.GUIUtility;
 
 final public class Driver extends JFrame
 {
@@ -71,7 +72,8 @@ final public class Driver extends JFrame
 		setSize(325, 340);
 		setResizable(false);
 
-		// make the window show up in the center of the screen, regardless of resolution
+		// make the window show up in the center of the screen, regardless of
+		// resolution
 		setLocationRelativeTo(null);
 
 		setResizable(false);
@@ -99,12 +101,14 @@ final public class Driver extends JFrame
 			ImageIcon picture = new ImageIcon(frontPageImage);
 			picture.setImage(picture.getImage().getScaledInstance(300, 200, Image.SCALE_SMOOTH));
 			pictureHolder.setIcon(picture);
-			
-			// TODO: this adds a menu bar icon to the top of the screen on a Mac and it shouldn't
+
 			// add SystemTray icon for Windows
-			final SystemTray sysTray = SystemTray.getSystemTray();
-			TrayIcon tray = new TrayIcon(picture.getImage().getScaledInstance(25, 18, Image.SCALE_SMOOTH));
-			sysTray.add(tray);
+			if (System.getProperty("os.name").startsWith("Windows"))
+			{
+				final SystemTray sysTray = SystemTray.getSystemTray();
+				TrayIcon tray = new TrayIcon(picture.getImage().getScaledInstance(25, 18, Image.SCALE_SMOOTH));
+				sysTray.add(tray);
+			}
 
 			// set program icon to be main picture
 			setIconImage(frontPageImage);
@@ -119,12 +123,9 @@ final public class Driver extends JFrame
 		m_newGameButton.addActionListener(new ActionListener()
 		{
 			@Override
-			public void actionPerformed(ActionEvent e)
+			public void actionPerformed(ActionEvent event)
 			{
-				remove(m_mainPanel);
-				m_otherPanel = new NewGameMenu();
-				setPanel(m_otherPanel);
-				pack();
+				setPanel(new NewGameMenu());
 			}
 		});
 
@@ -169,42 +170,33 @@ final public class Driver extends JFrame
 						{
 							if (gamesInProgressList.getSelectedValue() == null)
 							{
-								JOptionPane.showMessageDialog(Driver.getInstance(), "Please select a game", "Error", -1);
+								JOptionPane.showMessageDialog(Driver.getInstance(), "Please select a game", "Error", JOptionPane.PLAIN_MESSAGE);
 								return;
 							}
-							fileInputStream = new FileInputStream(FileUtility.getGamesInProgressFile(gamesInProgressList.getSelectedValue().toString()));
+							fileInputStream = new FileInputStream(FileUtility.getGamesInProgressFile(gamesInProgressList
+									.getSelectedValue().toString()));
 							objectInputStream = new ObjectInputStream(fileInputStream);
 							gameToPlay = (Game) objectInputStream.readObject();
 
-							// set the help menu info to be specific for game play
+							// set the help menu info to be specific for game
+							// play
 							if (m_gameOptionsMenu != null)
 								m_gameOptionsMenu.setVisible(true);
 
-							// change panels
-							remove(m_mainPanel);
-							m_otherPanel = new PlayGame(gameToPlay, false);
-							setPanel(m_otherPanel);
-							pack();
+							setPanel(new PlayGame(gameToPlay, false));
 							poppedFrame.dispose();
 						}
 						catch (Exception e)
 						{
 							e.printStackTrace();
 							JOptionPane.showMessageDialog(null, "There are no valid saved games. Start a New Game instead.",
-									"Invalid Saved Games", JOptionPane.ERROR_MESSAGE);
+									"Invalid Saved Games", JOptionPane.PLAIN_MESSAGE);
 						}
 					}
 				});
 
 				JButton cancelButton = new JButton("Cancel");
-				cancelButton.addActionListener(new ActionListener()
-				{
-					@Override
-					public void actionPerformed(ActionEvent event)
-					{
-						poppedFrame.dispose();
-					}
-				});
+				GUIUtility.setupCancelButton(cancelButton, poppedFrame);
 
 				JButton deleteButton = new JButton("Delete Saved Game");
 				deleteButton.addActionListener(new ActionListener()
@@ -214,12 +206,12 @@ final public class Driver extends JFrame
 					{
 						if (gamesInProgressList.getSelectedValue() != null)
 						{
-							boolean didDeleteSuccessfully = FileUtility.getGamesInProgressFile(gamesInProgressList.getSelectedValue().toString()).delete();
+							boolean didDeleteSuccessfully = FileUtility.getGamesInProgressFile(
+									gamesInProgressList.getSelectedValue().toString()).delete();
 							if (!didDeleteSuccessfully)
 							{
-								// TODO: why is the last parameter -1? Shouldn't it be one of the JOptionPane constants?
 								JOptionPane.showMessageDialog(Driver.getInstance(), "Saved game was not deleted successfully",
-										"Error", -1);
+										"Error", JOptionPane.ERROR_MESSAGE);
 							}
 							else
 							{
@@ -339,11 +331,7 @@ final public class Driver extends JFrame
 									objectInputStream = new ObjectInputStream(fileInputStream);
 									gameToView = (Game) objectInputStream.readObject();
 
-									// changes panels
-									remove(m_mainPanel);
-									m_otherPanel = new PlayGame(gameToView, false);
-									setPanel(m_otherPanel);
-									pack();
+									setPanel(new PlayGame(gameToView, false));
 									poppedFrame.dispose();
 								}
 								catch (Exception e)
@@ -354,25 +342,13 @@ final public class Driver extends JFrame
 											"Invalid Completed Game", JOptionPane.PLAIN_MESSAGE);
 								}
 							}
-
-							// changes panels
-							remove(m_mainPanel);
-							setPanel(m_otherPanel);
 							deactivateWindowListener();
-							pack();
 							poppedFrame.dispose();
 						}
 					});
 
 					JButton cancelButton = new JButton("Cancel");
-					cancelButton.addActionListener(new ActionListener()
-					{
-						@Override
-						public void actionPerformed(ActionEvent arg0)
-						{
-							poppedFrame.dispose();
-						}
-					});
+					GUIUtility.setupCancelButton(cancelButton, poppedFrame);
 
 					JButton deleteButton = new JButton("Delete Completed Game");
 					deleteButton.addActionListener(new ActionListener()
@@ -382,7 +358,8 @@ final public class Driver extends JFrame
 						{
 							if (completedGamesList.getSelectedValue() != null)
 							{
-								boolean didDeleteCompletedGameSuccessfully = FileUtility.getCompletedGamesFile(completedGamesList.getSelectedValue().toString()).delete();
+								boolean didDeleteCompletedGameSuccessfully = FileUtility.getCompletedGamesFile(
+										completedGamesList.getSelectedValue().toString()).delete();
 								if (!didDeleteCompletedGameSuccessfully)
 								{
 									JOptionPane.showMessageDialog(Driver.getInstance(), "Completed game was not deleted successfully",
@@ -453,10 +430,7 @@ final public class Driver extends JFrame
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				remove(m_mainPanel);
-				m_otherPanel = new CustomSetupMenu();
-				setPanel(m_otherPanel);
-				pack();
+				setPanel(new CustomSetupMenu());
 			}
 		});
 
@@ -501,12 +475,7 @@ final public class Driver extends JFrame
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				remove(m_mainPanel);
-				if (m_otherPanel != null)
-					remove(m_otherPanel);
-				m_otherPanel = new NewGameMenu();
-				setPanel(m_otherPanel);
-				pack();
+				setPanel(new NewGameMenu());
 			}
 		});
 
@@ -525,7 +494,6 @@ final public class Driver extends JFrame
 					remove(m_otherPanel);
 				ChessTimer.stopTimers();
 				revertToMainPanel();
-				pack();
 			}
 		});
 		m_mainMenu.setVisible(false);
@@ -553,14 +521,7 @@ final public class Driver extends JFrame
 				final JButton changeLocationButton = new JButton("Choose New Save Location");
 				final JButton resetButton = new JButton("Reset to Default Location");
 				final JButton cancelButton = new JButton("Cancel");
-				cancelButton.addActionListener(new ActionListener()
-				{
-					@Override
-					public void actionPerformed(ActionEvent e)
-					{
-						popupFrame.dispose();
-					}
-				});
+				GUIUtility.setupCancelButton(cancelButton, popupFrame);
 
 				holder.add(currentSaveLocationLabel);
 				holder.add(currentSaveLocationField);
@@ -764,26 +725,20 @@ final public class Driver extends JFrame
 	{
 		if (PlayGame.m_optionsMenu != null)
 			PlayGame.m_optionsMenu.setVisible(false);
-
-		// reset the panels being displayed to only contain the new game
-		if (m_otherPanel != null)
-			remove(m_otherPanel);
-		if (m_mainPanel != null)
-			remove(m_mainPanel);
-		m_otherPanel = new NewGameMenu();
-		add(m_otherPanel);
 		ChessTimer.stopTimers();
-		pack();
+		setPanel(new NewGameMenu());
 	}
 
 	public void setPanel(JPanel panel)
 	{
-		remove(m_otherPanel);
+		remove(m_mainPanel);
+		if (m_otherPanel != null)
+			remove(m_otherPanel);
 		m_mainMenu.setVisible(true);
-		m_otherPanel = panel;
-		add(m_otherPanel);
-		if (m_otherPanel.toString().contains("PlayGame") || m_otherPanel.toString().contains("PlayNetGame"))
+		add(panel);
+		if (panel.toString().contains("PlayGame") || panel.toString().contains("PlayNetGame"))
 			activateWindowListener();
+		m_otherPanel = panel;
 		pack();
 	}
 
@@ -890,22 +845,25 @@ final public class Driver extends JFrame
 
 		JTextArea pieceMakingHelpTextArea = new JTextArea();
 		pieceMakingHelpTextArea.setEditable(false);
-		pieceMakingHelpTextArea.setText("When you craft a new Chess variant you can make your own custom pieces! Follow these steps:\n"
-				+ "\t1. Create a name and choose the icons for your new piece\n"
-				+ "\t2. Enter the specific movement directions/distances you would like it to have\n"
-				+ "\t\t - To add instructions for a direction choose it from the drop down, then fill in\n"
-				+ "\t\t the farthest distance that piece should move in that direction into the box\n"
-				+ "\t\t - When you are finished with that particular direction press\n"
-				+ "\t\t the \"Add Movement\" button to add it to the piece\n"
-				+ "\t\t - Repeat this process for each direction the piece needs\n"
-				+ "\t 3. If you would like your piece to be able to jump over other pieces, check the box\n"
-				+ "\t 4. If you want this piece to move like a Knight does enter the directions in this format:\n\n"
-				+ "\t\t\t\t\t\t 3 x 2\n\n" + "\t\t - Enter movements either by column and then row or vice versa.\n"
-				+ "\t\t As an example a normal knight moves 2 x 1 squares\n"
-				+ "\t\t - Entering one combination (e.g. 3 x 2) will allow the piece\n" + "\t\t to move both 3 x 2 and 2 x 3 spaces\n"
-				+ "\t 5. When you have finished making your piece press \"Save Piece\"\n"
-				+ "\t\t - This piece will then be available for you to use in your variant\n"
-				+ "\t 6. Repeat this process for all pieces that you need and then press\n" + "\t the \"Done\" button at the bottom");
+		pieceMakingHelpTextArea
+				.setText("When you craft a new Chess variant you can make your own custom pieces! Follow these steps:\n"
+						+ "\t1. Create a name and choose the icons for your new piece\n"
+						+ "\t2. Enter the specific movement directions/distances you would like it to have\n"
+						+ "\t\t - To add instructions for a direction choose it from the drop down, then fill in\n"
+						+ "\t\t the farthest distance that piece should move in that direction into the box\n"
+						+ "\t\t - When you are finished with that particular direction press\n"
+						+ "\t\t the \"Add Movement\" button to add it to the piece\n"
+						+ "\t\t - Repeat this process for each direction the piece needs\n"
+						+ "\t 3. If you would like your piece to be able to jump over other pieces, check the box\n"
+						+ "\t 4. If you want this piece to move like a Knight does enter the directions in this format:\n\n"
+						+ "\t\t\t\t\t\t 3 x 2\n\n" + "\t\t - Enter movements either by column and then row or vice versa.\n"
+						+ "\t\t As an example a normal knight moves 2 x 1 squares\n"
+						+ "\t\t - Entering one combination (e.g. 3 x 2) will allow the piece\n"
+						+ "\t\t to move both 3 x 2 and 2 x 3 spaces\n"
+						+ "\t 5. When you have finished making your piece press \"Save Piece\"\n"
+						+ "\t\t - This piece will then be available for you to use in your variant\n"
+						+ "\t 6. Repeat this process for all pieces that you need and then press\n"
+						+ "\t the \"Done\" button at the bottom");
 		pieceMakingHelpPanel.add(pieceMakingHelpTextArea);
 
 		return helpFrame;
@@ -1017,18 +975,16 @@ final public class Driver extends JFrame
 			public void windowClosing(WindowEvent e)
 			{
 				Object[] options = new String[] { "Save Game", "Don't Save", "Cancel" };
-				int answer = JOptionPane.showOptionDialog(null, "Would you like to save your game before you quit?", "Quit?",
-						JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
-				// TODO: these should be JOptionPane constants, not just ints
-				switch (answer)
+				switch (JOptionPane.showOptionDialog(null, "Would you like to save your game before you quit?", "Quit?",
+						JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]))
 				{
-				case 0:
+				case JOptionPane.YES_OPTION:
 					((PlayGame) m_otherPanel).saveGame();
 					break;
-				case 2:
-					break;
-				default:
+				case JOptionPane.NO_OPTION:
 					System.exit(0);
+					break;
+				case JOptionPane.CANCEL_OPTION:
 					break;
 				}
 			}

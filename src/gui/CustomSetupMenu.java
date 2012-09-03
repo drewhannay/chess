@@ -82,17 +82,6 @@ public class CustomSetupMenu extends JPanel
 		constraints.insets = new Insets(0, 10, 100, 0);
 		add(showPiecePanel, constraints);
 
-		m_changePromotionButton = new JButton("Promote This Piece");
-		m_changePromotionButton.setToolTipText("Press me to set up promotion for the above selected piece");
-		m_changePromotionButton.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent arg0)
-			{
-				createPromotionPopup((String) m_pieceTypeList.getSelectedValue());
-			}
-		});
-
 		m_pieceDisplayBoard.getSquare(1, 1).addMouseListener(new MouseListener()
 		{
 			@Override
@@ -202,16 +191,8 @@ public class CustomSetupMenu extends JPanel
 		drawBoards(temp, false);
 
 		// Create button and add ActionListener
-		m_backButton = new JButton("Back");
-		m_backButton.setToolTipText("Press me to go back to the Turn setup window");
-		m_backButton.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent arg0)
-			{
-				Driver.getInstance().revertToMainPanel();
-			}
-		});
+		m_returnToMainButton = new JButton("Return to Main Menu");
+		GUIUtility.setupReturnToMainButton(m_returnToMainButton);
 
 		// Create button and add ActionListener
 		m_submitButton = new JButton("Save and Quit");
@@ -318,6 +299,21 @@ public class CustomSetupMenu extends JPanel
 			}
 		});
 
+		m_changePromotionButton = new JButton("Promote This Piece");
+		m_changePromotionButton.setToolTipText("Press me to set up promotion for the above selected piece");
+		m_changePromotionButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent arg0)
+			{
+				m_optionsFrame.dispose();
+				m_optionsFrame = new JFrame();
+				
+				@SuppressWarnings("unused")
+				PiecePromotion piecePromote = new PiecePromotion((String) m_pieceTypeList.getSelectedValue(), CustomSetupMenu.this, m_optionsFrame);
+			}
+		});
+		
 		JButton boardSetupButton = new JButton("Customize Game Board");
 		boardSetupButton.addActionListener(new ActionListener()
 		{
@@ -388,7 +384,8 @@ public class CustomSetupMenu extends JPanel
 			}
 		});
 
-		// TODO: this variable should have a more descriptive name; so should the other GridBagConstraints
+		// TODO: this variable should have a more descriptive name; so should
+		// the other GridBagConstraints
 		GridBagConstraints c = new GridBagConstraints();
 
 		m_pieceListPanel.setLayout(new GridBagLayout());
@@ -435,7 +432,7 @@ public class CustomSetupMenu extends JPanel
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 1;
 		c.gridy = 1;
-		optionsPanel.add(m_backButton, c);
+		optionsPanel.add(m_returnToMainButton, c);
 
 		constraints.gridy = 2;
 		constraints.gridx = 1;
@@ -470,11 +467,13 @@ public class CustomSetupMenu extends JPanel
 
 		for (int n = 0; n < boards.length; n++)
 		{
-			// create a JPanel to hold the grid and set the layout to the number of squares in the board
+			// create a JPanel to hold the grid and set the layout to the number
+			// of squares in the board
 			JPanel gridHolder = new JPanel();
 			gridHolder.setLayout(new GridLayout(boards[n].numRows(), boards[n].numCols()));
 
-			// loop through the board, initializing each Square and adding ActionListeners
+			// loop through the board, initializing each Square and adding
+			// ActionListeners
 			int numberOfRows = boards[n].numRows();
 			int numberOfColumns = boards[n].numCols();
 			for (int i = numberOfRows; i > 0; i--)
@@ -493,7 +492,8 @@ public class CustomSetupMenu extends JPanel
 
 				m_boardOnePanel.setBorder(BorderFactory.createEtchedBorder(Color.BLACK, Color.GRAY));
 				m_boardOnePanel.setLayout(new GridLayout(boards[n].numRows(), boards[n].numCols()));
-				// set the size of the grid to the number of rows and columns, scaled by 48, the size of the images
+				// set the size of the grid to the number of rows and columns,
+				// scaled by 48, the size of the images
 				m_boardOnePanel.setPreferredSize(new Dimension(boards[n].numCols() * 48, boards[n].numRows() * 48));
 
 				constraints.insets = new Insets(3, 5, 3, 10);
@@ -509,7 +509,8 @@ public class CustomSetupMenu extends JPanel
 
 				m_boardTwoPanel.setBorder(BorderFactory.createEtchedBorder(Color.BLACK, Color.GRAY));
 				m_boardTwoPanel.setLayout(new GridLayout(boards[n].numRows(), boards[n].numCols()));
-				// set the size of the grid to the number of rows and columns, scaled by 48, the size of the images
+				// set the size of the grid to the number of rows and columns,
+				// scaled by 48, the size of the images
 				m_boardTwoPanel.setPreferredSize(new Dimension(boards[n].numCols() * 48, boards[n].numRows() * 48));
 
 				constraints.insets = new Insets(3, 5, 3, 10);
@@ -546,8 +547,10 @@ public class CustomSetupMenu extends JPanel
 		m_pieceTypeList.setSelectedIndex(0);
 
 		// TODO: these need better names
-		Piece toAdd = PieceBuilder.makePiece((String) list.elementAt(0), false, m_pieceDisplayBoard.getSquare(1, 1), m_pieceDisplayBoard);
-		Piece toAdd1 = PieceBuilder.makePiece((String) list.elementAt(0), true, m_pieceDisplayBoard.getSquare(2, 1), m_pieceDisplayBoard);
+		Piece toAdd = PieceBuilder.makePiece((String) list.elementAt(0), false, m_pieceDisplayBoard.getSquare(1, 1),
+				m_pieceDisplayBoard);
+		Piece toAdd1 = PieceBuilder.makePiece((String) list.elementAt(0), true, m_pieceDisplayBoard.getSquare(2, 1),
+				m_pieceDisplayBoard);
 		m_pieceDisplayBoard.getSquare(1, 1).setPiece(toAdd);
 		m_pieceDisplayBoard.getSquare(2, 1).setPiece(toAdd1);
 
@@ -576,10 +579,10 @@ public class CustomSetupMenu extends JPanel
 						m_pieceDisplayBoard.getSquare(1, 1).setBackgroundColor(originalColor);
 
 					// TODO: these need better names
-					Piece toAdd = PieceBuilder.makePiece((String) list.elementAt(selection), false, m_pieceDisplayBoard.getSquare(1, 1),
-							m_pieceDisplayBoard);
-					Piece toAdd1 = PieceBuilder.makePiece((String) list.elementAt(selection), true, m_pieceDisplayBoard.getSquare(2, 1),
-							m_pieceDisplayBoard);
+					Piece toAdd = PieceBuilder.makePiece((String) list.elementAt(selection), false,
+							m_pieceDisplayBoard.getSquare(1, 1), m_pieceDisplayBoard);
+					Piece toAdd1 = PieceBuilder.makePiece((String) list.elementAt(selection), true,
+							m_pieceDisplayBoard.getSquare(2, 1), m_pieceDisplayBoard);
 					m_pieceDisplayBoard.getSquare(1, 1).setPiece(toAdd);
 					m_pieceDisplayBoard.getSquare(2, 1).setPiece(toAdd1);
 
@@ -628,7 +631,8 @@ public class CustomSetupMenu extends JPanel
 					Color color = JColorChooser.showDialog(popupFrame, "Choose Color", m_square.getColor());
 					if (color == null)
 						return;
-					// can't let them pick exactly the highlight color, or they could move to that space from anywhere
+					// can't let them pick exactly the highlight color, or they
+					// could move to that space from anywhere
 					if (color != Square.HIGHLIGHT_COLOR)
 					{
 						m_square.setBackgroundColor(color);
@@ -730,217 +734,9 @@ public class CustomSetupMenu extends JPanel
 		private Board m_board;
 	}
 
-	private void createPromotionPopup(final String type)
+	public void putPromotionMap(String pieceName, List promotesTo)
 	{
-		// Create the pop up and set the size, location, and layout.
-		final JFrame popupFrame = new JFrame("Promotion Options");
-		popupFrame.setSize(500, 300);
-		popupFrame.setLocationRelativeTo(null);
-		popupFrame.setLayout(new GridBagLayout());
-		popupFrame.setResizable(false);
-
-		// EMPTY LIST
-		final DefaultListModel emptyList = new DefaultListModel();
-		// LIST - CANT PROMOTE TO
-		final DefaultListModel list = new DefaultListModel();
-		Object[] allPieces = PieceBuilder.getSet().toArray();
-		for (int i = 0; i < allPieces.length; i++)
-		{
-			if (!allPieces[i].equals(type))
-				list.addElement(allPieces[i]);
-		}
-		// TODO: these need better names
-		final JList piecesList = new JList(list);
-		// EMPTY LIST - CAN PROMOTE TO
-		final JList piecesList2 = new JList(emptyList);
-
-		/*
-		 * ARROW PANEL
-		 */
-
-		// moveLeft This button will move a selected piece from the right list
-		// to the left list.
-		final JButton moveLeftButton = new JButton();
-		moveLeftButton.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent arg0)
-			{
-				try
-				{
-					int index = piecesList2.getSelectedIndex();
-
-					// Add the element of the right list to the left list.
-					list.addElement(emptyList.elementAt(index));
-					emptyList.remove(index);
-				}
-				catch (Exception e)
-				{
-				}
-			}
-		});
-		moveLeftButton.setText("<---");
-
-		// moveRight This button will move a selected piece from the left list
-		// to the right list.
-		final JButton moveRightButton = new JButton();
-		moveRightButton.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent arg0)
-			{
-				int index = piecesList.getSelectedIndex();
-
-				// Add the element of the left list to the right list.
-				try
-				{
-					emptyList.addElement(list.elementAt(index));
-					list.remove(index);
-				}
-				catch (Exception e)
-				{
-				}
-
-			}
-		});
-		moveRightButton.setText("--->");
-
-		// LIST - CANT PROMOTE TO
-		piecesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		piecesList.setLayoutOrientation(JList.VERTICAL);
-		piecesList.setVisibleRowCount(-1);
-		piecesList.setSelectedIndex(0);
-		// EMPTY LIST - CAN PROMOTE TO
-		piecesList2.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		piecesList2.setLayoutOrientation(JList.VERTICAL);
-		piecesList2.setVisibleRowCount(-1);
-		piecesList2.setSelectedIndex(0);
-
-		// LIST - CANT PROMOTE TO
-		JScrollPane scrollPane = new JScrollPane(piecesList);
-		scrollPane.setPreferredSize(new Dimension(200, 200));
-		ListSelectionModel selectList = piecesList.getSelectionModel();
-		selectList.addListSelectionListener(new ListSelectionListener()
-		{
-			@Override
-			public void valueChanged(ListSelectionEvent event)
-			{
-				if (event.getValueIsAdjusting() == false)
-				{ // If the user is still selecting.
-
-					// If the user has not selected anything yet.
-					if (piecesList.getSelectedIndex() == -1)
-					{
-						// No selection, disable fire button.
-						moveLeftButton.setEnabled(false);
-						moveRightButton.setEnabled(false);
-					}
-					else
-					{
-						// Selection, enable the fire button.
-						moveLeftButton.setEnabled(true);
-						moveRightButton.setEnabled(true);
-					}
-				}
-			}
-		});
-
-		// TODO: this needs a better name
-		// EMPTY LIST - CAN PROMOTE TO
-		JScrollPane scrollPane2 = new JScrollPane(piecesList2);
-		scrollPane2.setPreferredSize(new Dimension(200, 200));
-		ListSelectionModel selectList2 = piecesList2.getSelectionModel();
-		selectList2.addListSelectionListener(new ListSelectionListener()
-		{
-			@Override
-			public void valueChanged(ListSelectionEvent e)
-			{
-				if (e.getValueIsAdjusting() == false)
-				{ // If the user is still selecting.
-
-					// If the user has not selected anything yet.
-					if (piecesList2.getSelectedIndex() == -1)
-					{
-						// No selection, disable the buttons.
-						moveLeftButton.setEnabled(false);
-						moveRightButton.setEnabled(false);
-					}
-					else
-					{
-						// Selection, enable the buttons.
-						moveLeftButton.setEnabled(true);
-						moveRightButton.setEnabled(true);
-					}
-				}
-			}
-		});
-		// //////////////////////////SHOWING GUI/////////////////////////////
-		/*
-		 * Add the Submit and Back Buttons.
-		 */
-		JButton submitButton = new JButton("Save");
-		submitButton.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent arg0)
-			{
-				List<String> promotesTo = Lists.newArrayList();
-				for (int i = 0; i < emptyList.size(); i++)
-					promotesTo.add((String) emptyList.get(i));
-
-				m_promotionMap.put(type, promotesTo);
-				popupFrame.dispose();
-			}
-
-		});
-		JButton backButton = new JButton("Cancel");
-		backButton.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				popupFrame.dispose();
-			}
-		});
-
-		JPanel optionsPanel = new JPanel();
-		optionsPanel.add(submitButton);
-		optionsPanel.add(backButton);
-
-		JPanel arrowsPanel = new JPanel();
-		arrowsPanel.setLayout(new GridBagLayout());
-		GridBagConstraints constraints = new GridBagConstraints();
-		constraints.fill = GridBagConstraints.HORIZONTAL;
-		constraints.gridx = 0;
-		constraints.gridy = 1;
-		arrowsPanel.add(moveRightButton, constraints);
-		constraints.fill = GridBagConstraints.HORIZONTAL;
-		constraints.gridx = 0;
-		constraints.gridy = 2;
-		arrowsPanel.add(moveLeftButton, constraints);
-		// LIST - CANT PROMOTE TO
-		constraints.gridx = 0;
-		constraints.gridy = 0;
-		popupFrame.add(new JLabel("Can't Promote To"), constraints);
-		constraints.gridx = 0;
-		constraints.gridy = 1;
-		popupFrame.add(scrollPane, constraints);
-		constraints.gridx = 1;
-		constraints.gridy = 1;
-		popupFrame.add(arrowsPanel, constraints);
-		// EMPTY LIST - CAN PROMOTE TO
-		constraints.gridx = 2;
-		constraints.gridy = 0;
-		popupFrame.add(new JLabel("Can Promote To"), constraints);
-		constraints.gridx = 2;
-		constraints.gridy = 1;
-		popupFrame.add(scrollPane2, constraints);
-		constraints.gridx = 0;
-		constraints.gridy = 2;
-		constraints.gridwidth = 3;
-		popupFrame.add(optionsPanel, constraints);
-
-		popupFrame.setVisible(true);
+		m_promotionMap.put(pieceName, promotesTo);
 	}
 
 	private static final long serialVersionUID = 7830479492072657640L;
@@ -950,7 +746,7 @@ public class CustomSetupMenu extends JPanel
 	public Rules m_whiteRules = new Rules(false, false);
 	public Rules m_blackRules = new Rules(false, true);
 
-	private Square m_draggedSquare;	
+	private Square m_draggedSquare;
 	private JPanel m_boardOnePanel = new JPanel();
 	private JPanel m_boardTwoPanel = new JPanel();
 	private JPanel m_pieceListPanel = new JPanel();
@@ -958,7 +754,7 @@ public class CustomSetupMenu extends JPanel
 	private Builder m_builder;
 	private List<Piece> m_whiteTeam;
 	private List<Piece> m_blackTeam;
-	private JButton m_backButton;
+	private JButton m_returnToMainButton;
 	private JButton m_submitButton;
 	private JButton m_changePromotionButton;
 	private JList m_pieceTypeList;
