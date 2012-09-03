@@ -259,7 +259,7 @@ public class CustomSetupMenu extends JPanel
 							objectivePieceIsSet = true;
 							break;
 						}
-						// TODO Fix this.
+						// TODO Fix custom Objective Piece
 						// else if (p.isObjective()) {
 						// whiteRules.setObjectivePiece(new
 						// ObjectivePiece("custom objective", p.getName()));
@@ -281,7 +281,7 @@ public class CustomSetupMenu extends JPanel
 							objectivePieceIsSet = true;
 							break;
 						}
-						// TODO Fix this
+						// TODO Fix custom Objective Piece
 						// else if (p.isObjective()) {
 						// blackRules.setObjectivePiece(new
 						// ObjectivePiece("custom objective", p.getName()));

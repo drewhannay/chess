@@ -50,7 +50,6 @@ public class PlayNetGame extends PlayGame
 		m_inCheckLabel.setHorizontalTextPosition(SwingConstants.CENTER);
 		m_inCheckLabel.setForeground(Color.RED);
 
-		// TODO: give this a better name...no idea what it means
 		int twoBoardGridBagOffset = 0;
 		Driver.getInstance().setMenu(createMenuBar());
 
@@ -171,17 +170,8 @@ public class PlayNetGame extends PlayGame
 
 		m_whiteCapturePanel = new JPanel();
 		m_whiteCapturePanel.setBorder(BorderFactory.createTitledBorder("Captured Pieces"));
-		// TODO: is the if necessary? Won't jailBoardSize always be > 4
-		if (jailBoardSize < 4)
-		{
-			m_whiteCapturesJail = new Jail(4, 4);
-			m_whiteCapturePanel.setLayout(new GridLayout(4, 4));
-		}
-		else
-		{
-			m_whiteCapturesJail = new Jail(jailBoardSize, jailBoardSize);
-			m_whiteCapturePanel.setLayout(new GridLayout(jailBoardSize, jailBoardSize));
-		}
+		m_whiteCapturesJail = new Jail(jailBoardSize, jailBoardSize);
+		m_whiteCapturePanel.setLayout(new GridLayout(jailBoardSize, jailBoardSize));
 		m_whiteCapturePanel.setPreferredSize(new Dimension((m_whiteCapturesJail.getMaxColumn() + 1) * 25, (m_whiteCapturesJail
 				.getMaxRow() + 1) * 25));
 		for (int i = jailBoardSize; i > 0; i--)
@@ -192,17 +182,8 @@ public class PlayNetGame extends PlayGame
 
 		m_blackCapturePanel = new JPanel();
 		m_blackCapturePanel.setBorder(BorderFactory.createTitledBorder("Captured Pieces"));
-		// TODO: is the if necessary? Won't jailBoardSize always be > 4
-		if (jailBoardSize < 4)
-		{
-			m_blackCapturesJail = new Jail(4, 4);
-			m_blackCapturePanel.setLayout(new GridLayout(4, 4));
-		}
-		else
-		{
-			m_blackCapturesJail = new Jail(jailBoardSize, jailBoardSize);
-			m_blackCapturePanel.setLayout(new GridLayout(jailBoardSize, jailBoardSize));
-		}
+		m_blackCapturesJail = new Jail(jailBoardSize, jailBoardSize);
+		m_blackCapturePanel.setLayout(new GridLayout(jailBoardSize, jailBoardSize));
 		m_blackCapturePanel.setPreferredSize(new Dimension((m_blackCapturesJail.getMaxColumn() + 1) * 25, (m_blackCapturesJail
 				.getMaxRow() + 1) * 25));
 		for (int i = jailBoardSize; i > 0; i--)

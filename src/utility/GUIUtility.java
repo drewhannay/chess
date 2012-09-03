@@ -91,7 +91,7 @@ public final class GUIUtility
 		return imageIcon;
 	}
 	
-	public static void installAIFiles(JComboBox aiComboBox, NewGameMenu source){
+	public static void installAIFiles(JComboBox aiComboBox, NewGameMenu source, String[] aiFiles){
 		JFileChooser fileChooser = new JFileChooser();
 		int returnVal = fileChooser.showOpenDialog(Driver.getInstance());
 		File file = fileChooser.getSelectedFile();
@@ -108,7 +108,7 @@ public final class GUIUtility
 			else
 			{
 				aiComboBox.removeAllItems();
-				for (String fileName : source.getAIFiles())
+				for (String fileName : aiFiles)
 					aiComboBox.addItem(fileName);
 			}
 		}

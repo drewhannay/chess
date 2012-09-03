@@ -87,27 +87,15 @@ public class JailSquare implements Serializable
 		m_piece = piece;
 	}
 
-	// TODO: this method doesn't seem right...it probably shouldn't be in
-	// JailSquare
-	public String toACNString(boolean[] shouldPrintRowAndColumn)
-	{
-		StringBuilder builder = new StringBuilder();
-
-		if (shouldPrintRowAndColumn[0])
-			builder.append(m_row);
-		if (shouldPrintRowAndColumn[1])
-			builder.append(COLUMNS.charAt(m_column));
-
-		return builder.toString();
-	}
-
 	private static final long serialVersionUID = -6328168977600352667L;
-	private static final String COLUMNS = "-abcdefgh";
+	// private static final String COLUMNS = "-abcdefgh";
 
 	private Piece m_piece;
 	private Color m_backgroundColor;
 	private JButton m_button;
+	@SuppressWarnings("unused")
 	private int m_row;
+	@SuppressWarnings("unused")
 	private int m_column;
 
 }

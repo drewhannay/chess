@@ -141,16 +141,14 @@ public class ObjectiveMaker extends JPanel
 				{
 					if (!(whiteProtectObjectiveButton.isSelected() && blackProtectObjectiveButton.isSelected()))
 					{
-						int answer = JOptionPane.showConfirmDialog(null,
+						if (JOptionPane.showConfirmDialog(null,
 								"Using Protect Objective combined with another objective style is not recommended.\n"
-										+ "Do you want to continue anyways?", "Continue?", JOptionPane.YES_NO_OPTION);
-						// TODO: remove the magic number
-						if (answer != 0)
+										+ "Do you want to continue anyways?", "Continue?", JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION)
 							return;
 					}
 				}
 
-				if ((whiteCaptureAllButton.isSelected() && blackLoseAllButton.isSelected())
+				else if ((whiteCaptureAllButton.isSelected() && blackLoseAllButton.isSelected())
 						|| (blackCaptureAllButton.isSelected() && whiteLoseAllButton.isSelected()))
 				{
 					JOptionPane.showMessageDialog(null, "Capture All and Lose All is not a valid combination of objectives.\n"
@@ -158,15 +156,13 @@ public class ObjectiveMaker extends JPanel
 					return;
 				}
 
-				if (whiteCheckTimesButton.isSelected() || blackCheckTimesButton.isSelected())
+				else if (whiteCheckTimesButton.isSelected() || blackCheckTimesButton.isSelected())
 				{
 					if (!(whiteCheckTimesButton.isSelected() && blackCheckTimesButton.isSelected()))
 					{
-						int answer = JOptionPane.showConfirmDialog(null,
+						if (JOptionPane.showConfirmDialog(null,
 								"Using Check # Times combined with another objective style is not recommended.\n"
-										+ "Do you want to continue anyways?", "Continue?", JOptionPane.YES_NO_OPTION);
-						// TODO: remove the magic number
-						if (answer != 0)
+										+ "Do you want to continue anyways?", "Continue?", JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION)
 							return;
 					}
 				}

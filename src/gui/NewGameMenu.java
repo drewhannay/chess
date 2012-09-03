@@ -274,7 +274,7 @@ public class NewGameMenu extends JPanel
 							JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE))
 					{
 					case JOptionPane.YES_OPTION:
-						GUIUtility.installAIFiles(aiComboBox, NewGameMenu.this);
+						GUIUtility.installAIFiles(aiComboBox, NewGameMenu.this, getAIFiles());
 						break;
 					case JOptionPane.NO_OPTION:
 						break;
@@ -287,7 +287,7 @@ public class NewGameMenu extends JPanel
 					@Override
 					public void actionPerformed(ActionEvent event)
 					{
-						GUIUtility.installAIFiles(aiComboBox, NewGameMenu.this);
+						GUIUtility.installAIFiles(aiComboBox, NewGameMenu.this, getAIFiles());
 					}
 				});
 
@@ -457,7 +457,7 @@ public class NewGameMenu extends JPanel
 
 	}
 
-	public String[] getAIFiles()
+	private String[] getAIFiles()
 	{
 		String[] allFiles = FileUtility.getAIFileList();
 		allFiles = FileUtility.getAIFileList();
