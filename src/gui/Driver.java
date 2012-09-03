@@ -30,7 +30,6 @@ import java.net.URI;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -93,24 +92,18 @@ final public class Driver extends JFrame
 		// set up a new panel to hold everything in the main window
 		m_mainPanel = new JPanel();
 		m_mainPanel.setBorder(BorderFactory.createLoweredBevelBorder());
-
-		JLabel pictureHolder = new JLabel();
+		
+		JLabel iconHolder = new JLabel(GUIUtility.createImageIcon(300, 200, "/chess_picture.png", m_mainPanel));
+		BufferedImage frontPageImage;
 		try
 		{
-			BufferedImage frontPageImage = ImageIO.read(getClass().getResource("/chess_picture.png"));
-			ImageIcon picture = new ImageIcon(frontPageImage);
-			picture.setImage(picture.getImage().getScaledInstance(300, 200, Image.SCALE_SMOOTH));
-			pictureHolder.setIcon(picture);
-
-			// add SystemTray icon for Windows
+			frontPageImage = ImageIO.read(getClass().getResource("/chess_picture.png"));
 			if (System.getProperty("os.name").startsWith("Windows"))
 			{
 				final SystemTray sysTray = SystemTray.getSystemTray();
-				TrayIcon tray = new TrayIcon(picture.getImage().getScaledInstance(25, 18, Image.SCALE_SMOOTH));
+				TrayIcon tray = new TrayIcon(frontPageImage.getScaledInstance(25, 18, Image.SCALE_SMOOTH));
 				sysTray.add(tray);
 			}
-
-			// set program icon to be main picture
 			setIconImage(frontPageImage);
 		}
 		catch (Exception e)
@@ -689,7 +682,7 @@ final public class Driver extends JFrame
 		c.gridwidth = 3;
 		c.gridx = 0;
 		c.gridy = 0;
-		m_mainPanel.add(pictureHolder, c);
+		m_mainPanel.add(iconHolder, c);
 
 		// new game
 		c.fill = GridBagConstraints.HORIZONTAL;
@@ -880,25 +873,8 @@ final public class Driver extends JFrame
 		aboutFrame.setLayout(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
 
-		BufferedImage frontPageImage = null;
-		BufferedImage iconPieceImage = null;
-		try
-		{
-			frontPageImage = ImageIO.read(getClass().getResource("/front_page_image.jpeg"));
-			iconPieceImage = ImageIO.read(getClass().getResource("/king_dark.png"));
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-
-		ImageIcon picture = new ImageIcon(frontPageImage);
-		JLabel pictureHolder = new JLabel();
-		picture.setImage(picture.getImage().getScaledInstance(300, 200, Image.SCALE_SMOOTH));
-		pictureHolder.setIcon(picture);
-
-		ImageIcon piecePicture = new ImageIcon(iconPieceImage);
-		piecePicture.setImage(piecePicture.getImage());
+		JLabel frontPageImage = new JLabel(GUIUtility.createImageIcon(300, 200, "/front_page_image.jpeg", m_mainPanel));
+		JLabel piecePicture = new JLabel(GUIUtility.createImageIcon(48, 48, "/king_dark.png", m_mainPanel));
 
 		Font font = new Font("Verdana", Font.BOLD, 18);
 		JLabel title = new JLabel(AppConstants.APP_NAME + "\n");
@@ -906,14 +882,14 @@ final public class Driver extends JFrame
 
 		JPanel topPanel = new JPanel();
 		topPanel.add(title);
-		topPanel.add(pictureHolder);
+		topPanel.add(frontPageImage);
 
 		JTextArea infoTextArea = new JTextArea();
 		infoTextArea.setEditable(false);
 		infoTextArea.setText("Version 1.1\n\n" + "Visit our project site");
 
 		JButton siteButton = new JButton();
-		siteButton.setIcon(piecePicture);
+		siteButton.setIcon(piecePicture.getIcon());
 		siteButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -936,7 +912,7 @@ final public class Driver extends JFrame
 		constraints.gridy = 0;
 		aboutFrame.add(title, constraints);
 		constraints.gridy = 1;
-		aboutFrame.add(pictureHolder, constraints);
+		aboutFrame.add(frontPageImage, constraints);
 		constraints.gridy = 2;
 		aboutFrame.add(infoTextArea, constraints);
 		constraints.gridy = 3;
