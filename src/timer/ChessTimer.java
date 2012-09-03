@@ -94,9 +94,9 @@ public abstract class ChessTimer implements ActionListener, Serializable
 
 	public void timeElapsed()
 	{
-		Result r = new Result(m_isBlackTeamTimer ? Result.WHITE_WIN : Result.BLACK_WIN);
-		r.setText("Time has run out. " + r.winText() + "\n");
-		PlayGame.endOfGame(r);
+		Result result = m_isBlackTeamTimer ? Result.WHITE_WIN : Result.BLACK_WIN;
+		result.setText("Time has run out. " + result.winText() + "\n");
+		PlayGame.endOfGame(result);
 		m_timer.stop();
 	}
 

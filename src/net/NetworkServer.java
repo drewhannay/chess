@@ -104,10 +104,10 @@ public class NetworkServer
 																						// accepted
 																						// the
 																						// Draw.
-							Result r = new Result(Result.DRAW);
-							r.setText("The game has ended in a Draw!");
-							g.getLastMove().setResult(r);
-							PlayGame.endOfGame(r);
+							Result result = Result.DRAW;
+							result.setText("The game has ended in a Draw!");
+							g.getLastMove().setResult(result);
+							PlayGame.endOfGame(result);
 							throw new Exception();
 						}
 						else
@@ -146,10 +146,10 @@ public class NetworkServer
 						FakeMove toMove = (FakeMove) fromUser;
 						if (toMove.m_originColumn == -2)
 						{
-							Result r = new Result(Result.DRAW);
-							r.setText("The game has ended in a Draw!");
-							g.getLastMove().setResult(r);
-							PlayGame.endOfGame(r);
+							Result result = Result.DRAW;
+							result.setText("The game has ended in a Draw!");
+							g.getLastMove().setResult(result);
+							PlayGame.endOfGame(result);
 							png.m_drawRequested = false;
 							throw new Exception();
 						}

@@ -58,7 +58,7 @@ public class EndOfGame implements Serializable
 			if (piece.getName().equals(m_pieceType) && !piece.isCaptured())
 				return;
 		}
-		Result result = new Result(m_isBlackRuleSet ? Result.BLACK_WIN : Result.WHITE_WIN);
+		Result result = m_isBlackRuleSet ? Result.BLACK_WIN : Result.WHITE_WIN;
 		result.setText("Game Over! " + result.winText() + "\n");
 		PlayGame.endOfGame(result);
 	}
@@ -75,7 +75,7 @@ public class EndOfGame implements Serializable
 		{
 			if (++m_numberOfChecks == m_maxNumberOfChecks)
 			{
-				Result result = new Result(!m_isBlackRuleSet ? Result.WHITE_WIN : Result.BLACK_WIN);
+				Result result = !m_isBlackRuleSet ? Result.WHITE_WIN : Result.BLACK_WIN;
 				result.setText("Game Over! " + result.winText() + "\n");
 				PlayGame.endOfGame(result);
 			}
@@ -99,7 +99,7 @@ public class EndOfGame implements Serializable
 				if (m_game.getLastMove() != null)
 				{
 					m_game.getLastMove().setCheckmate(true);
-					Result result = new Result(m_game.isBlackMove() ? Result.WHITE_WIN : Result.BLACK_WIN);
+					Result result = m_game.isBlackMove() ? Result.WHITE_WIN : Result.BLACK_WIN;
 					String resultText = "Game over! " + result.winText() + "\n";
 
 					if (m_game.getThreats(objectivePiece) != null)
@@ -125,7 +125,7 @@ public class EndOfGame implements Serializable
 				if (m_game.getLastMove() != null)
 				{
 					m_game.getLastMove().setStalemate(true);
-					Result result = new Result(Result.DRAW);
+					Result result = Result.DRAW;
 					result.setText("Draw! " + "\n");
 					m_game.getLastMove().setResult(result);
 					if (!m_game.getHistory().contains(m_game.getLastMove()))
@@ -181,7 +181,7 @@ public class EndOfGame implements Serializable
 			if (!piece.isCaptured())
 				return;
 		}
-		Result result = new Result(m_isBlackRuleSet ? Result.BLACK_WIN : Result.WHITE_WIN);
+		Result result = m_isBlackRuleSet ? Result.BLACK_WIN : Result.WHITE_WIN;
 		result.setText("Game Over! " + result.winText() + "\n");
 		PlayGame.endOfGame(result);
 	}
@@ -199,7 +199,7 @@ public class EndOfGame implements Serializable
 			if (!piece.isCaptured())
 				return;
 		}
-		Result result = new Result(!m_isBlackRuleSet ? Result.BLACK_WIN : Result.WHITE_WIN);
+		Result result = !m_isBlackRuleSet ? Result.BLACK_WIN : Result.WHITE_WIN;
 		result.setText("Game Over! " + result.winText() + "\n");
 		PlayGame.endOfGame(result);
 	}

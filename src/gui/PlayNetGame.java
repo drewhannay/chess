@@ -473,7 +473,7 @@ public class PlayNetGame extends PlayGame
 							if (requestAIDraw())
 								return;
 
-							Result result = new Result(Result.DRAW);
+							Result result = Result.DRAW;
 							result.setText("You have declared a draw. What would you like to do?");
 							PlayGame.endOfGame(result);
 						}

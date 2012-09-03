@@ -440,7 +440,7 @@ public class Move implements Serializable
 	 */
 	public boolean isEndOfGame()
 	{
-		return (checkmate || stalemate || result != null || !result.isUndecided());
+		return (checkmate || stalemate || result != null || result != Result.UNDECIDED);
 	}
 
 	/**
@@ -503,7 +503,7 @@ public class Move implements Serializable
 		checkmate = b;
 		if (result == null && checkmate)
 		{
-			result = new Result(board.isBlackTurn() ? Result.BLACK_WIN : Result.WHITE_WIN);
+			result = board.isBlackTurn() ? Result.BLACK_WIN : Result.WHITE_WIN;
 		}
 		else
 		{
@@ -569,7 +569,7 @@ public class Move implements Serializable
 		stalemate = b;
 		if (result == null && stalemate)
 		{
-			result = new Result(Result.DRAW);
+			result = Result.DRAW;
 		}
 		else
 		{

@@ -188,7 +188,7 @@ public class PlayGame extends JPanel
 		{
 			PlayNetGame.m_netMove = m_game.moveToFakeMove(m_game.getHistory().get(m_game.getHistory().size() - 1));
 		}
-		else if (!result.isDraw())
+		else if (result != Result.DRAW)
 		{
 			JOptionPane.showMessageDialog(null, "No moves were made and the time ran out. Returning to the Main Menu.",
 					"Time Ran Out", JOptionPane.PLAIN_MESSAGE);
@@ -203,7 +203,7 @@ public class PlayGame extends JPanel
 
 		Object[] options = new String[] { "Save Record of Game", "New Game", "Quit" };
 		m_optionsMenu.setVisible(false);
-		switch (JOptionPane.showOptionDialog(null, result.text(), result.winText(), JOptionPane.YES_NO_CANCEL_OPTION,
+		switch (JOptionPane.showOptionDialog(null, result.toString(), result.winText(), JOptionPane.YES_NO_CANCEL_OPTION,
 				JOptionPane.PLAIN_MESSAGE, null, options, options[0]))
 		{
 		case JOptionPane.YES_OPTION:
@@ -361,7 +361,7 @@ public class PlayGame extends JPanel
 						return;
 
 					m_optionsMenu.setVisible(false);
-					Result result = new Result(Result.DRAW);
+					Result result = Result.DRAW;
 					result.setText("Draw! \nWhat would you like to do? \n");
 					getGame().getLastMove().setResult(result);
 					endOfGame(result);
