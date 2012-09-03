@@ -9,6 +9,7 @@ import gui.PlayNetGame;
 import java.io.EOFException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
 
@@ -18,11 +19,12 @@ import logic.Game;
 import logic.Result;
 import ai.FakeMove;
 
+
 /**
  * 
  * Class to create the network client
  * 
- * @author Drew Hannay & Andrew Wolfe & John McCormick
+ * @author Drew Hannay & Andrew Wolfe & John McCormick & Jonathan Miller
  * 
  */
 public class NetworkClient
@@ -30,10 +32,10 @@ public class NetworkClient
 	/**
 	 * Method to allow the client to join the host
 	 * 
-	 * @param host the computer being joined to
+	 * @param address of host the computer being joined to
 	 * @throws Exception throws an end of file or socket exception
 	 */
-	public void join(String host) throws Exception
+	public void join(InetAddress host) throws Exception
 	{
 
 		Socket socket = null;
