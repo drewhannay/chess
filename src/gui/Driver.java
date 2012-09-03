@@ -899,7 +899,7 @@ final public class Driver extends JFrame
 				{
 					try
 					{
-						Desktop.getDesktop().browse(new URI("https://github.com/drewhannay/chess"));
+						Desktop.getDesktop().browse(new URI(AppConstants.PROJECT_URL));
 					}
 					catch (Exception e)
 					{

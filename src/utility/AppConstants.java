@@ -7,4 +7,6 @@ public final class AppConstants
 	}
 
 	public static final String APP_NAME = "Chess Crafter";
+
+	public static final String PROJECT_URL = "https://github.com/drewhannay/chess";
 }
