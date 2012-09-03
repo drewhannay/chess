@@ -51,7 +51,7 @@ public class PlayNetGame extends PlayGame
 		m_inCheckLabel.setForeground(Color.RED);
 
 		// TODO: give this a better name...no idea what it means
-		int ifDouble = 0;
+		int twoBoardGridBagOffset = 0;
 		Driver.getInstance().setMenu(createMenuBar());
 
 		Driver.m_gameOptionsMenu.setVisible(true);
@@ -99,7 +99,7 @@ public class PlayNetGame extends PlayGame
 			constraints.gridx = 11;
 			add(createGrid(boards[1], isPlayback), constraints);
 
-			ifDouble += 10;
+			twoBoardGridBagOffset += 10;
 		}
 
 		JButton nextButton = new JButton("Next");
@@ -218,7 +218,7 @@ public class PlayNetGame extends PlayGame
 		constraints.gridheight = 1;
 		constraints.insets = new Insets(10, 10, 10, 0);
 		constraints.ipadx = 100;
-		constraints.gridx = 11 + ifDouble;
+		constraints.gridx = 11 + twoBoardGridBagOffset;
 		constraints.gridy = 0;
 		add(m_blackLabel, constraints);
 
@@ -229,7 +229,7 @@ public class PlayNetGame extends PlayGame
 		constraints.gridheight = 3;
 		constraints.ipadx = 0;
 		constraints.insets = new Insets(0, 25, 10, 25);
-		constraints.gridx = 11 + ifDouble;
+		constraints.gridx = 11 + twoBoardGridBagOffset;
 		constraints.gridy = 1;
 		add(m_blackCapturePanel, constraints);
 
@@ -241,7 +241,7 @@ public class PlayNetGame extends PlayGame
 			constraints.gridwidth = 3;
 			constraints.gridheight = 1;
 			constraints.ipadx = 100;
-			constraints.gridx = 11 + ifDouble;
+			constraints.gridx = 11 + twoBoardGridBagOffset;
 			constraints.gridy = 4;
 			add(m_blackTimer.getDisplayLabel(), constraints);
 
@@ -251,7 +251,7 @@ public class PlayNetGame extends PlayGame
 			constraints.gridwidth = 3;
 			constraints.gridheight = 1;
 			constraints.ipadx = 100;
-			constraints.gridx = 11 + ifDouble;
+			constraints.gridx = 11 + twoBoardGridBagOffset;
 			constraints.gridy = 6;
 			add(m_whiteTimer.getDisplayLabel(), constraints);
 		}
@@ -263,7 +263,7 @@ public class PlayNetGame extends PlayGame
 			constraints.gridwidth = 3;
 			constraints.gridheight = 1;
 			constraints.ipadx = 100;
-			constraints.gridx = 11 + ifDouble;
+			constraints.gridx = 11 + twoBoardGridBagOffset;
 			constraints.gridy = 4;
 			add(nextButton, constraints);
 
@@ -273,7 +273,7 @@ public class PlayNetGame extends PlayGame
 			constraints.gridwidth = 3;
 			constraints.gridheight = 1;
 			constraints.ipadx = 100;
-			constraints.gridx = 11 + ifDouble;
+			constraints.gridx = 11 + twoBoardGridBagOffset;
 			constraints.gridy = 5;
 			add(prevButton, constraints);
 		}
@@ -284,7 +284,7 @@ public class PlayNetGame extends PlayGame
 		constraints.gridwidth = 3;
 		constraints.gridheight = 3;
 		constraints.ipadx = 0;
-		constraints.gridx = 11 + ifDouble;
+		constraints.gridx = 11 + twoBoardGridBagOffset;
 		// change spacing and location if there is a timer or not.
 		if (m_whiteTimer instanceof NoTimer)
 		{
@@ -317,7 +317,7 @@ public class PlayNetGame extends PlayGame
 			constraints.gridy = 11;
 		}
 		constraints.ipadx = 100;
-		constraints.gridx = 11 + ifDouble;
+		constraints.gridx = 11 + twoBoardGridBagOffset;
 		add(m_whiteLabel, constraints);
 	}
 
