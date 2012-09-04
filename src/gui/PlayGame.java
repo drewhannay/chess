@@ -1,17 +1,21 @@
 package gui;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.DataInputStream;
@@ -24,7 +28,9 @@ import java.io.PrintWriter;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -32,6 +38,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 import logic.AlgebraicConverter;
 import logic.Board;
@@ -46,13 +53,24 @@ import timer.NoTimer;
 import utility.AppConstants;
 import utility.FileUtility;
 
+import com.google.common.collect.ImmutableList;
+
+import dragNdrop.AbstractDropManager;
+import dragNdrop.DropAdapter;
+import dragNdrop.DropEvent;
+import dragNdrop.GlassPane;
+
 public class PlayGame extends JPanel
 {
 	public PlayGame(boolean isPlayback, File acnFile) throws Exception
 	{
+		m_dropManager = new DropManager();
+		m_globalGlassPane = new GlassPane();
+		m_globalGlassPane.setOpaque(false);
+		Driver.getInstance().setGlassPane(m_globalGlassPane);
+
 		setGame(Builder.newGame("Classic"));
 		PlayGame.m_isPlayback = isPlayback;
-		m_mustMove = false;
 		PlayGame.m_whiteTimer = getGame().getWhiteTimer();
 		PlayGame.m_blackTimer = getGame().getBlackTimer();
 		m_whiteTimer.restart();
@@ -74,6 +92,7 @@ public class PlayGame extends JPanel
 	{
 		PlayGame.setGame(game);
 		PlayGame.m_isPlayback = isPlayback;
+		m_dropManager = new DropManager();
 		if (isPlayback)
 		{
 			PlayGame.m_whiteTimer = new NoTimer();
@@ -91,7 +110,10 @@ public class PlayGame extends JPanel
 		}
 		else
 		{
-			m_mustMove = false;
+			m_globalGlassPane = new GlassPane();
+			m_globalGlassPane.setOpaque(false);
+			Driver.getInstance().setGlassPane(m_globalGlassPane);
+
 			PlayGame.m_whiteTimer = game.getWhiteTimer();
 			PlayGame.m_blackTimer = game.getBlackTimer();
 			m_whiteTimer.restart();
@@ -106,14 +128,7 @@ public class PlayGame extends JPanel
 
 	public static void boardRefresh(Board[] boards)
 	{
-		for (int k = 0; k < boards.length; k++)
-		{
-			for (int i = 1; i <= boards[k].getMaxRow(); i++)
-			{
-				for (int j = 1; j <= boards[k].getMaxCol(); j++)
-					boards[k].getSquare(i, j).refresh();
-			}
-		}
+		refreshSquares(boards);
 
 		Piece objectivePiece = getGame().isBlackMove() ? getGame().getBlackRules().objectivePiece(true) : getGame().getWhiteRules()
 				.objectivePiece(false);
@@ -179,6 +194,18 @@ public class PlayGame extends JPanel
 		m_whiteLabel.setForeground(getGame().isBlackMove() ? Color.black : Color.white);
 		m_blackLabel.setBackground(getGame().isBlackMove() ? Square.HIGHLIGHT_COLOR : null);
 		m_blackLabel.setForeground(getGame().isBlackMove() ? Color.white : Color.black);
+	}
+
+	private static void refreshSquares(Board[] boards)
+	{
+		for (int k = 0; k < boards.length; k++)
+		{
+			for (int i = 1; i <= boards[k].getMaxRow(); i++)
+			{
+				for (int j = 1; j <= boards[k].getMaxCol(); j++)
+					boards[k].getSquare(i, j).refresh();
+			}
+		}
 	}
 
 	public static void endOfGame(Result result)
@@ -320,10 +347,14 @@ public class PlayGame extends JPanel
 
 			for (int j = 1; j <= numOfColumns; j++)
 			{
+				Square square = board.getSquare(i, j);
 				if (!isPlayback)
-					board.getSquare(i, j).addMouseListener(new SquareListener(board.getSquare(i, j), board));
+				{
+					square.addMouseListener(new SquareListener(square, board));
+					square.addMouseMotionListener(new MotionAdapter(m_globalGlassPane));
+				}
 
-				gridPanel.add(board.getSquare(i, j));
+				gridPanel.add(square);
 			}
 
 		}
@@ -401,7 +432,6 @@ public class PlayGame extends JPanel
 			@Override
 			public void actionPerformed(ActionEvent event)
 			{
-				m_mustMove = false;
 				if (getGame().getHistory().size() == 0)
 					return;
 
@@ -721,12 +751,14 @@ public class PlayGame extends JPanel
 		m_blackTimer.reset();
 	}
 
-	private class SquareListener implements MouseListener
+	protected class SquareListener extends DropAdapter implements MouseListener
 	{
 		public SquareListener(Square square, Board board)
 		{
-			m_clickedSquare = square;
+			super(m_globalGlassPane);
+			m_square = square;
 			m_board = board;
+			addDropListener(m_dropManager);
 		}
 
 		@Override
@@ -747,69 +779,122 @@ public class PlayGame extends JPanel
 		@Override
 		public void mousePressed(MouseEvent event)
 		{
-			if (m_nextMoveMustPlacePiece)
-			{
-				m_nextMoveMustPlacePiece = false;
-				getGame().nextTurn();
-				if (!m_clickedSquare.isOccupied() && m_clickedSquare.isHabitable() && m_pieceToPlace != null)
-				{
-					m_pieceToPlace.setSquare(m_clickedSquare);
-					m_clickedSquare.setPiece(m_pieceToPlace);
-					m_pieceToPlace = null;
-					m_nextMoveMustPlacePiece = false;
-					boardRefresh(getGame().getBoards());
-					getGame().genLegalDests();
-				}
+			// TODO: dropping from a jail currently doesn't work
+//			if (m_nextMoveMustPlacePiece)
+//			{
+//				m_nextMoveMustPlacePiece = false;
+//				getGame().nextTurn();
+//				if (!m_clickedSquare.isOccupied() && m_clickedSquare.isHabitable() && m_pieceToPlace != null)
+//				{
+//					m_pieceToPlace.setSquare(m_clickedSquare);
+//					m_clickedSquare.setPiece(m_pieceToPlace);
+//					m_pieceToPlace = null;
+//					m_nextMoveMustPlacePiece = false;
+//					boardRefresh(getGame().getBoards());
+//					getGame().genLegalDests();
+//				}
+//
+//				return;
+//			}
 
+			if (m_square.getPiece() == null || 
+					m_square.getPiece().isBlack() != getGame().isBlackMove())
+			{
 				return;
 			}
 
-			if (m_mustMove && m_clickedSquare == m_storedSquare)
+			List<Square> destinations = m_square.getPiece().getLegalDests();
+			if (destinations.size() > 0)
 			{
-				boardRefresh(getGame().getBoards());
-				m_mustMove = false;
+				for (Square destination : destinations)
+					destination.setBackgroundColor(Square.HIGHLIGHT_COLOR);
 			}
-			else if (m_mustMove && m_clickedSquare.getColor() == Square.HIGHLIGHT_COLOR)
-			{
-				try
-				{
-					getGame().playMove(new Move(m_board, m_storedSquare, m_clickedSquare));
-					m_mustMove = false;
-					boardRefresh(getGame().getBoards());
-				}
-				catch (Exception e)
-				{
-					e.printStackTrace();
-				}
-			}
-			else if (!m_mustMove && m_clickedSquare.getPiece() != null
-					&& m_clickedSquare.getPiece().isBlack() == getGame().isBlackMove())
-			{
-				List<Square> destinationlist = m_clickedSquare.getPiece().getLegalDests();
-				if (destinationlist.size() > 0)
-				{
-					for (Square destination : destinationlist)
-						destination.setBackgroundColor(Square.HIGHLIGHT_COLOR);
+			m_dropManager.setComponentList(destinations);
+			m_dropManager.setBoard(m_board);
 
-					m_storedSquare = m_clickedSquare;
-					m_mustMove = true;
-				}
-			}
+			if(m_square.getPiece() == null)
+				return;
+			else
+				m_square.hideIcon();
+
+			Driver.getInstance().setGlassPane(m_glassPane);
+			Component component = event.getComponent();
+
+			m_glassPane.setVisible(true);
+
+			Point point = (Point) event.getPoint().clone();
+			SwingUtilities.convertPointToScreen(point, component);
+			SwingUtilities.convertPointFromScreen(point, m_glassPane);
+
+			m_glassPane.setPoint(point);
+
+			BufferedImage image = null;
+			ImageIcon imageIcon = m_square.getPiece().getIcon();
+			int width = imageIcon.getIconWidth();
+			int height = imageIcon.getIconHeight();
+			image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+			Graphics2D graphics2D = (Graphics2D) image.getGraphics();
+			imageIcon.paintIcon(null, graphics2D, 0, 0);
+			graphics2D.dispose();
+
+			m_glassPane.setImage(image);
+			m_glassPane.repaint();
+			event.consume();
 		}
 
 		@Override
 		public void mouseReleased(MouseEvent event)
 		{
+			Point point = (Point) event.getPoint().clone();
+			SwingUtilities.convertPointToScreen(point, event.getComponent());
+
+			m_glassPane.setImage(null);
+			m_glassPane.setVisible(false);
+
+			fireDropEvent(new DropEvent(point, m_square));
 		}
 
-		private Square m_clickedSquare;
+		private Square m_square;
 		private Board m_board;
 	}
+
+	private static class DropManager extends AbstractDropManager
+	{
+		public void setBoard(Board board)
+		{
+			m_board = board;
+		}
+
+		@Override
+		public void dropped(DropEvent event)
+		{
+			Square originSquare = (Square) event.getOriginComponent();
+			Square destinationSquare = (Square) isInTarget(event.getDropLocation());
+
+			refreshSquares(getGame().getBoards());
+			final List<JComponent> dummyList = ImmutableList.of();
+			setComponentList(dummyList);
+
+			if (destinationSquare == null)
+				return;
+
+			try
+			{
+				getGame().playMove(new Move(m_board, originSquare, destinationSquare));
+				boardRefresh(getGame().getBoards());
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+
+		private Board m_board;
+	};
 
 	private static final long serialVersionUID = -2507232401817253688L;
 
 	protected static boolean m_nextMoveMustPlacePiece;
-	protected static boolean m_mustMove;
 	protected static boolean m_isPlayback;
 	protected static Game m_game;
 	protected static ChessTimer m_whiteTimer;
@@ -826,7 +911,9 @@ public class PlayGame extends JPanel
 	protected static Move[] m_history;
 	protected static int m_historyIndex;
 
-	protected Square m_storedSquare;
+	private final DropManager m_dropManager;
+
+	protected GlassPane m_globalGlassPane;
 	protected JButton m_undoButton;
 	protected JMenuItem m_saveMenuItem;
 	protected JMenuItem m_drawMenuItem;
