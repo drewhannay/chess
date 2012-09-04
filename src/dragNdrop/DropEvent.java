@@ -2,17 +2,14 @@ package dragNdrop;
 
 import java.awt.Point;
 
+import javax.swing.JComponent;
+
 public class DropEvent
 {
-	public DropEvent(String actionString, Point point)
+	public DropEvent(Point point, JComponent originComponent)
 	{
-		m_actionString = actionString;
 		m_point = point;
-	}
-
-	public String getAction()
-	{
-		return m_actionString;
+		m_originComponent = originComponent;
 	}
 
 	public Point getDropLocation()
@@ -20,6 +17,11 @@ public class DropEvent
 		return m_point;
 	}
 
+	public JComponent getOriginComponent()
+	{
+		return m_originComponent;
+	}
+
 	private Point m_point;
-	private String m_actionString;
+	private JComponent m_originComponent;
 }

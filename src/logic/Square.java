@@ -47,6 +47,12 @@ public class Square extends JLabel implements Serializable
 		return (m_piece != null);
 	}
 
+	public void hideIcon()
+	{
+		if (m_piece != null)
+			setIcon(null);
+	}
+
 	/**
 	 * Refresh the GUI's view of this Square with the current accurate
 	 * information.

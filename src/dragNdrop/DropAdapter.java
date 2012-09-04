@@ -8,10 +8,9 @@ import com.google.common.collect.Lists;
 
 public class DropAdapter extends MouseAdapter
 {
-	public DropAdapter(GlassPane glassPane, String actionString)
+	public DropAdapter(GlassPane glassPane)
 	{
 		m_glassPane = glassPane;
-		m_actionString = actionString;
 		m_listeners = Lists.newArrayList();
 	}
 
@@ -21,7 +20,7 @@ public class DropAdapter extends MouseAdapter
 			m_listeners.add(listener);
 	}
 
-	public void removeGhostDropListener(DropListener listener)
+	public void removeDropListener(DropListener listener)
 	{
 		if (listener != null)
 			m_listeners.remove(listener);
@@ -35,7 +34,6 @@ public class DropAdapter extends MouseAdapter
 	}
 
 	protected GlassPane m_glassPane;
-	protected String m_actionString;
 
 	private List<DropListener> m_listeners;
 }

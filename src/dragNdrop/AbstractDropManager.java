@@ -1,37 +1,43 @@
 package dragNdrop;
 
 import java.awt.Point;
+import java.awt.Rectangle;
+import java.util.List;
 
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
+
+import com.google.common.collect.ImmutableList;
 
 public abstract class AbstractDropManager implements DropListener
 {
 	public AbstractDropManager()
 	{
-		this(null);
+		m_components = ImmutableList.of();
 	}
 
-	public AbstractDropManager(JComponent component)
+	protected JComponent isInTarget(Point point)
 	{
-		m_component = component;
+		for (JComponent component : m_components)
+		{
+			Rectangle bounds = component.getBounds();
+			Point location = component.getLocation();
+			SwingUtilities.convertPointToScreen(location, component.getParent());
+			bounds.x = location.x;
+			bounds.y = location.y;
+			if (bounds.contains(point))
+				return component;
+		}
+
+		return null;
 	}
 
-	protected Point getTranslatedPoint(Point point)
+	public void setComponentList(List<? extends JComponent> components)
 	{
-		Point clonedPoint = (Point) point.clone();
-		SwingUtilities.convertPointFromScreen(clonedPoint, m_component);
-		return clonedPoint;
+		m_components = components;
 	}
 
-	protected boolean isInTarget(Point point)
-	{
-		return m_component.getBounds().contains(point);
-	}
+	public abstract void dropped(DropEvent event);
 
-	public void dropped(DropEvent event)
-	{
-	}
-
-	protected JComponent m_component;
+	protected List<? extends JComponent> m_components;
 }

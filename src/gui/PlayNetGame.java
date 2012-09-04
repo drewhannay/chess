@@ -9,9 +9,6 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -24,7 +21,6 @@ import javax.swing.SwingConstants;
 
 import logic.Board;
 import logic.Game;
-import logic.Move;
 import logic.Result;
 import logic.Square;
 import timer.NoTimer;
@@ -307,97 +303,98 @@ public class PlayNetGame extends PlayGame
 		return m_isBlackPlayer;
 	}
 
-	class ButtonListener implements MouseListener
-	{
-		public ButtonListener(Square square, Board board)
-		{
-			m_clickedSquare = square;
-			m_board = board;
-		}
-
-		@Override
-		public void mouseClicked(MouseEvent event)
-		{
-			if (getGame().isBlackMove() == m_isBlackPlayer)
-			{
-				if (m_nextMoveMustPlacePiece)
-				{
-					m_nextMoveMustPlacePiece = false;
-					getGame().nextTurn();
-					if (!m_clickedSquare.isOccupied() && m_clickedSquare.isHabitable() && m_pieceToPlace != null)
-					{
-						m_pieceToPlace.setSquare(m_clickedSquare);
-						m_clickedSquare.setPiece(m_pieceToPlace);
-						m_pieceToPlace = null;
-						m_nextMoveMustPlacePiece = false;
-						boardRefresh(getGame().getBoards());
-						getGame().genLegalDests();
-					}
-
-					return;
-				}
-				if (m_mustMove && m_clickedSquare == m_storedSquare)
-				{
-					boardRefresh(getGame().getBoards());
-					m_mustMove = false;
-				}
-				else if (m_mustMove && m_clickedSquare.getColor() == Square.HIGHLIGHT_COLOR)
-				{
-					try
-					{
-						Move move = new Move(m_board, m_storedSquare, m_clickedSquare);
-						getGame().playMove(move);
-
-						m_netMove = m_game.moveToFakeMove(move);
-
-						m_mustMove = false;
-						boardRefresh(getGame().getBoards());
-					}
-					catch (Exception e)
-					{
-						System.out.println(e.getMessage());
-						e.printStackTrace();
-					}
-				}
-				else if (!m_mustMove && m_clickedSquare.getPiece() != null
-						&& m_clickedSquare.getPiece().isBlack() == getGame().isBlackMove())
-				{
-					List<Square> destinationList = m_clickedSquare.getPiece().getLegalDests();
-					if (destinationList.size() > 0)
-					{
-						for (Square destination : destinationList)
-							destination.setBackgroundColor(Square.HIGHLIGHT_COLOR);
-
-						m_storedSquare = m_clickedSquare;
-						m_mustMove = true;
-					}
-				}
-			}
-		}
-
-		@Override
-		public void mouseEntered(MouseEvent event)
-		{
-		}
-
-		@Override
-		public void mouseExited(MouseEvent event)
-		{
-		}
-
-		@Override
-		public void mousePressed(MouseEvent event)
-		{
-		}
-
-		@Override
-		public void mouseReleased(MouseEvent event)
-		{
-		}
-
-		private Square m_clickedSquare;
-		private Board m_board;
-	}
+//	class ButtonListener implements MouseListener
+//	{
+//		public ButtonListener(Square square, Board board)
+//		{
+//			m_clickedSquare = square;
+//			m_board = board;
+//		}
+//
+//		@Override
+//		public void mouseClicked(MouseEvent event)
+//		{
+//			if (getGame().isBlackMove() == m_isBlackPlayer)
+//			{
+//				if (m_nextMoveMustPlacePiece)
+//				{
+//					m_nextMoveMustPlacePiece = false;
+//					getGame().nextTurn();
+//					if (!m_clickedSquare.isOccupied() && m_clickedSquare.isHabitable() && m_pieceToPlace != null)
+//					{
+//						m_pieceToPlace.setSquare(m_clickedSquare);
+//						m_clickedSquare.setPiece(m_pieceToPlace);
+//						m_pieceToPlace = null;
+//						m_nextMoveMustPlacePiece = false;
+//						boardRefresh(getGame().getBoards());
+//						getGame().genLegalDests();
+//					}
+//
+//					return;
+//				}
+//				if (m_mustMove && m_clickedSquare == m_storedSquare)
+//				{
+//					boardRefresh(getGame().getBoards());
+//					m_mustMove = false;
+//				}
+//				else if (m_mustMove && m_clickedSquare.getColor() == Square.HIGHLIGHT_COLOR)
+//				{
+//					try
+//					{
+//						Move move = new Move(m_board, m_storedSquare, m_clickedSquare);
+//						getGame().playMove(move);
+//
+//						m_netMove = m_game.moveToFakeMove(move);
+//
+//						m_mustMove = false;
+//						boardRefresh(getGame().getBoards());
+//					}
+//					catch (Exception e)
+//					{
+//						System.out.println(e.getMessage());
+//						e.printStackTrace();
+//					}
+//				}
+//				else if (!m_mustMove && m_clickedSquare.getPiece() != null
+//						&& m_clickedSquare.getPiece().isBlack() == getGame().isBlackMove())
+//				{
+//					List<Square> destinationList = m_clickedSquare.getPiece().getLegalDests();
+//					if (destinationList.size() > 0)
+//					{
+//						for (Square destination : destinationList)
+//							destination.setBackgroundColor(Square.HIGHLIGHT_COLOR);
+//
+//						m_storedSquare = m_clickedSquare;
+//						m_mustMove = true;
+//					}
+//				}
+//			}
+//		}
+//
+//		@Override
+//		public void mouseEntered(MouseEvent event)
+//		{
+//		}
+//
+//		@Override
+//		public void mouseExited(MouseEvent event)
+//		{
+//		}
+//
+//		@Override
+//		public void mousePressed(MouseEvent event)
+//		{
+//		}
+//
+//		@Override
+//		public void mouseReleased(MouseEvent event)
+//		{
+//		}
+//
+//		private Square m_clickedSquare;
+//		private Square m_storedSquare;
+//		private Board m_board;
+//	}
 
 	private JPanel createGrid(Board board, boolean isPlayback)
 	{
@@ -415,7 +412,7 @@ public class PlayNetGame extends PlayGame
 			for (int j = 1; j <= numberOfColumns; j++)
 			{
 				if (!isPlayback)
-					board.getSquare(i, j).addMouseListener(new ButtonListener(board.getSquare(i, j), board));
+					board.getSquare(i, j).addMouseListener(new SquareListener(board.getSquare(i, j), board));
 				grid.add(board.getSquare(i, j));
 			}
 		}
