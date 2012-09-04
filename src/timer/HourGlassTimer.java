@@ -1,14 +1,16 @@
 package timer;
 
+import utility.RunnableOfT;
+
 public class HourGlassTimer extends ChessTimer
 {
-	public HourGlassTimer(long startTime, boolean isBlackTeamTimer)
+	public HourGlassTimer(RunnableOfT<Boolean> timeElapsedCallback, long startTime, boolean isBlackTeamTimer)
 	{
 		m_currentTime = startTime;
 		m_isBlackTeamTimer = isBlackTeamTimer;
 		m_clockLastUpdatedTime = System.currentTimeMillis();
 		m_initialStartTime = startTime;
-		init();
+		init(timeElapsedCallback);
 	}
 
 	/**

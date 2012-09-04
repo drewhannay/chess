@@ -33,6 +33,7 @@ import javax.tools.ToolProvider;
 
 import logic.Builder;
 import logic.Game;
+import logic.Result;
 import net.NetworkClient;
 import net.NetworkServer;
 import timer.BronsteinDelayTimer;
@@ -44,6 +45,7 @@ import timer.SimpleDelayTimer;
 import timer.WordTimer;
 import utility.FileUtility;
 import utility.GUIUtility;
+import utility.RunnableOfT;
 import ai.AIAdapter;
 import ai.AIPlugin;
 
@@ -621,6 +623,16 @@ public class NewGameMenu extends JPanel
 				long startTime = Integer.parseInt(totalTimeField.getText()) * 1000;
 				long increment = Integer.parseInt(increaseField.getText()) * 1000;
 
+				RunnableOfT<Boolean> timeElapsedCallback = new RunnableOfT<Boolean>()
+				{
+					@Override
+					public void run(Boolean isBlackTimer)
+					{
+						Result result = isBlackTimer ? Result.WHITE_WIN : Result.BLACK_WIN;
+						result.setText("Time has run out. " + result.winText() + "\n");
+						PlayGame.endOfGame(result);
+					}
+				};
 				ChessTimer blackTimer = null;
 				ChessTimer whiteTimer = null;
 
@@ -631,30 +643,30 @@ public class NewGameMenu extends JPanel
 				}
 				else if (timerName.equals("Bronstein Delay"))
 				{
-					blackTimer = new BronsteinDelayTimer(increment, startTime, true);
-					whiteTimer = new BronsteinDelayTimer(increment, startTime, false);
+					blackTimer = new BronsteinDelayTimer(timeElapsedCallback, increment, startTime, true);
+					whiteTimer = new BronsteinDelayTimer(timeElapsedCallback, increment, startTime, false);
 				}
 				else if (timerName.equals("Fischer"))
 				{
-					blackTimer = new FischerTimer(increment, startTime, false, true);
-					whiteTimer = new FischerTimer(increment, startTime, false, false);
+					blackTimer = new FischerTimer(timeElapsedCallback, increment, startTime, false, true);
+					whiteTimer = new FischerTimer(timeElapsedCallback, increment, startTime, false, false);
 				}
 				else if (timerName.equals("Fischer After"))
 				{
-					blackTimer = new FischerTimer(increment, startTime, true, true);
-					whiteTimer = new FischerTimer(increment, startTime, true, false);
+					blackTimer = new FischerTimer(timeElapsedCallback, increment, startTime, true, true);
+					whiteTimer = new FischerTimer(timeElapsedCallback, increment, startTime, true, false);
 				}
 				else if (timerName.equals("Hour Glass"))
 				{
 					// time is halved since it is actually the time the player
 					// is not allowed to exceed
-					blackTimer = new HourGlassTimer(startTime / 2, true);
-					whiteTimer = new HourGlassTimer(startTime / 2, false);
+					blackTimer = new HourGlassTimer(timeElapsedCallback, startTime / 2, true);
+					whiteTimer = new HourGlassTimer(timeElapsedCallback, startTime / 2, false);
 				}
 				else if (timerName.equals("Simple Delay"))
 				{
-					blackTimer = new SimpleDelayTimer(increment, startTime, true);
-					whiteTimer = new SimpleDelayTimer(increment, startTime, false);
+					blackTimer = new SimpleDelayTimer(timeElapsedCallback, increment, startTime, true);
+					whiteTimer = new SimpleDelayTimer(timeElapsedCallback, increment, startTime, false);
 				}
 				else
 				{

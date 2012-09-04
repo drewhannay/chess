@@ -4,7 +4,7 @@ public class NoTimer extends ChessTimer
 {
 	public NoTimer()
 	{
-		init();
+		init(null);
 	}
 
 	@Override

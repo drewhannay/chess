@@ -1,15 +1,17 @@
 package timer;
 
+import utility.RunnableOfT;
+
 public class BronsteinDelayTimer extends ChessTimer
 {
-	public BronsteinDelayTimer(long incrementAmount, long currentTime, boolean isBlackTeamTimer)
+	public BronsteinDelayTimer(RunnableOfT<Boolean> callback, long incrementAmount, long currentTime, boolean isBlackTeamTimer)
 	{
 		m_incrementAmount = incrementAmount;
 		m_isBlackTeamTimer = isBlackTeamTimer;
 		m_currentTime = currentTime;
 		m_initialStartTime = m_currentTime;
 		m_clockLastUpdatedTime = System.currentTimeMillis();
-		init();
+		init(callback);
 	}
 
 	@Override

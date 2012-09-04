@@ -1,7 +1,5 @@
 package timer;
 
-import gui.PlayGame;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.Serializable;
@@ -11,11 +9,11 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
 
-import logic.Result;
+import utility.RunnableOfT;
 
 public abstract class ChessTimer implements ActionListener, Serializable
 {
-	public void init()
+	public void init(RunnableOfT<Boolean> timeElapsedCallback)
 	{
 		m_displayLabel = new JLabel();
 		m_displayLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -24,6 +22,7 @@ public abstract class ChessTimer implements ActionListener, Serializable
 		m_numberFormat.setMinimumIntegerDigits(2);
 		m_timer = new Timer(1000, this);
 		m_timer.setInitialDelay(0);
+		m_timeElapsedCallback = timeElapsedCallback;
 	}
 
 	@Override
@@ -94,9 +93,7 @@ public abstract class ChessTimer implements ActionListener, Serializable
 
 	public void timeElapsed()
 	{
-		Result result = m_isBlackTeamTimer ? Result.WHITE_WIN : Result.BLACK_WIN;
-		result.setText("Time has run out. " + result.winText() + "\n");
-		PlayGame.endOfGame(result);
+		m_timeElapsedCallback.run(m_isBlackTeamTimer);
 		m_timer.stop();
 	}
 
@@ -142,4 +139,5 @@ public abstract class ChessTimer implements ActionListener, Serializable
 	// up since it gets subtracted
 	protected int m_clockDirection = 1;
 	protected static boolean m_isStopped;
+	protected RunnableOfT<Boolean> m_timeElapsedCallback;
 }

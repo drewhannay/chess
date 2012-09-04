@@ -1,8 +1,10 @@
 package timer;
 
+import utility.RunnableOfT;
+
 public class FischerTimer extends ChessTimer
 {
-	public FischerTimer(long incrementAmount, long startTime, boolean isFischerAfterTimer, boolean isBlack)
+	public FischerTimer(RunnableOfT<Boolean> timeElapsedCallback, long incrementAmount, long startTime, boolean isFischerAfterTimer, boolean isBlack)
 	{
 		m_incrementAmount = incrementAmount;
 		m_currentTime = startTime;
@@ -10,7 +12,7 @@ public class FischerTimer extends ChessTimer
 		m_isFirstTime = true;
 		m_isBlackTeamTimer = isBlack;
 		m_initialStartTime = startTime;
-		init();
+		init(timeElapsedCallback);
 	}
 
 	@Override

@@ -1,15 +1,17 @@
 package timer;
 
+import utility.RunnableOfT;
+
 public class SimpleDelayTimer extends ChessTimer
 {
-	public SimpleDelayTimer(long delayTime, long startTime, boolean isBlackTeamTimer)
+	public SimpleDelayTimer(RunnableOfT<Boolean> timeElapsedCallback, long delayTime, long startTime, boolean isBlackTeamTimer)
 	{
 		m_delayTime = delayTime;
 		m_isBlackTeamTimer = isBlackTeamTimer;
 		m_currentTime = startTime;
 		m_initialStartTime = startTime;
 		m_clockLastUpdatedTime = System.currentTimeMillis();
-		init();
+		init(timeElapsedCallback);
 	}
 
 	@Override
