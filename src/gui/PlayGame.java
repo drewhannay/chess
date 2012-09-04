@@ -839,7 +839,6 @@ public class PlayGame extends JPanel
 
 			m_glassPane.setImage(image);
 			m_glassPane.repaint();
-			event.consume();
 		}
 
 		@Override
