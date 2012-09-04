@@ -1,8 +1,6 @@
 package utility;
 
-import gui.Driver;
-import gui.NewGameMenu;
-
+import java.awt.Component;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -63,19 +61,6 @@ public final class GUIUtility
 		});
 	}
 
-	public static void setupReturnToMainButton(JButton backButton)
-	{
-		backButton.setToolTipText("Press me to go back to the Main Menu");
-		backButton.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent event)
-			{
-				Driver.getInstance().revertToMainPanel();
-			}
-		});
-	}
-	
 	public static ImageIcon createImageIcon(int imageWidth, int imageHeight, String imageLocation, JPanel sourcePanel){
 		BufferedImage bufferedImage = null;
 		try
@@ -91,9 +76,9 @@ public final class GUIUtility
 		return imageIcon;
 	}
 	
-	public static void installAIFiles(JComboBox aiComboBox, NewGameMenu source, String[] aiFiles){
+	public static void installAIFiles(JComboBox aiComboBox, Component parent, String[] aiFiles){
 		JFileChooser fileChooser = new JFileChooser();
-		int returnVal = fileChooser.showOpenDialog(Driver.getInstance());
+		int returnVal = fileChooser.showOpenDialog(parent);
 		File file = fileChooser.getSelectedFile();
 
 		File destinationDirectory = new File(System.getProperty("user.home") + "/chess/AI");
@@ -102,7 +87,7 @@ public final class GUIUtility
 		{
 			if (!file.renameTo(new File(destinationDirectory, file.getName())))
 			{
-				JOptionPane.showMessageDialog(Driver.getInstance(), "File was not installed successfully", "Error",
+				JOptionPane.showMessageDialog(parent, "File was not installed successfully", "Error",
 						JOptionPane.PLAIN_MESSAGE);
 			}
 			else

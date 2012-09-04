@@ -404,7 +404,15 @@ public class NewGameMenu extends JPanel
 			}
 		});
 
-		GUIUtility.setupReturnToMainButton(m_returnToMainButton);
+		m_returnToMainButton.setToolTipText("Press me to go back to the Main Menu");
+		m_returnToMainButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent event)
+			{
+				Driver.getInstance().revertToMainPanel();
+			}
+		});
 
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setBorder(BorderFactory.createLoweredBevelBorder());

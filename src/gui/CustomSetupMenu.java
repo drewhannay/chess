@@ -192,7 +192,15 @@ public class CustomSetupMenu extends JPanel
 
 		// Create button and add ActionListener
 		m_returnToMainButton = new JButton("Return to Main Menu");
-		GUIUtility.setupReturnToMainButton(m_returnToMainButton);
+		m_returnToMainButton.setToolTipText("Press me to go back to the Main Menu");
+		m_returnToMainButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent event)
+			{
+				Driver.getInstance().revertToMainPanel();
+			}
+		});
 
 		// Create button and add ActionListener
 		m_submitButton = new JButton("Save and Quit");
