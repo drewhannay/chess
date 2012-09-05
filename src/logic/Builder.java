@@ -8,8 +8,6 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.ImageIcon;
-
 import rules.Rules;
 import utility.FileUtility;
 
@@ -106,8 +104,7 @@ public class Builder implements Serializable
 		bishopMovement.put('r', -1);
 		bishopMovement.put('L', -1);
 		bishopMovement.put('l', -1);
-		return new Piece("Bishop", new ImageIcon("./images/bishop_dark.png"), new ImageIcon("./images/bishop_light.png"), isBlack,
-				square, board, bishopMovement);
+		return new Piece("Bishop", isBlack, square, board, bishopMovement);
 	}
 
 	/**
@@ -130,8 +127,7 @@ public class Builder implements Serializable
 		kingMovement.put('r', 1);
 		kingMovement.put('L', 1);
 		kingMovement.put('l', 1);
-		return new Piece("King", new ImageIcon("./images/king_dark.png"), new ImageIcon("./images/king_light.png"), isBlack, square,
-				board, kingMovement);
+		return new Piece("King", isBlack, square, board, kingMovement);
 	}
 
 	/**
@@ -148,8 +144,7 @@ public class Builder implements Serializable
 		Map<Character, Integer> knightMovement = Maps.newHashMap();
 		knightMovement.put('x', 1);
 		knightMovement.put('y', 2);
-		return new Piece("Knight", new ImageIcon("./images/knight_dark.png"), new ImageIcon("./images/knight_light.png"), isBlack,
-				square, board, knightMovement);
+		return new Piece("Knight", isBlack, square, board, knightMovement);
 	}
 
 	/**
@@ -163,8 +158,7 @@ public class Builder implements Serializable
 	 */
 	public static Piece createPawn(boolean isBlack, Square square, Board board)
 	{
-		Piece pawn = new Piece("Pawn", new ImageIcon("./images/pawn_dark.png"), new ImageIcon("./images/pawn_light.png"), isBlack,
-				square, board, null);
+		Piece pawn = new Piece("Pawn", isBlack, square, board, null);
 		List<String> promotesTo = Lists.newArrayList();
 		promotesTo.add("Queen");
 		promotesTo.add("Bishop");
@@ -194,8 +188,7 @@ public class Builder implements Serializable
 		queenMovement.put('r', -1);
 		queenMovement.put('L', -1);
 		queenMovement.put('l', -1);
-		return new Piece("Queen", new ImageIcon("./images/queen_dark.png"), new ImageIcon("./images/queen_light.png"), isBlack,
-				square, board, queenMovement);
+		return new Piece("Queen", isBlack, square, board, queenMovement);
 	}
 
 	/**
@@ -214,8 +207,7 @@ public class Builder implements Serializable
 		rookMovement.put('S', -1);
 		rookMovement.put('W', -1);
 		rookMovement.put('E', -1);
-		return new Piece("Rook", new ImageIcon("./images/rook_dark.png"), new ImageIcon("./images/rook_light.png"), isBlack, square,
-				board, rookMovement);
+		return new Piece("Rook", isBlack, square, board, rookMovement);
 	}
 
 	/**

@@ -61,11 +61,20 @@ public final class GUIUtility
 		});
 	}
 
-	public static ImageIcon createImageIcon(int imageWidth, int imageHeight, String imageLocation){
+	public static ImageIcon createImageIcon(int imageWidth, int imageHeight, String imageLocation)
+	{
+		return createImageIcon(imageWidth, imageHeight, imageLocation, true);
+	}
+
+	public static ImageIcon createImageIcon(int imageWidth, int imageHeight, String imageLocation, boolean isBuiltInFile)
+	{
 		BufferedImage bufferedImage = null;
 		try
 		{
-			bufferedImage = ImageIO.read(GUIUtility.class.getResource(imageLocation));
+			if (isBuiltInFile)
+				bufferedImage = ImageIO.read(GUIUtility.class.getResource(imageLocation));
+			else
+				bufferedImage = ImageIO.read(new File(imageLocation));
 		}
 		catch (Exception e)
 		{
@@ -76,7 +85,8 @@ public final class GUIUtility
 		return imageIcon;
 	}
 	
-	public static void installAIFiles(JComboBox aiComboBox, Component parent, String[] aiFiles){
+	public static void installAIFiles(JComboBox aiComboBox, Component parent, String[] aiFiles)
+	{
 		JFileChooser fileChooser = new JFileChooser();
 		int returnVal = fileChooser.showOpenDialog(parent);
 		File file = fileChooser.getSelectedFile();
