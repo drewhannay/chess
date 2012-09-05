@@ -230,7 +230,7 @@ public class PlayGame extends JPanel
 
 		Object[] options = new String[] { "Save Record of Game", "New Game", "Quit" };
 		m_optionsMenu.setVisible(false);
-		switch (JOptionPane.showOptionDialog(null, result.toString(), result.winText(), JOptionPane.YES_NO_CANCEL_OPTION,
+		switch (JOptionPane.showOptionDialog(Driver.getInstance(), result.toString(), result.winText(), JOptionPane.YES_NO_CANCEL_OPTION,
 				JOptionPane.PLAIN_MESSAGE, null, options, options[0]))
 		{
 		case JOptionPane.YES_OPTION:
@@ -267,7 +267,7 @@ public class PlayGame extends JPanel
 					PrintWriter printWriter = new PrintWriter(preferencesFile);
 					printWriter.print("");
 					printWriter.close();
-					JOptionPane.showMessageDialog(null, "Since this is your first time playing " + AppConstants.APP_NAME
+					JOptionPane.showMessageDialog(Driver.getInstance(), "Since this is your first time playing " + AppConstants.APP_NAME
 							+ ", please choose a default completed game save location.\n"
 							+ "Pressing cancel will use the default save location.", "Save Location", JOptionPane.PLAIN_MESSAGE);
 					JFileChooser fileChooser = new JFileChooser();
@@ -295,7 +295,7 @@ public class PlayGame extends JPanel
 				e.printStackTrace();
 			}
 
-			String saveFileName = JOptionPane.showInputDialog(null, "Enter a name for the save file:", "Saving...",
+			String saveFileName = JOptionPane.showInputDialog(Driver.getInstance(), "Enter a name for the save file:", "Saving...",
 					JOptionPane.PLAIN_MESSAGE);
 			getGame().saveGame(saveFileName, getGame().isClassicChess());
 			m_game.setBlackMove(false);
@@ -315,7 +315,7 @@ public class PlayGame extends JPanel
 
 	public void saveGame()
 	{
-		String fileName = JOptionPane.showInputDialog(null, "Enter a name for the save file:", "Saving...", JOptionPane.PLAIN_MESSAGE);
+		String fileName = JOptionPane.showInputDialog(Driver.getInstance(), "Enter a name for the save file:", "Saving...", JOptionPane.PLAIN_MESSAGE);
 		if (fileName == null)
 			return;
 		getGame().saveGame(fileName, false);

@@ -128,7 +128,7 @@ final public class Driver extends JFrame
 
 				if (files.length == 0)
 				{
-					JOptionPane.showMessageDialog(null, "There are no saved games. Try starting a new game instead.",
+					JOptionPane.showMessageDialog(Driver.getInstance(), "There are no saved games. Try starting a new game instead.",
 							"No Completed Games", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
@@ -137,7 +137,7 @@ final public class Driver extends JFrame
 				poppedFrame.setLayout(new GridBagLayout());
 				poppedFrame.setSize(225, 200);
 				poppedFrame.setResizable(false);
-				poppedFrame.setLocationRelativeTo(null);
+				poppedFrame.setLocationRelativeTo(Driver.this);
 				GridBagConstraints constraints = new GridBagConstraints();
 
 				final JList gamesInProgressList = new JList(FileUtility.getGamesInProgressFileArray());
@@ -177,7 +177,7 @@ final public class Driver extends JFrame
 						catch (Exception e)
 						{
 							e.printStackTrace();
-							JOptionPane.showMessageDialog(null, "There are no valid saved games. Start a New Game instead.",
+							JOptionPane.showMessageDialog(Driver.getInstance(), "There are no valid saved games. Start a New Game instead.",
 									"Invalid Saved Games", JOptionPane.PLAIN_MESSAGE);
 						}
 					}
@@ -217,7 +217,7 @@ final public class Driver extends JFrame
 						}
 						else
 						{
-							JOptionPane.showMessageDialog(null, "There are currently no save files!", "No save file selected!",
+							JOptionPane.showMessageDialog(Driver.getInstance(), "There are currently no save files!", "No save file selected!",
 									JOptionPane.PLAIN_MESSAGE);
 						}
 					}
@@ -263,7 +263,7 @@ final public class Driver extends JFrame
 					String[] files = FileUtility.getCompletedGamesFileArray();
 					if (files.length == 0)
 					{
-						JOptionPane.showMessageDialog(null, "There are no completed games to display.", "No Completed Games",
+						JOptionPane.showMessageDialog(Driver.getInstance(), "There are no completed games to display.", "No Completed Games",
 								JOptionPane.PLAIN_MESSAGE);
 						return;
 					}
@@ -272,7 +272,7 @@ final public class Driver extends JFrame
 					poppedFrame.setLayout(new GridBagLayout());
 					poppedFrame.setSize(225, 200);
 					poppedFrame.setResizable(false);
-					poppedFrame.setLocationRelativeTo(null);
+					poppedFrame.setLocationRelativeTo(Driver.this);
 					GridBagConstraints constraints = new GridBagConstraints();
 
 					final JList completedGamesList = new JList(FileUtility.getCompletedGamesFileArray());
@@ -305,7 +305,7 @@ final public class Driver extends JFrame
 								}
 								catch (Exception e)
 								{
-									JOptionPane.showMessageDialog(null,
+									JOptionPane.showMessageDialog(Driver.getInstance(),
 											"This file contains invalid ACN notation. Please check the format and try again",
 											"Invalid Notation", JOptionPane.PLAIN_MESSAGE);
 									return;
@@ -325,7 +325,7 @@ final public class Driver extends JFrame
 								catch (Exception e)
 								{
 									e.printStackTrace();
-									JOptionPane.showMessageDialog(null,
+									JOptionPane.showMessageDialog(Driver.getInstance(),
 											"This game is corrupted, please choose another or start a New Game instead.",
 											"Invalid Completed Game", JOptionPane.PLAIN_MESSAGE);
 								}
@@ -370,7 +370,7 @@ final public class Driver extends JFrame
 							}
 							else
 							{
-								JOptionPane.showMessageDialog(null, "There are currently no completed games!",
+								JOptionPane.showMessageDialog(Driver.getInstance(), "There are currently no completed games!",
 										"No completed game selected!", JOptionPane.PLAIN_MESSAGE);
 							}
 						}
@@ -405,7 +405,7 @@ final public class Driver extends JFrame
 				catch (Exception e)
 				{
 					e.printStackTrace();
-					JOptionPane.showMessageDialog(null, "Either there are no completed games or the game file is missing.",
+					JOptionPane.showMessageDialog(Driver.getInstance(), "Either there are no completed games or the game file is missing.",
 							"No Completed Games", JOptionPane.PLAIN_MESSAGE);
 				}
 			}
@@ -493,7 +493,7 @@ final public class Driver extends JFrame
 			{
 				final JFrame popupFrame = new JFrame("Square Options");
 				popupFrame.setSize(370, 120);
-				popupFrame.setLocationRelativeTo(null);
+				popupFrame.setLocationRelativeTo(Driver.this);
 				popupFrame.setLayout(new GridBagLayout());
 				popupFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 				GridBagConstraints constraints = new GridBagConstraints();
@@ -615,7 +615,7 @@ final public class Driver extends JFrame
 				}
 				catch (Exception e)
 				{
-					JOptionPane.showMessageDialog(null, "That is not a valid location to save your completed games.",
+					JOptionPane.showMessageDialog(Driver.getInstance(), "That is not a valid location to save your completed games.",
 							"Invalid Location", JOptionPane.PLAIN_MESSAGE);
 					e.printStackTrace();
 				}
@@ -654,7 +654,7 @@ final public class Driver extends JFrame
 			@Override
 			public void actionPerformed(ActionEvent event)
 			{
-				int answer = JOptionPane.showConfirmDialog(null, "Are you sure you want to Quit?", "Quit?", JOptionPane.YES_NO_OPTION,
+				int answer = JOptionPane.showConfirmDialog(Driver.getInstance(), "Are you sure you want to Quit?", "Quit?", JOptionPane.YES_NO_OPTION,
 						JOptionPane.PLAIN_MESSAGE);
 				if (answer == 0)
 					System.exit(0);
@@ -734,7 +734,6 @@ final public class Driver extends JFrame
 		add(m_mainPanel);
 		deactivateWindowListener();
 		pack();
-		setLocationRelativeTo(null);
 	}
 
 	public static Driver getInstance()
@@ -782,7 +781,7 @@ final public class Driver extends JFrame
 			public void windowClosing(WindowEvent e)
 			{
 				Object[] options = new String[] { "Save Game", "Don't Save", "Cancel" };
-				switch (JOptionPane.showOptionDialog(null, "Would you like to save your game before you quit?", "Quit?",
+				switch (JOptionPane.showOptionDialog(Driver.getInstance(), "Would you like to save your game before you quit?", "Quit?",
 						JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]))
 				{
 				case JOptionPane.YES_OPTION:
