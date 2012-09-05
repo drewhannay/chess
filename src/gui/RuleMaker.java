@@ -316,7 +316,7 @@ public class RuleMaker extends JPanel
 						int answer = Integer.parseInt(whiteNumberOfChecks);
 						if (answer < 1)
 						{
-							JOptionPane.showMessageDialog(null, "Please enter a number greater than 1 into the Number of Checks box.",
+							JOptionPane.showMessageDialog(Driver.getInstance(), "Please enter a number greater than 1 into the Number of Checks box.",
 									"Number of Checks", JOptionPane.PLAIN_MESSAGE);
 							return;
 						}
@@ -324,7 +324,7 @@ public class RuleMaker extends JPanel
 					}
 					catch (Exception e)
 					{
-						JOptionPane.showMessageDialog(null, "Please enter a number into the Number of Checks box.",
+						JOptionPane.showMessageDialog(Driver.getInstance(), "Please enter a number into the Number of Checks box.",
 								"Number of Checks", JOptionPane.PLAIN_MESSAGE);
 						return;
 					}
@@ -351,7 +351,7 @@ public class RuleMaker extends JPanel
 						int answer = Integer.parseInt(blackNumberOfChecks);
 						if (answer < 1)
 						{
-							JOptionPane.showMessageDialog(null, "Please enter a number greater than 1 into the Number of Checks box.",
+							JOptionPane.showMessageDialog(Driver.getInstance(), "Please enter a number greater than 1 into the Number of Checks box.",
 									"Number of Checks", JOptionPane.PLAIN_MESSAGE);
 							return;
 						}
@@ -359,7 +359,7 @@ public class RuleMaker extends JPanel
 					}
 					catch (Exception ne)
 					{
-						JOptionPane.showMessageDialog(null, "Please enter a number into the Number of Checks box.",
+						JOptionPane.showMessageDialog(Driver.getInstance(), "Please enter a number into the Number of Checks box.",
 								"Number of Checks", JOptionPane.PLAIN_MESSAGE);
 						return;
 					}

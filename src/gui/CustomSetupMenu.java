@@ -9,7 +9,6 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.Point;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -182,7 +181,7 @@ public class CustomSetupMenu extends JPanel
 					}
 					if (numberOfObjectives != 1)
 					{
-						JOptionPane.showMessageDialog(null, "Please place exactly one White Objective Piece", "Objective Missing",
+						JOptionPane.showMessageDialog(Driver.getInstance(), "Please place exactly one White Objective Piece", "Objective Missing",
 								JOptionPane.PLAIN_MESSAGE);
 						return;
 					}
@@ -198,7 +197,7 @@ public class CustomSetupMenu extends JPanel
 					}
 					if (numberOfObjectives != 1)
 					{
-						JOptionPane.showMessageDialog(null, "Please place exactly one Black Objective Piece", "Objective Missing",
+						JOptionPane.showMessageDialog(Driver.getInstance(), "Please place exactly one Black Objective Piece", "Objective Missing",
 								JOptionPane.PLAIN_MESSAGE);
 						return;
 					}
@@ -394,10 +393,6 @@ public class CustomSetupMenu extends JPanel
 		mainPanelConstraints.gridy = 1;
 		add(m_pieceListPanel, mainPanelConstraints);
 
-		Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
-		int x = (int) ((dimension.getWidth() / 4));
-		int y = (int) ((dimension.getHeight() / 4));
-		Driver.getInstance().setLocation(x, y);
 	}
 
 	public void drawBoards(Board[] boards, boolean hasMultipleBoards)
@@ -565,7 +560,7 @@ public class CustomSetupMenu extends JPanel
 		{
 			final JFrame popupFrame = new JFrame("Square Options");
 			popupFrame.setSize(370, 120);
-			popupFrame.setLocationRelativeTo(null);
+			popupFrame.setLocationRelativeTo(Driver.getInstance());
 			popupFrame.setLayout(new FlowLayout());
 
 			final JButton colorChooserButton = new JButton("Set Square Color");
@@ -734,7 +729,7 @@ public class CustomSetupMenu extends JPanel
 			}
 			else
 			{
-				JOptionPane.showMessageDialog(null, "This square is uninhabitable.", "Warning", JOptionPane.PLAIN_MESSAGE);
+				JOptionPane.showMessageDialog(Driver.getInstance(), "This square is uninhabitable.", "Warning", JOptionPane.PLAIN_MESSAGE);
 			}
 		}
 	};
