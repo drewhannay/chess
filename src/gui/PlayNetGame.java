@@ -475,14 +475,14 @@ public class PlayNetGame extends PlayGame
 
 	private boolean requestDraw()
 	{
-		int result = JOptionPane.showConfirmDialog(null, "Would you like to send the other player a draw request?", "Draw",
+		int result = JOptionPane.showConfirmDialog(Driver.getInstance(), "Would you like to send the other player a draw request?", "Draw",
 				JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
 		return result == JOptionPane.YES_OPTION;
 	}
 
 	private boolean requestAIDraw()
 	{
-		int result = JOptionPane.showConfirmDialog(null, "Are you sure you would like to declare a draw?", "Draw",
+		int result = JOptionPane.showConfirmDialog(Driver.getInstance(), "Are you sure you would like to declare a draw?", "Draw",
 				JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
 		return result == JOptionPane.YES_OPTION;
 	}

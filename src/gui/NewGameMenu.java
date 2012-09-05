@@ -88,7 +88,7 @@ public class NewGameMenu extends JPanel
 				popupFrame.setLayout(new FlowLayout());
 				popupFrame.setSize(350, 150);
 				popupFrame.setResizable(false);
-				popupFrame.setLocationRelativeTo(null);
+				popupFrame.setLocationRelativeTo(Driver.getInstance());
 
 				JPanel optionsPanel = new JPanel();
 				final JLabel hostOrConnectLabel = new JLabel("Would you like to host a game or connect to one?");
@@ -102,7 +102,7 @@ public class NewGameMenu extends JPanel
 						poppedFrame.setLayout(new GridBagLayout());
 						poppedFrame.setSize(370, 150);
 						poppedFrame.setResizable(false);
-						poppedFrame.setLocationRelativeTo(null);
+						poppedFrame.setLocationRelativeTo(Driver.getInstance());
 						GridBagConstraints netGameConstraints = new GridBagConstraints();
 
 						final JLabel connectToLabel = new JLabel("Which computer would you like to connect to?");
@@ -116,7 +116,7 @@ public class NewGameMenu extends JPanel
 							{
 								if (connectToField.getText().equals(""))
 								{
-									JOptionPane.showMessageDialog(null, "Please enter a number", "Number Needed",
+									JOptionPane.showMessageDialog(Driver.getInstance(), "Please enter a number", "Number Needed",
 											JOptionPane.PLAIN_MESSAGE);
 									return;
 								}
@@ -131,7 +131,7 @@ public class NewGameMenu extends JPanel
 									}
 									catch (Exception e)
 									{
-										JOptionPane.showMessageDialog(null, "Please enter a number between 1-25 in the box",
+										JOptionPane.showMessageDialog(Driver.getInstance(), "Please enter a number between 1-25 in the box",
 												"Number Needed", JOptionPane.PLAIN_MESSAGE);
 										return;
 									}
@@ -147,7 +147,7 @@ public class NewGameMenu extends JPanel
 									}
 									catch (Exception e)
 									{
-										JOptionPane.showMessageDialog(null, "Please enter a number between 1-25 in the box",
+										JOptionPane.showMessageDialog(Driver.getInstance(), "Please enter a number between 1-25 in the box",
 												"Number Needed", JOptionPane.PLAIN_MESSAGE);
 										return;
 									}
@@ -248,7 +248,7 @@ public class NewGameMenu extends JPanel
 				poppedFrame.setLayout(new GridBagLayout());
 				poppedFrame.setSize(225, 200);
 				poppedFrame.setResizable(false);
-				poppedFrame.setLocationRelativeTo(null);
+				poppedFrame.setLocationRelativeTo(Driver.getInstance());
 				GridBagConstraints constraints = new GridBagConstraints();
 
 				final JComboBox dropdown = new JComboBox(Builder.getVariantFileArray());
@@ -271,7 +271,7 @@ public class NewGameMenu extends JPanel
 				
 				if (getAIFiles().length == 0)
 				{
-					switch (JOptionPane.showConfirmDialog(null,
+					switch (JOptionPane.showConfirmDialog(Driver.getInstance(),
 							"There are no AI files installed. Would you like to install one?", "Install AI Files?",
 							JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE))
 					{
@@ -303,7 +303,7 @@ public class NewGameMenu extends JPanel
 						File aiFile = FileUtility.getAIFile(aiFileName);
 						if (aiComboBox.getSelectedItem() == null)
 						{
-							JOptionPane.showMessageDialog(null, "You have not selected an AI file", "No AI file",
+							JOptionPane.showMessageDialog(Driver.getInstance(), "You have not selected an AI file", "No AI file",
 									JOptionPane.PLAIN_MESSAGE);
 							return;
 						}
@@ -322,7 +322,7 @@ public class NewGameMenu extends JPanel
 
 						if (!task.call())
 						{
-							JOptionPane.showMessageDialog(null, "Compilation failed\n"
+							JOptionPane.showMessageDialog(Driver.getInstance(), "Compilation failed\n"
 									+ "Make sure your class implements the AIPlugin interface\n"
 									+ "Make sure your class includes the following imports:\n" + "import ai.*;\n"
 									+ "import ai.AIAdapter.*;\n", "Compilation Failure", JOptionPane.PLAIN_MESSAGE);
@@ -492,7 +492,7 @@ public class NewGameMenu extends JPanel
 		popupFrame.setResizable(false);
 		// make the window show up in the center of the screen regardless of
 		// resolution
-		popupFrame.setLocationRelativeTo(null);
+		popupFrame.setLocationRelativeTo(Driver.getInstance());
 		GridBagConstraints constraints = new GridBagConstraints();
 
 		String[] variantTypes = Builder.getVariantFileArray();
