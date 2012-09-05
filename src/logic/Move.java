@@ -687,7 +687,8 @@ public class Move implements Serializable
 		if (getCaptured() != null)
 		{
 			getCaptured().setIsCaptured(false);
-			getCaptured().getSquare().setPiece(getCaptured());
+			getCaptured().getSquare().setPiece(null);
+			getDest().setPiece(getCaptured());
 			getCaptured().getLegalDests().clear();
 		}
 

@@ -166,9 +166,9 @@ public class PlayNetGame extends PlayGame
 
 		m_whiteCapturePanel = new JPanel();
 		m_whiteCapturePanel.setBorder(BorderFactory.createTitledBorder("Captured Pieces"));
-		m_whiteCapturesJail = new Jail(jailBoardSize, jailBoardSize);
+		m_whiteCapturesJail = new Board(jailBoardSize, jailBoardSize, isPlayback);
 		m_whiteCapturePanel.setLayout(new GridLayout(jailBoardSize, jailBoardSize));
-		m_whiteCapturePanel.setPreferredSize(new Dimension((m_whiteCapturesJail.getMaxColumn() + 1) * 25, (m_whiteCapturesJail
+		m_whiteCapturePanel.setPreferredSize(new Dimension((m_whiteCapturesJail.getMaxCol() + 1) * 25, (m_whiteCapturesJail
 				.getMaxRow() + 1) * 25));
 		for (int i = jailBoardSize; i > 0; i--)
 		{
@@ -178,9 +178,9 @@ public class PlayNetGame extends PlayGame
 
 		m_blackCapturePanel = new JPanel();
 		m_blackCapturePanel.setBorder(BorderFactory.createTitledBorder("Captured Pieces"));
-		m_blackCapturesJail = new Jail(jailBoardSize, jailBoardSize);
+		m_blackCapturesJail = new Board(jailBoardSize, jailBoardSize, isPlayback);
 		m_blackCapturePanel.setLayout(new GridLayout(jailBoardSize, jailBoardSize));
-		m_blackCapturePanel.setPreferredSize(new Dimension((m_blackCapturesJail.getMaxColumn() + 1) * 25, (m_blackCapturesJail
+		m_blackCapturePanel.setPreferredSize(new Dimension((m_blackCapturesJail.getMaxCol() + 1) * 25, (m_blackCapturesJail
 				.getMaxRow() + 1) * 25));
 		for (int i = jailBoardSize; i > 0; i--)
 		{
