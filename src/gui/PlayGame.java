@@ -143,50 +143,39 @@ public class PlayGame extends JPanel
 
 			for (Piece piece : getGame().getThreats(objectivePiece))
 				piece.getSquare().setColor(Color.red);
-
 		}
 		else
 		{
 			m_inCheckLabel.setVisible(false);
 		}
 
-		for (int i = 1; i <= m_whiteCapturesJail.getMaxRow(); i++)
-		{
-			for (int j = 1; j <= m_whiteCapturesJail.m_maxNumberOfColumns; j++)
-				m_whiteCapturesJail.getJailSquare(i, j).setOccupyingPiece(null);
-		}
 		int index = 0;
 		Piece[] blackCapturedPieces = getGame().getCapturedPieces(true);
-		for (int i = 1; i <= m_whiteCapturesJail.getMaxRow(); i++)
+		for (int i = m_whiteCapturesJail.getMaxRow(); i >= 1; i--)
 		{
-			for (int j = 1; j <= m_whiteCapturesJail.m_maxNumberOfColumns; j++)
+			for (int j = 1; j <= m_whiteCapturesJail.getMaxCol(); j++)
 			{
 				if (blackCapturedPieces != null && index < blackCapturedPieces.length)
 				{
-					m_whiteCapturesJail.getJailSquare(i, j).setOccupyingPiece(blackCapturedPieces[index]);
+					m_whiteCapturesJail.getSquare(i, j).setPiece(blackCapturedPieces[index]);
 					index++;
 				}
-				m_whiteCapturesJail.getJailSquare(i, j).refreshSquareGUI();
+				m_whiteCapturesJail.getSquare(i, j).refreshJail();
 			}
 		}
-
-		for (int i = 1; i <= m_blackCapturesJail.getMaxRow(); i++)
-		{
-			for (int j = 1; j <= m_blackCapturesJail.m_maxNumberOfColumns; j++)
-				m_blackCapturesJail.getJailSquare(i, j).setOccupyingPiece(null);
-		}
+		
 		index = 0;
 		Piece[] whiteCapturedPieces = getGame().getCapturedPieces(false);
-		for (int i = 1; i <= m_blackCapturesJail.getMaxRow(); i++)
+		for (int i = m_blackCapturesJail.getMaxRow(); i >= 1; i--)
 		{
-			for (int j = 1; j <= m_blackCapturesJail.m_maxNumberOfColumns; j++)
+			for (int j = 1; j <= m_blackCapturesJail.getMaxCol(); j++)
 			{
 				if (whiteCapturedPieces != null && index < whiteCapturedPieces.length)
 				{
-					m_blackCapturesJail.getJailSquare(i, j).setOccupyingPiece(whiteCapturedPieces[index]);
+					m_blackCapturesJail.getSquare(i, j).setPiece(whiteCapturedPieces[index]);
 					index++;
 				}
-				m_blackCapturesJail.getJailSquare(i, j).refreshSquareGUI();
+				m_blackCapturesJail.getSquare(i, j).refreshJail();
 			}
 		}
 
@@ -330,7 +319,7 @@ public class PlayGame extends JPanel
 		}
 	}
 
-	private JPanel createGrid(Board board, boolean isPlayback)
+	private JPanel createGrid(Board board, boolean isPlayback, boolean isJail)
 	{
 		final JPanel gridPanel = new JPanel();
 
@@ -341,34 +330,40 @@ public class PlayGame extends JPanel
 		int numOfColumns = board.numCols();
 		for (int i = numberOfRows; i > 0; i--)
 		{
-			JLabel label = new JLabel("" + i);
-			label.setHorizontalAlignment(SwingConstants.CENTER);
-			gridPanel.add(label);
+			if(!isJail){
+				JLabel label = new JLabel("" + i);
+				label.setHorizontalAlignment(SwingConstants.CENTER);
+				gridPanel.add(label);
+			}
 
 			for (int j = 1; j <= numOfColumns; j++)
 			{
 				Square square = board.getSquare(i, j);
 				if (!isPlayback)
 				{
-					square.addMouseListener(new SquareListener(square, board));
-					square.addMouseMotionListener(new MotionAdapter(m_globalGlassPane));
+					if(!isJail){
+						square.addMouseListener(new SquareListener(square, board));
+						square.addMouseMotionListener(new MotionAdapter(m_globalGlassPane));
+					}
 				}
 
 				gridPanel.add(square);
 			}
 
 		}
-		for (int k = 0; k <= numOfColumns; k++)
-		{
-			if (k != 0)
+		if(!isJail){
+			for (int k = 0; k <= numOfColumns; k++)
 			{
-				JLabel label = new JLabel("" + (char) (k - 1 + 'A'));
-				label.setHorizontalAlignment(SwingConstants.CENTER);
-				gridPanel.add(label);
-			}
-			else
-			{
-				gridPanel.add(new JLabel(""));
+				if (k != 0)
+				{
+					JLabel label = new JLabel("" + (char) (k - 1 + 'A'));
+					label.setHorizontalAlignment(SwingConstants.CENTER);
+					gridPanel.add(label);
+				}
+				else
+				{
+					gridPanel.add(new JLabel(""));
+				}
 			}
 		}
 		return gridPanel;
@@ -480,7 +475,7 @@ public class PlayGame extends JPanel
 			constraints.insets = new Insets(10, 0, 0, 0);
 			constraints.gridx = 0;
 
-			add(createGrid(boards[0], isPlayback), constraints);
+			add(createGrid(boards[0], isPlayback, false), constraints);
 		}
 		else
 		{
@@ -491,13 +486,13 @@ public class PlayGame extends JPanel
 			constraints.insets = new Insets(10, 0, 0, 0);
 			constraints.gridx = 0;
 
-			add(createGrid(boards[0], isPlayback), constraints);
+			add(createGrid(boards[0], isPlayback, false), constraints);
 
 			constraints.fill = GridBagConstraints.HORIZONTAL;
 			constraints.gridwidth = 10;
 			constraints.insets = new Insets(10, 0, 0, 0);
 			constraints.gridx = 11;
-			add(createGrid(boards[1], isPlayback), constraints);
+			add(createGrid(boards[1], isPlayback, false), constraints);
 
 			twoBoardsGridBagOffset += 10;
 		}
@@ -567,31 +562,21 @@ public class PlayGame extends JPanel
 			jailBoardSize = (int) Math.ceil(size);
 		}
 
-		m_whiteCapturePanel = new JPanel();
+		m_whiteCapturesJail = new Board(jailBoardSize, jailBoardSize, false);
+		m_whiteCapturePanel = createGrid(m_whiteCapturesJail, isPlayback, true);
 		m_whiteCapturePanel.setBorder(BorderFactory.createTitledBorder("Captured Pieces"));
-		m_whiteCapturesJail = new Jail(jailBoardSize, jailBoardSize);
 		m_whiteCapturePanel.setLayout(new GridLayout(jailBoardSize, jailBoardSize));
 
-		m_whiteCapturePanel.setPreferredSize(new Dimension((m_whiteCapturesJail.getMaxColumn() + 1) * 25, (m_whiteCapturesJail
+		m_whiteCapturePanel.setPreferredSize(new Dimension((m_whiteCapturesJail.getMaxCol() + 1) * 25, (m_whiteCapturesJail
 				.getMaxRow() + 1) * 25));
-		for (int i = jailBoardSize; i > 0; i--)
-		{
-			for (int j = 1; j <= jailBoardSize; j++)
-				m_whiteCapturePanel.add(new Square(i, j));
-		}
 
-		m_blackCapturePanel = new JPanel();
+		m_blackCapturesJail = new Board(jailBoardSize, jailBoardSize, false);
+		m_blackCapturePanel = createGrid(m_blackCapturesJail, isPlayback, true);
 		m_blackCapturePanel.setBorder(BorderFactory.createTitledBorder("Captured Pieces"));
-		m_blackCapturesJail = new Jail(jailBoardSize, jailBoardSize);
 		m_blackCapturePanel.setLayout(new GridLayout(jailBoardSize, jailBoardSize));
 
-		m_blackCapturePanel.setPreferredSize(new Dimension((m_blackCapturesJail.getMaxColumn() + 1) * 25, (m_blackCapturesJail
+		m_blackCapturePanel.setPreferredSize(new Dimension((m_blackCapturesJail.getMaxCol() + 1) * 25, (m_blackCapturesJail
 				.getMaxRow() + 1) * 25));
-		for (int i = jailBoardSize; i > 0; i--)
-		{
-			for (int j = 1; j <= jailBoardSize; j++)
-				m_blackCapturePanel.add(new Square(i, j));
-		}
 
 		// add the Black Name
 		constraints.fill = GridBagConstraints.NONE;
@@ -903,8 +888,8 @@ public class PlayGame extends JPanel
 	protected static JLabel m_blackLabel;
 	protected static JPanel m_whiteCapturePanel;
 	protected static JPanel m_blackCapturePanel;
-	protected static Jail m_whiteCapturesJail;
-	protected static Jail m_blackCapturesJail;
+	protected static Board m_whiteCapturesJail;
+	protected static Board m_blackCapturesJail;
 	protected static Piece m_pieceToPlace;
 	protected static JMenu m_optionsMenu;
 	protected static Move[] m_history;

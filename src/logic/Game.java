@@ -207,8 +207,10 @@ public class Game implements Serializable
 
 		for (int i = 0; i < team.size(); i++)
 		{
-			if (team.get(i).isCaptured() == isCaptured)
+			if (team.get(i).isCaptured()){
 				count++;
+				//TODO Count is only ever 1 even though multiple pieces have been captured
+			}
 		}
 
 		if (count > 0)
