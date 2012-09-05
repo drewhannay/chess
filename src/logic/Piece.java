@@ -8,6 +8,8 @@ import java.util.Map;
 
 import javax.swing.ImageIcon;
 
+import utility.ImageUtility;
+
 import com.google.common.collect.Lists;
 
 public class Piece implements Serializable
@@ -23,21 +25,21 @@ public class Piece implements Serializable
 	 * @param isBlack The color of this Piece
 	 * @param curSquare The Square this Piece occupies
 	 * @param board The Board this Piece occupies
-	 * @param movements HashMap of legal movements for this Piece
+	 * @param movements Map of legal movements for this Piece
 	 */
-	public Piece(String name, ImageIcon darkIcon, ImageIcon lightIcon, boolean isBlack, Square curSquare, Board board,
-			Map<Character, Integer> movements)
+	public Piece(String name, boolean isBlack, Square curSquare, Board board, Map<Character, Integer> movements)
 	{
 		m_name = name;
-		m_lightIcon = lightIcon;
-		m_darkIcon = darkIcon;
+		m_lightIcon = ImageUtility.getLightImage(name);
+		m_darkIcon = ImageUtility.getDarkImage(name);
 		setBlack(isBlack);
 		m_curSquare = curSquare;
 		setOriginalSquare(curSquare);
-		curSquare.setPiece(this);// Tell the Square what Piece is on it.
+		// Tell the Square what Piece is on it.
+		curSquare.setPiece(this);
 		m_board = board;
 		m_movements = movements;
-		// Initialize the ArrayLists
+
 		List<Square> legalDests = Lists.newArrayList();
 		setLegalDests(legalDests);
 

@@ -23,6 +23,7 @@ public abstract class ChessTimer implements ActionListener, Serializable
 		m_timer = new Timer(1000, this);
 		m_timer.setInitialDelay(0);
 		m_timeElapsedCallback = timeElapsedCallback;
+		m_isStopped = false;
 	}
 
 	@Override

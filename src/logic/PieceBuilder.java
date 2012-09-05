@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.util.Map;
 import java.util.Set;
 
-import javax.swing.ImageIcon;
-
 import com.google.common.collect.Maps;
 
 public class PieceBuilder implements Serializable
@@ -142,7 +140,7 @@ public class PieceBuilder implements Serializable
 		if (m_name.equals("Rook"))
 			return Builder.createRook(isBlack, origin, board);
 		else
-			return new Piece(m_name, m_darkImage, m_lightImage, isBlack, origin, board, m_movements);
+			return new Piece(m_name, isBlack, origin, board, m_movements);
 		// try {
 		//
 		// Class<?> klazz = Class.forName("logic." + name);
@@ -157,16 +155,6 @@ public class PieceBuilder implements Serializable
 		// }
 	}
 
-	public void setDarkImage(ImageIcon darkImage)
-	{
-		m_darkImage = darkImage;
-	}
-
-	public void setLightImage(ImageIcon lightImage)
-	{
-		m_lightImage = lightImage;
-	}
-
 	public void setName(String name)
 	{
 		m_name = name;
@@ -177,8 +165,6 @@ public class PieceBuilder implements Serializable
 	private static Map<String, PieceBuilder> m_pieceTypes;
 
 	private String m_name;
-	private ImageIcon m_lightImage;
-	private ImageIcon m_darkImage;
 	private Map<Character, Integer> m_movements;
 
 }

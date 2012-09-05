@@ -22,6 +22,16 @@ public final class FileUtility
 		return new File(path + "/" + aiName);
 	}
 
+	protected static String getImagePath(String imageName, boolean isBuiltInFile)
+	{
+		File file = new File(HIDDEN_DIR + "/" + IMAGES);
+		file.mkdirs();
+		if (isBuiltInFile)
+			return "/" + imageName;
+		else
+			return HIDDEN_DIR + "/" + IMAGES + "/" + imageName;
+	}
+
 	public static String[] getVariantsFileArray()
 	{
 		File file = new File(HIDDEN_DIR + "/" + VARIANTS);
@@ -121,6 +131,7 @@ public final class FileUtility
 
 	private static final String HIDDEN_DIR;
 	private static final String AI = "AI";
+	private static final String IMAGES = "images";
 	private static final String VARIANTS = "variants";
 	private static final String GAMES_IN_PROGRESS = "gamesInProgress";
 	private static final String COMPLETED_GAMES = "completedGames";

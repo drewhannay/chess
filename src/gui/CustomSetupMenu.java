@@ -619,7 +619,7 @@ public class CustomSetupMenu extends JPanel
 			popupFrame.setVisible(true);
 		}
 
-		private ImageIcon uninhabitableIcon = GUIUtility.createImageIcon(48, 48, "/Uninhabitable.png", CustomSetupMenu.this);
+		private ImageIcon uninhabitableIcon = GUIUtility.createImageIcon(48, 48, "/Uninhabitable.png");
 		
 		private Square m_square;
 		private Board m_board;

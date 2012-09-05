@@ -7,6 +7,9 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 
 import javax.imageio.ImageIO;
@@ -22,9 +25,11 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.filechooser.FileFilter;
 
 import logic.PieceBuilder;
 import utility.GUIUtility;
+import utility.ImageUtility;
 
 public class PieceMaker extends JPanel
 {
@@ -75,47 +80,9 @@ public class PieceMaker extends JPanel
 
 		final JButton lightImageButton = new JButton("Choose image for light piece");
 		lightImageButton.setToolTipText("Click me to choose an Light Colored Icon for this piece");
-		lightImageButton.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent event)
-			{
-				Object[] options = new String[] { "Browse My Computer", "Image from Internet", "Cancel" };
-
-				switch (JOptionPane.showOptionDialog(Driver.getInstance(), "Where would you like to get the image from?", "Choose Image",
-						JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]))
-				{
-				case JOptionPane.YES_OPTION:
-					final JFileChooser fileChooser = new JFileChooser("~/");
-					if (fileChooser.showOpenDialog(Driver.getInstance()) == JFileChooser.APPROVE_OPTION)
-					{
-						ImageIcon lightIcon = GUIUtility.createImageIcon(48, 48, fileChooser.toString(), PieceMaker.this);
-						lightIconLabel.setIcon(lightIcon);
-						m_builder.setLightImage(lightIcon);
-					}
-					break;
-				case JOptionPane.NO_OPTION:
-					String url = JOptionPane.showInputDialog(Driver.getInstance(), "Enter URL of the image:", "Input URL", JOptionPane.PLAIN_MESSAGE);
-					try
-					{
-						ImageIcon image = new ImageIcon(ImageIO.read(new URL(url)).getScaledInstance(48, 48, Image.SCALE_SMOOTH));
-						lightIconLabel.setIcon(image);
-						m_builder.setLightImage(image);
-					}
-					catch (Exception e)
-					{
-						e.printStackTrace();
-					}
-					break;
-				case JOptionPane.CANCEL_OPTION:
-					break;
-				}
-			}
-		});
+		lightImageButton.addActionListener(new ImageButtonActionListener(lightIconLabel, false));
 		lightIconPanel.add(lightImageButton);
 		lightIconPanel.add(lightIconLabel);
-
-		m_builder.setLightImage(blankSquare);
 
 		constraints.gridx = 0;
 		constraints.gridy = 3;
@@ -129,48 +96,9 @@ public class PieceMaker extends JPanel
 
 		final JButton darkImageButton = new JButton("Choose image for dark piece");
 		darkImageButton.setToolTipText("Click me to choose an Dark Colored Icon for this piece");
-		darkImageButton.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent event)
-			{
-				Object[] options = new String[] { "Browse My Computer", "Image from Internet", "Cancel" };
-
-				switch (JOptionPane.showOptionDialog(Driver.getInstance(), "Where would you like to get the image from?", "Choose Image",
-						JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]))
-				{
-				case JOptionPane.YES_OPTION:
-					JFileChooser fileChooser = new JFileChooser("~/");
-					if (fileChooser.showOpenDialog(Driver.getInstance()) == JFileChooser.APPROVE_OPTION)
-					{
-						ImageIcon icon = GUIUtility.createImageIcon(48, 48, fileChooser.toString(), PieceMaker.this);
-						darkIconLabel.setIcon(icon);
-						m_builder.setDarkImage(icon);
-					}
-					break;
-				case JOptionPane.NO_OPTION:
-					String url = JOptionPane.showInputDialog(Driver.getInstance(), "Enter the URL of the image:", "Input URL",
-							JOptionPane.PLAIN_MESSAGE);
-					try
-					{
-						ImageIcon image = new ImageIcon(ImageIO.read(new URL(url)).getScaledInstance(48, 48, Image.SCALE_SMOOTH));
-						darkIconLabel.setIcon(image);
-						m_builder.setDarkImage(image);
-					}
-					catch (Exception e)
-					{
-						e.printStackTrace();
-					}
-					break;
-				case JOptionPane.CANCEL_OPTION:
-					break;
-				}
-			}
-		});
+		darkImageButton.addActionListener(new ImageButtonActionListener(darkIconLabel, true));
 		darkIconPanel.add(darkImageButton);
 		darkIconPanel.add(darkIconLabel);
-
-		m_builder.setDarkImage(blankSquare);
 
 		constraints.gridx = 0;
 		constraints.gridy = 2;
@@ -204,7 +132,7 @@ public class PieceMaker extends JPanel
 		westField.setToolTipText("West");
 		westField.setText("0");
 
-		JLabel movementPictureHolder = new JLabel(GUIUtility.createImageIcon(130, 130, "/movement_directions.png", this));
+		JLabel movementPictureHolder = new JLabel(GUIUtility.createImageIcon(130, 130, "/movement_directions.png"));
 
 		JPanel movement = new JPanel();
 		movement.setLayout(new GridBagLayout());
@@ -316,7 +244,8 @@ public class PieceMaker extends JPanel
 			@Override
 			public void actionPerformed(ActionEvent event)
 			{
-				if (pieceNameField.getText() == "" || PieceBuilder.isPieceType(pieceNameField.getText()))
+				String pieceName = pieceNameField.getText().trim();
+				if (pieceName.isEmpty() || PieceBuilder.isPieceType(pieceNameField.getText()))
 				{
 					JOptionPane.showMessageDialog(Driver.getInstance(), "Please enter a unique piece name.", "Invalid Piece Name",
 							JOptionPane.PLAIN_MESSAGE);
@@ -345,7 +274,20 @@ public class PieceMaker extends JPanel
 						m_builder.addMove('y', Integer.parseInt(secondKnightDirectionField.getText()));
 					}
 				}
-				m_builder.setName(pieceNameField.getText());
+
+				try
+				{
+					ImageUtility.writeLightImage(pieceName, m_lightImage);
+					ImageUtility.writeDarkImage(pieceName, m_darkImage);
+				}
+				catch (Exception e)
+				{
+					JOptionPane.showMessageDialog(Driver.getInstance(), "Cannot write image files..did you remember to set both images?", "Image Error",
+							JOptionPane.PLAIN_MESSAGE);
+					return;
+				}
+
+				m_builder.setName(pieceName);
 				PieceBuilder.savePieceType(m_builder);
 
 				m_builder = new PieceBuilder();
@@ -373,7 +315,7 @@ public class PieceMaker extends JPanel
 			@Override
 			public void actionPerformed(ActionEvent event)
 			{
-				if (pieceNameField.getText().equals(""))
+				if (pieceNameField.getText().trim().isEmpty())
 				{
 					customSetupMenu.setupPiecesList();
 					PieceMaker.this.removeAll();
@@ -427,11 +369,102 @@ public class PieceMaker extends JPanel
 		}
 	}
 
+	private final class ImageButtonActionListener implements ActionListener
+	{
+		public ImageButtonActionListener(JLabel imageLabel, boolean isDarkImage)
+		{
+			m_imageLabel = imageLabel;
+			m_isDarkImage = isDarkImage;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent event)
+		{
+			Object[] options = new String[] { "Browse My Computer", "Image from Internet", "Cancel" };
+
+			switch (JOptionPane.showOptionDialog(Driver.getInstance(), "Where would you like to get the image from?", "Choose Image",
+					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]))
+			{
+			case JOptionPane.YES_OPTION:
+				JFileChooser fileChooser = new JFileChooser("~/");
+				fileChooser.setFileFilter(new FileFilter()
+				{
+					@Override
+					public String getDescription()
+					{
+						return "PNG Files";
+					}
+					
+					@Override
+					public boolean accept(File f)
+					{
+						if (f.isDirectory() || f.getName().endsWith(".png"))
+                            return true;
+						else
+							return false;
+					}
+				});
+
+				if (fileChooser.showOpenDialog(Driver.getInstance()) == JFileChooser.APPROVE_OPTION)
+				{
+					try
+					{
+						if (m_isDarkImage)
+						{
+							m_darkImage = ImageIO.read(new File(fileChooser.toString()));
+							m_imageLabel.setIcon(new ImageIcon(m_darkImage.getScaledInstance(48, 48, Image.SCALE_SMOOTH)));
+						}
+						else
+						{
+							m_lightImage = ImageIO.read(new File(fileChooser.toString()));
+							m_imageLabel.setIcon(new ImageIcon(m_lightImage.getScaledInstance(48, 48, Image.SCALE_SMOOTH)));
+						}
+					}
+					catch (IOException e)
+					{
+						// TODO we should show the user an error message if this fails
+						e.printStackTrace();
+					}
+				}
+				break;
+			case JOptionPane.NO_OPTION:
+				String url = JOptionPane.showInputDialog(Driver.getInstance(), "Enter the URL of the image:", "Input URL",
+						JOptionPane.PLAIN_MESSAGE);
+				try
+				{
+					if (m_isDarkImage)
+					{
+						m_darkImage = ImageIO.read(new URL(url));
+						m_imageLabel.setIcon(new ImageIcon(m_darkImage.getScaledInstance(48, 48, Image.SCALE_SMOOTH)));
+					}
+					else
+					{
+						m_lightImage = ImageIO.read(new URL(url));
+						m_imageLabel.setIcon(new ImageIcon(m_lightImage.getScaledInstance(48, 48, Image.SCALE_SMOOTH)));
+					}
+				}
+				catch (Exception e)
+				{
+					e.printStackTrace();
+				}
+				break;
+			case JOptionPane.CANCEL_OPTION:
+				break;
+			}
+		}
+
+		private final boolean m_isDarkImage;
+
+		private JLabel m_imageLabel;
+	}
+
 	private static final long serialVersionUID = -6530771731937840358L;
 	private static final String[] DIRECTIONS = new String[] { "North", "Northeast", "East", "Southeast", "South", "Southwest", "West",
 			"Northwest" };
 
 	private PieceBuilder m_builder;
 	private boolean m_isKnightLikePiece;
+	private BufferedImage m_lightImage;
+	private BufferedImage m_darkImage;
 	private JFrame m_frame;
 }
