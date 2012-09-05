@@ -88,7 +88,7 @@ final public class Driver extends JFrame
 		m_mainPanel = new JPanel();
 		m_mainPanel.setBorder(BorderFactory.createLoweredBevelBorder());
 		
-		JLabel iconHolder = new JLabel(GUIUtility.createImageIcon(300, 200, "/chess_picture.png", m_mainPanel));
+		JLabel iconHolder = new JLabel(GUIUtility.createImageIcon(300, 200, "/chess_picture.png"));
 		BufferedImage frontPageImage;
 		try
 		{

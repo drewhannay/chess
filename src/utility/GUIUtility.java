@@ -61,11 +61,11 @@ public final class GUIUtility
 		});
 	}
 
-	public static ImageIcon createImageIcon(int imageWidth, int imageHeight, String imageLocation, JPanel sourcePanel){
+	public static ImageIcon createImageIcon(int imageWidth, int imageHeight, String imageLocation){
 		BufferedImage bufferedImage = null;
 		try
 		{
-			bufferedImage = ImageIO.read(sourcePanel.getClass().getResource(imageLocation));
+			bufferedImage = ImageIO.read(GUIUtility.class.getResource(imageLocation));
 		}
 		catch (Exception e)
 		{

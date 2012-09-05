@@ -35,8 +35,8 @@ public class AboutMenu extends JFrame
 		setLayout(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
 
-		JLabel frontPageImage = new JLabel(GUIUtility.createImageIcon(300, 200, "/front_page_image.jpeg", mainPanel));
-		JLabel piecePicture = new JLabel(GUIUtility.createImageIcon(48, 48, "/king_dark.png", mainPanel));
+		JLabel frontPageImage = new JLabel(GUIUtility.createImageIcon(300, 200, "/front_page_image.jpeg"));
+		JLabel piecePicture = new JLabel(GUIUtility.createImageIcon(48, 48, "/king_dark.png"));
 
 		Font font = new Font("Verdana", Font.BOLD, 18);
 		JLabel title = new JLabel(AppConstants.APP_NAME + "\n");

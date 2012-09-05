@@ -89,7 +89,7 @@ public class PieceMaker extends JPanel
 					final JFileChooser fileChooser = new JFileChooser("~/");
 					if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
 					{
-						ImageIcon lightIcon = GUIUtility.createImageIcon(48, 48, fileChooser.toString(), PieceMaker.this);
+						ImageIcon lightIcon = GUIUtility.createImageIcon(48, 48, fileChooser.toString());
 						lightIconLabel.setIcon(lightIcon);
 						m_builder.setLightImage(lightIcon);
 					}
@@ -143,7 +143,7 @@ public class PieceMaker extends JPanel
 					JFileChooser fileChooser = new JFileChooser("~/");
 					if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
 					{
-						ImageIcon icon = GUIUtility.createImageIcon(48, 48, fileChooser.toString(), PieceMaker.this);
+						ImageIcon icon = GUIUtility.createImageIcon(48, 48, fileChooser.toString());
 						darkIconLabel.setIcon(icon);
 						m_builder.setDarkImage(icon);
 					}
@@ -204,7 +204,7 @@ public class PieceMaker extends JPanel
 		westField.setToolTipText("West");
 		westField.setText("0");
 
-		JLabel movementPictureHolder = new JLabel(GUIUtility.createImageIcon(130, 130, "/movement_directions.png", this));
+		JLabel movementPictureHolder = new JLabel(GUIUtility.createImageIcon(130, 130, "/movement_directions.png"));
 
 		JPanel movement = new JPanel();
 		movement.setLayout(new GridBagLayout());
