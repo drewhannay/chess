@@ -165,7 +165,7 @@ public class PlayerCustomMenu extends JPanel
 		}
 		catch (Exception e)
 		{
-			JOptionPane.showMessageDialog(null, "Enter a valid number of turns for both players.", "Incomplete Form",
+			JOptionPane.showMessageDialog(Driver.getInstance(), "Enter a valid number of turns for both players.", "Incomplete Form",
 					JOptionPane.PLAIN_MESSAGE);
 			return false;
 		}

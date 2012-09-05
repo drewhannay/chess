@@ -82,12 +82,12 @@ public class PieceMaker extends JPanel
 			{
 				Object[] options = new String[] { "Browse My Computer", "Image from Internet", "Cancel" };
 
-				switch (JOptionPane.showOptionDialog(null, "Where would you like to get the image from?", "Choose Image",
+				switch (JOptionPane.showOptionDialog(Driver.getInstance(), "Where would you like to get the image from?", "Choose Image",
 						JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]))
 				{
 				case JOptionPane.YES_OPTION:
 					final JFileChooser fileChooser = new JFileChooser("~/");
-					if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
+					if (fileChooser.showOpenDialog(Driver.getInstance()) == JFileChooser.APPROVE_OPTION)
 					{
 						ImageIcon lightIcon = GUIUtility.createImageIcon(48, 48, fileChooser.toString(), PieceMaker.this);
 						lightIconLabel.setIcon(lightIcon);
@@ -95,7 +95,7 @@ public class PieceMaker extends JPanel
 					}
 					break;
 				case JOptionPane.NO_OPTION:
-					String url = JOptionPane.showInputDialog(null, "Enter URL of the image:", "Input URL", JOptionPane.PLAIN_MESSAGE);
+					String url = JOptionPane.showInputDialog(Driver.getInstance(), "Enter URL of the image:", "Input URL", JOptionPane.PLAIN_MESSAGE);
 					try
 					{
 						ImageIcon image = new ImageIcon(ImageIO.read(new URL(url)).getScaledInstance(48, 48, Image.SCALE_SMOOTH));
@@ -136,12 +136,12 @@ public class PieceMaker extends JPanel
 			{
 				Object[] options = new String[] { "Browse My Computer", "Image from Internet", "Cancel" };
 
-				switch (JOptionPane.showOptionDialog(null, "Where would you like to get the image from?", "Choose Image",
+				switch (JOptionPane.showOptionDialog(Driver.getInstance(), "Where would you like to get the image from?", "Choose Image",
 						JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]))
 				{
 				case JOptionPane.YES_OPTION:
 					JFileChooser fileChooser = new JFileChooser("~/");
-					if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
+					if (fileChooser.showOpenDialog(Driver.getInstance()) == JFileChooser.APPROVE_OPTION)
 					{
 						ImageIcon icon = GUIUtility.createImageIcon(48, 48, fileChooser.toString(), PieceMaker.this);
 						darkIconLabel.setIcon(icon);
@@ -149,7 +149,7 @@ public class PieceMaker extends JPanel
 					}
 					break;
 				case JOptionPane.NO_OPTION:
-					String url = JOptionPane.showInputDialog(null, "Enter the URL of the image:", "Input URL",
+					String url = JOptionPane.showInputDialog(Driver.getInstance(), "Enter the URL of the image:", "Input URL",
 							JOptionPane.PLAIN_MESSAGE);
 					try
 					{
@@ -318,7 +318,7 @@ public class PieceMaker extends JPanel
 			{
 				if (pieceNameField.getText() == "" || PieceBuilder.isPieceType(pieceNameField.getText()))
 				{
-					JOptionPane.showMessageDialog(null, "Please enter a unique piece name.", "Invalid Piece Name",
+					JOptionPane.showMessageDialog(Driver.getInstance(), "Please enter a unique piece name.", "Invalid Piece Name",
 							JOptionPane.PLAIN_MESSAGE);
 					return;
 				}
@@ -381,7 +381,7 @@ public class PieceMaker extends JPanel
 				}
 				else
 				{
-					switch (JOptionPane.showConfirmDialog(null,
+					switch (JOptionPane.showConfirmDialog(Driver.getInstance(),
 							"If you continue the piece you are working on will not be saved. Continue?", "Piece Maker",
 							JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE))
 					{
@@ -421,7 +421,7 @@ public class PieceMaker extends JPanel
 		}
 		catch (Exception e)
 		{
-			JOptionPane.showMessageDialog(null, "All movement distances must be whole numbers. Please enter a number in the "
+			JOptionPane.showMessageDialog(Driver.getInstance(), "All movement distances must be whole numbers. Please enter a number in the "
 					+ textField.getToolTipText() + " direction box.", "Error", JOptionPane.PLAIN_MESSAGE);
 			return false;
 		}
