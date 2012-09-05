@@ -1,9 +1,11 @@
 package logic;
 
 import java.awt.Color;
+import java.awt.Image;
 import java.io.Serializable;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 public class Square extends JLabel implements Serializable
@@ -68,6 +70,30 @@ public class Square extends JLabel implements Serializable
 				setText(m_piece.getName());// Use it's name
 			else
 				setIcon(m_piece.getIcon());// Otherwise, use it's Icon
+		}
+		else
+		{// If there's no Piece, clear the Icon and Text of the Square.
+			setIcon(null);
+			setText("");
+		}
+		resetColor();// Then reset the color too.
+	}
+	
+	/**
+	 * Refresh the GUI's view of this Square with the current accurate
+	 * information, but only for Jails
+	 */
+	public void refreshJail()
+	{
+		setOpaque(true);
+		// if there's a Piece here...
+		if (m_piece != null)
+		{
+			// ...and it has no Icon
+			if (m_piece.getIcon() == null)
+				setText(m_piece.getName());// Use it's name
+			else
+				setIcon(new ImageIcon(m_piece.getIcon().getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH)));// Otherwise, use it's Icon
 		}
 		else
 		{// If there's no Piece, clear the Icon and Text of the Square.
