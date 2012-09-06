@@ -219,7 +219,7 @@ public class PlayGame extends JPanel
 
 		Object[] options = new String[] { "Save Record of Game", "New Game", "Quit" };
 		m_optionsMenu.setVisible(false);
-		switch (JOptionPane.showOptionDialog(Driver.getInstance(), result.toString(), result.winText(), JOptionPane.YES_NO_CANCEL_OPTION,
+		switch (JOptionPane.showOptionDialog(Driver.getInstance(), result.getGUIText(), result.winText(), JOptionPane.YES_NO_CANCEL_OPTION,
 				JOptionPane.PLAIN_MESSAGE, null, options, options[0]))
 		{
 		case JOptionPane.YES_OPTION:
@@ -388,7 +388,7 @@ public class PlayGame extends JPanel
 
 					m_optionsMenu.setVisible(false);
 					Result result = Result.DRAW;
-					result.setText("Draw! \nWhat would you like to do? \n");
+					result.setGUIText("Draw! \nWhat would you like to do? \n");
 					getGame().getLastMove().setResult(result);
 					endOfGame(result);
 				}

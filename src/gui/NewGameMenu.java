@@ -637,7 +637,7 @@ public class NewGameMenu extends JPanel
 					public void run(Boolean isBlackTimer)
 					{
 						Result result = isBlackTimer ? Result.WHITE_WIN : Result.BLACK_WIN;
-						result.setText("Time has run out. " + result.winText() + "\n");
+						result.setGUIText("Time has run out. " + result.winText() + "\n");
 						PlayGame.endOfGame(result);
 					}
 				};

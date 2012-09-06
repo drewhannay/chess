@@ -90,7 +90,7 @@ public class NetworkClient
 																						// the
 																						// Draw.
 							Result result = Result.DRAW;
-							result.setText("The game has ended in a Draw!");
+							result.setGUIText("The game has ended in a Draw!");
 							g.getLastMove().setResult(result);
 							PlayGame.endOfGame(result);
 							throw new Exception();
@@ -131,7 +131,7 @@ public class NetworkClient
 						if (toMove.m_originColumn == -2)
 						{
 							Result result = Result.DRAW;
-							result.setText("The game has ended in a Draw!");
+							result.setGUIText("The game has ended in a Draw!");
 							g.getLastMove().setResult(result);
 							PlayGame.endOfGame(result);
 							png.m_drawRequested = false;

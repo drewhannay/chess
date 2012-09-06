@@ -24,38 +24,42 @@ public enum Result implements Serializable
 		}
 	}
 
-	public void setText(String text)
+	public void setGUIText(String text)
 	{
-		m_text = text;
+		m_GUIText = text;
+	}
+
+	public String getGUIText()
+	{
+		return m_GUIText;
 	}
 
 	@Override
 	public String toString()
 	{
-		// TODO: I think this should be used for ACN files, but it must be broken now
-//		String s = "";
-//
-//		switch (this)
-//		{
-//		case UNDECIDED:
-//			s = "?";
-//			break;
-//		case WHITE_WIN:
-//			s = "1-0";
-//			break;
-//		case DRAW:
-//			s = "1/2-1/2";
-//			break;
-//		case BLACK_WIN:
-//			s = "0-1";
-//			break;
-//		default:
-//			s = "?";
-//		}
-		return m_text;
+		String acnResult = "";
+
+		switch (this)
+		{
+		case UNDECIDED:
+			acnResult = "?";
+			break;
+		case WHITE_WIN:
+			acnResult = "1-0";
+			break;
+		case DRAW:
+			acnResult = "1/2-1/2";
+			break;
+		case BLACK_WIN:
+			acnResult = "0-1";
+			break;
+		default:
+			acnResult = "?";
+		}
+		return acnResult;
 	}
 
 	private static final long serialVersionUID = -6844368741916902616L;
 
-	private String m_text;
+	private String m_GUIText;
 }

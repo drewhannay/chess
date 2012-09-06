@@ -452,7 +452,7 @@ public class PlayNetGame extends PlayGame
 								return;
 
 							Result result = Result.DRAW;
-							result.setText("You have declared a draw. What would you like to do?");
+							result.setGUIText("You have declared a draw. What would you like to do?");
 							PlayGame.endOfGame(result);
 						}
 						else
