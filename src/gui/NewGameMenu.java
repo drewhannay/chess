@@ -279,7 +279,7 @@ public class NewGameMenu extends JPanel
 						GUIUtility.installAIFiles(aiComboBox, NewGameMenu.this, getAIFiles());
 						break;
 					case JOptionPane.NO_OPTION:
-						break;
+						return;
 					}
 				}
 
