@@ -10,66 +10,66 @@ public final class FileUtility
 {
 	public static String[] getAIFileList()
 	{
-		File file = new File(HIDDEN_DIR + "/" + AI);
+		File file = new File(HIDDEN_DIR + SLASH + AI);
 		file.mkdirs();
 		return file.list();
 	}
 
 	public static File getAIFile(String aiName)
 	{
-		String path = HIDDEN_DIR + "/" + AI;
+		String path = HIDDEN_DIR + SLASH + AI;
 		new File(path).mkdirs();
-		return new File(path + "/" + aiName);
+		return new File(path + SLASH + aiName);
 	}
 
 	protected static String getImagePath(String imageName, boolean isBuiltInFile)
 	{
-		File file = new File(HIDDEN_DIR + "/" + IMAGES);
+		File file = new File(HIDDEN_DIR + SLASH + IMAGES);
 		file.mkdirs();
 		if (isBuiltInFile)
-			return "/" + imageName;
+			return SLASH + imageName;
 		else
-			return HIDDEN_DIR + "/" + IMAGES + "/" + imageName;
+			return HIDDEN_DIR + SLASH + IMAGES + SLASH + imageName;
 	}
 
 	public static String[] getVariantsFileArray()
 	{
-		File file = new File(HIDDEN_DIR + "/" + VARIANTS);
+		File file = new File(HIDDEN_DIR + SLASH + VARIANTS);
 		file.mkdirs();
 		return file.list();
 	}
 
 	public static File getVariantsFile(String variantName)
 	{
-		String path = HIDDEN_DIR + "/" + VARIANTS;
+		String path = HIDDEN_DIR + SLASH + VARIANTS;
 		new File(path).mkdirs();
-		return new File(path + "/" + variantName);
+		return new File(path + SLASH + variantName);
 	}
 
 	public static String[] getGamesInProgressFileArray()
 	{
-		File file = new File(HIDDEN_DIR + "/" + GAMES_IN_PROGRESS);
+		File file = new File(HIDDEN_DIR + SLASH + GAMES_IN_PROGRESS);
 		file.mkdirs();
 		return file.list();
 	}
 
 	public static File getGamesInProgressFile(String gameFileName)
 	{
-		String path = HIDDEN_DIR + "/" + GAMES_IN_PROGRESS;
+		String path = HIDDEN_DIR + SLASH + GAMES_IN_PROGRESS;
 		new File(path).mkdirs();
-		return new File(path + "/" + gameFileName);
+		return new File(path + SLASH + gameFileName);
 	}
 
 	public static String[] getCompletedGamesFileArray()
 	{
-		File file = new File(HIDDEN_DIR + "/" + COMPLETED_GAMES);
+		File file = new File(HIDDEN_DIR + SLASH + COMPLETED_GAMES);
 		file.mkdirs();
 		return file.list();
 	}
 
 	public static File getCompletedGamesFile(String completedGameFileName)
 	{
-		String path = HIDDEN_DIR + "/" + COMPLETED_GAMES;
+		String path = HIDDEN_DIR + SLASH + COMPLETED_GAMES;
 		new File(path).mkdirs();
 		try
 		{
@@ -86,14 +86,14 @@ public final class FileUtility
 		{
 			e.printStackTrace();
 		}
-		return new File(path + "/" + completedGameFileName);
+		return new File(path + SLASH + completedGameFileName);
 	}
 
 	public static File getPreferencesFile()
 	{
 		String path = HIDDEN_DIR;
 		new File(path).mkdirs();
-		return new File(path + "/" + PREFERENCES);
+		return new File(path + SLASH + PREFERENCES);
 	}
 
 	public static String getHiddenDir()
@@ -103,19 +103,22 @@ public final class FileUtility
 
 	public static String getDefaultCompletedLocation()
 	{
-		return HIDDEN_DIR + "/" + COMPLETED_GAMES;
+		String path = HIDDEN_DIR + SLASH + COMPLETED_GAMES;
+		new File(path).mkdirs();
+		return path;
 	}
 
 	static
 	{
 		if (System.getProperty("os.name").startsWith("Windows"))
 		{
-			HIDDEN_DIR = System.getProperty("user.home") + "/chess";
+			HIDDEN_DIR = System.getProperty("user.home") + "\\chess";
+			SLASH = "\\";
 			try
 			{
 				Runtime rt = Runtime.getRuntime();
 				// try to make our folder hidden on Windows
-				rt.exec("attrib +H " + System.getProperty("user.home") + "/chess");
+				rt.exec("attrib +H " + System.getProperty("user.home") + "\\chess");
 			}
 			catch (Throwable t)
 			{
@@ -126,6 +129,7 @@ public final class FileUtility
 		{
 			// if we're not on Windows, just add a period
 			HIDDEN_DIR = System.getProperty("user.home") + "/.chess";
+			SLASH = "/";
 		}
 	}
 
@@ -136,4 +140,5 @@ public final class FileUtility
 	private static final String GAMES_IN_PROGRESS = "gamesInProgress";
 	private static final String COMPLETED_GAMES = "completedGames";
 	private static final String PREFERENCES = "preferences.txt";
+	private static final String SLASH;
 }
