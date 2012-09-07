@@ -9,7 +9,6 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.Point;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -698,11 +697,6 @@ public class PlayGame extends JPanel
 		constraints.ipadx = 100;
 		constraints.gridx = 11 + twoBoardsGridBagOffset;
 		add(m_whiteLabel, constraints);
-
-		Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
-		int x = (int) ((dimension.getWidth() / 3.3));
-		int y = (int) ((dimension.getHeight() / 4));
-		Driver.getInstance().setLocation(x, y);
 	}
 
 	public static void setNextMoveMustPlacePiece(boolean nextMoveMustPlacePiece)
