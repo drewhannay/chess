@@ -687,7 +687,8 @@ public class NewGameMenu extends JPanel
 					Game gameToPlay = Builder.newGame((String) dropdown.getSelectedItem());
 					gameToPlay.setTimers(whiteTimer, blackTimer);
 					final PlayNetGame game;
-					if (m_hostName.equals(event))
+					// TODO: this if statement can't be right...
+					if (m_hostName.equals(event.toString()))
 					{
 						try
 						{
