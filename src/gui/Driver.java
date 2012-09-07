@@ -87,7 +87,7 @@ final public class Driver extends JFrame
 		// set up a new panel to hold everything in the main window
 		m_mainPanel = new JPanel();
 		m_mainPanel.setBorder(BorderFactory.createLoweredBevelBorder());
-		
+
 		JLabel iconHolder = new JLabel(GUIUtility.createImageIcon(300, 200, "/chess_picture.png"));
 		BufferedImage frontPageImage;
 		try
@@ -158,7 +158,8 @@ final public class Driver extends JFrame
 						{
 							if (gamesInProgressList.getSelectedValue() == null)
 							{
-								JOptionPane.showMessageDialog(Driver.getInstance(), "Please select a game", "Error", JOptionPane.PLAIN_MESSAGE);
+								JOptionPane.showMessageDialog(Driver.getInstance(), "Please select a game", "Error",
+										JOptionPane.PLAIN_MESSAGE);
 								return;
 							}
 							fileInputStream = new FileInputStream(FileUtility.getGamesInProgressFile(gamesInProgressList
@@ -177,8 +178,9 @@ final public class Driver extends JFrame
 						catch (Exception e)
 						{
 							e.printStackTrace();
-							JOptionPane.showMessageDialog(Driver.getInstance(), "There are no valid saved games. Start a New Game instead.",
-									"Invalid Saved Games", JOptionPane.PLAIN_MESSAGE);
+							JOptionPane.showMessageDialog(Driver.getInstance(),
+									"There are no valid saved games. Start a New Game instead.", "Invalid Saved Games",
+									JOptionPane.PLAIN_MESSAGE);
 						}
 					}
 				});
@@ -217,8 +219,8 @@ final public class Driver extends JFrame
 						}
 						else
 						{
-							JOptionPane.showMessageDialog(Driver.getInstance(), "There are currently no save files!", "No save file selected!",
-									JOptionPane.PLAIN_MESSAGE);
+							JOptionPane.showMessageDialog(Driver.getInstance(), "There are currently no save files!",
+									"No save file selected!", JOptionPane.PLAIN_MESSAGE);
 						}
 					}
 				});
@@ -263,8 +265,8 @@ final public class Driver extends JFrame
 					String[] files = FileUtility.getCompletedGamesFileArray();
 					if (files.length == 0)
 					{
-						JOptionPane.showMessageDialog(Driver.getInstance(), "There are no completed games to display.", "No Completed Games",
-								JOptionPane.PLAIN_MESSAGE);
+						JOptionPane.showMessageDialog(Driver.getInstance(), "There are no completed games to display.",
+								"No Completed Games", JOptionPane.PLAIN_MESSAGE);
 						return;
 					}
 
@@ -405,8 +407,9 @@ final public class Driver extends JFrame
 				catch (Exception e)
 				{
 					e.printStackTrace();
-					JOptionPane.showMessageDialog(Driver.getInstance(), "Either there are no completed games or the game file is missing.",
-							"No Completed Games", JOptionPane.PLAIN_MESSAGE);
+					JOptionPane.showMessageDialog(Driver.getInstance(),
+							"Either there are no completed games or the game file is missing.", "No Completed Games",
+							JOptionPane.PLAIN_MESSAGE);
 				}
 			}
 		});
@@ -505,11 +508,13 @@ final public class Driver extends JFrame
 				currentSaveLocationField.setEditable(false);
 				final JButton changeLocationButton = new JButton("Choose New Save Location");
 				final JButton resetButton = new JButton("Reset to Default Location");
-				final JButton cancelButton = new JButton("Cancel");
+				final JButton cancelButton = new JButton("Done");
 				GUIUtility.setupCancelButton(cancelButton, popupFrame);
 
 				holder.add(currentSaveLocationLabel);
 				holder.add(currentSaveLocationField);
+
+				final String defaultSaveLocation = FileUtility.getDefaultCompletedLocation();
 
 				try
 				{
@@ -522,7 +527,7 @@ final public class Driver extends JFrame
 							BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(preferencesFile, true));
 							bufferedWriter.write("DefaultPreferencesSet = true");
 							bufferedWriter.newLine();
-							bufferedWriter.write("DefaultSaveLocation = " + FileUtility.getDefaultCompletedLocation());
+							bufferedWriter.write("DefaultSaveLocation = " + defaultSaveLocation);
 							bufferedWriter.close();
 						}
 						catch (IOException e)
@@ -549,13 +554,17 @@ final public class Driver extends JFrame
 						{
 							try
 							{
+								PrintWriter printWriter = new PrintWriter(preferencesFile);
+								printWriter.print("");
+								printWriter.close();
 								BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(preferencesFile, true));
 								bufferedWriter.write("DefaultPreferencesSet = true");
 								bufferedWriter.newLine();
-								bufferedWriter.write("DefaultSaveLocation = " + FileUtility.getDefaultCompletedLocation());
+								bufferedWriter.write("DefaultSaveLocation = " + defaultSaveLocation);
 								bufferedWriter.close();
+								currentSaveLocationField.setText(defaultSaveLocation);
 							}
-							catch (IOException e)
+							catch (Exception e)
 							{
 								e.printStackTrace();
 							}
@@ -567,18 +576,27 @@ final public class Driver extends JFrame
 						@Override
 						public void actionPerformed(ActionEvent event)
 						{
+							FileWriter fileWriter = null;
+							try
+							{
+								fileWriter = new FileWriter(preferencesFile, true);
+							}
+							catch (Exception e1)
+							{
+								e1.printStackTrace();
+							}
 							if (!preferencesFile.exists())
 							{
 								try
 								{
 									preferencesFile.createNewFile();
-									BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(preferencesFile, true));
+									BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 									bufferedWriter.write("DefaultPreferencesSet = false");
 									bufferedWriter.newLine();
-									bufferedWriter.write("DefaultSaveLocation = " + FileUtility.getDefaultCompletedLocation());
+									bufferedWriter.write("DefaultSaveLocation = " + defaultSaveLocation);
 									bufferedWriter.close();
 								}
-								catch (IOException ae)
+								catch (Exception ae)
 								{
 									ae.printStackTrace();
 								}
@@ -589,7 +607,7 @@ final public class Driver extends JFrame
 								JFileChooser fileChooser = new JFileChooser();
 								fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 								int returnVal = fileChooser.showOpenDialog(Driver.getInstance());
-								BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(preferencesFile, true));
+								BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 								bufferedWriter.write("DefaultPreferencesSet = true");
 								bufferedWriter.newLine();
 								if (returnVal == JFileChooser.APPROVE_OPTION)
@@ -602,9 +620,18 @@ final public class Driver extends JFrame
 								}
 								else
 								{
+									printWriter.close();
 									bufferedWriter.close();
 									return;
 								}
+							}
+							catch (Exception e)
+							{
+								e.printStackTrace();
+							}
+							try
+							{
+								fileWriter.close();
 							}
 							catch (Exception e)
 							{
@@ -654,8 +681,8 @@ final public class Driver extends JFrame
 			@Override
 			public void actionPerformed(ActionEvent event)
 			{
-				int answer = JOptionPane.showConfirmDialog(Driver.getInstance(), "Are you sure you want to Quit?", "Quit?", JOptionPane.YES_NO_OPTION,
-						JOptionPane.PLAIN_MESSAGE);
+				int answer = JOptionPane.showConfirmDialog(Driver.getInstance(), "Are you sure you want to Quit?", "Quit?",
+						JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
 				if (answer == 0)
 					System.exit(0);
 			}
@@ -750,7 +777,7 @@ final public class Driver extends JFrame
 		m_gameOptionsMenu.setText("Options");
 		m_gameOptionsMenu.setToolTipText("Use me to access game options");
 	}
-	
+
 	public void activateWindowListener()
 	{
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -781,8 +808,8 @@ final public class Driver extends JFrame
 			public void windowClosing(WindowEvent e)
 			{
 				Object[] options = new String[] { "Save Game", "Don't Save", "Cancel" };
-				switch (JOptionPane.showOptionDialog(Driver.getInstance(), "Would you like to save your game before you quit?", "Quit?",
-						JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]))
+				switch (JOptionPane.showOptionDialog(Driver.getInstance(), "Would you like to save your game before you quit?",
+						"Quit?", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]))
 				{
 				case JOptionPane.YES_OPTION:
 					((PlayGame) m_otherPanel).saveGame();
