@@ -48,7 +48,7 @@ import utility.AppConstants;
 import utility.FileUtility;
 import utility.GUIUtility;
 
-final public class Driver extends JFrame
+public final class Driver extends JFrame
 {
 	public static void main(String[] args)
 	{
