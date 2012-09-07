@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.InputStreamReader;
 
 public final class FileUtility
@@ -106,6 +107,25 @@ public final class FileUtility
 		String path = HIDDEN_DIR + SLASH + COMPLETED_GAMES;
 		new File(path).mkdirs();
 		return path;
+	}
+
+	public static String readPreferencesFileLine(int lineToRead)
+	{
+		String line = "";
+		try
+		{
+			BufferedReader bufferedReader = new BufferedReader(new FileReader(FileUtility.getPreferencesFile()));
+			for (int i = 0; i <= lineToRead; i++)
+			{
+				line = bufferedReader.readLine();
+			}
+			bufferedReader.close();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		return line;
 	}
 
 	static
