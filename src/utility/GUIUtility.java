@@ -68,21 +68,24 @@ public final class GUIUtility
 
 	public static ImageIcon createImageIcon(int imageWidth, int imageHeight, String imageLocation, boolean isBuiltInFile)
 	{
-		BufferedImage bufferedImage = null;
 		try
 		{
+			BufferedImage bufferedImage;
+
 			if (isBuiltInFile)
 				bufferedImage = ImageIO.read(GUIUtility.class.getResource(imageLocation));
 			else
 				bufferedImage = ImageIO.read(new File(imageLocation));
+
+			ImageIcon imageIcon = new ImageIcon(bufferedImage);
+			imageIcon.setImage(imageIcon.getImage().getScaledInstance(imageWidth, imageHeight, Image.SCALE_SMOOTH));
+			return imageIcon;
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
+			return null;
 		}
-		ImageIcon imageIcon = new ImageIcon(bufferedImage);
-		imageIcon.setImage(imageIcon.getImage().getScaledInstance(imageWidth, imageHeight, Image.SCALE_SMOOTH));
-		return imageIcon;
 	}
 	
 	public static void installAIFiles(JComboBox aiComboBox, Component parent, String[] aiFiles)
