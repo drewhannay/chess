@@ -110,11 +110,11 @@ public class CustomSetupMenu extends JPanel
 		m_pieceDisplaySquares[WHITE_INDEX].setBackgroundColor(Color.LIGHT_GRAY);
 		m_pieceDisplaySquares[BLACK_INDEX].setBackgroundColor(Color.getHSBColor(30, 70, 70));
 
-		m_whiteRules.addEndOfGame(new EndOfGame("classic", 0, "", false));
-		m_blackRules.addEndOfGame(new EndOfGame("classic", 0, "", true));
+		m_whiteRules.addEndOfGame(EndOfGame.CLASSIC.init(0, "", false));
+		m_blackRules.addEndOfGame(EndOfGame.CLASSIC.init(0, "", true));
 
-		m_whiteRules.setObjectivePiece(new ObjectivePiece("classic", "King"));
-		m_blackRules.setObjectivePiece(new ObjectivePiece("classic", "King"));
+		m_whiteRules.setObjectivePiece(ObjectivePiece.CLASSIC);
+		m_blackRules.setObjectivePiece(ObjectivePiece.CLASSIC);
 
 		constraints.gridx = 1;
 		constraints.gridy = 0;
@@ -210,7 +210,7 @@ public class CustomSetupMenu extends JPanel
 				{
 					if (piece.getName().equals("King"))
 					{
-						m_whiteRules.setObjectivePiece(new ObjectivePiece("classic", "King"));
+						m_whiteRules.setObjectivePiece(ObjectivePiece.CLASSIC);
 						objectivePieceIsSet = true;
 						break;
 					}
@@ -224,7 +224,7 @@ public class CustomSetupMenu extends JPanel
 					// }
 				}
 				if (!objectivePieceIsSet)
-					m_whiteRules.setObjectivePiece(new ObjectivePiece("no objective", ""));
+					m_whiteRules.setObjectivePiece(ObjectivePiece.NO_OBJECTIVE);
 
 				m_builder.m_blackTeam = m_blackTeam;
 				objectivePieceIsSet = false;
@@ -232,7 +232,7 @@ public class CustomSetupMenu extends JPanel
 				{
 					if (piece.getName().equals("King"))
 					{
-						m_blackRules.setObjectivePiece(new ObjectivePiece("classic", "King"));
+						m_blackRules.setObjectivePiece(ObjectivePiece.CLASSIC);
 						objectivePieceIsSet = true;
 						break;
 					}
@@ -245,7 +245,7 @@ public class CustomSetupMenu extends JPanel
 					// }
 				}
 				if (!objectivePieceIsSet)
-					m_blackRules.setObjectivePiece(new ObjectivePiece("no objective", ""));
+					m_blackRules.setObjectivePiece(ObjectivePiece.CLASSIC);
 
 				m_builder.writeFile(m_whiteRules, m_blackRules);
 				// Return to the main screen.
@@ -742,8 +742,8 @@ public class CustomSetupMenu extends JPanel
 	private final DropManager m_dropManager;
 	private final Square[] m_pieceDisplaySquares = new Square[2];
 
-	public Rules m_whiteRules = new Rules(false, false);
-	public Rules m_blackRules = new Rules(false, true);
+	public Rules m_whiteRules = new Rules(false);
+	public Rules m_blackRules = new Rules(true);
 
 	private JPanel[] m_boardPanels;
 	private JPanel m_pieceListPanel = new JPanel();

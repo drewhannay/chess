@@ -502,7 +502,7 @@ public class NewGameMenu extends JPanel
 			for (String variant : variantTypes)
 			{
 				Game game = Builder.newGame(variant);
-				if (game.getWhiteRules().networkable() && game.getBlackRules().networkable())
+				if (game.getWhiteRules().rulesAreNetworkable() && game.getBlackRules().rulesAreNetworkable())
 					filteredList.add(variant);
 			}
 			variantTypes = new String[filteredList.size()];
@@ -687,7 +687,8 @@ public class NewGameMenu extends JPanel
 					Game gameToPlay = Builder.newGame((String) dropdown.getSelectedItem());
 					gameToPlay.setTimers(whiteTimer, blackTimer);
 					final PlayNetGame game;
-					if (m_hostName.equals(event))
+					// TODO: this if statement can't be right...
+					if (m_hostName.equals(event.toString()))
 					{
 						try
 						{

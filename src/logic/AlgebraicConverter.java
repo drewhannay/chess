@@ -212,7 +212,7 @@ public final class AlgebraicConverter
 				{
 					turn = moves.get(i) + (i % 2 == 0 ? (" " + moves.get(i).result) : ("\n" + (j + 1) + " " + moves.get(i).result));
 				}
-				if (i % 2 == 1 || moves.get(i).result != null)
+				if (i % 2 != 0 || moves.get(i).result != null)
 				{
 					out.write(j + " " + toWrite + " " + turn + '\n');
 					toWrite = "";

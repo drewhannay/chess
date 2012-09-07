@@ -2,10 +2,7 @@ package rules;
 
 import gui.PlayGame;
 
-import java.io.Serializable;
-import java.lang.reflect.Method;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.JOptionPane;
 
@@ -16,38 +13,72 @@ import logic.Piece;
 import logic.Square;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
-/**
- * AfterMove.java
- * 
- * Class to hold methods with various tasks to be performed after a Move takes
- * place.
- * 
- * @author Drew Hannay & Alisa Maas
- * 
- * CSCI 335, Wheaton College, Spring 2011 Phase 2 April 7, 2011
- */
-public class AfterMove implements Serializable
+public enum AfterMove
 {
-	public List<String> getMethods()
+	CLASSIC,
+	SWAP_COLOR_OF_CAPTURER,
+	CAPTURED_PIECE_TO_ORIGIN,
+	CAPTURER_STEALS_CAPTURED,
+	CAPTURER_PLACES_CAPTURED,
+	ATOMIC_CAPTURE;
+
+	public void performAfterMoveAction(Move move)
 	{
-		return m_methodNames;
+		switch (this)
+		{
+		case SWAP_COLOR_OF_CAPTURER:
+			swapColorOfCapturingPiece(move);
+			break;
+		case CAPTURED_PIECE_TO_ORIGIN:
+			moveCapturedPieceToOrigin(move);
+			break;
+		case CAPTURER_STEALS_CAPTURED:
+			stealCapturedPiece(move);
+			break;
+		case CAPTURER_PLACES_CAPTURED:
+			placeCapturedPiece(move);
+			break;
+		case ATOMIC_CAPTURE:
+			atomicCapture(move);
+			break;
+		case CLASSIC:
+		default:
+			break;
+		}
 	}
 
-	public void addMethod(String methodName)
+	public void undo(Move move)
 	{
-		m_doMethod.add(doMethods.get(methodName));
-		m_undoMethod.add(undoMethods.get(methodName));
-		m_methodNames.add(methodName);
+		switch (this)
+		{
+		case SWAP_COLOR_OF_CAPTURER:
+			swapColorOfCapturingPiece(move);
+			break;
+		case CAPTURED_PIECE_TO_ORIGIN:
+			undoMoveCapturedPieceToOrigin(move);
+			break;
+		case CAPTURER_STEALS_CAPTURED:
+			undoStealCapturedPiece(move);
+			break;
+		case CAPTURER_PLACES_CAPTURED:
+			undoPlaceCapturedPiece(move);
+			break;
+		case ATOMIC_CAPTURE:
+			undoAtomicCapture(move);
+			break;
+		case CLASSIC:
+		default:
+			break;
+		}
 	}
 
-	/**
-	 * Swap the color of the capturing piece.
-	 * 
-	 * @param move The move just performed
-	 */
-	public void captureTeamSwap(Move move)
+	public void setGame(Game game)
+	{
+		m_game = game;
+	}
+
+	private void swapColorOfCapturingPiece(Move move)
 	{
 		if (move.getCaptured() == null)
 			return;
@@ -60,64 +91,11 @@ public class AfterMove implements Serializable
 		toSwap.setBlack(!toSwap.isBlack());
 	}
 
-	/**
-	 * Does nothing in the classic move case.
-	 * 
-	 * @param m Not used; necessary for the reflection (in order to dynamically
-	 * call a method, all the signatures must be the same)
-	 */
-	public void classicAfterMove(Move move)
+	private void moveCapturedPieceToOrigin(Move move)
 	{
-		// Nothing to be done after the move in classic chess.
-	}
-
-	/**
-	 * Does nothing in the classic move case.
-	 * 
-	 * @param m Not used; necessary for the reflection (in order to dynamically
-	 * call a method, all the signatures must be the same)
-	 */
-	public void classicUndo(Move move)
-	{
-		// Also nothing to undo
-	}
-
-	/**
-	 * Execute the appropriate methods using reflection.
-	 * 
-	 * @param move The move that has just been performed.
-	 */
-	public void execute(Move move)
-	{
-		try
-		{
-			if (m_doMethod == null)
-			{
-				m_doMethod = Lists.newArrayList();
-				for (String methodName : m_methodNames)
-					m_doMethod.add(doMethods.get(methodName));
-			}
-			for (Method method : m_doMethod)
-			{
-				method.invoke(this, move);
-			}
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Return the captured piece to its original square.
-	 * 
-	 * @param m The move just performed.
-	 */
-	public void goHome(Move m)
-	{
-		if (m.getCaptured() == null)
+		if (move.getCaptured() == null)
 			return;
-		Piece toHome = m.getCaptured();
+		Piece toHome = move.getCaptured();
 		// if you captured a piece on it's original square, let capturing work
 		// as normal
 		if (toHome.getOriginalSquare() == toHome.getSquare())
@@ -129,22 +107,31 @@ public class AfterMove implements Serializable
 
 		// if there was a piece on the original square, save it so we can put it
 		// back if we undo
-		m.setRemoved(toHome.getOriginalSquare().getPiece());
-		if (m.getRemoved() != null)
-			(m.getRemoved().isBlack() ? m_game.getBlackTeam() : m_game.getWhiteTeam()).remove(m.getRemoved());
+		move.setRemoved(toHome.getOriginalSquare().getPiece());
+		if (move.getRemoved() != null)
+			(move.getRemoved().isBlack() ? m_game.getBlackTeam() : m_game.getWhiteTeam()).remove(move.getRemoved());
 
 		// actually set the captured piece on it's home square
 		toHome.getOriginalSquare().setPiece(toHome);
 		toHome.setIsCaptured(false);
 	}
 
-	/**
-	 * The capturer places the captured piece, and the captured piece changes
-	 * color.
-	 * 
-	 * @param move The move just performed.
-	 */
-	public void placeCapturedSwitch(Move move)
+	private void undoMoveCapturedPieceToOrigin(Move move)
+	{
+		if (move.getCaptured() == null)
+			return;
+		Piece restore = move.getCaptured();
+		restore.setIsCaptured(false);
+		if (move.getRemoved() != null)
+		{
+			(move.getRemoved().isBlack() ? m_game.getBlackTeam() : m_game.getWhiteTeam()).add(move.getRemoved());
+			move.getRemoved().setIsCaptured(false);
+		}
+		move.getCaptured().getSquare().setPiece(move.getRemoved());
+		move.getDest().setPiece(restore);
+	}
+
+	private void stealCapturedPiece(Move move)
 	{
 		if (move.getCaptured() == null)
 			return;
@@ -166,12 +153,7 @@ public class AfterMove implements Serializable
 
 	}
 
-	/**
-	 * Undo the effects of placeCapturedSwap
-	 * 
-	 * @param move The move to undo.
-	 */
-	public void undoPlaceCapturedSwitch(Move move)
+	private void undoStealCapturedPiece(Move move)
 	{
 		if (move.getOldPos() == null)
 		{
@@ -197,12 +179,7 @@ public class AfterMove implements Serializable
 		}
 	}
 
-	/**
-	 * The opponent places captured pieces.
-	 * 
-	 * @param move The move just performed.
-	 */
-	public void placeCaptured(Move move)
+	private void placeCapturedPiece(Move move)
 	{
 		if (move.getCaptured() == null)
 			return;
@@ -221,15 +198,9 @@ public class AfterMove implements Serializable
 			PlayGame.setNextMoveMustPlacePiece(true);
 			PlayGame.setPieceToPlace(toPlace);
 		}
-
 	}
 
-	/**
-	 * Undo the effects of placeCaptured.
-	 * 
-	 * @param move The move to undo.
-	 */
-	public void undoPlaceCaptured(Move move)
+	private void undoPlaceCapturedPiece(Move move)
 	{
 		if (move.getOldPos() == null)
 		{
@@ -253,68 +224,13 @@ public class AfterMove implements Serializable
 	}
 
 	/**
-	 * Setter method for the game object
-	 * 
-	 * @param game The game to set the instance variable to.
-	 */
-	public void setGame(Game game)
-	{
-		m_game = game;
-	}
-
-	/**
-	 * Undo all the appropriate methods using reflection.
-	 * 
-	 * @param move The move that has just been performed.
-	 */
-	public void undo(Move move)
-	{
-		try
-		{
-			if (m_undoMethod == null)
-			{
-				m_undoMethod = Lists.newArrayList();
-				for (String methodName : m_methodNames)
-					m_undoMethod.add(undoMethods.get(methodName));
-			}
-			for (Method method : m_undoMethod)
-				method.invoke(this, move);
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Return the captured pieces to the appropriate square after undoing a
-	 * move.
-	 * 
-	 * @param move The move just performed.
-	 */
-	public void undoGoHome(Move move)
-	{
-		if (move.getCaptured() == null)
-			return;
-		Piece restore = move.getCaptured();
-		restore.setIsCaptured(false);
-		if (move.getRemoved() != null)
-		{
-			(move.getRemoved().isBlack() ? m_game.getBlackTeam() : m_game.getWhiteTeam()).add(move.getRemoved());
-			move.getRemoved().setIsCaptured(false);
-		}
-		move.getCaptured().getSquare().setPiece(move.getRemoved());
-		move.getDest().setPiece(restore);
-	}
-
-	/**
 	 * Capture removes pieces from 8 surrounding squares, including the
 	 * capturing piece - with the exception of pawns, unless the pawn is either
 	 * the captured piece or the capturer.
 	 * 
 	 * @param move The move performed.
 	 */
-	public void atomicCapture(Move move)
+	private void atomicCapture(Move move)
 	{
 		if (move.getCaptured() == null)
 			return;
@@ -370,12 +286,7 @@ public class AfterMove implements Serializable
 		move.setExploded(exploded.toArray(toReturn));
 	}
 
-	/**
-	 * Undo atomicCapture
-	 * 
-	 * @param move The move performed.
-	 */
-	public void undoAtomicCapture(Move move)
+	private void undoAtomicCapture(Move move)
 	{
 		if (move.getCaptured() == null)
 		{
@@ -384,47 +295,15 @@ public class AfterMove implements Serializable
 		else
 		{
 			Piece[] exploded = move.getExploded();
-			for (Piece p : exploded)
+			for (Piece piece : exploded)
 			{
-				p.setIsCaptured(false);
-				p.getSquare().setPiece(p);
+				piece.setIsCaptured(false);
+				piece.getSquare().setPiece(piece);
 			}
 			exploded[exploded.length - 1].setMoveCount(exploded[exploded.length - 1].getMoveCount() - 1);
 			move.setExploded(null);
 		}
 	}
 
-	private static final long serialVersionUID = -5906257593787563104L;
-
-	private static Map<String, Method> doMethods = Maps.newHashMap();
-	private static Map<String, Method> undoMethods = Maps.newHashMap();
-	static
-	{
-		try
-		{
-			doMethods.put("classic", AfterMove.class.getMethod("classicAfterMove", Move.class));
-			doMethods.put("captureTeamSwap", AfterMove.class.getMethod("captureTeamSwap", Move.class));
-			doMethods.put("goHome", AfterMove.class.getMethod("goHome", Move.class));
-			doMethods.put("placeCapturedSwitch", AfterMove.class.getMethod("placeCapturedSwitch", Move.class));
-			doMethods.put("placeCaptured", AfterMove.class.getMethod("placeCaptured", Move.class));
-			doMethods.put("atomicCapture", AfterMove.class.getMethod("atomicCapture", Move.class));
-
-			undoMethods.put("placeCapturedSwitch", AfterMove.class.getMethod("undoPlaceCapturedSwitch", Move.class));
-			undoMethods.put("placeCaptured", AfterMove.class.getMethod("undoPlaceCaptured", Move.class));
-			undoMethods.put("classic", AfterMove.class.getMethod("classicUndo", Move.class));
-			undoMethods.put("captureTeamSwap", AfterMove.class.getMethod("captureTeamSwap", Move.class));
-			undoMethods.put("goHome", AfterMove.class.getMethod("undoGoHome", Move.class));
-			undoMethods.put("atomicCapture", AfterMove.class.getMethod("undoAtomicCapture", Move.class));
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-	}
-
-	private transient List<Method> m_doMethod = Lists.newArrayList();
-	private transient List<Method> m_undoMethod = Lists.newArrayList();
-
 	private Game m_game;
-	private List<String> m_methodNames = Lists.newArrayList();
 }
