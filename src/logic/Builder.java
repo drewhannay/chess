@@ -85,7 +85,7 @@ public class Builder implements Serializable
 		classic.m_blackTeam.add(createKnight(true, b.getSquare(8, 7), b));
 		classic.m_blackTeam.add(createRook(true, b.getSquare(8, 8), b));
 
-		classic.writeFile(new Rules(true, false), new Rules(true, true));
+		classic.writeFile(new Rules(false), new Rules(true));
 	}
 
 	/**

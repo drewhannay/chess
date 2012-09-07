@@ -119,7 +119,7 @@ public class Game implements Serializable
 			}
 		}
 
-		(isBlackMove() ? getBlackRules() : getWhiteRules()).adjustTeamDests(movingTeam);
+		(isBlackMove() ? getBlackRules() : getWhiteRules()).adjustTeamLegalDestinations(movingTeam);
 
 		// If the King is in check, the legal moves list must be modified
 		// accordingly.
@@ -506,8 +506,8 @@ public class Game implements Serializable
 			return;
 
 		getHistory().add(m);
-		getBlackRules().endOfGame(m_blackObjectivePiece);
-		getWhiteRules().endOfGame(m_whiteObjectivePiece);
+		getBlackRules().checkEndOfGame(m_blackObjectivePiece);
+		getWhiteRules().checkEndOfGame(m_whiteObjectivePiece);
 	}
 
 	/**

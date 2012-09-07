@@ -142,24 +142,24 @@ public class PlayerCustomMenu extends JPanel
 				{
 					if (increment > 0)
 					{
-						whiteRules.setNextTurn(new NextTurn("increasing together", whiteTurns, blackTurns, increment));
-						blackRules.setNextTurn(new NextTurn("increasing together", whiteTurns, blackTurns, increment));
+						whiteRules.setNextTurn(NextTurn.INCREASING_TOGETHER.init(whiteTurns, blackTurns, increment));
+						blackRules.setNextTurn(NextTurn.INCREASING_TOGETHER.init(whiteTurns, blackTurns, increment));
 					}
 					else
 					{
-						whiteRules.setNextTurn(new NextTurn("different turns", whiteTurns, blackTurns, increment));
-						blackRules.setNextTurn(new NextTurn("different turns", whiteTurns, blackTurns, increment));
+						whiteRules.setNextTurn(NextTurn.DIFFERENT_NUMBER_OF_TURNS.init(whiteTurns, blackTurns, increment));
+						blackRules.setNextTurn(NextTurn.DIFFERENT_NUMBER_OF_TURNS.init(whiteTurns, blackTurns, increment));
 					}
 				}
 				else if (increment > 0)
 				{
-					whiteRules.setNextTurn(new NextTurn("increasing separately", whiteTurns, blackTurns, increment));
-					blackRules.setNextTurn(new NextTurn("increasing separately", whiteTurns, blackTurns, increment));
+					whiteRules.setNextTurn(NextTurn.INCREASING_SEPARATELY.init(whiteTurns, blackTurns, increment));
+					blackRules.setNextTurn(NextTurn.INCREASING_SEPARATELY.init(whiteTurns, blackTurns, increment));
 				}
 				else
 				{
-					whiteRules.setNextTurn(new NextTurn("different turns", whiteTurns, blackTurns, increment));
-					blackRules.setNextTurn(new NextTurn("different turns", whiteTurns, blackTurns, increment));
+					whiteRules.setNextTurn(NextTurn.DIFFERENT_NUMBER_OF_TURNS.init(whiteTurns, blackTurns, increment));
+					blackRules.setNextTurn(NextTurn.DIFFERENT_NUMBER_OF_TURNS.init(whiteTurns, blackTurns, increment));
 				}
 			}
 		}
@@ -174,8 +174,8 @@ public class PlayerCustomMenu extends JPanel
 
 	private static final long serialVersionUID = -5035641594159934814L;
 
-	private Rules whiteRules = new Rules(false, false);
-	private Rules blackRules = new Rules(false, false);
+	private Rules whiteRules = new Rules(false);
+	private Rules blackRules = new Rules(true);
 	private JTextField m_playerOneTurnsField;
 	private JTextField m_playerTwoTurnsField;
 	private JLabel m_incrementTurnsLabel;

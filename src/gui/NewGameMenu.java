@@ -502,7 +502,7 @@ public class NewGameMenu extends JPanel
 			for (String variant : variantTypes)
 			{
 				Game game = Builder.newGame(variant);
-				if (game.getWhiteRules().networkable() && game.getBlackRules().networkable())
+				if (game.getWhiteRules().rulesAreNetworkable() && game.getBlackRules().rulesAreNetworkable())
 					filteredList.add(variant);
 			}
 			variantTypes = new String[filteredList.size()];

@@ -2,61 +2,82 @@ package rules;
 
 import gui.PlayGame;
 
-import java.io.Serializable;
-import java.lang.reflect.Method;
-import java.util.Map;
-
-import com.google.common.collect.Maps;
-
-/**
- * NextTurn.java
- * 
- * Class to hold methods controlling the turn flow of the game
- * 
- * @author Drew Hannay & Alisa Maas
- * 
- * CSCI 335, Wheaton College, Spring 2011 Phase 2 April 7, 2011
- */
-public class NextTurn implements Serializable
+public enum NextTurn
 {
-	/**
-	 * @param methodName The name of the method
-	 * @param whiteMoves The number of white moves.
-	 * @param blackMoves The number of black moves
-	 * @param increment The increment.
-	 */
-	public NextTurn(String methodName, int whiteMoves, int blackMoves, int increment)
+	CLASSIC,
+	INCREASING_TOGETHER,
+	INCREASING_SEPARATELY,
+	DIFFERENT_NUMBER_OF_TURNS;
+
+	public NextTurn init(int whiteMoves, int blackMoves, int increment)
 	{
-		m_methodName = methodName;
-		m_doMethod = m_doMethods.get(methodName);
-		m_undoMethod = m_undoMethods.get(methodName);
 		m_numberOfWhiteMovesBeforeTurnChange = whiteMoves;
 		m_numberOfBlackMovesBeforeTurnChange = blackMoves;
 		m_turnIncrement = increment;
 		m_currentNumberOfMovesMade = 0;
 		m_isBlackMove = false;
+
+		return this;
 	}
 
-	/**
-	 * In classic, each player gets 1 move.
-	 * 
-	 * @return Whose turn it is.
-	 */
-	public boolean classicNextTurn()
+	public boolean getNextTurn()
 	{
+		switch (this)
+		{
+		case CLASSIC:
+			return classicNextTurn();
+		case INCREASING_TOGETHER:
+			return increasingTurnsTogether();
+		case INCREASING_SEPARATELY:
+			return increasingTurnsSeparately();
+		case DIFFERENT_NUMBER_OF_TURNS:
+			return differentNumberOfTurns();
+		default:
+			return false;
+		}
+	}
 
+	public boolean undo()
+	{
+		switch (this)
+		{
+		case CLASSIC:
+			return undoClassic();
+		case INCREASING_TOGETHER:
+			return undoIncreasingTurnsTogether();
+		case INCREASING_SEPARATELY:
+			return undoIncreasingTurnsSeparately();
+		case DIFFERENT_NUMBER_OF_TURNS:
+			return undoDifferentNumberOfTurns();
+		default:
+			return false;
+		}
+	}
+
+	public int getWhiteMoves()
+	{
+		return m_numberOfWhiteMovesBeforeTurnChange;
+	}
+
+	public int getBlackMoves()
+	{
+		return m_numberOfBlackMovesBeforeTurnChange;
+	}
+
+	public int getIncrement()
+	{
+		return m_turnIncrement;
+	}
+
+	private boolean classicNextTurn()
+	{
 		m_isBlackMove = !m_isBlackMove;
 		PlayGame.turn(m_isBlackMove);
 
 		return m_isBlackMove;
 	}
 
-	/**
-	 * Classic is undone by changing the turn back.
-	 * 
-	 * @return Whose turn it is.
-	 */
-	public boolean classicUndo()
+	private boolean undoClassic()
 	{
 		m_isBlackMove = !m_isBlackMove;
 		PlayGame.turn(m_isBlackMove);
@@ -64,50 +85,31 @@ public class NextTurn implements Serializable
 		return m_isBlackMove;
 	}
 
-	/**
-	 * Black and white have different numbers of turns, but that number does not
-	 * increase.
-	 * 
-	 * @return Whose turn it is.
-	 */
-	public boolean differentNumTurns()
+	private boolean increasingTurnsTogether()
 	{
-		if (++m_currentNumberOfMovesMade >= (m_isBlackMove ? m_numberOfBlackMovesBeforeTurnChange
-				: m_numberOfWhiteMovesBeforeTurnChange))
+		if (++m_currentNumberOfMovesMade >= m_numberOfWhiteMovesBeforeTurnChange)
 		{
 			m_isBlackMove = !m_isBlackMove;
 			PlayGame.turn(m_isBlackMove);
-
+			m_numberOfWhiteMovesBeforeTurnChange += m_turnIncrement;
 			m_currentNumberOfMovesMade = 0;
 		}
 		return m_isBlackMove;
 	}
 
-	/**
-	 * @return Whose turn it is.
-	 */
-	public boolean execute()
+	private boolean undoIncreasingTurnsTogether()
 	{
-		try
+		if (--m_currentNumberOfMovesMade < 0)
 		{
-			if (m_doMethod == null)
-				m_doMethod = m_doMethods.get(m_methodName);
-			return (Boolean) m_doMethod.invoke(this, (Object[]) null);
+			m_isBlackMove = !m_isBlackMove;
+			PlayGame.turn(m_isBlackMove);
+			m_numberOfWhiteMovesBeforeTurnChange -= m_turnIncrement;
+			m_currentNumberOfMovesMade = m_numberOfWhiteMovesBeforeTurnChange - 1;
 		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-		return false;
+		return m_isBlackMove;
 	}
 
-	/**
-	 * White and black have different numbers of turns, and this number
-	 * increases.
-	 * 
-	 * @return Whose turn it is.
-	 */
-	public boolean increasingTurnsSeparately()
+	private boolean increasingTurnsSeparately()
 	{
 		if (++m_currentNumberOfMovesMade >= (m_isBlackMove ? m_numberOfBlackMovesBeforeTurnChange
 				: m_numberOfWhiteMovesBeforeTurnChange))
@@ -121,84 +123,7 @@ public class NextTurn implements Serializable
 		return m_isBlackMove;
 	}
 
-	/**
-	 * In this variant, the number of turns increases each round by the
-	 * increment, but both players have the same number of turns.
-	 * 
-	 * @return Whose turn it is.
-	 */
-	public boolean increasingTurnsTogether()
-	{
-		if (++m_currentNumberOfMovesMade >= m_numberOfWhiteMovesBeforeTurnChange)
-		{
-			m_isBlackMove = !m_isBlackMove;
-			PlayGame.turn(m_isBlackMove);
-			m_numberOfWhiteMovesBeforeTurnChange += m_turnIncrement;
-			m_currentNumberOfMovesMade = 0;
-		}
-		return m_isBlackMove;
-	}
-
-	/**
-	 * This is undone by decrementing the number of moves made, and if
-	 * necessary, decrementing the amount of moves possible each round. Then the
-	 * turn is changed, if appropriate.
-	 * 
-	 * @return Whose turn it is.
-	 */
-	public boolean undoIncreasingTurnsTogether()
-	{
-		if (--m_currentNumberOfMovesMade < 0)
-		{
-			m_isBlackMove = !m_isBlackMove;
-			PlayGame.turn(m_isBlackMove);
-			m_numberOfWhiteMovesBeforeTurnChange -= m_turnIncrement;
-			m_currentNumberOfMovesMade = m_numberOfWhiteMovesBeforeTurnChange - 1;
-		}
-		return m_isBlackMove;
-	}
-
-	/**
-	 * @return Whose turn it is.
-	 */
-	public boolean undo()
-	{
-		try
-		{
-			if (m_undoMethod == null)
-				m_undoMethod = m_undoMethods.get(m_methodName);
-			return (Boolean) m_undoMethod.invoke(this, (Object[]) null);
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-		return false;
-	}
-
-	/**
-	 * Undo this by changing the turn if appropriate.
-	 * 
-	 * @return Whose turn it is.
-	 */
-	public boolean undoDifferentNumTurns()
-	{
-		if (--m_currentNumberOfMovesMade < 0)
-		{
-			m_isBlackMove = !m_isBlackMove;
-			PlayGame.turn(m_isBlackMove);
-
-			m_currentNumberOfMovesMade = m_isBlackMove ? m_numberOfBlackMovesBeforeTurnChange : m_numberOfWhiteMovesBeforeTurnChange;
-		}
-		return m_isBlackMove;
-	}
-
-	/**
-	 * Undo the effects of increasingTurnsSeparately.
-	 * 
-	 * @return Whose turn it is.
-	 */
-	public boolean undoIncreasingTurnsSeparately()
+	private boolean undoIncreasingTurnsSeparately()
 	{
 		if (--m_currentNumberOfMovesMade < 0)
 		{
@@ -212,61 +137,34 @@ public class NextTurn implements Serializable
 		return m_isBlackMove;
 	}
 
-	/**
-	 * Getter method for White's moves
-	 */
-	public int getWhiteMoves()
+	private boolean differentNumberOfTurns()
 	{
-		return m_numberOfWhiteMovesBeforeTurnChange;
-	}
-
-	/**
-	 * Getter method for Black's moves
-	 */
-	public int getBlackMoves()
-	{
-		return m_numberOfBlackMovesBeforeTurnChange;
-	}
-
-	/**
-	 * Getter method for the increment
-	 */
-	public int getIncrement()
-	{
-		return m_turnIncrement;
-	}
-
-	private static final long serialVersionUID = 9127502749298644757L;
-
-	private static Map<String, Method> m_doMethods = Maps.newHashMap();
-	private static Map<String, Method> m_undoMethods = Maps.newHashMap();
-
-	static
-	{
-		try
+		if (++m_currentNumberOfMovesMade >= (m_isBlackMove ? m_numberOfBlackMovesBeforeTurnChange
+				: m_numberOfWhiteMovesBeforeTurnChange))
 		{
-			m_doMethods.put("classic", NextTurn.class.getMethod("classicNextTurn"));
-			m_undoMethods.put("classic", NextTurn.class.getMethod("classicUndo"));
-			m_doMethods.put("increasing together", NextTurn.class.getMethod("increasingTurnsTogether"));
-			m_undoMethods.put("increasing together", NextTurn.class.getMethod("undoIncreasingTurnsTogether"));
-			m_doMethods.put("different turns", NextTurn.class.getMethod("differentNumTurns"));
-			m_undoMethods.put("different turns", NextTurn.class.getMethod("undoDifferentNumTurns"));
-			m_doMethods.put("increasing separately", NextTurn.class.getMethod("increasingTurnsSeparately"));
-			m_undoMethods.put("increasing separately", NextTurn.class.getMethod("undoIncreasingTurnsSeparately"));
+			m_isBlackMove = !m_isBlackMove;
+			PlayGame.turn(m_isBlackMove);
+
+			m_currentNumberOfMovesMade = 0;
 		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
+		return m_isBlackMove;
 	}
 
-	private transient Method m_doMethod;
-	private transient Method m_undoMethod;
+	private boolean undoDifferentNumberOfTurns()
+	{
+		if (--m_currentNumberOfMovesMade < 0)
+		{
+			m_isBlackMove = !m_isBlackMove;
+			PlayGame.turn(m_isBlackMove);
 
-	private String m_methodName;
+			m_currentNumberOfMovesMade = m_isBlackMove ? m_numberOfBlackMovesBeforeTurnChange : m_numberOfWhiteMovesBeforeTurnChange;
+		}
+		return m_isBlackMove;
+	}
+
 	private int m_numberOfWhiteMovesBeforeTurnChange;
 	private int m_numberOfBlackMovesBeforeTurnChange;
-	private int m_turnIncrement;
 	private int m_currentNumberOfMovesMade;
+	private int m_turnIncrement;
 	private boolean m_isBlackMove;
 }
