@@ -15,15 +15,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -222,65 +214,28 @@ public class PlayGame extends JPanel
 				JOptionPane.PLAIN_MESSAGE, null, options, options[0]))
 		{
 		case JOptionPane.YES_OPTION:
-			File preferencesFile = FileUtility.getPreferencesFile();
-			if (!preferencesFile.exists())
+			if (FileUtility.readPreferencesFileLine(FileUtility.defaultPreferencesSet).contains("false"));
 			{
 				try
 				{
-					preferencesFile.createNewFile();
-					BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(preferencesFile, true));
-					bufferedWriter.write("DefaultPreferencesSet = false");
-					bufferedWriter.newLine();
-					bufferedWriter.write("DefaultSaveLocation = " + FileUtility.getDefaultCompletedLocation());
-					bufferedWriter.close();
-				}
-				catch (IOException e)
-				{
-					e.printStackTrace();
-				}
-			}
-
-			try
-			{
-				FileInputStream fileInputStream = new FileInputStream(preferencesFile);
-				DataInputStream in = new DataInputStream(fileInputStream);
-				BufferedReader br = new BufferedReader(new InputStreamReader(in));
-				String line;
-				line = br.readLine();
-				fileInputStream.close();
-				in.close();
-				br.close();
-				if (line.contains("false"))
-				{
-					PrintWriter printWriter = new PrintWriter(preferencesFile);
-					printWriter.print("");
-					printWriter.close();
 					JOptionPane.showMessageDialog(Driver.getInstance(), "Since this is your first time playing " + AppConstants.APP_NAME
 							+ ", please choose a default completed game save location.\n"
 							+ "Pressing cancel will use the default save location.", "Save Location", JOptionPane.PLAIN_MESSAGE);
 					JFileChooser fileChooser = new JFileChooser();
 					fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 					int returnVal = fileChooser.showOpenDialog(Driver.getInstance());
-					BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(preferencesFile, true));
-					bufferedWriter.write("DefaultPreferencesSet = true");
-					bufferedWriter.newLine();
 					if (returnVal == JFileChooser.APPROVE_OPTION)
 					{
-						bufferedWriter.write("DefaultSaveLocation = " + fileChooser.getSelectedFile().getAbsolutePath());
-						bufferedWriter.close();
-					}
-					else
-					{
-						bufferedWriter.write("DefaultSaveLocation = " + FileUtility.getDefaultCompletedLocation());
-						bufferedWriter.close();
+						FileUtility.overwritePreferencesFileLine(FileUtility.defaultPreferencesSet, "DefaultPreferencesSet = true");
+						FileUtility.overwritePreferencesFileLine(FileUtility.defaultSaveLocation, "DefaultSaveLocation = " + fileChooser.getSelectedFile().getAbsolutePath());
 					}
 				}
-			}
-			catch (Exception e)
-			{
-				JOptionPane.showMessageDialog(null, "That is not a valid location to save your completed games.", "Invalid Location",
-						JOptionPane.PLAIN_MESSAGE);
-				e.printStackTrace();
+				catch (Exception e)
+				{
+					JOptionPane.showMessageDialog(null, "That is not a valid location to save your completed games.", "Invalid Location",
+							JOptionPane.PLAIN_MESSAGE);
+					e.printStackTrace();
+				}
 			}
 
 			String saveFileName = JOptionPane.showInputDialog(Driver.getInstance(), "Enter a name for the save file:", "Saving...",
@@ -783,10 +738,13 @@ public class PlayGame extends JPanel
 			}
 
 			List<Square> destinations = m_square.getPiece().getLegalDests();
-			if (destinations.size() > 0)
+			if(FileUtility.readPreferencesFileLine(2).contains("true"))
 			{
-				for (Square destination : destinations)
-					destination.setBackgroundColor(Square.HIGHLIGHT_COLOR);
+				if (destinations.size() > 0)
+				{
+					for (Square destination : destinations)
+						destination.setBackgroundColor(Square.HIGHLIGHT_COLOR);
+				}
 			}
 			m_dropManager.setComponentList(destinations);
 			m_dropManager.setBoard(m_board);
