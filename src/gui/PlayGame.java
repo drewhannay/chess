@@ -15,9 +15,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -216,42 +214,21 @@ public class PlayGame extends JPanel
 				JOptionPane.PLAIN_MESSAGE, null, options, options[0]))
 		{
 		case JOptionPane.YES_OPTION:
-			final String defaultSaveLocation = FileUtility.getDefaultCompletedLocation();
-			File preferencesFile = FileUtility.getPreferencesFile();
-			FileWriter fileWriter = null;
-			try
-			{
-				fileWriter = new FileWriter(preferencesFile, true);
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-			}
-			if (!preferencesFile.exists())
+			if (FileUtility.readPreferencesFileLine(FileUtility.defaultPreferencesSet).contains("false"));
 			{
 				try
 				{
-					preferencesFile.createNewFile();
-					BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 					JOptionPane.showMessageDialog(Driver.getInstance(), "Since this is your first time playing " + AppConstants.APP_NAME
 							+ ", please choose a default completed game save location.\n"
 							+ "Pressing cancel will use the default save location.", "Save Location", JOptionPane.PLAIN_MESSAGE);
 					JFileChooser fileChooser = new JFileChooser();
 					fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 					int returnVal = fileChooser.showOpenDialog(Driver.getInstance());
-					bufferedWriter.write("DefaultPreferencesSet = true");
-					bufferedWriter.newLine();
 					if (returnVal == JFileChooser.APPROVE_OPTION)
 					{
-						bufferedWriter.write("DefaultSaveLocation = " + fileChooser.getSelectedFile().getAbsolutePath());
+						FileUtility.overwritePreferencesFileLine(FileUtility.defaultPreferencesSet, "DefaultPreferencesSet = true");
+						FileUtility.overwritePreferencesFileLine(FileUtility.defaultSaveLocation, "DefaultSaveLocation = " + fileChooser.getSelectedFile().getAbsolutePath());
 					}
-					else
-					{
-						bufferedWriter.write("DefaultSaveLocation = " + defaultSaveLocation);
-					}
-					bufferedWriter.newLine();
-					bufferedWriter.write("MoveHighlighting = true");
-					bufferedWriter.close();
 				}
 				catch (Exception e)
 				{

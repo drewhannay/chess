@@ -1004,6 +1004,10 @@ public class Piece implements Serializable
 	{
 		m_originalSquare = originalSquare;
 	}
+	
+	public Map<Character, Integer> getPieceMovements(){
+		return m_movements;
+	}
 
 	/**
 	 * Limit the legal destinations of this piece if it is pinned by another

@@ -5,12 +5,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -29,12 +23,6 @@ import utility.GUIUtility;
 
 public class Preferences extends JFrame
 {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7753014974582493592L;
-
 	public Preferences()
 	{
 		initGUIComponents();
@@ -85,27 +73,7 @@ public class Preferences extends JFrame
 
 		try
 		{
-			final File preferencesFile = FileUtility.getPreferencesFile();
-			if (!preferencesFile.exists())
-			{
-				try
-				{
-					preferencesFile.createNewFile();
-					BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(preferencesFile, true));
-					bufferedWriter.write("DefaultPreferencesSet = true");
-					bufferedWriter.newLine();
-					bufferedWriter.write("DefaultSaveLocation = " + defaultSaveLocation);
-					bufferedWriter.newLine();
-					bufferedWriter.write("MoveHighlighting = true");
-					bufferedWriter.close();
-				}
-				catch (IOException e)
-				{
-					e.printStackTrace();
-				}
-			}
-
-			currentSaveLocationField.setText(FileUtility.readPreferencesFileLine(1).substring(22));
+			currentSaveLocationField.setText(FileUtility.readPreferencesFileLine(FileUtility.defaultSaveLocation).substring(22));
 
 			resetButton.addActionListener(new ActionListener()
 			{
@@ -116,7 +84,7 @@ public class Preferences extends JFrame
 					{
 						try
 						{
-							overwriteFileLine(1, "DefaultSaveLocation = " + defaultSaveLocation);
+							FileUtility.overwritePreferencesFileLine(FileUtility.defaultSaveLocation, "DefaultSaveLocation = " + defaultSaveLocation);
 						}
 						catch (Exception e)
 						{
@@ -143,7 +111,7 @@ public class Preferences extends JFrame
 						int returnVal = fileChooser.showOpenDialog(Driver.getInstance());
 						if (returnVal == JFileChooser.APPROVE_OPTION)
 						{
-							overwriteFileLine(1, "DefaultSaveLocation = " + fileChooser.getSelectedFile().getAbsolutePath());
+							FileUtility.overwritePreferencesFileLine(FileUtility.defaultSaveLocation, "DefaultSaveLocation = " + fileChooser.getSelectedFile().getAbsolutePath());
 							currentSaveLocationField.setText(fileChooser.getSelectedFile().getAbsolutePath());
 						}
 					}
@@ -155,7 +123,7 @@ public class Preferences extends JFrame
 			});
 
 			final JCheckBox moveHighlighting = new JCheckBox("Highlight Valid Moves");
-			if (FileUtility.readPreferencesFileLine(2).contains("true"))
+			if (FileUtility.readPreferencesFileLine(FileUtility.moveHighlighting).contains("true"))
 				moveHighlighting.setSelected(true);
 			else
 				moveHighlighting.setSelected(false);
@@ -165,14 +133,14 @@ public class Preferences extends JFrame
 			moveHighlighting.addActionListener(new ActionListener()
 			{
 				@Override
-				public void actionPerformed(ActionEvent arg0)
+				public void actionPerformed(ActionEvent event)
 				{
 					try
 					{
 						if (moveHighlighting.isSelected())
-							overwriteFileLine(2, "MoveHighlighting = true");
+							FileUtility.overwritePreferencesFileLine(FileUtility.moveHighlighting, "MoveHighlighting = true");
 						else
-							overwriteFileLine(2, "MoveHighlighting = false");
+							FileUtility.overwritePreferencesFileLine(FileUtility.moveHighlighting, "MoveHighlighting = false");
 					}
 					catch (Exception e)
 					{
@@ -208,37 +176,5 @@ public class Preferences extends JFrame
 		pack();
 		setVisible(true);
 	}
-
-	private static void overwriteFileLine(int lineToOverwrite, String overwriteText) throws Exception
-	{
-		File preferencesFile = FileUtility.getPreferencesFile();
-		File tmp = File.createTempFile("tmp", "");
-
-		BufferedReader bufferedReader = new BufferedReader(new FileReader(preferencesFile));
-		BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(tmp));
-
-		for (int i = 0; i < lineToOverwrite; i++)
-		{
-			bufferedWriter.write(bufferedReader.readLine());
-			bufferedWriter.newLine();
-		}
-
-		bufferedWriter.write(overwriteText);
-		bufferedWriter.newLine();
-		bufferedReader.readLine();
-
-		String readLine;
-		while (null != (readLine = bufferedReader.readLine()))
-		{
-			bufferedWriter.write(readLine);
-			bufferedWriter.newLine();
-		}
-
-		bufferedReader.close();
-		bufferedWriter.close();
-
-		File oldFile = preferencesFile;
-		if (oldFile.delete())
-			tmp.renameTo(oldFile);
-	}
+	private static final long serialVersionUID = -7753014974582493592L;
 }

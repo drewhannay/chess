@@ -64,7 +64,9 @@ public final class Driver extends JFrame
 		setResizable(false);
 		setLayout(new FlowLayout());
 		setResizable(true);
-
+		
+		FileUtility.createDefaultPreferences();
+		
 		// make the app match the look and feel of the user's system
 		try
 		{

@@ -113,9 +113,9 @@ public class CustomSetupMenu extends JPanel
 		m_whiteRules.addEndOfGame(EndOfGame.CLASSIC.init(0, "", false));
 		m_blackRules.addEndOfGame(EndOfGame.CLASSIC.init(0, "", true));
 
-		m_whiteRules.setObjectivePiece(ObjectivePiece.CLASSIC);
-		m_blackRules.setObjectivePiece(ObjectivePiece.CLASSIC);
-
+		m_whiteRules.setObjectivePiece(ObjectivePiece.CUSTOM_OBJECTIVE.setObjectivePieceName("King"));
+		m_blackRules.setObjectivePiece(ObjectivePiece.CUSTOM_OBJECTIVE.setObjectivePieceName("King"));
+				
 		constraints.gridx = 1;
 		constraints.gridy = 0;
 		constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -678,11 +678,15 @@ public class CustomSetupMenu extends JPanel
 		@Override
 		public void mouseExited(MouseEvent event)
 		{
+			m_hoverOver.setVisible(false);
+			m_hoverOver.dispose();
 		}
 
 		@Override
 		public void mouseEntered(MouseEvent event)
 		{
+			m_hoverOver = new JFrame();
+			new SquareHoverOver(m_square.getPiece(), m_hoverOver, CustomSetupMenu.this);
 		}
 
 		@Override
@@ -754,5 +758,6 @@ public class CustomSetupMenu extends JPanel
 	private JButton m_changePromotionButton;
 	private JList m_pieceTypeList;
 	private JFrame m_optionsFrame;
+	private JFrame m_hoverOver;
 	private JScrollPane m_scrollPane = new JScrollPane();
 }
