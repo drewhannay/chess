@@ -438,7 +438,7 @@ public class PlayNetGamePanel extends PlayGamePanel
 		m_optionsMenu = new JMenu("Menu");
 		if (!m_isPlayback)
 		{
-			m_drawMenuItem = new JMenuItem("Request Draw", KeyEvent.VK_R);
+			JMenuItem m_drawMenuItem = new JMenuItem("Request Draw", KeyEvent.VK_R);
 			m_drawMenuItem.addActionListener(new ActionListener()
 			{
 				@Override
@@ -467,6 +467,9 @@ public class PlayNetGamePanel extends PlayGamePanel
 				}
 			});
 
+			if (m_isAIGame)
+				m_drawMenuItem.setText("Declare Draw");
+
 			m_optionsMenu.add(m_drawMenuItem);
 		}
 
@@ -491,7 +494,6 @@ public class PlayNetGamePanel extends PlayGamePanel
 	{
 		m_isAIGame = isAIGame;
 		Driver.getInstance().setFileMenuVisibility(true);
-		m_drawMenuItem.setText("Declare Draw");
 	}
 
 	private static final long serialVersionUID = -4220208356045682711L;

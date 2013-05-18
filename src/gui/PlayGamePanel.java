@@ -375,10 +375,10 @@ public class PlayGamePanel extends JPanel
 
 		if (!m_isPlayback)
 		{
-			m_drawMenuItem = new JMenuItem("Declare Draw", KeyEvent.VK_D);
-			m_saveMenuItem = new JMenuItem("Save & Quit", KeyEvent.VK_S);
+			JMenuItem drawMenuItem = new JMenuItem("Declare Draw", KeyEvent.VK_D);
+			JMenuItem saveMenuItem = new JMenuItem("Save & Quit", KeyEvent.VK_S);
 
-			m_drawMenuItem.addActionListener(new ActionListener()
+			drawMenuItem.addActionListener(new ActionListener()
 			{
 				@Override
 				public void actionPerformed(ActionEvent event)
@@ -394,7 +394,7 @@ public class PlayGamePanel extends JPanel
 				}
 			});
 
-			m_saveMenuItem.addActionListener(new ActionListener()
+			saveMenuItem.addActionListener(new ActionListener()
 			{
 				@Override
 				public void actionPerformed(ActionEvent event)
@@ -408,8 +408,8 @@ public class PlayGamePanel extends JPanel
 				}
 			});
 
-			m_optionsMenu.add(m_drawMenuItem);
-			m_optionsMenu.add(m_saveMenuItem);
+			m_optionsMenu.add(drawMenuItem);
+			m_optionsMenu.add(saveMenuItem);
 		}
 
 		return m_optionsMenu;
@@ -421,8 +421,8 @@ public class PlayGamePanel extends JPanel
 		m_inCheckLabel.setHorizontalTextPosition(SwingConstants.CENTER);
 		m_inCheckLabel.setForeground(Color.RED);
 
-		m_undoButton = new JButton("Undo");
-		m_undoButton.addActionListener(new ActionListener()
+		JButton undoButton = new JButton("Undo");
+		undoButton.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent event)
@@ -620,7 +620,7 @@ public class PlayGamePanel extends JPanel
 			constraints.ipadx = 100;
 			constraints.gridx = 11 + twoBoardsGridBagOffset;
 			constraints.gridy = 5;
-			add(m_undoButton, constraints);
+			add(undoButton, constraints);
 
 			// adds the White timer
 			constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -893,7 +893,4 @@ public class PlayGamePanel extends JPanel
 	private final DropManager m_dropManager;
 
 	protected GlassPane m_globalGlassPane;
-	protected JButton m_undoButton;
-	protected JMenuItem m_saveMenuItem;
-	protected JMenuItem m_drawMenuItem;
 }
