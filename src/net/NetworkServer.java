@@ -2,8 +2,8 @@ package net;
 
 import gui.AnimatedLabel;
 import gui.Driver;
-import gui.PlayGame;
-import gui.PlayNetGame;
+import gui.PlayGamePanel;
+import gui.PlayNetGamePanel;
 
 import java.io.EOFException;
 import java.io.ObjectInputStream;
@@ -33,7 +33,7 @@ public class NetworkServer
 	 * @param png the game that is going to be played
 	 * @throws Exception socket or end of file exception
 	 */
-	public void host(PlayNetGame png) throws Exception
+	public void host(PlayNetGamePanel png) throws Exception
 	{
 		ServerSocket serverSocket = null;
 		Socket clientSocket = null;
@@ -43,7 +43,7 @@ public class NetworkServer
 		{
 			try
 			{
-				PlayGame.resetTimers();
+				PlayGamePanel.resetTimers();
 
 				clientSocket = serverSocket.accept();
 			}
@@ -61,28 +61,28 @@ public class NetworkServer
 		Object fromUser;
 		Object fromServer;
 
-		Game g = PlayGame.getGame();
+		Game g = PlayGamePanel.getGame();
 		fromServer = g;
 		if (fromServer != null)
 			out.writeObject(fromServer);
-		PlayGame.resetTimers();
+		PlayGamePanel.resetTimers();
 		Driver.getInstance().setPanel(png);
 		try
 		{
 			while (g.isBlackMove() == false)
 			{
-				while (PlayNetGame.m_netMove == null)
+				while (PlayNetGamePanel.m_netMove == null)
 					Thread.sleep(0);
-				fromServer = PlayNetGame.m_netMove;
-				PlayNetGame.m_netMove = null;
+				fromServer = PlayNetGamePanel.m_netMove;
+				PlayNetGamePanel.m_netMove = null;
 
 				out.writeObject(fromServer);
 				out.flush();
 			}
 
-			while (PlayNetGame.m_isRunning)
+			while (PlayNetGamePanel.m_isRunning)
 			{
-				while (g.isBlackMove() == true && PlayNetGame.m_isRunning)
+				while (g.isBlackMove() == true && PlayNetGamePanel.m_isRunning)
 				{
 					fromUser = in.readObject();
 					FakeMove toMove = (FakeMove) fromUser;
@@ -106,7 +106,7 @@ public class NetworkServer
 							Result result = Result.DRAW;
 							result.setGuiText("The game has ended in a Draw!");
 							g.getLastMove().setResult(result);
-							PlayGame.endOfGame(result);
+							PlayGamePanel.endOfGame(result);
 							throw new Exception();
 						}
 						else
@@ -135,9 +135,9 @@ public class NetworkServer
 					}
 				}
 
-				while (g.isBlackMove() == false && PlayNetGame.m_isRunning)
+				while (g.isBlackMove() == false && PlayNetGamePanel.m_isRunning)
 				{
-					while (PlayNetGame.m_netMove == null && !png.m_drawRequested && PlayNetGame.m_isRunning)
+					while (PlayNetGamePanel.m_netMove == null && !png.m_drawRequested && PlayNetGamePanel.m_isRunning)
 						Thread.sleep(0);
 					if (png.m_drawRequested)
 					{
@@ -148,7 +148,7 @@ public class NetworkServer
 							Result result = Result.DRAW;
 							result.setGuiText("The game has ended in a Draw!");
 							g.getLastMove().setResult(result);
-							PlayGame.endOfGame(result);
+							PlayGamePanel.endOfGame(result);
 							png.m_drawRequested = false;
 							throw new Exception();
 						}
@@ -162,8 +162,8 @@ public class NetworkServer
 						}
 					}
 
-					fromServer = PlayNetGame.m_netMove;
-					PlayNetGame.m_netMove = null;
+					fromServer = PlayNetGamePanel.m_netMove;
+					PlayNetGamePanel.m_netMove = null;
 
 					if (((FakeMove) fromServer).m_originColumn == -1)
 						png.m_drawRequested = true;

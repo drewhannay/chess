@@ -11,9 +11,9 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class NetLoading extends JPanel
+public class NetLoadingPanel extends JPanel
 {
-	public NetLoading()
+	public NetLoadingPanel()
 	{
 		initGUIComponents();
 	}

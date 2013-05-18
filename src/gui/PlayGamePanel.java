@@ -58,10 +58,11 @@ import dragNdrop.AbstractDropManager;
 import dragNdrop.DropAdapter;
 import dragNdrop.DropEvent;
 import dragNdrop.GlassPane;
+import dragNdrop.MotionAdapter;
 
-public class PlayGame extends JPanel
+public class PlayGamePanel extends JPanel
 {
-	public PlayGame(boolean isPlayback, File acnFile) throws Exception
+	public PlayGamePanel(boolean isPlayback, File acnFile) throws Exception
 	{
 		m_dropManager = new DropManager();
 		m_globalGlassPane = new GlassPane();
@@ -69,9 +70,9 @@ public class PlayGame extends JPanel
 		Driver.getInstance().setGlassPane(m_globalGlassPane);
 
 		setGame(Builder.newGame("Classic"));
-		PlayGame.m_isPlayback = isPlayback;
-		PlayGame.m_whiteTimer = getGame().getWhiteTimer();
-		PlayGame.m_blackTimer = getGame().getBlackTimer();
+		PlayGamePanel.m_isPlayback = isPlayback;
+		PlayGamePanel.m_whiteTimer = getGame().getWhiteTimer();
+		PlayGamePanel.m_blackTimer = getGame().getBlackTimer();
 		m_whiteTimer.restart();
 		m_blackTimer.restart();
 		turn(getGame().getBoards()[0].isBlackTurn());
@@ -87,15 +88,15 @@ public class PlayGame extends JPanel
 		boardRefresh(getGame().getBoards());
 	}
 
-	public PlayGame(Game game, boolean isPlayback) throws Exception
+	public PlayGamePanel(Game game, boolean isPlayback) throws Exception
 	{
-		PlayGame.setGame(game);
-		PlayGame.m_isPlayback = isPlayback;
+		PlayGamePanel.setGame(game);
+		PlayGamePanel.m_isPlayback = isPlayback;
 		m_dropManager = new DropManager();
 		if (isPlayback)
 		{
-			PlayGame.m_whiteTimer = ChessTimer.createTimer(TimerTypes.NO_TIMER, null, 0, 0, false);
-			PlayGame.m_blackTimer = ChessTimer.createTimer(TimerTypes.NO_TIMER, null, 0, 0, true);
+			PlayGamePanel.m_whiteTimer = ChessTimer.createTimer(TimerTypes.NO_TIMER, null, 0, 0, false);
+			PlayGamePanel.m_blackTimer = ChessTimer.createTimer(TimerTypes.NO_TIMER, null, 0, 0, true);
 			m_history = new Move[game.getHistory().size()];
 			game.getHistory().toArray(m_history);
 			initComponents(isPlayback);
@@ -113,8 +114,8 @@ public class PlayGame extends JPanel
 			m_globalGlassPane.setOpaque(false);
 			Driver.getInstance().setGlassPane(m_globalGlassPane);
 
-			PlayGame.m_whiteTimer = game.getWhiteTimer();
-			PlayGame.m_blackTimer = game.getBlackTimer();
+			PlayGamePanel.m_whiteTimer = game.getWhiteTimer();
+			PlayGamePanel.m_blackTimer = game.getBlackTimer();
 			m_whiteTimer.restart();
 			m_blackTimer.restart();
 			turn(game.isBlackMove());
@@ -198,16 +199,16 @@ public class PlayGame extends JPanel
 
 	public static void endOfGame(Result result)
 	{
-		PlayNetGame.m_isRunning = false;
+		PlayNetGamePanel.m_isRunning = false;
 		if (m_game.getHistory().size() != 0)
 		{
-			PlayNetGame.m_netMove = m_game.moveToFakeMove(m_game.getHistory().get(m_game.getHistory().size() - 1));
+			PlayNetGamePanel.m_netMove = m_game.moveToFakeMove(m_game.getHistory().get(m_game.getHistory().size() - 1));
 		}
 		else if (result != Result.DRAW)
 		{
 			JOptionPane.showMessageDialog(null, "No moves were made and the time ran out. Returning to the Main Menu.",
 					"Time Ran Out", JOptionPane.PLAIN_MESSAGE);
-			PlayNetGame.m_isRunning = false;
+			PlayNetGamePanel.m_isRunning = false;
 			Driver.getInstance().revertToMainPanel();
 			Driver.getInstance().setFileMenuVisibility(true);
 			return;
@@ -716,7 +717,7 @@ public class PlayGame extends JPanel
 
 	public static void setGame(Game game)
 	{
-		PlayGame.m_game = game;
+		PlayGamePanel.m_game = game;
 	}
 
 	public static Game getGame()

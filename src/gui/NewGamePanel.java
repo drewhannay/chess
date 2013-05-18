@@ -247,7 +247,7 @@ public class NewGamePanel extends JPanel
 					{
 						Result result = isBlackTimer ? Result.WHITE_WIN : Result.BLACK_WIN;
 						result.setGuiText("Time has run out. " + result.winText() + "\n");
-						PlayGame.endOfGame(result);
+						PlayGamePanel.endOfGame(result);
 					}
 				};
 				ChessTimer blackTimer = ChessTimer.createTimer(timerType, timeElapsedCallback, increment, startTime, true);
@@ -255,10 +255,10 @@ public class NewGamePanel extends JPanel
 
 				Game gameToPlay = Builder.newGame((String) dropdown.getSelectedItem());
 				gameToPlay.setTimers(whiteTimer, blackTimer);
-				PlayGame game = null;
+				PlayGamePanel game = null;
 				try
 				{
-					game = new PlayGame(gameToPlay, false);
+					game = new PlayGamePanel(gameToPlay, false);
 				}
 				catch (Exception e)
 				{
@@ -409,7 +409,7 @@ public class NewGamePanel extends JPanel
 					});
 					aiThread.start();
 
-					PlayNetGame playNetGame = new PlayNetGame(gameToPlay, false, false);
+					PlayNetGamePanel playNetGame = new PlayNetGamePanel(gameToPlay, false, false);
 					playNetGame.setIsAIGame(true);
 					Driver.getInstance().setPanel(playNetGame);
 				}

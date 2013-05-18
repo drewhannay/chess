@@ -1,6 +1,6 @@
 package rules;
 
-import gui.PlayGame;
+import gui.PlayGamePanel;
 
 import java.util.List;
 
@@ -147,8 +147,8 @@ public enum AfterMove
 		if (move.isVerified())
 		{
 			JOptionPane.showMessageDialog(null, "This piece is now on your side. Place it in an empty square.");
-			PlayGame.setNextMoveMustPlacePiece(true);
-			PlayGame.setPieceToPlace(toPlace);
+			PlayGamePanel.setNextMoveMustPlacePiece(true);
+			PlayGamePanel.setPieceToPlace(toPlace);
 		}
 
 	}
@@ -173,8 +173,8 @@ public enum AfterMove
 			toPlace.setSquare(move.getOldPos());
 			move.getOldPos().setPiece(toPlace);
 			toPlace.setIsCaptured(false);
-			PlayGame.setNextMoveMustPlacePiece(false);
-			PlayGame.setPieceToPlace(null);
+			PlayGamePanel.setNextMoveMustPlacePiece(false);
+			PlayGamePanel.setPieceToPlace(null);
 			move.setOldPos(null);
 		}
 	}
@@ -195,8 +195,8 @@ public enum AfterMove
 		{
 			toPlace.setIsCaptured(false);
 			JOptionPane.showMessageDialog(null, "You have captured this piece. Now place it in an empty square.");
-			PlayGame.setNextMoveMustPlacePiece(true);
-			PlayGame.setPieceToPlace(toPlace);
+			PlayGamePanel.setNextMoveMustPlacePiece(true);
+			PlayGamePanel.setPieceToPlace(toPlace);
 		}
 	}
 
@@ -217,8 +217,8 @@ public enum AfterMove
 			toPlace.setSquare(move.getOldPos());
 			move.getOldPos().setPiece(toPlace);
 			toPlace.setIsCaptured(false);
-			PlayGame.setNextMoveMustPlacePiece(false);
-			PlayGame.setPieceToPlace(null);
+			PlayGamePanel.setNextMoveMustPlacePiece(false);
+			PlayGamePanel.setPieceToPlace(null);
 			move.setOldPos(null);
 		}
 	}

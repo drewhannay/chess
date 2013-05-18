@@ -19,9 +19,9 @@ import rules.NextTurn;
 import rules.Rules;
 import utility.GuiUtility;
 
-public class PlayerCustomMenu extends JPanel
+public class CustomPlayerPanel extends JPanel
 {
-	public PlayerCustomMenu(CustomSetupMenu customSetupMenu, JFrame optionsFrame)
+	public CustomPlayerPanel(CustomSetupPanel customSetupMenu, JFrame optionsFrame)
 	{
 		whiteRules = customSetupMenu.m_whiteRules;
 		blackRules = customSetupMenu.m_blackRules;
@@ -34,7 +34,7 @@ public class PlayerCustomMenu extends JPanel
 		initGUIComponents(customSetupMenu);
 	}
 
-	private void initGUIComponents(final CustomSetupMenu customSetupMenu)
+	private void initGUIComponents(final CustomSetupPanel customSetupMenu)
 	{
 		setLayout(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
@@ -69,7 +69,7 @@ public class PlayerCustomMenu extends JPanel
 				{
 					customSetupMenu.m_whiteRules = whiteRules;
 					customSetupMenu.m_blackRules = blackRules;
-					PlayerCustomMenu.this.removeAll();
+					CustomPlayerPanel.this.removeAll();
 					m_frame.setVisible(false);
 				}
 			}

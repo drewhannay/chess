@@ -24,7 +24,7 @@ import utility.GuiUtility;
 
 import com.google.common.collect.Lists;
 
-public class PiecePromotion extends JPanel
+public class PiecePromotionPanel extends JPanel
 {
 	/**
 	 * 
@@ -36,7 +36,7 @@ public class PiecePromotion extends JPanel
 	 * @param pieceName
 	 * @param customSetupMenu
 	 */
-	public PiecePromotion(String pieceName, CustomSetupMenu customSetupMenu, JFrame optionsFrame)
+	public PiecePromotionPanel(String pieceName, CustomSetupPanel customSetupMenu, JFrame optionsFrame)
 	{
 		m_pieceBeingPromotedName = pieceName;
 		m_customSetupMenu = customSetupMenu;
@@ -181,7 +181,7 @@ public class PiecePromotion extends JPanel
 					promotesTo.add((String) canPromoteList.get(i));
 
 				m_customSetupMenu.putPromotionMap(m_pieceBeingPromotedName, promotesTo);
-				PiecePromotion.this.removeAll();
+				PiecePromotionPanel.this.removeAll();
 				m_frame.setVisible(false);
 			}
 
@@ -237,6 +237,6 @@ public class PiecePromotion extends JPanel
 	}
 
 	private String m_pieceBeingPromotedName;
-	private CustomSetupMenu m_customSetupMenu;
+	private CustomSetupPanel m_customSetupMenu;
 	private JFrame m_frame;
 }

@@ -18,9 +18,9 @@ import javax.swing.WindowConstants;
 import utility.AppConstants;
 import utility.GuiUtility;
 
-public class AboutMenu extends JFrame
+public class AboutFrame extends JFrame
 {
-	public AboutMenu(JPanel mainPanel)
+	public AboutFrame(JPanel mainPanel)
 	{
 		initGUIComponents(mainPanel);
 	}

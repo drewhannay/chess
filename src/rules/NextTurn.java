@@ -1,6 +1,6 @@
 package rules;
 
-import gui.PlayGame;
+import gui.PlayGamePanel;
 
 public enum NextTurn
 {
@@ -72,7 +72,7 @@ public enum NextTurn
 	private boolean classicNextTurn()
 	{
 		m_isBlackMove = !m_isBlackMove;
-		PlayGame.turn(m_isBlackMove);
+		PlayGamePanel.turn(m_isBlackMove);
 
 		return m_isBlackMove;
 	}
@@ -80,7 +80,7 @@ public enum NextTurn
 	private boolean undoClassic()
 	{
 		m_isBlackMove = !m_isBlackMove;
-		PlayGame.turn(m_isBlackMove);
+		PlayGamePanel.turn(m_isBlackMove);
 
 		return m_isBlackMove;
 	}
@@ -90,7 +90,7 @@ public enum NextTurn
 		if (++m_currentNumberOfMovesMade >= m_numberOfWhiteMovesBeforeTurnChange)
 		{
 			m_isBlackMove = !m_isBlackMove;
-			PlayGame.turn(m_isBlackMove);
+			PlayGamePanel.turn(m_isBlackMove);
 			m_numberOfWhiteMovesBeforeTurnChange += m_turnIncrement;
 			m_currentNumberOfMovesMade = 0;
 		}
@@ -102,7 +102,7 @@ public enum NextTurn
 		if (--m_currentNumberOfMovesMade < 0)
 		{
 			m_isBlackMove = !m_isBlackMove;
-			PlayGame.turn(m_isBlackMove);
+			PlayGamePanel.turn(m_isBlackMove);
 			m_numberOfWhiteMovesBeforeTurnChange -= m_turnIncrement;
 			m_currentNumberOfMovesMade = m_numberOfWhiteMovesBeforeTurnChange - 1;
 		}
@@ -115,7 +115,7 @@ public enum NextTurn
 				: m_numberOfWhiteMovesBeforeTurnChange))
 		{
 			m_isBlackMove = !m_isBlackMove;
-			PlayGame.turn(m_isBlackMove);
+			PlayGamePanel.turn(m_isBlackMove);
 			m_numberOfBlackMovesBeforeTurnChange += m_turnIncrement;
 			m_numberOfWhiteMovesBeforeTurnChange += m_turnIncrement;
 			m_currentNumberOfMovesMade = 0;
@@ -130,7 +130,7 @@ public enum NextTurn
 			m_isBlackMove = !m_isBlackMove;
 			m_numberOfBlackMovesBeforeTurnChange -= m_turnIncrement;
 			m_numberOfWhiteMovesBeforeTurnChange -= m_turnIncrement;
-			PlayGame.turn(m_isBlackMove);
+			PlayGamePanel.turn(m_isBlackMove);
 
 			m_currentNumberOfMovesMade = m_isBlackMove ? m_numberOfBlackMovesBeforeTurnChange : m_numberOfWhiteMovesBeforeTurnChange;
 		}
@@ -143,7 +143,7 @@ public enum NextTurn
 				: m_numberOfWhiteMovesBeforeTurnChange))
 		{
 			m_isBlackMove = !m_isBlackMove;
-			PlayGame.turn(m_isBlackMove);
+			PlayGamePanel.turn(m_isBlackMove);
 
 			m_currentNumberOfMovesMade = 0;
 		}
@@ -155,7 +155,7 @@ public enum NextTurn
 		if (--m_currentNumberOfMovesMade < 0)
 		{
 			m_isBlackMove = !m_isBlackMove;
-			PlayGame.turn(m_isBlackMove);
+			PlayGamePanel.turn(m_isBlackMove);
 
 			m_currentNumberOfMovesMade = m_isBlackMove ? m_numberOfBlackMovesBeforeTurnChange : m_numberOfWhiteMovesBeforeTurnChange;
 		}

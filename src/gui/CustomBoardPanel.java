@@ -20,9 +20,9 @@ import javax.swing.JTextField;
 import logic.Board;
 import utility.GuiUtility;
 
-public class BoardCustomMenu extends JPanel
+public class CustomBoardPanel extends JPanel
 {
-	public BoardCustomMenu(CustomSetupMenu variant, JFrame optionsFrame)
+	public CustomBoardPanel(CustomSetupPanel variant, JFrame optionsFrame)
 	{
 		m_frame = optionsFrame;
 		m_frame.setVisible(true);
@@ -33,7 +33,7 @@ public class BoardCustomMenu extends JPanel
 		initGUIComponents(variant);
 	}
 
-	private void initGUIComponents(final CustomSetupMenu variant)
+	private void initGUIComponents(final CustomSetupPanel variant)
 	{
 		setBorder(BorderFactory.createLoweredBevelBorder());
 		setLayout(new GridBagLayout());
@@ -221,5 +221,5 @@ public class BoardCustomMenu extends JPanel
 	private JButton m_cancelButton;
 	private JButton m_submitButton;
 	private JFrame m_frame;
-	private BoardCustomMenu m_holder = this;
+	private CustomBoardPanel m_holder = this;
 }

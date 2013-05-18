@@ -55,10 +55,11 @@ import dragNdrop.AbstractDropManager;
 import dragNdrop.DropAdapter;
 import dragNdrop.DropEvent;
 import dragNdrop.GlassPane;
+import dragNdrop.MotionAdapter;
 
-public class CustomSetupMenu extends JPanel
+public class CustomSetupPanel extends JPanel
 {
-	public CustomSetupMenu()
+	public CustomSetupPanel()
 	{
 		m_dropManager = new DropManager();
 		m_globalGlassPane = new GlassPane();
@@ -159,7 +160,7 @@ public class CustomSetupMenu extends JPanel
 			{
 				if (variantNameField.getText().trim().isEmpty())
 				{
-					JOptionPane.showMessageDialog(CustomSetupMenu.this, "Please enter a name for this game.", "Enter Name",
+					JOptionPane.showMessageDialog(CustomSetupPanel.this, "Please enter a name for this game.", "Enter Name",
 							JOptionPane.PLAIN_MESSAGE);
 					return;
 				}
@@ -263,7 +264,7 @@ public class CustomSetupMenu extends JPanel
 				m_optionsFrame.dispose();
 				m_optionsFrame = new JFrame();
 				
-				new PiecePromotion((String) m_pieceTypeList.getSelectedValue(), CustomSetupMenu.this, m_optionsFrame);
+				new PiecePromotionPanel((String) m_pieceTypeList.getSelectedValue(), CustomSetupPanel.this, m_optionsFrame);
 			}
 		});
 		
@@ -276,7 +277,7 @@ public class CustomSetupMenu extends JPanel
 				m_optionsFrame.dispose();
 				m_optionsFrame = new JFrame();
 
-				new BoardCustomMenu(CustomSetupMenu.this, m_optionsFrame);
+				new CustomBoardPanel(CustomSetupPanel.this, m_optionsFrame);
 			}
 		});
 
@@ -289,7 +290,7 @@ public class CustomSetupMenu extends JPanel
 				m_optionsFrame.dispose();
 				m_optionsFrame = new JFrame();
 
-				new ObjectiveMaker(CustomSetupMenu.this, m_optionsFrame);
+				new ObjectiveMakerPanel(CustomSetupPanel.this, m_optionsFrame);
 			}
 		});
 
@@ -302,7 +303,7 @@ public class CustomSetupMenu extends JPanel
 				m_optionsFrame.dispose();
 				m_optionsFrame = new JFrame();
 
-				new RuleMaker(CustomSetupMenu.this, m_optionsFrame);
+				new RuleMakerPanel(CustomSetupPanel.this, m_optionsFrame);
 			}
 		});
 
@@ -315,7 +316,7 @@ public class CustomSetupMenu extends JPanel
 				m_optionsFrame.dispose();
 				m_optionsFrame = new JFrame();
 
-				new PlayerCustomMenu(CustomSetupMenu.this, m_optionsFrame);
+				new CustomPlayerPanel(CustomSetupPanel.this, m_optionsFrame);
 			}
 		});
 
@@ -328,7 +329,7 @@ public class CustomSetupMenu extends JPanel
 				m_optionsFrame.dispose();
 				m_optionsFrame = new JFrame();
 
-				new PieceMaker(CustomSetupMenu.this, m_optionsFrame);
+				new PieceMakerPanel(CustomSetupPanel.this, m_optionsFrame);
 			}
 		});
 

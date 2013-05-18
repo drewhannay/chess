@@ -1,6 +1,6 @@
 package logic;
 
-import gui.PlayGame;
+import gui.PlayGamePanel;
 
 import java.io.Serializable;
 import java.util.List;
@@ -326,7 +326,7 @@ public class Move implements Serializable
 		}
 
 		board.getGame().afterMove(this);
-		if (!PlayGame.getNextMoveMustPlacePiece())
+		if (!PlayGamePanel.getNextMoveMustPlacePiece())
 		{
 			board.getGame().nextTurn();
 		}
@@ -358,7 +358,7 @@ public class Move implements Serializable
 		}
 
 		setVerified(true);
-		PlayGame.boardRefresh(board.getGame().getBoards());
+		PlayGamePanel.boardRefresh(board.getGame().getBoards());
 	}
 
 	/**
@@ -706,7 +706,7 @@ public class Move implements Serializable
 		executed = false;
 
 		board.getGame().setStaleLegalDests(true);
-		PlayGame.boardRefresh(board.getGame().getBoards());
+		PlayGamePanel.boardRefresh(board.getGame().getBoards());
 	}
 
 	/**

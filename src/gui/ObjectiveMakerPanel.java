@@ -21,9 +21,9 @@ import rules.EndOfGame;
 import rules.Rules;
 import utility.GuiUtility;
 
-public class ObjectiveMaker extends JPanel
+public class ObjectiveMakerPanel extends JPanel
 {
-	public ObjectiveMaker(CustomSetupMenu customSetupMenu, JFrame optionsFrame)
+	public ObjectiveMakerPanel(CustomSetupPanel customSetupMenu, JFrame optionsFrame)
 	{
 		m_frame = optionsFrame;
 		m_frame.setVisible(true);
@@ -36,7 +36,7 @@ public class ObjectiveMaker extends JPanel
 		initGUIComponents(customSetupMenu);
 	}
 
-	public void initGUIComponents(final CustomSetupMenu customSetupMenu)
+	public void initGUIComponents(final CustomSetupPanel customSetupMenu)
 	{
 		setLayout(new GridBagLayout());
 		setSize(600, 600);
@@ -215,7 +215,7 @@ public class ObjectiveMaker extends JPanel
 
 				customSetupMenu.m_whiteRules = m_whiteRules;
 				customSetupMenu.m_blackRules = m_blackRules;
-				ObjectiveMaker.this.removeAll();
+				ObjectiveMakerPanel.this.removeAll();
 				m_frame.setVisible(false);
 			}
 		});

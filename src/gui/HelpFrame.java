@@ -11,9 +11,9 @@ import javax.swing.WindowConstants;
 
 import utility.AppConstants;
 
-public class HelpMenu extends JFrame
+public class HelpFrame extends JFrame
 {
-	public HelpMenu()
+	public HelpFrame()
 	{
 		initGUIComponents();
 	}

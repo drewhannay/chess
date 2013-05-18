@@ -79,8 +79,8 @@ public final class Driver extends JFrame
 
 	public void setUpNewGame()
 	{
-		if (PlayGame.m_optionsMenu != null)
-			PlayGame.m_optionsMenu.setVisible(false);
+		if (PlayGamePanel.m_optionsMenu != null)
+			PlayGamePanel.m_optionsMenu.setVisible(false);
 		ChessTimer.stopTimers();
 		setPanel(new NewGamePanel());
 	}
@@ -196,7 +196,7 @@ public final class Driver extends JFrame
 							"Quit?", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]))
 					{
 					case JOptionPane.YES_OPTION:
-						((PlayGame) mOtherPanel).saveGame();
+						((PlayGamePanel) mOtherPanel).saveGame();
 						break;
 					case JOptionPane.NO_OPTION:
 						System.exit(0);
@@ -332,7 +332,7 @@ public final class Driver extends JFrame
 			@Override
 			public void actionPerformed(ActionEvent event)
 			{
-				new HelpMenu();
+				new HelpFrame();
 			}
 		});
 		helpMenu.add(helpMenuItem);
@@ -344,7 +344,7 @@ public final class Driver extends JFrame
 			@Override
 			public void actionPerformed(ActionEvent event)
 			{
-				new AboutMenu(mMainPanel);
+				new AboutFrame(mMainPanel);
 			}
 		});
 		helpMenu.add(aboutItem);
@@ -426,7 +426,7 @@ public final class Driver extends JFrame
 							if (mOptionsMenu != null)
 								mOptionsMenu.setVisible(true);
 
-							setPanel(new PlayGame(gameToPlay, false));
+							setPanel(new PlayGamePanel(gameToPlay, false));
 							poppedFrame.dispose();
 						}
 						catch (Exception e)
@@ -563,7 +563,7 @@ public final class Driver extends JFrame
 							{
 								try
 								{
-									mOtherPanel = new PlayGame(true, file);
+									mOtherPanel = new PlayGamePanel(true, file);
 								}
 								catch (Exception e)
 								{
@@ -581,7 +581,7 @@ public final class Driver extends JFrame
 									objectInputStream = new ObjectInputStream(fileInputStream);
 									gameToView = (Game) objectInputStream.readObject();
 
-									setPanel(new PlayGame(gameToView, false));
+									setPanel(new PlayGamePanel(gameToView, false));
 									poppedFrame.dispose();
 								}
 								catch (Exception e)
@@ -686,7 +686,7 @@ public final class Driver extends JFrame
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				setPanel(new CustomSetupMenu());
+				setPanel(new CustomSetupPanel());
 			}
 		});
 

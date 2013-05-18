@@ -2,8 +2,8 @@ package net;
 
 import gui.AnimatedLabel;
 import gui.Driver;
-import gui.PlayGame;
-import gui.PlayNetGame;
+import gui.PlayGamePanel;
+import gui.PlayNetGamePanel;
 
 import java.io.EOFException;
 import java.io.ObjectInputStream;
@@ -58,15 +58,15 @@ public class NetworkClient
 		Object fromUser;
 
 		Game g = (Game) in.readObject();
-		PlayNetGame png = new PlayNetGame(g, false, true);
-		PlayGame.resetTimers();
+		PlayNetGamePanel png = new PlayNetGamePanel(g, false, true);
+		PlayGamePanel.resetTimers();
 		Driver.getInstance().setPanel(png);
 
 		try
 		{
-			while (PlayNetGame.m_isRunning)
+			while (PlayNetGamePanel.m_isRunning)
 			{
-				while (g.isBlackMove() == false && PlayNetGame.m_isRunning)
+				while (g.isBlackMove() == false && PlayNetGamePanel.m_isRunning)
 				{
 					fromServer = in.readObject();
 					FakeMove toMove = (FakeMove) fromServer;
@@ -91,7 +91,7 @@ public class NetworkClient
 							Result result = Result.DRAW;
 							result.setGuiText("The game has ended in a Draw!");
 							g.getLastMove().setResult(result);
-							PlayGame.endOfGame(result);
+							PlayGamePanel.endOfGame(result);
 							throw new Exception();
 						}
 						else
@@ -119,9 +119,9 @@ public class NetworkClient
 							continue;
 					}
 				}
-				while (g.isBlackMove() == true && PlayNetGame.m_isRunning)
+				while (g.isBlackMove() == true && PlayNetGamePanel.m_isRunning)
 				{
-					while (PlayNetGame.m_netMove == null && !png.m_drawRequested && PlayNetGame.m_isRunning)
+					while (PlayNetGamePanel.m_netMove == null && !png.m_drawRequested && PlayNetGamePanel.m_isRunning)
 						Thread.sleep(0);
 					if (png.m_drawRequested)
 					{
@@ -132,7 +132,7 @@ public class NetworkClient
 							Result result = Result.DRAW;
 							result.setGuiText("The game has ended in a Draw!");
 							g.getLastMove().setResult(result);
-							PlayGame.endOfGame(result);
+							PlayGamePanel.endOfGame(result);
 							png.m_drawRequested = false;
 							throw new Exception();
 						}
@@ -146,8 +146,8 @@ public class NetworkClient
 						}
 					}
 
-					fromUser = PlayNetGame.m_netMove;
-					PlayNetGame.m_netMove = null;
+					fromUser = PlayNetGamePanel.m_netMove;
+					PlayNetGamePanel.m_netMove = null;
 
 					if (fromUser != null && ((FakeMove) fromUser).m_originColumn == -1)
 						png.m_drawRequested = true;
@@ -172,7 +172,7 @@ public class NetworkClient
 			e.printStackTrace();
 			if (g.getHistory().size() != 0 && g.getHistory().get(g.getHistory().size() - 1).getResult() != null)
 				return;
-			if (!PlayNetGame.m_isRunning)
+			if (!PlayNetGamePanel.m_isRunning)
 				return;
 			JOptionPane.showMessageDialog(null, "Your opponent closed the game", "Oops!", JOptionPane.ERROR_MESSAGE);
 			g.getBlackTimer().stopTimer();

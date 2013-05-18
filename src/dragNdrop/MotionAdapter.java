@@ -1,4 +1,4 @@
-package gui;
+package dragNdrop;
 
 import java.awt.Component;
 import java.awt.Point;
@@ -7,7 +7,6 @@ import java.awt.event.MouseMotionAdapter;
 
 import javax.swing.SwingUtilities;
 
-import dragNdrop.GlassPane;
 
 public class MotionAdapter extends MouseMotionAdapter
 {

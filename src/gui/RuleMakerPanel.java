@@ -30,9 +30,9 @@ import rules.ObjectivePiece;
 import rules.Rules;
 import utility.GuiUtility;
 
-public class RuleMaker extends JPanel
+public class RuleMakerPanel extends JPanel
 {
-	public RuleMaker(CustomSetupMenu customSetupMenu, JFrame optionsFrame)
+	public RuleMakerPanel(CustomSetupPanel customSetupMenu, JFrame optionsFrame)
 	{
 		m_frame = optionsFrame;
 		m_frame.setVisible(true);
@@ -46,7 +46,7 @@ public class RuleMaker extends JPanel
 		initGUIComponents(customSetupMenu);
 	}
 
-	private void initGUIComponents(final CustomSetupMenu customSetupMenu)
+	private void initGUIComponents(final CustomSetupPanel customSetupMenu)
 	{
 		revalidate();
 		repaint();
@@ -384,7 +384,7 @@ public class RuleMaker extends JPanel
 
 				customSetupMenu.m_whiteRules = m_whiteRules;
 				customSetupMenu.m_blackRules = m_blackRules;
-				RuleMaker.this.removeAll();
+				RuleMakerPanel.this.removeAll();
 				m_frame.setVisible(false);
 			}
 		});

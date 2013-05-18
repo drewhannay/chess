@@ -31,9 +31,9 @@ import logic.PieceBuilder;
 import utility.GuiUtility;
 import utility.ImageUtility;
 
-public class PieceMaker extends JPanel
+public class PieceMakerPanel extends JPanel
 {
-	public PieceMaker(CustomSetupMenu customSetupMenu, JFrame optionsFrame)
+	public PieceMakerPanel(CustomSetupPanel customSetupMenu, JFrame optionsFrame)
 	{
 		m_frame = optionsFrame;
 		m_frame.setVisible(true);
@@ -45,7 +45,7 @@ public class PieceMaker extends JPanel
 		initGUIComponents(customSetupMenu);
 	}
 
-	private void initGUIComponents(final CustomSetupMenu customSetupMenu)
+	private void initGUIComponents(final CustomSetupPanel customSetupMenu)
 	{
 		m_builder = new PieceBuilder();
 
@@ -318,7 +318,7 @@ public class PieceMaker extends JPanel
 				if (pieceNameField.getText().trim().isEmpty())
 				{
 					customSetupMenu.setupPiecesList();
-					PieceMaker.this.removeAll();
+					PieceMakerPanel.this.removeAll();
 					m_frame.setVisible(false);
 				}
 				else
@@ -329,7 +329,7 @@ public class PieceMaker extends JPanel
 					{
 					case JOptionPane.YES_OPTION:
 						customSetupMenu.setupPiecesList();
-						PieceMaker.this.removeAll();
+						PieceMakerPanel.this.removeAll();
 						m_frame.setVisible(false);
 						break;
 					case JOptionPane.NO_OPTION:

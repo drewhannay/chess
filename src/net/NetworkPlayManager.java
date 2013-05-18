@@ -1,7 +1,7 @@
 package net;
 
 import gui.Driver;
-import gui.NetLoading;
+import gui.NetLoadingPanel;
 
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
@@ -142,7 +142,7 @@ public final class NetworkPlayManager
 										}
 									});
 									clientThread.start();
-									Driver.getInstance().setPanel(new NetLoading());
+									Driver.getInstance().setPanel(new NetLoadingPanel());
 								}
 								catch (Exception e)
 								{

@@ -1,6 +1,6 @@
 package ai;
 
-import gui.PlayNetGame;
+import gui.PlayNetGamePanel;
 
 import java.util.List;
 
@@ -57,8 +57,8 @@ public class AIAdapter
 	 */
 	public void runGame(AIPlugin aiPlugin)
 	{
-		PlayNetGame.m_isRunning = true;
-		while (PlayNetGame.m_isRunning)
+		PlayNetGamePanel.m_isRunning = true;
+		while (PlayNetGamePanel.m_isRunning)
 		{
 			while (m_game.isBlackMove())
 			{

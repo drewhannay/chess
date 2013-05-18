@@ -1,6 +1,6 @@
 package rules;
 
-import gui.PlayGame;
+import gui.PlayGamePanel;
 
 import java.util.List;
 
@@ -102,8 +102,8 @@ public enum EndOfGame
 						m_game.getHistory().add(m_game.getLastMove());
 
 					// let the user see the final move
-					PlayGame.boardRefresh(m_game.getBoards());
-					PlayGame.endOfGame(result);
+					PlayGamePanel.boardRefresh(m_game.getBoards());
+					PlayGamePanel.endOfGame(result);
 				}
 			}
 			// if the King isn't threatened, then it's stalemate
@@ -120,8 +120,8 @@ public enum EndOfGame
 						m_game.getHistory().add(m_game.getLastMove());
 					}
 					// let the user see the final move
-					PlayGame.boardRefresh(m_game.getBoards());
-					PlayGame.endOfGame(result);
+					PlayGamePanel.boardRefresh(m_game.getBoards());
+					PlayGamePanel.endOfGame(result);
 				}
 			}
 		}
@@ -136,7 +136,7 @@ public enum EndOfGame
 			{
 				Result result = !m_isBlackRuleSet ? Result.WHITE_WIN : Result.BLACK_WIN;
 				result.setGuiText("Game Over! " + result.winText() + "\n");
-				PlayGame.endOfGame(result);
+				PlayGamePanel.endOfGame(result);
 			}
 		}
 		m_move = m_game.getLastMove();
@@ -158,7 +158,7 @@ public enum EndOfGame
 		}
 		Result result = m_isBlackRuleSet ? Result.BLACK_WIN : Result.WHITE_WIN;
 		result.setGuiText("Game Over! " + result.winText() + "\n");
-		PlayGame.endOfGame(result);
+		PlayGamePanel.endOfGame(result);
 	}
 
 	private void captureAllPieces()
@@ -171,7 +171,7 @@ public enum EndOfGame
 		}
 		Result result = !m_isBlackRuleSet ? Result.BLACK_WIN : Result.WHITE_WIN;
 		result.setGuiText("Game Over! " + result.winText() + "\n");
-		PlayGame.endOfGame(result);
+		PlayGamePanel.endOfGame(result);
 	}
 
 	private void checkCaptureAllOfType()
@@ -184,7 +184,7 @@ public enum EndOfGame
 		}
 		Result result = m_isBlackRuleSet ? Result.BLACK_WIN : Result.WHITE_WIN;
 		result.setGuiText("Game Over! " + result.winText() + "\n");
-		PlayGame.endOfGame(result);
+		PlayGamePanel.endOfGame(result);
 	}
 
 	private Game m_game;

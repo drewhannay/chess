@@ -26,12 +26,12 @@ import logic.Square;
 import timer.ChessTimer;
 import ai.FakeMove;
 
-public class PlayNetGame extends PlayGame
+public class PlayNetGamePanel extends PlayGamePanel
 {
-	public PlayNetGame(Game game, boolean isPlayback, boolean isBlack) throws Exception
+	public PlayNetGamePanel(Game game, boolean isPlayback, boolean isBlack) throws Exception
 	{
 		super(game, isPlayback);
-		PlayNetGame.m_isBlackPlayer = isBlack;
+		PlayNetGamePanel.m_isBlackPlayer = isBlack;
 		initGUIComponents(isPlayback);
 	}
 
@@ -453,7 +453,7 @@ public class PlayNetGame extends PlayGame
 
 							Result result = Result.DRAW;
 							result.setGuiText("You have declared a draw. What would you like to do?");
-							PlayGame.endOfGame(result);
+							PlayGamePanel.endOfGame(result);
 						}
 						else
 						{
