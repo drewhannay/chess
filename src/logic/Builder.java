@@ -247,6 +247,7 @@ public class Builder implements Serializable
 					Game toReturn = new Game(name, b.m_boards, b.m_whiteRules, b.m_blackRules);
 					toReturn.setWhiteTeam(b.m_whiteTeam);
 					toReturn.setBlackTeam(b.m_blackTeam);
+					in.close();
 
 					return toReturn;
 				}

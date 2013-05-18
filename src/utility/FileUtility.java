@@ -73,14 +73,13 @@ public final class FileUtility
 		new File(path).mkdirs();
 		try
 		{
-			FileInputStream fstream = null;
-			fstream = new FileInputStream(getPreferencesFile());
-			DataInputStream in = new DataInputStream(fstream);
-			BufferedReader br = new BufferedReader(new InputStreamReader(in));
+			DataInputStream dataInputStream = new DataInputStream(new FileInputStream(getPreferencesFile()));
+			BufferedReader reader = new BufferedReader(new InputStreamReader(dataInputStream));
 			String line;
-			line = br.readLine();
-			line = br.readLine();
+			line = reader.readLine();
+			line = reader.readLine();
 			path = line.substring(22);
+			reader.close();
 		}
 		catch (Exception e)
 		{
