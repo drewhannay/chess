@@ -18,9 +18,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-public final class GUIUtility
+public final class GuiUtility
 {
-	private GUIUtility()
+	private GuiUtility()
 	{
 	}
 
@@ -73,7 +73,7 @@ public final class GUIUtility
 			BufferedImage bufferedImage;
 
 			if (isBuiltInFile)
-				bufferedImage = ImageIO.read(GUIUtility.class.getResource(imageLocation));
+				bufferedImage = ImageIO.read(GuiUtility.class.getResource(imageLocation));
 			else
 				bufferedImage = ImageIO.read(new File(imageLocation));
 

@@ -44,7 +44,7 @@ import timer.NoTimer;
 import timer.SimpleDelayTimer;
 import timer.WordTimer;
 import utility.FileUtility;
-import utility.GUIUtility;
+import utility.GuiUtility;
 import utility.RunnableOfT;
 import ai.AIAdapter;
 import ai.AIPlugin;
@@ -184,7 +184,7 @@ public class NewGameMenu extends JPanel
 						});
 
 						final JButton cancelButton = new JButton("Cancel");
-						GUIUtility.setupCancelButton(cancelButton, popupFrame);
+						GuiUtility.setupCancelButton(cancelButton, popupFrame);
 
 						JPanel topLevelPanel = new JPanel();
 						topLevelPanel.setLayout(new GridBagLayout());
@@ -276,7 +276,7 @@ public class NewGameMenu extends JPanel
 							JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE))
 					{
 					case JOptionPane.YES_OPTION:
-						GUIUtility.installAIFiles(aiComboBox, NewGameMenu.this, getAIFiles());
+						GuiUtility.installAIFiles(aiComboBox, NewGameMenu.this, getAIFiles());
 						break;
 					case JOptionPane.NO_OPTION:
 						return;
@@ -289,7 +289,7 @@ public class NewGameMenu extends JPanel
 					@Override
 					public void actionPerformed(ActionEvent event)
 					{
-						GUIUtility.installAIFiles(aiComboBox, NewGameMenu.this, getAIFiles());
+						GuiUtility.installAIFiles(aiComboBox, NewGameMenu.this, getAIFiles());
 					}
 				});
 
@@ -383,7 +383,7 @@ public class NewGameMenu extends JPanel
 				});
 
 				JButton cancelButton = new JButton("Cancel");
-				GUIUtility.setupCancelButton(cancelButton, poppedFrame);
+				GuiUtility.setupCancelButton(cancelButton, poppedFrame);
 
 				JPanel buttonPanel = new JPanel();
 				buttonPanel.setLayout(new FlowLayout());

@@ -40,7 +40,7 @@ public class PlayNetGame extends PlayGame
 		super.removeAll();
 		m_optionsMenu.setVisible(false);
 
-		Driver.getInstance().m_fileMenu.setVisible(false);
+		Driver.getInstance().setFileMenuVisibility(false);
 
 		m_inCheckLabel = new JLabel("You're In Check!");
 		m_inCheckLabel.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -49,7 +49,7 @@ public class PlayNetGame extends PlayGame
 		int twoBoardGridBagOffset = 0;
 		Driver.getInstance().setMenu(createMenuBar());
 
-		Driver.m_gameOptionsMenu.setVisible(true);
+		Driver.getInstance().setOptionsMenuVisibility(true);
 
 		setLayout(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
@@ -490,7 +490,7 @@ public class PlayNetGame extends PlayGame
 	public void setIsAIGame(boolean isAIGame)
 	{
 		m_isAIGame = isAIGame;
-		Driver.getInstance().m_fileMenu.setVisible(true);
+		Driver.getInstance().setFileMenuVisibility(true);
 		m_drawMenuItem.setText("Declare Draw");
 	}
 

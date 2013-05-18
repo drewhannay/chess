@@ -17,7 +17,7 @@ import javax.swing.JTextField;
 
 import rules.NextTurn;
 import rules.Rules;
-import utility.GUIUtility;
+import utility.GuiUtility;
 
 public class PlayerCustomMenu extends JPanel
 {
@@ -43,7 +43,7 @@ public class PlayerCustomMenu extends JPanel
 		JLabel playerOneTurnsLabel = new JLabel("How many turns in a row for White? ");
 		JLabel playerTwoTurnsLabel = new JLabel("How many turns in a row for Black? ");
 		m_playerOneTurnsField = new JTextField(4);
-		GUIUtility.requestFocus(m_playerOneTurnsField);
+		GuiUtility.requestFocus(m_playerOneTurnsField);
 		m_playerOneTurnsField.setText(Integer.toString(whiteRules.getNextTurn().getWhiteMoves()));
 		m_playerOneTurnsField.setToolTipText("This will be the amount of turns for the First Player (white in classic)");
 		m_playerTwoTurnsField = new JTextField(4);
@@ -56,7 +56,7 @@ public class PlayerCustomMenu extends JPanel
 
 		JButton cancelButton = new JButton("Cancel");
 		cancelButton.setToolTipText("Press me to return to the main Variant window");
-		GUIUtility.setupVariantCancelButton(cancelButton, this, m_frame);
+		GuiUtility.setupVariantCancelButton(cancelButton, this, m_frame);
 
 		JButton submitButton = new JButton("Save");
 		submitButton.setToolTipText("Press me to save these turn settings");

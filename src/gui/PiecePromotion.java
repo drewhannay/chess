@@ -20,7 +20,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import logic.PieceBuilder;
-import utility.GUIUtility;
+import utility.GuiUtility;
 
 import com.google.common.collect.Lists;
 
@@ -187,7 +187,7 @@ public class PiecePromotion extends JPanel
 
 		});
 		JButton cancelButton = new JButton("Cancel");
-		GUIUtility.setupVariantCancelButton(cancelButton, this, m_frame);
+		GuiUtility.setupVariantCancelButton(cancelButton, this, m_frame);
 
 		JPanel optionsPanel = new JPanel();
 		optionsPanel.add(saveButton);

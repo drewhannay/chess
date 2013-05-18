@@ -45,7 +45,7 @@ import logic.Square;
 import rules.EndOfGame;
 import rules.ObjectivePiece;
 import rules.Rules;
-import utility.GUIUtility;
+import utility.GuiUtility;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
@@ -129,7 +129,7 @@ public class CustomSetupMenu extends JPanel
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.insets = new Insets(0, 0, 0, 0);
 		add(variantNameField, constraints);
-		GUIUtility.requestFocus(variantNameField);
+		GuiUtility.requestFocus(variantNameField);
 
 		Board[] temp = new Board[1];
 		temp[0] = new Board(8, 8, false);
@@ -619,7 +619,7 @@ public class CustomSetupMenu extends JPanel
 			popupFrame.setVisible(true);
 		}
 
-		private ImageIcon uninhabitableIcon = GUIUtility.createImageIcon(48, 48, "/Uninhabitable.png");
+		private ImageIcon uninhabitableIcon = GuiUtility.createImageIcon(48, 48, "/Uninhabitable.png");
 		
 		private Square m_square;
 		private Board m_board;

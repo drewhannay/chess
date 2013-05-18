@@ -16,7 +16,7 @@ import javax.swing.JTextArea;
 import javax.swing.WindowConstants;
 
 import utility.AppConstants;
-import utility.GUIUtility;
+import utility.GuiUtility;
 
 public class AboutMenu extends JFrame
 {
@@ -35,8 +35,8 @@ public class AboutMenu extends JFrame
 		setLayout(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
 
-		JLabel frontPageImage = new JLabel(GUIUtility.createImageIcon(300, 200, "/front_page_image.jpeg"));
-		JLabel piecePicture = new JLabel(GUIUtility.createImageIcon(48, 48, "/king_dark.png"));
+		JLabel frontPageImage = new JLabel(GuiUtility.createImageIcon(300, 200, "/front_page_image.jpeg"));
+		JLabel piecePicture = new JLabel(GuiUtility.createImageIcon(48, 48, "/d_King.png"));
 
 		Font font = new Font("Verdana", Font.BOLD, 18);
 		JLabel title = new JLabel(AppConstants.APP_NAME + "\n");

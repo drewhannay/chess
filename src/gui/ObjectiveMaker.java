@@ -19,7 +19,7 @@ import javax.swing.JRadioButton;
 
 import rules.EndOfGame;
 import rules.Rules;
-import utility.GUIUtility;
+import utility.GuiUtility;
 
 public class ObjectiveMaker extends JPanel
 {
@@ -46,7 +46,7 @@ public class ObjectiveMaker extends JPanel
 		final JPanel objectiveWhitePanel = new JPanel();
 		objectiveWhitePanel.setLayout(new GridLayout(5, 1));
 		final JRadioButton whiteCaptureAllButton = new JRadioButton("Capture All", false);
-		GUIUtility.requestFocus(whiteCaptureAllButton);
+		GuiUtility.requestFocus(whiteCaptureAllButton);
 		whiteCaptureAllButton.setToolTipText("Press me if you want the objective to be capturing all enemy pieces");
 		objectiveWhitePanel.add(whiteCaptureAllButton);
 		if (customSetupMenu.m_whiteRules.getEndOfGame() == EndOfGame.CAPTURE_ALL_PIECES)
@@ -128,7 +128,7 @@ public class ObjectiveMaker extends JPanel
 
 		final JButton cancelButton = new JButton("Cancel");
 		cancelButton.setToolTipText("Press me to return to the piece creation window");
-		GUIUtility.setupVariantCancelButton(cancelButton, this, m_frame);
+		GuiUtility.setupVariantCancelButton(cancelButton, this, m_frame);
 
 		JButton saveButton = new JButton("Save");
 		saveButton.setToolTipText("Press me to save these objective settings");

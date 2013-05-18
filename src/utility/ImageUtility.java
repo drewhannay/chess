@@ -28,13 +28,13 @@ public final class ImageUtility
 	public static ImageIcon getLightImage(String pieceName)
 	{
 		boolean isBuiltInFile = PIECE_NAMES.contains(pieceName);
-		return GUIUtility.createImageIcon(48, 48, FileUtility.getImagePath(LIGHT_PREFIX + pieceName + PNG, isBuiltInFile), isBuiltInFile);
+		return GuiUtility.createImageIcon(48, 48, FileUtility.getImagePath(LIGHT_PREFIX + pieceName + PNG, isBuiltInFile), isBuiltInFile);
 	}
 
 	public static ImageIcon getDarkImage(String pieceName)
 	{
 		boolean isBuiltInFile = PIECE_NAMES.contains(pieceName);
-		return GUIUtility.createImageIcon(48, 48, FileUtility.getImagePath(DARK_PREFIX + pieceName + PNG, isBuiltInFile), isBuiltInFile);
+		return GuiUtility.createImageIcon(48, 48, FileUtility.getImagePath(DARK_PREFIX + pieceName + PNG, isBuiltInFile), isBuiltInFile);
 	}
 
 	private static final String LIGHT_PREFIX = "l_";

@@ -31,7 +31,7 @@ public class NetLoading extends JPanel
 			{
 				AnimatedLabel.m_isFinished = true;
 				NewGameMenu.m_isCancelled = true;
-				Driver.getInstance().m_fileMenu.setVisible(true);
+				Driver.getInstance().setFileMenuVisibility(true);
 				Driver.getInstance().revertToMainPanel();
 			}
 		});

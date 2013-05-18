@@ -28,7 +28,7 @@ import javax.swing.JTextField;
 import javax.swing.filechooser.FileFilter;
 
 import logic.PieceBuilder;
-import utility.GUIUtility;
+import utility.GuiUtility;
 import utility.ImageUtility;
 
 public class PieceMaker extends JPanel
@@ -63,7 +63,7 @@ public class PieceMaker extends JPanel
 		namePanel.add(new JLabel("Piece Name:"));
 		final JTextField pieceNameField = new JTextField(15);
 		pieceNameField.setToolTipText("Enter the name of the new piece here");
-		GUIUtility.requestFocus(pieceNameField);
+		GuiUtility.requestFocus(pieceNameField);
 		namePanel.add(pieceNameField);
 
 		constraints.gridx = 0;
@@ -132,7 +132,7 @@ public class PieceMaker extends JPanel
 		westField.setToolTipText("West");
 		westField.setText("0");
 
-		JLabel movementPictureHolder = new JLabel(GUIUtility.createImageIcon(130, 130, "/movement_directions.png"));
+		JLabel movementPictureHolder = new JLabel(GuiUtility.createImageIcon(130, 130, "/movement_directions.png"));
 
 		JPanel movement = new JPanel();
 		movement.setLayout(new GridBagLayout());

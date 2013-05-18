@@ -209,7 +209,7 @@ public class PlayGame extends JPanel
 					"Time Ran Out", JOptionPane.PLAIN_MESSAGE);
 			PlayNetGame.m_isRunning = false;
 			Driver.getInstance().revertToMainPanel();
-			Driver.getInstance().m_fileMenu.setVisible(true);
+			Driver.getInstance().setFileMenuVisibility(true);
 			return;
 		}
 
@@ -287,7 +287,7 @@ public class PlayGame extends JPanel
 					JOptionPane.PLAIN_MESSAGE);
 			getGame().saveGame(saveFileName, getGame().isClassicChess());
 			m_game.setBlackMove(false);
-			Driver.getInstance().m_fileMenu.setVisible(true);
+			Driver.getInstance().setFileMenuVisibility(true);
 			Driver.getInstance().revertToMainPanel();
 			break;
 		case JOptionPane.NO_OPTION:
@@ -448,7 +448,7 @@ public class PlayGame extends JPanel
 		if (m_optionsMenu == null || !m_optionsMenu.isVisible())
 			Driver.getInstance().setMenu(createMenuBar());
 
-		Driver.m_gameOptionsMenu.setVisible(!isPlayback);
+		Driver.getInstance().setOptionsMenuVisibility(!isPlayback);
 
 		setLayout(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();

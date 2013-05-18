@@ -180,9 +180,8 @@ public class NetworkServer
 		{
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(null, "Your opponent closed the game", "Oops!", JOptionPane.ERROR_MESSAGE);
-			Driver.getInstance().m_fileMenu.setVisible(true);
-			Driver.getInstance();
-			Driver.m_gameOptionsMenu.setVisible(false);
+			Driver.getInstance().setFileMenuVisibility(true);
+			Driver.getInstance().setOptionsMenuVisibility(false);
 			Driver.getInstance().revertToMainPanel();
 			serverSocket.close();
 			return;
@@ -195,9 +194,8 @@ public class NetworkServer
 			JOptionPane.showMessageDialog(null, "Your opponent closed the game", "Oops!", JOptionPane.ERROR_MESSAGE);
 			g.getBlackTimer().stopTimer();
 			g.getWhiteTimer().stopTimer();
-			Driver.getInstance().m_fileMenu.setVisible(true);
-			Driver.getInstance();
-			Driver.m_gameOptionsMenu.setVisible(false);
+			Driver.getInstance().setFileMenuVisibility(true);
+			Driver.getInstance().setOptionsMenuVisibility(false);
 			Driver.getInstance().revertToMainPanel();
 			serverSocket.close();
 			return;

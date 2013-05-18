@@ -28,7 +28,7 @@ import rules.EndOfGame;
 import rules.GetBoard;
 import rules.ObjectivePiece;
 import rules.Rules;
-import utility.GUIUtility;
+import utility.GuiUtility;
 
 public class RuleMaker extends JPanel
 {
@@ -60,7 +60,7 @@ public class RuleMaker extends JPanel
 		final JPanel whiteLegalDestinationPanel = new JPanel();
 		whiteLegalDestinationPanel.setLayout(new GridLayout(2, 1));
 		final JCheckBox whiteCaptureMandatoryCheckBox = new JCheckBox("Capture Mandatory");
-		GUIUtility.requestFocus(whiteCaptureMandatoryCheckBox);
+		GuiUtility.requestFocus(whiteCaptureMandatoryCheckBox);
 		whiteCaptureMandatoryCheckBox.setToolTipText("Capturing moves must be performed");
 		whiteLegalDestinationPanel.add(whiteCaptureMandatoryCheckBox);
 
@@ -242,7 +242,7 @@ public class RuleMaker extends JPanel
 
 		final JButton cancelButton = new JButton("Cancel");
 		cancelButton.setToolTipText("Press me to return to the main Variant window");
-		GUIUtility.setupVariantCancelButton(cancelButton, this, m_frame);
+		GuiUtility.setupVariantCancelButton(cancelButton, this, m_frame);
 
 		JButton saveButton = new JButton("Save");
 		saveButton.setToolTipText("Press me to save these rules");

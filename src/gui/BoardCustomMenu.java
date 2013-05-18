@@ -18,7 +18,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 import logic.Board;
-import utility.GUIUtility;
+import utility.GuiUtility;
 
 public class BoardCustomMenu extends JPanel
 {
@@ -43,12 +43,12 @@ public class BoardCustomMenu extends JPanel
 		// create button and add ActionListener
 		m_cancelButton = new JButton("Cancel");
 		m_cancelButton.setToolTipText("Press me to go back to the main variant setup");
-		GUIUtility.setupVariantCancelButton(m_cancelButton, this, m_frame);
+		GuiUtility.setupVariantCancelButton(m_cancelButton, this, m_frame);
 
 		// Create JLabels and JRadioButtons.
 		m_numberOfBoardsLabel = new JLabel("How many boards?");
 		m_oneBoardButton = new JRadioButton("1");
-		GUIUtility.requestFocus(m_oneBoardButton);
+		GuiUtility.requestFocus(m_oneBoardButton);
 		m_oneBoardButton.setToolTipText("Choose me for one Board");
 		// Set oneBoard to be initially selected.
 		m_twoBoardsButton = new JRadioButton("2");
