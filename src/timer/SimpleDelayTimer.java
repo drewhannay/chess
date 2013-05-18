@@ -2,7 +2,7 @@ package timer;
 
 import utility.RunnableOfT;
 
-public class SimpleDelayTimer extends ChessTimer
+class SimpleDelayTimer extends ChessTimer
 {
 	public SimpleDelayTimer(RunnableOfT<Boolean> timeElapsedCallback, long delayTime, long startTime, boolean isBlackTeamTimer)
 	{

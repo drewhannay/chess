@@ -8,7 +8,7 @@ import java.util.List;
 
 import rules.Rules;
 import timer.ChessTimer;
-import timer.NoTimer;
+import timer.TimerTypes;
 import utility.FileUtility;
 import ai.FakeMove;
 
@@ -34,8 +34,8 @@ public class Game implements Serializable
 	{
 		m_gameType = gameType;
 		m_boards = boards;
-		m_whiteTimer = new NoTimer();
-		m_blackTimer = new NoTimer();
+		m_whiteTimer = ChessTimer.createTimer(TimerTypes.NO_TIMER, null, 0, 0, false);
+		m_blackTimer = ChessTimer.createTimer(TimerTypes.NO_TIMER, null, 0, 0, true);
 		setWhiteRules(whiteRules);
 		whiteRules.setGame(this);
 		setBlackRules(blackRules);

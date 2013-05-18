@@ -1,6 +1,6 @@
 package timer;
 
-public class WordTimer extends ChessTimer
+class WordTimer extends ChessTimer
 {
 	public WordTimer(long startTime)
 	{

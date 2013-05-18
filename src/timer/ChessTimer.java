@@ -9,6 +9,8 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
 
+import com.google.common.base.Preconditions;
+
 import utility.RunnableOfT;
 
 public abstract class ChessTimer implements ActionListener, Serializable
@@ -30,6 +32,43 @@ public abstract class ChessTimer implements ActionListener, Serializable
 	public void actionPerformed(ActionEvent ae)
 	{
 		updateDisplay();
+	}
+
+	// FIXME: this is a terrible method...
+	public static boolean isNoTimer(ChessTimer timer)
+	{
+		return timer instanceof NoTimer;
+	}
+
+	// FIXME: this is a terrible method...
+	public static boolean isWordTimer(ChessTimer timer)
+	{
+		return timer instanceof WordTimer;
+	}
+
+	public static ChessTimer createTimer(TimerTypes timerType, RunnableOfT<Boolean> timeElapsedCallback, long incrementAmount, long startTime, boolean isBlackTeamTimer)
+	{
+		switch (timerType)
+		{
+		case NO_TIMER:
+			return new NoTimer();
+		case BRONSTEIN_DELAY:
+			return new BronsteinDelayTimer(timeElapsedCallback, incrementAmount, startTime, isBlackTeamTimer);
+		case FISCHER:
+			return new FischerTimer(timeElapsedCallback, incrementAmount, startTime, false, isBlackTeamTimer);
+		case FISCHER_AFTER:
+			return new FischerTimer(timeElapsedCallback, incrementAmount, startTime, true, isBlackTeamTimer);
+		case HOUR_GLASS:
+			// time is halved since it is actually the time the player may not exceed
+			return new HourGlassTimer(timeElapsedCallback, startTime / 2, isBlackTeamTimer);
+		case SIMPLE_DELAY:
+			return new SimpleDelayTimer(timeElapsedCallback, incrementAmount, startTime, isBlackTeamTimer);
+		case WORD:
+			return new WordTimer(startTime);
+		default:
+			Preconditions.checkArgument(false);
+			return null;
+		}
 	}
 
 	public static void stopTimers()

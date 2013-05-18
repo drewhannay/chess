@@ -2,7 +2,7 @@ package timer;
 
 import utility.RunnableOfT;
 
-public class HourGlassTimer extends ChessTimer
+class HourGlassTimer extends ChessTimer
 {
 	public HourGlassTimer(RunnableOfT<Boolean> timeElapsedCallback, long startTime, boolean isBlackTeamTimer)
 	{

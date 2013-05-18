@@ -48,7 +48,7 @@ import logic.Piece;
 import logic.Result;
 import logic.Square;
 import timer.ChessTimer;
-import timer.NoTimer;
+import timer.TimerTypes;
 import utility.AppConstants;
 import utility.FileUtility;
 
@@ -94,8 +94,8 @@ public class PlayGame extends JPanel
 		m_dropManager = new DropManager();
 		if (isPlayback)
 		{
-			PlayGame.m_whiteTimer = new NoTimer();
-			PlayGame.m_blackTimer = new NoTimer();
+			PlayGame.m_whiteTimer = ChessTimer.createTimer(TimerTypes.NO_TIMER, null, 0, 0, false);
+			PlayGame.m_blackTimer = ChessTimer.createTimer(TimerTypes.NO_TIMER, null, 0, 0, true);
 			m_history = new Move[game.getHistory().size()];
 			game.getHistory().toArray(m_history);
 			initComponents(isPlayback);
@@ -387,7 +387,7 @@ public class PlayGame extends JPanel
 
 					m_optionsMenu.setVisible(false);
 					Result result = Result.DRAW;
-					result.setGUIText("Draw! \nWhat would you like to do? \n");
+					result.setGuiText("Draw! \nWhat would you like to do? \n");
 					getGame().getLastMove().setResult(result);
 					endOfGame(result);
 				}
@@ -663,7 +663,7 @@ public class PlayGame extends JPanel
 		constraints.gridx = 11 + twoBoardsGridBagOffset;
 
 		// change spacing and location if there is a timer or not.
-		if (m_whiteTimer instanceof NoTimer)
+		if (ChessTimer.isNoTimer(m_whiteTimer))
 		{
 			constraints.gridy = 6;
 			constraints.insets = new Insets(10, 25, 0, 25);
@@ -684,7 +684,7 @@ public class PlayGame extends JPanel
 		constraints.insets = new Insets(10, 0, 10, 0);
 
 		// change spacing if there is a timer
-		if (m_whiteTimer instanceof NoTimer)
+		if (ChessTimer.isNoTimer(m_whiteTimer))
 		{
 			constraints.gridheight = 1;
 			constraints.gridy = 9;

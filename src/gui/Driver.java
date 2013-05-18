@@ -82,7 +82,7 @@ public final class Driver extends JFrame
 		if (PlayGame.m_optionsMenu != null)
 			PlayGame.m_optionsMenu.setVisible(false);
 		ChessTimer.stopTimers();
-		setPanel(new NewGameMenu());
+		setPanel(new NewGamePanel());
 	}
 
 	public void setPanel(JPanel panel)
@@ -263,7 +263,7 @@ public final class Driver extends JFrame
 			@Override
 			public void actionPerformed(ActionEvent event)
 			{
-				setPanel(new NewGameMenu());
+				setPanel(new NewGamePanel());
 			}
 		});
 
@@ -362,7 +362,7 @@ public final class Driver extends JFrame
 			@Override
 			public void actionPerformed(ActionEvent event)
 			{
-				setPanel(new NewGameMenu());
+				setPanel(new NewGamePanel());
 			}
 		});
 

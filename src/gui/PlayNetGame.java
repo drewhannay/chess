@@ -23,7 +23,7 @@ import logic.Board;
 import logic.Game;
 import logic.Result;
 import logic.Square;
-import timer.NoTimer;
+import timer.ChessTimer;
 import ai.FakeMove;
 
 public class PlayNetGame extends PlayGame
@@ -263,7 +263,7 @@ public class PlayNetGame extends PlayGame
 		constraints.ipadx = 0;
 		constraints.gridx = 11 + twoBoardGridBagOffset;
 		// change spacing and location if there is a timer or not.
-		if (m_whiteTimer instanceof NoTimer)
+		if (ChessTimer.isNoTimer(m_whiteTimer))
 		{
 			constraints.gridy = 6;
 			constraints.insets = new Insets(10, 25, 0, 25);
@@ -283,7 +283,7 @@ public class PlayNetGame extends PlayGame
 		constraints.weighty = 0.0;
 		constraints.insets = new Insets(10, 0, 10, 0);
 		// change spacing if there is a timer
-		if (m_whiteTimer instanceof NoTimer)
+		if (ChessTimer.isNoTimer(m_whiteTimer))
 		{
 			constraints.gridheight = 1;
 			constraints.gridy = 9;
@@ -452,7 +452,7 @@ public class PlayNetGame extends PlayGame
 								return;
 
 							Result result = Result.DRAW;
-							result.setGUIText("You have declared a draw. What would you like to do?");
+							result.setGuiText("You have declared a draw. What would you like to do?");
 							PlayGame.endOfGame(result);
 						}
 						else

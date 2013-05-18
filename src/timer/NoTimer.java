@@ -1,6 +1,6 @@
 package timer;
 
-public class NoTimer extends ChessTimer
+class NoTimer extends ChessTimer
 {
 	public NoTimer()
 	{

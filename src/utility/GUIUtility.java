@@ -10,7 +10,6 @@ import java.io.File;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -88,31 +87,25 @@ public final class GuiUtility
 		}
 	}
 	
-	public static void installAIFiles(JComboBox aiComboBox, Component parent, String[] aiFiles)
+	public static boolean tryAIFileInstall(Component parent)
 	{
 		JFileChooser fileChooser = new JFileChooser();
 		int returnVal = fileChooser.showOpenDialog(parent);
 		File file = fileChooser.getSelectedFile();
 
-		File destinationDirectory = new File(System.getProperty("user.home") + "/chess/AI");
-
 		if (returnVal == JFileChooser.APPROVE_OPTION)
 		{
-			if (!file.renameTo(new File(destinationDirectory, file.getName())))
+			if (!file.renameTo(FileUtility.getAIFile(file.getName())))
 			{
 				JOptionPane.showMessageDialog(parent, "File was not installed successfully", "Error",
 						JOptionPane.PLAIN_MESSAGE);
 			}
 			else
 			{
-				aiComboBox.removeAllItems();
-				for (String fileName : aiFiles)
-					aiComboBox.addItem(fileName);
+				return true;
 			}
 		}
-		else
-		{
-			return;
-		}
+
+		return false;
 	}
 }

@@ -96,7 +96,7 @@ public enum EndOfGame
 								+ m_game.getThreats(objectivePiece)[0].getName() + " at location "
 								+ m_game.getThreats(objectivePiece)[0].getSquare().toString(new boolean[] { false, false }) + "\n";
 					}
-					result.setGUIText(resultText + "What would you like to do? \n");
+					result.setGuiText(resultText + "What would you like to do? \n");
 					m_game.getLastMove().setResult(result);
 					if (!m_game.getHistory().contains(m_game.getLastMove()))
 						m_game.getHistory().add(m_game.getLastMove());
@@ -113,7 +113,7 @@ public enum EndOfGame
 				{
 					m_game.getLastMove().setStalemate(true);
 					Result result = Result.DRAW;
-					result.setGUIText("Draw! " + "\n");
+					result.setGuiText("Draw! " + "\n");
 					m_game.getLastMove().setResult(result);
 					if (!m_game.getHistory().contains(m_game.getLastMove()))
 					{
@@ -135,7 +135,7 @@ public enum EndOfGame
 			if (++m_numberOfChecks == m_maxNumberOfChecks)
 			{
 				Result result = !m_isBlackRuleSet ? Result.WHITE_WIN : Result.BLACK_WIN;
-				result.setGUIText("Game Over! " + result.winText() + "\n");
+				result.setGuiText("Game Over! " + result.winText() + "\n");
 				PlayGame.endOfGame(result);
 			}
 		}
@@ -157,7 +157,7 @@ public enum EndOfGame
 				return;
 		}
 		Result result = m_isBlackRuleSet ? Result.BLACK_WIN : Result.WHITE_WIN;
-		result.setGUIText("Game Over! " + result.winText() + "\n");
+		result.setGuiText("Game Over! " + result.winText() + "\n");
 		PlayGame.endOfGame(result);
 	}
 
@@ -170,7 +170,7 @@ public enum EndOfGame
 				return;
 		}
 		Result result = !m_isBlackRuleSet ? Result.BLACK_WIN : Result.WHITE_WIN;
-		result.setGUIText("Game Over! " + result.winText() + "\n");
+		result.setGuiText("Game Over! " + result.winText() + "\n");
 		PlayGame.endOfGame(result);
 	}
 
@@ -183,7 +183,7 @@ public enum EndOfGame
 				return;
 		}
 		Result result = m_isBlackRuleSet ? Result.BLACK_WIN : Result.WHITE_WIN;
-		result.setGUIText("Game Over! " + result.winText() + "\n");
+		result.setGuiText("Game Over! " + result.winText() + "\n");
 		PlayGame.endOfGame(result);
 	}
 

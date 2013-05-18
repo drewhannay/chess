@@ -5,7 +5,7 @@ import gui.PlayGame;
 import java.io.Serializable;
 import java.util.List;
 
-import timer.WordTimer;
+import timer.ChessTimer;
 
 /**
  * Move.java
@@ -339,7 +339,7 @@ public class Move implements Serializable
 			oldWhiteTime = board.getGame().getWhiteTimer().getRawTime();
 			oldBlackTime = board.getGame().getBlackTimer().getRawTime();
 		}
-		if (board.getGame().getWhiteTimer() instanceof WordTimer)
+		if (ChessTimer.isWordTimer(board.getGame().getWhiteTimer()))
 		{
 			oldWhiteDirection = board.getGame().getWhiteTimer().getClockDirection();
 			oldBlackDirection = board.getGame().getBlackTimer().getClockDirection();
@@ -695,7 +695,7 @@ public class Move implements Serializable
 		board.getGame().undoAfterMove(this);
 		board.getGame().getWhiteTimer().setClockTime(oldWhiteTime);
 		board.getGame().getBlackTimer().setClockTime(oldBlackTime);
-		if (board.getGame().getWhiteTimer() instanceof WordTimer)
+		if (ChessTimer.isWordTimer(board.getGame().getWhiteTimer()))
 		{
 			board.getGame().getWhiteTimer().setClockDirection(oldWhiteDirection);
 			board.getGame().getBlackTimer().setClockDirection(oldBlackDirection);

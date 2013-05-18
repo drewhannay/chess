@@ -2,7 +2,7 @@ package timer;
 
 import utility.RunnableOfT;
 
-public class BronsteinDelayTimer extends ChessTimer
+class BronsteinDelayTimer extends ChessTimer
 {
 	public BronsteinDelayTimer(RunnableOfT<Boolean> callback, long incrementAmount, long currentTime, boolean isBlackTeamTimer)
 	{
