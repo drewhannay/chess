@@ -15,7 +15,7 @@ public enum ObjectivePiece
 	{
 		Preconditions.checkState(this != CLASSIC);
 
-		m_objectivePieceName = objectivePieceName;
+		mObjectivePieceName = objectivePieceName;
 		return this;
 	}
 
@@ -35,19 +35,19 @@ public enum ObjectivePiece
 
 	public void setGame(Game game)
 	{
-		m_game = game;
+		mGame = game;
 	}
 
 	public String getObjectivePieceName()
 	{
-		return m_objectivePieceName;
+		return mObjectivePieceName;
 	}
 
 	private Piece classicObjectivePiece(boolean isBlack)
 	{
 		if (isBlack)
 		{
-			for (Piece piece : m_game.getBlackTeam())
+			for (Piece piece : mGame.getBlackTeam())
 			{
 				if (piece.getName().equals("King"))
 					return piece;
@@ -55,7 +55,7 @@ public enum ObjectivePiece
 		}
 		else
 		{
-			for (Piece piece : m_game.getWhiteTeam())
+			for (Piece piece : mGame.getWhiteTeam())
 			{
 				if (piece.getName().equals("King"))
 					return piece;
@@ -69,17 +69,17 @@ public enum ObjectivePiece
 	{
 		if (isBlack)
 		{
-			for (Piece piece : m_game.getBlackTeam())
+			for (Piece piece : mGame.getBlackTeam())
 			{
-				if (piece.getName().equals(m_objectivePieceName))
+				if (piece.getName().equals(mObjectivePieceName))
 					return piece;
 			}
 		}
 		else
 		{
-			for (Piece piece : m_game.getWhiteTeam())
+			for (Piece piece : mGame.getWhiteTeam())
 			{
-				if (piece.getName().equals(m_objectivePieceName))
+				if (piece.getName().equals(mObjectivePieceName))
 					return piece;
 			}
 		}
@@ -87,6 +87,6 @@ public enum ObjectivePiece
 		return null;
 	}
 
-	private Game m_game;
-	private String m_objectivePieceName;
+	private Game mGame;
+	private String mObjectivePieceName;
 }

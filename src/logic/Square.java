@@ -14,14 +14,14 @@ public class Square extends JLabel implements Serializable
 
 	public Square(int row, int column)
 	{
-		m_row = row;
-		m_column = column;
-		m_isHabitable = true;
+		mRow = row;
+		mColumn = column;
+		mIsHabitable = true;
 	}
 
 	public int getCol()
 	{
-		return m_column;
+		return mColumn;
 	}
 
 	public Color getColor()
@@ -31,27 +31,27 @@ public class Square extends JLabel implements Serializable
 
 	public Piece getPiece()
 	{
-		return m_piece;
+		return mPiece;
 	}
 
 	public int getRow()
 	{
-		return m_row;
+		return mRow;
 	}
 
 	public boolean isHabitable()
 	{
-		return m_isHabitable;
+		return mIsHabitable;
 	}
 
 	public boolean isOccupied()
 	{
-		return (m_piece != null);
+		return (mPiece != null);
 	}
 
 	public void hideIcon()
 	{
-		if (m_piece != null)
+		if (mPiece != null)
 			setIcon(null);
 	}
 
@@ -63,13 +63,13 @@ public class Square extends JLabel implements Serializable
 	{
 		setOpaque(true);
 		// if there's a Piece here...
-		if (m_piece != null)
+		if (mPiece != null)
 		{
 			// ...and it has no Icon
-			if (m_piece.getIcon() == null)
-				setText(m_piece.getName());// Use it's name
+			if (mPiece.getIcon() == null)
+				setText(mPiece.getName());// Use it's name
 			else
-				setIcon(m_piece.getIcon());// Otherwise, use it's Icon
+				setIcon(mPiece.getIcon());// Otherwise, use it's Icon
 		}
 		else
 		{// If there's no Piece, clear the Icon and Text of the Square.
@@ -87,13 +87,13 @@ public class Square extends JLabel implements Serializable
 	{
 		setOpaque(true);
 		// if there's a Piece here...
-		if (m_piece != null)
+		if (mPiece != null)
 		{
 			// ...and it has no Icon
-			if (m_piece.getIcon() == null)
-				setText(m_piece.getName());// Use it's name
+			if (mPiece.getIcon() == null)
+				setText(mPiece.getName());// Use it's name
 			else
-				setIcon(new ImageIcon(m_piece.getIcon().getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH)));// Otherwise, use it's Icon
+				setIcon(new ImageIcon(mPiece.getIcon().getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH)));// Otherwise, use it's Icon
 		}
 		else
 		{// If there's no Piece, clear the Icon and Text of the Square.
@@ -108,15 +108,15 @@ public class Square extends JLabel implements Serializable
 	 */
 	public void resetColor()
 	{
-		if (m_backgroundColor != null)
+		if (mBackgroundColor != null)
 		{
 			// If a custom background color has been saved, use that.
-			setBackground(m_backgroundColor);
+			setBackground(mBackgroundColor);
 			return;
 		}
 		setBorder(null);
 		// Otherwise make our normal light/dark pattern.
-		if ((m_row % 2 != 0 && m_column % 2 != 0) || (m_row % 2 == 0 && m_column % 2 == 0))
+		if ((mRow % 2 != 0 && mColumn % 2 != 0) || (mRow % 2 == 0 && mColumn % 2 == 0))
 		{
 			setBackground(Color.LIGHT_GRAY);
 			setForeground(Color.getHSBColor(30, 70, 70));
@@ -150,12 +150,12 @@ public class Square extends JLabel implements Serializable
 		// if the Color is the highlight color then change is only temporary,
 		// don't store it.
 		if (c != Square.HIGHLIGHT_COLOR)
-			m_backgroundColor = c;
+			mBackgroundColor = c;
 	}
 
 	public void setIsHabitable(boolean isHabitable)
 	{
-		m_isHabitable = isHabitable;
+		mIsHabitable = isHabitable;
 	}
 
 	/**
@@ -166,11 +166,11 @@ public class Square extends JLabel implements Serializable
 	 */
 	public Piece setPiece(Piece p)
 	{
-		Piece oldPiece = m_piece;
-		m_piece = p;
-		if (m_piece != null)
+		Piece oldPiece = mPiece;
+		mPiece = p;
+		if (mPiece != null)
 		{
-			m_piece.setSquare(this);
+			mPiece.setSquare(this);
 		}
 		return oldPiece;
 	}
@@ -178,13 +178,13 @@ public class Square extends JLabel implements Serializable
 	public void setCol(int col)
 	{
 		// TODO Make sure they're setting a valid coordinate
-		m_column = col;
+		mColumn = col;
 	}
 
 	public void setRow(int row)
 	{
 		// TODO Make sure they're setting a valid coordinate
-		m_row = row;
+		mRow = row;
 	}
 
 	/**
@@ -199,18 +199,18 @@ public class Square extends JLabel implements Serializable
 		String toReturn = "";
 
 		if (!unique[0])
-			toReturn += files.charAt(m_column);
+			toReturn += files.charAt(mColumn);
 		if (!unique[1])
-			toReturn += m_row;
+			toReturn += mRow;
 
 		return toReturn;
 	}
 
 	private static final long serialVersionUID = -5408493670737541871L;
 
-	private Piece m_piece;
-	private int m_row;// File
-	private int m_column;// Rank
-	private Color m_backgroundColor;
-	private boolean m_isHabitable;
+	private Piece mPiece;
+	private int mRow;// File
+	private int mColumn;// Rank
+	private Color mBackgroundColor;
+	private boolean mIsHabitable;
 }

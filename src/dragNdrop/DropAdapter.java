@@ -10,30 +10,30 @@ public class DropAdapter extends MouseAdapter
 {
 	public DropAdapter(GlassPane glassPane)
 	{
-		m_glassPane = glassPane;
-		m_listeners = Lists.newArrayList();
+		mGlassPane = glassPane;
+		mListeners = Lists.newArrayList();
 	}
 
 	public void addDropListener(DropListener listener)
 	{
 		if (listener != null)
-			m_listeners.add(listener);
+			mListeners.add(listener);
 	}
 
 	public void removeDropListener(DropListener listener)
 	{
 		if (listener != null)
-			m_listeners.remove(listener);
+			mListeners.remove(listener);
 	}
 
 	protected void fireDropEvent(DropEvent event)
 	{
-		Iterator<DropListener> iterator = m_listeners.iterator();
+		Iterator<DropListener> iterator = mListeners.iterator();
 		while (iterator.hasNext())
 			((DropListener) iterator.next()).dropped(event);
 	}
 
-	protected GlassPane m_glassPane;
+	protected GlassPane mGlassPane;
 
-	private List<DropListener> m_listeners;
+	private List<DropListener> mListeners;
 }

@@ -25,19 +25,19 @@ public class AnimatedLabel extends JLabel implements Runnable
 		m_isFinished = false;
 		while (!m_isFinished)
 		{
-			m_stringIndex++;
-			if (m_stringIndex == 1)
+			mStringIndex++;
+			if (mStringIndex == 1)
 			{
 				setText("Waiting. ");
 			}
-			else if (m_stringIndex == 2)
+			else if (mStringIndex == 2)
 			{
 				setText("Waiting.. ");
 			}
 			else
 			{
 				setText("Waiting... ");
-				m_stringIndex = 0;
+				mStringIndex = 0;
 			}
 			try
 			{
@@ -53,6 +53,6 @@ public class AnimatedLabel extends JLabel implements Runnable
 
 	public static boolean m_isFinished = false;
 
-	protected String[] m_strings;
-	protected int m_stringIndex = 0;
+	protected String[] mStrings;
+	protected int mStringIndex = 0;
 }

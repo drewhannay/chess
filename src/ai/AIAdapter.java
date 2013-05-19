@@ -27,12 +27,12 @@ public class AIAdapter
 	/**
 	 * The Game being viewed by the AI plug in
 	 */
-	private Game m_game;
+	private Game mGame;
 
 	/**
 	 * The array of boards for reference.
 	 */
-	private AIBoard[] m_boards;
+	private AIBoard[] mBoards;
 
 	/**
 	 * Constructor
@@ -41,7 +41,7 @@ public class AIAdapter
 	 */
 	public AIAdapter(Game game)
 	{
-		m_game = game;
+		mGame = game;
 	}
 
 	/**
@@ -49,7 +49,7 @@ public class AIAdapter
 	 */
 	public Game getGame()
 	{
-		return m_game;
+		return mGame;
 	}
 
 	/**
@@ -57,10 +57,10 @@ public class AIAdapter
 	 */
 	public void runGame(AIPlugin aiPlugin)
 	{
-		PlayNetGamePanel.m_isRunning = true;
-		while (PlayNetGamePanel.m_isRunning)
+		PlayNetGamePanel.mIsRunning = true;
+		while (PlayNetGamePanel.mIsRunning)
 		{
-			while (m_game.isBlackMove())
+			while (mGame.isBlackMove())
 			{
 				try
 				{
@@ -92,9 +92,9 @@ public class AIAdapter
 	{
 		try
 		{
-			Board board = m_game.getBoards()[move.m_boardIndex];
-			m_game.playMove(new Move(board, board.getSquare(move.m_originRow, move.m_originColumn), board.getSquare(
-					move.m_destinationRow, move.m_destinationColumn), move.m_promotionPieceName));
+			Board board = mGame.getBoards()[move.mBoardIndex];
+			mGame.playMove(new Move(board, board.getSquare(move.mOriginRow, move.mOriginColumn), board.getSquare(
+					move.mDestinationRow, move.mDestinationColumn), move.mPromotionPieceName));
 			return true;
 		}
 		catch (Exception e)
@@ -108,13 +108,13 @@ public class AIAdapter
 	 */
 	public synchronized AIBoard[] getBoards()
 	{
-		if (m_game.isStaleLegalDests())
-			m_game.genLegalDests();
+		if (mGame.isStaleLegalDests())
+			mGame.genLegalDests();
 
-		m_boards = new AIBoard[m_game.getBoards().length];
-		for (int i = 0; i < m_boards.length; i++)
-			m_boards[i] = new AIBoard(m_game.getBoards()[i]);
-		return m_boards;
+		mBoards = new AIBoard[mGame.getBoards().length];
+		for (int i = 0; i < mBoards.length; i++)
+			mBoards[i] = new AIBoard(mGame.getBoards()[i]);
+		return mBoards;
 	}
 
 	/**
@@ -390,6 +390,5 @@ public class AIAdapter
 		{
 			return legalDests;
 		}
-
 	}
 }

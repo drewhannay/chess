@@ -11,11 +11,11 @@ public enum NextTurn
 
 	public NextTurn init(int whiteMoves, int blackMoves, int increment)
 	{
-		m_numberOfWhiteMovesBeforeTurnChange = whiteMoves;
-		m_numberOfBlackMovesBeforeTurnChange = blackMoves;
-		m_turnIncrement = increment;
-		m_currentNumberOfMovesMade = 0;
-		m_isBlackMove = false;
+		mNumberOfWhiteMovesBeforeTurnChange = whiteMoves;
+		mNumberOfBlackMovesBeforeTurnChange = blackMoves;
+		mTurnIncrement = increment;
+		mCurrentNumberOfMovesMade = 0;
+		mIsBlackMove = false;
 
 		return this;
 	}
@@ -56,115 +56,115 @@ public enum NextTurn
 
 	public int getWhiteMoves()
 	{
-		return m_numberOfWhiteMovesBeforeTurnChange;
+		return mNumberOfWhiteMovesBeforeTurnChange;
 	}
 
 	public int getBlackMoves()
 	{
-		return m_numberOfBlackMovesBeforeTurnChange;
+		return mNumberOfBlackMovesBeforeTurnChange;
 	}
 
 	public int getIncrement()
 	{
-		return m_turnIncrement;
+		return mTurnIncrement;
 	}
 
 	private boolean classicNextTurn()
 	{
-		m_isBlackMove = !m_isBlackMove;
-		PlayGamePanel.turn(m_isBlackMove);
+		mIsBlackMove = !mIsBlackMove;
+		PlayGamePanel.turn(mIsBlackMove);
 
-		return m_isBlackMove;
+		return mIsBlackMove;
 	}
 
 	private boolean undoClassic()
 	{
-		m_isBlackMove = !m_isBlackMove;
-		PlayGamePanel.turn(m_isBlackMove);
+		mIsBlackMove = !mIsBlackMove;
+		PlayGamePanel.turn(mIsBlackMove);
 
-		return m_isBlackMove;
+		return mIsBlackMove;
 	}
 
 	private boolean increasingTurnsTogether()
 	{
-		if (++m_currentNumberOfMovesMade >= m_numberOfWhiteMovesBeforeTurnChange)
+		if (++mCurrentNumberOfMovesMade >= mNumberOfWhiteMovesBeforeTurnChange)
 		{
-			m_isBlackMove = !m_isBlackMove;
-			PlayGamePanel.turn(m_isBlackMove);
-			m_numberOfWhiteMovesBeforeTurnChange += m_turnIncrement;
-			m_currentNumberOfMovesMade = 0;
+			mIsBlackMove = !mIsBlackMove;
+			PlayGamePanel.turn(mIsBlackMove);
+			mNumberOfWhiteMovesBeforeTurnChange += mTurnIncrement;
+			mCurrentNumberOfMovesMade = 0;
 		}
-		return m_isBlackMove;
+		return mIsBlackMove;
 	}
 
 	private boolean undoIncreasingTurnsTogether()
 	{
-		if (--m_currentNumberOfMovesMade < 0)
+		if (--mCurrentNumberOfMovesMade < 0)
 		{
-			m_isBlackMove = !m_isBlackMove;
-			PlayGamePanel.turn(m_isBlackMove);
-			m_numberOfWhiteMovesBeforeTurnChange -= m_turnIncrement;
-			m_currentNumberOfMovesMade = m_numberOfWhiteMovesBeforeTurnChange - 1;
+			mIsBlackMove = !mIsBlackMove;
+			PlayGamePanel.turn(mIsBlackMove);
+			mNumberOfWhiteMovesBeforeTurnChange -= mTurnIncrement;
+			mCurrentNumberOfMovesMade = mNumberOfWhiteMovesBeforeTurnChange - 1;
 		}
-		return m_isBlackMove;
+		return mIsBlackMove;
 	}
 
 	private boolean increasingTurnsSeparately()
 	{
-		if (++m_currentNumberOfMovesMade >= (m_isBlackMove ? m_numberOfBlackMovesBeforeTurnChange
-				: m_numberOfWhiteMovesBeforeTurnChange))
+		if (++mCurrentNumberOfMovesMade >= (mIsBlackMove ? mNumberOfBlackMovesBeforeTurnChange
+				: mNumberOfWhiteMovesBeforeTurnChange))
 		{
-			m_isBlackMove = !m_isBlackMove;
-			PlayGamePanel.turn(m_isBlackMove);
-			m_numberOfBlackMovesBeforeTurnChange += m_turnIncrement;
-			m_numberOfWhiteMovesBeforeTurnChange += m_turnIncrement;
-			m_currentNumberOfMovesMade = 0;
+			mIsBlackMove = !mIsBlackMove;
+			PlayGamePanel.turn(mIsBlackMove);
+			mNumberOfBlackMovesBeforeTurnChange += mTurnIncrement;
+			mNumberOfWhiteMovesBeforeTurnChange += mTurnIncrement;
+			mCurrentNumberOfMovesMade = 0;
 		}
-		return m_isBlackMove;
+		return mIsBlackMove;
 	}
 
 	private boolean undoIncreasingTurnsSeparately()
 	{
-		if (--m_currentNumberOfMovesMade < 0)
+		if (--mCurrentNumberOfMovesMade < 0)
 		{
-			m_isBlackMove = !m_isBlackMove;
-			m_numberOfBlackMovesBeforeTurnChange -= m_turnIncrement;
-			m_numberOfWhiteMovesBeforeTurnChange -= m_turnIncrement;
-			PlayGamePanel.turn(m_isBlackMove);
+			mIsBlackMove = !mIsBlackMove;
+			mNumberOfBlackMovesBeforeTurnChange -= mTurnIncrement;
+			mNumberOfWhiteMovesBeforeTurnChange -= mTurnIncrement;
+			PlayGamePanel.turn(mIsBlackMove);
 
-			m_currentNumberOfMovesMade = m_isBlackMove ? m_numberOfBlackMovesBeforeTurnChange : m_numberOfWhiteMovesBeforeTurnChange;
+			mCurrentNumberOfMovesMade = mIsBlackMove ? mNumberOfBlackMovesBeforeTurnChange : mNumberOfWhiteMovesBeforeTurnChange;
 		}
-		return m_isBlackMove;
+		return mIsBlackMove;
 	}
 
 	private boolean differentNumberOfTurns()
 	{
-		if (++m_currentNumberOfMovesMade >= (m_isBlackMove ? m_numberOfBlackMovesBeforeTurnChange
-				: m_numberOfWhiteMovesBeforeTurnChange))
+		if (++mCurrentNumberOfMovesMade >= (mIsBlackMove ? mNumberOfBlackMovesBeforeTurnChange
+				: mNumberOfWhiteMovesBeforeTurnChange))
 		{
-			m_isBlackMove = !m_isBlackMove;
-			PlayGamePanel.turn(m_isBlackMove);
+			mIsBlackMove = !mIsBlackMove;
+			PlayGamePanel.turn(mIsBlackMove);
 
-			m_currentNumberOfMovesMade = 0;
+			mCurrentNumberOfMovesMade = 0;
 		}
-		return m_isBlackMove;
+		return mIsBlackMove;
 	}
 
 	private boolean undoDifferentNumberOfTurns()
 	{
-		if (--m_currentNumberOfMovesMade < 0)
+		if (--mCurrentNumberOfMovesMade < 0)
 		{
-			m_isBlackMove = !m_isBlackMove;
-			PlayGamePanel.turn(m_isBlackMove);
+			mIsBlackMove = !mIsBlackMove;
+			PlayGamePanel.turn(mIsBlackMove);
 
-			m_currentNumberOfMovesMade = m_isBlackMove ? m_numberOfBlackMovesBeforeTurnChange : m_numberOfWhiteMovesBeforeTurnChange;
+			mCurrentNumberOfMovesMade = mIsBlackMove ? mNumberOfBlackMovesBeforeTurnChange : mNumberOfWhiteMovesBeforeTurnChange;
 		}
-		return m_isBlackMove;
+		return mIsBlackMove;
 	}
 
-	private int m_numberOfWhiteMovesBeforeTurnChange;
-	private int m_numberOfBlackMovesBeforeTurnChange;
-	private int m_currentNumberOfMovesMade;
-	private int m_turnIncrement;
-	private boolean m_isBlackMove;
+	private int mNumberOfWhiteMovesBeforeTurnChange;
+	private int mNumberOfBlackMovesBeforeTurnChange;
+	private int mCurrentNumberOfMovesMade;
+	private int mTurnIncrement;
+	private boolean mIsBlackMove;
 }

@@ -35,19 +35,19 @@ public class PieceMakerPanel extends JPanel
 {
 	public PieceMakerPanel(CustomSetupPanel customSetupMenu, JFrame optionsFrame)
 	{
-		m_frame = optionsFrame;
-		m_frame.setVisible(true);
-		m_frame.add(this);
-		m_frame.setVisible(true);
-		m_frame.setSize(400, 600);
-		m_frame.setLocationRelativeTo(Driver.getInstance());
+		mFrame = optionsFrame;
+		mFrame.setVisible(true);
+		mFrame.add(this);
+		mFrame.setVisible(true);
+		mFrame.setSize(400, 600);
+		mFrame.setLocationRelativeTo(Driver.getInstance());
 		PieceBuilder.initPieceTypes();
 		initGUIComponents(customSetupMenu);
 	}
 
 	private void initGUIComponents(final CustomSetupPanel customSetupMenu)
 	{
-		m_builder = new PieceBuilder();
+		mBuilder = new PieceBuilder();
 
 		setSize(550, 875);
 		setLayout(new GridBagLayout());
@@ -187,9 +187,9 @@ public class PieceMakerPanel extends JPanel
 			@Override
 			public void actionPerformed(ActionEvent event)
 			{
-				m_isKnightLikePiece = !m_isKnightLikePiece;
-				firstKnightDirectionField.setEnabled(m_isKnightLikePiece);
-				secondKnightDirectionField.setEnabled(m_isKnightLikePiece);
+				mIsKnightLikePiece = !mIsKnightLikePiece;
+				firstKnightDirectionField.setEnabled(mIsKnightLikePiece);
+				secondKnightDirectionField.setEnabled(mIsKnightLikePiece);
 			}
 		});
 
@@ -256,29 +256,29 @@ public class PieceMakerPanel extends JPanel
 						&& isIntegerDistance(eastField) && isIntegerDistance(westField) && isIntegerDistance(southField)
 						&& isIntegerDistance(southEastField) && isIntegerDistance(southWestField))
 				{
-					m_builder.addMove('N', Integer.parseInt(northField.getText()));
-					m_builder.addMove('R', Integer.parseInt(northEastField.getText()));
-					m_builder.addMove('L', Integer.parseInt(northWestField.getText()));
-					m_builder.addMove('E', Integer.parseInt(eastField.getText()));
-					m_builder.addMove('W', Integer.parseInt(westField.getText()));
-					m_builder.addMove('S', Integer.parseInt(southField.getText()));
-					m_builder.addMove('r', Integer.parseInt(southEastField.getText()));
-					m_builder.addMove('l', Integer.parseInt(southWestField.getText()));
+					mBuilder.addMove('N', Integer.parseInt(northField.getText()));
+					mBuilder.addMove('R', Integer.parseInt(northEastField.getText()));
+					mBuilder.addMove('L', Integer.parseInt(northWestField.getText()));
+					mBuilder.addMove('E', Integer.parseInt(eastField.getText()));
+					mBuilder.addMove('W', Integer.parseInt(westField.getText()));
+					mBuilder.addMove('S', Integer.parseInt(southField.getText()));
+					mBuilder.addMove('r', Integer.parseInt(southEastField.getText()));
+					mBuilder.addMove('l', Integer.parseInt(southWestField.getText()));
 				}
 
 				if (firstKnightDirectionField.isEnabled())
 				{
 					if (isIntegerDistance(firstKnightDirectionField) && isIntegerDistance(secondKnightDirectionField))
 					{
-						m_builder.addMove('x', Integer.parseInt(firstKnightDirectionField.getText()));
-						m_builder.addMove('y', Integer.parseInt(secondKnightDirectionField.getText()));
+						mBuilder.addMove('x', Integer.parseInt(firstKnightDirectionField.getText()));
+						mBuilder.addMove('y', Integer.parseInt(secondKnightDirectionField.getText()));
 					}
 				}
 
 				try
 				{
-					ImageUtility.writeLightImage(pieceName, m_lightImage);
-					ImageUtility.writeDarkImage(pieceName, m_darkImage);
+					ImageUtility.writeLightImage(pieceName, mLightImage);
+					ImageUtility.writeDarkImage(pieceName, mDarkImage);
 				}
 				catch (Exception e)
 				{
@@ -287,10 +287,10 @@ public class PieceMakerPanel extends JPanel
 					return;
 				}
 
-				m_builder.setName(pieceName);
-				PieceBuilder.savePieceType(m_builder);
+				mBuilder.setName(pieceName);
+				PieceBuilder.savePieceType(mBuilder);
 
-				m_builder = new PieceBuilder();
+				mBuilder = new PieceBuilder();
 				pieceNameField.setText("");
 				lightIconLabel.setIcon(blankSquare);
 				darkIconLabel.setIcon(blankSquare);
@@ -301,7 +301,7 @@ public class PieceMakerPanel extends JPanel
 				firstKnightDirectionField.setEnabled(false);
 				secondKnightDirectionField.setText("");
 				secondKnightDirectionField.setEnabled(false);
-				m_isKnightLikePiece = false;
+				mIsKnightLikePiece = false;
 				dropdown.removeAllItems();
 				for (int i = 0; i < DIRECTIONS.length; i++)
 					dropdown.addItem(DIRECTIONS[i]);
@@ -319,7 +319,7 @@ public class PieceMakerPanel extends JPanel
 				{
 					customSetupMenu.setupPiecesList();
 					PieceMakerPanel.this.removeAll();
-					m_frame.setVisible(false);
+					mFrame.setVisible(false);
 				}
 				else
 				{
@@ -330,7 +330,7 @@ public class PieceMakerPanel extends JPanel
 					case JOptionPane.YES_OPTION:
 						customSetupMenu.setupPiecesList();
 						PieceMakerPanel.this.removeAll();
-						m_frame.setVisible(false);
+						mFrame.setVisible(false);
 						break;
 					case JOptionPane.NO_OPTION:
 						break;
@@ -351,7 +351,7 @@ public class PieceMakerPanel extends JPanel
 		constraints.gridy = 1;
 		add(doneButton, constraints);
 
-		m_frame.pack();
+		mFrame.pack();
 	}
 
 	private boolean isIntegerDistance(JTextField textField)
@@ -411,13 +411,13 @@ public class PieceMakerPanel extends JPanel
 					{
 						if (m_isDarkImage)
 						{
-							m_darkImage = ImageIO.read(new File(fileChooser.toString()));
-							m_imageLabel.setIcon(new ImageIcon(m_darkImage.getScaledInstance(48, 48, Image.SCALE_SMOOTH)));
+							mDarkImage = ImageIO.read(new File(fileChooser.toString()));
+							m_imageLabel.setIcon(new ImageIcon(mDarkImage.getScaledInstance(48, 48, Image.SCALE_SMOOTH)));
 						}
 						else
 						{
-							m_lightImage = ImageIO.read(new File(fileChooser.toString()));
-							m_imageLabel.setIcon(new ImageIcon(m_lightImage.getScaledInstance(48, 48, Image.SCALE_SMOOTH)));
+							mLightImage = ImageIO.read(new File(fileChooser.toString()));
+							m_imageLabel.setIcon(new ImageIcon(mLightImage.getScaledInstance(48, 48, Image.SCALE_SMOOTH)));
 						}
 					}
 					catch (IOException e)
@@ -434,13 +434,13 @@ public class PieceMakerPanel extends JPanel
 				{
 					if (m_isDarkImage)
 					{
-						m_darkImage = ImageIO.read(new URL(url));
-						m_imageLabel.setIcon(new ImageIcon(m_darkImage.getScaledInstance(48, 48, Image.SCALE_SMOOTH)));
+						mDarkImage = ImageIO.read(new URL(url));
+						m_imageLabel.setIcon(new ImageIcon(mDarkImage.getScaledInstance(48, 48, Image.SCALE_SMOOTH)));
 					}
 					else
 					{
-						m_lightImage = ImageIO.read(new URL(url));
-						m_imageLabel.setIcon(new ImageIcon(m_lightImage.getScaledInstance(48, 48, Image.SCALE_SMOOTH)));
+						mLightImage = ImageIO.read(new URL(url));
+						m_imageLabel.setIcon(new ImageIcon(mLightImage.getScaledInstance(48, 48, Image.SCALE_SMOOTH)));
 					}
 				}
 				catch (Exception e)
@@ -462,9 +462,9 @@ public class PieceMakerPanel extends JPanel
 	private static final String[] DIRECTIONS = new String[] { "North", "Northeast", "East", "Southeast", "South", "Southwest", "West",
 			"Northwest" };
 
-	private PieceBuilder m_builder;
-	private boolean m_isKnightLikePiece;
-	private BufferedImage m_lightImage;
-	private BufferedImage m_darkImage;
-	private JFrame m_frame;
+	private PieceBuilder mBuilder;
+	private boolean mIsKnightLikePiece;
+	private BufferedImage mLightImage;
+	private BufferedImage mDarkImage;
+	private JFrame mFrame;
 }

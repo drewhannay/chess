@@ -12,7 +12,7 @@ public class MotionAdapter extends MouseMotionAdapter
 {
 	public MotionAdapter(GlassPane glassPane)
 	{
-		m_glassPane = glassPane;
+		mGlassPane = glassPane;
 	}
 
 	public void mouseDragged(MouseEvent event)
@@ -21,11 +21,11 @@ public class MotionAdapter extends MouseMotionAdapter
 
 		Point point = (Point) event.getPoint().clone();
 		SwingUtilities.convertPointToScreen(point, component);
-		SwingUtilities.convertPointFromScreen(point, m_glassPane);
-		m_glassPane.setPoint(point);
+		SwingUtilities.convertPointFromScreen(point, mGlassPane);
+		mGlassPane.setPoint(point);
 
-		m_glassPane.repaint();
+		mGlassPane.repaint();
 	}
 
-	private GlassPane m_glassPane;
+	private GlassPane mGlassPane;
 }

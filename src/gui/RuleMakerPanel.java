@@ -34,15 +34,15 @@ public class RuleMakerPanel extends JPanel
 {
 	public RuleMakerPanel(CustomSetupPanel customSetupMenu, JFrame optionsFrame)
 	{
-		m_frame = optionsFrame;
-		m_frame.setVisible(true);
-		m_frame.add(this);
-		m_frame.setVisible(true);
-		m_frame.setSize(600, 500);
-		m_frame.setLocationRelativeTo(Driver.getInstance());
-		m_builder = customSetupMenu.getBuilder();
-		m_whiteRules = customSetupMenu.m_whiteRules;
-		m_blackRules = customSetupMenu.m_blackRules;
+		mFrame = optionsFrame;
+		mFrame.setVisible(true);
+		mFrame.add(this);
+		mFrame.setVisible(true);
+		mFrame.setSize(600, 500);
+		mFrame.setLocationRelativeTo(Driver.getInstance());
+		mBuilder = customSetupMenu.getBuilder();
+		mWhiteRules = customSetupMenu.mWhiteRules;
+		mBlackRules = customSetupMenu.mBlackRules;
 		initGUIComponents(customSetupMenu);
 	}
 
@@ -55,7 +55,7 @@ public class RuleMakerPanel extends JPanel
 		setBorder(BorderFactory.createLoweredBevelBorder());
 		GridBagConstraints constraints = new GridBagConstraints();
 
-		final Board[] boards = m_builder.getBoards();
+		final Board[] boards = mBuilder.getBoards();
 
 		final JPanel whiteLegalDestinationPanel = new JPanel();
 		whiteLegalDestinationPanel.setLayout(new GridLayout(2, 1));
@@ -66,7 +66,7 @@ public class RuleMakerPanel extends JPanel
 
 		final JCheckBox whiteNoMoveObjectiveCheckBox = new JCheckBox("Can't Move Objective");
 		whiteNoMoveObjectiveCheckBox.setToolTipText("Moving the objective piece is illegal");
-		if (m_whiteRules.getEndOfGame() == EndOfGame.CLASSIC || m_whiteRules.getEndOfGame() == EndOfGame.CHECK_N_TIMES)
+		if (mWhiteRules.getEndOfGame() == EndOfGame.CLASSIC || mWhiteRules.getEndOfGame() == EndOfGame.CHECK_N_TIMES)
 			whiteLegalDestinationPanel.add(whiteNoMoveObjectiveCheckBox);
 
 		final JPanel whiteAfterCaptureCheckBox = new JPanel();
@@ -74,7 +74,7 @@ public class RuleMakerPanel extends JPanel
 		final JCheckBox whiteChangeColorCheckBox = new JCheckBox("Capturer changes Color");
 		whiteChangeColorCheckBox.setToolTipText("The capturing piece changes color after performing a capture");
 
-		if (m_whiteRules.getEndOfGame() != EndOfGame.CLASSIC)
+		if (mWhiteRules.getEndOfGame() != EndOfGame.CLASSIC)
 			whiteAfterCaptureCheckBox.add(whiteChangeColorCheckBox);
 
 		final JCheckBox whitePieceReturnCheckBox = new JCheckBox("Captured piece returns to start");
@@ -82,7 +82,7 @@ public class RuleMakerPanel extends JPanel
 		whiteAfterCaptureCheckBox.add(whitePieceReturnCheckBox);
 		final JCheckBox whiteDropPiecesCheckBox = new JCheckBox("Captured Pieces Drop");
 		whiteDropPiecesCheckBox.setToolTipText("Captured pieces are placed in any open square on the board by the capturer");
-		if (m_whiteRules.getEndOfGame() != EndOfGame.CAPTURE_ALL_OF_TYPE || m_whiteRules.getEndOfGame() != EndOfGame.LOSE_ALL_PIECES)
+		if (mWhiteRules.getEndOfGame() != EndOfGame.CAPTURE_ALL_OF_TYPE || mWhiteRules.getEndOfGame() != EndOfGame.LOSE_ALL_PIECES)
 			whiteAfterCaptureCheckBox.add(whiteDropPiecesCheckBox);
 
 		final JCheckBox whiteCapturedColorAndDropCheckBox = new JCheckBox("Captured Piece Changes Color and Drops");
@@ -97,7 +97,7 @@ public class RuleMakerPanel extends JPanel
 		blackLegalDestinationPanel.add(blackCaptureMandatoryCheckBox);
 		final JCheckBox blackNoMoveObjectiveCheckBox = new JCheckBox("Can't Move Objective");
 		blackNoMoveObjectiveCheckBox.setToolTipText("Moving the objective piece is illegal");
-		if (m_blackRules.getEndOfGame() == EndOfGame.CLASSIC || m_blackRules.getEndOfGame() == EndOfGame.CHECK_N_TIMES)
+		if (mBlackRules.getEndOfGame() == EndOfGame.CLASSIC || mBlackRules.getEndOfGame() == EndOfGame.CHECK_N_TIMES)
 			blackLegalDestinationPanel.add(blackNoMoveObjectiveCheckBox);
 
 		final JPanel blackAfterCaptureCheckBox = new JPanel();
@@ -105,7 +105,7 @@ public class RuleMakerPanel extends JPanel
 		final JCheckBox blackChangeColorCheckBox = new JCheckBox("Capturer changes Color");
 		blackChangeColorCheckBox.setToolTipText("The capturing piece changes color after performing a capture");
 
-		if (m_blackRules.getEndOfGame() != EndOfGame.CLASSIC)
+		if (mBlackRules.getEndOfGame() != EndOfGame.CLASSIC)
 			blackAfterCaptureCheckBox.add(blackChangeColorCheckBox);
 
 		final JCheckBox blackPieceReturnCheckBox = new JCheckBox("Captured piece returns to start");
@@ -113,7 +113,7 @@ public class RuleMakerPanel extends JPanel
 		blackAfterCaptureCheckBox.add(blackPieceReturnCheckBox);
 		final JCheckBox blackDropPiecesCheckBox = new JCheckBox("Captured Pieces Drop");
 		blackDropPiecesCheckBox.setToolTipText("Captured pieces are placed in any open square on the board by the capturer");
-		if (m_blackRules.getEndOfGame() != EndOfGame.CAPTURE_ALL_OF_TYPE || m_blackRules.getEndOfGame() != EndOfGame.LOSE_ALL_PIECES)
+		if (mBlackRules.getEndOfGame() != EndOfGame.CAPTURE_ALL_OF_TYPE || mBlackRules.getEndOfGame() != EndOfGame.LOSE_ALL_PIECES)
 			blackAfterCaptureCheckBox.add(blackDropPiecesCheckBox);
 
 		final JCheckBox blackCapturedColorAndDropCheckBox = new JCheckBox("Captured Piece Changes Color and Drops");
@@ -144,9 +144,9 @@ public class RuleMakerPanel extends JPanel
 		int blackObjectiveIndex = 0;
 		for (int i = 0; i < allPieces.length; i++)
 		{
-			if (allPieces[i].equals(m_whiteRules.getObjectiveName()))
+			if (allPieces[i].equals(mWhiteRules.getObjectiveName()))
 				whiteObjectiveIndex = i;
-			if (allPieces[i].equals(m_blackRules.getObjectiveName()))
+			if (allPieces[i].equals(mBlackRules.getObjectiveName()))
 				blackObjectiveIndex = i;
 		}
 
@@ -156,9 +156,9 @@ public class RuleMakerPanel extends JPanel
 		whiteNumberOfChecksField.setVisible(false);
 		whitePieceList.setVisible(false);
 
-		if (m_whiteRules.getEndOfGame() == EndOfGame.CLASSIC || m_whiteRules.getEndOfGame() == EndOfGame.CAPTURE_ALL_OF_TYPE)
+		if (mWhiteRules.getEndOfGame() == EndOfGame.CLASSIC || mWhiteRules.getEndOfGame() == EndOfGame.CAPTURE_ALL_OF_TYPE)
 		{
-			if (m_whiteRules.getEndOfGame() == EndOfGame.CAPTURE_ALL_OF_TYPE)
+			if (mWhiteRules.getEndOfGame() == EndOfGame.CAPTURE_ALL_OF_TYPE)
 				whiteObjectivePieceLabel.setText("Which Piece type will be captured?");
 
 			whitePieceList.setVisible(true);
@@ -172,7 +172,7 @@ public class RuleMakerPanel extends JPanel
 			whiteExtrasPanel.add(whitePieceList, constraints);
 		}
 
-		if (m_whiteRules.getEndOfGame() == EndOfGame.CHECK_N_TIMES)
+		if (mWhiteRules.getEndOfGame() == EndOfGame.CHECK_N_TIMES)
 		{
 			whiteNumberOfChecksField.setVisible(true);
 			whitePieceList.setVisible(true);
@@ -204,9 +204,9 @@ public class RuleMakerPanel extends JPanel
 		blackNumberOfChecksField.setVisible(false);
 		blackPiecesList.setVisible(false);
 
-		if (m_blackRules.getEndOfGame() == EndOfGame.CLASSIC || m_blackRules.getEndOfGame() == EndOfGame.CAPTURE_ALL_OF_TYPE)
+		if (mBlackRules.getEndOfGame() == EndOfGame.CLASSIC || mBlackRules.getEndOfGame() == EndOfGame.CAPTURE_ALL_OF_TYPE)
 		{
-			if (m_blackRules.getEndOfGame() == EndOfGame.CAPTURE_ALL_OF_TYPE)
+			if (mBlackRules.getEndOfGame() == EndOfGame.CAPTURE_ALL_OF_TYPE)
 				blackObjectivePieceLabel.setText("Which Piece type will be captured?");
 
 			blackPiecesList.setVisible(true);
@@ -220,7 +220,7 @@ public class RuleMakerPanel extends JPanel
 			blackExtrasPanel.add(blackPiecesList, constraints);
 		}
 
-		if (m_blackRules.getEndOfGame() == EndOfGame.CHECK_N_TIMES)
+		if (mBlackRules.getEndOfGame() == EndOfGame.CHECK_N_TIMES)
 		{
 			blackNumberOfChecksField.setVisible(true);
 			blackPiecesList.setVisible(true);
@@ -242,7 +242,7 @@ public class RuleMakerPanel extends JPanel
 
 		final JButton cancelButton = new JButton("Cancel");
 		cancelButton.setToolTipText("Press me to return to the main Variant window");
-		GuiUtility.setupVariantCancelButton(cancelButton, this, m_frame);
+		GuiUtility.setupVariantCancelButton(cancelButton, this, mFrame);
 
 		JButton saveButton = new JButton("Save");
 		saveButton.setToolTipText("Press me to save these rules");
@@ -253,61 +253,61 @@ public class RuleMakerPanel extends JPanel
 			{
 				if (whiteCaptureMandatoryCheckBox.isSelected())
 				{
-					m_whiteRules.addAdjustTeamDestinations(AdjustTeamLegalDestinations.MUST_CAPTURE);
+					mWhiteRules.addAdjustTeamDestinations(AdjustTeamLegalDestinations.MUST_CAPTURE);
 				}
 				if (whiteNoMoveObjectiveCheckBox.isSelected())
 				{
-					m_whiteRules.addCropLegalDests(CropLegalDestinations.STATIONARY_OBJECTIVE);
+					mWhiteRules.addCropLegalDests(CropLegalDestinations.STATIONARY_OBJECTIVE);
 				}
 				if (whiteChangeColorCheckBox.isSelected())
 				{
-					m_whiteRules.addAfterMove(AfterMove.SWAP_COLOR_OF_CAPTURER);
+					mWhiteRules.addAfterMove(AfterMove.SWAP_COLOR_OF_CAPTURER);
 				}
 				if (whitePieceReturnCheckBox.isSelected())
 				{
-					m_whiteRules.addAfterMove(AfterMove.CAPTURED_PIECE_TO_ORIGIN);
+					mWhiteRules.addAfterMove(AfterMove.CAPTURED_PIECE_TO_ORIGIN);
 				}
 				if (whiteDropPiecesCheckBox.isSelected())
 				{
-					m_whiteRules.addAfterMove(AfterMove.CAPTURER_PLACES_CAPTURED);
+					mWhiteRules.addAfterMove(AfterMove.CAPTURER_PLACES_CAPTURED);
 				}
 				if (whiteCapturedColorAndDropCheckBox.isSelected())
 				{
-					m_whiteRules.addAfterMove(AfterMove.CAPTURER_STEALS_CAPTURED);
+					mWhiteRules.addAfterMove(AfterMove.CAPTURER_STEALS_CAPTURED);
 				}
 				if (blackCaptureMandatoryCheckBox.isSelected())
 				{
-					m_blackRules.addAdjustTeamDestinations(AdjustTeamLegalDestinations.MUST_CAPTURE);
+					mBlackRules.addAdjustTeamDestinations(AdjustTeamLegalDestinations.MUST_CAPTURE);
 				}
 				if (blackNoMoveObjectiveCheckBox.isSelected())
 				{
-					m_blackRules.addCropLegalDests(CropLegalDestinations.STATIONARY_OBJECTIVE);
+					mBlackRules.addCropLegalDests(CropLegalDestinations.STATIONARY_OBJECTIVE);
 				}
 				if (blackChangeColorCheckBox.isSelected())
 				{
-					m_blackRules.addAfterMove(AfterMove.SWAP_COLOR_OF_CAPTURER);
+					mBlackRules.addAfterMove(AfterMove.SWAP_COLOR_OF_CAPTURER);
 				}
 				if (blackPieceReturnCheckBox.isSelected())
 				{
-					m_blackRules.addAfterMove(AfterMove.CAPTURED_PIECE_TO_ORIGIN);
+					mBlackRules.addAfterMove(AfterMove.CAPTURED_PIECE_TO_ORIGIN);
 				}
 				if (blackDropPiecesCheckBox.isSelected())
 				{
-					m_blackRules.addAfterMove(AfterMove.CAPTURER_PLACES_CAPTURED);
+					mBlackRules.addAfterMove(AfterMove.CAPTURER_PLACES_CAPTURED);
 				}
 				if (blackCapturedColorAndDropCheckBox.isSelected())
 				{
-					m_blackRules.addAfterMove(AfterMove.CAPTURER_STEALS_CAPTURED);
+					mBlackRules.addAfterMove(AfterMove.CAPTURER_STEALS_CAPTURED);
 				}
 				if (switchBoardsCheckBox.isSelected() && boards.length == 2)
 				{
-					m_whiteRules.setGetBoard(GetBoard.OPPOSITE_BOARD);
-					m_blackRules.setGetBoard(GetBoard.OPPOSITE_BOARD);
+					mWhiteRules.setGetBoard(GetBoard.OPPOSITE_BOARD);
+					mBlackRules.setGetBoard(GetBoard.OPPOSITE_BOARD);
 				}
 				if (atomicChessCheckBox.isSelected())
 				{
-					m_whiteRules.addAfterMove(AfterMove.ATOMIC_CAPTURE);
-					m_blackRules.addAfterMove(AfterMove.ATOMIC_CAPTURE);
+					mWhiteRules.addAfterMove(AfterMove.ATOMIC_CAPTURE);
+					mBlackRules.addAfterMove(AfterMove.ATOMIC_CAPTURE);
 				}
 
 				if (whiteNumberOfChecksField.isVisible())
@@ -322,7 +322,7 @@ public class RuleMakerPanel extends JPanel
 									"Number of Checks", JOptionPane.PLAIN_MESSAGE);
 							return;
 						}
-						m_whiteRules.addEndOfGame(EndOfGame.CHECK_N_TIMES.init(answer, "", false));
+						mWhiteRules.addEndOfGame(EndOfGame.CHECK_N_TIMES.init(answer, "", false));
 					}
 					catch (Exception e)
 					{
@@ -333,15 +333,15 @@ public class RuleMakerPanel extends JPanel
 				}
 				else if (whitePieceList.isVisible())
 				{
-					if (m_whiteRules.getEndOfGame() == EndOfGame.CLASSIC)
+					if (mWhiteRules.getEndOfGame() == EndOfGame.CLASSIC)
 					{
-						m_whiteRules.addEndOfGame(EndOfGame.CLASSIC.init(0, "", false));
-						m_whiteRules.setObjectivePiece(ObjectivePiece.CUSTOM_OBJECTIVE.setObjectivePieceName(whitePieceList.getSelectedItem()
+						mWhiteRules.addEndOfGame(EndOfGame.CLASSIC.init(0, "", false));
+						mWhiteRules.setObjectivePiece(ObjectivePiece.CUSTOM_OBJECTIVE.setObjectivePieceName(whitePieceList.getSelectedItem()
 								.toString()));
 					}
 					else
 					{
-						m_whiteRules.addEndOfGame(EndOfGame.CAPTURE_ALL_OF_TYPE.init(0, whitePieceList.getSelectedItem().toString(),
+						mWhiteRules.addEndOfGame(EndOfGame.CAPTURE_ALL_OF_TYPE.init(0, whitePieceList.getSelectedItem().toString(),
 								false));
 					}
 				}
@@ -357,7 +357,7 @@ public class RuleMakerPanel extends JPanel
 									"Number of Checks", JOptionPane.PLAIN_MESSAGE);
 							return;
 						}
-						m_blackRules.addEndOfGame(EndOfGame.CHECK_N_TIMES.init(answer, "", true));
+						mBlackRules.addEndOfGame(EndOfGame.CHECK_N_TIMES.init(answer, "", true));
 					}
 					catch (Exception ne)
 					{
@@ -369,23 +369,23 @@ public class RuleMakerPanel extends JPanel
 				else if (blackPiecesList.isVisible())
 				{
 					blackPiecesList.getSelectedItem();
-					if (m_blackRules.getEndOfGame() == EndOfGame.CLASSIC)
+					if (mBlackRules.getEndOfGame() == EndOfGame.CLASSIC)
 					{
-						m_blackRules.addEndOfGame(EndOfGame.CLASSIC.init(0, "", true));
-						m_blackRules.setObjectivePiece(ObjectivePiece.CUSTOM_OBJECTIVE.setObjectivePieceName(blackPiecesList.getSelectedItem()
+						mBlackRules.addEndOfGame(EndOfGame.CLASSIC.init(0, "", true));
+						mBlackRules.setObjectivePiece(ObjectivePiece.CUSTOM_OBJECTIVE.setObjectivePieceName(blackPiecesList.getSelectedItem()
 								.toString()));
 					}
 					else
 					{
-						m_blackRules.addEndOfGame(EndOfGame.CAPTURE_ALL_OF_TYPE.init(0, blackPiecesList.getSelectedItem().toString(),
+						mBlackRules.addEndOfGame(EndOfGame.CAPTURE_ALL_OF_TYPE.init(0, blackPiecesList.getSelectedItem().toString(),
 								true));
 					}
 				}
 
-				customSetupMenu.m_whiteRules = m_whiteRules;
-				customSetupMenu.m_blackRules = m_blackRules;
+				customSetupMenu.mWhiteRules = mWhiteRules;
+				customSetupMenu.mBlackRules = mBlackRules;
 				RuleMakerPanel.this.removeAll();
-				m_frame.setVisible(false);
+				mFrame.setVisible(false);
 			}
 		});
 
@@ -708,14 +708,14 @@ public class RuleMakerPanel extends JPanel
 		{
 			switchBoardsCheckBox.setEnabled(true);
 		}
-		m_frame.pack();
+		mFrame.pack();
 	}
 
 	private static final long serialVersionUID = 8365806731061105370L;
-	static boolean m_needsObjectivePiece = false;
+	static boolean mNeedsObjectivePiece = false;
 
-	private Builder m_builder;
-	private Rules m_whiteRules = new Rules(false);
-	private Rules m_blackRules = new Rules(true);
-	private JFrame m_frame;
+	private Builder mBuilder;
+	private Rules mWhiteRules = new Rules(false);
+	private Rules mBlackRules = new Rules(true);
+	private JFrame mFrame;
 }

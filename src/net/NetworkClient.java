@@ -64,30 +64,22 @@ public class NetworkClient
 
 		try
 		{
-			while (PlayNetGamePanel.m_isRunning)
+			while (PlayNetGamePanel.mIsRunning)
 			{
-				while (g.isBlackMove() == false && PlayNetGamePanel.m_isRunning)
+				while (g.isBlackMove() == false && PlayNetGamePanel.mIsRunning)
 				{
 					fromServer = in.readObject();
 					FakeMove toMove = (FakeMove) fromServer;
 
-					if (toMove.m_originColumn == -1)
+					if (toMove.mOriginColumn == -1)
 					{
 						int surrender = JOptionPane.showConfirmDialog(null, "The other player has requested a Draw. Do you accept?",
 								"Draw", JOptionPane.YES_NO_OPTION);
 						if (surrender == 0)
-						{ // If this player also accepts the Draw.
-							out.writeObject(new FakeMove(-2, -2, -2, -2, -2, null)); // Write
-																						// out
-																						// a
-																						// new
-																						// object
-																						// which
-																						// shows
-																						// you
-																						// accepted
-																						// the
-																						// Draw.
+						{
+							// if this player also accepts the Draw
+							// write out a new object which shows you accepted the Draw
+							out.writeObject(new FakeMove(-2, -2, -2, -2, -2, null));
 							Result result = Result.DRAW;
 							result.setGuiText("The game has ended in a Draw!");
 							g.getLastMove().setResult(result);
@@ -96,19 +88,8 @@ public class NetworkClient
 						}
 						else
 						{
-							out.writeObject(new FakeMove(-3, -3, -3, -3, -3, null));// Else,
-																					// write
-																					// out
-																					// an
-																					// object
-																					// which
-																					// shows
-																					// you
-																					// did
-																					// NOT
-																					// accept
-																					// the
-																					// Draw.
+							// else, write out an object which shows you did NOT accept the Draw
+							out.writeObject(new FakeMove(-3, -3, -3, -3, -3, null));
 							continue;
 						}
 					}
@@ -119,38 +100,38 @@ public class NetworkClient
 							continue;
 					}
 				}
-				while (g.isBlackMove() == true && PlayNetGamePanel.m_isRunning)
+				while (g.isBlackMove() == true && PlayNetGamePanel.mIsRunning)
 				{
-					while (PlayNetGamePanel.m_netMove == null && !png.m_drawRequested && PlayNetGamePanel.m_isRunning)
+					while (PlayNetGamePanel.mNetMove == null && !png.mDrawRequested && PlayNetGamePanel.mIsRunning)
 						Thread.sleep(0);
-					if (png.m_drawRequested)
+					if (png.mDrawRequested)
 					{
 						fromServer = in.readObject();
 						FakeMove toMove = (FakeMove) fromServer;
-						if (toMove.m_originColumn == -2)
+						if (toMove.mOriginColumn == -2)
 						{
 							Result result = Result.DRAW;
 							result.setGuiText("The game has ended in a Draw!");
 							g.getLastMove().setResult(result);
 							PlayGamePanel.endOfGame(result);
-							png.m_drawRequested = false;
+							png.mDrawRequested = false;
 							throw new Exception();
 						}
-						else if (toMove.m_originColumn == -3)
+						else if (toMove.mOriginColumn == -3)
 						{ // If the response is an unaccepted Draw request, do
 							// not perform the Move.
 							JOptionPane.showMessageDialog(null, "Your request for a draw has been denied. Continue play as normal.",
 									"Denied", JOptionPane.PLAIN_MESSAGE);
-							png.m_drawRequested = false;
+							png.mDrawRequested = false;
 							continue;
 						}
 					}
 
-					fromUser = PlayNetGamePanel.m_netMove;
-					PlayNetGamePanel.m_netMove = null;
+					fromUser = PlayNetGamePanel.mNetMove;
+					PlayNetGamePanel.mNetMove = null;
 
-					if (fromUser != null && ((FakeMove) fromUser).m_originColumn == -1)
-						png.m_drawRequested = true;
+					if (fromUser != null && ((FakeMove) fromUser).mOriginColumn == -1)
+						png.mDrawRequested = true;
 					out.writeObject(fromUser);
 					out.flush();
 					if (g.getLastMove().getResult() != null)
@@ -172,7 +153,7 @@ public class NetworkClient
 			e.printStackTrace();
 			if (g.getHistory().size() != 0 && g.getHistory().get(g.getHistory().size() - 1).getResult() != null)
 				return;
-			if (!PlayNetGamePanel.m_isRunning)
+			if (!PlayNetGamePanel.mIsRunning)
 				return;
 			JOptionPane.showMessageDialog(null, "Your opponent closed the game", "Oops!", JOptionPane.ERROR_MESSAGE);
 			g.getBlackTimer().stopTimer();
@@ -191,5 +172,4 @@ public class NetworkClient
 		in.close();
 		socket.close();
 	}
-
 }

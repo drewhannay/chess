@@ -18,12 +18,12 @@ public class FakeMove implements Serializable
 	public FakeMove(int boardIndex, int originRow, int originColumn, int destinationRow, int destinationColumn,
 			String promotionPieceName)
 	{
-		m_boardIndex = boardIndex;
-		m_originRow = originRow;
-		m_originColumn = originColumn;
-		m_destinationRow = destinationRow;
-		m_destinationColumn = destinationColumn;
-		m_promotionPieceName = promotionPieceName;
+		mBoardIndex = boardIndex;
+		mOriginRow = originRow;
+		mOriginColumn = originColumn;
+		mDestinationRow = destinationRow;
+		mDestinationColumn = destinationColumn;
+		mPromotionPieceName = promotionPieceName;
 	}
 
 	/**
@@ -34,15 +34,15 @@ public class FakeMove implements Serializable
 	@Override
 	public String toString()
 	{
-		return m_boardIndex + " " + m_originRow + " " + m_originColumn + " " + m_destinationRow + " " + m_destinationColumn;
+		return mBoardIndex + " " + mOriginRow + " " + mOriginColumn + " " + mDestinationRow + " " + mDestinationColumn;
 	}
 
 	private static final long serialVersionUID = -7511895104920021930L;
 
-	public int m_boardIndex;
-	public int m_originRow;
-	public int m_originColumn;
-	public int m_destinationRow;
-	public int m_destinationColumn;
-	public String m_promotionPieceName;
+	public int mBoardIndex;
+	public int mOriginRow;
+	public int mOriginColumn;
+	public int mDestinationRow;
+	public int mDestinationColumn;
+	public String mPromotionPieceName;
 }

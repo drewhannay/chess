@@ -11,36 +11,36 @@ public class Board implements Serializable
 	{
 		setMaxRow(numRows);
 		setMaxCol(numColumns);
-		m_wrapsAround = wrapsAround;
-		m_squares = new Square[numRows][numColumns];
+		mWrapsAround = wrapsAround;
+		mSquares = new Square[numRows][numColumns];
 
 		for (int row = 0, column = 0; row < numRows; row++)
 		{
 			// Initialize the Squares. Add one to the row and column to ignore
 			// counting from zero
 			for (column = 0; column < numColumns; column++)
-				m_squares[row][column] = new Square((row + 1), (column + 1));
+				mSquares[row][column] = new Square((row + 1), (column + 1));
 		}
 	}
 
 	public int getEnpassantCol()
 	{
-		return m_enpassantColumn;
+		return mEnpassantColumn;
 	}
 
 	public Game getGame()
 	{
-		return m_game;
+		return mGame;
 	}
 
 	public int getMaxCol()
 	{
-		return m_maxColumn;
+		return mMaxColumn;
 	}
 
 	public int getMaxRow()
 	{
-		return m_maxRow;
+		return mMaxRow;
 	}
 
 	/**
@@ -107,7 +107,7 @@ public class Board implements Serializable
 	{
 		// Use x-1 and y-1 so that we can maintain the illusion of counting from
 		// 1
-		return m_squares[row - 1][col - 1];
+		return mSquares[row - 1][col - 1];
 	}
 
 	public boolean isBlackTurn()
@@ -185,7 +185,7 @@ public class Board implements Serializable
 
 	public boolean isWrapAround()
 	{
-		return m_wrapsAround;
+		return mWrapsAround;
 	}
 
 	public int numCols()
@@ -200,30 +200,30 @@ public class Board implements Serializable
 
 	public void setEnpassantCol(int enpassantCol)
 	{
-		m_enpassantColumn = enpassantCol;
+		mEnpassantColumn = enpassantCol;
 	}
 
 	public void setGame(Game g)
 	{
-		m_game = g;
+		mGame = g;
 	}
 
 	public void setMaxCol(int maxCol)
 	{
-		m_maxColumn = maxCol;
+		mMaxColumn = maxCol;
 	}
 
 	public void setMaxRow(int maxRow)
 	{
-		m_maxRow = maxRow;
+		mMaxRow = maxRow;
 	}
 
 	private static final long serialVersionUID = -3660560968400318452L;
 
-	private Game m_game;
-	protected Square m_squares[][];
-	private int m_maxRow;
-	private int m_maxColumn;
-	private int m_enpassantColumn = NO_ENPASSANT;
-	private boolean m_wrapsAround;
+	private Game mGame;
+	protected Square mSquares[][];
+	private int mMaxRow;
+	private int mMaxColumn;
+	private int mEnpassantColumn = NO_ENPASSANT;
+	private boolean mWrapsAround;
 }

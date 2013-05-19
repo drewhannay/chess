@@ -260,5 +260,4 @@ public final class AlgebraicConverter
 		// Yay for regular expressions!
 		return Pattern.compile(pat);
 	}
-
 }

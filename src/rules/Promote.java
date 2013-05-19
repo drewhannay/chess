@@ -14,7 +14,7 @@ public enum Promote
 	public Piece promotePiece(Piece pieceToPromote, boolean pieceCanBePromoted, String pieceTypeToPromoteFrom)
 	{
 		if (m_lastPromotedFromPieceName == null)
-			m_lastPromotedFromPieceName = m_resetLastPromoted;
+			m_lastPromotedFromPieceName = mResetLastPromoted;
 
 		Piece promotedPiece;
 		switch (this)
@@ -29,7 +29,7 @@ public enum Promote
 			promotedPiece = null;
 		}
 
-		m_resetLastPromoted = m_lastPromotedFromPieceName;
+		mResetLastPromoted = m_lastPromotedFromPieceName;
 		return promotedPiece;
 	}
 
@@ -48,7 +48,7 @@ public enum Promote
 
 	public void setGame(Game game)
 	{
-		m_game = game;
+		mGame = game;
 	}
 
 	private Piece classicPromotion(Piece pieceToPromote, boolean pieceCanBePromoted, String pieceTypeToPromoteFrom)
@@ -58,7 +58,7 @@ public enum Promote
 		if (!pieceCanBePromoted)
 		{
 			m_lastPromotedFromPieceName = pieceToPromote.getName();
-			m_promotedToClass = pieceToPromote.getName();
+			mPromotedToClass = pieceToPromote.getName();
 		}
 		if (pieceCanBePromoted && pieceTypeToPromoteFrom != null && !pieceTypeToPromoteFrom.equals(pieceToPromote.getName()))
 		{
@@ -66,9 +66,9 @@ public enum Promote
 			{
 				Piece promoted = PieceBuilder.makePiece(pieceTypeToPromoteFrom, pieceToPromote.isBlack(), pieceToPromote.getSquare(), pieceToPromote.getBoard());
 				if (promoted.isBlack())
-					m_game.getBlackTeam().set(m_game.getBlackTeam().indexOf(pieceToPromote), promoted);
+					mGame.getBlackTeam().set(mGame.getBlackTeam().indexOf(pieceToPromote), promoted);
 				else
-					m_game.getWhiteTeam().set(m_game.getWhiteTeam().indexOf(pieceToPromote), promoted);
+					mGame.getWhiteTeam().set(mGame.getWhiteTeam().indexOf(pieceToPromote), promoted);
 				promoted.getLegalDests().clear();
 				promoted.setMoveCount(pieceToPromote.getMoveCount());
 				return promoted;
@@ -80,12 +80,12 @@ public enum Promote
 		}
 		if (!pieceCanBePromoted && (pieceToPromote.getPromotesTo() == null || pieceToPromote.getPromotesTo().size() == 0))
 			return pieceToPromote;
-		if (!pieceCanBePromoted && pieceTypeToPromoteFrom == null && m_game.isBlackMove() == pieceToPromote.isBlack())
+		if (!pieceCanBePromoted && pieceTypeToPromoteFrom == null && mGame.isBlackMove() == pieceToPromote.isBlack())
 		{
-			m_promotedToClass = "";
+			mPromotedToClass = "";
 			if (pieceToPromote.getPromotesTo().size() == 1)
-				m_promotedToClass = pieceToPromote.getPromotesTo().get(0);
-			while (m_promotedToClass.equals(""))
+				mPromotedToClass = pieceToPromote.getPromotesTo().get(0);
+			while (mPromotedToClass.equals(""))
 			{
 				String result = (String) JOptionPane.showInputDialog(null, "Select the Promotion type:", "Promo choice",
 						JOptionPane.PLAIN_MESSAGE, null, pieceToPromote.getPromotesTo().toArray(), null);
@@ -93,22 +93,22 @@ public enum Promote
 				if (result == null)
 					continue;
 
-				m_promotedToClass = result;
+				mPromotedToClass = result;
 				pieceTypeToPromoteFrom = result;
 			}
 		}
 		else if (pieceTypeToPromoteFrom != null && pieceToPromote.getPromotesTo() != null && pieceToPromote.getPromotesTo().contains(pieceTypeToPromoteFrom))
 		{
-			m_promotedToClass = pieceTypeToPromoteFrom;
+			mPromotedToClass = pieceTypeToPromoteFrom;
 		}
 
 		try
 		{
-			Piece promoted = PieceBuilder.makePiece(m_promotedToClass, pieceToPromote.isBlack(), pieceToPromote.getSquare(), pieceToPromote.getBoard());
+			Piece promoted = PieceBuilder.makePiece(mPromotedToClass, pieceToPromote.isBlack(), pieceToPromote.getSquare(), pieceToPromote.getBoard());
 			if (promoted.isBlack())
-				m_game.getBlackTeam().set(m_game.getBlackTeam().indexOf(pieceToPromote), promoted);
+				mGame.getBlackTeam().set(mGame.getBlackTeam().indexOf(pieceToPromote), promoted);
 			else
-				m_game.getWhiteTeam().set(m_game.getWhiteTeam().indexOf(pieceToPromote), promoted);
+				mGame.getWhiteTeam().set(mGame.getWhiteTeam().indexOf(pieceToPromote), promoted);
 			promoted.getLegalDests().clear();
 			promoted.setMoveCount(pieceToPromote.getMoveCount());
 			return promoted;
@@ -126,7 +126,7 @@ public enum Promote
 
 	private static String m_lastPromotedFromPieceName;
 
-	private Game m_game;
-	private String m_resetLastPromoted;
-	private String m_promotedToClass;
+	private Game mGame;
+	private String mResetLastPromoted;
+	private String mPromotedToClass;
 }

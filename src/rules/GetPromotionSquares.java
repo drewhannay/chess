@@ -27,7 +27,7 @@ public enum GetPromotionSquares
 
 	public void setGame(Game game)
 	{
-		m_game = game;
+		mGame = game;
 	}
 
 	private List<Square> classicPromoSquares(Piece piece)
@@ -37,15 +37,15 @@ public enum GetPromotionSquares
 		// that gets from the user the promotion squares of each type (looks up
 		// in a map). Can eventually replace this method.
 		List<Square> toReturn = Lists.newArrayList();
-		for (int i = 1; i <= m_game.getBoards()[0].getMaxRow(); i++)
+		for (int i = 1; i <= mGame.getBoards()[0].getMaxRow(); i++)
 		{
 			if (piece.isBlack())
-				toReturn.add(m_game.getBoards()[0].getSquare(1, i));
+				toReturn.add(mGame.getBoards()[0].getSquare(1, i));
 			else
-				toReturn.add(m_game.getBoards()[0].getSquare(8, i));
+				toReturn.add(mGame.getBoards()[0].getSquare(8, i));
 		}
 		return toReturn;
 	}
 
-	private Game m_game;
+	private Game mGame;
 }

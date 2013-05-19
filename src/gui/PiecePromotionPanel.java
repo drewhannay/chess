@@ -28,24 +28,19 @@ public class PiecePromotionPanel extends JPanel
 {
 	/**
 	 * 
-	 */
-	private static final long serialVersionUID = -3940357256712099377L;
-
-	/**
-	 * 
 	 * @param pieceName
 	 * @param customSetupMenu
 	 */
 	public PiecePromotionPanel(String pieceName, CustomSetupPanel customSetupMenu, JFrame optionsFrame)
 	{
-		m_pieceBeingPromotedName = pieceName;
-		m_customSetupMenu = customSetupMenu;
-		m_frame = optionsFrame;
-		m_frame.setVisible(true);
-		m_frame.add(this);
-		m_frame.setVisible(true);
-		m_frame.setSize(600, 500);
-		m_frame.setLocationRelativeTo(Driver.getInstance());
+		mPieceBeingPromotedName = pieceName;
+		mCustomSetupMenu = customSetupMenu;
+		mFrame = optionsFrame;
+		mFrame.setVisible(true);
+		mFrame.add(this);
+		mFrame.setVisible(true);
+		mFrame.setSize(600, 500);
+		mFrame.setLocationRelativeTo(Driver.getInstance());
 		initComponents();
 	}
 
@@ -58,7 +53,7 @@ public class PiecePromotionPanel extends JPanel
 		Object[] allPieces = PieceBuilder.getSet().toArray();
 		for (int i = 0; i < allPieces.length; i++)
 		{
-			if (!allPieces[i].equals(m_pieceBeingPromotedName))
+			if (!allPieces[i].equals(mPieceBeingPromotedName))
 				cantPromoteList.addElement(allPieces[i]);
 		}
 		final JList cantPromoteToDisplay = new JList(cantPromoteList);
@@ -180,14 +175,14 @@ public class PiecePromotionPanel extends JPanel
 				for (int i = 0; i < canPromoteList.size(); i++)
 					promotesTo.add((String) canPromoteList.get(i));
 
-				m_customSetupMenu.putPromotionMap(m_pieceBeingPromotedName, promotesTo);
+				mCustomSetupMenu.putPromotionMap(mPieceBeingPromotedName, promotesTo);
 				PiecePromotionPanel.this.removeAll();
-				m_frame.setVisible(false);
+				mFrame.setVisible(false);
 			}
 
 		});
 		JButton cancelButton = new JButton("Cancel");
-		GuiUtility.setupVariantCancelButton(cancelButton, this, m_frame);
+		GuiUtility.setupVariantCancelButton(cancelButton, this, mFrame);
 
 		JPanel optionsPanel = new JPanel();
 		optionsPanel.add(saveButton);
@@ -233,10 +228,12 @@ public class PiecePromotionPanel extends JPanel
 		add(optionsPanel, constraints);
 
 		setVisible(true);
-		m_frame.pack();
+		mFrame.pack();
 	}
 
-	private String m_pieceBeingPromotedName;
-	private CustomSetupPanel m_customSetupMenu;
-	private JFrame m_frame;
+	private static final long serialVersionUID = -3940357256712099377L;
+
+	private String mPieceBeingPromotedName;
+	private CustomSetupPanel mCustomSetupMenu;
+	private JFrame mFrame;
 }

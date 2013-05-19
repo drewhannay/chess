@@ -25,14 +25,14 @@ public class ObjectiveMakerPanel extends JPanel
 {
 	public ObjectiveMakerPanel(CustomSetupPanel customSetupMenu, JFrame optionsFrame)
 	{
-		m_frame = optionsFrame;
-		m_frame.setVisible(true);
-		m_frame.add(this);
-		m_frame.setVisible(true);
-		m_frame.setSize(400, 300);
-		m_frame.setLocationRelativeTo(Driver.getInstance());
-		m_whiteRules = customSetupMenu.m_whiteRules;
-		m_blackRules = customSetupMenu.m_blackRules;
+		mFrame = optionsFrame;
+		mFrame.setVisible(true);
+		mFrame.add(this);
+		mFrame.setVisible(true);
+		mFrame.setSize(400, 300);
+		mFrame.setLocationRelativeTo(Driver.getInstance());
+		mWhiteRules = customSetupMenu.mWhiteRules;
+		mBlackRules = customSetupMenu.mBlackRules;
 		initGUIComponents(customSetupMenu);
 	}
 
@@ -49,33 +49,33 @@ public class ObjectiveMakerPanel extends JPanel
 		GuiUtility.requestFocus(whiteCaptureAllButton);
 		whiteCaptureAllButton.setToolTipText("Press me if you want the objective to be capturing all enemy pieces");
 		objectiveWhitePanel.add(whiteCaptureAllButton);
-		if (customSetupMenu.m_whiteRules.getEndOfGame() == EndOfGame.CAPTURE_ALL_PIECES)
+		if (customSetupMenu.mWhiteRules.getEndOfGame() == EndOfGame.CAPTURE_ALL_PIECES)
 			whiteCaptureAllButton.setSelected(true);
 
 		final JRadioButton whiteCaptureAllTypeButton = new JRadioButton("Capture All of Type", false);
 		whiteCaptureAllTypeButton
 				.setToolTipText("Press me if you want the objective to be capturing all enemy pieces of a certain type");
 		objectiveWhitePanel.add(whiteCaptureAllTypeButton);
-		if (customSetupMenu.m_whiteRules.getEndOfGame() == EndOfGame.CAPTURE_ALL_OF_TYPE)
+		if (customSetupMenu.mWhiteRules.getEndOfGame() == EndOfGame.CAPTURE_ALL_OF_TYPE)
 			whiteCaptureAllTypeButton.setSelected(true);
 
 		final JRadioButton whiteProtectObjectiveButton = new JRadioButton("Protect Objective", false);
 		whiteProtectObjectiveButton.setToolTipText("Press me if you want the objective to be protecting your own objective");
 		objectiveWhitePanel.add(whiteProtectObjectiveButton);
-		if (customSetupMenu.m_whiteRules.getEndOfGame() == EndOfGame.CLASSIC)
+		if (customSetupMenu.mWhiteRules.getEndOfGame() == EndOfGame.CLASSIC)
 			whiteProtectObjectiveButton.setSelected(true);
 
 		final JRadioButton whiteLoseAllButton = new JRadioButton("Lose All Pieces", false);
 		whiteLoseAllButton.setToolTipText("Press me if you want the objective to be losing all of your pieces");
 		objectiveWhitePanel.add(whiteLoseAllButton);
-		if (customSetupMenu.m_whiteRules.getEndOfGame() == EndOfGame.LOSE_ALL_PIECES)
+		if (customSetupMenu.mWhiteRules.getEndOfGame() == EndOfGame.LOSE_ALL_PIECES)
 			whiteLoseAllButton.setSelected(true);
 
 		final JRadioButton whiteCheckTimesButton = new JRadioButton("Check # Times", false);
 		whiteCheckTimesButton
 				.setToolTipText("Press me if you want the objective to be putting the other team in check a certain amount of times");
 		objectiveWhitePanel.add(whiteCheckTimesButton);
-		if (customSetupMenu.m_whiteRules.getEndOfGame() == EndOfGame.CHECK_N_TIMES)
+		if (customSetupMenu.mWhiteRules.getEndOfGame() == EndOfGame.CHECK_N_TIMES)
 			whiteCheckTimesButton.setSelected(true);
 
 		final ButtonGroup whiteButtonGroup = new ButtonGroup();
@@ -90,33 +90,33 @@ public class ObjectiveMakerPanel extends JPanel
 		final JRadioButton blackCaptureAllButton = new JRadioButton("Capture All", false);
 		blackCaptureAllButton.setToolTipText("Press me if you want the objective to be capturing all enemy pieces");
 		objectiveBlackPanel.add(blackCaptureAllButton);
-		if (customSetupMenu.m_blackRules.getEndOfGame() == EndOfGame.CAPTURE_ALL_PIECES)
+		if (customSetupMenu.mBlackRules.getEndOfGame() == EndOfGame.CAPTURE_ALL_PIECES)
 			blackCaptureAllButton.setSelected(true);
 
 		final JRadioButton blackCaptureAllTypeButton = new JRadioButton("Capture All of Type", false);
 		blackCaptureAllTypeButton
 				.setToolTipText("Press me if you want the objective to be capturing all enemy pieces of a certain type");
 		objectiveBlackPanel.add(blackCaptureAllTypeButton);
-		if (customSetupMenu.m_blackRules.getEndOfGame() == EndOfGame.CAPTURE_ALL_OF_TYPE)
+		if (customSetupMenu.mBlackRules.getEndOfGame() == EndOfGame.CAPTURE_ALL_OF_TYPE)
 			blackCaptureAllTypeButton.setSelected(true);
 
 		final JRadioButton blackProtectObjectiveButton = new JRadioButton("Protect Objective", false);
 		blackProtectObjectiveButton.setToolTipText("Press me if you want the objective to be protecting your own objective");
 		objectiveBlackPanel.add(blackProtectObjectiveButton);
-		if (customSetupMenu.m_blackRules.getEndOfGame() == EndOfGame.CLASSIC)
+		if (customSetupMenu.mBlackRules.getEndOfGame() == EndOfGame.CLASSIC)
 			blackProtectObjectiveButton.setSelected(true);
 
 		final JRadioButton blackLoseAllButton = new JRadioButton("Lose All Pieces", false);
 		blackLoseAllButton.setToolTipText("Press me if you want the objective to be losing all of your pieces");
 		objectiveBlackPanel.add(blackLoseAllButton);
-		if (customSetupMenu.m_blackRules.getEndOfGame() == EndOfGame.LOSE_ALL_PIECES)
+		if (customSetupMenu.mBlackRules.getEndOfGame() == EndOfGame.LOSE_ALL_PIECES)
 			blackLoseAllButton.setSelected(true);
 
 		final JRadioButton blackCheckTimesButton = new JRadioButton("Check # Times", false);
 		blackCheckTimesButton
 				.setToolTipText("Press me if you want the objective to be putting the other team in check a certain amount of times");
 		objectiveBlackPanel.add(blackCheckTimesButton);
-		if (customSetupMenu.m_blackRules.getEndOfGame() == EndOfGame.CHECK_N_TIMES)
+		if (customSetupMenu.mBlackRules.getEndOfGame() == EndOfGame.CHECK_N_TIMES)
 			blackCheckTimesButton.setSelected(true);
 
 		final ButtonGroup blackButtonGroup = new ButtonGroup();
@@ -128,7 +128,7 @@ public class ObjectiveMakerPanel extends JPanel
 
 		final JButton cancelButton = new JButton("Cancel");
 		cancelButton.setToolTipText("Press me to return to the piece creation window");
-		GuiUtility.setupVariantCancelButton(cancelButton, this, m_frame);
+		GuiUtility.setupVariantCancelButton(cancelButton, this, mFrame);
 
 		JButton saveButton = new JButton("Save");
 		saveButton.setToolTipText("Press me to save these objective settings");
@@ -169,54 +169,54 @@ public class ObjectiveMakerPanel extends JPanel
 
 				if (whiteCaptureAllButton.isSelected())
 				{
-					m_whiteRules.addEndOfGame(EndOfGame.CAPTURE_ALL_PIECES.init(0, "", false));
+					mWhiteRules.addEndOfGame(EndOfGame.CAPTURE_ALL_PIECES.init(0, "", false));
 				}
 				if (whiteCaptureAllTypeButton.isSelected())
 				{
-					m_whiteRules.addEndOfGame(EndOfGame.CAPTURE_ALL_OF_TYPE.init(0, "Knight", false));
+					mWhiteRules.addEndOfGame(EndOfGame.CAPTURE_ALL_OF_TYPE.init(0, "Knight", false));
 				}
 				if (whiteProtectObjectiveButton.isSelected())
 				{
-					m_whiteRules.addEndOfGame(EndOfGame.CLASSIC.init(0, "", false));
+					mWhiteRules.addEndOfGame(EndOfGame.CLASSIC.init(0, "", false));
 					m_needsObjectivePiece = true;
 				}
 				if (whiteLoseAllButton.isSelected())
 				{
-					m_whiteRules.addEndOfGame(EndOfGame.LOSE_ALL_PIECES.init(0, "", false));
+					mWhiteRules.addEndOfGame(EndOfGame.LOSE_ALL_PIECES.init(0, "", false));
 				}
 				if (whiteCheckTimesButton.isSelected())
 				{
-					m_whiteRules.addEndOfGame(EndOfGame.CHECK_N_TIMES.init(3, "", false));
+					mWhiteRules.addEndOfGame(EndOfGame.CHECK_N_TIMES.init(3, "", false));
 					m_needsObjectivePiece = true;
 				}
 
 				if (blackCaptureAllButton.isSelected())
 				{
-					m_blackRules.addEndOfGame(EndOfGame.CAPTURE_ALL_PIECES.init(0, "", true));
+					mBlackRules.addEndOfGame(EndOfGame.CAPTURE_ALL_PIECES.init(0, "", true));
 				}
 				if (blackCaptureAllTypeButton.isSelected())
 				{
-					m_blackRules.addEndOfGame(EndOfGame.CAPTURE_ALL_OF_TYPE.init(0, "Knight", true));
+					mBlackRules.addEndOfGame(EndOfGame.CAPTURE_ALL_OF_TYPE.init(0, "Knight", true));
 					m_needsObjectivePiece = false;
 				}
 				if (blackProtectObjectiveButton.isSelected())
 				{
-					m_blackRules.addEndOfGame(EndOfGame.CLASSIC.init(0, "", true));
+					mBlackRules.addEndOfGame(EndOfGame.CLASSIC.init(0, "", true));
 				}
 				if (blackLoseAllButton.isSelected())
 				{
-					m_blackRules.addEndOfGame(EndOfGame.LOSE_ALL_PIECES.init(0, "", true));
+					mBlackRules.addEndOfGame(EndOfGame.LOSE_ALL_PIECES.init(0, "", true));
 				}
 				if (blackCheckTimesButton.isSelected())
 				{
-					m_blackRules.addEndOfGame(EndOfGame.CHECK_N_TIMES.init(3, "", true));
+					mBlackRules.addEndOfGame(EndOfGame.CHECK_N_TIMES.init(3, "", true));
 					m_needsObjectivePiece = true;
 				}
 
-				customSetupMenu.m_whiteRules = m_whiteRules;
-				customSetupMenu.m_blackRules = m_blackRules;
+				customSetupMenu.mWhiteRules = mWhiteRules;
+				customSetupMenu.mBlackRules = mBlackRules;
 				ObjectiveMakerPanel.this.removeAll();
-				m_frame.setVisible(false);
+				mFrame.setVisible(false);
 			}
 		});
 
@@ -283,14 +283,14 @@ public class ObjectiveMakerPanel extends JPanel
 		constraints.gridwidth = 2;
 		add(buttonPanel, constraints);
 
-		m_frame.pack();
+		mFrame.pack();
 	}
 
 	private static final long serialVersionUID = 8365806731061105372L;
 
 	static boolean m_needsObjectivePiece = false;
 
-	private Rules m_whiteRules = new Rules(false);
-	private Rules m_blackRules = new Rules(true);
-	private JFrame m_frame;
+	private Rules mWhiteRules = new Rules(false);
+	private Rules mBlackRules = new Rules(true);
+	private JFrame mFrame;
 }

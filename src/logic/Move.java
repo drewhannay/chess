@@ -18,7 +18,6 @@ import timer.ChessTimer;
  */
 public class Move implements Serializable
 {
-
 	/**
 	 * Generated Serial Version ID
 	 */

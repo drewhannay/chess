@@ -23,7 +23,7 @@ public enum GetBoard
 
 	public void setGame(Game game)
 	{
-		m_game = game;
+		mGame = game;
 	}
 
 	private Board classicGetBoard(Board startBoard)
@@ -33,10 +33,10 @@ public enum GetBoard
 
 	private Board getOppositeBoard(Board startBoard)
 	{
-		if (startBoard.equals(m_game.getBoards()[0]))
-			return m_game.getBoards()[1];
-		return m_game.getBoards()[0];
+		if (startBoard.equals(mGame.getBoards()[0]))
+			return mGame.getBoards()[1];
+		return mGame.getBoards()[0];
 	}
 
-	private Game m_game;
+	private Game mGame;
 }

@@ -70,20 +70,20 @@ public class PlayGamePanel extends JPanel
 		Driver.getInstance().setGlassPane(m_globalGlassPane);
 
 		setGame(Builder.newGame("Classic"));
-		PlayGamePanel.m_isPlayback = isPlayback;
-		PlayGamePanel.m_whiteTimer = getGame().getWhiteTimer();
-		PlayGamePanel.m_blackTimer = getGame().getBlackTimer();
-		m_whiteTimer.restart();
-		m_blackTimer.restart();
+		PlayGamePanel.mIsPlayback = isPlayback;
+		PlayGamePanel.mWhiteTimer = getGame().getWhiteTimer();
+		PlayGamePanel.mBlackTimer = getGame().getBlackTimer();
+		mWhiteTimer.restart();
+		mBlackTimer.restart();
 		turn(getGame().getBoards()[0].isBlackTurn());
 		initComponents(isPlayback);
 		setGame(AlgebraicConverter.convert(getGame(), acnFile));
-		m_history = new Move[getGame().getHistory().size()];
-		getGame().getHistory().toArray(m_history);
-		m_historyIndex = m_history.length - 1;
+		mHistory = new Move[getGame().getHistory().size()];
+		getGame().getHistory().toArray(mHistory);
+		mHistoryIndex = mHistory.length - 1;
 
-		while (m_historyIndex >= 0)
-			m_history[m_historyIndex--].undo();
+		while (mHistoryIndex >= 0)
+			mHistory[mHistoryIndex--].undo();
 
 		boardRefresh(getGame().getBoards());
 	}
@@ -91,21 +91,21 @@ public class PlayGamePanel extends JPanel
 	public PlayGamePanel(Game game, boolean isPlayback) throws Exception
 	{
 		PlayGamePanel.setGame(game);
-		PlayGamePanel.m_isPlayback = isPlayback;
+		PlayGamePanel.mIsPlayback = isPlayback;
 		m_dropManager = new DropManager();
 		if (isPlayback)
 		{
-			PlayGamePanel.m_whiteTimer = ChessTimer.createTimer(TimerTypes.NO_TIMER, null, 0, 0, false);
-			PlayGamePanel.m_blackTimer = ChessTimer.createTimer(TimerTypes.NO_TIMER, null, 0, 0, true);
-			m_history = new Move[game.getHistory().size()];
-			game.getHistory().toArray(m_history);
+			PlayGamePanel.mWhiteTimer = ChessTimer.createTimer(TimerTypes.NO_TIMER, null, 0, 0, false);
+			PlayGamePanel.mBlackTimer = ChessTimer.createTimer(TimerTypes.NO_TIMER, null, 0, 0, true);
+			mHistory = new Move[game.getHistory().size()];
+			game.getHistory().toArray(mHistory);
 			initComponents(isPlayback);
-			m_historyIndex = m_history.length - 1;
+			mHistoryIndex = mHistory.length - 1;
 
-			while (m_historyIndex >= 0)
+			while (mHistoryIndex >= 0)
 			{
-				m_history[m_historyIndex].undo();
-				m_historyIndex--;
+				mHistory[mHistoryIndex].undo();
+				mHistoryIndex--;
 			}
 		}
 		else
@@ -114,13 +114,13 @@ public class PlayGamePanel extends JPanel
 			m_globalGlassPane.setOpaque(false);
 			Driver.getInstance().setGlassPane(m_globalGlassPane);
 
-			PlayGamePanel.m_whiteTimer = game.getWhiteTimer();
-			PlayGamePanel.m_blackTimer = game.getBlackTimer();
-			m_whiteTimer.restart();
-			m_blackTimer.restart();
+			PlayGamePanel.mWhiteTimer = game.getWhiteTimer();
+			PlayGamePanel.mBlackTimer = game.getBlackTimer();
+			mWhiteTimer.restart();
+			mBlackTimer.restart();
 			turn(game.isBlackMove());
-			m_history = null;
-			m_historyIndex = -3;
+			mHistory = null;
+			mHistoryIndex = -3;
 			initComponents(isPlayback);
 		}
 		boardRefresh(game.getBoards());
@@ -135,54 +135,54 @@ public class PlayGamePanel extends JPanel
 
 		if (objectivePiece != null && objectivePiece.isInCheck())
 		{
-			m_inCheckLabel.setVisible(true);
+			mInCheckLabel.setVisible(true);
 			if (getGame().getBlackRules().objectivePiece(true).isInCheck())
-				m_inCheckLabel.setBorder(BorderFactory.createTitledBorder("Black Team"));
+				mInCheckLabel.setBorder(BorderFactory.createTitledBorder("Black Team"));
 			else
-				m_inCheckLabel.setBorder(BorderFactory.createTitledBorder("White Team"));
+				mInCheckLabel.setBorder(BorderFactory.createTitledBorder("White Team"));
 
 			for (Piece piece : getGame().getThreats(objectivePiece))
 				piece.getSquare().setColor(Color.red);
 		}
 		else
 		{
-			m_inCheckLabel.setVisible(false);
+			mInCheckLabel.setVisible(false);
 		}
 
 		int index = 0;
 		Piece[] blackCapturedPieces = getGame().getCapturedPieces(true);
-		for (int i = m_whiteCapturesJail.getMaxRow(); i >= 1; i--)
+		for (int i = mWhiteCapturesJail.getMaxRow(); i >= 1; i--)
 		{
-			for (int j = 1; j <= m_whiteCapturesJail.getMaxCol(); j++)
+			for (int j = 1; j <= mWhiteCapturesJail.getMaxCol(); j++)
 			{
 				if (blackCapturedPieces != null && index < blackCapturedPieces.length)
 				{
-					m_whiteCapturesJail.getSquare(i, j).setPiece(blackCapturedPieces[index]);
+					mWhiteCapturesJail.getSquare(i, j).setPiece(blackCapturedPieces[index]);
 					index++;
 				}
-				m_whiteCapturesJail.getSquare(i, j).refreshJail();
+				mWhiteCapturesJail.getSquare(i, j).refreshJail();
 			}
 		}
 		
 		index = 0;
 		Piece[] whiteCapturedPieces = getGame().getCapturedPieces(false);
-		for (int i = m_blackCapturesJail.getMaxRow(); i >= 1; i--)
+		for (int i = mBlackCapturesJail.getMaxRow(); i >= 1; i--)
 		{
-			for (int j = 1; j <= m_blackCapturesJail.getMaxCol(); j++)
+			for (int j = 1; j <= mBlackCapturesJail.getMaxCol(); j++)
 			{
 				if (whiteCapturedPieces != null && index < whiteCapturedPieces.length)
 				{
-					m_blackCapturesJail.getSquare(i, j).setPiece(whiteCapturedPieces[index]);
+					mBlackCapturesJail.getSquare(i, j).setPiece(whiteCapturedPieces[index]);
 					index++;
 				}
-				m_blackCapturesJail.getSquare(i, j).refreshJail();
+				mBlackCapturesJail.getSquare(i, j).refreshJail();
 			}
 		}
 
-		m_whiteLabel.setBackground(getGame().isBlackMove() ? null : Square.HIGHLIGHT_COLOR);
-		m_whiteLabel.setForeground(getGame().isBlackMove() ? Color.black : Color.white);
-		m_blackLabel.setBackground(getGame().isBlackMove() ? Square.HIGHLIGHT_COLOR : null);
-		m_blackLabel.setForeground(getGame().isBlackMove() ? Color.white : Color.black);
+		mWhiteLabel.setBackground(getGame().isBlackMove() ? null : Square.HIGHLIGHT_COLOR);
+		mWhiteLabel.setForeground(getGame().isBlackMove() ? Color.black : Color.white);
+		mBlackLabel.setBackground(getGame().isBlackMove() ? Square.HIGHLIGHT_COLOR : null);
+		mBlackLabel.setForeground(getGame().isBlackMove() ? Color.white : Color.black);
 	}
 
 	private static void refreshSquares(Board[] boards)
@@ -199,26 +199,26 @@ public class PlayGamePanel extends JPanel
 
 	public static void endOfGame(Result result)
 	{
-		PlayNetGamePanel.m_isRunning = false;
-		if (m_game.getHistory().size() != 0)
+		PlayNetGamePanel.mIsRunning = false;
+		if (mGame.getHistory().size() != 0)
 		{
-			PlayNetGamePanel.m_netMove = m_game.moveToFakeMove(m_game.getHistory().get(m_game.getHistory().size() - 1));
+			PlayNetGamePanel.mNetMove = mGame.moveToFakeMove(mGame.getHistory().get(mGame.getHistory().size() - 1));
 		}
 		else if (result != Result.DRAW)
 		{
 			JOptionPane.showMessageDialog(null, "No moves were made and the time ran out. Returning to the Main Menu.",
 					"Time Ran Out", JOptionPane.PLAIN_MESSAGE);
-			PlayNetGamePanel.m_isRunning = false;
+			PlayNetGamePanel.mIsRunning = false;
 			Driver.getInstance().revertToMainPanel();
 			Driver.getInstance().setFileMenuVisibility(true);
 			return;
 		}
 
-		if (m_isPlayback)
+		if (mIsPlayback)
 			return;
 
 		Object[] options = new String[] { "Save Record of Game", "New Game", "Quit" };
-		m_optionsMenu.setVisible(false);
+		mOptionsMenu.setVisible(false);
 		switch (JOptionPane.showOptionDialog(Driver.getInstance(), result.getGUIText(), result.winText(), JOptionPane.YES_NO_CANCEL_OPTION,
 				JOptionPane.PLAIN_MESSAGE, null, options, options[0]))
 		{
@@ -287,16 +287,16 @@ public class PlayGamePanel extends JPanel
 			String saveFileName = JOptionPane.showInputDialog(Driver.getInstance(), "Enter a name for the save file:", "Saving...",
 					JOptionPane.PLAIN_MESSAGE);
 			getGame().saveGame(saveFileName, getGame().isClassicChess());
-			m_game.setBlackMove(false);
+			mGame.setBlackMove(false);
 			Driver.getInstance().setFileMenuVisibility(true);
 			Driver.getInstance().revertToMainPanel();
 			break;
 		case JOptionPane.NO_OPTION:
-			m_game.setBlackMove(false);
+			mGame.setBlackMove(false);
 			Driver.getInstance().setUpNewGame();
 			break;
 		case JOptionPane.CANCEL_OPTION:
-			m_game.setBlackMove(false);
+			mGame.setBlackMove(false);
 			System.exit(0);
 			break;
 		}
@@ -312,10 +312,10 @@ public class PlayGamePanel extends JPanel
 
 	public static void turn(boolean isBlackTurn)
 	{
-		if (m_whiteTimer != null && m_blackTimer != null)
+		if (mWhiteTimer != null && mBlackTimer != null)
 		{
-			(!isBlackTurn ? m_whiteTimer : m_blackTimer).startTimer();
-			(isBlackTurn ? m_whiteTimer : m_blackTimer).stopTimer();
+			(!isBlackTurn ? mWhiteTimer : mBlackTimer).startTimer();
+			(isBlackTurn ? mWhiteTimer : mBlackTimer).stopTimer();
 		}
 	}
 
@@ -371,9 +371,9 @@ public class PlayGamePanel extends JPanel
 
 	public JMenu createMenuBar()
 	{
-		m_optionsMenu = new JMenu("Menu");
+		mOptionsMenu = new JMenu("Menu");
 
-		if (!m_isPlayback)
+		if (!mIsPlayback)
 		{
 			JMenuItem drawMenuItem = new JMenuItem("Declare Draw", KeyEvent.VK_D);
 			JMenuItem saveMenuItem = new JMenuItem("Save & Quit", KeyEvent.VK_S);
@@ -386,7 +386,7 @@ public class PlayGamePanel extends JPanel
 					if (getGame().getLastMove() == null)
 						return;
 
-					m_optionsMenu.setVisible(false);
+					mOptionsMenu.setVisible(false);
 					Result result = Result.DRAW;
 					result.setGuiText("Draw! \nWhat would you like to do? \n");
 					getGame().getLastMove().setResult(result);
@@ -399,27 +399,27 @@ public class PlayGamePanel extends JPanel
 				@Override
 				public void actionPerformed(ActionEvent event)
 				{
-					m_whiteTimer.stopTimer();
-					m_blackTimer.stopTimer();
+					mWhiteTimer.stopTimer();
+					mBlackTimer.stopTimer();
 					saveGame();
 
-					m_optionsMenu.setVisible(false);
+					mOptionsMenu.setVisible(false);
 					Driver.getInstance().revertToMainPanel();
 				}
 			});
 
-			m_optionsMenu.add(drawMenuItem);
-			m_optionsMenu.add(saveMenuItem);
+			mOptionsMenu.add(drawMenuItem);
+			mOptionsMenu.add(saveMenuItem);
 		}
 
-		return m_optionsMenu;
+		return mOptionsMenu;
 	}
 
 	private void initComponents(boolean isPlayback) throws Exception
 	{
-		m_inCheckLabel = new JLabel("You're In Check!");
-		m_inCheckLabel.setHorizontalTextPosition(SwingConstants.CENTER);
-		m_inCheckLabel.setForeground(Color.RED);
+		mInCheckLabel = new JLabel("You're In Check!");
+		mInCheckLabel.setHorizontalTextPosition(SwingConstants.CENTER);
+		mInCheckLabel.setForeground(Color.RED);
 
 		JButton undoButton = new JButton("Undo");
 		undoButton.addActionListener(new ActionListener()
@@ -446,7 +446,7 @@ public class PlayGamePanel extends JPanel
 		});
 
 		int twoBoardsGridBagOffset = 0;
-		if (m_optionsMenu == null || !m_optionsMenu.isVisible())
+		if (mOptionsMenu == null || !mOptionsMenu.isVisible())
 			Driver.getInstance().setMenu(createMenuBar());
 
 		Driver.getInstance().setOptionsMenuVisibility(!isPlayback);
@@ -457,13 +457,13 @@ public class PlayGamePanel extends JPanel
 		final Board[] boards = getGame().getBoards();
 		setBorder(BorderFactory.createLoweredBevelBorder());
 
-		m_inCheckLabel.setHorizontalTextPosition(SwingConstants.CENTER);
-		m_inCheckLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		mInCheckLabel.setHorizontalTextPosition(SwingConstants.CENTER);
+		mInCheckLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		constraints.fill = GridBagConstraints.NONE;
 		constraints.gridy = 0;
 		constraints.gridx = 9;
-		m_inCheckLabel.setVisible(false);
-		add(m_inCheckLabel, constraints);
+		mInCheckLabel.setVisible(false);
+		add(mInCheckLabel, constraints);
 
 		if (boards.length == 1)
 		{
@@ -503,12 +503,12 @@ public class PlayGamePanel extends JPanel
 			@Override
 			public void actionPerformed(ActionEvent event)
 			{
-				if (m_historyIndex + 1 == m_history.length)
+				if (mHistoryIndex + 1 == mHistory.length)
 					return;
 
 				try
 				{
-					m_history[++m_historyIndex].execute();
+					mHistory[++mHistoryIndex].execute();
 				}
 				catch (Exception e)
 				{
@@ -523,12 +523,12 @@ public class PlayGamePanel extends JPanel
 			@Override
 			public void actionPerformed(ActionEvent event)
 			{
-				if (m_historyIndex == -1)
+				if (mHistoryIndex == -1)
 					return;
 
 				try
 				{
-					m_history[m_historyIndex--].undo();
+					mHistory[mHistoryIndex--].undo();
 				}
 				catch (Exception e)
 				{
@@ -537,18 +537,18 @@ public class PlayGamePanel extends JPanel
 			}
 		});
 
-		m_whiteLabel = new JLabel("WHITE");
-		m_whiteLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		m_whiteLabel.setBorder(BorderFactory.createTitledBorder(""));
+		mWhiteLabel = new JLabel("WHITE");
+		mWhiteLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		mWhiteLabel.setBorder(BorderFactory.createTitledBorder(""));
 
-		m_blackLabel = new JLabel("BLACK");
-		m_blackLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		m_blackLabel.setBorder(BorderFactory.createTitledBorder(""));
+		mBlackLabel = new JLabel("BLACK");
+		mBlackLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		mBlackLabel.setBorder(BorderFactory.createTitledBorder(""));
 
-		m_whiteLabel.setOpaque(true);
-		m_blackLabel.setOpaque(true);
-		m_whiteLabel.setVisible(true);
-		m_blackLabel.setVisible(true);
+		mWhiteLabel.setOpaque(true);
+		mBlackLabel.setOpaque(true);
+		mWhiteLabel.setVisible(true);
+		mBlackLabel.setVisible(true);
 
 		int jailBoardSize;
 		if (getGame().getWhiteTeam().size() <= 4 && getGame().getBlackTeam().size() <= 4)
@@ -562,20 +562,20 @@ public class PlayGamePanel extends JPanel
 			jailBoardSize = (int) Math.ceil(size);
 		}
 
-		m_whiteCapturesJail = new Board(jailBoardSize, jailBoardSize, false);
-		m_whiteCapturePanel = createGrid(m_whiteCapturesJail, isPlayback, true);
-		m_whiteCapturePanel.setBorder(BorderFactory.createTitledBorder("Captured Pieces"));
-		m_whiteCapturePanel.setLayout(new GridLayout(jailBoardSize, jailBoardSize));
+		mWhiteCapturesJail = new Board(jailBoardSize, jailBoardSize, false);
+		mWhiteCapturePanel = createGrid(mWhiteCapturesJail, isPlayback, true);
+		mWhiteCapturePanel.setBorder(BorderFactory.createTitledBorder("Captured Pieces"));
+		mWhiteCapturePanel.setLayout(new GridLayout(jailBoardSize, jailBoardSize));
 
-		m_whiteCapturePanel.setPreferredSize(new Dimension((m_whiteCapturesJail.getMaxCol() + 1) * 25, (m_whiteCapturesJail
+		mWhiteCapturePanel.setPreferredSize(new Dimension((mWhiteCapturesJail.getMaxCol() + 1) * 25, (mWhiteCapturesJail
 				.getMaxRow() + 1) * 25));
 
-		m_blackCapturesJail = new Board(jailBoardSize, jailBoardSize, false);
-		m_blackCapturePanel = createGrid(m_blackCapturesJail, isPlayback, true);
-		m_blackCapturePanel.setBorder(BorderFactory.createTitledBorder("Captured Pieces"));
-		m_blackCapturePanel.setLayout(new GridLayout(jailBoardSize, jailBoardSize));
+		mBlackCapturesJail = new Board(jailBoardSize, jailBoardSize, false);
+		mBlackCapturePanel = createGrid(mBlackCapturesJail, isPlayback, true);
+		mBlackCapturePanel.setBorder(BorderFactory.createTitledBorder("Captured Pieces"));
+		mBlackCapturePanel.setLayout(new GridLayout(jailBoardSize, jailBoardSize));
 
-		m_blackCapturePanel.setPreferredSize(new Dimension((m_blackCapturesJail.getMaxCol() + 1) * 25, (m_blackCapturesJail
+		mBlackCapturePanel.setPreferredSize(new Dimension((mBlackCapturesJail.getMaxCol() + 1) * 25, (mBlackCapturesJail
 				.getMaxRow() + 1) * 25));
 
 		// add the Black Name
@@ -587,7 +587,7 @@ public class PlayGamePanel extends JPanel
 		constraints.ipadx = 100;
 		constraints.gridx = 11 + twoBoardsGridBagOffset;
 		constraints.gridy = 0;
-		add(m_blackLabel, constraints);
+		add(mBlackLabel, constraints);
 
 		// add the Black Jail
 		constraints.fill = GridBagConstraints.NONE;
@@ -598,7 +598,7 @@ public class PlayGamePanel extends JPanel
 		constraints.insets = new Insets(0, 25, 10, 25);
 		constraints.gridx = 11 + twoBoardsGridBagOffset;
 		constraints.gridy = 1;
-		add(m_blackCapturePanel, constraints);
+		add(mBlackCapturePanel, constraints);
 
 		if (!isPlayback)
 		{
@@ -610,7 +610,7 @@ public class PlayGamePanel extends JPanel
 			constraints.ipadx = 100;
 			constraints.gridx = 11 + twoBoardsGridBagOffset;
 			constraints.gridy = 4;
-			add(m_blackTimer.getDisplayLabel(), constraints);
+			add(mBlackTimer.getDisplayLabel(), constraints);
 
 			// adds the undo button
 			constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -630,7 +630,7 @@ public class PlayGamePanel extends JPanel
 			constraints.ipadx = 100;
 			constraints.gridx = 11 + twoBoardsGridBagOffset;
 			constraints.gridy = 6;
-			add(m_whiteTimer.getDisplayLabel(), constraints);
+			add(mWhiteTimer.getDisplayLabel(), constraints);
 		}
 		else
 		{
@@ -664,7 +664,7 @@ public class PlayGamePanel extends JPanel
 		constraints.gridx = 11 + twoBoardsGridBagOffset;
 
 		// change spacing and location if there is a timer or not.
-		if (ChessTimer.isNoTimer(m_whiteTimer))
+		if (ChessTimer.isNoTimer(mWhiteTimer))
 		{
 			constraints.gridy = 6;
 			constraints.insets = new Insets(10, 25, 0, 25);
@@ -674,7 +674,7 @@ public class PlayGamePanel extends JPanel
 			constraints.gridy = 7;
 			constraints.insets = new Insets(0, 25, 0, 25);
 		}
-		add(m_whiteCapturePanel, constraints);
+		add(mWhiteCapturePanel, constraints);
 
 		// add the White Name
 		constraints.fill = GridBagConstraints.NONE;
@@ -685,7 +685,7 @@ public class PlayGamePanel extends JPanel
 		constraints.insets = new Insets(10, 0, 10, 0);
 
 		// change spacing if there is a timer
-		if (ChessTimer.isNoTimer(m_whiteTimer))
+		if (ChessTimer.isNoTimer(mWhiteTimer))
 		{
 			constraints.gridheight = 1;
 			constraints.gridy = 9;
@@ -697,38 +697,38 @@ public class PlayGamePanel extends JPanel
 		}
 		constraints.ipadx = 100;
 		constraints.gridx = 11 + twoBoardsGridBagOffset;
-		add(m_whiteLabel, constraints);
+		add(mWhiteLabel, constraints);
 	}
 
 	public static void setNextMoveMustPlacePiece(boolean nextMoveMustPlacePiece)
 	{
-		m_nextMoveMustPlacePiece = nextMoveMustPlacePiece;
+		mNextMoveMustPlacePiece = nextMoveMustPlacePiece;
 	}
 
 	public static boolean getNextMoveMustPlacePiece()
 	{
-		return m_nextMoveMustPlacePiece;
+		return mNextMoveMustPlacePiece;
 	}
 
 	public static void setPieceToPlace(Piece piece)
 	{
-		m_pieceToPlace = piece;
+		mPieceToPlace = piece;
 	}
 
 	public static void setGame(Game game)
 	{
-		PlayGamePanel.m_game = game;
+		PlayGamePanel.mGame = game;
 	}
 
 	public static Game getGame()
 	{
-		return m_game;
+		return mGame;
 	}
 
 	public static void resetTimers()
 	{
-		m_whiteTimer.reset();
-		m_blackTimer.reset();
+		mWhiteTimer.reset();
+		mBlackTimer.reset();
 	}
 
 	protected class SquareListener extends DropAdapter implements MouseListener
@@ -797,16 +797,16 @@ public class PlayGamePanel extends JPanel
 			else
 				m_square.hideIcon();
 
-			Driver.getInstance().setGlassPane(m_glassPane);
+			Driver.getInstance().setGlassPane(mGlassPane);
 			Component component = event.getComponent();
 
-			m_glassPane.setVisible(true);
+			mGlassPane.setVisible(true);
 
 			Point point = (Point) event.getPoint().clone();
 			SwingUtilities.convertPointToScreen(point, component);
-			SwingUtilities.convertPointFromScreen(point, m_glassPane);
+			SwingUtilities.convertPointFromScreen(point, mGlassPane);
 
-			m_glassPane.setPoint(point);
+			mGlassPane.setPoint(point);
 
 			BufferedImage image = null;
 			ImageIcon imageIcon = m_square.getPiece().getIcon();
@@ -817,8 +817,8 @@ public class PlayGamePanel extends JPanel
 			imageIcon.paintIcon(null, graphics2D, 0, 0);
 			graphics2D.dispose();
 
-			m_glassPane.setImage(image);
-			m_glassPane.repaint();
+			mGlassPane.setImage(image);
+			mGlassPane.repaint();
 		}
 
 		@Override
@@ -827,8 +827,8 @@ public class PlayGamePanel extends JPanel
 			Point point = (Point) event.getPoint().clone();
 			SwingUtilities.convertPointToScreen(point, event.getComponent());
 
-			m_glassPane.setImage(null);
-			m_glassPane.setVisible(false);
+			mGlassPane.setImage(null);
+			mGlassPane.setVisible(false);
 
 			fireDropEvent(new DropEvent(point, m_square));
 		}
@@ -873,22 +873,22 @@ public class PlayGamePanel extends JPanel
 
 	private static final long serialVersionUID = -2507232401817253688L;
 
-	protected static boolean m_nextMoveMustPlacePiece;
-	protected static boolean m_isPlayback;
-	protected static Game m_game;
-	protected static ChessTimer m_whiteTimer;
-	protected static ChessTimer m_blackTimer;
-	protected static JLabel m_inCheckLabel;
-	protected static JLabel m_whiteLabel;
-	protected static JLabel m_blackLabel;
-	protected static JPanel m_whiteCapturePanel;
-	protected static JPanel m_blackCapturePanel;
-	protected static Board m_whiteCapturesJail;
-	protected static Board m_blackCapturesJail;
-	protected static Piece m_pieceToPlace;
-	protected static JMenu m_optionsMenu;
-	protected static Move[] m_history;
-	protected static int m_historyIndex;
+	protected static boolean mNextMoveMustPlacePiece;
+	protected static boolean mIsPlayback;
+	protected static Game mGame;
+	protected static ChessTimer mWhiteTimer;
+	protected static ChessTimer mBlackTimer;
+	protected static JLabel mInCheckLabel;
+	protected static JLabel mWhiteLabel;
+	protected static JLabel mBlackLabel;
+	protected static JPanel mWhiteCapturePanel;
+	protected static JPanel mBlackCapturePanel;
+	protected static Board mWhiteCapturesJail;
+	protected static Board mBlackCapturesJail;
+	protected static Piece mPieceToPlace;
+	protected static JMenu mOptionsMenu;
+	protected static Move[] mHistory;
+	protected static int mHistoryIndex;
 
 	private final DropManager m_dropManager;
 

@@ -26,12 +26,12 @@ public enum Result implements Serializable
 
 	public void setGuiText(String text)
 	{
-		m_GUIText = text;
+		mGuiText = text;
 	}
 
 	public String getGUIText()
 	{
-		return m_GUIText;
+		return mGuiText;
 	}
 
 	@Override
@@ -61,5 +61,5 @@ public enum Result implements Serializable
 
 	private static final long serialVersionUID = -6844368741916902616L;
 
-	private String m_GUIText;
+	private String mGuiText;
 }

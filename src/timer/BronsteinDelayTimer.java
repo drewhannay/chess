@@ -6,50 +6,50 @@ class BronsteinDelayTimer extends ChessTimer
 {
 	public BronsteinDelayTimer(RunnableOfT<Boolean> callback, long incrementAmount, long currentTime, boolean isBlackTeamTimer)
 	{
-		m_incrementAmount = incrementAmount;
-		m_isBlackTeamTimer = isBlackTeamTimer;
-		m_currentTime = currentTime;
-		m_initialStartTime = m_currentTime;
-		m_clockLastUpdatedTime = System.currentTimeMillis();
+		mIncrementAmount = incrementAmount;
+		mIsBlackTeamTimer = isBlackTeamTimer;
+		mCurrentTime = currentTime;
+		mInitialStartTime = mCurrentTime;
+		mClockLastUpdatedTime = System.currentTimeMillis();
 		init(callback);
 	}
 
 	@Override
 	public void startTimer()
 	{
-		m_clockLastUpdatedTime = System.currentTimeMillis();
-		m_lagTime = System.currentTimeMillis();
-		m_timer.start();
+		mClockLastUpdatedTime = System.currentTimeMillis();
+		mLagTime = System.currentTimeMillis();
+		mTimer.start();
 	}
 
 	@Override
 	public void reset()
 	{
-		m_clockLastUpdatedTime = System.currentTimeMillis();
-		m_currentTime = m_initialStartTime;
+		mClockLastUpdatedTime = System.currentTimeMillis();
+		mCurrentTime = mInitialStartTime;
 		updateDisplay();
-		m_isFirstRun = true;
+		mIsFirstRun = true;
 	}
 
 	@Override
 	public void stopTimer()
 	{
-		m_clockLastUpdatedTime = System.currentTimeMillis();
-		long delay = System.currentTimeMillis() - m_lagTime;
+		mClockLastUpdatedTime = System.currentTimeMillis();
+		long delay = System.currentTimeMillis() - mLagTime;
 
-		if (!m_isFirstRun && !m_timeWasRecentlyReset)
-			m_currentTime += (delay >= m_incrementAmount ? m_incrementAmount : delay);
+		if (!mIsFirstRun && !mTimeWasRecentlyReset)
+			mCurrentTime += (delay >= mIncrementAmount ? mIncrementAmount : delay);
 		else
-			m_isFirstRun = false;
+			mIsFirstRun = false;
 
-		m_timeWasRecentlyReset = false;
+		mTimeWasRecentlyReset = false;
 		updateDisplay();
-		m_timer.stop();
+		mTimer.stop();
 	}
 
 	private static final long serialVersionUID = 5421690863308194342L;
 
-	private long m_incrementAmount;
-	private boolean m_isFirstRun = true;
-	private long m_lagTime;
+	private long mIncrementAmount;
+	private boolean mIsFirstRun = true;
+	private long mLagTime;
 }

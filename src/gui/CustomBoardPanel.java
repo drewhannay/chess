@@ -24,12 +24,12 @@ public class CustomBoardPanel extends JPanel
 {
 	public CustomBoardPanel(CustomSetupPanel variant, JFrame optionsFrame)
 	{
-		m_frame = optionsFrame;
-		m_frame.setVisible(true);
-		m_frame.add(this);
-		m_frame.setVisible(true);
-		m_frame.setSize(300, 250);
-		m_frame.setLocationRelativeTo(Driver.getInstance());
+		mFrame = optionsFrame;
+		mFrame.setVisible(true);
+		mFrame.add(this);
+		mFrame.setVisible(true);
+		mFrame.setSize(300, 250);
+		mFrame.setLocationRelativeTo(Driver.getInstance());
 		initGUIComponents(variant);
 	}
 
@@ -41,75 +41,75 @@ public class CustomBoardPanel extends JPanel
 		revalidate();
 		repaint();
 		// create button and add ActionListener
-		m_cancelButton = new JButton("Cancel");
-		m_cancelButton.setToolTipText("Press me to go back to the main variant setup");
-		GuiUtility.setupVariantCancelButton(m_cancelButton, this, m_frame);
+		mCancelButton = new JButton("Cancel");
+		mCancelButton.setToolTipText("Press me to go back to the main variant setup");
+		GuiUtility.setupVariantCancelButton(mCancelButton, this, mFrame);
 
 		// Create JLabels and JRadioButtons.
-		m_numberOfBoardsLabel = new JLabel("How many boards?");
-		m_oneBoardButton = new JRadioButton("1");
-		GuiUtility.requestFocus(m_oneBoardButton);
-		m_oneBoardButton.setToolTipText("Choose me for one Board");
+		mNumberOfBoardsLabel = new JLabel("How many boards?");
+		mOneBoardButton = new JRadioButton("1");
+		GuiUtility.requestFocus(mOneBoardButton);
+		mOneBoardButton.setToolTipText("Choose me for one Board");
 		// Set oneBoard to be initially selected.
-		m_twoBoardsButton = new JRadioButton("2");
-		m_twoBoardsButton.setToolTipText("Choose me for two boards");
+		mTwoBoardsButton = new JRadioButton("2");
+		mTwoBoardsButton.setToolTipText("Choose me for two boards");
 
 		JPanel boards = new JPanel();
-		boards.add(m_oneBoardButton);
-		boards.add(m_twoBoardsButton);
+		boards.add(mOneBoardButton);
+		boards.add(mTwoBoardsButton);
 
 		Board[] board = variant.getBuilder().getBoards();
 
 		if (board.length == 1)
-			m_oneBoardButton.setSelected(true);
+			mOneBoardButton.setSelected(true);
 		else
-			m_twoBoardsButton.setSelected(true);
+			mTwoBoardsButton.setSelected(true);
 
 		// important: add the buttons to a group so only one can be selected at
 		// a time
 		ButtonGroup group = new ButtonGroup();
-		group.add(m_oneBoardButton);
-		group.add(m_twoBoardsButton);
+		group.add(mOneBoardButton);
+		group.add(mTwoBoardsButton);
 
 		// Create JLabels and JTextFields. Default size 8*8
-		m_dimensionsLabel = new JLabel("Dimensions?");
-		m_numberOfRowsLabel = new JLabel("Rows:");
-		m_numberOfRowsTextField = new JTextField(5);
-		m_numberOfRowsTextField.setText(board[0].numRows() + "");
-		m_numberOfRowsTextField.setToolTipText("Enter the amount of rows you would like");
-		m_numberOfColumnsLabel = new JLabel("Columns:");
-		m_numberOfColumnsTextField = new JTextField(5);
-		m_numberOfColumnsTextField.setText(board[0].numCols() + "");
-		m_numberOfColumnsTextField.setToolTipText("Enter the amount of columns you would like");
+		mDimensionsLabel = new JLabel("Dimensions?");
+		mNumberOfRowsLabel = new JLabel("Rows:");
+		mNumberOfRowsTextField = new JTextField(5);
+		mNumberOfRowsTextField.setText(board[0].numRows() + "");
+		mNumberOfRowsTextField.setToolTipText("Enter the amount of rows you would like");
+		mNumberOfColumnsLabel = new JLabel("Columns:");
+		mNumberOfColumnsTextField = new JTextField(5);
+		mNumberOfColumnsTextField.setText(board[0].numCols() + "");
+		mNumberOfColumnsTextField.setToolTipText("Enter the amount of columns you would like");
 
 		JPanel rowCol = new JPanel();
 		rowCol.setLayout(new GridBagLayout());
 		constraints.gridx = 0;
 		constraints.gridy = 0;
 		constraints.insets = new Insets(2, 15, 1, 5);
-		rowCol.add(m_numberOfRowsLabel, constraints);
+		rowCol.add(mNumberOfRowsLabel, constraints);
 		constraints.gridx = 1;
 		constraints.gridy = 0;
 		constraints.fill = GridBagConstraints.BOTH;
-		rowCol.add(m_numberOfRowsTextField, constraints);
+		rowCol.add(mNumberOfRowsTextField, constraints);
 		constraints.gridx = 0;
 		constraints.gridy = 1;
 		constraints.fill = GridBagConstraints.NONE;
-		rowCol.add(m_numberOfColumnsLabel, constraints);
+		rowCol.add(mNumberOfColumnsLabel, constraints);
 		constraints.gridx = 1;
 		constraints.gridy = 1;
 		constraints.fill = GridBagConstraints.BOTH;
-		rowCol.add(m_numberOfColumnsTextField, constraints);
+		rowCol.add(mNumberOfColumnsTextField, constraints);
 
 		// Create JLabel and JCheckBox
-		m_wrapAroundLabel = new JLabel("<html>Should boards wrap <br />" + "around horizontally?</html>");
-		m_wrapAroundCheckBox = new JCheckBox("Yes");
-		m_wrapAroundCheckBox.setToolTipText("Press me to have boards that wrap around on the edges");
+		mWrapAroundLabel = new JLabel("<html>Should boards wrap <br />" + "around horizontally?</html>");
+		mWrapAroundCheckBox = new JCheckBox("Yes");
+		mWrapAroundCheckBox.setToolTipText("Press me to have boards that wrap around on the edges");
 
 		// Create button and add ActionListener
-		m_submitButton = new JButton("Save");
-		m_submitButton.setToolTipText("Press me to save these board settings");
-		m_submitButton.addActionListener(new ActionListener()
+		mSubmitButton = new JButton("Save");
+		mSubmitButton.setToolTipText("Press me to save these board settings");
+		mSubmitButton.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent arg0)
@@ -117,69 +117,69 @@ public class CustomBoardPanel extends JPanel
 				if (formIsValid())
 				{
 					// create Board[] based on which radio button is selected.
-					Board[] boards = (m_oneBoardButton.isSelected()) ? new Board[1] : new Board[2];
+					Board[] boards = (mOneBoardButton.isSelected()) ? new Board[1] : new Board[2];
 					for (int i = 0; i < boards.length; i++)
 					{
 						// initialize each board with the given rows and columns
 						// and wraparound boolean.
-						boards[i] = new Board(Integer.parseInt(m_numberOfRowsTextField.getText()), Integer
-								.parseInt(m_numberOfColumnsTextField.getText()), m_wrapAroundCheckBox.isSelected());
+						boards[i] = new Board(Integer.parseInt(mNumberOfRowsTextField.getText()), Integer
+								.parseInt(mNumberOfColumnsTextField.getText()), mWrapAroundCheckBox.isSelected());
 					}
-					if (m_twoBoardsButton.isSelected())
+					if (mTwoBoardsButton.isSelected())
 						variant.drawBoards(boards, true);
 					else
 						variant.drawBoards(boards, false);
-					m_holder.removeAll();
-					m_frame.setVisible(false);
+					mHolder.removeAll();
+					mFrame.setVisible(false);
 				}
 			}
 
 		});
 
 		JPanel buttons = new JPanel();
-		buttons.add(m_submitButton);
-		buttons.add(m_cancelButton);
+		buttons.add(mSubmitButton);
+		buttons.add(mCancelButton);
 
 		constraints.gridx = 0;
 		constraints.gridy = 0;
-		add(m_numberOfBoardsLabel, constraints);
+		add(mNumberOfBoardsLabel, constraints);
 		constraints.gridx = 1;
 		constraints.gridy = 0;
 		add(boards, constraints);
 		constraints.gridx = 0;
 		constraints.gridy = 1;
-		add(m_dimensionsLabel, constraints);
+		add(mDimensionsLabel, constraints);
 		constraints.gridx = 1;
 		constraints.gridy = 1;
 		add(rowCol, constraints);
 		constraints.gridx = 0;
 		constraints.gridy = 2;
-		add(m_wrapAroundLabel, constraints);
+		add(mWrapAroundLabel, constraints);
 		constraints.gridx = 1;
 		constraints.gridy = 2;
 		constraints.anchor = GridBagConstraints.CENTER;
 		constraints.fill = GridBagConstraints.NONE;
-		add(m_wrapAroundCheckBox, constraints);
+		add(mWrapAroundCheckBox, constraints);
 		constraints.gridx = 0;
 		constraints.gridy = 3;
 		constraints.gridwidth = 2;
 		constraints.insets = new Insets(10, 0, 10, 0);
 		add(buttons, constraints);
 
-		m_frame.pack();
+		mFrame.pack();
 	}
 
 	private boolean formIsValid()
 	{
-		if (!m_oneBoardButton.isSelected() && !m_twoBoardsButton.isSelected())
+		if (!mOneBoardButton.isSelected() && !mTwoBoardsButton.isSelected())
 		{
 			JOptionPane.showMessageDialog(Driver.getInstance(), "Please select the number of boards.", "Incomplete Form", JOptionPane.PLAIN_MESSAGE);
 			return false;
 		}
 		try
 		{
-			int numberOfRows = Integer.parseInt(m_numberOfRowsTextField.getText());
-			int numberOfColumns = Integer.parseInt(m_numberOfColumnsTextField.getText());
+			int numberOfRows = Integer.parseInt(mNumberOfRowsTextField.getText());
+			int numberOfColumns = Integer.parseInt(mNumberOfColumnsTextField.getText());
 			if (numberOfRows < 3 || numberOfColumns < 3 || numberOfRows > 16 || numberOfColumns > 16)
 				throw new Exception();
 		}
@@ -191,9 +191,9 @@ public class CustomBoardPanel extends JPanel
 		}
 		try
 		{
-			int numberOfRows = Integer.parseInt(m_numberOfRowsTextField.getText());
-			int numberOfColumns = Integer.parseInt(m_numberOfColumnsTextField.getText());
-			if (m_twoBoardsButton.isSelected()
+			int numberOfRows = Integer.parseInt(mNumberOfRowsTextField.getText());
+			int numberOfColumns = Integer.parseInt(mNumberOfColumnsTextField.getText());
+			if (mTwoBoardsButton.isSelected()
 					&& (numberOfRows < 3 || numberOfColumns < 3 || numberOfRows > 10 || numberOfColumns > 10))
 				throw new Exception();
 		}
@@ -208,18 +208,18 @@ public class CustomBoardPanel extends JPanel
 
 	private static final long serialVersionUID = 5842202724028685933L;
 
-	private JLabel m_numberOfBoardsLabel;
-	private JRadioButton m_oneBoardButton;
-	private JRadioButton m_twoBoardsButton;
-	private JLabel m_dimensionsLabel;
-	private JLabel m_numberOfRowsLabel;
-	private JTextField m_numberOfRowsTextField;
-	private JLabel m_numberOfColumnsLabel;
-	private JTextField m_numberOfColumnsTextField;
-	private JLabel m_wrapAroundLabel;
-	private JCheckBox m_wrapAroundCheckBox;
-	private JButton m_cancelButton;
-	private JButton m_submitButton;
-	private JFrame m_frame;
-	private CustomBoardPanel m_holder = this;
+	private JLabel mNumberOfBoardsLabel;
+	private JRadioButton mOneBoardButton;
+	private JRadioButton mTwoBoardsButton;
+	private JLabel mDimensionsLabel;
+	private JLabel mNumberOfRowsLabel;
+	private JTextField mNumberOfRowsTextField;
+	private JLabel mNumberOfColumnsLabel;
+	private JTextField mNumberOfColumnsTextField;
+	private JLabel mWrapAroundLabel;
+	private JCheckBox mWrapAroundCheckBox;
+	private JButton mCancelButton;
+	private JButton mSubmitButton;
+	private JFrame mFrame;
+	private CustomBoardPanel mHolder = this;
 }

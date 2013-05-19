@@ -22,13 +22,13 @@ public class PieceBuilder implements Serializable
 	 */
 	public static void initPieceTypes()
 	{
-		m_pieceTypes = Maps.newHashMap();
-		m_pieceTypes.put("Pawn", new PieceBuilder("Pawn"));
-		m_pieceTypes.put("Rook", new PieceBuilder("Rook"));
-		m_pieceTypes.put("Bishop", new PieceBuilder("Bishop"));
-		m_pieceTypes.put("Knight", new PieceBuilder("Knight"));
-		m_pieceTypes.put("Queen", new PieceBuilder("Queen"));
-		m_pieceTypes.put("King", new PieceBuilder("King"));
+		mPieceTypes = Maps.newHashMap();
+		mPieceTypes.put("Pawn", new PieceBuilder("Pawn"));
+		mPieceTypes.put("Rook", new PieceBuilder("Rook"));
+		mPieceTypes.put("Bishop", new PieceBuilder("Bishop"));
+		mPieceTypes.put("Knight", new PieceBuilder("Knight"));
+		mPieceTypes.put("Queen", new PieceBuilder("Queen"));
+		mPieceTypes.put("King", new PieceBuilder("King"));
 	}
 
 	/**
@@ -36,7 +36,7 @@ public class PieceBuilder implements Serializable
 	 */
 	public PieceBuilder()
 	{
-		m_movements = Maps.newHashMap();
+		mMovements = Maps.newHashMap();
 	}
 
 	/**
@@ -51,11 +51,11 @@ public class PieceBuilder implements Serializable
 		 * Changes made here. PieceBuilders need to check if they already have
 		 * an instantiation before making another copy of movements.
 		 */
-		m_name = name;
+		mName = name;
 		if (!PieceBuilder.isPieceType(name))
-			m_movements = Maps.newHashMap();
+			mMovements = Maps.newHashMap();
 		else
-			m_movements = m_pieceTypes.get(name).m_movements;
+			mMovements = mPieceTypes.get(name).mMovements;
 	}
 
 	/**
@@ -65,7 +65,7 @@ public class PieceBuilder implements Serializable
 	 */
 	public static Set<String> getSet()
 	{
-		return m_pieceTypes.keySet();
+		return mPieceTypes.keySet();
 	}
 
 	/**
@@ -76,7 +76,7 @@ public class PieceBuilder implements Serializable
 	 */
 	public static boolean isPieceType(String name)
 	{
-		return m_pieceTypes.containsKey(name);
+		return mPieceTypes.containsKey(name);
 	}
 
 	/**
@@ -90,7 +90,7 @@ public class PieceBuilder implements Serializable
 	 */
 	public static Piece makePiece(String name, boolean isBlack, Square origin, Board board)
 	{
-		return m_pieceTypes.get(name).makePiece(isBlack, origin, board);
+		return mPieceTypes.get(name).makePiece(isBlack, origin, board);
 	}
 
 	/**
@@ -100,7 +100,7 @@ public class PieceBuilder implements Serializable
 	 */
 	public static void savePieceType(PieceBuilder p)
 	{
-		m_pieceTypes.put(p.m_name, p);
+		mPieceTypes.put(p.mName, p);
 	}
 
 	/**
@@ -113,7 +113,7 @@ public class PieceBuilder implements Serializable
 	public void addMove(char c, int num)
 	{
 		// TODO Check that c is valid.
-		m_movements.put(c, num);
+		mMovements.put(c, num);
 	}
 
 	/**
@@ -127,20 +127,20 @@ public class PieceBuilder implements Serializable
 	private Piece makePiece(boolean isBlack, Square origin, Board board)
 	{
 		// TODO is it worth using reflection to get rid of that if/else?
-		if (m_name.equals("Bishop"))
+		if (mName.equals("Bishop"))
 			return Builder.createBishop(isBlack, origin, board);
-		if (m_name.equals("King"))
+		if (mName.equals("King"))
 			return Builder.createKing(isBlack, origin, board);
-		if (m_name.equals("Knight"))
+		if (mName.equals("Knight"))
 			return Builder.createKnight(isBlack, origin, board);
-		if (m_name.equals("Pawn"))
+		if (mName.equals("Pawn"))
 			return Builder.createPawn(isBlack, origin, board);
-		if (m_name.equals("Queen"))
+		if (mName.equals("Queen"))
 			return Builder.createQueen(isBlack, origin, board);
-		if (m_name.equals("Rook"))
+		if (mName.equals("Rook"))
 			return Builder.createRook(isBlack, origin, board);
 		else
-			return new Piece(m_name, isBlack, origin, board, m_movements);
+			return new Piece(mName, isBlack, origin, board, mMovements);
 		// try {
 		//
 		// Class<?> klazz = Class.forName("logic." + name);
@@ -157,14 +157,13 @@ public class PieceBuilder implements Serializable
 
 	public void setName(String name)
 	{
-		m_name = name;
+		mName = name;
 	}
 
 	private static final long serialVersionUID = -1351201562740885961L;
 
-	private static Map<String, PieceBuilder> m_pieceTypes;
+	private static Map<String, PieceBuilder> mPieceTypes;
 
-	private String m_name;
-	private Map<Character, Integer> m_movements;
-
+	private String mName;
+	private Map<Character, Integer> mMovements;
 }

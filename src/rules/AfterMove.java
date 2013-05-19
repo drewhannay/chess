@@ -75,7 +75,7 @@ public enum AfterMove
 
 	public void setGame(Game game)
 	{
-		m_game = game;
+		mGame = game;
 	}
 
 	private void swapColorOfCapturingPiece(Move move)
@@ -86,8 +86,8 @@ public enum AfterMove
 		toSwap.getLegalDests().clear();
 		toSwap.getGuardSquares().clear();
 		toSwap.setPinnedBy(null);
-		(toSwap.isBlack() ? m_game.getBlackTeam() : m_game.getWhiteTeam()).remove(toSwap);
-		(!toSwap.isBlack() ? m_game.getBlackTeam() : m_game.getWhiteTeam()).add(toSwap);
+		(toSwap.isBlack() ? mGame.getBlackTeam() : mGame.getWhiteTeam()).remove(toSwap);
+		(!toSwap.isBlack() ? mGame.getBlackTeam() : mGame.getWhiteTeam()).add(toSwap);
 		toSwap.setBlack(!toSwap.isBlack());
 	}
 
@@ -109,7 +109,7 @@ public enum AfterMove
 		// back if we undo
 		move.setRemoved(toHome.getOriginalSquare().getPiece());
 		if (move.getRemoved() != null)
-			(move.getRemoved().isBlack() ? m_game.getBlackTeam() : m_game.getWhiteTeam()).remove(move.getRemoved());
+			(move.getRemoved().isBlack() ? mGame.getBlackTeam() : mGame.getWhiteTeam()).remove(move.getRemoved());
 
 		// actually set the captured piece on it's home square
 		toHome.getOriginalSquare().setPiece(toHome);
@@ -124,7 +124,7 @@ public enum AfterMove
 		restore.setIsCaptured(false);
 		if (move.getRemoved() != null)
 		{
-			(move.getRemoved().isBlack() ? m_game.getBlackTeam() : m_game.getWhiteTeam()).add(move.getRemoved());
+			(move.getRemoved().isBlack() ? mGame.getBlackTeam() : mGame.getWhiteTeam()).add(move.getRemoved());
 			move.getRemoved().setIsCaptured(false);
 		}
 		move.getCaptured().getSquare().setPiece(move.getRemoved());
@@ -139,8 +139,8 @@ public enum AfterMove
 		toPlace.getLegalDests().clear();
 		toPlace.getGuardSquares().clear();
 		toPlace.setPinnedBy(null);
-		(toPlace.isBlack() ? m_game.getBlackTeam() : m_game.getWhiteTeam()).remove(toPlace);
-		(!toPlace.isBlack() ? m_game.getBlackTeam() : m_game.getWhiteTeam()).add(toPlace);
+		(toPlace.isBlack() ? mGame.getBlackTeam() : mGame.getWhiteTeam()).remove(toPlace);
+		(!toPlace.isBlack() ? mGame.getBlackTeam() : mGame.getWhiteTeam()).add(toPlace);
 		toPlace.setBlack(!toPlace.isBlack());
 		toPlace.setIsCaptured(false);
 		move.setOldPos(toPlace.getSquare());
@@ -165,8 +165,8 @@ public enum AfterMove
 			toPlace.getLegalDests().clear();
 			toPlace.getGuardSquares().clear();
 			toPlace.setPinnedBy(null);
-			(toPlace.isBlack() ? m_game.getBlackTeam() : m_game.getWhiteTeam()).remove(toPlace);
-			(!toPlace.isBlack() ? m_game.getBlackTeam() : m_game.getWhiteTeam()).add(toPlace);
+			(toPlace.isBlack() ? mGame.getBlackTeam() : mGame.getWhiteTeam()).remove(toPlace);
+			(!toPlace.isBlack() ? mGame.getBlackTeam() : mGame.getWhiteTeam()).add(toPlace);
 			toPlace.setBlack(!toPlace.isBlack());
 			toPlace.setIsCaptured(false);
 			toPlace.getSquare().setPiece(null);
@@ -189,7 +189,7 @@ public enum AfterMove
 		toPlace.setPinnedBy(null);
 
 		move.setOldPos(toPlace.getSquare());
-		Piece objectivePiece = toPlace.isBlack() ? m_game.getBlackRules().objectivePiece(toPlace.isBlack()) : m_game.getWhiteRules()
+		Piece objectivePiece = toPlace.isBlack() ? mGame.getBlackRules().objectivePiece(toPlace.isBlack()) : mGame.getWhiteRules()
 				.objectivePiece(toPlace.isBlack());
 		if (move.isVerified() && !(objectivePiece == toPlace))
 		{
@@ -305,5 +305,5 @@ public enum AfterMove
 		}
 	}
 
-	private Game m_game;
+	private Game mGame;
 }

@@ -6,10 +6,10 @@ class HourGlassTimer extends ChessTimer
 {
 	public HourGlassTimer(RunnableOfT<Boolean> timeElapsedCallback, long startTime, boolean isBlackTeamTimer)
 	{
-		m_currentTime = startTime;
-		m_isBlackTeamTimer = isBlackTeamTimer;
-		m_clockLastUpdatedTime = System.currentTimeMillis();
-		m_initialStartTime = startTime;
+		mCurrentTime = startTime;
+		mIsBlackTeamTimer = isBlackTeamTimer;
+		mClockLastUpdatedTime = System.currentTimeMillis();
+		mInitialStartTime = startTime;
 		init(timeElapsedCallback);
 	}
 
@@ -19,23 +19,23 @@ class HourGlassTimer extends ChessTimer
 	 */
 	public void reverseFlow()
 	{
-		m_clockDirection *= -1;
+		mClockDirection *= -1;
 	}
 
 	@Override
 	public void startTimer()
 	{
-		m_clockDirection = 1;
-		m_clockLastUpdatedTime = System.currentTimeMillis();
-		m_timer.start();
+		mClockDirection = 1;
+		mClockLastUpdatedTime = System.currentTimeMillis();
+		mTimer.start();
 	}
 
 	@Override
 	public void stopTimer()
 	{
-		m_clockDirection = -1;
-		m_clockLastUpdatedTime = System.currentTimeMillis();
-		m_timer.start();
+		mClockDirection = -1;
+		mClockLastUpdatedTime = System.currentTimeMillis();
+		mTimer.start();
 	}
 
 	private static final long serialVersionUID = 1345233312932413270L;

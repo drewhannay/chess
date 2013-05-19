@@ -13,12 +13,12 @@ public abstract class AbstractDropManager implements DropListener
 {
 	public AbstractDropManager()
 	{
-		m_components = ImmutableList.of();
+		mComponents = ImmutableList.of();
 	}
 
 	protected JComponent isInTarget(Point point)
 	{
-		for (JComponent component : m_components)
+		for (JComponent component : mComponents)
 		{
 			Rectangle bounds = component.getBounds();
 			Point location = component.getLocation();
@@ -34,10 +34,10 @@ public abstract class AbstractDropManager implements DropListener
 
 	public void setComponentList(List<? extends JComponent> components)
 	{
-		m_components = components;
+		mComponents = components;
 	}
 
 	public abstract void dropped(DropEvent event);
 
-	protected List<? extends JComponent> m_components;
+	protected List<? extends JComponent> mComponents;
 }

@@ -22,9 +22,9 @@ public class NetLoadingPanel extends JPanel
 	{
 		setBorder(BorderFactory.createLoweredBevelBorder());
 
-		m_cancelButton = new JButton("Cancel");
-		m_cancelButton.setToolTipText("Press me to go back to the Main Menu");
-		m_cancelButton.addActionListener(new ActionListener()
+		mCancelButton = new JButton("Cancel");
+		mCancelButton.setToolTipText("Press me to go back to the Main Menu");
+		mCancelButton.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent event)
@@ -36,7 +36,7 @@ public class NetLoadingPanel extends JPanel
 			}
 		});
 
-		m_waitLabel = new AnimatedLabel();
+		mWaitLabel = new AnimatedLabel();
 
 		setLayout(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
@@ -44,15 +44,15 @@ public class NetLoadingPanel extends JPanel
 		constraints.insets = new Insets(3, 3, 3, 3);
 		constraints.gridx = 0;
 		constraints.gridy = 0;
-		add(m_waitLabel, constraints);
+		add(mWaitLabel, constraints);
 
 		constraints.gridx = 0;
 		constraints.gridy = 1;
-		add(m_cancelButton, constraints);
+		add(mCancelButton, constraints);
 	}
 
 	private static final long serialVersionUID = 8365806731061105369L;
 
-	private JLabel m_waitLabel;
-	private JButton m_cancelButton;
+	private JLabel mWaitLabel;
+	private JButton mCancelButton;
 }

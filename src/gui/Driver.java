@@ -79,8 +79,8 @@ public final class Driver extends JFrame
 
 	public void setUpNewGame()
 	{
-		if (PlayGamePanel.m_optionsMenu != null)
-			PlayGamePanel.m_optionsMenu.setVisible(false);
+		if (PlayGamePanel.mOptionsMenu != null)
+			PlayGamePanel.mOptionsMenu.setVisible(false);
 		ChessTimer.stopTimers();
 		setPanel(new NewGamePanel());
 	}

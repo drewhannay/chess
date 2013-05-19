@@ -23,14 +23,14 @@ public class CustomPlayerPanel extends JPanel
 {
 	public CustomPlayerPanel(CustomSetupPanel customSetupMenu, JFrame optionsFrame)
 	{
-		whiteRules = customSetupMenu.m_whiteRules;
-		blackRules = customSetupMenu.m_blackRules;
-		m_frame = optionsFrame;
-		m_frame.setVisible(true);
-		m_frame.add(this);
-		m_frame.setVisible(true);
-		m_frame.setSize(300, 200);
-		m_frame.setLocationRelativeTo(Driver.getInstance());
+		whiteRules = customSetupMenu.mWhiteRules;
+		blackRules = customSetupMenu.mBlackRules;
+		mFrame = optionsFrame;
+		mFrame.setVisible(true);
+		mFrame.add(this);
+		mFrame.setVisible(true);
+		mFrame.setSize(300, 200);
+		mFrame.setLocationRelativeTo(Driver.getInstance());
 		initGUIComponents(customSetupMenu);
 	}
 
@@ -42,21 +42,21 @@ public class CustomPlayerPanel extends JPanel
 
 		JLabel playerOneTurnsLabel = new JLabel("How many turns in a row for White? ");
 		JLabel playerTwoTurnsLabel = new JLabel("How many turns in a row for Black? ");
-		m_playerOneTurnsField = new JTextField(4);
-		GuiUtility.requestFocus(m_playerOneTurnsField);
-		m_playerOneTurnsField.setText(Integer.toString(whiteRules.getNextTurn().getWhiteMoves()));
-		m_playerOneTurnsField.setToolTipText("This will be the amount of turns for the First Player (white in classic)");
-		m_playerTwoTurnsField = new JTextField(4);
-		m_playerTwoTurnsField.setText(Integer.toString(whiteRules.getNextTurn().getBlackMoves()));
-		m_playerTwoTurnsField.setToolTipText("This will be the amount of turns for the First Player (white in classic)");
-		m_incrementTurnsLabel = new JLabel("Increase turns by how many each round? ");
-		m_incrementTurnsField = new JTextField(4);
-		m_incrementTurnsField.setText(Integer.toString(whiteRules.getNextTurn().getIncrement()));
-		m_incrementTurnsField.setToolTipText("This will be the number of turns each player gains for each time their turn occurs");
+		mPlayerOneTurnsField = new JTextField(4);
+		GuiUtility.requestFocus(mPlayerOneTurnsField);
+		mPlayerOneTurnsField.setText(Integer.toString(whiteRules.getNextTurn().getWhiteMoves()));
+		mPlayerOneTurnsField.setToolTipText("This will be the amount of turns for the First Player (white in classic)");
+		mPlayerTwoTurnsField = new JTextField(4);
+		mPlayerTwoTurnsField.setText(Integer.toString(whiteRules.getNextTurn().getBlackMoves()));
+		mPlayerTwoTurnsField.setToolTipText("This will be the amount of turns for the First Player (white in classic)");
+		mIncrementTurnsLabel = new JLabel("Increase turns by how many each round? ");
+		mIncrementTurnsField = new JTextField(4);
+		mIncrementTurnsField.setText(Integer.toString(whiteRules.getNextTurn().getIncrement()));
+		mIncrementTurnsField.setToolTipText("This will be the number of turns each player gains for each time their turn occurs");
 
 		JButton cancelButton = new JButton("Cancel");
 		cancelButton.setToolTipText("Press me to return to the main Variant window");
-		GuiUtility.setupVariantCancelButton(cancelButton, this, m_frame);
+		GuiUtility.setupVariantCancelButton(cancelButton, this, mFrame);
 
 		JButton submitButton = new JButton("Save");
 		submitButton.setToolTipText("Press me to save these turn settings");
@@ -67,10 +67,10 @@ public class CustomPlayerPanel extends JPanel
 			{
 				if (formIsComplete(whiteRules, blackRules))
 				{
-					customSetupMenu.m_whiteRules = whiteRules;
-					customSetupMenu.m_blackRules = blackRules;
+					customSetupMenu.mWhiteRules = whiteRules;
+					customSetupMenu.mBlackRules = blackRules;
 					CustomPlayerPanel.this.removeAll();
-					m_frame.setVisible(false);
+					mFrame.setVisible(false);
 				}
 			}
 		});
@@ -88,7 +88,7 @@ public class CustomPlayerPanel extends JPanel
 		constraints.insets = new Insets(3, 3, 3, 3);
 		constraints.gridx = 2;
 		constraints.gridy = 0;
-		add(m_playerOneTurnsField, constraints);
+		add(mPlayerOneTurnsField, constraints);
 
 		constraints.insets = new Insets(3, 3, 3, 3);
 		constraints.gridx = 0;
@@ -98,17 +98,17 @@ public class CustomPlayerPanel extends JPanel
 		constraints.insets = new Insets(3, 3, 3, 3);
 		constraints.gridx = 2;
 		constraints.gridy = 1;
-		add(m_playerTwoTurnsField, constraints);
+		add(mPlayerTwoTurnsField, constraints);
 
 		constraints.insets = new Insets(3, 3, 3, 3);
 		constraints.gridx = 0;
 		constraints.gridy = 2;
-		add(m_incrementTurnsLabel, constraints);
+		add(mIncrementTurnsLabel, constraints);
 
 		constraints.insets = new Insets(3, 3, 3, 3);
 		constraints.gridx = 2;
 		constraints.gridy = 2;
-		add(m_incrementTurnsField, constraints);
+		add(mIncrementTurnsField, constraints);
 
 		constraints.gridwidth = 3;
 		constraints.gridx = 0;
@@ -121,9 +121,9 @@ public class CustomPlayerPanel extends JPanel
 	{
 		try
 		{
-			int whiteTurns = Integer.parseInt(m_playerOneTurnsField.getText());
-			int blackTurns = Integer.parseInt(m_playerTwoTurnsField.getText());
-			int increment = Integer.parseInt(m_incrementTurnsField.getText());
+			int whiteTurns = Integer.parseInt(mPlayerOneTurnsField.getText());
+			int blackTurns = Integer.parseInt(mPlayerTwoTurnsField.getText());
+			int increment = Integer.parseInt(mIncrementTurnsField.getText());
 			if (whiteTurns < 0)
 			{
 				JOptionPane.showMessageDialog(this, "The White team's turns cannot be negative", "No Negatives",
@@ -176,9 +176,9 @@ public class CustomPlayerPanel extends JPanel
 
 	private Rules whiteRules = new Rules(false);
 	private Rules blackRules = new Rules(true);
-	private JTextField m_playerOneTurnsField;
-	private JTextField m_playerTwoTurnsField;
-	private JLabel m_incrementTurnsLabel;
-	private JTextField m_incrementTurnsField;
-	private JFrame m_frame;
+	private JTextField mPlayerOneTurnsField;
+	private JTextField mPlayerTwoTurnsField;
+	private JLabel mIncrementTurnsLabel;
+	private JTextField mIncrementTurnsField;
+	private JFrame mFrame;
 }

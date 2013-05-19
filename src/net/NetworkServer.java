@@ -71,22 +71,22 @@ public class NetworkServer
 		{
 			while (g.isBlackMove() == false)
 			{
-				while (PlayNetGamePanel.m_netMove == null)
+				while (PlayNetGamePanel.mNetMove == null)
 					Thread.sleep(0);
-				fromServer = PlayNetGamePanel.m_netMove;
-				PlayNetGamePanel.m_netMove = null;
+				fromServer = PlayNetGamePanel.mNetMove;
+				PlayNetGamePanel.mNetMove = null;
 
 				out.writeObject(fromServer);
 				out.flush();
 			}
 
-			while (PlayNetGamePanel.m_isRunning)
+			while (PlayNetGamePanel.mIsRunning)
 			{
-				while (g.isBlackMove() == true && PlayNetGamePanel.m_isRunning)
+				while (g.isBlackMove() == true && PlayNetGamePanel.mIsRunning)
 				{
 					fromUser = in.readObject();
 					FakeMove toMove = (FakeMove) fromUser;
-					if (toMove.m_originColumn == -1)
+					if (toMove.mOriginColumn == -1)
 					{
 						int surrender = JOptionPane.showConfirmDialog(null, "The other player has requested a Draw. Do you accept?",
 								"Draw", JOptionPane.YES_NO_OPTION);
@@ -135,38 +135,38 @@ public class NetworkServer
 					}
 				}
 
-				while (g.isBlackMove() == false && PlayNetGamePanel.m_isRunning)
+				while (g.isBlackMove() == false && PlayNetGamePanel.mIsRunning)
 				{
-					while (PlayNetGamePanel.m_netMove == null && !png.m_drawRequested && PlayNetGamePanel.m_isRunning)
+					while (PlayNetGamePanel.mNetMove == null && !png.mDrawRequested && PlayNetGamePanel.mIsRunning)
 						Thread.sleep(0);
-					if (png.m_drawRequested)
+					if (png.mDrawRequested)
 					{
 						fromUser = in.readObject();
 						FakeMove toMove = (FakeMove) fromUser;
-						if (toMove.m_originColumn == -2)
+						if (toMove.mOriginColumn == -2)
 						{
 							Result result = Result.DRAW;
 							result.setGuiText("The game has ended in a Draw!");
 							g.getLastMove().setResult(result);
 							PlayGamePanel.endOfGame(result);
-							png.m_drawRequested = false;
+							png.mDrawRequested = false;
 							throw new Exception();
 						}
-						else if (toMove.m_originColumn == -3)
+						else if (toMove.mOriginColumn == -3)
 						{ // If the response is an unaccepted Draw request, do
 							// not perform the Move.
 							JOptionPane.showMessageDialog(null, "Your request for a draw has been denied. Continue play as normal.",
 									"Denied", JOptionPane.PLAIN_MESSAGE);
-							png.m_drawRequested = false;
+							png.mDrawRequested = false;
 							continue;
 						}
 					}
 
-					fromServer = PlayNetGamePanel.m_netMove;
-					PlayNetGamePanel.m_netMove = null;
+					fromServer = PlayNetGamePanel.mNetMove;
+					PlayNetGamePanel.mNetMove = null;
 
-					if (((FakeMove) fromServer).m_originColumn == -1)
-						png.m_drawRequested = true;
+					if (((FakeMove) fromServer).mOriginColumn == -1)
+						png.mDrawRequested = true;
 
 					out.writeObject(fromServer);
 					out.flush();
@@ -209,5 +209,4 @@ public class NetworkServer
 		clientSocket.close();
 		serverSocket.close();
 	}
-
 }

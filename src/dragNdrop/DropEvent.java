@@ -8,20 +8,20 @@ public class DropEvent
 {
 	public DropEvent(Point point, JComponent originComponent)
 	{
-		m_point = point;
-		m_originComponent = originComponent;
+		mPoint = point;
+		mOriginComponent = originComponent;
 	}
 
 	public Point getDropLocation()
 	{
-		return m_point;
+		return mPoint;
 	}
 
 	public JComponent getOriginComponent()
 	{
-		return m_originComponent;
+		return mOriginComponent;
 	}
 
-	private Point m_point;
-	private JComponent m_originComponent;
+	private Point mPoint;
+	private JComponent mOriginComponent;
 }

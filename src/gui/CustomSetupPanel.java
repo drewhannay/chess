@@ -61,24 +61,24 @@ public class CustomSetupPanel extends JPanel
 {
 	public CustomSetupPanel()
 	{
-		m_dropManager = new DropManager();
-		m_globalGlassPane = new GlassPane();
-		m_globalGlassPane.setOpaque(false);
-		Driver.getInstance().setGlassPane(m_globalGlassPane);
+		mDropManager = new DropManager();
+		mGlobalGlassPane = new GlassPane();
+		mGlobalGlassPane.setOpaque(false);
+		Driver.getInstance().setGlassPane(mGlobalGlassPane);
 
-		m_builder = new Builder("New Variant");
-		m_whiteTeam = Lists.newArrayList();
-		m_blackTeam = Lists.newArrayList();
+		mBuilder = new Builder("New Variant");
+		mWhiteTeam = Lists.newArrayList();
+		mBlackTeam = Lists.newArrayList();
 
-		m_boardPanels = new JPanel[] { new JPanel(), new JPanel() };
+		mBoardPanels = new JPanel[] { new JPanel(), new JPanel() };
 
 		Board board = new Board(2, 1, false);
-		m_pieceDisplaySquares[WHITE_INDEX] = board.getSquare(1, 1);
-		m_pieceDisplaySquares[BLACK_INDEX] = board.getSquare(2, 1);
+		mPieceDisplaySquares[WHITE_INDEX] = board.getSquare(1, 1);
+		mPieceDisplaySquares[BLACK_INDEX] = board.getSquare(2, 1);
 
-		m_optionsFrame = new JFrame();
-		m_optionsFrame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-		m_scrollPane.setPreferredSize(new Dimension(200, 200));
+		mOptionsFrame = new JFrame();
+		mOptionsFrame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+		mScrollPane.setPreferredSize(new Dimension(200, 200));
 		initGUIComponents();
 	}
 
@@ -93,7 +93,7 @@ public class CustomSetupPanel extends JPanel
 		showPiecePanel.setLayout(new GridLayout(2, 1));
 		showPiecePanel.setPreferredSize(new Dimension(50, 100));
 
-		for (Square square : m_pieceDisplaySquares)
+		for (Square square : mPieceDisplaySquares)
 			showPiecePanel.add(square);
 
 		constraints.gridx = 5;
@@ -102,20 +102,20 @@ public class CustomSetupPanel extends JPanel
 		constraints.insets = new Insets(0, 10, 100, 0);
 		add(showPiecePanel, constraints);
 
-		for (Square square : m_pieceDisplaySquares)
+		for (Square square : mPieceDisplaySquares)
 		{
 			square.addMouseListener(new PieceDisplayBoardListener(square));
-			square.addMouseMotionListener(new MotionAdapter(m_globalGlassPane));
+			square.addMouseMotionListener(new MotionAdapter(mGlobalGlassPane));
 		}
 
-		m_pieceDisplaySquares[WHITE_INDEX].setBackgroundColor(Color.LIGHT_GRAY);
-		m_pieceDisplaySquares[BLACK_INDEX].setBackgroundColor(Color.getHSBColor(30, 70, 70));
+		mPieceDisplaySquares[WHITE_INDEX].setBackgroundColor(Color.LIGHT_GRAY);
+		mPieceDisplaySquares[BLACK_INDEX].setBackgroundColor(Color.getHSBColor(30, 70, 70));
 
-		m_whiteRules.addEndOfGame(EndOfGame.CLASSIC.init(0, "", false));
-		m_blackRules.addEndOfGame(EndOfGame.CLASSIC.init(0, "", true));
+		mWhiteRules.addEndOfGame(EndOfGame.CLASSIC.init(0, "", false));
+		mBlackRules.addEndOfGame(EndOfGame.CLASSIC.init(0, "", true));
 
-		m_whiteRules.setObjectivePiece(ObjectivePiece.CLASSIC);
-		m_blackRules.setObjectivePiece(ObjectivePiece.CLASSIC);
+		mWhiteRules.setObjectivePiece(ObjectivePiece.CLASSIC);
+		mBlackRules.setObjectivePiece(ObjectivePiece.CLASSIC);
 
 		constraints.gridx = 1;
 		constraints.gridy = 0;
@@ -165,19 +165,19 @@ public class CustomSetupPanel extends JPanel
 					return;
 				}
 
-				m_builder.setName(variantNameField.getText());
+				mBuilder.setName(variantNameField.getText());
 
-				for (Piece piece : m_whiteTeam)
-					piece.setPromotesTo(m_promotionMap.get(piece.getName()));
-				for (Piece piece : m_blackTeam)
-					piece.setPromotesTo(m_promotionMap.get(piece.getName()));
+				for (Piece piece : mWhiteTeam)
+					piece.setPromotesTo(mPromotionMap.get(piece.getName()));
+				for (Piece piece : mBlackTeam)
+					piece.setPromotesTo(mPromotionMap.get(piece.getName()));
 
 				int numberOfObjectives = 0;
-				if (!m_whiteRules.getObjectiveName().isEmpty())
+				if (!mWhiteRules.getObjectiveName().isEmpty())
 				{
-					for (Piece piece : m_whiteTeam)
+					for (Piece piece : mWhiteTeam)
 					{
-						if (piece.getName().equals(m_whiteRules.getObjectiveName()))
+						if (piece.getName().equals(mWhiteRules.getObjectiveName()))
 							numberOfObjectives++;
 					}
 					if (numberOfObjectives != 1)
@@ -189,11 +189,11 @@ public class CustomSetupPanel extends JPanel
 				}
 
 				numberOfObjectives = 0;
-				if (!m_blackRules.getObjectiveName().isEmpty())
+				if (!mBlackRules.getObjectiveName().isEmpty())
 				{
-					for (Piece piece : m_blackTeam)
+					for (Piece piece : mBlackTeam)
 					{
-						if (piece.getName().equals(m_blackRules.getObjectiveName()))
+						if (piece.getName().equals(mBlackRules.getObjectiveName()))
 							numberOfObjectives++;
 					}
 					if (numberOfObjectives != 1)
@@ -204,14 +204,14 @@ public class CustomSetupPanel extends JPanel
 					}
 				}
 
-				m_builder.m_whiteTeam = m_whiteTeam;
+				mBuilder.mWhiteTeam = mWhiteTeam;
 
 				boolean objectivePieceIsSet = false;
-				for (Piece piece : m_whiteTeam)
+				for (Piece piece : mWhiteTeam)
 				{
 					if (piece.getName().equals("King"))
 					{
-						m_whiteRules.setObjectivePiece(ObjectivePiece.CLASSIC);
+						mWhiteRules.setObjectivePiece(ObjectivePiece.CLASSIC);
 						objectivePieceIsSet = true;
 						break;
 					}
@@ -225,15 +225,15 @@ public class CustomSetupPanel extends JPanel
 					// }
 				}
 				if (!objectivePieceIsSet)
-					m_whiteRules.setObjectivePiece(ObjectivePiece.NO_OBJECTIVE);
+					mWhiteRules.setObjectivePiece(ObjectivePiece.NO_OBJECTIVE);
 
-				m_builder.m_blackTeam = m_blackTeam;
+				mBuilder.mBlackTeam = mBlackTeam;
 				objectivePieceIsSet = false;
-				for (Piece piece : m_blackTeam)
+				for (Piece piece : mBlackTeam)
 				{
 					if (piece.getName().equals("King"))
 					{
-						m_blackRules.setObjectivePiece(ObjectivePiece.CLASSIC);
+						mBlackRules.setObjectivePiece(ObjectivePiece.CLASSIC);
 						objectivePieceIsSet = true;
 						break;
 					}
@@ -246,25 +246,25 @@ public class CustomSetupPanel extends JPanel
 					// }
 				}
 				if (!objectivePieceIsSet)
-					m_blackRules.setObjectivePiece(ObjectivePiece.CLASSIC);
+					mBlackRules.setObjectivePiece(ObjectivePiece.CLASSIC);
 
-				m_builder.writeFile(m_whiteRules, m_blackRules);
+				mBuilder.writeFile(mWhiteRules, mBlackRules);
 				// Return to the main screen.
 				Driver.getInstance().revertToMainPanel();
 			}
 		});
 
-		m_changePromotionButton = new JButton("Promote This Piece");
-		m_changePromotionButton.setToolTipText("Press me to set up promotion for the above selected piece");
-		m_changePromotionButton.addActionListener(new ActionListener()
+		mChangePromotionButton = new JButton("Promote This Piece");
+		mChangePromotionButton.setToolTipText("Press me to set up promotion for the above selected piece");
+		mChangePromotionButton.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent event)
 			{
-				m_optionsFrame.dispose();
-				m_optionsFrame = new JFrame();
+				mOptionsFrame.dispose();
+				mOptionsFrame = new JFrame();
 				
-				new PiecePromotionPanel((String) m_pieceTypeList.getSelectedValue(), CustomSetupPanel.this, m_optionsFrame);
+				new PiecePromotionPanel((String) mPieceTypeList.getSelectedValue(), CustomSetupPanel.this, mOptionsFrame);
 			}
 		});
 		
@@ -274,10 +274,10 @@ public class CustomSetupPanel extends JPanel
 			@Override
 			public void actionPerformed(ActionEvent event)
 			{
-				m_optionsFrame.dispose();
-				m_optionsFrame = new JFrame();
+				mOptionsFrame.dispose();
+				mOptionsFrame = new JFrame();
 
-				new CustomBoardPanel(CustomSetupPanel.this, m_optionsFrame);
+				new CustomBoardPanel(CustomSetupPanel.this, mOptionsFrame);
 			}
 		});
 
@@ -287,10 +287,10 @@ public class CustomSetupPanel extends JPanel
 			@Override
 			public void actionPerformed(ActionEvent event)
 			{
-				m_optionsFrame.dispose();
-				m_optionsFrame = new JFrame();
+				mOptionsFrame.dispose();
+				mOptionsFrame = new JFrame();
 
-				new ObjectiveMakerPanel(CustomSetupPanel.this, m_optionsFrame);
+				new ObjectiveMakerPanel(CustomSetupPanel.this, mOptionsFrame);
 			}
 		});
 
@@ -300,10 +300,10 @@ public class CustomSetupPanel extends JPanel
 			@Override
 			public void actionPerformed(ActionEvent event)
 			{
-				m_optionsFrame.dispose();
-				m_optionsFrame = new JFrame();
+				mOptionsFrame.dispose();
+				mOptionsFrame = new JFrame();
 
-				new RuleMakerPanel(CustomSetupPanel.this, m_optionsFrame);
+				new RuleMakerPanel(CustomSetupPanel.this, mOptionsFrame);
 			}
 		});
 
@@ -313,10 +313,10 @@ public class CustomSetupPanel extends JPanel
 			@Override
 			public void actionPerformed(ActionEvent event)
 			{
-				m_optionsFrame.dispose();
-				m_optionsFrame = new JFrame();
+				mOptionsFrame.dispose();
+				mOptionsFrame = new JFrame();
 
-				new CustomPlayerPanel(CustomSetupPanel.this, m_optionsFrame);
+				new CustomPlayerPanel(CustomSetupPanel.this, mOptionsFrame);
 			}
 		});
 
@@ -326,47 +326,47 @@ public class CustomSetupPanel extends JPanel
 			@Override
 			public void actionPerformed(ActionEvent event)
 			{
-				m_optionsFrame.dispose();
-				m_optionsFrame = new JFrame();
+				mOptionsFrame.dispose();
+				mOptionsFrame = new JFrame();
 
-				new PieceMakerPanel(CustomSetupPanel.this, m_optionsFrame);
+				new PieceMakerPanel(CustomSetupPanel.this, mOptionsFrame);
 			}
 		});
 
 		GridBagConstraints mainPanelConstraints = new GridBagConstraints();
 
-		m_pieceListPanel.setLayout(new GridBagLayout());
+		mPieceListPanel.setLayout(new GridBagLayout());
 		mainPanelConstraints.gridx = 0;
 		mainPanelConstraints.gridy = 0;
 		mainPanelConstraints.gridwidth = 2;
-		m_pieceListPanel.add(m_scrollPane, mainPanelConstraints);
+		mPieceListPanel.add(mScrollPane, mainPanelConstraints);
 
 		mainPanelConstraints.fill = GridBagConstraints.HORIZONTAL;
 		mainPanelConstraints.gridx = 0;
 		mainPanelConstraints.gridy = 1;
 		mainPanelConstraints.gridwidth = 1;
 		mainPanelConstraints.insets = new Insets(5, 3, 3, 3);
-		m_pieceListPanel.add(m_changePromotionButton, mainPanelConstraints);
+		mPieceListPanel.add(mChangePromotionButton, mainPanelConstraints);
 
 		mainPanelConstraints.gridx = 1;
 		mainPanelConstraints.gridy = 1;
-		m_pieceListPanel.add(pieceSetupButton, mainPanelConstraints);
+		mPieceListPanel.add(pieceSetupButton, mainPanelConstraints);
 
 		mainPanelConstraints.gridx = 0;
 		mainPanelConstraints.gridy = 2;
-		m_pieceListPanel.add(boardSetupButton, mainPanelConstraints);
+		mPieceListPanel.add(boardSetupButton, mainPanelConstraints);
 
 		mainPanelConstraints.gridx = 0;
 		mainPanelConstraints.gridy = 3;
-		m_pieceListPanel.add(objectiveSetupButton, mainPanelConstraints);
+		mPieceListPanel.add(objectiveSetupButton, mainPanelConstraints);
 
 		mainPanelConstraints.gridx = 1;
 		mainPanelConstraints.gridy = 3;
-		m_pieceListPanel.add(ruleSetupButton, mainPanelConstraints);
+		mPieceListPanel.add(ruleSetupButton, mainPanelConstraints);
 
 		mainPanelConstraints.gridx = 1;
 		mainPanelConstraints.gridy = 2;
-		m_pieceListPanel.add(playerSetupButton, mainPanelConstraints);
+		mPieceListPanel.add(playerSetupButton, mainPanelConstraints);
 
 		JPanel optionsPanel = new JPanel();
 		optionsPanel.setLayout(new GridBagLayout());
@@ -392,16 +392,16 @@ public class CustomSetupPanel extends JPanel
 		mainPanelConstraints.gridwidth = 1;
 		mainPanelConstraints.gridx = 6;
 		mainPanelConstraints.gridy = 1;
-		add(m_pieceListPanel, mainPanelConstraints);
+		add(mPieceListPanel, mainPanelConstraints);
 
 	}
 
 	public void drawBoards(Board[] boards, boolean hasMultipleBoards)
 	{
 		// Get the set the board into the builder.
-		m_builder.setBoards(boards);
+		mBuilder.setBoards(boards);
 
-		for (JPanel panel : m_boardPanels)
+		for (JPanel panel : mBoardPanels)
 		{
 			panel.removeAll();
 			remove(panel);
@@ -444,9 +444,9 @@ public class CustomSetupPanel extends JPanel
 
 			add(panel, constraints);
 		}
-		m_dropManager.setComponentList(squareList);
+		mDropManager.setComponentList(squareList);
 
-		for (JPanel panel : m_boardPanels)
+		for (JPanel panel : mBoardPanels)
 		{
 			panel.revalidate();
 			panel.repaint();
@@ -464,27 +464,27 @@ public class CustomSetupPanel extends JPanel
 		for (int i = 0; i < allPieces.length; i++)
 			list.addElement(allPieces[i]);
 
-		m_pieceTypeList = new JList(list);
+		mPieceTypeList = new JList(list);
 
-		m_pieceTypeList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-		m_pieceTypeList.setLayoutOrientation(JList.VERTICAL);
-		m_pieceTypeList.setVisibleRowCount(-1);
-		m_pieceTypeList.setSelectedIndex(0);
+		mPieceTypeList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		mPieceTypeList.setLayoutOrientation(JList.VERTICAL);
+		mPieceTypeList.setVisibleRowCount(-1);
+		mPieceTypeList.setSelectedIndex(0);
 
-		Piece whitePieceBeingDisplayed = PieceBuilder.makePiece((String) list.elementAt(0), false, m_pieceDisplaySquares[WHITE_INDEX],
+		Piece whitePieceBeingDisplayed = PieceBuilder.makePiece((String) list.elementAt(0), false, mPieceDisplaySquares[WHITE_INDEX],
 				null);
-		Piece blackPieceBeingDisplayed = PieceBuilder.makePiece((String) list.elementAt(0), true, m_pieceDisplaySquares[BLACK_INDEX],
+		Piece blackPieceBeingDisplayed = PieceBuilder.makePiece((String) list.elementAt(0), true, mPieceDisplaySquares[BLACK_INDEX],
 				null);
 
-		m_pieceDisplaySquares[WHITE_INDEX].setPiece(whitePieceBeingDisplayed);
-		m_pieceDisplaySquares[BLACK_INDEX].setPiece(blackPieceBeingDisplayed);
+		mPieceDisplaySquares[WHITE_INDEX].setPiece(whitePieceBeingDisplayed);
+		mPieceDisplaySquares[BLACK_INDEX].setPiece(blackPieceBeingDisplayed);
 
-		for (Square square : m_pieceDisplaySquares)
+		for (Square square : mPieceDisplaySquares)
 			square.refresh();
 
-		ListSelectionModel selectList = m_pieceTypeList.getSelectionModel();
+		ListSelectionModel selectList = mPieceTypeList.getSelectionModel();
 
-		m_scrollPane.getViewport().add(m_pieceTypeList, null);
+		mScrollPane.getViewport().add(mPieceTypeList, null);
 
 		selectList.addListSelectionListener(new ListSelectionListener()
 		{
@@ -496,19 +496,19 @@ public class CustomSetupPanel extends JPanel
 				int selection = listSelectionModel.getAnchorSelectionIndex();
 				if (!listSelectionModel.getValueIsAdjusting())
 				{
-					for (Square square : m_pieceDisplaySquares)
+					for (Square square : mPieceDisplaySquares)
 						square.setVisible(true);
 
-					m_changePromotionButton.setEnabled(true);
+					mChangePromotionButton.setEnabled(true);
 
 					Piece whitePieceBeingDisplayed = PieceBuilder.makePiece((String) list.elementAt(selection), false,
-							m_pieceDisplaySquares[WHITE_INDEX], null);
+							mPieceDisplaySquares[WHITE_INDEX], null);
 					Piece blackPieceBeingDisplayed = PieceBuilder.makePiece((String) list.elementAt(selection), true,
-							m_pieceDisplaySquares[BLACK_INDEX], null);
-					m_pieceDisplaySquares[WHITE_INDEX].setPiece(whitePieceBeingDisplayed);
-					m_pieceDisplaySquares[BLACK_INDEX].setPiece(blackPieceBeingDisplayed);
+							mPieceDisplaySquares[BLACK_INDEX], null);
+					mPieceDisplaySquares[WHITE_INDEX].setPiece(whitePieceBeingDisplayed);
+					mPieceDisplaySquares[BLACK_INDEX].setPiece(blackPieceBeingDisplayed);
 
-					for (Square square : m_pieceDisplaySquares)
+					for (Square square : mPieceDisplaySquares)
 					{
 						square.resetColor();
 						square.refresh();
@@ -517,15 +517,15 @@ public class CustomSetupPanel extends JPanel
 			}
 		});
 
-		m_pieceListPanel.revalidate();
-		m_pieceListPanel.repaint();
+		mPieceListPanel.revalidate();
+		mPieceListPanel.repaint();
 
 		Driver.getInstance().pack();
 	}
 
 	public Builder getBuilder()
 	{
-		return m_builder;
+		return mBuilder;
 	}
 
 	private final class SquareSetupMouseListener extends MouseAdapter
@@ -542,7 +542,7 @@ public class CustomSetupPanel extends JPanel
 			if (m_square.isOccupied())
 			{
 				Piece toRemove = m_square.setPiece(null);
-				(toRemove.isBlack() ? m_blackTeam : m_whiteTeam).remove(toRemove);
+				(toRemove.isBlack() ? mBlackTeam : mWhiteTeam).remove(toRemove);
 
 				m_square.refresh();
 			}
@@ -628,28 +628,28 @@ public class CustomSetupPanel extends JPanel
 
 	public void putPromotionMap(String pieceName, List<String> promotesTo)
 	{
-		m_promotionMap.put(pieceName, promotesTo);
+		mPromotionMap.put(pieceName, promotesTo);
 	}
 
 	private final class PieceDisplayBoardListener extends DropAdapter implements MouseListener
 	{
 		public PieceDisplayBoardListener(Square square)
 		{
-			super(m_globalGlassPane);
+			super(mGlobalGlassPane);
 			m_square = square;
-			addDropListener(m_dropManager);
+			addDropListener(mDropManager);
 		}
 
 		@Override
 		public void mousePressed(MouseEvent event)
 		{
-			m_glassPane.setVisible(true);
+			mGlassPane.setVisible(true);
 
 			Point point = (Point) event.getPoint().clone();
 			SwingUtilities.convertPointToScreen(point, event.getComponent());
-			SwingUtilities.convertPointFromScreen(point, m_glassPane);
+			SwingUtilities.convertPointFromScreen(point, mGlassPane);
 
-			m_glassPane.setPoint(point);
+			mGlassPane.setPoint(point);
 
 			BufferedImage image = null;
 			ImageIcon imageIcon = m_square.getPiece().getIcon();
@@ -660,8 +660,8 @@ public class CustomSetupPanel extends JPanel
 			imageIcon.paintIcon(null, graphics2D, 0, 0);
 			graphics2D.dispose();
 
-			m_glassPane.setImage(image);
-			m_glassPane.repaint();
+			mGlassPane.setImage(image);
+			mGlassPane.repaint();
 		}
 
 		@Override
@@ -670,8 +670,8 @@ public class CustomSetupPanel extends JPanel
 			Point point = (Point) event.getPoint().clone();
 			SwingUtilities.convertPointToScreen(point, event.getComponent());
 
-			m_glassPane.setImage(null);
-			m_glassPane.setVisible(false);
+			mGlassPane.setImage(null);
+			mGlassPane.setVisible(false);
 
 			fireDropEvent(new DropEvent(point, m_square));
 		}
@@ -711,7 +711,7 @@ public class CustomSetupPanel extends JPanel
 
 				Piece oldPiece = destinationSquare.getPiece();
 				if (oldPiece != null)
-					(oldPiece.isBlack() ? m_blackTeam : m_whiteTeam).remove(oldPiece);
+					(oldPiece.isBlack() ? mBlackTeam : mWhiteTeam).remove(oldPiece);
 
 				MouseListener[] listeners = destinationSquare.getMouseListeners();
 				Preconditions.checkPositionIndex(0, listeners.length);
@@ -721,9 +721,9 @@ public class CustomSetupPanel extends JPanel
 						((SquareSetupMouseListener) listeners[0]).getBoard());
 
 				if (originPiece.isBlack())
-					m_blackTeam.add(piece);
+					mBlackTeam.add(piece);
 				else
-					m_whiteTeam.add(piece);
+					mWhiteTeam.add(piece);
 
 				destinationSquare.setPiece(piece);
 				destinationSquare.refresh();
@@ -739,21 +739,21 @@ public class CustomSetupPanel extends JPanel
 	private static final int WHITE_INDEX = 0;
 	private static final int BLACK_INDEX = 1;
 
-	private final GlassPane m_globalGlassPane;
-	private final DropManager m_dropManager;
-	private final Square[] m_pieceDisplaySquares = new Square[2];
+	private final GlassPane mGlobalGlassPane;
+	private final DropManager mDropManager;
+	private final Square[] mPieceDisplaySquares = new Square[2];
 
-	public Rules m_whiteRules = new Rules(false);
-	public Rules m_blackRules = new Rules(true);
+	public Rules mWhiteRules = new Rules(false);
+	public Rules mBlackRules = new Rules(true);
 
-	private JPanel[] m_boardPanels;
-	private JPanel m_pieceListPanel = new JPanel();
-	private Map<String, List<String>> m_promotionMap = Maps.newHashMap();
-	private Builder m_builder;
-	private List<Piece> m_whiteTeam;
-	private List<Piece> m_blackTeam;
-	private JButton m_changePromotionButton;
-	private JList m_pieceTypeList;
-	private JFrame m_optionsFrame;
-	private JScrollPane m_scrollPane = new JScrollPane();
+	private JPanel[] mBoardPanels;
+	private JPanel mPieceListPanel = new JPanel();
+	private Map<String, List<String>> mPromotionMap = Maps.newHashMap();
+	private Builder mBuilder;
+	private List<Piece> mWhiteTeam;
+	private List<Piece> mBlackTeam;
+	private JButton mChangePromotionButton;
+	private JList mPieceTypeList;
+	private JFrame mOptionsFrame;
+	private JScrollPane mScrollPane = new JScrollPane();
 }

@@ -31,20 +31,20 @@ public class PlayNetGamePanel extends PlayGamePanel
 	public PlayNetGamePanel(Game game, boolean isPlayback, boolean isBlack) throws Exception
 	{
 		super(game, isPlayback);
-		PlayNetGamePanel.m_isBlackPlayer = isBlack;
+		PlayNetGamePanel.mIsBlackPlayer = isBlack;
 		initGUIComponents(isPlayback);
 	}
 
 	private void initGUIComponents(boolean isPlayback)
 	{
 		super.removeAll();
-		m_optionsMenu.setVisible(false);
+		mOptionsMenu.setVisible(false);
 
 		Driver.getInstance().setFileMenuVisibility(false);
 
-		m_inCheckLabel = new JLabel("You're In Check!");
-		m_inCheckLabel.setHorizontalTextPosition(SwingConstants.CENTER);
-		m_inCheckLabel.setForeground(Color.RED);
+		mInCheckLabel = new JLabel("You're In Check!");
+		mInCheckLabel.setHorizontalTextPosition(SwingConstants.CENTER);
+		mInCheckLabel.setForeground(Color.RED);
 
 		int twoBoardGridBagOffset = 0;
 		Driver.getInstance().setMenu(createMenuBar());
@@ -57,13 +57,13 @@ public class PlayNetGamePanel extends PlayGamePanel
 		final Board[] boards = getGame().getBoards();
 		setBorder(BorderFactory.createLoweredBevelBorder());
 
-		m_inCheckLabel.setHorizontalTextPosition(SwingConstants.CENTER);
-		m_inCheckLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		mInCheckLabel.setHorizontalTextPosition(SwingConstants.CENTER);
+		mInCheckLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		constraints.fill = GridBagConstraints.NONE;
 		constraints.gridy = 0;
 		constraints.gridx = 9;
-		m_inCheckLabel.setVisible(false);
-		add(m_inCheckLabel, constraints);
+		mInCheckLabel.setVisible(false);
+		add(mInCheckLabel, constraints);
 
 		if (boards.length == 1)
 		{
@@ -103,12 +103,12 @@ public class PlayNetGamePanel extends PlayGamePanel
 			@Override
 			public void actionPerformed(ActionEvent event)
 			{
-				if (m_historyIndex + 1 == m_history.length)
+				if (mHistoryIndex + 1 == mHistory.length)
 					return;
 
 				try
 				{
-					m_history[++m_historyIndex].execute();
+					mHistory[++mHistoryIndex].execute();
 				}
 				catch (Exception e)
 				{
@@ -123,12 +123,12 @@ public class PlayNetGamePanel extends PlayGamePanel
 			@Override
 			public void actionPerformed(ActionEvent event)
 			{
-				if (m_historyIndex == -1)
+				if (mHistoryIndex == -1)
 					return;
 
 				try
 				{
-					m_history[m_historyIndex--].undo();
+					mHistory[mHistoryIndex--].undo();
 				}
 				catch (Exception e)
 				{
@@ -137,19 +137,19 @@ public class PlayNetGamePanel extends PlayGamePanel
 			}
 		});
 
-		m_whiteLabel = new JLabel("WHITE");
-		m_whiteLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		mWhiteLabel = new JLabel("WHITE");
+		mWhiteLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
-		m_whiteLabel.setBorder(BorderFactory.createTitledBorder(""));
+		mWhiteLabel.setBorder(BorderFactory.createTitledBorder(""));
 
-		m_blackLabel = new JLabel("BLACK");
-		m_blackLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		m_blackLabel.setBorder(BorderFactory.createTitledBorder(""));
+		mBlackLabel = new JLabel("BLACK");
+		mBlackLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		mBlackLabel.setBorder(BorderFactory.createTitledBorder(""));
 
-		m_whiteLabel.setOpaque(true);
-		m_blackLabel.setOpaque(true);
+		mWhiteLabel.setOpaque(true);
+		mBlackLabel.setOpaque(true);
 
-		m_whiteLabel.setBackground(getGame().isBlackMove() ? null : Square.HIGHLIGHT_COLOR);
+		mWhiteLabel.setBackground(getGame().isBlackMove() ? null : Square.HIGHLIGHT_COLOR);
 
 		int jailBoardSize;
 
@@ -164,28 +164,28 @@ public class PlayNetGamePanel extends PlayGamePanel
 			jailBoardSize = (int) Math.ceil(size);
 		}
 
-		m_whiteCapturePanel = new JPanel();
-		m_whiteCapturePanel.setBorder(BorderFactory.createTitledBorder("Captured Pieces"));
-		m_whiteCapturesJail = new Board(jailBoardSize, jailBoardSize, isPlayback);
-		m_whiteCapturePanel.setLayout(new GridLayout(jailBoardSize, jailBoardSize));
-		m_whiteCapturePanel.setPreferredSize(new Dimension((m_whiteCapturesJail.getMaxCol() + 1) * 25, (m_whiteCapturesJail
+		mWhiteCapturePanel = new JPanel();
+		mWhiteCapturePanel.setBorder(BorderFactory.createTitledBorder("Captured Pieces"));
+		mWhiteCapturesJail = new Board(jailBoardSize, jailBoardSize, isPlayback);
+		mWhiteCapturePanel.setLayout(new GridLayout(jailBoardSize, jailBoardSize));
+		mWhiteCapturePanel.setPreferredSize(new Dimension((mWhiteCapturesJail.getMaxCol() + 1) * 25, (mWhiteCapturesJail
 				.getMaxRow() + 1) * 25));
 		for (int i = jailBoardSize; i > 0; i--)
 		{
 			for (int j = 1; j <= jailBoardSize; j++)
-				m_whiteCapturePanel.add(new Square(i, j));
+				mWhiteCapturePanel.add(new Square(i, j));
 		}
 
-		m_blackCapturePanel = new JPanel();
-		m_blackCapturePanel.setBorder(BorderFactory.createTitledBorder("Captured Pieces"));
-		m_blackCapturesJail = new Board(jailBoardSize, jailBoardSize, isPlayback);
-		m_blackCapturePanel.setLayout(new GridLayout(jailBoardSize, jailBoardSize));
-		m_blackCapturePanel.setPreferredSize(new Dimension((m_blackCapturesJail.getMaxCol() + 1) * 25, (m_blackCapturesJail
+		mBlackCapturePanel = new JPanel();
+		mBlackCapturePanel.setBorder(BorderFactory.createTitledBorder("Captured Pieces"));
+		mBlackCapturesJail = new Board(jailBoardSize, jailBoardSize, isPlayback);
+		mBlackCapturePanel.setLayout(new GridLayout(jailBoardSize, jailBoardSize));
+		mBlackCapturePanel.setPreferredSize(new Dimension((mBlackCapturesJail.getMaxCol() + 1) * 25, (mBlackCapturesJail
 				.getMaxRow() + 1) * 25));
 		for (int i = jailBoardSize; i > 0; i--)
 		{
 			for (int j = 1; j <= jailBoardSize; j++)
-				m_blackCapturePanel.add(new Square(i, j));
+				mBlackCapturePanel.add(new Square(i, j));
 		}
 
 		// add the Black name
@@ -197,7 +197,7 @@ public class PlayNetGamePanel extends PlayGamePanel
 		constraints.ipadx = 100;
 		constraints.gridx = 11 + twoBoardGridBagOffset;
 		constraints.gridy = 0;
-		add(m_blackLabel, constraints);
+		add(mBlackLabel, constraints);
 
 		// add the Black jail
 		constraints.fill = GridBagConstraints.NONE;
@@ -208,7 +208,7 @@ public class PlayNetGamePanel extends PlayGamePanel
 		constraints.insets = new Insets(0, 25, 10, 25);
 		constraints.gridx = 11 + twoBoardGridBagOffset;
 		constraints.gridy = 1;
-		add(m_blackCapturePanel, constraints);
+		add(mBlackCapturePanel, constraints);
 
 		if (!isPlayback)
 		{
@@ -220,7 +220,7 @@ public class PlayNetGamePanel extends PlayGamePanel
 			constraints.ipadx = 100;
 			constraints.gridx = 11 + twoBoardGridBagOffset;
 			constraints.gridy = 4;
-			add(m_blackTimer.getDisplayLabel(), constraints);
+			add(mBlackTimer.getDisplayLabel(), constraints);
 
 			// add the White timer
 			constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -230,7 +230,7 @@ public class PlayNetGamePanel extends PlayGamePanel
 			constraints.ipadx = 100;
 			constraints.gridx = 11 + twoBoardGridBagOffset;
 			constraints.gridy = 6;
-			add(m_whiteTimer.getDisplayLabel(), constraints);
+			add(mWhiteTimer.getDisplayLabel(), constraints);
 		}
 		else
 		{
@@ -263,7 +263,7 @@ public class PlayNetGamePanel extends PlayGamePanel
 		constraints.ipadx = 0;
 		constraints.gridx = 11 + twoBoardGridBagOffset;
 		// change spacing and location if there is a timer or not.
-		if (ChessTimer.isNoTimer(m_whiteTimer))
+		if (ChessTimer.isNoTimer(mWhiteTimer))
 		{
 			constraints.gridy = 6;
 			constraints.insets = new Insets(10, 25, 0, 25);
@@ -273,7 +273,7 @@ public class PlayNetGamePanel extends PlayGamePanel
 			constraints.gridy = 7;
 			constraints.insets = new Insets(0, 25, 0, 25);
 		}
-		add(m_whiteCapturePanel, constraints);
+		add(mWhiteCapturePanel, constraints);
 
 		// add the White Name
 		constraints.fill = GridBagConstraints.NONE;
@@ -283,7 +283,7 @@ public class PlayNetGamePanel extends PlayGamePanel
 		constraints.weighty = 0.0;
 		constraints.insets = new Insets(10, 0, 10, 0);
 		// change spacing if there is a timer
-		if (ChessTimer.isNoTimer(m_whiteTimer))
+		if (ChessTimer.isNoTimer(mWhiteTimer))
 		{
 			constraints.gridheight = 1;
 			constraints.gridy = 9;
@@ -295,12 +295,12 @@ public class PlayNetGamePanel extends PlayGamePanel
 		}
 		constraints.ipadx = 100;
 		constraints.gridx = 11 + twoBoardGridBagOffset;
-		add(m_whiteLabel, constraints);
+		add(mWhiteLabel, constraints);
 	}
 
 	public static boolean isBlackPlayer()
 	{
-		return m_isBlackPlayer;
+		return mIsBlackPlayer;
 	}
 
 //	class ButtonListener implements MouseListener
@@ -435,8 +435,8 @@ public class PlayNetGamePanel extends PlayGamePanel
 	@Override
 	public JMenu createMenuBar()
 	{
-		m_optionsMenu = new JMenu("Menu");
-		if (!m_isPlayback)
+		mOptionsMenu = new JMenu("Menu");
+		if (!mIsPlayback)
 		{
 			JMenuItem m_drawMenuItem = new JMenuItem("Request Draw", KeyEvent.VK_R);
 			m_drawMenuItem.addActionListener(new ActionListener()
@@ -444,9 +444,9 @@ public class PlayNetGamePanel extends PlayGamePanel
 				@Override
 				public void actionPerformed(ActionEvent event)
 				{
-					if (getGame().isBlackMove() == m_isBlackPlayer)
+					if (getGame().isBlackMove() == mIsBlackPlayer)
 					{
-						if (m_isAIGame)
+						if (mIsAIGame)
 						{
 							if (requestAIDraw())
 								return;
@@ -461,19 +461,19 @@ public class PlayNetGamePanel extends PlayGamePanel
 								return;
 
 							// send move indicating surrender request
-							m_netMove = new FakeMove(-1, -1, -1, -1, -1, null);
+							mNetMove = new FakeMove(-1, -1, -1, -1, -1, null);
 						}
 					}
 				}
 			});
 
-			if (m_isAIGame)
+			if (mIsAIGame)
 				m_drawMenuItem.setText("Declare Draw");
 
-			m_optionsMenu.add(m_drawMenuItem);
+			mOptionsMenu.add(m_drawMenuItem);
 		}
 
-		return m_optionsMenu;
+		return mOptionsMenu;
 	}
 
 	private boolean requestDraw()
@@ -492,16 +492,16 @@ public class PlayNetGamePanel extends PlayGamePanel
 
 	public void setIsAIGame(boolean isAIGame)
 	{
-		m_isAIGame = isAIGame;
+		mIsAIGame = isAIGame;
 		Driver.getInstance().setFileMenuVisibility(true);
 	}
 
 	private static final long serialVersionUID = -4220208356045682711L;
 
-	private static boolean m_isBlackPlayer;
-	public static boolean m_isRunning = true;
-	public static FakeMove m_netMove = null;
+	private static boolean mIsBlackPlayer;
+	public static boolean mIsRunning = true;
+	public static FakeMove mNetMove = null;
 
-	private boolean m_isAIGame;
-	public boolean m_drawRequested = false;
+	private boolean mIsAIGame;
+	public boolean mDrawRequested = false;
 }

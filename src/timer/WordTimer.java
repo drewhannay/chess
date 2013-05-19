@@ -4,30 +4,30 @@ class WordTimer extends ChessTimer
 {
 	public WordTimer(long startTime)
 	{
-		m_currentTime = startTime;
-		m_initialStartTime = startTime;
+		mCurrentTime = startTime;
+		mInitialStartTime = startTime;
 		init(null);
 	}
 
 	@Override
 	public void startTimer()
 	{
-		m_clockLastUpdatedTime = System.currentTimeMillis();
-		m_timer.start();
+		mClockLastUpdatedTime = System.currentTimeMillis();
+		mTimer.start();
 	}
 
 	@Override
 	public void stopTimer()
 	{
-		m_clockLastUpdatedTime = System.currentTimeMillis();
+		mClockLastUpdatedTime = System.currentTimeMillis();
 		updateDisplay();
-		m_timer.stop();
+		mTimer.stop();
 	}
 
 	@Override
 	public void timeElapsed()
 	{
-		m_clockDirection = -1;
+		mClockDirection = -1;
 	}
 
 	private static final long serialVersionUID = -3488243754798571897L;
