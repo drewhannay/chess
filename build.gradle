@@ -1,0 +1,31 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'macAppBundle'
+
+sourceCompatibility = 1.6
+version = '1.0'
+
+macAppBundle {
+    mainClassName = "gui.Driver"
+    icon = "images/chess.icns"
+}
+
+buildscript {
+    repositories {
+        ivy {
+            url "http://gradle-macappbundle.googlecode.com"
+            artifactPattern 'http://gradle-macappbundle.googlecode.com/files/[module]-[revision].[ext]'
+        }
+    }
+
+    dependencies {
+        classpath 'edu.sc.seis:gradle-macappbundle:1.0.8'
+    }
+}
+
+dependencies {
+  compile fileTree(dir: 'lib', include: '**/*.jar')
+}
+
+sourceSets.main.java.srcDirs = ['src'] 
+sourceSets.main.resources.srcDirs = ['images']

@@ -1,5 +1,6 @@
 *.class
 bin/*
+build/*
 classes/*
 jar/*
 release/*
@@ -16,6 +17,8 @@ ACN File
 completedGames/*
 gamesInProgress/*
 variants/*
+
+.gradle
 
 # Package Files #
 *.war
