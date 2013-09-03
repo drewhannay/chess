@@ -173,7 +173,7 @@ public class CustomSetupPanel extends JPanel
 					piece.setPromotesTo(mPromotionMap.get(piece.getName()));
 
 				int numberOfObjectives = 0;
-				if (mWhiteRules.getObjectiveName() != null && !mWhiteRules.getObjectiveName().isEmpty())
+				if (!mWhiteRules.getObjectiveName().isEmpty())
 				{
 					for (Piece piece : mWhiteTeam)
 					{
@@ -189,7 +189,7 @@ public class CustomSetupPanel extends JPanel
 				}
 
 				numberOfObjectives = 0;
-				if (mBlackRules.getObjectiveName() != null && !mBlackRules.getObjectiveName().isEmpty())
+				if (!mBlackRules.getObjectiveName().isEmpty())
 				{
 					for (Piece piece : mBlackTeam)
 					{
