@@ -160,11 +160,11 @@ public final class Driver extends JFrame
 		c.gridwidth = 2;
 		mMainPanel.add(createNewGameButton(), c);
 
-		// create new variant
+		//open variant menu
 		c.gridx = 2;
 		c.gridy = 1;
 		c.gridwidth = 1;
-		mMainPanel.add(createVariantButton(), c);
+		mMainPanel.add(variantMenuButton(), c);
 
 		// continue
 		c.fill = GridBagConstraints.HORIZONTAL;
@@ -678,16 +678,16 @@ public final class Driver extends JFrame
 		return viewCompletedGameButton;
 	}
 
-	private JButton createVariantButton()
+	private JButton variantMenuButton()
 	{
-		JButton variantButton = new JButton("Create New Game Type");
-		variantButton.setToolTipText("Craft a new kind of chess game");
+		JButton variantButton = new JButton("Variants");
+		variantButton.setToolTipText("Create, edit, or remove game variants.");
 		variantButton.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				setPanel(new CustomSetupPanel());
+				setPanel(new VariantMenuPanel());
 			}
 		});
 

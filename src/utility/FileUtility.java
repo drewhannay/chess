@@ -38,6 +38,21 @@ public final class FileUtility
 		file.mkdirs();
 		return file.list();
 	}
+	
+	public static String[] getVariantsFileArrayNoClassic()
+	{
+		String[] variants = getVariantsFileArray();
+		for (int i = 0; i < variants.length; i++)
+		{
+			if (variants[i].contentEquals("Classic"))
+			{
+				variants[i] = variants[variants.length - 1];
+				variants[variants.length - 1] = null;
+				break;
+			}
+		}
+		return variants;
+	}
 
 	public static File getVariantsFile(String variantName)
 	{
