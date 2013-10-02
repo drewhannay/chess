@@ -2,5 +2,5 @@ package dragNdrop;
 
 public interface DropListener
 {
-	public void dropped(DropEvent event);
+	public void dropped(DropEvent event, boolean fromDisplayBoard);
 }

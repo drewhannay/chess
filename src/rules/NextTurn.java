@@ -1,29 +1,31 @@
 package rules;
 
+import java.io.Serializable;
+
 import gui.PlayGamePanel;
 
-public enum NextTurn
-{
-	CLASSIC,
-	INCREASING_TOGETHER,
-	INCREASING_SEPARATELY,
-	DIFFERENT_NUMBER_OF_TURNS;
+public class NextTurn implements Serializable {
+	
+	public enum NextTurnOption {
+		CLASSIC, INCREASING_TOGETHER, INCREASING_SEPARATELY, DIFFERENT_NUMBER_OF_TURNS
+	};
 
-	public NextTurn init(int whiteMoves, int blackMoves, int increment)
-	{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4504947872189771271L;
+
+	public NextTurn(NextTurnOption option, int whiteMoves, int blackMoves, int increment) {
 		mNumberOfWhiteMovesBeforeTurnChange = whiteMoves;
 		mNumberOfBlackMovesBeforeTurnChange = blackMoves;
 		mTurnIncrement = increment;
 		mCurrentNumberOfMovesMade = 0;
 		mIsBlackMove = false;
-
-		return this;
+		mNextTurnOption = option;
 	}
 
-	public boolean getNextTurn()
-	{
-		switch (this)
-		{
+	public boolean getNextTurn() {
+		switch (mNextTurnOption) {
 		case CLASSIC:
 			return classicNextTurn();
 		case INCREASING_TOGETHER:
@@ -37,10 +39,8 @@ public enum NextTurn
 		}
 	}
 
-	public boolean undo()
-	{
-		switch (this)
-		{
+	public boolean undo() {
+		switch (mNextTurnOption) {
 		case CLASSIC:
 			return undoClassic();
 		case INCREASING_TOGETHER:
@@ -132,7 +132,8 @@ public enum NextTurn
 			mNumberOfWhiteMovesBeforeTurnChange -= mTurnIncrement;
 			PlayGamePanel.turn(mIsBlackMove);
 
-			mCurrentNumberOfMovesMade = mIsBlackMove ? mNumberOfBlackMovesBeforeTurnChange : mNumberOfWhiteMovesBeforeTurnChange;
+			mCurrentNumberOfMovesMade = mIsBlackMove ? mNumberOfBlackMovesBeforeTurnChange
+					: mNumberOfWhiteMovesBeforeTurnChange;
 		}
 		return mIsBlackMove;
 	}
@@ -157,11 +158,13 @@ public enum NextTurn
 			mIsBlackMove = !mIsBlackMove;
 			PlayGamePanel.turn(mIsBlackMove);
 
-			mCurrentNumberOfMovesMade = mIsBlackMove ? mNumberOfBlackMovesBeforeTurnChange : mNumberOfWhiteMovesBeforeTurnChange;
+			mCurrentNumberOfMovesMade = mIsBlackMove ? mNumberOfBlackMovesBeforeTurnChange
+					: mNumberOfWhiteMovesBeforeTurnChange;
 		}
 		return mIsBlackMove;
 	}
 
+	private NextTurnOption mNextTurnOption;
 	private int mNumberOfWhiteMovesBeforeTurnChange;
 	private int mNumberOfBlackMovesBeforeTurnChange;
 	private int mCurrentNumberOfMovesMade;

@@ -35,7 +35,7 @@ public class VariantMenuPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				if (mPopupFrame == null) {
-					Driver.getInstance().setPanel(new CustomSetupPanel());
+					Driver.getInstance().setPanel(new CustomSetupPanel(null));
 				}
 			}
 		});
@@ -69,7 +69,9 @@ public class VariantMenuPanel extends JPanel {
 		editButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-
+				if (mPopupFrame == null) {
+					Driver.getInstance().setPanel(new CustomSetupPanel(((DefaultListModel) variantList.getModel()).get(variantList.getSelectedIndex()).toString()));
+				}
 			}
 		});
 		buttonPanel.add(editButton, constraints);
@@ -111,8 +113,7 @@ public class VariantMenuPanel extends JPanel {
 			@Override
 			public void valueChanged(ListSelectionEvent arg0) {
 				deleteButton.setEnabled(true);
-				// TODO: enable this button once editing variants works
-				// editButton.setEnabled(true);
+				editButton.setEnabled(true);
 			}
 		});
 

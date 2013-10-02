@@ -244,7 +244,7 @@ public class Builder implements Serializable
 				{
 					ObjectInputStream in = new ObjectInputStream(new FileInputStream(FileUtility.getVariantsFile(name)));
 					Builder b = (Builder) in.readObject();
-					Game toReturn = new Game(name, b.mBoards, b.mWhiteRules, b.mBlackRules);
+					Game toReturn = new Game(name, b.mBoards, b.mWhiteRules, b.mBlackRules, b.mPromotionMap);
 					toReturn.setWhiteTeam(b.mWhiteTeam);
 					toReturn.setBlackTeam(b.mBlackTeam);
 					in.close();
@@ -289,11 +289,13 @@ public class Builder implements Serializable
 	 */
 	public void writeFile(Rules whiteRules, Rules blackRules)
 	{
+		mWhiteRules = whiteRules;
+		mBlackRules = blackRules;
 		try
 		{
 			FileOutputStream f_out = new FileOutputStream(FileUtility.getVariantsFile(mName));
 			ObjectOutputStream out = new ObjectOutputStream(f_out);
-			out.writeObject(new Builder(mName, mBoards, mWhiteTeam, mBlackTeam, whiteRules, blackRules));
+			out.writeObject(this);
 			out.close();
 			f_out.close();
 		}
@@ -307,6 +309,23 @@ public class Builder implements Serializable
 		mName = name;
 	}
 
+	public void addToPromotionMap(String key, List<String> value)
+	{
+		mPromotionMap.put(key, value);
+	}
+	
+	public void setPromotionMap(Map<String, List<String>> promotionMap)
+	{
+		mPromotionMap = promotionMap;
+	}
+	
+	public Map<String, List<String>> getPromotionMap()
+	{
+		if (mPromotionMap == null)
+			System.out.println("no promomap, yo");
+		return mPromotionMap;
+	}
+	
 	private static final long serialVersionUID = 2099226533521671457L;
 
 	private String mName;
@@ -315,5 +334,5 @@ public class Builder implements Serializable
 	public List<Piece> mBlackTeam;
 	private Rules mWhiteRules;
 	private Rules mBlackRules;
-
+	private Map<String, List<String>> mPromotionMap;
 }

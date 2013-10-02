@@ -9,18 +9,20 @@ import logic.Game;
 import logic.Move;
 import logic.Piece;
 import logic.Square;
+import rules.NextTurn.NextTurnOption;
+import rules.ObjectivePiece.ObjectivePieceTypes;
 
 public class Rules implements Serializable
 {
 	public Rules(boolean isBlack)
 	{
 		// Initialize everything to classic to ensure nothing can be null.
-		mNextTurn = NextTurn.CLASSIC.init(1, 1, 0);
+		mNextTurn = new NextTurn(NextTurnOption.CLASSIC, 1, 1, 0);
 
 		mEndOfGame = EndOfGame.CLASSIC.init(3, "Queen", isBlack);
 
 		mCropLegalDests = EnumSet.of(CropLegalDestinations.CLASSIC);
-		mObjectivePiece = ObjectivePiece.CLASSIC;
+		mObjectivePiece = new ObjectivePiece(ObjectivePieceTypes.CLASSIC);
 		mAfterMoves = EnumSet.of(AfterMove.CLASSIC);
 		mGetBoard = GetBoard.CLASSIC;
 		mPromote = Promote.CLASSIC;
@@ -35,7 +37,7 @@ public class Rules implements Serializable
 
 	public void addAfterMove(AfterMove afterMove)
 	{
-		mAfterMoves.add(afterMove);
+			mAfterMoves.add(afterMove);
 	}
 
 	public void addCropLegalDests(CropLegalDestinations cropLegalDests)
@@ -43,6 +45,16 @@ public class Rules implements Serializable
 		mCropLegalDests.add(cropLegalDests);
 	}
 
+	public void clearCropLegalDests()
+	{
+		mCropLegalDests.clear();
+	}
+	
+	public void clearAfterMoves()
+	{
+		mAfterMoves.clear();
+	}
+	
 	public void addEndOfGame(EndOfGame endOfGame)
 	{
 		mEndOfGame = endOfGame;
@@ -171,6 +183,46 @@ public class Rules implements Serializable
 	public boolean rulesAreNetworkable()
 	{
 		return !(mAfterMoves.contains(AfterMove.CAPTURER_PLACES_CAPTURED) || mAfterMoves.contains(AfterMove.CAPTURER_STEALS_CAPTURED));
+	}
+	
+	public boolean getCaptureMandatory()
+	{
+		return mAdjustTeamLegalDestinations.equals(AdjustTeamLegalDestinations.MUST_CAPTURE);
+	}
+
+	public boolean getObjectiveIsStationary()
+	{
+		return mCropLegalDests.contains(CropLegalDestinations.STATIONARY_OBJECTIVE);
+	}
+	
+	public boolean getCapturedReturnToStart()
+	{
+		return mAfterMoves.contains(AfterMove.CAPTURED_PIECE_TO_ORIGIN);
+	}
+	
+	public boolean getPiecesDrop()
+	{
+		return mAfterMoves.contains(AfterMove.CAPTURER_PLACES_CAPTURED);
+	}
+	
+	public boolean getPiecesDropAndSwitch()
+	{
+		return mAfterMoves.contains(AfterMove.CAPTURER_STEALS_CAPTURED);
+	}
+	
+	public boolean getNoAfterMovesSelected()
+	{
+		return (!getCapturedReturnToStart()) && (!getPiecesDrop()) && (!getPiecesDropAndSwitch());
+	}
+	
+	public boolean isAtomic()
+	{
+		return mAfterMoves.contains(AfterMove.ATOMIC_CAPTURE);
+	}
+	
+	public boolean switchBoards()
+	{
+		return mGetBoard.equals(GetBoard.OPPOSITE_BOARD);
 	}
 
 	private static final long serialVersionUID = -7895448383101471186L;
