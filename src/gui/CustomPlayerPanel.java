@@ -17,14 +17,15 @@ import javax.swing.JTextField;
 
 import rules.NextTurn;
 import rules.Rules;
+import rules.NextTurn.NextTurnOption;
 import utility.GuiUtility;
 
 public class CustomPlayerPanel extends JPanel
 {
 	public CustomPlayerPanel(CustomSetupPanel customSetupMenu, JFrame optionsFrame)
 	{
-		whiteRules = customSetupMenu.mWhiteRules;
-		blackRules = customSetupMenu.mBlackRules;
+		mWhiteRules = customSetupMenu.mWhiteRules;
+		mBlackRules = customSetupMenu.mBlackRules;
 		mFrame = optionsFrame;
 		mFrame.setVisible(true);
 		mFrame.add(this);
@@ -44,31 +45,31 @@ public class CustomPlayerPanel extends JPanel
 		JLabel playerTwoTurnsLabel = new JLabel("How many turns in a row for Black? ");
 		mPlayerOneTurnsField = new JTextField(4);
 		GuiUtility.requestFocus(mPlayerOneTurnsField);
-		mPlayerOneTurnsField.setText(Integer.toString(whiteRules.getNextTurn().getWhiteMoves()));
+		mPlayerOneTurnsField.setText(Integer.toString(mWhiteRules.getNextTurn().getWhiteMoves()));
 		mPlayerOneTurnsField.setToolTipText("This will be the amount of turns for the First Player (white in classic)");
 		mPlayerTwoTurnsField = new JTextField(4);
-		mPlayerTwoTurnsField.setText(Integer.toString(whiteRules.getNextTurn().getBlackMoves()));
+		mPlayerTwoTurnsField.setText(Integer.toString(mWhiteRules.getNextTurn().getBlackMoves()));
 		mPlayerTwoTurnsField.setToolTipText("This will be the amount of turns for the First Player (white in classic)");
 		mIncrementTurnsLabel = new JLabel("Increase turns by how many each round? ");
 		mIncrementTurnsField = new JTextField(4);
-		mIncrementTurnsField.setText(Integer.toString(whiteRules.getNextTurn().getIncrement()));
+		mIncrementTurnsField.setText(Integer.toString(mWhiteRules.getNextTurn().getIncrement()));
 		mIncrementTurnsField.setToolTipText("This will be the number of turns each player gains for each time their turn occurs");
 
 		JButton cancelButton = new JButton("Cancel");
-		cancelButton.setToolTipText("Press me to return to the main Variant window");
+		cancelButton.setToolTipText("Press to return to the main Variant window");
 		GuiUtility.setupVariantCancelButton(cancelButton, this, mFrame);
 
 		JButton submitButton = new JButton("Save");
-		submitButton.setToolTipText("Press me to save these turn settings");
+		submitButton.setToolTipText("Press to save turn settings");
 		submitButton.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent event)
 			{
-				if (formIsComplete(whiteRules, blackRules))
+				if (formIsComplete(mWhiteRules, mBlackRules))
 				{
-					customSetupMenu.mWhiteRules = whiteRules;
-					customSetupMenu.mBlackRules = blackRules;
+					customSetupMenu.setWhiteRules(mWhiteRules);
+					customSetupMenu.setBlackRules(mBlackRules);
 					CustomPlayerPanel.this.removeAll();
 					mFrame.setVisible(false);
 				}
@@ -119,6 +120,9 @@ public class CustomPlayerPanel extends JPanel
 
 	private boolean formIsComplete(Rules whiteRules, Rules blackRules)
 	{
+		mWhiteRules = whiteRules;
+		mBlackRules = blackRules;
+		
 		try
 		{
 			int whiteTurns = Integer.parseInt(mPlayerOneTurnsField.getText());
@@ -138,29 +142,21 @@ public class CustomPlayerPanel extends JPanel
 			}
 			else
 			{
+				NextTurn next;
 				if (whiteTurns == blackTurns)
 				{
 					if (increment > 0)
-					{
-						whiteRules.setNextTurn(NextTurn.INCREASING_TOGETHER.init(whiteTurns, blackTurns, increment));
-						blackRules.setNextTurn(NextTurn.INCREASING_TOGETHER.init(whiteTurns, blackTurns, increment));
-					}
+						next = new NextTurn(NextTurnOption.INCREASING_TOGETHER, whiteTurns, blackTurns, increment);
 					else
-					{
-						whiteRules.setNextTurn(NextTurn.DIFFERENT_NUMBER_OF_TURNS.init(whiteTurns, blackTurns, increment));
-						blackRules.setNextTurn(NextTurn.DIFFERENT_NUMBER_OF_TURNS.init(whiteTurns, blackTurns, increment));
-					}
+						next = new NextTurn(NextTurnOption.DIFFERENT_NUMBER_OF_TURNS, whiteTurns, blackTurns, increment);
 				}
 				else if (increment > 0)
-				{
-					whiteRules.setNextTurn(NextTurn.INCREASING_SEPARATELY.init(whiteTurns, blackTurns, increment));
-					blackRules.setNextTurn(NextTurn.INCREASING_SEPARATELY.init(whiteTurns, blackTurns, increment));
-				}
+					next = new NextTurn(NextTurnOption.INCREASING_SEPARATELY, whiteTurns, blackTurns, increment);
 				else
-				{
-					whiteRules.setNextTurn(NextTurn.DIFFERENT_NUMBER_OF_TURNS.init(whiteTurns, blackTurns, increment));
-					blackRules.setNextTurn(NextTurn.DIFFERENT_NUMBER_OF_TURNS.init(whiteTurns, blackTurns, increment));
-				}
+					next = new NextTurn(NextTurnOption.DIFFERENT_NUMBER_OF_TURNS, whiteTurns, blackTurns, increment);
+
+				mWhiteRules.setNextTurn(next);
+				mBlackRules.setNextTurn(next);
 			}
 		}
 		catch (Exception e)
@@ -174,8 +170,8 @@ public class CustomPlayerPanel extends JPanel
 
 	private static final long serialVersionUID = -5035641594159934814L;
 
-	private Rules whiteRules = new Rules(false);
-	private Rules blackRules = new Rules(true);
+	private Rules mWhiteRules;
+	private Rules mBlackRules;
 	private JTextField mPlayerOneTurnsField;
 	private JTextField mPlayerTwoTurnsField;
 	private JLabel mIncrementTurnsLabel;

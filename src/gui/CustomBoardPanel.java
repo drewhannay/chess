@@ -42,17 +42,17 @@ public class CustomBoardPanel extends JPanel
 		repaint();
 		// create button and add ActionListener
 		mCancelButton = new JButton("Cancel");
-		mCancelButton.setToolTipText("Press me to go back to the main variant setup");
+		mCancelButton.setToolTipText("Press to return to the main variant setup");
 		GuiUtility.setupVariantCancelButton(mCancelButton, this, mFrame);
 
 		// Create JLabels and JRadioButtons.
 		mNumberOfBoardsLabel = new JLabel("How many boards?");
 		mOneBoardButton = new JRadioButton("1");
 		GuiUtility.requestFocus(mOneBoardButton);
-		mOneBoardButton.setToolTipText("Choose me for one Board");
+		mOneBoardButton.setToolTipText("Select to play with one board");
 		// Set oneBoard to be initially selected.
 		mTwoBoardsButton = new JRadioButton("2");
-		mTwoBoardsButton.setToolTipText("Choose me for two boards");
+		mTwoBoardsButton.setToolTipText("Select to play with two boards");
 
 		JPanel boards = new JPanel();
 		boards.add(mOneBoardButton);
@@ -102,9 +102,13 @@ public class CustomBoardPanel extends JPanel
 		rowCol.add(mNumberOfColumnsTextField, constraints);
 
 		// Create JLabel and JCheckBox
-		mWrapAroundLabel = new JLabel("<html>Should boards wrap <br />" + "around horizontally?</html>");
+		mWrapAroundLabel = new JLabel("<html>Should boards wrap <br />"
+				+ "around horizontally?</html>");
 		mWrapAroundCheckBox = new JCheckBox("Yes");
-		mWrapAroundCheckBox.setToolTipText("Press me to have boards that wrap around on the edges");
+		mWrapAroundCheckBox.setSelected(variant.getBuilder().getBoards()[0]
+				.isWrapAround());
+		mWrapAroundCheckBox
+				.setToolTipText("Press me to have boards that wrap around on the edges");
 
 		// Create button and add ActionListener
 		mSubmitButton = new JButton("Save");
@@ -116,24 +120,62 @@ public class CustomBoardPanel extends JPanel
 			{
 				if (formIsValid())
 				{
-					// create Board[] based on which radio button is selected.
-					Board[] boards = (mOneBoardButton.isSelected()) ? new Board[1] : new Board[2];
-					for (int i = 0; i < boards.length; i++)
+					int changeCode = boardsChanged();
+					if (changeCode != NO_CHANGES)
 					{
-						// initialize each board with the given rows and columns
-						// and wraparound boolean.
-						boards[i] = new Board(Integer.parseInt(mNumberOfRowsTextField.getText()), Integer
-								.parseInt(mNumberOfColumnsTextField.getText()), mWrapAroundCheckBox.isSelected());
-					}
-					if (mTwoBoardsButton.isSelected())
-						variant.drawBoards(boards, true);
-					else
-						variant.drawBoards(boards, false);
+						// create Board[] based on which radio button is
+						// selected.
+						Board[] boards = (mOneBoardButton.isSelected()) ? new Board[1]
+								: new Board[2];
+						for (int i = 0; i < boards.length; i++)
+						{
+							// initialize each board with the given rows and
+							// columns
+							// and wraparound boolean.
+							if (changeCode == WRAP_ONLY)
+								boards[i] = variant.getBuilder().getBoards()[i].makeCopyWithWrapSelection(mWrapAroundCheckBox.isSelected());
+							else
+								boards[i] = new Board(
+									Integer.parseInt(mNumberOfRowsTextField
+											.getText()), Integer
+											.parseInt(mNumberOfColumnsTextField
+													.getText()),
+									mWrapAroundCheckBox.isSelected());
+						}
+
+					variant.drawBoards(boards, mTwoBoardsButton.isSelected());
 					mHolder.removeAll();
 					mFrame.setVisible(false);
 				}
+				}
 			}
 
+			private int boardsChanged() {
+				Board[] oldBoards = variant.getBuilder().getBoards();
+				int change = NO_CHANGES;
+
+				if (oldBoards[0].isWrapAround() != mWrapAroundCheckBox
+						.isSelected())
+					change = WRAP_ONLY;
+
+				if (mTwoBoardsButton.isSelected() && oldBoards.length != 2)
+					change = SHAPE_CHANGE;
+				else if (!mTwoBoardsButton.isSelected()
+						&& oldBoards.length != 1)
+					change = SHAPE_CHANGE;
+				else if (oldBoards[0].numCols() != Integer
+						.parseInt(mNumberOfColumnsTextField.getText()))
+					change = SHAPE_CHANGE;
+				else if (oldBoards[0].numRows() != Integer
+						.parseInt(mNumberOfRowsTextField.getText()))
+					change = SHAPE_CHANGE;
+
+				return change;
+			}
+
+			private final static int NO_CHANGES = 0;
+			private final static int WRAP_ONLY = 1;
+			private final static int SHAPE_CHANGE = 2;
 		});
 
 		JPanel buttons = new JPanel();

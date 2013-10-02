@@ -5,6 +5,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import rules.Rules;
 import timer.ChessTimer;
@@ -22,6 +23,7 @@ import com.google.common.collect.Lists;
  */
 public class Game implements Serializable
 {
+	private Map<String, List<String>> mPromotionMap;
 	/**
 	 * Constructor. Initializes and saves state of Game information.
 	 * 
@@ -29,8 +31,9 @@ public class Game implements Serializable
 	 * @param boards Reference to boards Array.
 	 * @param whiteRules The rules for the white team
 	 * @param blackRules The rules for the black team
+	 * @param promotionMap 
 	 */
-	public Game(String gameType, Board[] boards, Rules whiteRules, Rules blackRules)
+	public Game(String gameType, Board[] boards, Rules whiteRules, Rules blackRules, Map<String, List<String>> promotionMap)
 	{
 		mGameType = gameType;
 		mBoards = boards;
@@ -42,6 +45,8 @@ public class Game implements Serializable
 		blackRules.setGame(this);
 		setBlackMove(false);
 
+		setPromotionMap(promotionMap);
+		
 		for (Board b : mBoards)
 			b.setGame(this);
 
@@ -664,6 +669,14 @@ public class Game implements Serializable
 			promoName = mHistory.get(mHistory.size() - 1).getPromoPiece().getName();
 
 		return new FakeMove(boardNum, m.origin.getRow(), m.origin.getCol(), m.getDest().getRow(), m.getDest().getCol(), promoName);
+	}
+
+	public Map<String, List<String>> getPromotionMap() {
+		return mPromotionMap;
+	}
+
+	public void setPromotionMap(Map<String, List<String>> mPromotionMap) {
+		this.mPromotionMap = mPromotionMap;
 	}
 
 	private static final long serialVersionUID = 7291801823624891384L;
