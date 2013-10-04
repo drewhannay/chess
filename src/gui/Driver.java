@@ -99,7 +99,7 @@ public final class Driver extends JFrame
 			activateWindowListener();
 		mOtherPanel = panel;
 		pack();
-		centerComponent();
+		centerFrame();
 	}
 
 	public void revertToMainPanel()
@@ -109,7 +109,7 @@ public final class Driver extends JFrame
 		add(mMainPanel);
 		deactivateWindowListener();
 		pack();
-		centerComponent();
+		centerFrame();
 	}
 
 	public void setMenu(JMenu menu)
@@ -697,7 +697,7 @@ public final class Driver extends JFrame
 		return variantButton;
 	}
 
-	public static void centerComponent() {
+	public static void centerFrame() {
 		Driver driver = getInstance();
 		int width = driver.getWidth();
 		int height = driver.getHeight();

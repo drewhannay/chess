@@ -132,7 +132,7 @@ public class NewGamePanel extends JPanel
 		mPopupFrame.setLayout(new GridBagLayout());
 		mPopupFrame.setSize(325, 225);
 		mPopupFrame.setResizable(false);
-		Driver.centerComponent();
+		Driver.centerFrame();
 		mPopupFrame.setLocationRelativeTo(Driver.getInstance());
 		mPopupFrame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		mPopupFrame.addWindowListener(new WindowAdapter()
