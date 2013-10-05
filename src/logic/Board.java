@@ -218,6 +218,13 @@ public class Board implements Serializable
 		mMaxRow = maxRow;
 	}
 
+	public Board makeCopyWithWrapSelection(boolean wrapAround)
+	{
+		Board toReturn = this;
+		mWrapsAround = wrapAround;
+		return toReturn;
+	}
+	
 	private static final long serialVersionUID = -3660560968400318452L;
 
 	private Game mGame;

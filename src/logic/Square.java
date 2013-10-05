@@ -8,9 +8,12 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
+import utility.GuiUtility;
+
 public class Square extends JLabel implements Serializable
 {
 	public static final Color HIGHLIGHT_COLOR = new Color(20, 129, 191);
+	private static final ImageIcon s_uninhabitableIcon = GuiUtility.createImageIcon(48, 48, "/Uninhabitable.png");;
 
 	public Square(int row, int column)
 	{
@@ -62,6 +65,12 @@ public class Square extends JLabel implements Serializable
 	public void refresh()
 	{
 		setOpaque(true);
+		if (!mIsHabitable)
+		{
+			setIcon(s_uninhabitableIcon);
+			return;
+		}
+		
 		// if there's a Piece here...
 		if (mPiece != null)
 		{
@@ -156,6 +165,10 @@ public class Square extends JLabel implements Serializable
 	public void setIsHabitable(boolean isHabitable)
 	{
 		mIsHabitable = isHabitable;
+		if (!mIsHabitable)
+			setIcon(s_uninhabitableIcon);
+		else
+			setIcon(null);
 	}
 
 	/**

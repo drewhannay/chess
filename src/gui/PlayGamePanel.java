@@ -830,7 +830,7 @@ public class PlayGamePanel extends JPanel
 			mGlassPane.setImage(null);
 			mGlassPane.setVisible(false);
 
-			fireDropEvent(new DropEvent(point, m_square));
+			fireDropEvent(new DropEvent(point, m_square), false);
 		}
 
 		private Square m_square;
@@ -845,7 +845,7 @@ public class PlayGamePanel extends JPanel
 		}
 
 		@Override
-		public void dropped(DropEvent event)
+		public void dropped(DropEvent event, boolean fromDisplayBoard)
 		{
 			Square originSquare = (Square) event.getOriginComponent();
 			Square destinationSquare = (Square) isInTarget(event.getDropLocation());

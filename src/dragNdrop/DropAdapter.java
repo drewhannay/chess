@@ -26,11 +26,11 @@ public class DropAdapter extends MouseAdapter
 			mListeners.remove(listener);
 	}
 
-	protected void fireDropEvent(DropEvent event)
+	protected void fireDropEvent(DropEvent event, boolean fromDisplayBoard)
 	{
 		Iterator<DropListener> iterator = mListeners.iterator();
 		while (iterator.hasNext())
-			((DropListener) iterator.next()).dropped(event);
+			((DropListener) iterator.next()).dropped(event, fromDisplayBoard);
 	}
 
 	protected GlassPane mGlassPane;

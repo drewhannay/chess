@@ -1,28 +1,43 @@
 package rules;
 
-import com.google.common.base.Preconditions;
+import java.io.Serializable;
 
 import logic.Game;
 import logic.Piece;
 
-public enum ObjectivePiece
-{
-	CLASSIC,
-	NO_OBJECTIVE,
-	CUSTOM_OBJECTIVE;
-
-	public ObjectivePiece setObjectivePieceName(String objectivePieceName)
-	{
-		Preconditions.checkState(this != CLASSIC);
-
-		mObjectivePieceName = objectivePieceName;
-		return this;
+public class ObjectivePiece implements Serializable {
+	public enum ObjectivePieceTypes {
+		CLASSIC, NO_OBJECTIVE, CUSTOM_OBJECTIVE;
 	}
 
-	public Piece getObjectivePiece(boolean isBlack)
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1220279533086251233L;
+
+	public ObjectivePiece(ObjectivePieceTypes type, String objectivePieceName)
 	{
-		switch (this)
-		{
+		mObjectivePieceType = type;
+		mObjectivePieceName = objectivePieceName;
+	}
+	
+	public ObjectivePiece(ObjectivePieceTypes type)
+	{
+			this(type, "King");
+	}
+
+	public ObjectivePiece() 
+	{
+		this(ObjectivePieceTypes.NO_OBJECTIVE, null);
+	}
+
+	public ObjectivePieceTypes getObjectivePieceType()
+	{
+		return mObjectivePieceType;
+	}
+	
+	public Piece getObjectivePiece(boolean isBlack) {
+		switch (mObjectivePieceType) {
 		case CLASSIC:
 			return classicObjectivePiece(isBlack);
 		case CUSTOM_OBJECTIVE:
@@ -89,4 +104,5 @@ public enum ObjectivePiece
 
 	private Game mGame;
 	private String mObjectivePieceName;
+	private ObjectivePieceTypes mObjectivePieceType;
 }
