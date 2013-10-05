@@ -7,6 +7,7 @@ import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.SystemTray;
+import java.awt.Toolkit;
 import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -98,6 +99,7 @@ public final class Driver extends JFrame
 			activateWindowListener();
 		mOtherPanel = panel;
 		pack();
+		centerFrame();
 	}
 
 	public void revertToMainPanel()
@@ -107,6 +109,7 @@ public final class Driver extends JFrame
 		add(mMainPanel);
 		deactivateWindowListener();
 		pack();
+		centerFrame();
 	}
 
 	public void setMenu(JMenu menu)
@@ -694,6 +697,22 @@ public final class Driver extends JFrame
 		return variantButton;
 	}
 
+	public static void centerFrame() {
+		Driver driver = getInstance();
+		int width = driver.getWidth();
+		int height = driver.getHeight();
+		if (s_screenWidth == null)
+		{
+			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();	
+			s_screenWidth = screenSize.getWidth();
+			s_screenHeight = screenSize.getHeight();
+		}
+		driver.setLocation((int)((s_screenWidth/2)-(width/2)), (int)((s_screenHeight/2)-(height/2)));
+	}
+	
+	private static Double s_screenWidth;
+	private static Double s_screenHeight;
+	
 	private static final long serialVersionUID = -3533604157531154757L;
 
 	private static Driver sInstance;
