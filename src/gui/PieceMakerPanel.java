@@ -411,12 +411,12 @@ public class PieceMakerPanel extends JPanel
 					{
 						if (m_isDarkImage)
 						{
-							mDarkImage = ImageIO.read(new File(fileChooser.toString()));
+							mDarkImage = ImageIO.read(fileChooser.getSelectedFile());
 							m_imageLabel.setIcon(new ImageIcon(mDarkImage.getScaledInstance(48, 48, Image.SCALE_SMOOTH)));
 						}
 						else
 						{
-							mLightImage = ImageIO.read(new File(fileChooser.toString()));
+							mLightImage = ImageIO.read(fileChooser.getSelectedFile());
 							m_imageLabel.setIcon(new ImageIcon(mLightImage.getScaledInstance(48, 48, Image.SCALE_SMOOTH)));
 						}
 					}
