@@ -1,10 +1,14 @@
 package utility;
 
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
+
+import javax.imageio.ImageIO;
 
 public final class FileUtility
 {
@@ -22,14 +26,20 @@ public final class FileUtility
 		return new File(path + SLASH + aiName);
 	}
 
-	protected static String getImagePath(String imageName, boolean isBuiltInFile)
+	public static String getImagePath(String imageName, boolean isBuiltInFile)
 	{
-		File file = new File(HIDDEN_DIR + SLASH + IMAGES);
-		file.mkdirs();
+		String imagePath;
 		if (isBuiltInFile)
-			return ".."+SLASH + imageName;
+		{
+			imagePath = ROOT_RUNNING_DIR+ SLASH + IMAGES + SLASH + imageName;
+		}
 		else
-			return HIDDEN_DIR + SLASH + IMAGES + SLASH + imageName;
+		{
+			File file = new File(HIDDEN_DIR + SLASH + IMAGES);
+			file.mkdirs();
+			imagePath = HIDDEN_DIR + SLASH + IMAGES + SLASH + imageName;
+		}
+		return imagePath;
 	}
 
 	public static String[] getVariantsFileArray()
@@ -128,6 +138,10 @@ public final class FileUtility
 		{
 			HIDDEN_DIR = System.getProperty("user.home") + "\\chess";
 			SLASH = "\\";
+			
+			String userDir = System.getProperty("user.dir");
+			
+			ROOT_RUNNING_DIR = userDir.substring(0, userDir.lastIndexOf("\\"))+"\\ChessCrafterShared";
 			try
 			{
 				Runtime rt = Runtime.getRuntime();
@@ -143,11 +157,27 @@ public final class FileUtility
 		{
 			// if we're not on Windows, just add a period
 			HIDDEN_DIR = System.getProperty("user.home") + "/.chess";
+			ROOT_RUNNING_DIR = System.getProperty("user.dir");
 			SLASH = "/";
 		}
 	}
 
+	public static BufferedImage getFrontPageImage()
+	{
+		BufferedImage frontPage = null;
+		try
+		{
+			frontPage = ImageIO.read(new File(getImagePath("chess_logo.png", true)));
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		return frontPage;
+	}
+	
 	private static final String HIDDEN_DIR;
+	private static final String ROOT_RUNNING_DIR;
 	private static final String AI = "AI";
 	private static final String IMAGES = "images";
 	private static final String VARIANTS = "variants";

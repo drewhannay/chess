@@ -77,12 +77,7 @@ public final class GuiUtility
 	{
 		try
 		{
-			BufferedImage bufferedImage;
-
-			if (isBuiltInFile)
-				bufferedImage = ImageIO.read(GuiUtility.class.getResource(imageLocation));
-			else
-				bufferedImage = ImageIO.read(new File(imageLocation));
+			BufferedImage bufferedImage = ImageIO.read(new File(imageLocation));
 
 			ImageIcon imageIcon = new ImageIcon(bufferedImage);
 			imageIcon.setImage(imageIcon.getImage().getScaledInstance(imageWidth, imageHeight, Image.SCALE_SMOOTH));
