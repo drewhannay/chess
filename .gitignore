@@ -5,7 +5,6 @@ jar/*
 release/*
 .externalToolBuilders
 .metadata/*
-.project
 .settings/*
 glob:src/savedGame
 gameTypes
