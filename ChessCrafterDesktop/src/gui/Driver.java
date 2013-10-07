@@ -20,7 +20,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -158,7 +157,7 @@ public final class Driver extends JFrame implements ChessCrafter
 		c.gridwidth = 3;
 		c.gridx = 0;
 		c.gridy = 0;
-		mMainPanel.add(new JLabel(GuiUtility.createImageIcon(300, 200, GuiConstants.HOME_SCREEN_IMAGE_PATH)), c);
+		mMainPanel.add(new JLabel(GuiUtility.createImageIcon(300, 200, FileUtility.getImagePath("chess_logo.png", true))), c);
 
 		// new game
 		c.fill = GridBagConstraints.HORIZONTAL;
@@ -234,7 +233,7 @@ public final class Driver extends JFrame implements ChessCrafter
 	{
 		try
 		{
-			BufferedImage frontPageImage = ImageIO.read(getClass().getResource(GuiConstants.HOME_SCREEN_IMAGE_PATH));
+			BufferedImage frontPageImage = FileUtility.getFrontPageImage();
 			if (System.getProperty("os.name").startsWith("Windows"))
 			{
 				final SystemTray sysTray = SystemTray.getSystemTray();
