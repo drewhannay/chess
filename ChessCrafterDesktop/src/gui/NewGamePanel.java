@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.List;
@@ -153,7 +154,17 @@ public class NewGamePanel extends JPanel
 
 		GridBagConstraints constraints = new GridBagConstraints();
 
-		final JComboBox dropdown = new JComboBox(Builder.getVariantFileArray());
+		final JComboBox dropdown;
+		try
+		{
+			dropdown = new JComboBox(Builder.getVariantFileArray());
+		}
+		catch (IOException e1)
+		{
+			JOptionPane.showMessageDialog(Driver.getInstance(), "Error: Could not load variant files. Maybe send a bug report or whatnot?");
+			e1.printStackTrace();
+			return;
+		}
 
 		// variant type selector
 		constraints.gridx = 0;
@@ -317,7 +328,15 @@ public class NewGamePanel extends JPanel
 		constraints.gridx = 1;
 		constraints.gridy = 0;
 		constraints.insets = new Insets(3, 0, 3, 0);
-		mPopupFrame.add(new JComboBox(Builder.getVariantFileArray()), constraints);
+		try
+		{
+			mPopupFrame.add(new JComboBox(Builder.getVariantFileArray()), constraints);
+		}
+		catch (IOException e1)
+		{
+			JOptionPane.showMessageDialog(Driver.getInstance(), "Error: Could not load variant files. Did you delete something?");
+			e1.printStackTrace();
+		}
 
 		// add the AI selector to the frame
 		constraints.gridx = 0;
@@ -360,7 +379,17 @@ public class NewGamePanel extends JPanel
 							JOptionPane.PLAIN_MESSAGE);
 					return;
 				}
-				Game gameToPlay = Builder.newGame((String) new JComboBox(Builder.getVariantFileArray()).getSelectedItem());
+				Game gameToPlay;
+				try
+				{
+					gameToPlay = Builder.newGame((String) new JComboBox(Builder.getVariantFileArray()).getSelectedItem());
+				}
+				catch (IOException e1)
+				{
+					e1.printStackTrace();
+					JOptionPane.showMessageDialog(Driver.getInstance(), "Error: Could not load variant files. Did you delete something?");
+					return;
+				}
 
 				JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
 				StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, Locale.getDefault(), null);

@@ -2,6 +2,7 @@ package logic;
 
 import java.awt.Color;
 import java.awt.Image;
+import java.io.IOException;
 import java.io.Serializable;
 
 import javax.swing.BorderFactory;
@@ -14,7 +15,19 @@ import utility.GuiUtility;
 public class Square extends JLabel implements Serializable
 {
 	public static final Color HIGHLIGHT_COLOR = new Color(20, 129, 191);
-	private static final ImageIcon s_uninhabitableIcon = GuiUtility.createImageIcon(48, 48, FileUtility.getImagePath("Uninhabitable.png", true));
+
+	static
+	{
+		try
+		{
+			s_uninhabitableIcon = GuiUtility.createImageIcon(48, 48, FileUtility.getImagePath("Uninhabitable.png", true));
+		}
+
+		catch (IOException ioe)
+		{
+			ioe.printStackTrace();
+		}
+	}
 
 	public Square(int row, int column)
 	{
@@ -71,7 +84,7 @@ public class Square extends JLabel implements Serializable
 			setIcon(s_uninhabitableIcon);
 			return;
 		}
-		
+
 		// if there's a Piece here...
 		if (mPiece != null)
 		{
@@ -88,7 +101,7 @@ public class Square extends JLabel implements Serializable
 		}
 		resetColor();// Then reset the color too.
 	}
-	
+
 	/**
 	 * Refresh the GUI's view of this Square with the current accurate
 	 * information, but only for Jails
@@ -103,7 +116,10 @@ public class Square extends JLabel implements Serializable
 			if (mPiece.getIcon() == null)
 				setText(mPiece.getName());// Use it's name
 			else
-				setIcon(new ImageIcon(mPiece.getIcon().getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH)));// Otherwise, use it's Icon
+				setIcon(new ImageIcon(mPiece.getIcon().getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH)));// Otherwise,
+																													// use
+																													// it's
+																													// Icon
 		}
 		else
 		{// If there's no Piece, clear the Icon and Text of the Square.
@@ -227,4 +243,5 @@ public class Square extends JLabel implements Serializable
 	private int mColumn;// Rank
 	private Color mBackgroundColor;
 	private boolean mIsHabitable;
+	private static ImageIcon s_uninhabitableIcon;
 }

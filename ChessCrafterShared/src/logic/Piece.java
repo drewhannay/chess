@@ -1,5 +1,6 @@
 package logic;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -26,12 +27,15 @@ public class Piece implements Serializable
 	 * @param curSquare The Square this Piece occupies
 	 * @param board The Board this Piece occupies
 	 * @param movements Map of legal movements for this Piece
+	 * @throws IOException 
 	 */
-	public Piece(String name, boolean isBlack, Square curSquare, Board board, Map<Character, Integer> movements)
+	public Piece(String name, boolean isBlack, Square curSquare, Board board, Map<Character, Integer> movements) throws IOException
 	{
 		mName = name;
+
 		mLightIcon = ImageUtility.getLightImage(name);
 		mDarkIcon = ImageUtility.getDarkImage(name);
+
 		setBlack(isBlack);
 		mCurrentSquare = curSquare;
 		setOriginalSquare(curSquare);
