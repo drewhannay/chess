@@ -2,6 +2,7 @@ package logic;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
@@ -56,8 +57,9 @@ public class Builder implements Serializable
 
 	/**
 	 * Build the classic game of chess for the user.
+	 * @throws IOException 
 	 */
-	private static void buildClassic()
+	private static void buildClassic() throws IOException
 	{
 		Builder classic = new Builder("Classic");// Name is Classic chess
 		classic.setBoards(new Board[] { new Board(8, 8, false) });
@@ -96,8 +98,9 @@ public class Builder implements Serializable
 	 * @param square What square does this piece start on?
 	 * @param board The board the piece is on
 	 * @return The constructed bishop.
+	 * @throws IOException 
 	 */
-	public static Piece createBishop(boolean isBlack, Square square, Board board)
+	public static Piece createBishop(boolean isBlack, Square square, Board board) throws IOException
 	{
 		Map<Character, Integer> bishopMovement = Maps.newHashMap();
 		bishopMovement.put('R', -1);
@@ -115,8 +118,9 @@ public class Builder implements Serializable
 	 * @param square What square does this piece start on?
 	 * @param board The board the piece is on
 	 * @return The constructed king.
+	 * @throws IOException 
 	 */
-	public static Piece createKing(boolean isBlack, Square square, Board board)
+	public static Piece createKing(boolean isBlack, Square square, Board board) throws IOException
 	{
 		Map<Character, Integer> kingMovement = Maps.newHashMap();
 		kingMovement.put('N', 1);
@@ -138,8 +142,9 @@ public class Builder implements Serializable
 	 * @param square What square does this piece start on?
 	 * @param board The board the piece is on
 	 * @return The constructed knight.
+	 * @throws IOException 
 	 */
-	public static Piece createKnight(boolean isBlack, Square square, Board board)
+	public static Piece createKnight(boolean isBlack, Square square, Board board) throws IOException
 	{
 		Map<Character, Integer> knightMovement = Maps.newHashMap();
 		knightMovement.put('x', 1);
@@ -155,8 +160,9 @@ public class Builder implements Serializable
 	 * @param square What square does this piece start on?
 	 * @param board The board the piece is on
 	 * @return The constructed pawn.
+	 * @throws IOException 
 	 */
-	public static Piece createPawn(boolean isBlack, Square square, Board board)
+	public static Piece createPawn(boolean isBlack, Square square, Board board) throws IOException
 	{
 		Piece pawn = new Piece("Pawn", isBlack, square, board, null);
 		List<String> promotesTo = Lists.newArrayList();
@@ -176,8 +182,9 @@ public class Builder implements Serializable
 	 * @param square What square does this piece start on?
 	 * @param board The board the piece is on
 	 * @return The constructed queen.
+	 * @throws IOException 
 	 */
-	public static Piece createQueen(boolean isBlack, Square square, Board board)
+	public static Piece createQueen(boolean isBlack, Square square, Board board) throws IOException
 	{
 		Map<Character, Integer> queenMovement = Maps.newHashMap();
 		queenMovement.put('N', -1);
@@ -199,8 +206,9 @@ public class Builder implements Serializable
 	 * @param square What square does this piece start on?
 	 * @param board The board the piece is on
 	 * @return The constructed rook.
+	 * @throws IOException 
 	 */
-	public static Piece createRook(boolean isBlack, Square square, Board board)
+	public static Piece createRook(boolean isBlack, Square square, Board board) throws IOException
 	{
 		Map<Character, Integer> rookMovement = Maps.newHashMap();
 		rookMovement.put('N', -1);
@@ -214,8 +222,9 @@ public class Builder implements Serializable
 	 * Get the Set of names of Game types
 	 * 
 	 * @return A Set containing the names of Game types
+	 * @throws IOException 
 	 */
-	public static String[] getVariantFileArray()
+	public static String[] getVariantFileArray() throws IOException
 	{
 		String[] vars = FileUtility.getVariantsFileArray();
 		for (String s : vars)
@@ -321,8 +330,6 @@ public class Builder implements Serializable
 	
 	public Map<String, List<String>> getPromotionMap()
 	{
-		if (mPromotionMap == null)
-			System.out.println("no promomap, yo");
 		return mPromotionMap;
 	}
 	

@@ -49,6 +49,13 @@ public final class FileUtility
 		return file.list();
 	}
 	
+	public static String[] getCustomPieceArray()
+	{
+		File file = new File(HIDDEN_DIR + SLASH + PIECES);
+		file.mkdirs();
+		return file.list();
+	}
+	
 	public static String[] getVariantsFileArrayNoClassic()
 	{
 		String[] variants = getVariantsFileArray();
@@ -66,9 +73,12 @@ public final class FileUtility
 
 	public static File getVariantsFile(String variantName)
 	{
-		String path = HIDDEN_DIR + SLASH + VARIANTS;
-		new File(path).mkdirs();
-		return new File(path + SLASH + variantName);
+		return new File(HIDDEN_DIR + SLASH + VARIANTS + SLASH + variantName);
+	}
+	
+	public static File getPieceFile(String pieceName)
+	{
+		return new File(HIDDEN_DIR + SLASH + PIECES + SLASH + pieceName);
 	}
 
 	public static String[] getGamesInProgressFileArray()
@@ -176,11 +186,20 @@ public final class FileUtility
 		return frontPage;
 	}
 	
+	public static void deletePiece(String pieceName)
+	{
+		File pieceFile = getPieceFile(pieceName);
+		pieceFile.delete();
+		new File((getImagePath("l_"+pieceName+".png", false))).delete();
+		new File((getImagePath("d_"+pieceName+".png", false))).delete();
+	}
+	
 	private static final String HIDDEN_DIR;
 	private static final String ROOT_RUNNING_DIR;
 	private static final String AI = "AI";
 	private static final String IMAGES = "images";
 	private static final String VARIANTS = "variants";
+	private static final String PIECES = "pieces";
 	private static final String GAMES_IN_PROGRESS = "gamesInProgress";
 	private static final String COMPLETED_GAMES = "completedGames";
 	private static final String PREFERENCES = "preferences.txt";

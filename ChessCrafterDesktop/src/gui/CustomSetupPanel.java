@@ -15,6 +15,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -47,6 +48,7 @@ import rules.EndOfGame;
 import rules.ObjectivePiece;
 import rules.ObjectivePiece.ObjectivePieceTypes;
 import rules.Rules;
+import utility.FileUtility;
 import utility.GuiUtility;
 
 import com.google.common.collect.Lists;
@@ -326,12 +328,11 @@ public class CustomSetupPanel extends JPanel
 			{
 				mOptionsFrame.dispose();
 				mOptionsFrame = new JFrame();
-
 				new CustomPlayerPanel(CustomSetupPanel.this, mOptionsFrame);
 			}
 		});
 
-		JButton pieceSetupButton = new JButton("Make New Pieces");
+		JButton pieceSetupButton = new JButton("Piece Editor");
 		pieceSetupButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -339,8 +340,7 @@ public class CustomSetupPanel extends JPanel
 			{
 				mOptionsFrame.dispose();
 				mOptionsFrame = new JFrame();
-
-				new PieceMakerPanel(CustomSetupPanel.this, mOptionsFrame);
+				new PieceMenuPanel(mOptionsFrame);
 			}
 		});
 
@@ -483,9 +483,13 @@ public class CustomSetupPanel extends JPanel
 		// create a List with a vertical ScrollBar
 		final DefaultListModel list = new DefaultListModel();
 
-		Object[] allPieces = PieceBuilder.getSet().toArray();
-		for (int i = 0; i < allPieces.length; i++)
-			list.addElement(allPieces[i]);
+		Object[] standardPieces = PieceBuilder.getSet().toArray();
+		for (int i = 0; i < standardPieces.length; i++)
+			list.addElement(standardPieces[i]);
+		
+		String[] customPieces = FileUtility.getCustomPieceArray();
+		for (int i = 0; i < customPieces.length; i++)
+			list.addElement(customPieces[i]);
 
 		mPieceTypeList = new JList(list);
 
@@ -495,12 +499,25 @@ public class CustomSetupPanel extends JPanel
 		mPieceTypeList.setVisibleRowCount(-1);
 		mPieceTypeList.setSelectedIndex(0);
 
-		Piece whitePieceBeingDisplayed = PieceBuilder.makePiece(
-				(String) list.elementAt(0), false,
-				mPieceDisplaySquares[WHITE_INDEX], null);
-		Piece blackPieceBeingDisplayed = PieceBuilder.makePiece(
-				(String) list.elementAt(0), true,
-				mPieceDisplaySquares[BLACK_INDEX], null);
+		Piece whitePieceBeingDisplayed = null;
+		Piece blackPieceBeingDisplayed = null;
+		
+		try
+		{
+			whitePieceBeingDisplayed = PieceBuilder.makePiece(
+					(String) list.elementAt(0), false,
+					mPieceDisplaySquares[WHITE_INDEX], null);
+			blackPieceBeingDisplayed = PieceBuilder.makePiece(
+					(String) list.elementAt(0), true,
+					mPieceDisplaySquares[BLACK_INDEX], null);
+		}
+		catch (IOException e)
+		{
+			JOptionPane.showMessageDialog(Driver.getInstance(), "Error: Could not load piece. Did you delete something?");
+			e.printStackTrace();
+			return;
+		}
+		
 
 		mPieceDisplaySquares[WHITE_INDEX].setPiece(whitePieceBeingDisplayed);
 		mPieceDisplaySquares[BLACK_INDEX].setPiece(blackPieceBeingDisplayed);
@@ -527,12 +544,25 @@ public class CustomSetupPanel extends JPanel
 
 					mChangePromotionButton.setEnabled(true);
 
-					Piece whitePieceBeingDisplayed = PieceBuilder.makePiece(
-							(String) list.elementAt(selection), false,
-							mPieceDisplaySquares[WHITE_INDEX], null);
-					Piece blackPieceBeingDisplayed = PieceBuilder.makePiece(
-							(String) list.elementAt(selection), true,
-							mPieceDisplaySquares[BLACK_INDEX], null);
+					Piece whitePieceBeingDisplayed;
+					Piece blackPieceBeingDisplayed;
+
+					try
+					{
+						whitePieceBeingDisplayed = PieceBuilder.makePiece(
+								(String) list.elementAt(selection), false,
+								mPieceDisplaySquares[WHITE_INDEX], null);
+						blackPieceBeingDisplayed = PieceBuilder.makePiece(
+								(String) list.elementAt(selection), true,
+								mPieceDisplaySquares[BLACK_INDEX], null);
+					}
+					catch (IOException e)
+					{
+						JOptionPane.showMessageDialog(Driver.getInstance(), "Error: Could not load piece. Did you delete something?");
+						e.printStackTrace();
+						return;
+					}
+					
 					mPieceDisplaySquares[WHITE_INDEX]
 							.setPiece(whitePieceBeingDisplayed);
 					mPieceDisplaySquares[BLACK_INDEX]
@@ -744,6 +774,10 @@ public class CustomSetupPanel extends JPanel
 			mGlassPane.setPoint(point);
 
 			BufferedImage image = null;
+			String pieceName = m_square.getPiece().getName();
+			
+			FileUtility.getPieceFile(pieceName);
+			
 			ImageIcon imageIcon = m_square.getPiece().getIcon();
 			int width = imageIcon.getIconWidth();
 			int height = imageIcon.getIconHeight();
@@ -823,9 +857,19 @@ public class CustomSetupPanel extends JPanel
 				int boardNumber = event.getDropLocation().getX() < mBoardPanels[0].getLocationOnScreen().getX()+mBoardPanels[0].getWidth() ?
 						0 : 1;
 				
-				Piece piece = PieceBuilder.makePiece(originPiece.getName(),
-						originPiece.isBlack(), destinationSquare,
-						mBuilder.getBoards()[boardNumber]);
+				Piece piece = null;
+				try
+				{
+					piece = PieceBuilder.makePiece(originPiece.getName(),
+							originPiece.isBlack(), destinationSquare,
+							mBuilder.getBoards()[boardNumber]);
+				}
+				catch (IOException e)
+				{
+					JOptionPane.showMessageDialog(Driver.getInstance(), "Error: Could not load piece. Did you delete something?");
+					e.printStackTrace();
+					return;
+				}
 
 				if (originPiece.isBlack())
 					mBlackTeam.add(piece);
@@ -864,7 +908,7 @@ public class CustomSetupPanel extends JPanel
 			}
 		}
 	};
-
+	
 	private static final long serialVersionUID = 7830479492072657640L;
 	private static final int WHITE_INDEX = 0;
 	private static final int BLACK_INDEX = 1;

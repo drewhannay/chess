@@ -6,6 +6,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.net.URI;
 
 import javax.swing.JButton;
@@ -35,8 +36,17 @@ public class AboutFrame extends JFrame
 		setLayout(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
 
-		JLabel frontPageImage = new JLabel(GuiUtility.createImageIcon(300, 200, "/front_page_image.jpeg"));
-		JLabel piecePicture = new JLabel(GuiUtility.createImageIcon(48, 48, "/d_King.png"));
+		JLabel frontPageImage = null;
+		JLabel piecePicture = null;
+		try
+		{
+			frontPageImage = new JLabel(GuiUtility.createImageIcon(300, 200, "/front_page_image.jpeg"));
+			piecePicture = new JLabel(GuiUtility.createImageIcon(48, 48, "/d_King.png"));
+		}
+		catch (IOException e1)
+		{
+			e1.printStackTrace();
+		}
 
 		Font font = new Font("Verdana", Font.BOLD, 18);
 		JLabel title = new JLabel(AppConstants.APP_NAME + "\n");

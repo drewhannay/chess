@@ -18,6 +18,7 @@ import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 
 import javax.swing.BorderFactory;
@@ -154,24 +155,35 @@ public final class Driver extends JFrame implements ChessCrafter
 		// home screen image
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weightx = 0.0;
-		c.gridwidth = 3;
+		c.gridwidth = 4;
 		c.gridx = 0;
 		c.gridy = 0;
-		mMainPanel.add(new JLabel(GuiUtility.createImageIcon(300, 200, FileUtility.getImagePath("chess_logo.png", true))), c);
+		try
+		{
+			mMainPanel.add(new JLabel(GuiUtility.createImageIcon(300, 200, FileUtility.getImagePath("chess_logo.png", true))), c);
+		}
+		catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		// new game
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.gridy = 1;
-		c.gridwidth = 2;
+		c.gridwidth = 1;
 		mMainPanel.add(createNewGameButton(), c);
 
 		//open variant menu
 		c.gridx = 2;
 		c.gridy = 1;
-		c.gridwidth = 1;
 		mMainPanel.add(variantMenuButton(), c);
 
+		c.gridx = 3;
+		c.gridy = 1;
+		mMainPanel.add(pieceMenuButton(), c);
+		
 		// continue
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
@@ -187,6 +199,22 @@ public final class Driver extends JFrame implements ChessCrafter
 
 		add(mMainPanel);
 		setVisible(true);
+	}
+
+	private JButton pieceMenuButton()
+	{
+		JButton pieceButton = new JButton("Pieces");
+		pieceButton.setToolTipText("Create, edit, or remove custom pieces.");
+		pieceButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				setPanel(new PieceMenuPanel());
+			}
+		});
+
+		return pieceButton;
 	}
 
 	private void activateWindowListener()
@@ -523,7 +551,7 @@ public final class Driver extends JFrame implements ChessCrafter
 	private JButton createViewCompletedGamesButton()
 	{
 
-		JButton viewCompletedGameButton = new JButton("View Completed Games");
+		JButton viewCompletedGameButton = new JButton("Completed Games");
 		viewCompletedGameButton.setToolTipText("Review a finished game");
 		viewCompletedGameButton.addActionListener(new ActionListener()
 		{
@@ -744,7 +772,7 @@ public final class Driver extends JFrame implements ChessCrafter
 	
 	@Override
 	public void setPanel(Object newPanel) {
-			setPanel(newPanel);
+			setPanel((JPanel) newPanel);
 	}
 	
 	private static Double s_screenWidth;

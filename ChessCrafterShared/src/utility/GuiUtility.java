@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -68,26 +69,18 @@ public final class GuiUtility
 		});
 	}
 
-	public static ImageIcon createImageIcon(int imageWidth, int imageHeight, String imageLocation)
+	public static ImageIcon createImageIcon(int imageWidth, int imageHeight, String imageLocation) throws IOException
 	{
 		return createImageIcon(imageWidth, imageHeight, imageLocation, true);
 	}
 
-	public static ImageIcon createImageIcon(int imageWidth, int imageHeight, String imageLocation, boolean isBuiltInFile)
+	public static ImageIcon createImageIcon(int imageWidth, int imageHeight, String imageLocation, boolean isBuiltInFile) throws IOException
 	{
-		try
-		{
 			BufferedImage bufferedImage = ImageIO.read(new File(imageLocation));
 
 			ImageIcon imageIcon = new ImageIcon(bufferedImage);
 			imageIcon.setImage(imageIcon.getImage().getScaledInstance(imageWidth, imageHeight, Image.SCALE_SMOOTH));
 			return imageIcon;
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			return null;
-		}
 	}
 	
 	public static boolean tryAIFileInstall(Component parent)
