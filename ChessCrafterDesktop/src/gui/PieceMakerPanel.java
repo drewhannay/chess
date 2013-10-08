@@ -11,6 +11,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -28,26 +29,63 @@ import javax.swing.JTextField;
 import javax.swing.filechooser.FileFilter;
 
 import logic.PieceBuilder;
+import utility.FileUtility;
 import utility.GuiUtility;
 import utility.ImageUtility;
 
 public class PieceMakerPanel extends JPanel
 {
-	public PieceMakerPanel(CustomSetupPanel customSetupMenu, JFrame optionsFrame)
+	public PieceMakerPanel(PieceMenuPanel menuPanel)
 	{
-		mFrame = optionsFrame;
-		mFrame.setVisible(true);
-		mFrame.add(this);
-		mFrame.setVisible(true);
-		mFrame.setSize(400, 600);
-		mFrame.setLocationRelativeTo(Driver.getInstance());
-		PieceBuilder.initPieceTypes();
-		initGUIComponents(customSetupMenu);
+		mLeaperCheckBox = new JCheckBox("Can jump other Pieces", false);
+		mPieceNameField = new JTextField(15);
+		mKnightMovementsCheckBox = new JCheckBox("Knight-like Movements", false);
+		mNorthField = new JTextField(4);
+		mNorthEastField = new JTextField(4);
+		mEastField = new JTextField(4); 
+		mSouthEastField = new JTextField(4);
+		mSouthField = new JTextField(4);
+		mSouthWestField = new JTextField(4);
+		mWestField = new JTextField(4);
+		mNorthWestField = new JTextField(4);
+		mKnightOneField = new JTextField(4);
+		mKnightTwoField = new JTextField(4);
+		new PieceMakerPanel(null, menuPanel);
 	}
 
-	private void initGUIComponents(final CustomSetupPanel customSetupMenu)
+	public PieceMakerPanel(String pieceName, PieceMenuPanel menuPanel)
 	{
-		mBuilder = new PieceBuilder();
+		mPieceMenuPanel = menuPanel;
+		mFrame = new JFrame("Piece Editor");
+		mFrame.add(this);
+		mFrame.setSize(400, 600);
+		mFrame.setLocationRelativeTo(Driver.getInstance());
+		mLeaperCheckBox = new JCheckBox("Can jump other Pieces", false);
+		mKnightMovementsCheckBox = new JCheckBox("Knight-like Movements", false);
+		mPieceNameField = new JTextField(15);
+		mNorthField = new JTextField(4);
+		mNorthEastField = new JTextField(4);
+		mEastField = new JTextField(4); 
+		mSouthEastField = new JTextField(4);
+		mSouthField = new JTextField(4);
+		mSouthWestField = new JTextField(4);
+		mWestField = new JTextField(4);
+		mNorthWestField = new JTextField(4);
+		mKnightOneField = new JTextField(4);
+		mKnightTwoField = new JTextField(4);
+		PieceBuilder.initPieceTypes();
+		PieceBuilder builder = null;
+		if (pieceName != null)
+			builder = PieceBuilder.loadFromDisk(pieceName);
+		initGUIComponents(builder);
+	}
+
+	private void initGUIComponents(PieceBuilder builder)
+	{
+		if (builder == null)
+			mBuilder = new PieceBuilder();
+		else
+			mBuilder = builder;
 
 		setSize(550, 875);
 		setLayout(new GridBagLayout());
@@ -61,22 +99,43 @@ public class PieceMakerPanel extends JPanel
 		namePanel.setLayout(new FlowLayout());
 
 		namePanel.add(new JLabel("Piece Name:"));
-		final JTextField pieceNameField = new JTextField(15);
-		pieceNameField.setToolTipText("Enter the name of the new piece here");
-		GuiUtility.requestFocus(pieceNameField);
-		namePanel.add(pieceNameField);
+		mPieceNameField.setToolTipText("Enter the name of the new piece here");
+		if (builder != null)
+			mPieceNameField.setText(builder.getName());
+		GuiUtility.requestFocus(mPieceNameField);
+		namePanel.add(mPieceNameField);
 
 		constraints.gridx = 0;
 		constraints.gridy = 0;
 		pieceCreationPanel.add(namePanel, constraints);
 
-		final ImageIcon blankSquare = new ImageIcon("./images/WhiteSquare.gif");
+		final ImageIcon blankSquare = new ImageIcon(FileUtility.getImagePath("WhiteSquare.gif", true));
 		blankSquare.setImage(blankSquare.getImage().getScaledInstance(48, 48, Image.SCALE_SMOOTH));
 		final JPanel lightIconPanel = new JPanel();
 		lightIconPanel.setLayout(new FlowLayout());
 		final JLabel lightIconLabel = new JLabel();
 		lightIconLabel.setSize(48, 48);
-		lightIconLabel.setIcon(blankSquare);
+		try
+		{
+			lightIconLabel.setIcon(builder == null ? blankSquare : ImageUtility.getLightImage(builder.getName()));
+		}
+		catch (IOException e3)
+		{
+			// TODO Auto-generated catch block
+			e3.printStackTrace();
+		}
+
+		if (builder != null)
+		{
+			try
+			{
+				mLightImage = ImageIO.read(new File(FileUtility.getImagePath("l_" + builder.getName() + ".png", false)));
+			}
+			catch (IOException e1)
+			{
+				e1.printStackTrace();
+			}
+		}
 
 		final JButton lightImageButton = new JButton("Choose image for light piece");
 		lightImageButton.setToolTipText("Click me to choose an Light Colored Icon for this piece");
@@ -92,7 +151,19 @@ public class PieceMakerPanel extends JPanel
 		darkIconPanel.setLayout(new FlowLayout());
 		final JLabel darkIconLabel = new JLabel();
 		darkIconLabel.setSize(48, 48);
-		darkIconLabel.setIcon(blankSquare);
+		darkIconLabel.setIcon(builder == null ? blankSquare : ImageUtility.getDarkImage(builder.getName()));
+
+		if (builder != null)
+		{
+			try
+			{
+				mDarkImage = ImageIO.read(new File(FileUtility.getImagePath("d_" + builder.getName() + ".png", false)));
+			}
+			catch (IOException e1)
+			{
+				e1.printStackTrace();
+			}
+		}
 
 		final JButton darkImageButton = new JButton("Choose image for dark piece");
 		darkImageButton.setToolTipText("Click me to choose an Dark Colored Icon for this piece");
@@ -104,35 +175,40 @@ public class PieceMakerPanel extends JPanel
 		constraints.gridy = 2;
 		pieceCreationPanel.add(darkIconPanel, constraints);
 
+		//TODO: What is this? I don't think we use it, and I can't imagine needing it...
 		final JComboBox dropdown = new JComboBox(DIRECTIONS);
 		dropdown.setToolTipText("This dropdown has all of the valid directions you can still set movement for");
 
-		final JTextField northField = new JTextField(4);
-		northField.setToolTipText("North");
-		northField.setText("0");
-		final JTextField northEastField = new JTextField(4);
-		northEastField.setToolTipText("Northeast");
-		northEastField.setText("0");
-		final JTextField northWestField = new JTextField(4);
-		northWestField.setToolTipText("Northwest");
-		northWestField.setText("0");
-		final JTextField eastField = new JTextField(4);
-		eastField.setToolTipText("East");
-		eastField.setText("0");
-		final JTextField southEastField = new JTextField(4);
-		southEastField.setToolTipText("Southeast");
-		southEastField.setText("0");
-		final JTextField southField = new JTextField(4);
-		southField.setToolTipText("South");
-		southField.setText("0");
-		final JTextField southWestField = new JTextField(4);
-		southWestField.setToolTipText("Southwest");
-		southWestField.setText("0");
-		final JTextField westField = new JTextField(4);
-		westField.setToolTipText("West");
-		westField.setText("0");
+		Map<Character, Integer> moveMap = builder == null ? null : builder.getMovements();
 
-		JLabel movementPictureHolder = new JLabel(GuiUtility.createImageIcon(130, 130, "/movement_directions.png"));
+		mNorthField.setToolTipText("North");
+		mNorthField.setText(builder == null ? "0" : "" + moveMap.get(PieceBuilder.NORTH));
+		mNorthEastField.setToolTipText("Northeast");
+		mNorthEastField.setText(builder == null ? "0" : "" + moveMap.get(PieceBuilder.NORTHEAST));
+		mNorthWestField.setToolTipText("Northwest");
+		mNorthWestField.setText(builder == null ? "0" : "" + moveMap.get(PieceBuilder.NORTHWEST));
+		mEastField.setToolTipText("East");
+		mEastField.setText(builder == null ? "0" : "" + moveMap.get(PieceBuilder.EAST));
+		mSouthEastField.setToolTipText("Southeast");
+		mSouthEastField.setText(builder == null ? "0" : "" + moveMap.get(PieceBuilder.SOUTHEAST));
+		mSouthField.setToolTipText("South");
+		mSouthField.setText(builder == null ? "0" : "" + moveMap.get(PieceBuilder.SOUTH));
+		mSouthWestField.setToolTipText("Southwest");
+		mSouthWestField.setText(builder == null ? "0" : "" + moveMap.get(PieceBuilder.SOUTHWEST));
+		mWestField.setToolTipText("West");
+		mWestField.setText(builder == null ? "0" : "" + moveMap.get(PieceBuilder.WEST));
+
+		JLabel movementPictureHolder = null;
+		try
+		{
+			movementPictureHolder = new JLabel(GuiUtility.createImageIcon(130, 130,
+					FileUtility.getImagePath("movement_directions.png", true)));
+		}
+		catch (IOException e1)
+		{
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
 		JPanel movement = new JPanel();
 		movement.setLayout(new GridBagLayout());
@@ -141,67 +217,83 @@ public class PieceMakerPanel extends JPanel
 		constraints.gridy = 0;
 		constraints.weightx = 1;
 		constraints.anchor = GridBagConstraints.EAST;
-		movement.add(northWestField, constraints);
+		movement.add(mNorthWestField, constraints);
 		constraints.gridx = 1;
 		constraints.anchor = GridBagConstraints.CENTER;
-		movement.add(northField, constraints);
+		movement.add(mNorthField, constraints);
 		constraints.gridx = 2;
 		constraints.anchor = GridBagConstraints.WEST;
-		movement.add(northEastField, constraints);
+		movement.add(mNorthEastField, constraints);
 		constraints.gridx = 0;
 		constraints.gridy = 1;
 		constraints.anchor = GridBagConstraints.EAST;
-		movement.add(westField, constraints);
+		movement.add(mWestField, constraints);
 		constraints.gridx = 1;
 		constraints.anchor = GridBagConstraints.CENTER;
 		movement.add(movementPictureHolder, constraints);
 		constraints.gridx = 2;
 		constraints.anchor = GridBagConstraints.WEST;
-		movement.add(eastField, constraints);
+		movement.add(mEastField, constraints);
 		constraints.gridx = 0;
 		constraints.gridy = 2;
 		constraints.anchor = GridBagConstraints.EAST;
-		movement.add(southWestField, constraints);
+		movement.add(mSouthWestField, constraints);
 		constraints.gridx = 1;
 		constraints.anchor = GridBagConstraints.CENTER;
-		movement.add(southField, constraints);
+		movement.add(mSouthField, constraints);
 		constraints.gridx = 2;
 		constraints.anchor = GridBagConstraints.WEST;
-		movement.add(southEastField, constraints);
+		movement.add(mSouthEastField, constraints);
 
 		final JTextField distanceField = new JTextField(3);
 		distanceField.setToolTipText("Greatest amount of spaces piece can travel in chosen direction");
 
-		final JTextField firstKnightDirectionField = new JTextField(2);
-		firstKnightDirectionField.setToolTipText("Enter the knight-like directions you would like");
-		firstKnightDirectionField.setEnabled(false);
+		mKnightOneField.setToolTipText("Enter the knight-like directions you would like");
 
-		final JTextField secondKnightDirectionField = new JTextField(2);
-		secondKnightDirectionField.setToolTipText("Enter the other direction for the knight-like piece");
-		secondKnightDirectionField.setEnabled(false);
+		mKnightTwoField.setToolTipText("Enter the other direction for the knight-like piece");
+		mKnightTwoField.setEnabled(false);
 
-		final JCheckBox knightMovementsCheckBox = new JCheckBox("Knight-like Movements", false);
-		knightMovementsCheckBox.setToolTipText("Press me to turn on Knight-Like Movements for this piece");
-		knightMovementsCheckBox.addActionListener(new ActionListener()
+		if (builder == null)
+		{
+			mKnightOneField.setEnabled(false);
+			mKnightTwoField.setEnabled(false);
+		}
+		else
+		{
+			mKnightOneField.setEnabled(builder.getIsKnightLike());
+			if (mKnightOneField.isEnabled())
+				mKnightOneField.setText(builder.getMovements().get(PieceBuilder.KNIGHT_ONE)+"");
+			mKnightTwoField.setEnabled(builder.getIsKnightLike());
+			if (mKnightTwoField.isEnabled())
+				mKnightTwoField.setText(builder.getMovements().get(PieceBuilder.KNIGHT_TWO)+"");
+		}
+		
+		mKnightMovementsCheckBox.setToolTipText("Press me to turn on Knight-Like Movements for this piece");
+
+		if (builder != null)
+			mKnightMovementsCheckBox.setSelected(builder.getIsKnightLike());
+
+		mKnightMovementsCheckBox.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent event)
 			{
-				mIsKnightLikePiece = !mIsKnightLikePiece;
-				firstKnightDirectionField.setEnabled(mIsKnightLikePiece);
-				secondKnightDirectionField.setEnabled(mIsKnightLikePiece);
+				mKnightOneField.setEnabled(mKnightMovementsCheckBox.isSelected());
+				mKnightTwoField.setEnabled(mKnightMovementsCheckBox.isSelected());
 			}
 		});
 
-		final JCheckBox leaperCheckBox = new JCheckBox("Can jump other Pieces", false);
-		leaperCheckBox.setToolTipText("Press me to allow this piece to jump others");
+		
+		mLeaperCheckBox.setToolTipText("Press me to allow this piece to jump others");
+		if (builder != null)
+			mLeaperCheckBox.setSelected(builder.canJump());
 
 		final JPanel knightMovementPanel = new JPanel();
 		knightMovementPanel.setToolTipText("Use me to set up Knight Like Movements. See Variant Help for instructions");
 		knightMovementPanel.setLayout(new FlowLayout());
-		knightMovementPanel.add(firstKnightDirectionField);
+		knightMovementPanel.add(mKnightOneField);
 		knightMovementPanel.add(new JLabel("x"));
-		knightMovementPanel.add(secondKnightDirectionField);
+		knightMovementPanel.add(mKnightTwoField);
 
 		JPanel movementPanel = new JPanel();
 		movementPanel.setLayout(new BoxLayout(movementPanel, BoxLayout.Y_AXIS));
@@ -220,11 +312,11 @@ public class PieceMakerPanel extends JPanel
 		constraints.insets = new Insets(5, 0, 0, 0);
 		constraints.gridx = 0;
 		constraints.gridy = 5;
-		movementPanel.add(leaperCheckBox, constraints);
+		movementPanel.add(mLeaperCheckBox, constraints);
 		constraints.insets = new Insets(5, 0, 0, 0);
 		constraints.gridx = 0;
 		constraints.gridy = 6;
-		movementPanel.add(knightMovementsCheckBox, constraints);
+		movementPanel.add(mKnightMovementsCheckBox, constraints);
 		constraints.insets = new Insets(5, 0, 5, 0);
 		constraints.gridx = 0;
 		constraints.gridy = 7;
@@ -237,41 +329,41 @@ public class PieceMakerPanel extends JPanel
 		constraints.gridy = 5;
 		pieceCreationPanel.add(movementPanel, constraints);
 
-		final JButton savePieceButton = new JButton("Save Piece");
-		savePieceButton.setToolTipText("Press me to save this Piece type");
+		final JButton savePieceButton = new JButton("Save and Return");
+		savePieceButton.setToolTipText("Press to save this Piece type");
 		savePieceButton.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent event)
 			{
-				String pieceName = pieceNameField.getText().trim();
-				if (pieceName.isEmpty() || PieceBuilder.isPieceType(pieceNameField.getText()))
+				String pieceName = mPieceNameField.getText().trim();
+				if (pieceName.isEmpty() || PieceBuilder.isPieceType(mPieceNameField.getText()))
 				{
 					JOptionPane.showMessageDialog(Driver.getInstance(), "Please enter a unique piece name.", "Invalid Piece Name",
 							JOptionPane.PLAIN_MESSAGE);
 					return;
 				}
 
-				if (isIntegerDistance(northField) && isIntegerDistance(northEastField) && isIntegerDistance(northWestField)
-						&& isIntegerDistance(eastField) && isIntegerDistance(westField) && isIntegerDistance(southField)
-						&& isIntegerDistance(southEastField) && isIntegerDistance(southWestField))
+				if (isIntegerDistance(mNorthField) && isIntegerDistance(mNorthEastField) && isIntegerDistance(mNorthWestField)
+						&& isIntegerDistance(mEastField) && isIntegerDistance(mWestField) && isIntegerDistance(mSouthField)
+						&& isIntegerDistance(mSouthEastField) && isIntegerDistance(mSouthWestField))
 				{
-					mBuilder.addMove('N', Integer.parseInt(northField.getText()));
-					mBuilder.addMove('R', Integer.parseInt(northEastField.getText()));
-					mBuilder.addMove('L', Integer.parseInt(northWestField.getText()));
-					mBuilder.addMove('E', Integer.parseInt(eastField.getText()));
-					mBuilder.addMove('W', Integer.parseInt(westField.getText()));
-					mBuilder.addMove('S', Integer.parseInt(southField.getText()));
-					mBuilder.addMove('r', Integer.parseInt(southEastField.getText()));
-					mBuilder.addMove('l', Integer.parseInt(southWestField.getText()));
+					mBuilder.addMove(PieceBuilder.NORTH, Integer.parseInt(mNorthField.getText()));
+					mBuilder.addMove(PieceBuilder.NORTHEAST, Integer.parseInt(mNorthEastField.getText()));
+					mBuilder.addMove(PieceBuilder.NORTHWEST, Integer.parseInt(mNorthWestField.getText()));
+					mBuilder.addMove(PieceBuilder.EAST, Integer.parseInt(mEastField.getText()));
+					mBuilder.addMove(PieceBuilder.WEST, Integer.parseInt(mWestField.getText()));
+					mBuilder.addMove(PieceBuilder.SOUTH, Integer.parseInt(mSouthField.getText()));
+					mBuilder.addMove(PieceBuilder.SOUTHEAST, Integer.parseInt(mSouthEastField.getText()));
+					mBuilder.addMove(PieceBuilder.SOUTHWEST, Integer.parseInt(mSouthWestField.getText()));
 				}
 
-				if (firstKnightDirectionField.isEnabled())
+				if (mKnightOneField.isEnabled())
 				{
-					if (isIntegerDistance(firstKnightDirectionField) && isIntegerDistance(secondKnightDirectionField))
+					if (isIntegerDistance(mKnightOneField) && isIntegerDistance(mKnightTwoField))
 					{
-						mBuilder.addMove('x', Integer.parseInt(firstKnightDirectionField.getText()));
-						mBuilder.addMove('y', Integer.parseInt(secondKnightDirectionField.getText()));
+						mBuilder.addMove(PieceBuilder.KNIGHT_ONE, Integer.parseInt(mKnightOneField.getText()));
+						mBuilder.addMove(PieceBuilder.KNIGHT_TWO, Integer.parseInt(mKnightTwoField.getText()));
 					}
 				}
 
@@ -282,76 +374,119 @@ public class PieceMakerPanel extends JPanel
 				}
 				catch (Exception e)
 				{
-					JOptionPane.showMessageDialog(Driver.getInstance(), "Cannot write image files..did you remember to set both images?", "Image Error",
-							JOptionPane.PLAIN_MESSAGE);
+					JOptionPane.showMessageDialog(Driver.getInstance(),
+							"Cannot write image files. Did you remember to set both images?", "Image Error", JOptionPane.PLAIN_MESSAGE);
 					return;
 				}
 
 				mBuilder.setName(pieceName);
+				mBuilder.setCanJump(mLeaperCheckBox.isSelected());
+				mBuilder.setIsKnightLike(mKnightMovementsCheckBox.isSelected());
 				PieceBuilder.savePieceType(mBuilder);
-
-				mBuilder = new PieceBuilder();
-				pieceNameField.setText("");
-				lightIconLabel.setIcon(blankSquare);
-				darkIconLabel.setIcon(blankSquare);
-				distanceField.setText("");
-				leaperCheckBox.setSelected(false);
-				knightMovementsCheckBox.setSelected(false);
-				firstKnightDirectionField.setText("");
-				firstKnightDirectionField.setEnabled(false);
-				secondKnightDirectionField.setText("");
-				secondKnightDirectionField.setEnabled(false);
-				mIsKnightLikePiece = false;
-				dropdown.removeAllItems();
-				for (int i = 0; i < DIRECTIONS.length; i++)
-					dropdown.addItem(DIRECTIONS[i]);
+				PieceBuilder.writeToDisk(mBuilder);
+				
+				mFrame.dispose();
+				mPieceMenuPanel.refreshList();
+				PieceMakerPanel.this.removeAll();
 			}
 		});
 
-		final JButton doneButton = new JButton("Done");
-		doneButton.setToolTipText("Press me when you have made all of your pieces");
-		doneButton.addActionListener(new ActionListener()
+		final JButton cancelButton = new JButton("Cancel");
+		cancelButton.setToolTipText("Press to return without saving.");
+		cancelButton.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent event)
 			{
-				if (pieceNameField.getText().trim().isEmpty())
+				if (mPieceNameField.getText().trim().isEmpty())
 				{
-					customSetupMenu.setupPiecesList();
+					mFrame.dispose();
 					PieceMakerPanel.this.removeAll();
-					mFrame.setVisible(false);
 				}
 				else
 				{
-					switch (JOptionPane.showConfirmDialog(Driver.getInstance(),
-							"If you continue the piece you are working on will not be saved. Continue?", "Piece Maker",
-							JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE))
+					if (hasChanged())
 					{
-					case JOptionPane.YES_OPTION:
-						customSetupMenu.setupPiecesList();
+						switch (JOptionPane.showConfirmDialog(Driver.getInstance(),
+								"If you continue, the piece you are working on will not be saved. Continue?", "Piece Maker",
+								JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE))
+						{
+						case JOptionPane.YES_OPTION:
+							mFrame.dispose();
+							PieceMakerPanel.this.removeAll();
+							break;
+						case JOptionPane.NO_OPTION:
+							break;
+						}	
+					}
+					else
+					{
+						mFrame.dispose();
 						PieceMakerPanel.this.removeAll();
-						mFrame.setVisible(false);
-						break;
-					case JOptionPane.NO_OPTION:
-						break;
 					}
 				}
 			}
 		});
-
-		constraints.gridx = 0;
-		constraints.gridy = 7;
-		pieceCreationPanel.add(savePieceButton, constraints);
-
+		
 		constraints.gridx = 0;
 		constraints.gridy = 0;
 		add(pieceCreationPanel, constraints);
 
+		constraints.gridwidth = 1;
 		constraints.gridx = 0;
-		constraints.gridy = 1;
-		add(doneButton, constraints);
+		constraints.gridy = 7;
+		add(cancelButton, constraints);
 
+		
+		constraints.gridx = 1;
+		constraints.gridy = 7;
+		add(savePieceButton, constraints);
+		
+		mFrame.setVisible(true);
 		mFrame.pack();
+	}
+
+	protected boolean hasChanged()
+	{
+		boolean changed = false;
+		if (mBuilder != null)
+		{
+			try
+			{
+			if (mBuilder.canJump() != mLeaperCheckBox.isSelected())
+				changed = true;
+			if (!mBuilder.getName().equals(mPieceNameField.getText()))
+				changed = true;
+			if (mBuilder.getIsKnightLike() != mKnightMovementsCheckBox.isSelected())
+				changed = true;
+			Map<Character, Integer> moveMap = mBuilder.getMovements();
+			if (!mNorthField.getText().equals(moveMap.get(PieceBuilder.NORTH)+""))
+					changed = true;
+			if (!mNorthEastField.getText().equals(moveMap.get(PieceBuilder.NORTHEAST)+""))
+				changed = true;
+			if (!mNorthWestField.getText().equals(moveMap.get(PieceBuilder.NORTHWEST)+""))
+				changed = true;
+			if (!mEastField.getText().equals(moveMap.get(PieceBuilder.EAST)+""))
+				changed = true;
+			if (!mSouthEastField.getText().equals(moveMap.get(PieceBuilder.SOUTHEAST)+""))
+				changed = true;
+			if (!mSouthField.getText().equals(moveMap.get(PieceBuilder.SOUTH)+""))
+				changed = true;
+			if (!mSouthWestField.getText().equals(moveMap.get(PieceBuilder.SOUTHWEST)+""))
+				changed = true;
+			if (!mWestField.getText().equals(moveMap.get(PieceBuilder.WEST)+""))
+				changed = true;
+			if (mKnightOneField.isEnabled() && !mKnightOneField.getText().equals(moveMap.get(PieceBuilder.KNIGHT_ONE)+""))
+				changed = true;
+			if (mKnightTwoField.isEnabled() && !mKnightTwoField.getText().equals(moveMap.get(PieceBuilder.KNIGHT_TWO)+""))
+				changed = true;
+			}
+			catch (Exception e)
+			{
+				return true;
+			}
+		}
+		return changed;
 	}
 
 	private boolean isIntegerDistance(JTextField textField)
@@ -363,8 +498,9 @@ public class PieceMakerPanel extends JPanel
 		}
 		catch (Exception e)
 		{
-			JOptionPane.showMessageDialog(Driver.getInstance(), "All movement distances must be whole numbers. Please enter a number in the "
-					+ textField.getToolTipText() + " direction box.", "Error", JOptionPane.PLAIN_MESSAGE);
+			JOptionPane.showMessageDialog(Driver.getInstance(),
+					"All movement distances must be whole numbers. Please enter a number in the " + textField.getToolTipText()
+							+ " direction box.", "Error", JOptionPane.PLAIN_MESSAGE);
 			return false;
 		}
 	}
@@ -394,12 +530,12 @@ public class PieceMakerPanel extends JPanel
 					{
 						return "PNG Files";
 					}
-					
+
 					@Override
 					public boolean accept(File f)
 					{
 						if (f.isDirectory() || f.getName().endsWith(".png"))
-                            return true;
+							return true;
 						else
 							return false;
 					}
@@ -422,7 +558,8 @@ public class PieceMakerPanel extends JPanel
 					}
 					catch (IOException e)
 					{
-						// TODO we should show the user an error message if this fails
+						// TODO we should show the user an error message if this
+						// fails
 						e.printStackTrace();
 					}
 				}
@@ -462,8 +599,21 @@ public class PieceMakerPanel extends JPanel
 	private static final String[] DIRECTIONS = new String[] { "North", "Northeast", "East", "Southeast", "South", "Southwest", "West",
 			"Northwest" };
 
+	private final JCheckBox mKnightMovementsCheckBox;
+	private final JTextField mPieceNameField;
+	private final JCheckBox mLeaperCheckBox;
+	private final JTextField mNorthField;
+	private final JTextField mNorthEastField;
+	private final JTextField mEastField;
+	private final JTextField mSouthEastField;
+	private final JTextField mSouthField;
+	private final JTextField mSouthWestField;
+	private final JTextField mWestField;
+	private final JTextField mNorthWestField;
+	private final JTextField mKnightOneField;
+	private final JTextField mKnightTwoField;
 	private PieceBuilder mBuilder;
-	private boolean mIsKnightLikePiece;
+	private PieceMenuPanel mPieceMenuPanel;
 	private BufferedImage mLightImage;
 	private BufferedImage mDarkImage;
 	private JFrame mFrame;
