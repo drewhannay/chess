@@ -30,12 +30,12 @@ public class PieceBuilder implements Serializable
 	public static void initPieceTypes()
 	{
 		mPieceTypes = Maps.newHashMap();
-		mPieceTypes.put("Pawn", new PieceBuilder("Pawn"));
-		mPieceTypes.put("Rook", new PieceBuilder("Rook"));
-		mPieceTypes.put("Bishop", new PieceBuilder("Bishop"));
-		mPieceTypes.put("Knight", new PieceBuilder("Knight"));
-		mPieceTypes.put("Queen", new PieceBuilder("Queen"));
-		mPieceTypes.put("King", new PieceBuilder("King"));
+		mPieceTypes.put(Messages.getString("pawn"), new PieceBuilder(Messages.getString("pawn"))); //$NON-NLS-1$ //$NON-NLS-2$
+		mPieceTypes.put(Messages.getString("rook"), new PieceBuilder(Messages.getString("rook"))); //$NON-NLS-1$ //$NON-NLS-2$
+		mPieceTypes.put(Messages.getString("bishop"), new PieceBuilder(Messages.getString("bishop"))); //$NON-NLS-1$ //$NON-NLS-2$
+		mPieceTypes.put(Messages.getString("knight"), new PieceBuilder(Messages.getString("knight"))); //$NON-NLS-1$ //$NON-NLS-2$
+		mPieceTypes.put(Messages.getString("queen"), new PieceBuilder(Messages.getString("queen"))); //$NON-NLS-1$ //$NON-NLS-2$
+		mPieceTypes.put(Messages.getString("king"), new PieceBuilder(Messages.getString("king"))); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**
@@ -170,17 +170,17 @@ public class PieceBuilder implements Serializable
 	private Piece makePiece(boolean isBlack, Square origin, Board board) throws IOException
 	{
 		// TODO is it worth using reflection to get rid of that if/else?
-		if (mName.equals("Bishop"))
+		if (mName.equals(Messages.getString("bishop"))) //$NON-NLS-1$
 			return Builder.createBishop(isBlack, origin, board);
-		if (mName.equals("King"))
+		if (mName.equals(Messages.getString("king"))) //$NON-NLS-1$
 			return Builder.createKing(isBlack, origin, board);
-		if (mName.equals("Knight"))
+		if (mName.equals(Messages.getString("knight"))) //$NON-NLS-1$
 			return Builder.createKnight(isBlack, origin, board);
-		if (mName.equals("Pawn"))
+		if (mName.equals(Messages.getString("pawn"))) //$NON-NLS-1$
 			return Builder.createPawn(isBlack, origin, board);
-		if (mName.equals("Queen"))
+		if (mName.equals(Messages.getString("queen"))) //$NON-NLS-1$
 			return Builder.createQueen(isBlack, origin, board);
-		if (mName.equals("Rook"))
+		if (mName.equals(Messages.getString("rook"))) //$NON-NLS-1$
 			return Builder.createRook(isBlack, origin, board);
 		else
 			return new Piece(mName, isBlack, origin, board, mMovements);

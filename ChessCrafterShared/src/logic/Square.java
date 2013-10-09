@@ -20,7 +20,7 @@ public class Square extends JLabel implements Serializable
 	{
 		try
 		{
-			s_uninhabitableIcon = GuiUtility.createImageIcon(48, 48, FileUtility.getImagePath("Uninhabitable.png", true));
+			s_uninhabitableIcon = GuiUtility.createImageIcon(48, 48, FileUtility.getImagePath("Uninhabitable.png", true)); //$NON-NLS-1$
 		}
 
 		catch (IOException ioe)
@@ -97,7 +97,7 @@ public class Square extends JLabel implements Serializable
 		else
 		{// If there's no Piece, clear the Icon and Text of the Square.
 			setIcon(null);
-			setText("");
+			setText(""); //$NON-NLS-1$
 		}
 		resetColor();// Then reset the color too.
 	}
@@ -124,7 +124,7 @@ public class Square extends JLabel implements Serializable
 		else
 		{// If there's no Piece, clear the Icon and Text of the Square.
 			setIcon(null);
-			setText("");
+			setText(""); //$NON-NLS-1$
 		}
 		resetColor();// Then reset the color too.
 	}
@@ -225,8 +225,8 @@ public class Square extends JLabel implements Serializable
 	 */
 	public String toString(boolean[] unique)
 	{
-		String files = "-abcdefgh";
-		String toReturn = "";
+		String files = "-abcdefgh"; //$NON-NLS-1$
+		String toReturn = ""; //$NON-NLS-1$
 
 		if (!unique[0])
 			toReturn += files.charAt(mColumn);

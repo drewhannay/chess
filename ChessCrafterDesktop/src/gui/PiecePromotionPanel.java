@@ -82,7 +82,7 @@ public class PiecePromotionPanel extends JPanel
 				}
 			}
 		});
-		moveLeftButton.setText("<---");
+		moveLeftButton.setText("<---"); //$NON-NLS-1$
 
 		final JButton moveRightButton = new JButton();
 		moveRightButton.addActionListener(new ActionListener()
@@ -103,7 +103,7 @@ public class PiecePromotionPanel extends JPanel
 
 			}
 		});
-		moveRightButton.setText("--->");
+		moveRightButton.setText("--->"); //$NON-NLS-1$
 
 		cantPromoteToDisplay.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		cantPromoteToDisplay.setLayoutOrientation(JList.VERTICAL);
@@ -170,7 +170,7 @@ public class PiecePromotionPanel extends JPanel
 				}
 			}
 		});
-		JButton saveButton = new JButton("Save");
+		JButton saveButton = new JButton(Messages.getString("PiecePromotionPanel.save")); //$NON-NLS-1$
 		saveButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -186,7 +186,7 @@ public class PiecePromotionPanel extends JPanel
 			}
 
 		});
-		JButton cancelButton = new JButton("Cancel");
+		JButton cancelButton = new JButton(Messages.getString("PiecePromotionPanel.cancel")); //$NON-NLS-1$
 		GuiUtility.setupVariantCancelButton(cancelButton, this, mFrame);
 
 		JPanel optionsPanel = new JPanel();
@@ -209,7 +209,7 @@ public class PiecePromotionPanel extends JPanel
 		constraints.gridx = 0;
 		constraints.gridy = 0;
 		constraints.insets = new Insets(10, 0, 10, 0);
-		add(new JLabel("<HTML><b>Can't Promote To</b></HTML>"), constraints);
+		add(new JLabel(Messages.getString("PiecePromotionPanel.cantPromoteHTML")), constraints); //$NON-NLS-1$
 		constraints.gridx = 0;
 		constraints.gridy = 1;
 		constraints.insets = new Insets(0, 10, 10, 0);
@@ -221,7 +221,7 @@ public class PiecePromotionPanel extends JPanel
 		constraints.gridx = 2;
 		constraints.gridy = 0;
 		constraints.insets = new Insets(10, 0, 10, 0);
-		add(new JLabel("<HTML><b>Can Promote To</b></HTML>"), constraints);
+		add(new JLabel(Messages.getString("PiecePromotionPanel.canPromoteHTML")), constraints); //$NON-NLS-1$
 		constraints.gridx = 2;
 		constraints.gridy = 1;
 		constraints.insets = new Insets(0, 0, 10, 10);

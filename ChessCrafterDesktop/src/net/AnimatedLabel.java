@@ -11,7 +11,7 @@ public class AnimatedLabel extends JLabel implements Runnable
 {
 	public AnimatedLabel()
 	{
-		setText("Waiting");
+		setText(Messages.getString("AnimatedLabel.noDot")); //$NON-NLS-1$
 		new Thread(this).start();
 	}
 
@@ -28,15 +28,15 @@ public class AnimatedLabel extends JLabel implements Runnable
 			mStringIndex++;
 			if (mStringIndex == 1)
 			{
-				setText("Waiting. ");
+				setText(Messages.getString("AnimatedLabel.oneDot")); //$NON-NLS-1$
 			}
 			else if (mStringIndex == 2)
 			{
-				setText("Waiting.. ");
+				setText(Messages.getString("AnimatedLabel.twoDots")); //$NON-NLS-1$
 			}
 			else
 			{
-				setText("Waiting... ");
+				setText(Messages.getString("AnimatedLabel.threeDots")); //$NON-NLS-1$
 				mStringIndex = 0;
 			}
 			try

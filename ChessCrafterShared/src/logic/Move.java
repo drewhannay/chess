@@ -163,7 +163,7 @@ public class Move implements Serializable
 			break;
 		}
 		if (!board.isLegalMove(this))
-			throw new Exception("Illegal Move");
+			throw new Exception(Messages.getString("illegalMove")); //$NON-NLS-1$
 	}
 
 	/**
@@ -196,7 +196,7 @@ public class Move implements Serializable
 		setDest(dest);
 		this.promo = promo;
 		if (!board.isLegalMove(this))
-			throw new Exception("Illegal Move");
+			throw new Exception(Messages.getString("illegalMove")); //$NON-NLS-1$
 	}
 
 	/**
@@ -241,17 +241,17 @@ public class Move implements Serializable
 		setPiece(origin.getPiece());
 
 		if (!origin.isOccupied())
-			throw new Exception("No Piece to Move");// If there is no Piece to
+			throw new Exception(Messages.getString("noPieceToMove"));// If there is no Piece to //$NON-NLS-1$
 													// Move, get angry.
 
 		if (getPiece().isBlack() != board.isBlackTurn())
-			throw new Exception("Not your turn");
+			throw new Exception(Messages.getString("notYourTurn")); //$NON-NLS-1$
 
 		setCaptured(getDest().getPiece());
 
 		if (board.getGame().isClassicChess())
 		{
-			if (origin.getPiece().getName().equals("Pawn") && getCaptured() == null && origin.getCol() != getDest().getCol())
+			if (origin.getPiece().getName().equals(Messages.getString("pawn")) && getCaptured() == null && origin.getCol() != getDest().getCol()) //$NON-NLS-1$
 			{
 				setCaptured(board.getSquare(origin.getRow(), getDest().getCol()).getPiece());
 			}
@@ -273,13 +273,13 @@ public class Move implements Serializable
 		if (board.getGame().isClassicChess())
 		{
 			// Mark enpassant on the board
-			if (origin.getPiece().getName().equals("Pawn") && Math.abs(origin.getRow() - getDest().getRow()) == 2)
+			if (origin.getPiece().getName().equals(Messages.getString("pawn")) && Math.abs(origin.getRow() - getDest().getRow()) == 2) //$NON-NLS-1$
 			{
 				board.setEnpassantCol(origin.getCol());
 			}
 
 			// Castling
-			if (origin.getPiece().getName().equals("King") && origin.getPiece().getMoveCount() == 0)
+			if (origin.getPiece().getName().equals(Messages.getString("king")) && origin.getPiece().getMoveCount() == 0) //$NON-NLS-1$
 			{
 
 				Square rookOrigin;
@@ -464,7 +464,7 @@ public class Move implements Serializable
 	 */
 	public char pieceToChar(Piece p)
 	{
-		if (p.getName().equals("Knight"))
+		if (p.getName().equals(Messages.getString("knight"))) //$NON-NLS-1$
 			return 'N';
 		else
 			return p.getName().charAt(0);
@@ -588,40 +588,40 @@ public class Move implements Serializable
 	@Override
 	public String toString()
 	{
-		String s = "";
+		String s = ""; //$NON-NLS-1$
 
 		if (castleQueenside)
 		{
-			s = "O-O-O";
+			s = "O-O-O"; //$NON-NLS-1$
 		}
 		else if (castleKingside)
 		{
-			s = "O-O";
+			s = "O-O"; //$NON-NLS-1$
 		}
 		else
 		{
-			s = ((getPiece() != null && !(getPiece().getName().equals("Pawn"))) ? (pieceToChar(getPiece())) + "" : " ")
-					+ origin.toString(unique) + ((getCaptured() != null) ? "x" : "")
+			s = ((getPiece() != null && !(getPiece().getName().equals(Messages.getString("pawn")))) ? (pieceToChar(getPiece())) + "" : " ") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+					+ origin.toString(unique) + ((getCaptured() != null) ? "x" : "") //$NON-NLS-1$ //$NON-NLS-2$
 					+ getDest().toString(new boolean[] { false, false });
 
 			if (promotion != null)
 			{
-				s += "=" + pieceToChar(promotion);
+				s += "=" + pieceToChar(promotion); //$NON-NLS-1$
 			}
 
 			if (checkmate)
 			{
-				s += "#";
+				s += "#"; //$NON-NLS-1$
 			}
 			else
 			{
 				if (check)
 				{
-					s += "+";
+					s += "+"; //$NON-NLS-1$
 				}
 				if (doublecheck)
 				{
-					s += "+";
+					s += "+"; //$NON-NLS-1$
 				}
 			}
 		}
@@ -641,7 +641,7 @@ public class Move implements Serializable
 		if (board.getGame().isClassicChess())
 		{
 			// Castling
-			if (getPiece().getName().equals("King") && getPiece().getMoveCount() == 1)
+			if (getPiece().getName().equals(Messages.getString("king")) && getPiece().getMoveCount() == 1) //$NON-NLS-1$
 			{
 				Square rookOrigin;
 				Square rookDest;
