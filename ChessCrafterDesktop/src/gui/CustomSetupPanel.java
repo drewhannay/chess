@@ -89,7 +89,7 @@ public class CustomSetupPanel extends JPanel
 			for (int i = 0; i < mBoardPanels.length; i++)
 				mBoardPanels[i] = new JPanel();
 		} else {
-			mBuilder = new Builder(Messages.getString("CustomSetupPanel.newVariant")); //$NON-NLS-1$
+			mBuilder = new Builder("New Variant");
 
 			mWhiteTeam = Lists.newArrayList();
 			mBlackTeam = Lists.newArrayList();
@@ -142,8 +142,8 @@ public class CustomSetupPanel extends JPanel
 				30, 70, 70));
 
 		if (game == null) {
-			mWhiteRules.addEndOfGame(EndOfGame.CLASSIC.init(0, Messages.getString("CustomSetupPanel.empty"), false)); //$NON-NLS-1$
-			mBlackRules.addEndOfGame(EndOfGame.CLASSIC.init(0, Messages.getString("CustomSetupPanel.empty"), true)); //$NON-NLS-1$
+			mWhiteRules.addEndOfGame(EndOfGame.CLASSIC.init(0, "", false));
+			mBlackRules.addEndOfGame(EndOfGame.CLASSIC.init(0, "", true));
 
 			mWhiteRules.setObjectivePiece(new ObjectivePiece(
 					ObjectivePieceTypes.CLASSIC));
@@ -156,7 +156,7 @@ public class CustomSetupPanel extends JPanel
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.insets = new Insets(10, 10, 10, 5);
 		constraints.anchor = GridBagConstraints.CENTER;
-		add(new JLabel(Messages.getString("CustomSetupPanel.variantName")), constraints); //$NON-NLS-1$
+		add(new JLabel("Variant Name"), constraints);
 
 		final JTextField variantNameField = new JTextField(25);
 		constraints.gridx = 2;
@@ -181,7 +181,7 @@ public class CustomSetupPanel extends JPanel
 		drawBoards(temp, temp.length > 1);
 
 		// main menu button
-		JButton returnToMainButton = new JButton(Messages.getString("CustomSetupPanel.returnToMainMenu")); //$NON-NLS-1$
+		JButton returnToMainButton = new JButton("Return to Main Menu");
 		// returnToMainButton.setToolTipText("Press to return to the Main Menu");
 		returnToMainButton.addActionListener(new ActionListener() {
 			@Override
@@ -191,14 +191,14 @@ public class CustomSetupPanel extends JPanel
 		});
 
 		// Create button and add ActionListener
-		JButton submitButton = new JButton(Messages.getString("CustomSetupPanel.saveAndQuit")); //$NON-NLS-1$
+		JButton submitButton = new JButton("Save and Quit");
 		// submitButton.setToolTipText("Save a finished variant");
 		submitButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				if (variantNameField.getText().trim().isEmpty()) {
 					JOptionPane.showMessageDialog(CustomSetupPanel.this,
-							Messages.getString("CustomSetupPanel.enterAName"), Messages.getString("CustomSetupPanel.enterName"), //$NON-NLS-1$ //$NON-NLS-2$
+							"Enter a name for this game.", "Enter Name",
 							JOptionPane.PLAIN_MESSAGE);
 					return;
 				}
@@ -225,8 +225,8 @@ public class CustomSetupPanel extends JPanel
 					if (numberOfObjectives != 1) {
 						JOptionPane.showMessageDialog(
 								Driver.getInstance(),
-								Messages.getString("CustomSetupPanel.placeOneWhiteObjective"), //$NON-NLS-1$
-								Messages.getString("CustomSetupPanel.objectiveMissing"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$
+								"Please place exactly one White Objective Piece",
+								"Objective Missing", JOptionPane.PLAIN_MESSAGE);
 						return;
 					}
 				}
@@ -242,8 +242,8 @@ public class CustomSetupPanel extends JPanel
 					if (numberOfObjectives != 1) {
 						JOptionPane.showMessageDialog(
 								Driver.getInstance(),
-								Messages.getString("CustomSetupPanel.placeOneBlackObjective"), //$NON-NLS-1$
-								Messages.getString("CustomSetupPanel.objectiveMissing"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$
+								"Please place exactly one Black Objective Piece",
+								"Objective Missing", JOptionPane.PLAIN_MESSAGE);
 						return;
 					}
 				}
@@ -266,9 +266,9 @@ public class CustomSetupPanel extends JPanel
 			}
 		});
 
-		mChangePromotionButton = new JButton(Messages.getString("CustomSetupPanel.promoteThisPiece")); //$NON-NLS-1$
+		mChangePromotionButton = new JButton("Promote This Piece");
 		mChangePromotionButton
-				.setToolTipText(Messages.getString("CustomSetupPanel.pressToSetUpPromotion")); //$NON-NLS-1$
+				.setToolTipText("Press to set up promotion for the selected piece");
 		mChangePromotionButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -281,7 +281,7 @@ public class CustomSetupPanel extends JPanel
 			}
 		});
 		
-		JButton boardSetupButton = new JButton(Messages.getString("CustomSetupPanel.customizeGameBoard")); //$NON-NLS-1$
+		JButton boardSetupButton = new JButton("Customize Game Board");
 		boardSetupButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -294,7 +294,7 @@ public class CustomSetupPanel extends JPanel
 			}
 		});
 
-		JButton objectiveSetupButton = new JButton(Messages.getString("CustomSetupPanel.setUpObjectives")); //$NON-NLS-1$
+		JButton objectiveSetupButton = new JButton("Set up Game Objectives");
 		objectiveSetupButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -307,7 +307,7 @@ public class CustomSetupPanel extends JPanel
 			}
 		});
 
-		JButton ruleSetupButton = new JButton(Messages.getString("CustomSetupPanel.setUpGameRules")); //$NON-NLS-1$
+		JButton ruleSetupButton = new JButton("Set up Game Rules");
 		ruleSetupButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -320,7 +320,7 @@ public class CustomSetupPanel extends JPanel
 			}
 		});
 
-		JButton playerSetupButton = new JButton(Messages.getString("CustomSetupPanel.setUpPlayerRules")); //$NON-NLS-1$
+		JButton playerSetupButton = new JButton("Set up Player Rules");
 		playerSetupButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -332,7 +332,7 @@ public class CustomSetupPanel extends JPanel
 			}
 		});
 
-		JButton pieceSetupButton = new JButton(Messages.getString("CustomSetupPanel.pieceEditor")); //$NON-NLS-1$
+		JButton pieceSetupButton = new JButton("Piece Editor");
 		pieceSetupButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -513,7 +513,7 @@ public class CustomSetupPanel extends JPanel
 		}
 		catch (IOException e)
 		{
-			JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("CustomSetupPanel.errorCouldNotLoadPiece")); //$NON-NLS-1$
+			JOptionPane.showMessageDialog(Driver.getInstance(), "Error: Could not load piece. Did you delete something?");
 			e.printStackTrace();
 			return;
 		}
@@ -558,7 +558,7 @@ public class CustomSetupPanel extends JPanel
 					}
 					catch (IOException e)
 					{
-						JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("CustomSetupPanel.errorCouldNotLoadPiece")); //$NON-NLS-1$
+						JOptionPane.showMessageDialog(Driver.getInstance(), "Error: Could not load piece. Did you delete something?");
 						e.printStackTrace();
 						return;
 					}
@@ -621,19 +621,19 @@ public class CustomSetupPanel extends JPanel
 
 		private void showSquareOptions()
 		{
-			final JFrame popupFrame = new JFrame(Messages.getString("CustomSetupPanel.squareOptions")); //$NON-NLS-1$
+			final JFrame popupFrame = new JFrame("Square Options");
 			popupFrame.setSize(370, 120);
 			popupFrame.setLocationRelativeTo(Driver.getInstance());
 			popupFrame.setLayout(new FlowLayout());
 
-			final JButton colorChooserButton = new JButton(Messages.getString("CustomSetupPanel.setSquareColor")); //$NON-NLS-1$
+			final JButton colorChooserButton = new JButton("Set Square Color");
 			colorChooserButton.addActionListener(new ActionListener()
 			{
 
 				@Override
 				public void actionPerformed(ActionEvent event)
 				{
-					Color color = JColorChooser.showDialog(popupFrame, Messages.getString("CustomSetupPanel.chooseColor"), m_square.getColor()); //$NON-NLS-1$
+					Color color = JColorChooser.showDialog(popupFrame, "Choose Color", m_square.getColor());
 					if (color == null)
 						return;
 					// TODO: verify that this can be removed
@@ -647,7 +647,7 @@ public class CustomSetupPanel extends JPanel
 					else
 					{
 						// the chances of this happening is EXTREMELY small...
-						JOptionPane.showMessageDialog(popupFrame, Messages.getString("CustomSetupPanel.colorCannotBeSelected"), Messages.getString("CustomSetupPanel.invalidColor"), //$NON-NLS-1$ //$NON-NLS-2$
+						JOptionPane.showMessageDialog(popupFrame, "That color cannot be selected.", "Invalid Color",
 								JOptionPane.PLAIN_MESSAGE);
 					}
 
@@ -656,10 +656,10 @@ public class CustomSetupPanel extends JPanel
 			popupFrame.add(colorChooserButton);
 
 			final JCheckBox uninhabitableButton = new JCheckBox(
-					Messages.getString("CustomSetupPanel.uninhabited"), !m_square.isHabitable()); //$NON-NLS-1$
+					"Uninhabitable", !m_square.isHabitable());
 			popupFrame.add(uninhabitableButton);
 
-			final JButton doneButton = new JButton(Messages.getString("CustomSetupPanel.done")); //$NON-NLS-1$
+			final JButton doneButton = new JButton("Done");
 			doneButton.addActionListener(new ActionListener()
 			{
 				@Override
@@ -866,7 +866,7 @@ public class CustomSetupPanel extends JPanel
 				}
 				catch (IOException e)
 				{
-					JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("CustomSetupPanel.errorCouldNotLoadPiece")); //$NON-NLS-1$
+					JOptionPane.showMessageDialog(Driver.getInstance(), "Error: Could not load piece. Did you delete something?");
 					e.printStackTrace();
 					return;
 				}
@@ -903,7 +903,7 @@ public class CustomSetupPanel extends JPanel
 
 			} else {
 				JOptionPane.showMessageDialog(Driver.getInstance(),
-						Messages.getString("CustomSetupPanel.squareIsUninhabitable"), Messages.getString("CustomSetupPanel.warning"), //$NON-NLS-1$ //$NON-NLS-2$
+						"This square is uninhabitable.", "Warning",
 						JOptionPane.PLAIN_MESSAGE);
 			}
 		}

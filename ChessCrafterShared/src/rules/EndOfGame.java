@@ -86,16 +86,16 @@ public enum EndOfGame
 				{
 					mGame.getLastMove().setCheckmate(true);
 					Result result = mGame.isBlackMove() ? Result.WHITE_WIN : Result.BLACK_WIN;
-					String resultText = Messages.getString("gameOverExc") + result.winText() + "\n"; //$NON-NLS-1$ //$NON-NLS-2$
+					String resultText = "Game over! " + result.winText() + "\n";
 
 					if (mGame.getThreats(objectivePiece) != null)
 					{
-						resultText += Messages.getString("pieceCausedFinalCheck") //$NON-NLS-1$
-								+ Messages.getString("piecePlacedWasThe") //$NON-NLS-1$
-								+ mGame.getThreats(objectivePiece)[0].getName() + Messages.getString("atLocation") //$NON-NLS-1$
-								+ mGame.getThreats(objectivePiece)[0].getSquare().toString(new boolean[] { false, false }) + "\n"; //$NON-NLS-1$
+						resultText += "The piece(s) that caused the final check are highlighted in Red. "
+								+ "\nThe piece that placed the King in check was the "
+								+ mGame.getThreats(objectivePiece)[0].getName() + " at location "
+								+ mGame.getThreats(objectivePiece)[0].getSquare().toString(new boolean[] { false, false }) + "\n";
 					}
-					result.setGuiText(resultText + Messages.getString("whatWouldYouLikeToDo")); //$NON-NLS-1$
+					result.setGuiText(resultText + "What would you like to do? \n");
 					mGame.getLastMove().setResult(result);
 					if (!mGame.getHistory().contains(mGame.getLastMove()))
 						mGame.getHistory().add(mGame.getLastMove());
@@ -112,7 +112,7 @@ public enum EndOfGame
 				{
 					mGame.getLastMove().setStalemate(true);
 					Result result = Result.DRAW;
-					result.setGuiText(Messages.getString("drawExc") + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
+					result.setGuiText("Draw! " + "\n");
 					mGame.getLastMove().setResult(result);
 					if (!mGame.getHistory().contains(mGame.getLastMove()))
 					{
@@ -134,7 +134,7 @@ public enum EndOfGame
 			if (++mNumberOfChecks == mMaxNumberOfChecks)
 			{
 				Result result = !mIsBlackRuleSet ? Result.WHITE_WIN : Result.BLACK_WIN;
-				result.setGuiText(Messages.getString("gameOverExcSpace") + result.winText() + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
+				result.setGuiText("Game Over! " + result.winText() + "\n");
 				GuiUtility.getChessCrafter().getPlayGameScreen().endOfGame(result);
 			}
 		}
@@ -156,7 +156,7 @@ public enum EndOfGame
 				return;
 		}
 		Result result = mIsBlackRuleSet ? Result.BLACK_WIN : Result.WHITE_WIN;
-		result.setGuiText(Messages.getString("gameOverExcSpace") + result.winText() + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
+		result.setGuiText("Game Over! " + result.winText() + "\n");
 		GuiUtility.getChessCrafter().getPlayGameScreen().endOfGame(result);
 	}
 
@@ -169,7 +169,7 @@ public enum EndOfGame
 				return;
 		}
 		Result result = !mIsBlackRuleSet ? Result.BLACK_WIN : Result.WHITE_WIN;
-		result.setGuiText(Messages.getString("gameOverExcSpace") + result.winText() + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
+		result.setGuiText("Game Over! " + result.winText() + "\n");
 		GuiUtility.getChessCrafter().getPlayGameScreen().endOfGame(result);
 	}
 
@@ -182,7 +182,7 @@ public enum EndOfGame
 				return;
 		}
 		Result result = mIsBlackRuleSet ? Result.BLACK_WIN : Result.WHITE_WIN;
-		result.setGuiText(Messages.getString("gameOverExcSpace") + result.winText() + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
+		result.setGuiText("Game Over! " + result.winText() + "\n");
 		GuiUtility.getChessCrafter().getPlayGameScreen().endOfGame(result);
 	}
 

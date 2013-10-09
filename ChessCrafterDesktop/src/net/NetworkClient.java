@@ -71,15 +71,15 @@ public class NetworkClient
 
 					if (toMove.mOriginColumn == -1)
 					{
-						int surrender = JOptionPane.showConfirmDialog(null, Messages.getString("NetworkClient.otherRequestedDraw"), //$NON-NLS-1$
-								Messages.getString("NetworkClient.draw"), JOptionPane.YES_NO_OPTION); //$NON-NLS-1$
+						int surrender = JOptionPane.showConfirmDialog(null, "The other player has requested a Draw. Do you accept?",
+								"Draw", JOptionPane.YES_NO_OPTION);
 						if (surrender == 0)
 						{
 							// if this player also accepts the Draw
 							// write out a new object which shows you accepted the Draw
 							out.writeObject(new FakeMove(-2, -2, -2, -2, -2, null));
 							Result result = Result.DRAW;
-							result.setGuiText(Messages.getString("NetworkClient.gameEndedInDraw")); //$NON-NLS-1$
+							result.setGuiText("The game has ended in a Draw!");
 							g.getLastMove().setResult(result);
 							GuiUtility.getChessCrafter().getPlayGameScreen().endOfGame(result);
 							throw new Exception();
@@ -109,7 +109,7 @@ public class NetworkClient
 						if (toMove.mOriginColumn == -2)
 						{
 							Result result = Result.DRAW;
-							result.setGuiText(Messages.getString("NetworkClient.gameEndedInDraw")); //$NON-NLS-1$
+							result.setGuiText("The game has ended in a Draw!");
 							g.getLastMove().setResult(result);
 							pgs.endOfGame(result);
 							png.setDrawRequested(false);
@@ -118,8 +118,8 @@ public class NetworkClient
 						else if (toMove.mOriginColumn == -3)
 						{ // If the response is an unaccepted Draw request, do
 							// not perform the Move.
-							JOptionPane.showMessageDialog(null, Messages.getString("NetworkClient.requestDeclined"), //$NON-NLS-1$
-									Messages.getString("NetworkClient.denied"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$
+							JOptionPane.showMessageDialog(null, "Your request for a draw has been denied. Continue play as normal.",
+									"Denied", JOptionPane.PLAIN_MESSAGE);
 							png.setDrawRequested(false);
 							continue;
 						}
@@ -140,7 +140,7 @@ public class NetworkClient
 		catch (SocketException e)
 		{
 			e.printStackTrace();
-			JOptionPane.showMessageDialog(null, Messages.getString("NetworkClient.opponentClosedGame"), Messages.getString("NetworkClient.oops"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
+			JOptionPane.showMessageDialog(null, "Your opponent closed the game", "Oops!", JOptionPane.ERROR_MESSAGE);
 			Driver.getInstance().setFileMenuVisibility(true);
 			Driver.getInstance().setOptionsMenuVisibility(false);
 			Driver.getInstance().revertToMainPanel();
@@ -153,7 +153,7 @@ public class NetworkClient
 				return;
 			if (!GuiUtility.getChessCrafter().getNetGameScreen(g, false, g.isBlackMove()).isRunning())
 				return;
-			JOptionPane.showMessageDialog(null, Messages.getString("NetworkClient.opponentClosedGame"), Messages.getString("NetworkClient.oops"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
+			JOptionPane.showMessageDialog(null, "Your opponent closed the game", "Oops!", JOptionPane.ERROR_MESSAGE);
 			g.getBlackTimer().stopTimer();
 			g.getWhiteTimer().stopTimer();
 			Driver.getInstance().setFileMenuVisibility(true);

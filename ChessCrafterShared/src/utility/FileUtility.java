@@ -61,7 +61,7 @@ public final class FileUtility
 		String[] variants = getVariantsFileArray();
 		for (int i = 0; i < variants.length; i++)
 		{
-			if (variants[i].contentEquals(Messages.getString("classic"))) //$NON-NLS-1$
+			if (variants[i].contentEquals("Classic"))
 			{
 				variants[i] = variants[variants.length - 1];
 				variants[variants.length - 1] = null;
@@ -144,19 +144,19 @@ public final class FileUtility
 
 	static
 	{
-		if (System.getProperty("os.name").startsWith("Windows")) //$NON-NLS-1$ //$NON-NLS-2$
+		if (System.getProperty("os.name").startsWith("Windows"))
 		{
-			HIDDEN_DIR = System.getProperty("user.home") + "\\chess"; //$NON-NLS-1$ //$NON-NLS-2$
-			SLASH = "\\"; //$NON-NLS-1$
+			HIDDEN_DIR = System.getProperty("user.home") + "\\chess";
+			SLASH = "\\";
 			
-			String userDir = System.getProperty("user.dir"); //$NON-NLS-1$
+			String userDir = System.getProperty("user.dir");
 			
-			ROOT_RUNNING_DIR = userDir.substring(0, userDir.lastIndexOf("\\"))+"\\ChessCrafterShared"; //$NON-NLS-1$ //$NON-NLS-2$
+			ROOT_RUNNING_DIR = userDir.substring(0, userDir.lastIndexOf("\\"))+"\\ChessCrafterShared";
 			try
 			{
 				Runtime rt = Runtime.getRuntime();
 				// try to make our folder hidden on Windows
-				rt.exec("attrib +H " + System.getProperty("user.home") + "\\chess"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				rt.exec("attrib +H " + System.getProperty("user.home") + "\\chess");
 			}
 			catch (Throwable t)
 			{
@@ -166,9 +166,9 @@ public final class FileUtility
 		else
 		{
 			// if we're not on Windows, just add a period
-			HIDDEN_DIR = System.getProperty("user.home") + "/.chess"; //$NON-NLS-1$ //$NON-NLS-2$
-			ROOT_RUNNING_DIR = System.getProperty("user.dir"); //$NON-NLS-1$
-			SLASH = "/"; //$NON-NLS-1$
+			HIDDEN_DIR = System.getProperty("user.home") + "/.chess";
+			ROOT_RUNNING_DIR = System.getProperty("user.dir");
+			SLASH = "/";
 		}
 	}
 
@@ -177,7 +177,7 @@ public final class FileUtility
 		BufferedImage frontPage = null;
 		try
 		{
-			frontPage = ImageIO.read(new File(getImagePath("chess_logo.png", true))); //$NON-NLS-1$
+			frontPage = ImageIO.read(new File(getImagePath("chess_logo.png", true)));
 		}
 		catch (IOException e)
 		{
@@ -190,18 +190,18 @@ public final class FileUtility
 	{
 		File pieceFile = getPieceFile(pieceName);
 		pieceFile.delete();
-		new File((getImagePath("l_"+pieceName+".png", false))).delete(); //$NON-NLS-1$ //$NON-NLS-2$
-		new File((getImagePath("d_"+pieceName+".png", false))).delete(); //$NON-NLS-1$ //$NON-NLS-2$
+		new File((getImagePath("l_"+pieceName+".png", false))).delete();
+		new File((getImagePath("d_"+pieceName+".png", false))).delete();
 	}
 	
 	private static final String HIDDEN_DIR;
 	private static final String ROOT_RUNNING_DIR;
-	private static final String AI = "AI"; //$NON-NLS-1$
-	private static final String IMAGES = "images"; //$NON-NLS-1$
-	private static final String VARIANTS = "variants"; //$NON-NLS-1$
-	private static final String PIECES = "pieces"; //$NON-NLS-1$
-	private static final String GAMES_IN_PROGRESS = "gamesInProgress"; //$NON-NLS-1$
-	private static final String COMPLETED_GAMES = "completedGames"; //$NON-NLS-1$
-	private static final String PREFERENCES = "preferences.txt"; //$NON-NLS-1$
+	private static final String AI = "AI";
+	private static final String IMAGES = "images";
+	private static final String VARIANTS = "variants";
+	private static final String PIECES = "pieces";
+	private static final String GAMES_IN_PROGRESS = "gamesInProgress";
+	private static final String COMPLETED_GAMES = "completedGames";
+	private static final String PREFERENCES = "preferences.txt";
 	private static final String SLASH;
 }

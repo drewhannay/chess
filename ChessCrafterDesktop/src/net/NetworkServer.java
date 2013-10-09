@@ -89,8 +89,8 @@ public class NetworkServer
 					FakeMove toMove = (FakeMove) fromUser;
 					if (toMove.mOriginColumn == -1)
 					{
-						int surrender = JOptionPane.showConfirmDialog(null, Messages.getString("NetworkServer.otherRequestedDraw"), //$NON-NLS-1$
-								Messages.getString("NetworkServer.draw"), JOptionPane.YES_NO_OPTION); //$NON-NLS-1$
+						int surrender = JOptionPane.showConfirmDialog(null, "The other player has requested a Draw. Do you accept?",
+								"Draw", JOptionPane.YES_NO_OPTION);
 						if (surrender == 0)
 						{ // If this player also accepts the Draw.
 							out.writeObject(new FakeMove(-2, -2, -2, -2, -2, null)); // Write
@@ -105,7 +105,7 @@ public class NetworkServer
 																						// the
 																						// Draw.
 							Result result = Result.DRAW;
-							result.setGuiText(Messages.getString("NetworkServer.endedInDraw")); //$NON-NLS-1$
+							result.setGuiText("The game has ended in a Draw!");
 							g.getLastMove().setResult(result);
 							GuiUtility.getChessCrafter().getPlayGameScreen().endOfGame(result);
 							throw new Exception();
@@ -147,7 +147,7 @@ public class NetworkServer
 						if (toMove.mOriginColumn == -2)
 						{
 							Result result = Result.DRAW;
-							result.setGuiText(Messages.getString("NetworkServer.endedInDraw")); //$NON-NLS-1$
+							result.setGuiText("The game has ended in a Draw!");
 							g.getLastMove().setResult(result);
 							GuiUtility.getChessCrafter().getPlayGameScreen().endOfGame(result);
 							png.mDrawRequested = false;
@@ -156,8 +156,8 @@ public class NetworkServer
 						else if (toMove.mOriginColumn == -3)
 						{ // If the response is an unaccepted Draw request, do
 							// not perform the Move.
-							JOptionPane.showMessageDialog(null, Messages.getString("NetworkServer.requestDenied"), //$NON-NLS-1$
-									Messages.getString("NetworkServer.denied"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$
+							JOptionPane.showMessageDialog(null, "Your request for a draw has been denied. Continue play as normal.",
+									"Denied", JOptionPane.PLAIN_MESSAGE);
 							png.mDrawRequested = false;
 							continue;
 						}
@@ -179,7 +179,7 @@ public class NetworkServer
 		catch (SocketException e)
 		{
 			e.printStackTrace();
-			JOptionPane.showMessageDialog(null, Messages.getString("NetworkServer.opponentClosed"), Messages.getString("NetworkServer.oops"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
+			JOptionPane.showMessageDialog(null, "Your opponent closed the game", "Oops!", JOptionPane.ERROR_MESSAGE);
 			Driver.getInstance().setFileMenuVisibility(true);
 			Driver.getInstance().setOptionsMenuVisibility(false);
 			Driver.getInstance().revertToMainPanel();
@@ -191,7 +191,7 @@ public class NetworkServer
 			e.printStackTrace();
 			if (g.getHistory().size() != 0 && g.getHistory().get(g.getHistory().size() - 1).getResult() != null)
 				return;
-			JOptionPane.showMessageDialog(null, Messages.getString("NetworkServer.opponentClosed"), Messages.getString("NetworkServer.oops"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
+			JOptionPane.showMessageDialog(null, "Your opponent closed the game", "Oops!", JOptionPane.ERROR_MESSAGE);
 			g.getBlackTimer().stopTimer();
 			g.getWhiteTimer().stopTimer();
 			Driver.getInstance().setFileMenuVisibility(true);

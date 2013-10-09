@@ -18,22 +18,22 @@ public enum TimerTypes
 		switch (this)
 		{
 		case NO_TIMER:
-			return Messages.getString("noTimer"); //$NON-NLS-1$
+			return "No Timer";
 		case BRONSTEIN_DELAY:
-			return Messages.getString("bronsteinDelay"); //$NON-NLS-1$
+			return "Bronstein Delay";
 		case FISCHER:
-			return Messages.getString("fischer"); //$NON-NLS-1$
+			return "Fischer";
 		case FISCHER_AFTER:
-			return Messages.getString("fischerAfter"); //$NON-NLS-1$
+			return "Fischer After";
 		case HOUR_GLASS:
-			return Messages.getString("hourGlass"); //$NON-NLS-1$
+			return "Hour Glass";
 		case SIMPLE_DELAY:
-			return Messages.getString("simpleDelay"); //$NON-NLS-1$
+			return "Simple Delay";
 		case WORD:
-			return Messages.getString("word"); //$NON-NLS-1$
+			return "Word";
 		default:
 			Preconditions.checkArgument(false);
-			return ""; //$NON-NLS-1$
+			return "";
 		}
 	};
 }

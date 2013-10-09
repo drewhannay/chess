@@ -63,8 +63,8 @@ public class RuleMakerPanel extends JPanel
 		// capture mandatory check boxes
 		final JPanel whiteLegalDestinationPanel = new JPanel();
 		whiteLegalDestinationPanel.setLayout(new GridLayout(2, 1));
-		final JCheckBox whiteCaptureMandatoryCheckBox = new JCheckBox(Messages.getString("RuleMakerPanel.captureMandatory")); //$NON-NLS-1$
-		whiteCaptureMandatoryCheckBox.setToolTipText(Messages.getString("RuleMakerPanel.capturingMustBe")); //$NON-NLS-1$
+		final JCheckBox whiteCaptureMandatoryCheckBox = new JCheckBox("Capture Mandatory");
+		whiteCaptureMandatoryCheckBox.setToolTipText("Capturing moves must be performed");
 		whiteCaptureMandatoryCheckBox.setSelected(customSetupMenu.mWhiteRules
 				.getCaptureMandatory());
 		whiteLegalDestinationPanel.add(whiteCaptureMandatoryCheckBox);
@@ -72,18 +72,18 @@ public class RuleMakerPanel extends JPanel
 		final JPanel blackLegalDestinationPanel = new JPanel();
 		blackLegalDestinationPanel.setLayout(new GridLayout(2, 1));
 		final JCheckBox blackCaptureMandatoryCheckBox = new JCheckBox(
-				Messages.getString("RuleMakerPanel.captureMandatory")); //$NON-NLS-1$
+				"Capture Mandatory");
 		blackCaptureMandatoryCheckBox
-				.setToolTipText(Messages.getString("RuleMakerPanel.capturingMustBe")); //$NON-NLS-1$
+				.setToolTipText("Capturing moves must be performed");
 		blackCaptureMandatoryCheckBox.setSelected(customSetupMenu.mBlackRules
 				.getCaptureMandatory());
 		blackLegalDestinationPanel.add(blackCaptureMandatoryCheckBox);
 
 		// can't move objective check boxes
 		final JCheckBox whiteNoMoveObjectiveCheckBox = new JCheckBox(
-				Messages.getString("RuleMakerPanel.cantMoveObj")); //$NON-NLS-1$
+				"Can't Move Objective");
 		whiteNoMoveObjectiveCheckBox
-				.setToolTipText(Messages.getString("RuleMakerPanel.movingObjIllegal")); //$NON-NLS-1$
+				.setToolTipText("Moving the objective piece is illegal");
 		if (mWhiteRules.getEndOfGame() == EndOfGame.CLASSIC
 				|| mWhiteRules.getEndOfGame() == EndOfGame.CHECK_N_TIMES) {
 			whiteNoMoveObjectiveCheckBox
@@ -92,8 +92,8 @@ public class RuleMakerPanel extends JPanel
 			whiteLegalDestinationPanel.add(whiteNoMoveObjectiveCheckBox);
 		}
 
-		final JCheckBox blackNoMoveObjectiveCheckBox = new JCheckBox(Messages.getString("RuleMakerPanel.cantMoveObj")); //$NON-NLS-1$
-		blackNoMoveObjectiveCheckBox.setToolTipText(Messages.getString("RuleMakerPanel.movingObjIllegal")); //$NON-NLS-1$
+		final JCheckBox blackNoMoveObjectiveCheckBox = new JCheckBox("Can't Move Objective");
+		blackNoMoveObjectiveCheckBox.setToolTipText("Moving the objective piece is illegal");
 		if (mBlackRules.getEndOfGame() == EndOfGame.CLASSIC
 				|| mBlackRules.getEndOfGame() == EndOfGame.CHECK_N_TIMES) {
 			blackNoMoveObjectiveCheckBox
@@ -107,9 +107,9 @@ public class RuleMakerPanel extends JPanel
 
 		final ButtonGroup whiteAfterOptions = new ButtonGroup();
 		final JRadioButton whiteChangeColorRadioButton = new JRadioButton(
-				Messages.getString("RuleMakerPanel.captererChangesColor")); //$NON-NLS-1$
+				"Capturer changes Color");
 		whiteChangeColorRadioButton
-				.setToolTipText(Messages.getString("RuleMakerPanel.capturingPieceChanges")); //$NON-NLS-1$
+				.setToolTipText("The capturing piece changes color after performing a capture");
 
 		if (mWhiteRules.getEndOfGame() != EndOfGame.CLASSIC) {
 			whiteAfterOptions.add(whiteChangeColorRadioButton);
@@ -117,36 +117,36 @@ public class RuleMakerPanel extends JPanel
 		}
 
 		final JRadioButton whitePieceReturnRadioButton = new JRadioButton(
-				Messages.getString("RuleMakerPanel.capturedReturns")); //$NON-NLS-1$
+				"Captured piece returns to start");
 		whitePieceReturnRadioButton
-				.setToolTipText(Messages.getString("RuleMakerPanel.capturedReturnToTheirStart")); //$NON-NLS-1$
+				.setToolTipText("Captured pieces return to their starting squares");
 		whitePieceReturnRadioButton.setSelected(mWhiteRules
 				.getCapturedReturnToStart());
 		whiteAfterOptions.add(whitePieceReturnRadioButton);
 		whiteAfterCapturePanel.add(whitePieceReturnRadioButton);
 
 		final JRadioButton whiteDropPiecesRadioButton = new JRadioButton(
-				Messages.getString("RuleMakerPanel.capturedPiecesDrop")); //$NON-NLS-1$
+				"Captured Pieces Drop");
 		if (mWhiteRules.getEndOfGame() != EndOfGame.CAPTURE_ALL_OF_TYPE
 				|| mWhiteRules.getEndOfGame() != EndOfGame.LOSE_ALL_PIECES) {
 			whiteDropPiecesRadioButton
-					.setToolTipText(Messages.getString("RuleMakerPanel.capturedArePlaced")); //$NON-NLS-1$
+					.setToolTipText("Captured pieces are placed in any open square on the board by the capturer");
 			whiteDropPiecesRadioButton.setSelected(mWhiteRules.getPiecesDrop());
 			whiteAfterOptions.add(whiteDropPiecesRadioButton);
 			whiteAfterCapturePanel.add(whiteDropPiecesRadioButton);
 		}
 
 		final JRadioButton whiteCapturedColorAndDropRadioButton = new JRadioButton(
-				Messages.getString("RuleMakerPanel.capturedChangesAnd")); //$NON-NLS-1$
+				"Captured Piece Changes Color and Drops");
 		whiteCapturedColorAndDropRadioButton
-				.setToolTipText(Messages.getString("RuleMakerPanel.capturedChangesTeams")); //$NON-NLS-1$
+				.setToolTipText("Captured pieces change teams and are placed in any open square on the board by the capturer");
 		whiteCapturedColorAndDropRadioButton.setSelected(mWhiteRules
 				.getPiecesDropAndSwitch());
 		whiteAfterOptions.add(whiteCapturedColorAndDropRadioButton);
 		whiteAfterCapturePanel.add(whiteCapturedColorAndDropRadioButton);
 
 		final JRadioButton whiteNoAfterMoveRadioButton = new JRadioButton(
-				Messages.getString("RuleMakerPanel.doNothing")); //$NON-NLS-1$
+				"Do Nothing");
 		whiteNoAfterMoveRadioButton.setSelected(mWhiteRules
 				.getNoAfterMovesSelected());
 		whiteAfterOptions.add(whiteNoAfterMoveRadioButton);
@@ -157,9 +157,9 @@ public class RuleMakerPanel extends JPanel
 		
 		blackAfterPanel.setLayout(new GridLayout(4, 1));
 		final JRadioButton blackChangeColorRadioButton = new JRadioButton(
-				Messages.getString("RuleMakerPanel.capturerChanges")); //$NON-NLS-1$
+				"Capturer changes Color");
 		blackChangeColorRadioButton
-				.setToolTipText(Messages.getString("RuleMakerPanel.capturingPieceChanges")); //$NON-NLS-1$
+				.setToolTipText("The capturing piece changes color after performing a capture");
 
 		if (mBlackRules.getEndOfGame() != EndOfGame.CLASSIC)
 		{
@@ -168,18 +168,18 @@ public class RuleMakerPanel extends JPanel
 		}
 
 		final JRadioButton blackPieceReturnRadioButton = new JRadioButton(
-				Messages.getString("RuleMakerPanel.capturedReturns")); //$NON-NLS-1$
+				"Captured piece returns to start");
 		blackPieceReturnRadioButton
-				.setToolTipText(Messages.getString("RuleMakerPanel.capturedReturnToTheirStart")); //$NON-NLS-1$
+				.setToolTipText("Captured pieces return to their starting squares");
 		blackPieceReturnRadioButton.setSelected(mBlackRules
 				.getCapturedReturnToStart());
 		blackAfterPanel.add(blackPieceReturnRadioButton);
 		blackAfterOptions.add(blackPieceReturnRadioButton);
 		
 		final JRadioButton blackDropPiecesRadioButton = new JRadioButton(
-				Messages.getString("RuleMakerPanel.capturedPiecesDrop")); //$NON-NLS-1$
+				"Captured Pieces Drop");
 		blackDropPiecesRadioButton
-				.setToolTipText(Messages.getString("RuleMakerPanel.capturedArePlaced")); //$NON-NLS-1$
+				.setToolTipText("Captured pieces are placed in any open square on the board by the capturer");
 		if (mBlackRules.getEndOfGame() != EndOfGame.CAPTURE_ALL_OF_TYPE
 				|| mBlackRules.getEndOfGame() != EndOfGame.LOSE_ALL_PIECES) {
 			blackDropPiecesRadioButton.setSelected(mBlackRules.getPiecesDrop());
@@ -188,16 +188,16 @@ public class RuleMakerPanel extends JPanel
 		}
 
 		final JRadioButton blackCapturedColorAndDropRadioButton = new JRadioButton(
-				Messages.getString("RuleMakerPanel.capturedChangesAnd")); //$NON-NLS-1$
+				"Captured Piece Changes Color and Drops");
 		blackCapturedColorAndDropRadioButton
-				.setToolTipText(Messages.getString("RuleMakerPanel.capturedChangesTeams")); //$NON-NLS-1$
+				.setToolTipText("Captured pieces change teams and are placed in any open square on the board by the capturer");
 		blackCapturedColorAndDropRadioButton.setSelected(mBlackRules
 				.getPiecesDropAndSwitch());
 		blackAfterPanel.add(blackCapturedColorAndDropRadioButton);
 		blackAfterOptions.add(blackCapturedColorAndDropRadioButton);
 
 		final JRadioButton blackNoAfterMoveRadioButton = new JRadioButton(
-				Messages.getString("RuleMakerPanel.doNothing")); //$NON-NLS-1$
+				"Do Nothing");
 		blackNoAfterMoveRadioButton.setSelected(mBlackRules
 				.getNoAfterMovesSelected());
 		blackAfterOptions.add(blackNoAfterMoveRadioButton);
@@ -206,17 +206,17 @@ public class RuleMakerPanel extends JPanel
 		final JPanel specialRulesPanel = new JPanel();
 		specialRulesPanel.setLayout(new GridLayout(2, 1));
 
-		final JCheckBox atomicChessCheckBox = new JCheckBox(Messages.getString("RuleMakerPanel.atomicChess")); //$NON-NLS-1$
+		final JCheckBox atomicChessCheckBox = new JCheckBox("Atomic Chess");
 		atomicChessCheckBox
-				.setToolTipText(Messages.getString("RuleMakerPanel.captureRemovesBoth")); //$NON-NLS-1$
+				.setToolTipText("Capture removes from play both capturer and the captured piece,\nas well as the pieces in the 8 surrounding squares (except for pawns)");
 		atomicChessCheckBox.setEnabled(mWhiteRules.isAtomic() || mWhiteRules.getNoAfterMovesSelected());
 		atomicChessCheckBox.setSelected(mWhiteRules.isAtomic());
 		specialRulesPanel.add(atomicChessCheckBox);
 
 		final JCheckBox switchBoardsCheckBox = new JCheckBox(
-				Messages.getString("RuleMakerPanel.moveToOtherBoard")); //$NON-NLS-1$
+				"Move to other board");
 		switchBoardsCheckBox
-				.setToolTipText(Messages.getString("RuleMakerPanel.eachPiecesMoves")); //$NON-NLS-1$
+				.setToolTipText("Each piece moves to the opposite board every time it moves.");
 		switchBoardsCheckBox.setEnabled(mWhiteRules.switchBoards());
 		specialRulesPanel.add(switchBoardsCheckBox);
 
@@ -236,9 +236,9 @@ public class RuleMakerPanel extends JPanel
 		}
 
 		JLabel whiteNumberOfChecksLabel = new JLabel(
-				Messages.getString("RuleMakerPanel.howManyTimesForCheck")); //$NON-NLS-1$
+				"How many times for check?");
 		JLabel whiteObjectivePieceLabel = new JLabel(
-				Messages.getString("RuleMakerPanel.whichIsObjective")); //$NON-NLS-1$
+				"Which piece is the objective?");
 
 		whiteNumberOfChecksField.setVisible(false);
 		whitePieceList.setVisible(false);
@@ -248,7 +248,7 @@ public class RuleMakerPanel extends JPanel
 		{
 			if (mWhiteRules.getEndOfGame() == EndOfGame.CAPTURE_ALL_OF_TYPE)
 				whiteObjectivePieceLabel
-						.setText(Messages.getString("RuleMakerPanel.whichPieceTypeCaptured")); //$NON-NLS-1$
+						.setText("Which Piece type will be captured?");
 
 			whitePieceList.setVisible(true);
 			whitePieceList.setSelectedIndex(whiteObjectiveIndex);
@@ -288,9 +288,9 @@ public class RuleMakerPanel extends JPanel
 		final JComboBox blackPiecesList = new JComboBox(allPieces);
 
 		JLabel blackNumberOfChecksLabel = new JLabel(
-				Messages.getString("RuleMakerPanel.howManyTimesForCheck")); //$NON-NLS-1$
+				"How many times for check?");
 		JLabel blackObjectivePieceLabel = new JLabel(
-				Messages.getString("RuleMakerPanel.whichIsObjective")); //$NON-NLS-1$
+				"Which piece is the objective?");
 
 		blackNumberOfChecksField.setVisible(false);
 		blackPiecesList.setVisible(false);
@@ -300,7 +300,7 @@ public class RuleMakerPanel extends JPanel
 		{
 			if (mBlackRules.getEndOfGame() == EndOfGame.CAPTURE_ALL_OF_TYPE)
 				blackObjectivePieceLabel
-						.setText(Messages.getString("RuleMakerPanel.whichPieceTypeCaptured")); //$NON-NLS-1$
+						.setText("Which Piece type will be captured?");
 
 			blackPiecesList.setVisible(true);
 			blackPiecesList.setSelectedIndex(blackObjectiveIndex);
@@ -333,13 +333,13 @@ public class RuleMakerPanel extends JPanel
 			blackExtrasPanel.add(blackPiecesList, constraints);
 		}
 
-		final JButton cancelButton = new JButton(Messages.getString("RuleMakerPanel.cancel")); //$NON-NLS-1$
+		final JButton cancelButton = new JButton("Cancel");
 		cancelButton
-				.setToolTipText(Messages.getString("RuleMakerPanel.pressToReturnToVariant")); //$NON-NLS-1$
+				.setToolTipText("Press me to return to the main Variant window");
 		GuiUtility.setupVariantCancelButton(cancelButton, this, mFrame);
 
-		JButton saveButton = new JButton(Messages.getString("RuleMakerPanel.save")); //$NON-NLS-1$
-		saveButton.setToolTipText(Messages.getString("RuleMakerPanel.pressToSave")); //$NON-NLS-1$
+		JButton saveButton = new JButton("Save");
+		saveButton.setToolTipText("Press to save rules");
 		saveButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -423,20 +423,20 @@ public class RuleMakerPanel extends JPanel
 						{
 							JOptionPane.showMessageDialog(
 									Driver.getInstance(),
-									Messages.getString("RuleMakerPanel.enterGreaterThanOne"), //$NON-NLS-1$
-									Messages.getString("RuleMakerPanel.numberOfChecks"), //$NON-NLS-1$
+									"Please enter a number greater than 1 into the Number of Checks box.",
+									"Number of Checks",
 									JOptionPane.PLAIN_MESSAGE);
 							return;
 						}
 						mWhiteRules.addEndOfGame(EndOfGame.CHECK_N_TIMES.init(
-								answer, "", false)); //$NON-NLS-1$
+								answer, "", false));
 					}
 					catch (Exception e)
 					{
 						JOptionPane.showMessageDialog(
 								Driver.getInstance(),
-								Messages.getString("RuleMakerPanel.enterIntoNumberOfChecks"), //$NON-NLS-1$
-								Messages.getString("RuleMakerPanel.numberOfChecks"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$
+								"Please enter a number into the Number of Checks box.",
+								"Number of Checks", JOptionPane.PLAIN_MESSAGE);
 						return;
 					}
 				}
@@ -444,7 +444,7 @@ public class RuleMakerPanel extends JPanel
 				{
 					if (mWhiteRules.getEndOfGame() == EndOfGame.CLASSIC)
 					{
-						mWhiteRules.addEndOfGame(EndOfGame.CLASSIC.init(0, "", //$NON-NLS-1$
+						mWhiteRules.addEndOfGame(EndOfGame.CLASSIC.init(0, "",
 								false));
 						mWhiteRules.setObjectivePiece(new ObjectivePiece(
 								ObjectivePieceTypes.CUSTOM_OBJECTIVE,
@@ -468,20 +468,20 @@ public class RuleMakerPanel extends JPanel
 						{
 							JOptionPane.showMessageDialog(
 									Driver.getInstance(),
-									Messages.getString("RuleMakerPanel.enterGreaterThanOne"), //$NON-NLS-1$
-									Messages.getString("RuleMakerPanel.numberOfChecks"), //$NON-NLS-1$
+									"Please enter a number greater than 1 into the Number of Checks box.",
+									"Number of Checks",
 									JOptionPane.PLAIN_MESSAGE);
 							return;
 						}
 						mBlackRules.addEndOfGame(EndOfGame.CHECK_N_TIMES.init(
-								answer, "", true)); //$NON-NLS-1$
+								answer, "", true));
 					}
 					catch (Exception ne)
 					{
 						JOptionPane.showMessageDialog(
 								Driver.getInstance(),
-								Messages.getString("RuleMakerPanel.enterIntoNumberOfChecks"), //$NON-NLS-1$
-								Messages.getString("RuleMakerPanel.numberOfChecks"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$
+								"Please enter a number into the Number of Checks box.",
+								"Number of Checks", JOptionPane.PLAIN_MESSAGE);
 						return;
 					}
 				}
@@ -490,7 +490,7 @@ public class RuleMakerPanel extends JPanel
 					blackPiecesList.getSelectedItem();
 					if (mBlackRules.getEndOfGame() == EndOfGame.CLASSIC)
 					{
-						mBlackRules.addEndOfGame(EndOfGame.CLASSIC.init(0, "", //$NON-NLS-1$
+						mBlackRules.addEndOfGame(EndOfGame.CLASSIC.init(0, "",
 								true));
 						mBlackRules.setObjectivePiece(new ObjectivePiece(
 								ObjectivePieceTypes.CUSTOM_OBJECTIVE,
@@ -513,7 +513,7 @@ public class RuleMakerPanel extends JPanel
 
 		JPanel whiteTeamPanel = new JPanel();
 		whiteTeamPanel
-				.setBorder(BorderFactory.createTitledBorder(Messages.getString("RuleMakerPanel.whiteTeam"))); //$NON-NLS-1$
+				.setBorder(BorderFactory.createTitledBorder("White Team"));
 		whiteTeamPanel.setLayout(new GridBagLayout());
 
 		JPanel whiteLegalDestinationsPanel = new JPanel();
@@ -521,7 +521,7 @@ public class RuleMakerPanel extends JPanel
 		constraints.gridx = 0;
 		constraints.gridy = 1;
 		whiteLegalDestinationsPanel.add(new JLabel(
-				Messages.getString("RuleMakerPanel.legalDestinationHTML")), constraints); //$NON-NLS-1$
+				"<html><u> Legal Destination </u></br></html>"), constraints);
 		constraints.gridx = 0;
 		constraints.gridy = 2;
 		whiteLegalDestinationsPanel
@@ -542,7 +542,7 @@ public class RuleMakerPanel extends JPanel
 		constraints.gridx = 0;
 		constraints.gridy = 1;
 		whiteCapturePanel.add(new JLabel(
-				Messages.getString("RuleMakerPanel.afterCapturingHTML")), //$NON-NLS-1$
+				"<html><u>After Capturing a piece</u></br></html>"),
 				constraints);
 		constraints.gridx = 0;
 		constraints.gridy = 2;
@@ -554,7 +554,7 @@ public class RuleMakerPanel extends JPanel
 
 		JPanel blackTeamPanel = new JPanel();
 		blackTeamPanel
-				.setBorder(BorderFactory.createTitledBorder(Messages.getString("RuleMakerPanel.blackTeam"))); //$NON-NLS-1$
+				.setBorder(BorderFactory.createTitledBorder("Black Team"));
 		blackTeamPanel.setLayout(new GridBagLayout());
 
 		JPanel blackLegalDestinationsPanel = new JPanel();
@@ -562,7 +562,7 @@ public class RuleMakerPanel extends JPanel
 		constraints.gridx = 0;
 		constraints.gridy = 1;
 		blackLegalDestinationsPanel.add(new JLabel(
-				Messages.getString("RuleMakerPanel.legalDestinationHTML")), constraints); //$NON-NLS-1$
+				"<html><u> Legal Destination </u></br></html>"), constraints);
 		constraints.gridx = 0;
 		constraints.gridy = 2;
 		blackLegalDestinationsPanel
@@ -578,7 +578,7 @@ public class RuleMakerPanel extends JPanel
 		constraints.gridx = 0;
 		constraints.gridy = 1;
 		blackCapturePanel.add(new JLabel(
-				Messages.getString("RuleMakerPanel.afterCapturingHTML")), //$NON-NLS-1$
+				"<html><u>After Capturing a piece</u></br></html>"),
 				constraints);
 		constraints.gridx = 0;
 		constraints.gridy = 2;
@@ -605,7 +605,7 @@ public class RuleMakerPanel extends JPanel
 
 		JPanel specialRules = new JPanel();
 		specialRules.setBorder(BorderFactory
-				.createTitledBorder(Messages.getString("RuleMakerPanel.specialRules"))); //$NON-NLS-1$
+				.createTitledBorder("Special rules"));
 		specialRules.setLayout(new GridBagLayout());
 
 		constraints.gridx = 0;

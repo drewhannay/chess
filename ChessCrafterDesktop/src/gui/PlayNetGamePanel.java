@@ -47,7 +47,7 @@ public class PlayNetGamePanel extends PlayGamePanel implements PlayNetGameScreen
 
 		Driver.getInstance().setFileMenuVisibility(false);
 
-		mInCheckLabel = new JLabel(Messages.getString("PlayNetGamePanel.youreInCheck")); //$NON-NLS-1$
+		mInCheckLabel = new JLabel("You're In Check!");
 		mInCheckLabel.setHorizontalTextPosition(SwingConstants.CENTER);
 		mInCheckLabel.setForeground(Color.RED);
 
@@ -102,7 +102,7 @@ public class PlayNetGamePanel extends PlayGamePanel implements PlayNetGameScreen
 			twoBoardGridBagOffset += 10;
 		}
 
-		JButton nextButton = new JButton(Messages.getString("PlayNetGamePanel.next")); //$NON-NLS-1$
+		JButton nextButton = new JButton("Next");
 		nextButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -122,7 +122,7 @@ public class PlayNetGamePanel extends PlayGamePanel implements PlayNetGameScreen
 			}
 		});
 
-		JButton prevButton = new JButton(Messages.getString("PlayNetGamePanel.previous")); //$NON-NLS-1$
+		JButton prevButton = new JButton("Previous");
 		prevButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -142,14 +142,14 @@ public class PlayNetGamePanel extends PlayGamePanel implements PlayNetGameScreen
 			}
 		});
 
-		mWhiteLabel = new JLabel(Messages.getString("PlayNetGamePanel.whiteCaps")); //$NON-NLS-1$
+		mWhiteLabel = new JLabel("WHITE");
 		mWhiteLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
-		mWhiteLabel.setBorder(BorderFactory.createTitledBorder("")); //$NON-NLS-1$
+		mWhiteLabel.setBorder(BorderFactory.createTitledBorder(""));
 
-		mBlackLabel = new JLabel(Messages.getString("PlayNetGamePanel.blackCaps")); //$NON-NLS-1$
+		mBlackLabel = new JLabel("BLACK");
 		mBlackLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		mBlackLabel.setBorder(BorderFactory.createTitledBorder("")); //$NON-NLS-1$
+		mBlackLabel.setBorder(BorderFactory.createTitledBorder(""));
 
 		mWhiteLabel.setOpaque(true);
 		mBlackLabel.setOpaque(true);
@@ -170,7 +170,7 @@ public class PlayNetGamePanel extends PlayGamePanel implements PlayNetGameScreen
 		}
 
 		mWhiteCapturePanel = new JPanel();
-		mWhiteCapturePanel.setBorder(BorderFactory.createTitledBorder(Messages.getString("PlayNetGamePanel.capturedPieces"))); //$NON-NLS-1$
+		mWhiteCapturePanel.setBorder(BorderFactory.createTitledBorder("Captured Pieces"));
 		mWhiteCapturesJail = new Board(jailBoardSize, jailBoardSize, isPlayback);
 		mWhiteCapturePanel.setLayout(new GridLayout(jailBoardSize, jailBoardSize));
 		mWhiteCapturePanel.setPreferredSize(new Dimension((mWhiteCapturesJail.getMaxCol() + 1) * 25, (mWhiteCapturesJail
@@ -182,7 +182,7 @@ public class PlayNetGamePanel extends PlayGamePanel implements PlayNetGameScreen
 		}
 
 		mBlackCapturePanel = new JPanel();
-		mBlackCapturePanel.setBorder(BorderFactory.createTitledBorder(Messages.getString("PlayNetGamePanel.captuedPieces"))); //$NON-NLS-1$
+		mBlackCapturePanel.setBorder(BorderFactory.createTitledBorder("Captured Pieces"));
 		mBlackCapturesJail = new Board(jailBoardSize, jailBoardSize, isPlayback);
 		mBlackCapturePanel.setLayout(new GridLayout(jailBoardSize, jailBoardSize));
 		mBlackCapturePanel.setPreferredSize(new Dimension((mBlackCapturesJail.getMaxCol() + 1) * 25, (mBlackCapturesJail
@@ -411,7 +411,7 @@ public class PlayNetGamePanel extends PlayGamePanel implements PlayNetGameScreen
 		int numberOfColumns = board.numCols();
 		for (int i = numberOfRows; i > 0; i--)
 		{
-			JLabel label = new JLabel("" + i); //$NON-NLS-1$
+			JLabel label = new JLabel("" + i);
 			label.setHorizontalAlignment(SwingConstants.CENTER);
 			grid.add(label);
 			for (int j = 1; j <= numberOfColumns; j++)
@@ -425,13 +425,13 @@ public class PlayNetGamePanel extends PlayGamePanel implements PlayNetGameScreen
 		{
 			if (k != 0)
 			{
-				JLabel label = new JLabel("" + (char) (k - 1 + 'A')); //$NON-NLS-1$
+				JLabel label = new JLabel("" + (char) (k - 1 + 'A'));
 				label.setHorizontalAlignment(SwingConstants.CENTER);
 				grid.add(label);
 			}
 			else
 			{
-				grid.add(new JLabel("")); //$NON-NLS-1$
+				grid.add(new JLabel(""));
 			}
 		}
 		return grid;
@@ -440,10 +440,10 @@ public class PlayNetGamePanel extends PlayGamePanel implements PlayNetGameScreen
 	@Override
 	public JMenu createMenuBar()
 	{
-		mOptionsMenu = new JMenu(Messages.getString("PlayNetGamePanel.menu")); //$NON-NLS-1$
+		mOptionsMenu = new JMenu("Menu");
 		if (!mIsPlayback)
 		{
-			JMenuItem m_drawMenuItem = new JMenuItem(Messages.getString("PlayNetGamePanel.requestDraw"), KeyEvent.VK_R); //$NON-NLS-1$
+			JMenuItem m_drawMenuItem = new JMenuItem("Request Draw", KeyEvent.VK_R);
 			m_drawMenuItem.addActionListener(new ActionListener()
 			{
 				@Override
@@ -457,7 +457,7 @@ public class PlayNetGamePanel extends PlayGamePanel implements PlayNetGameScreen
 								return;
 
 							Result result = Result.DRAW;
-							result.setGuiText(Messages.getString("PlayNetGamePanel.youDeclaredDraw")); //$NON-NLS-1$
+							result.setGuiText("You have declared a draw. What would you like to do?");
 							GuiUtility.getChessCrafter().getPlayGameScreen().endOfGame(result);
 						}
 						else
@@ -473,7 +473,7 @@ public class PlayNetGamePanel extends PlayGamePanel implements PlayNetGameScreen
 			});
 
 			if (mIsAIGame)
-				m_drawMenuItem.setText(Messages.getString("PlayNetGamePanel.declareDraw")); //$NON-NLS-1$
+				m_drawMenuItem.setText("Declare Draw");
 
 			mOptionsMenu.add(m_drawMenuItem);
 		}
@@ -483,14 +483,14 @@ public class PlayNetGamePanel extends PlayGamePanel implements PlayNetGameScreen
 
 	private boolean requestDraw()
 	{
-		int result = JOptionPane.showConfirmDialog(Driver.getInstance(), Messages.getString("PlayNetGamePanel.sendDrawRequest"), Messages.getString("PlayNetGamePanel.draw"), //$NON-NLS-1$ //$NON-NLS-2$
+		int result = JOptionPane.showConfirmDialog(Driver.getInstance(), "Would you like to send the other player a draw request?", "Draw",
 				JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
 		return result == JOptionPane.YES_OPTION;
 	}
 
 	private boolean requestAIDraw()
 	{
-		int result = JOptionPane.showConfirmDialog(Driver.getInstance(), Messages.getString("PlayNetGamePanel.sureAboutDraw"), Messages.getString("PlayNetGamePanel.draw"), //$NON-NLS-1$ //$NON-NLS-2$
+		int result = JOptionPane.showConfirmDialog(Driver.getInstance(), "Are you sure you would like to declare a draw?", "Draw",
 				JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
 		return result == JOptionPane.YES_OPTION;
 	}

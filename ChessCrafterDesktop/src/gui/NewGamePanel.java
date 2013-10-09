@@ -61,13 +61,13 @@ public class NewGamePanel extends JPanel
 		constraints.ipadx = 0;
 		constraints.insets = new Insets(5, 50, 5, 50);
 		constraints.anchor = GridBagConstraints.CENTER;
-		add(new JLabel(Messages.getString("NewGamePanel.howToPlay")), constraints); //$NON-NLS-1$
+		add(new JLabel("How would you like to play?"), constraints);
 
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setBorder(BorderFactory.createLoweredBevelBorder());
 		buttonPanel.setLayout(new GridBagLayout());
 
-		JButton humanPlayButton = new JButton(Messages.getString("NewGamePanel.humanPlay")); //$NON-NLS-1$
+		JButton humanPlayButton = new JButton("Human Play");
 		humanPlayButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -86,7 +86,7 @@ public class NewGamePanel extends JPanel
 
 		if (NetworkPlayManager.getInstance().networkPlayIsAvailable())
 		{
-			JButton networkPlayButton = new JButton(Messages.getString("NewGamePanel.networkPlay")); //$NON-NLS-1$
+			JButton networkPlayButton = new JButton("Network Play");
 			networkPlayButton.addActionListener(NetworkPlayManager.getInstance().createNetworkPlayActionListener());
 
 			constraints.gridy = 2;
@@ -95,7 +95,7 @@ public class NewGamePanel extends JPanel
 			buttonPanel.add(networkPlayButton, constraints);
 		}
 
-		JButton aiPlayButton = new JButton(Messages.getString("NewGamePanel.aiPlay")); //$NON-NLS-1$
+		JButton aiPlayButton = new JButton("AI Play");
 		aiPlayButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -112,8 +112,8 @@ public class NewGamePanel extends JPanel
 		constraints.gridy = 1;
 		add(buttonPanel, constraints);
 
-		JButton backButton = new JButton(Messages.getString("NewGamePanel.returnToMenu")); //$NON-NLS-1$
-		backButton.setToolTipText(Messages.getString("NewGamePanel.returnToMenu")); //$NON-NLS-1$
+		JButton backButton = new JButton("Return to Main Menu");
+		backButton.setToolTipText("Return to the Main Menu");
 		backButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -129,7 +129,7 @@ public class NewGamePanel extends JPanel
 
 	private void initPopup()
 	{
-		mPopupFrame = new JFrame(Messages.getString("NewGamePanel.newGame")); //$NON-NLS-1$
+		mPopupFrame = new JFrame("New Game");
 		mPopupFrame.setLayout(new GridBagLayout());
 		mPopupFrame.setSize(325, 225);
 		mPopupFrame.setResizable(false);
@@ -161,7 +161,7 @@ public class NewGamePanel extends JPanel
 		}
 		catch (IOException e1)
 		{
-			JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("NewGamePanel.errorCouldntLoadVariantFiles")); //$NON-NLS-1$
+			JOptionPane.showMessageDialog(Driver.getInstance(), "Error: Could not load variant files. Maybe send a bug report or whatnot?");
 			e1.printStackTrace();
 			return;
 		}
@@ -170,7 +170,7 @@ public class NewGamePanel extends JPanel
 		constraints.gridx = 0;
 		constraints.gridy = 0;
 		constraints.anchor = GridBagConstraints.WEST;
-		mPopupFrame.add(new JLabel(Messages.getString("NewGamePanel.type")), constraints); //$NON-NLS-1$
+		mPopupFrame.add(new JLabel("Type: "), constraints);
 
 		constraints.gridx = 1;
 		constraints.gridy = 0;
@@ -178,14 +178,14 @@ public class NewGamePanel extends JPanel
 		mPopupFrame.add(dropdown, constraints);
 
 		// total time and increment fields
-		final JLabel totalTimeLabel = new JLabel(Messages.getString("NewGamePanel.totalTime")); //$NON-NLS-1$
+		final JLabel totalTimeLabel = new JLabel("Total Time (sec): ");
 		totalTimeLabel.setEnabled(false);
-		final JTextField totalTimeField = new JTextField("120", 3); //$NON-NLS-1$
+		final JTextField totalTimeField = new JTextField("120", 3);
 		totalTimeField.setEnabled(false);
 
-		final JLabel incrementLabel = new JLabel(Messages.getString("NewGamePanel.increment")); //$NON-NLS-1$
+		final JLabel incrementLabel = new JLabel("Increment/delay (sec): ");
 		incrementLabel.setEnabled(false);
-		final JTextField incrementField = new JTextField("10", 3); //$NON-NLS-1$
+		final JTextField incrementField = new JTextField("10", 3);
 		incrementField.setEnabled(false);
 
 		// combo box for selecting a timer
@@ -216,7 +216,7 @@ public class NewGamePanel extends JPanel
 		// add the combo box to the frame
 		constraints.gridx = 0;
 		constraints.gridy = 1;
-		mPopupFrame.add(new JLabel(Messages.getString("NewGamePanel.timer")), constraints); //$NON-NLS-1$
+		mPopupFrame.add(new JLabel("Timer: "), constraints);
 
 		constraints.gridx = 1;
 		constraints.gridy = 1;
@@ -243,7 +243,7 @@ public class NewGamePanel extends JPanel
 		mPopupFrame.add(incrementField, constraints);
 
 		// set up the done button
-		final JButton doneButton = new JButton(Messages.getString("NewGamePanel.start")); //$NON-NLS-1$
+		final JButton doneButton = new JButton("Start");
 		doneButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -259,7 +259,7 @@ public class NewGamePanel extends JPanel
 					public void run(Boolean isBlackTimer)
 					{
 						Result result = isBlackTimer ? Result.WHITE_WIN : Result.BLACK_WIN;
-						result.setGuiText(Messages.getString("NewGamePanel.timeHasRunOut") + result.winText() + Messages.getString("NewGamePanel.newLine")); //$NON-NLS-1$ //$NON-NLS-2$
+						result.setGuiText("Time has run out. " + result.winText() + "\n");
 						GuiUtility.getChessCrafter().getPlayGameScreen().endOfGame(result);
 					}
 				};
@@ -285,7 +285,7 @@ public class NewGamePanel extends JPanel
 		});
 
 		// set up the cancel button
-		final JButton cancelButton = new JButton(Messages.getString("NewGamePanel.cancel")); //$NON-NLS-1$
+		final JButton cancelButton = new JButton("Cancel");
 		cancelButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -323,7 +323,7 @@ public class NewGamePanel extends JPanel
 		// add the variant type selector to the frame
 		constraints.gridx = 0;
 		constraints.gridy = 0;
-		mPopupFrame.add(new JLabel(Messages.getString("NewGamePanel.type")), constraints); //$NON-NLS-1$
+		mPopupFrame.add(new JLabel("Type: "), constraints);
 
 		constraints.gridx = 1;
 		constraints.gridy = 0;
@@ -334,14 +334,14 @@ public class NewGamePanel extends JPanel
 		}
 		catch (IOException e1)
 		{
-			JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("NewGamePanel.errorDidYouDeleteSomething")); //$NON-NLS-1$
+			JOptionPane.showMessageDialog(Driver.getInstance(), "Error: Could not load variant files. Did you delete something?");
 			e1.printStackTrace();
 		}
 
 		// add the AI selector to the frame
 		constraints.gridx = 0;
 		constraints.gridy = 1;
-		mPopupFrame.add(new JLabel(Messages.getString("NewGamePanel.ai")), constraints); //$NON-NLS-1$
+		mPopupFrame.add(new JLabel("AI: "), constraints);
 
 		final JComboBox aiComboBox = new JComboBox(AIManager.getInstance().getAIFiles());
 		constraints.gridx = 1;
@@ -350,7 +350,7 @@ public class NewGamePanel extends JPanel
 		mPopupFrame.add(aiComboBox, constraints);
 
 		// add a button to the frame for installing a new AI
-		JButton addAIFileButton = new JButton(Messages.getString("NewGamePanel.installNewAI")); //$NON-NLS-1$
+		JButton addAIFileButton = new JButton("Install New AI");
 		addAIFileButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -365,7 +365,7 @@ public class NewGamePanel extends JPanel
 			}
 		});
 
-		JButton nextButton = new JButton(Messages.getString("NewGamePanel.next")); //$NON-NLS-1$
+		JButton nextButton = new JButton("Next");
 		nextButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -375,7 +375,7 @@ public class NewGamePanel extends JPanel
 				File aiFile = FileUtility.getAIFile(aiFileName);
 				if (aiComboBox.getSelectedItem() == null)
 				{
-					JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("NewGamePanel.youHaveNotSelectedAI"), Messages.getString("NewGamePanel.noAIFile"), //$NON-NLS-1$ //$NON-NLS-2$
+					JOptionPane.showMessageDialog(Driver.getInstance(), "You have not selected an AI file", "No AI file",
 							JOptionPane.PLAIN_MESSAGE);
 					return;
 				}
@@ -387,14 +387,14 @@ public class NewGamePanel extends JPanel
 				catch (IOException e1)
 				{
 					e1.printStackTrace();
-					JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("NewGamePanel.errorDidYouDeleteSomething")); //$NON-NLS-1$
+					JOptionPane.showMessageDialog(Driver.getInstance(), "Error: Could not load variant files. Did you delete something?");
 					return;
 				}
 
 				JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
 				StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, Locale.getDefault(), null);
 
-				String[] compileOptions = new String[] { "-d", "bin" }; //$NON-NLS-1$ //$NON-NLS-2$
+				String[] compileOptions = new String[] { "-d", "bin" };
 				Iterable<String> compilationOptions = Arrays.asList(compileOptions);
 
 				List<File> sourceFileList = Lists.newArrayList();
@@ -404,10 +404,10 @@ public class NewGamePanel extends JPanel
 
 				if (!task.call())
 				{
-					JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("NewGamePanel.compilationFailed") //$NON-NLS-1$
-							+ Messages.getString("NewGamePanel.makeSureClassImplementsAIPlugin") //$NON-NLS-1$
-							+ Messages.getString("NewGamePanel.makeSureClassIncludes") + "import ai.*;\n" //$NON-NLS-1$ //$NON-NLS-2$
-							+ "import ai.AIAdapter.*;\n", Messages.getString("NewGamePanel.compilationFailure"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
+					JOptionPane.showMessageDialog(Driver.getInstance(), "Compilation failed\n"
+							+ "Make sure your class implements the AIPlugin interface\n"
+							+ "Make sure your class includes the following imports:\n" + "import ai.*;\n"
+							+ "import ai.AIAdapter.*;\n", "Compilation Failure", JOptionPane.PLAIN_MESSAGE);
 					return;
 				}
 
@@ -418,7 +418,7 @@ public class NewGamePanel extends JPanel
 					final AIPlugin aiPlugin;
 					final AIAdapter aiAdapter = new AIAdapter(gameToPlay);
 					ClassLoader classLoader = ClassLoader.getSystemClassLoader();
-					Class<?> klazz = classLoader.loadClass(aiFileName.substring(0, aiFileName.indexOf(".java"))); //$NON-NLS-1$
+					Class<?> klazz = classLoader.loadClass(aiFileName.substring(0, aiFileName.indexOf(".java")));
 					Constructor<?> constructor = klazz.getConstructor();
 					aiPlugin = (AIPlugin) constructor.newInstance();
 
@@ -454,7 +454,7 @@ public class NewGamePanel extends JPanel
 			}
 		});
 
-		JButton cancelButton = new JButton(Messages.getString("NewGamePanel.cancel")); //$NON-NLS-1$
+		JButton cancelButton = new JButton("Cancel");
 		cancelButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -488,7 +488,7 @@ public class NewGamePanel extends JPanel
 		if (AIManager.getInstance().getAIFiles().length == 0)
 		{
 			switch (JOptionPane.showConfirmDialog(Driver.getInstance(),
-					Messages.getString("NewGamePanel.noAIFilesInstalled"), Messages.getString("NewGamePanel.installAIFiles"), //$NON-NLS-1$ //$NON-NLS-2$
+					"There are no AI files installed. Would you like to install one?", "Install AI Files?",
 					JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE))
 			{
 			case JOptionPane.YES_OPTION:

@@ -30,7 +30,7 @@ public class VariantMenuPanel extends JPanel {
 		constraints.insets = new Insets(5, 50, 5, 50);
 		constraints.anchor = GridBagConstraints.CENTER;
 
-		JButton createNewVariantButton = new JButton(Messages.getString("VariantMenuPanel.createNew")); //$NON-NLS-1$
+		JButton createNewVariantButton = new JButton("Create New Variant");
 		createNewVariantButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
@@ -64,7 +64,7 @@ public class VariantMenuPanel extends JPanel {
 
 		constraints.gridy = 2;
 		constraints.ipadx = 7;
-		final JButton editButton = new JButton(Messages.getString("VariantMenuPanel.edit")); //$NON-NLS-1$
+		final JButton editButton = new JButton("Edit");
 		editButton.setEnabled(false);
 		editButton.addActionListener(new ActionListener() {
 			@Override
@@ -76,7 +76,7 @@ public class VariantMenuPanel extends JPanel {
 		});
 		buttonPanel.add(editButton, constraints);
 
-		final JButton deleteButton = new JButton(Messages.getString("VariantMenuPanel.delete")); //$NON-NLS-1$
+		final JButton deleteButton = new JButton("Delete");
 		deleteButton.setEnabled(false);
 		deleteButton.addActionListener(new ActionListener() {
 			@Override
@@ -117,8 +117,8 @@ public class VariantMenuPanel extends JPanel {
 			}
 		});
 
-		JButton backButton = new JButton(Messages.getString("VariantMenuPanel.return")); //$NON-NLS-1$
-		backButton.setToolTipText(Messages.getString("VariantMenuPanel.return")); //$NON-NLS-1$
+		JButton backButton = new JButton("Return to Main Menu");
+		backButton.setToolTipText("Return to the Main Menu");
 		backButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {

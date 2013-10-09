@@ -17,7 +17,6 @@ import javax.swing.JTextArea;
 import javax.swing.WindowConstants;
 
 import utility.AppConstants;
-import utility.FileUtility;
 import utility.GuiUtility;
 
 public class AboutFrame extends JFrame
@@ -29,7 +28,7 @@ public class AboutFrame extends JFrame
 
 	private void initGUIComponents(JPanel mainPanel)
 	{
-		setTitle(Messages.getString("AboutFrame.about") + AppConstants.APP_NAME);  //$NON-NLS-1$
+		setTitle("About " + AppConstants.APP_NAME);
 		setSize(350, 375);
 		setResizable(false);
 		setLocationRelativeTo(this);
@@ -41,16 +40,16 @@ public class AboutFrame extends JFrame
 		JLabel piecePicture = null;
 		try
 		{
-			frontPageImage = new JLabel(GuiUtility.createImageIcon(300, 200, FileUtility.getImagePath("front_page_image.jpeg", true))); //$NON-NLS-1$
-			piecePicture = new JLabel(GuiUtility.createImageIcon(48, 48, FileUtility.getImagePath("d_King.png",true))); //$NON-NLS-1$
+			frontPageImage = new JLabel(GuiUtility.createImageIcon(300, 200, "/front_page_image.jpeg"));
+			piecePicture = new JLabel(GuiUtility.createImageIcon(48, 48, "/d_King.png"));
 		}
 		catch (IOException e1)
 		{
 			e1.printStackTrace();
 		}
 
-		Font font = new Font(Messages.getString("AboutFrame.verdana"), Font.BOLD, 18); //$NON-NLS-1$
-		JLabel title = new JLabel(AppConstants.APP_NAME + Messages.getString("AboutFrame.newline")); //$NON-NLS-1$
+		Font font = new Font("Verdana", Font.BOLD, 18);
+		JLabel title = new JLabel(AppConstants.APP_NAME + "\n");
 		title.setFont(font);
 
 		JPanel topPanel = new JPanel();
@@ -59,7 +58,7 @@ public class AboutFrame extends JFrame
 
 		JTextArea infoTextArea = new JTextArea();
 		infoTextArea.setEditable(false);
-		infoTextArea.setText(Messages.getString("AboutFrame.version") + Messages.getString("AboutFrame.visitOurSite")); //$NON-NLS-1$ //$NON-NLS-2$
+		infoTextArea.setText("Version 1.1\n\n" + "Visit our project site");
 
 		JButton siteButton = new JButton();
 		siteButton.setIcon(piecePicture.getIcon());

@@ -19,7 +19,7 @@ public class Rules implements Serializable
 		// Initialize everything to classic to ensure nothing can be null.
 		mNextTurn = new NextTurn(NextTurnOption.CLASSIC, 1, 1, 0);
 
-		mEndOfGame = EndOfGame.CLASSIC.init(3, Messages.getString("queen"), isBlack); //$NON-NLS-1$
+		mEndOfGame = EndOfGame.CLASSIC.init(3, "Queen", isBlack);
 
 		mCropLegalDests = EnumSet.of(CropLegalDestinations.CLASSIC);
 		mObjectivePiece = new ObjectivePiece(ObjectivePieceTypes.CLASSIC);

@@ -61,7 +61,7 @@ public class Builder implements Serializable
 	 */
 	private static void buildClassic() throws IOException
 	{
-		Builder classic = new Builder(Messages.getString("classic"));// Name is Classic chess //$NON-NLS-1$
+		Builder classic = new Builder("Classic");// Name is Classic chess
 		classic.setBoards(new Board[] { new Board(8, 8, false) });
 		Board b = classic.mBoards[0];
 		for (int i = 1; i < 9; i++)
@@ -107,7 +107,7 @@ public class Builder implements Serializable
 		bishopMovement.put('r', -1);
 		bishopMovement.put('L', -1);
 		bishopMovement.put('l', -1);
-		return new Piece(Messages.getString("bishop"), isBlack, square, board, bishopMovement); //$NON-NLS-1$
+		return new Piece("Bishop", isBlack, square, board, bishopMovement);
 	}
 
 	/**
@@ -131,7 +131,7 @@ public class Builder implements Serializable
 		kingMovement.put('r', 1);
 		kingMovement.put('L', 1);
 		kingMovement.put('l', 1);
-		return new Piece(Messages.getString("king"), isBlack, square, board, kingMovement); //$NON-NLS-1$
+		return new Piece("King", isBlack, square, board, kingMovement);
 	}
 
 	/**
@@ -149,7 +149,7 @@ public class Builder implements Serializable
 		Map<Character, Integer> knightMovement = Maps.newHashMap();
 		knightMovement.put('x', 1);
 		knightMovement.put('y', 2);
-		return new Piece(Messages.getString("knight"), isBlack, square, board, knightMovement); //$NON-NLS-1$
+		return new Piece("Knight", isBlack, square, board, knightMovement);
 	}
 
 	/**
@@ -164,12 +164,12 @@ public class Builder implements Serializable
 	 */
 	public static Piece createPawn(boolean isBlack, Square square, Board board) throws IOException
 	{
-		Piece pawn = new Piece(Messages.getString("pawn"), isBlack, square, board, null); //$NON-NLS-1$
+		Piece pawn = new Piece("Pawn", isBlack, square, board, null);
 		List<String> promotesTo = Lists.newArrayList();
-		promotesTo.add(Messages.getString("queen")); //$NON-NLS-1$
-		promotesTo.add(Messages.getString("bishop")); //$NON-NLS-1$
-		promotesTo.add(Messages.getString("knight")); //$NON-NLS-1$
-		promotesTo.add(Messages.getString("rook")); //$NON-NLS-1$
+		promotesTo.add("Queen");
+		promotesTo.add("Bishop");
+		promotesTo.add("Knight");
+		promotesTo.add("Rook");
 		pawn.setPromotesTo(promotesTo);
 		return pawn;
 	}
@@ -195,7 +195,7 @@ public class Builder implements Serializable
 		queenMovement.put('r', -1);
 		queenMovement.put('L', -1);
 		queenMovement.put('l', -1);
-		return new Piece(Messages.getString("queen"), isBlack, square, board, queenMovement); //$NON-NLS-1$
+		return new Piece("Queen", isBlack, square, board, queenMovement);
 	}
 
 	/**
@@ -215,7 +215,7 @@ public class Builder implements Serializable
 		rookMovement.put('S', -1);
 		rookMovement.put('W', -1);
 		rookMovement.put('E', -1);
-		return new Piece(Messages.getString("rook"), isBlack, square, board, rookMovement); //$NON-NLS-1$
+		return new Piece("Rook", isBlack, square, board, rookMovement);
 	}
 
 	/**
@@ -229,7 +229,7 @@ public class Builder implements Serializable
 		String[] vars = FileUtility.getVariantsFileArray();
 		for (String s : vars)
 		{
-			if (s.equals(Messages.getString("classic"))) //$NON-NLS-1$
+			if (s.equals("Classic"))
 				return vars;
 		}
 		buildClassic();

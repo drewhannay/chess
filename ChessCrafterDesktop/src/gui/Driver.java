@@ -53,7 +53,7 @@ public final class Driver extends JFrame implements ChessCrafter
 		}
 		catch (Exception e)
 		{
-			System.out.println(Messages.getString("Driver.errorSettingUpInitialScreen")); //$NON-NLS-1$
+			System.out.println("Error setting up initial GUI screen");
 			e.printStackTrace();
 		}
 	}
@@ -99,7 +99,7 @@ public final class Driver extends JFrame implements ChessCrafter
 		mMainMenuItem.setVisible(true);
 		add(panel);
 		// FIXME
-		if (panel.toString().contains(Messages.getString("Driver.playGame")) || panel.toString().contains(Messages.getString("Driver.playNetGame"))) //$NON-NLS-1$ //$NON-NLS-2$
+		if (panel.toString().contains("PlayGame") || panel.toString().contains("PlayNetGame"))
 			activateWindowListener();
 		mOtherPanel = panel;
 		pack();
@@ -122,8 +122,8 @@ public final class Driver extends JFrame implements ChessCrafter
 		mMenuBar.add(mOptionsMenu);
 		mOptionsMenu.setVisible(true);
 		mOptionsMenu.setMnemonic('O');
-		mOptionsMenu.setText(Messages.getString("Driver.options")); //$NON-NLS-1$
-		mOptionsMenu.setToolTipText(Messages.getString("Driver.accessGameOptions")); //$NON-NLS-1$
+		mOptionsMenu.setText("Options");
+		mOptionsMenu.setToolTipText("Use me to access game options");
 	}
 
 	private void initGuiComponents() throws ClassNotFoundException, InstantiationException, IllegalAccessException,
@@ -160,7 +160,7 @@ public final class Driver extends JFrame implements ChessCrafter
 		c.gridy = 0;
 		try
 		{
-			mMainPanel.add(new JLabel(GuiUtility.createImageIcon(300, 200, FileUtility.getImagePath("chess_logo.png", true))), c); //$NON-NLS-1$
+			mMainPanel.add(new JLabel(GuiUtility.createImageIcon(300, 200, FileUtility.getImagePath("chess_logo.png", true))), c);
 		}
 		catch (IOException e)
 		{
@@ -203,8 +203,8 @@ public final class Driver extends JFrame implements ChessCrafter
 
 	private JButton pieceMenuButton()
 	{
-		JButton pieceButton = new JButton(Messages.getString("Driver.pieces")); //$NON-NLS-1$
-		pieceButton.setToolTipText(Messages.getString("Driver.createEditRemove")); //$NON-NLS-1$
+		JButton pieceButton = new JButton("Pieces");
+		pieceButton.setToolTipText("Create, edit, or remove custom pieces.");
 		pieceButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -226,9 +226,9 @@ public final class Driver extends JFrame implements ChessCrafter
 				@Override
 				public void windowClosing(WindowEvent e)
 				{
-					Object[] options = new String[] { Messages.getString("Driver.saveGame"), Messages.getString("Driver.dontSave"), Messages.getString("Driver.cancel") }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-					switch (JOptionPane.showOptionDialog(Driver.getInstance(), Messages.getString("Driver.saveBeforeQuitting"), //$NON-NLS-1$
-							Messages.getString("Driver.quitQ"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0])) //$NON-NLS-1$
+					Object[] options = new String[] { "Save Game", "Don't Save", "Cancel" };
+					switch (JOptionPane.showOptionDialog(Driver.getInstance(), "Would you like to save your game before you quit?",
+							"Quit?", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]))
 					{
 					case JOptionPane.YES_OPTION:
 						((PlayGamePanel) mOtherPanel).saveGame();
@@ -262,7 +262,7 @@ public final class Driver extends JFrame implements ChessCrafter
 		try
 		{
 			BufferedImage frontPageImage = FileUtility.getFrontPageImage();
-			if (System.getProperty("os.name").startsWith("Windows")) //$NON-NLS-1$ //$NON-NLS-2$
+			if (System.getProperty("os.name").startsWith("Windows"))
 			{
 				final SystemTray sysTray = SystemTray.getSystemTray();
 				TrayIcon tray = new TrayIcon(frontPageImage.getScaledInstance(25, 18, Image.SCALE_SMOOTH));
@@ -288,11 +288,11 @@ public final class Driver extends JFrame implements ChessCrafter
 
 	private JMenu createFileMenu()
 	{
-		JMenu fileMenu = new JMenu(Messages.getString("Driver.file")); //$NON-NLS-1$
+		JMenu fileMenu = new JMenu("File");
 		fileMenu.setMnemonic('F');
 
-		JMenuItem newGameItem = new JMenuItem(Messages.getString("Driver.newGame"), KeyEvent.VK_N); //$NON-NLS-1$
-		newGameItem.setToolTipText(Messages.getString("Driver.startNewGame")); //$NON-NLS-1$
+		JMenuItem newGameItem = new JMenuItem("New Game", KeyEvent.VK_N);
+		newGameItem.setToolTipText("Start a new Game");
 		newGameItem.addActionListener(new ActionListener()
 		{
 			@Override
@@ -304,8 +304,8 @@ public final class Driver extends JFrame implements ChessCrafter
 
 		fileMenu.add(newGameItem);
 
-		mMainMenuItem = new JMenuItem(Messages.getString("Driver.mainMenu"), KeyEvent.VK_M); //$NON-NLS-1$
-		mMainMenuItem.setToolTipText(Messages.getString("Driver.returnToMain")); //$NON-NLS-1$
+		mMainMenuItem = new JMenuItem("Main Menu", KeyEvent.VK_M);
+		mMainMenuItem.setToolTipText("Return to the Main Menu");
 		mMainMenuItem.addActionListener(new ActionListener()
 		{
 			@Override
@@ -323,8 +323,8 @@ public final class Driver extends JFrame implements ChessCrafter
 		mMainMenuItem.setVisible(false);
 		fileMenu.add(mMainMenuItem);
 
-		JMenuItem preferences = new JMenuItem(Messages.getString("Driver.preferences"), KeyEvent.VK_P); //$NON-NLS-1$
-		preferences.setToolTipText(Messages.getString("Driver.changePreferences")); //$NON-NLS-1$
+		JMenuItem preferences = new JMenuItem("Preferences", KeyEvent.VK_P);
+		preferences.setToolTipText("Change preferences");
 		preferences.addActionListener(new ActionListener()
 		{
 			@Override
@@ -335,14 +335,14 @@ public final class Driver extends JFrame implements ChessCrafter
 		});
 		fileMenu.add(preferences);
 
-		JMenuItem exitMenuItem = new JMenuItem(Messages.getString("Driver.quit"), KeyEvent.VK_Q); //$NON-NLS-1$
-		exitMenuItem.setToolTipText(Messages.getString("Driver.closeProgram")); //$NON-NLS-1$
+		JMenuItem exitMenuItem = new JMenuItem("Quit", KeyEvent.VK_Q);
+		exitMenuItem.setToolTipText("Close the program");
 		exitMenuItem.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent event)
 			{
-				int answer = JOptionPane.showConfirmDialog(Driver.getInstance(), Messages.getString("Driver.sureYouWannaQuit"), Messages.getString("Driver.quitQ"), //$NON-NLS-1$ //$NON-NLS-2$
+				int answer = JOptionPane.showConfirmDialog(Driver.getInstance(), "Are you sure you want to Quit?", "Quit?",
 						JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
 				if (answer == 0)
 					System.exit(0);
@@ -357,11 +357,11 @@ public final class Driver extends JFrame implements ChessCrafter
 
 	private JMenu createHelpMenu()
 	{
-		JMenu helpMenu = new JMenu(Messages.getString("Driver.help")); //$NON-NLS-1$
+		JMenu helpMenu = new JMenu("Help");
 		helpMenu.setMnemonic('H');
 
-		JMenuItem helpMenuItem = new JMenuItem(Messages.getString("Driver.browseHelp"), KeyEvent.VK_H); //$NON-NLS-1$
-		helpMenuItem.setToolTipText(Messages.getString("Driver.clickToGetHelp")); //$NON-NLS-1$
+		JMenuItem helpMenuItem = new JMenuItem("Browse Help", KeyEvent.VK_H);
+		helpMenuItem.setToolTipText("Click on me to get help");
 		helpMenuItem.addActionListener(new ActionListener()
 		{
 			@Override
@@ -372,8 +372,8 @@ public final class Driver extends JFrame implements ChessCrafter
 		});
 		helpMenu.add(helpMenuItem);
 
-		JMenuItem aboutItem = new JMenuItem(Messages.getString("Driver.about") + AppConstants.APP_NAME, KeyEvent.VK_A); //$NON-NLS-1$
-		aboutItem.setToolTipText(Messages.getString("Driver.informationAbout") + AppConstants.APP_NAME); //$NON-NLS-1$
+		JMenuItem aboutItem = new JMenuItem("About " + AppConstants.APP_NAME, KeyEvent.VK_A);
+		aboutItem.setToolTipText("Information about " + AppConstants.APP_NAME);
 		aboutItem.addActionListener(new ActionListener()
 		{
 			@Override
@@ -389,9 +389,9 @@ public final class Driver extends JFrame implements ChessCrafter
 
 	private JButton createNewGameButton()
 	{
-		JButton newGameButton = new JButton(Messages.getString("Driver.newGame")); //$NON-NLS-1$
+		JButton newGameButton = new JButton("New Game");
 
-		newGameButton.setToolTipText(Messages.getString("Driver.startANewGame")); //$NON-NLS-1$
+		newGameButton.setToolTipText("Start a new game of Chess");
 		newGameButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -406,8 +406,8 @@ public final class Driver extends JFrame implements ChessCrafter
 
 	private JButton createContinueGameButton()
 	{
-		JButton continueGameButton = new JButton(Messages.getString("Driver.loadGame")); //$NON-NLS-1$
-		continueGameButton.setToolTipText(Messages.getString("Driver.loadASavedGame")); //$NON-NLS-1$
+		JButton continueGameButton = new JButton("Load Game");
+		continueGameButton.setToolTipText("Load a saved game");
 		continueGameButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -417,12 +417,12 @@ public final class Driver extends JFrame implements ChessCrafter
 
 				if (files.length == 0)
 				{
-					JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("Driver.noSavedGames"), //$NON-NLS-1$
-							Messages.getString("Driver.noCompletedGames"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
+					JOptionPane.showMessageDialog(Driver.getInstance(), "There are no saved games. Try starting a new game instead.",
+							"No Completed Games", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
 
-				final JFrame poppedFrame = new JFrame(Messages.getString("Driver.loadSavedGame")); //$NON-NLS-1$
+				final JFrame poppedFrame = new JFrame("Load Saved Game");
 				poppedFrame.setLayout(new GridBagLayout());
 				poppedFrame.setSize(225, 200);
 				poppedFrame.setResizable(false);
@@ -434,7 +434,7 @@ public final class Driver extends JFrame implements ChessCrafter
 				scrollPane.setPreferredSize(new Dimension(200, 200));
 				gamesInProgressList.setSelectedIndex(0);
 
-				JButton nextButton = new JButton(Messages.getString("Driver.next")); //$NON-NLS-1$
+				JButton nextButton = new JButton("Next");
 				nextButton.addActionListener(new ActionListener()
 				{
 					@Override
@@ -447,7 +447,7 @@ public final class Driver extends JFrame implements ChessCrafter
 						{
 							if (gamesInProgressList.getSelectedValue() == null)
 							{
-								JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("Driver.selectGame"), Messages.getString("Driver.error"), //$NON-NLS-1$ //$NON-NLS-2$
+								JOptionPane.showMessageDialog(Driver.getInstance(), "Please select a game", "Error",
 										JOptionPane.PLAIN_MESSAGE);
 								return;
 							}
@@ -471,16 +471,16 @@ public final class Driver extends JFrame implements ChessCrafter
 						{
 							e.printStackTrace();
 							JOptionPane.showMessageDialog(Driver.getInstance(),
-									Messages.getString("Driver.noValidSavedGames"), Messages.getString("Driver.invalidSavedGames"), //$NON-NLS-1$ //$NON-NLS-2$
+									"There are no valid saved games. Start a New Game instead.", "Invalid Saved Games",
 									JOptionPane.PLAIN_MESSAGE);
 						}
 					}
 				});
 
-				JButton cancelButton = new JButton(Messages.getString("Driver.cancel")); //$NON-NLS-1$
+				JButton cancelButton = new JButton("Cancel");
 				GuiUtility.setupCancelButton(cancelButton, poppedFrame);
 
-				JButton deleteButton = new JButton(Messages.getString("Driver.deleteSavedGame")); //$NON-NLS-1$
+				JButton deleteButton = new JButton("Delete Saved Game");
 				deleteButton.addActionListener(new ActionListener()
 				{
 					@Override
@@ -492,8 +492,8 @@ public final class Driver extends JFrame implements ChessCrafter
 									gamesInProgressList.getSelectedValue().toString()).delete();
 							if (!didDeleteSuccessfully)
 							{
-								JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("Driver.savedGameNotDeleted"), //$NON-NLS-1$
-										Messages.getString("Driver.error"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
+								JOptionPane.showMessageDialog(Driver.getInstance(), "Saved game was not deleted successfully",
+										"Error", JOptionPane.ERROR_MESSAGE);
 							}
 							else
 							{
@@ -502,7 +502,7 @@ public final class Driver extends JFrame implements ChessCrafter
 								if (gamesInProgressList.getSelectedValue() == null)
 								{
 									JOptionPane.showMessageDialog(Driver.getInstance(),
-											Messages.getString("Driver.noMoreCompletedGames"), Messages.getString("Driver.noCompletedGames"), //$NON-NLS-1$ //$NON-NLS-2$
+											"There are no more completed games. Returning to Main Menu", "No Completed Games",
 											JOptionPane.PLAIN_MESSAGE);
 									poppedFrame.dispose();
 								}
@@ -511,8 +511,8 @@ public final class Driver extends JFrame implements ChessCrafter
 						}
 						else
 						{
-							JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("Driver.noSaveFiles"), //$NON-NLS-1$
-									Messages.getString("Driver.noSaveFileSelected"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$
+							JOptionPane.showMessageDialog(Driver.getInstance(), "There are currently no save files!",
+									"No save file selected!", JOptionPane.PLAIN_MESSAGE);
 						}
 					}
 				});
@@ -551,8 +551,8 @@ public final class Driver extends JFrame implements ChessCrafter
 	private JButton createViewCompletedGamesButton()
 	{
 
-		JButton viewCompletedGameButton = new JButton(Messages.getString("Driver.completedGames")); //$NON-NLS-1$
-		viewCompletedGameButton.setToolTipText(Messages.getString("Driver.reviewFinishedGame")); //$NON-NLS-1$
+		JButton viewCompletedGameButton = new JButton("Completed Games");
+		viewCompletedGameButton.setToolTipText("Review a finished game");
 		viewCompletedGameButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -563,12 +563,12 @@ public final class Driver extends JFrame implements ChessCrafter
 					String[] files = FileUtility.getCompletedGamesFileArray();
 					if (files.length == 0)
 					{
-						JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("Driver.noCompletedToDisplay"), //$NON-NLS-1$
-								Messages.getString("Driver.noCompleted"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$
+						JOptionPane.showMessageDialog(Driver.getInstance(), "There are no completed games to display.",
+								"No Completed Games", JOptionPane.PLAIN_MESSAGE);
 						return;
 					}
 
-					final JFrame poppedFrame = new JFrame(Messages.getString("Driver.viewCompleted")); //$NON-NLS-1$
+					final JFrame poppedFrame = new JFrame("View Completed Game");
 					poppedFrame.setLayout(new GridBagLayout());
 					poppedFrame.setSize(225, 200);
 					poppedFrame.setResizable(false);
@@ -580,7 +580,7 @@ public final class Driver extends JFrame implements ChessCrafter
 					scrollPane.setPreferredSize(new Dimension(200, 200));
 					completedGamesList.setSelectedIndex(0);
 
-					JButton nextButton = new JButton(Messages.getString("Driver.next")); //$NON-NLS-1$
+					JButton nextButton = new JButton("Next");
 					nextButton.addActionListener(new ActionListener()
 					{
 						@Override
@@ -588,7 +588,7 @@ public final class Driver extends JFrame implements ChessCrafter
 						{
 							if (completedGamesList.getSelectedValue() == null)
 							{
-								JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("Driver.selectGame"), Messages.getString("Driver.error"), //$NON-NLS-1$ //$NON-NLS-2$
+								JOptionPane.showMessageDialog(Driver.getInstance(), "Please select a game", "Error",
 										JOptionPane.PLAIN_MESSAGE);
 								return;
 							}
@@ -597,7 +597,7 @@ public final class Driver extends JFrame implements ChessCrafter
 							FileInputStream fileInputStream;
 							ObjectInputStream objectInputStream;
 							Game gameToView;
-							if (completedGamesList.getSelectedValue().toString().endsWith(".acn")) //$NON-NLS-1$
+							if (completedGamesList.getSelectedValue().toString().endsWith(".acn"))
 							{
 								try
 								{
@@ -606,8 +606,8 @@ public final class Driver extends JFrame implements ChessCrafter
 								catch (Exception e)
 								{
 									JOptionPane.showMessageDialog(Driver.getInstance(),
-											Messages.getString("Driver.invalidACNNotation"), //$NON-NLS-1$
-											Messages.getString("Driver.invalidNotation"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$
+											"This file contains invalid ACN notation. Please check the format and try again",
+											"Invalid Notation", JOptionPane.PLAIN_MESSAGE);
 									return;
 								}
 							}
@@ -626,8 +626,8 @@ public final class Driver extends JFrame implements ChessCrafter
 								{
 									e.printStackTrace();
 									JOptionPane.showMessageDialog(Driver.getInstance(),
-											Messages.getString("Driver.gameIsCorrupted"), //$NON-NLS-1$
-											Messages.getString("Driver.invalidCompletedGame"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$
+											"This game is corrupted, please choose another or start a New Game instead.",
+											"Invalid Completed Game", JOptionPane.PLAIN_MESSAGE);
 								}
 							}
 							deactivateWindowListener();
@@ -635,10 +635,10 @@ public final class Driver extends JFrame implements ChessCrafter
 						}
 					});
 
-					JButton cancelButton = new JButton(Messages.getString("Driver.cancel")); //$NON-NLS-1$
+					JButton cancelButton = new JButton("Cancel");
 					GuiUtility.setupCancelButton(cancelButton, poppedFrame);
 
-					JButton deleteButton = new JButton(Messages.getString("Driver.deleteCompleted")); //$NON-NLS-1$
+					JButton deleteButton = new JButton("Delete Completed Game");
 					deleteButton.addActionListener(new ActionListener()
 					{
 						@Override
@@ -650,8 +650,8 @@ public final class Driver extends JFrame implements ChessCrafter
 										completedGamesList.getSelectedValue().toString()).delete();
 								if (!didDeleteCompletedGameSuccessfully)
 								{
-									JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("Driver.completedNotDeleted"), //$NON-NLS-1$
-											Messages.getString("Driver.error"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$
+									JOptionPane.showMessageDialog(Driver.getInstance(), "Completed game was not deleted successfully",
+											"Error", JOptionPane.PLAIN_MESSAGE);
 								}
 								else
 								{
@@ -661,7 +661,7 @@ public final class Driver extends JFrame implements ChessCrafter
 									if (completedGamesList.getSelectedValue() == null)
 									{
 										JOptionPane.showMessageDialog(Driver.getInstance(),
-												Messages.getString("Driver.noMoreCompleted"), Messages.getString("Driver.noCompleted"), //$NON-NLS-1$ //$NON-NLS-2$
+												"There are no more completed games. Returning to Main Menu", "No Completed Games",
 												JOptionPane.PLAIN_MESSAGE);
 										poppedFrame.dispose();
 									}
@@ -670,8 +670,8 @@ public final class Driver extends JFrame implements ChessCrafter
 							}
 							else
 							{
-								JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("Driver.currentlyNoCompleted"), //$NON-NLS-1$
-										Messages.getString("Driver.noCompletedSelected"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$
+								JOptionPane.showMessageDialog(Driver.getInstance(), "There are currently no completed games!",
+										"No completed game selected!", JOptionPane.PLAIN_MESSAGE);
 							}
 						}
 					});
@@ -706,7 +706,7 @@ public final class Driver extends JFrame implements ChessCrafter
 				{
 					e.printStackTrace();
 					JOptionPane.showMessageDialog(Driver.getInstance(),
-							Messages.getString("Driver.eitherNoCompletedOrGameMissing"), Messages.getString("Driver.noCompleted"), //$NON-NLS-1$ //$NON-NLS-2$
+							"Either there are no completed games or the game file is missing.", "No Completed Games",
 							JOptionPane.PLAIN_MESSAGE);
 				}
 			}
@@ -717,8 +717,8 @@ public final class Driver extends JFrame implements ChessCrafter
 
 	private JButton variantMenuButton()
 	{
-		JButton variantButton = new JButton(Messages.getString("Driver.variants")); //$NON-NLS-1$
-		variantButton.setToolTipText(Messages.getString("Driver.createEditRemoveVariants")); //$NON-NLS-1$
+		JButton variantButton = new JButton("Variants");
+		variantButton.setToolTipText("Create, edit, or remove game variants.");
 		variantButton.addActionListener(new ActionListener()
 		{
 			@Override

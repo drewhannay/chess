@@ -142,7 +142,7 @@ public enum AfterMove
 		move.setOldPos(toPlace.getSquare());
 		if (move.isVerified())
 		{
-			JOptionPane.showMessageDialog(null, Messages.getString("pieceIsOnYourSide")); //$NON-NLS-1$
+			JOptionPane.showMessageDialog(null, "This piece is now on your side. Place it in an empty square.");
 			GuiUtility.getChessCrafter().getPlayGameScreen().setNextMoveMustPlacePiece(true);
 			GuiUtility.getChessCrafter().getPlayGameScreen().setPieceToPlace(toPlace);
 		}
@@ -190,7 +190,7 @@ public enum AfterMove
 		if (move.isVerified() && !(objectivePiece == toPlace))
 		{
 			toPlace.setIsCaptured(false);
-			JOptionPane.showMessageDialog(null, Messages.getString("youCapturedPiece")); //$NON-NLS-1$
+			JOptionPane.showMessageDialog(null, "You have captured this piece. Now place it in an empty square.");
 			GuiUtility.getChessCrafter().getPlayGameScreen().setNextMoveMustPlacePiece(true);
 			GuiUtility.getChessCrafter().getPlayGameScreen().setPieceToPlace(toPlace);
 		}
@@ -268,7 +268,7 @@ public enum AfterMove
 			if (s == null)
 				continue;
 			Piece p = s.getPiece();
-			if (p != null && (!(p.getName().equals(Messages.getString("pawn"))) && p != suicide) && p != captured) //$NON-NLS-1$
+			if (p != null && (!(p.getName().equals("Pawn")) && p != suicide) && p != captured)
 			{
 				exploded.add(p);
 				p.setIsCaptured(true);

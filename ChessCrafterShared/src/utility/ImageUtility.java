@@ -16,14 +16,14 @@ public final class ImageUtility
 	{
 		if (image == null)
 			throw new Exception();
-		ImageIO.write(image, "PNG", new File(FileUtility.getImagePath(LIGHT_PREFIX + pieceName + PNG, false))); //$NON-NLS-1$
+		ImageIO.write(image, "PNG", new File(FileUtility.getImagePath(LIGHT_PREFIX + pieceName + PNG, false)));
 	}
 
 	public static void writeDarkImage(String pieceName, BufferedImage image) throws Exception
 	{
 		if (image == null)
 			throw new Exception();
-		ImageIO.write(image, "PNG", new File(FileUtility.getImagePath(DARK_PREFIX + pieceName + PNG, false))); //$NON-NLS-1$
+		ImageIO.write(image, "PNG", new File(FileUtility.getImagePath(DARK_PREFIX + pieceName + PNG, false)));
 	}
 
 	public static ImageIcon getLightImage(String pieceName) throws IOException
@@ -46,8 +46,8 @@ public final class ImageUtility
 		}
 	}
 	
-	private static final String LIGHT_PREFIX = "l_"; //$NON-NLS-1$
-	private static final String DARK_PREFIX = "d_"; //$NON-NLS-1$
-	private static final String PNG = ".png"; //$NON-NLS-1$
-	private static final List<String> PIECE_NAMES = Lists.newArrayList(Messages.getString("pawn"), Messages.getString("rook"), Messages.getString("bishop"), Messages.getString("knight"), Messages.getString("queen"), Messages.getString("king")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
+	private static final String LIGHT_PREFIX = "l_";
+	private static final String DARK_PREFIX = "d_";
+	private static final String PNG = ".png";
+	private static final List<String> PIECE_NAMES = Lists.newArrayList("Pawn", "Rook", "Bishop", "Knight", "Queen", "King");
 }

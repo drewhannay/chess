@@ -55,39 +55,39 @@ public final class NetworkPlayManager
 			@Override
 			public void actionPerformed(ActionEvent event)
 			{
-				final JFrame popupFrame = new JFrame(Messages.getString("NetworkPlayManager.newGame")); //$NON-NLS-1$
+				final JFrame popupFrame = new JFrame("New Game");
 				popupFrame.setLayout(new FlowLayout());
 				popupFrame.setSize(350, 150);
 				popupFrame.setResizable(false);
 				popupFrame.setLocationRelativeTo(Driver.getInstance());
 
 				JPanel optionsPanel = new JPanel();
-				final JLabel hostOrConnectLabel = new JLabel(Messages.getString("NetworkPlayManager.hostOrConnect")); //$NON-NLS-1$
-				final JButton clientButton = new JButton(Messages.getString("NetworkPlayManager.connect")); //$NON-NLS-1$
+				final JLabel hostOrConnectLabel = new JLabel("Would you like to host a game or connect to one?");
+				final JButton clientButton = new JButton("Connect");
 				clientButton.addActionListener(new ActionListener()
 				{
 					@Override
 					public void actionPerformed(ActionEvent event)
 					{
-						final JFrame poppedFrame = new JFrame(Messages.getString("NetworkPlayManager.newGame")); //$NON-NLS-1$
+						final JFrame poppedFrame = new JFrame("New Game");
 						poppedFrame.setLayout(new GridBagLayout());
 						poppedFrame.setSize(370, 150);
 						poppedFrame.setResizable(false);
 						poppedFrame.setLocationRelativeTo(Driver.getInstance());
 						GridBagConstraints netGameConstraints = new GridBagConstraints();
 
-						final JLabel connectToLabel = new JLabel(Messages.getString("NetworkPlayManager.whichComputer")); //$NON-NLS-1$
-						final JTextField connectToField = new JTextField("", 2); //$NON-NLS-1$
+						final JLabel connectToLabel = new JLabel("Which computer would you like to connect to?");
+						final JTextField connectToField = new JTextField("", 2);
 
-						final JButton nextButton = new JButton(Messages.getString("NetworkPlayManager.next")); //$NON-NLS-1$
+						final JButton nextButton = new JButton("Next");
 						nextButton.addActionListener(new ActionListener()
 						{
 							@Override
 							public void actionPerformed(ActionEvent event)
 							{
-								if (connectToField.getText().equals("")) //$NON-NLS-1$
+								if (connectToField.getText().equals(""))
 								{
-									JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("NetworkPlayManager.enterNumber"), Messages.getString("NetworkPlayManager.numberNeeded"), //$NON-NLS-1$ //$NON-NLS-2$
+									JOptionPane.showMessageDialog(Driver.getInstance(), "Please enter a number", "Number Needed",
 											JOptionPane.PLAIN_MESSAGE);
 									return;
 								}
@@ -98,12 +98,12 @@ public final class NetworkPlayManager
 										int hostNumber = Integer.parseInt(connectToField.getText());
 										if (hostNumber > 25 || hostNumber < 1)
 											throw new Exception();
-										mHostName = "cslab0" + hostNumber; //$NON-NLS-1$
+										mHostName = "cslab0" + hostNumber;
 									}
 									catch (Exception e)
 									{
-										JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("NetworkPlayManager.enterNumberBetween"), //$NON-NLS-1$
-												Messages.getString("NetworkPlayManager.numberNeeded"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$
+										JOptionPane.showMessageDialog(Driver.getInstance(), "Please enter a number between 1-25 in the box",
+												"Number Needed", JOptionPane.PLAIN_MESSAGE);
 										return;
 									}
 								}
@@ -114,12 +114,12 @@ public final class NetworkPlayManager
 										int hostNumber = Integer.parseInt(connectToField.getText());
 										if (hostNumber > 25 || hostNumber < 1)
 											throw new Exception();
-										mHostName = "cslab" + hostNumber; //$NON-NLS-1$
+										mHostName = "cslab" + hostNumber;
 									}
 									catch (Exception e)
 									{
-										JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("NetworkPlayManager.enterNumberBetween"), //$NON-NLS-1$
-												Messages.getString("NetworkPlayManager.numberNeeded"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$
+										JOptionPane.showMessageDialog(Driver.getInstance(), "Please enter a number between 1-25 in the box",
+												"Number Needed", JOptionPane.PLAIN_MESSAGE);
 										return;
 									}
 								}
@@ -154,7 +154,7 @@ public final class NetworkPlayManager
 							}
 						});
 
-						final JButton cancelButton = new JButton(Messages.getString("NetworkPlayManager.cancel")); //$NON-NLS-1$
+						final JButton cancelButton = new JButton("Cancel");
 						GuiUtility.setupCancelButton(cancelButton, popupFrame);
 
 						JPanel topLevelPanel = new JPanel();
@@ -168,7 +168,7 @@ public final class NetworkPlayManager
 						netGameConstraints.gridx = 0;
 						netGameConstraints.gridy = 1;
 						netGameConstraints.gridwidth = 1;
-						topLevelPanel.add(new JLabel("cslab: "), netGameConstraints); //$NON-NLS-1$
+						topLevelPanel.add(new JLabel("cslab: "), netGameConstraints);
 						netGameConstraints.gridx = 1;
 						netGameConstraints.gridy = 1;
 						netGameConstraints.gridwidth = 1;
@@ -190,7 +190,7 @@ public final class NetworkPlayManager
 					}
 				});
 
-				final JButton hostButton = new JButton(Messages.getString("NetworkPlayManager.host")); //$NON-NLS-1$
+				final JButton hostButton = new JButton("Host");
 				hostButton.addActionListener(new ActionListener()
 				{
 					@Override
@@ -281,5 +281,5 @@ public final class NetworkPlayManager
 
 	private static NetworkPlayManager sInstance;
 
-	private String mHostName = ""; //$NON-NLS-1$
+	private String mHostName = "";
 }

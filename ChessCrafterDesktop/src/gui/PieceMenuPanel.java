@@ -44,7 +44,7 @@ public class PieceMenuPanel extends JPanel
 		constraints.insets = new Insets(5, 10, 5, 10);
 		constraints.anchor = GridBagConstraints.CENTER;
 
-		JButton createNewPieceButton = new JButton(Messages.getString("PieceMenuPanel.createNew")); //$NON-NLS-1$
+		JButton createNewPieceButton = new JButton("Create New Piece");
 		createNewPieceButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -83,7 +83,7 @@ public class PieceMenuPanel extends JPanel
 
 		constraints.gridy = 2;
 		constraints.ipadx = 7;
-		final JButton editButton = new JButton(Messages.getString("PieceMenuPanel.edit")); //$NON-NLS-1$
+		final JButton editButton = new JButton("Edit");
 		editButton.setEnabled(false);
 		editButton.addActionListener(new ActionListener()
 		{
@@ -95,7 +95,7 @@ public class PieceMenuPanel extends JPanel
 		});
 		buttonPanel.add(editButton, constraints);
 
-		final JButton deleteButton = new JButton(Messages.getString("PieceMenuPanel.delete")); //$NON-NLS-1$
+		final JButton deleteButton = new JButton("Delete");
 		deleteButton.setEnabled(false);
 		deleteButton.addActionListener(new ActionListener()
 		{
@@ -143,8 +143,8 @@ public class PieceMenuPanel extends JPanel
 		
 		if (mFrame == null)
 		{
-			JButton backButton = new JButton(Messages.getString("PieceMenuPanel.returnToMenu")); //$NON-NLS-1$
-			backButton.setToolTipText(Messages.getString("PieceMenuPanel.returnToMenu")); //$NON-NLS-1$
+			JButton backButton = new JButton("Return to Main Menu");
+			backButton.setToolTipText("Return to the Main Menu");
 			backButton.addActionListener(new ActionListener()
 			{
 				@Override
@@ -159,8 +159,8 @@ public class PieceMenuPanel extends JPanel
 		}
 		else
 		{
-			JButton doneButton = new JButton(Messages.getString("PieceMenuPanel.done")); //$NON-NLS-1$
-			doneButton.setToolTipText(Messages.getString("PieceMenuPanel.returnToVariant")); //$NON-NLS-1$
+			JButton doneButton = new JButton("Done");
+			doneButton.setToolTipText("Return to Variant Creation");
 			doneButton.addActionListener(new ActionListener()
 			{
 				
@@ -178,7 +178,7 @@ public class PieceMenuPanel extends JPanel
 		
 		if (mFrame != null)
 		{	
-			mFrame.setTitle(Messages.getString("PieceMenuPanel.pieceMenu")); //$NON-NLS-1$
+			mFrame.setTitle("Piece Menu");
 			mFrame.setSize(225, 300);
 			mFrame.add(this);
 			mFrame.setLocationRelativeTo(Driver.getInstance());

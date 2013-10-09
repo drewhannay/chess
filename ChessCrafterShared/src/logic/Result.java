@@ -14,13 +14,13 @@ public enum Result implements Serializable
 		switch (this)
 		{
 		case DRAW:
-			return Messages.getString("drawExc"); //$NON-NLS-1$
+			return "Draw!";
 		case WHITE_WIN:
-			return Messages.getString("whiteWonExc"); //$NON-NLS-1$
+			return "White won!";
 		case BLACK_WIN:
-			return Messages.getString("blackWonExc"); //$NON-NLS-1$
+			return "Black won!";
 		default:
-			return ""; //$NON-NLS-1$
+			return "";
 		}
 	}
 
@@ -37,24 +37,24 @@ public enum Result implements Serializable
 	@Override
 	public String toString()
 	{
-		String acnResult = ""; //$NON-NLS-1$
+		String acnResult = "";
 
 		switch (this)
 		{
 		case UNDECIDED:
-			acnResult = "?"; //$NON-NLS-1$
+			acnResult = "?";
 			break;
 		case WHITE_WIN:
-			acnResult = "1-0"; //$NON-NLS-1$
+			acnResult = "1-0";
 			break;
 		case DRAW:
-			acnResult = "1/2-1/2"; //$NON-NLS-1$
+			acnResult = "1/2-1/2";
 			break;
 		case BLACK_WIN:
-			acnResult = "0-1"; //$NON-NLS-1$
+			acnResult = "0-1";
 			break;
 		default:
-			acnResult = "?"; //$NON-NLS-1$
+			acnResult = "?";
 		}
 		return acnResult;
 	}
