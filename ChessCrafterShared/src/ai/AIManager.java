@@ -30,7 +30,7 @@ public final class AIManager
 
 		for (String fileName : allFiles)
 		{
-			if (fileName.endsWith(".java"))
+			if (fileName.endsWith(".java")) //$NON-NLS-1$
 				tempFiles.add(fileName);
 		}
 

@@ -425,7 +425,7 @@ public class Game implements Serializable
 	 */
 	public boolean isClassicChess()
 	{
-		return mGameType.equals("Classic");
+		return mGameType.equals(Messages.getString("classic")); //$NON-NLS-1$
 	}
 
 	/**
@@ -536,16 +536,16 @@ public class Game implements Serializable
 		{
 			if (ACN)
 			{
-				FileOutputStream f_out = new FileOutputStream(FileUtility.getCompletedGamesFile(fileName + ".acn"));
+				FileOutputStream f_out = new FileOutputStream(FileUtility.getCompletedGamesFile(fileName + ".acn")); //$NON-NLS-1$
 				ObjectOutputStream out = new ObjectOutputStream(f_out);
 				out.writeObject(this);
 				out.close();
 				f_out.close();
-				AlgebraicConverter.convert(getHistory(), (fileName + ".acn"));
+				AlgebraicConverter.convert(getHistory(), (fileName + ".acn")); //$NON-NLS-1$
 			}
 			else
 			{
-				FileOutputStream f_out = new FileOutputStream(FileUtility.getGamesInProgressFile(fileName + ".var"));
+				FileOutputStream f_out = new FileOutputStream(FileUtility.getGamesInProgressFile(fileName + ".var")); //$NON-NLS-1$
 				ObjectOutputStream out = new ObjectOutputStream(f_out);
 				out.writeObject(this);
 				out.close();

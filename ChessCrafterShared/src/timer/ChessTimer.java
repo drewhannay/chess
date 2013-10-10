@@ -156,7 +156,7 @@ public abstract class ChessTimer implements ActionListener, Serializable
 
 		int minutes = (int) (mCurrentTime / 60000);
 		int seconds = (int) ((mCurrentTime % 60000) / 1000);
-		mDisplayLabel.setText(mNumberFormat.format(minutes) + ":" + mNumberFormat.format(seconds));
+		mDisplayLabel.setText(mNumberFormat.format(minutes) + ":" + mNumberFormat.format(seconds)); //$NON-NLS-1$
 		if (mCurrentTime <= 0)
 		{
 			mCurrentTime = Math.abs(mCurrentTime);

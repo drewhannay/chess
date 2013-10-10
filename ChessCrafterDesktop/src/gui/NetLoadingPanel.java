@@ -24,8 +24,8 @@ public class NetLoadingPanel extends JPanel
 	{
 		setBorder(BorderFactory.createLoweredBevelBorder());
 
-		mCancelButton = new JButton("Cancel");
-		mCancelButton.setToolTipText("Press me to go back to the Main Menu");
+		mCancelButton = new JButton(Messages.getString("NetLoadingPanel.cancel")); //$NON-NLS-1$
+		mCancelButton.setToolTipText(Messages.getString("NetLoadingPanel.backToMainMenu")); //$NON-NLS-1$
 		mCancelButton.addActionListener(new ActionListener()
 		{
 			@Override

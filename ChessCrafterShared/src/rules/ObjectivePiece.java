@@ -23,7 +23,7 @@ public class ObjectivePiece implements Serializable {
 	
 	public ObjectivePiece(ObjectivePieceTypes type)
 	{
-			this(type, "King");
+			this(type, Messages.getString("king")); //$NON-NLS-1$
 	}
 
 	public ObjectivePiece() 
@@ -64,7 +64,7 @@ public class ObjectivePiece implements Serializable {
 		{
 			for (Piece piece : mGame.getBlackTeam())
 			{
-				if (piece.getName().equals("King"))
+				if (piece.getName().equals(Messages.getString("king"))) //$NON-NLS-1$
 					return piece;
 			}
 		}
@@ -72,7 +72,7 @@ public class ObjectivePiece implements Serializable {
 		{
 			for (Piece piece : mGame.getWhiteTeam())
 			{
-				if (piece.getName().equals("King"))
+				if (piece.getName().equals(Messages.getString("king"))) //$NON-NLS-1$
 					return piece;
 			}
 		}
