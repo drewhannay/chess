@@ -27,7 +27,7 @@ public final class AlgebraicConverter
 	/**
 	 * Static final String[] used for converting integers to letters for ACN
 	 */
-	private static final String columns = "%abcdefgh";
+	private static final String columns = "%abcdefgh"; //$NON-NLS-1$
 
 	/**
 	 * HashMap to move from the char representation of a Class to the actual
@@ -37,11 +37,11 @@ public final class AlgebraicConverter
 
 	static
 	{
-		map.put('B', "Bishop");
-		map.put('K', "King");
-		map.put('N', "Knight");
-		map.put('Q', "Queen");
-		map.put('R', "Rook");
+		map.put('B', Messages.getString("bishop")); //$NON-NLS-1$
+		map.put('K', Messages.getString("king")); //$NON-NLS-1$
+		map.put('N', Messages.getString("knight")); //$NON-NLS-1$
+		map.put('Q', Messages.getString("queen")); //$NON-NLS-1$
+		map.put('R', Messages.getString("rook")); //$NON-NLS-1$
 	}
 
 	/**
@@ -69,11 +69,11 @@ public final class AlgebraicConverter
 		result = getPattern().matcher(s);
 		if (result.find())
 		{
-			if (result.group(1).equals("O-O-O") || result.group(1).equals("0-0-0"))
+			if (result.group(1).equals("O-O-O") || result.group(1).equals("0-0-0")) //$NON-NLS-1$ //$NON-NLS-2$
 			{
 				move = new Move(board, Move.CASTLE_QUEEN_SIDE);
 			}
-			else if (result.group(1).equals("O-O") || result.group(1).equals("0-0"))
+			else if (result.group(1).equals("O-O") || result.group(1).equals("0-0")) //$NON-NLS-1$ //$NON-NLS-2$
 			{
 				move = new Move(board, Move.CASTLE_KING_SIDE);
 			}
@@ -86,22 +86,22 @@ public final class AlgebraicConverter
 
 				if (result.group(3) != null)
 				{
-					origCol = columns.indexOf((result.group(3).charAt(0) + "").toLowerCase());
+					origCol = columns.indexOf((result.group(3).charAt(0) + "").toLowerCase()); //$NON-NLS-1$
 				}
 
 				if (result.group(4) != null)
 				{
-					origRow = Integer.parseInt(result.group(4).charAt(0) + "");
+					origRow = Integer.parseInt(result.group(4).charAt(0) + ""); //$NON-NLS-1$
 				}
 
-				dest = board.getSquare(Integer.parseInt(result.group(7).charAt(0) + ""),
-						columns.indexOf((result.group(6).charAt(0) + "").toLowerCase()));
+				dest = board.getSquare(Integer.parseInt(result.group(7).charAt(0) + ""), //$NON-NLS-1$
+						columns.indexOf((result.group(6).charAt(0) + "").toLowerCase())); //$NON-NLS-1$
 
 				if (origCol < 1 || origRow < 1)
 				{
 					if (pieceKlass == null)
 					{
-						pieceKlass = "Pawn";
+						pieceKlass = Messages.getString("pawn"); //$NON-NLS-1$
 					}
 					orig = board.getOriginSquare(pieceKlass, origCol, origRow, dest);
 				}
@@ -112,7 +112,7 @@ public final class AlgebraicConverter
 
 				if (result.group(8) != null)
 				{ // promotion
-					if (result.group(8).contains("=") || result.group(8).contains("("))
+					if (result.group(8).contains("=") || result.group(8).contains("(")) //$NON-NLS-1$ //$NON-NLS-2$
 					{
 						promo = map.get(result.group(8).charAt(1)); // 0 is '='
 																	// or '('
@@ -204,18 +204,18 @@ public final class AlgebraicConverter
 		try
 		{
 			BufferedWriter out = new BufferedWriter(new FileWriter(FileUtility.getCompletedGamesFile(pathName)));
-			String toWrite = "";
+			String toWrite = ""; //$NON-NLS-1$
 			for (int i = 0, j = 1; i < moves.size(); i++)
 			{
 				String turn = moves.get(i).toString();
 				if (moves.get(i).result != null)
 				{
-					turn = moves.get(i) + (i % 2 == 0 ? (" " + moves.get(i).result) : ("\n" + (j + 1) + " " + moves.get(i).result));
+					turn = moves.get(i) + (i % 2 == 0 ? (" " + moves.get(i).result) : ("\n" + (j + 1) + " " + moves.get(i).result)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				}
 				if (i % 2 != 0 || moves.get(i).result != null)
 				{
-					out.write(j + " " + toWrite + " " + turn + '\n');
-					toWrite = "";
+					out.write(j + " " + toWrite + " " + turn + '\n'); //$NON-NLS-1$ //$NON-NLS-2$
+					toWrite = ""; //$NON-NLS-1$
 					j++;
 				}
 				else
@@ -241,21 +241,21 @@ public final class AlgebraicConverter
 	 */
 	public static Pattern getPattern()
 	{
-		String pat = "";
-		pat += "([O0]-[O0]-[O0]|[O0]-[O0]";// Check for castling (Group 1)
-		pat += "|^([KNQRB])?";// Check for the type of piece that's moving, null
+		String pat = ""; //$NON-NLS-1$
+		pat += "([O0]-[O0]-[O0]|[O0]-[O0]";// Check for castling (Group 1) //$NON-NLS-1$
+		pat += "|^([KNQRB])?";// Check for the type of piece that's moving, null //$NON-NLS-1$
 								// if pawn
-		pat += "([A-Ha-h])?";// Check for the origin column of the moving piece
-		pat += "([1-8])?";// Check for the origin row of the moving piece
-		pat += "([x:])?";// Check if the move is a capture
-		pat += "([A-Ha-h])([1-8])";// Get the destination column and row.
-		pat += "(=[NBRQ]?|\\([NBRQ]?\\)|[NBRQ])?)";// Check for several
+		pat += "([A-Ha-h])?";// Check for the origin column of the moving piece //$NON-NLS-1$
+		pat += "([1-8])?";// Check for the origin row of the moving piece //$NON-NLS-1$
+		pat += "([x:])?";// Check if the move is a capture //$NON-NLS-1$
+		pat += "([A-Ha-h])([1-8])";// Get the destination column and row. //$NON-NLS-1$
+		pat += "(=[NBRQ]?|\\([NBRQ]?\\)|[NBRQ])?)";// Check for several //$NON-NLS-1$
 		// different styles of piece
 		// promotion
-		pat += "(e.p)?";// Check for enpassant (might not be marked)
-		pat += "(\\+)?";// Check for check
-		pat += "(\\+)?";// Check for double check
-		pat += "(#)?";// Check if the game is over
+		pat += "(e.p)?";// Check for enpassant (might not be marked) //$NON-NLS-1$
+		pat += "(\\+)?";// Check for check //$NON-NLS-1$
+		pat += "(\\+)?";// Check for double check //$NON-NLS-1$
+		pat += "(#)?";// Check if the game is over //$NON-NLS-1$
 		// ([O0]-[O0]-[O0]|[O0]-[O0]|^([KNQRB])?([A-Ha-h])?([1-8])?([x:])?([A-Ha-h])([1-8])(=[NBRQ]?|\([NBRQ]?\)|[NBRQ])?)(e.p)?(\+)?(\+)?(#)?
 		// Yay for regular expressions!
 		return Pattern.compile(pat);

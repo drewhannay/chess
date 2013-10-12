@@ -1,20 +1,20 @@
 *.class
-bin/*
-classes/*
-jar/*
-release/*
+bin/
+classes/
+jar/
+release/
 .externalToolBuilders
-.metadata/*
-.settings/*
+.metadata/
+.settings/
 glob:src/savedGame
 gameTypes
 pieceTypes
 savedGame
-savedGames/*
+savedGames/
 ACN File
-completedGames/*
-gamesInProgress/*
-variants/*
+completedGames/
+gamesInProgress/
+variants/
 
 # Package Files #
 *.war

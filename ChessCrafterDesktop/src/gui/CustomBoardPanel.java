@@ -41,18 +41,18 @@ public class CustomBoardPanel extends JPanel
 		revalidate();
 		repaint();
 		// create button and add ActionListener
-		mCancelButton = new JButton("Cancel");
-		mCancelButton.setToolTipText("Press to return to the main variant setup");
+		mCancelButton = new JButton(Messages.getString("CustomBoardPanel.cancel")); //$NON-NLS-1$
+		mCancelButton.setToolTipText(Messages.getString("CustomBoardPanel.returnToVariantSetup")); //$NON-NLS-1$
 		GuiUtility.setupVariantCancelButton(mCancelButton, this, mFrame);
 
 		// Create JLabels and JRadioButtons.
-		mNumberOfBoardsLabel = new JLabel("How many boards?");
-		mOneBoardButton = new JRadioButton("1");
+		mNumberOfBoardsLabel = new JLabel(Messages.getString("CustomBoardPanel.howManyBoards")); //$NON-NLS-1$
+		mOneBoardButton = new JRadioButton(Messages.getString("CustomBoardPanel.1")); //$NON-NLS-1$
 		GuiUtility.requestFocus(mOneBoardButton);
-		mOneBoardButton.setToolTipText("Select to play with one board");
+		mOneBoardButton.setToolTipText(Messages.getString("CustomBoardPanel.selectForOneBoard")); //$NON-NLS-1$
 		// Set oneBoard to be initially selected.
-		mTwoBoardsButton = new JRadioButton("2");
-		mTwoBoardsButton.setToolTipText("Select to play with two boards");
+		mTwoBoardsButton = new JRadioButton(Messages.getString("CustomBoardPanel.2")); //$NON-NLS-1$
+		mTwoBoardsButton.setToolTipText(Messages.getString("CustomBoardPanel.selectForTwoBoards")); //$NON-NLS-1$
 
 		JPanel boards = new JPanel();
 		boards.add(mOneBoardButton);
@@ -72,15 +72,15 @@ public class CustomBoardPanel extends JPanel
 		group.add(mTwoBoardsButton);
 
 		// Create JLabels and JTextFields. Default size 8*8
-		mDimensionsLabel = new JLabel("Dimensions?");
-		mNumberOfRowsLabel = new JLabel("Rows:");
+		mDimensionsLabel = new JLabel(Messages.getString("CustomBoardPanel.dimensions")); //$NON-NLS-1$
+		mNumberOfRowsLabel = new JLabel(Messages.getString("CustomBoardPanel.rows")); //$NON-NLS-1$
 		mNumberOfRowsTextField = new JTextField(5);
-		mNumberOfRowsTextField.setText(board[0].numRows() + "");
-		mNumberOfRowsTextField.setToolTipText("Enter the amount of rows you would like");
-		mNumberOfColumnsLabel = new JLabel("Columns:");
+		mNumberOfRowsTextField.setText(board[0].numRows() + Messages.getString("CustomBoardPanel.empty")); //$NON-NLS-1$
+		mNumberOfRowsTextField.setToolTipText(Messages.getString("CustomBoardPanel.enterRowAmount")); //$NON-NLS-1$
+		mNumberOfColumnsLabel = new JLabel(Messages.getString("CustomBoardPanel.columns")); //$NON-NLS-1$
 		mNumberOfColumnsTextField = new JTextField(5);
-		mNumberOfColumnsTextField.setText(board[0].numCols() + "");
-		mNumberOfColumnsTextField.setToolTipText("Enter the amount of columns you would like");
+		mNumberOfColumnsTextField.setText(board[0].numCols() + Messages.getString("CustomBoardPanel.empty")); //$NON-NLS-1$
+		mNumberOfColumnsTextField.setToolTipText(Messages.getString("CustomBoardPanel.amountOfColumns")); //$NON-NLS-1$
 
 		JPanel rowCol = new JPanel();
 		rowCol.setLayout(new GridBagLayout());
@@ -102,17 +102,17 @@ public class CustomBoardPanel extends JPanel
 		rowCol.add(mNumberOfColumnsTextField, constraints);
 
 		// Create JLabel and JCheckBox
-		mWrapAroundLabel = new JLabel("<html>Should boards wrap <br />"
-				+ "around horizontally?</html>");
-		mWrapAroundCheckBox = new JCheckBox("Yes");
+		mWrapAroundLabel = new JLabel(Messages.getString("CustomBoardPanel.shouldWrap") //$NON-NLS-1$
+				+ Messages.getString("CustomBoardPanel.aroundHorizontally")); //$NON-NLS-1$
+		mWrapAroundCheckBox = new JCheckBox(Messages.getString("CustomBoardPanel.yes")); //$NON-NLS-1$
 		mWrapAroundCheckBox.setSelected(variant.getBuilder().getBoards()[0]
 				.isWrapAround());
 		mWrapAroundCheckBox
-				.setToolTipText("Press me to have boards that wrap around on the edges");
+				.setToolTipText(Messages.getString("CustomBoardPanel.pressToHaveWrapAround")); //$NON-NLS-1$
 
 		// Create button and add ActionListener
-		mSubmitButton = new JButton("Save");
-		mSubmitButton.setToolTipText("Press me to save these board settings");
+		mSubmitButton = new JButton(Messages.getString("CustomBoardPanel.save")); //$NON-NLS-1$
+		mSubmitButton.setToolTipText(Messages.getString("CustomBoardPanel.pressToSave")); //$NON-NLS-1$
 		mSubmitButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -215,7 +215,7 @@ public class CustomBoardPanel extends JPanel
 	{
 		if (!mOneBoardButton.isSelected() && !mTwoBoardsButton.isSelected())
 		{
-			JOptionPane.showMessageDialog(Driver.getInstance(), "Please select the number of boards.", "Incomplete Form", JOptionPane.PLAIN_MESSAGE);
+			JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("CustomBoardPanel.selectNumberOfBoards"), Messages.getString("CustomBoardPanel.incompleteForm"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
 			return false;
 		}
 		try
@@ -227,8 +227,8 @@ public class CustomBoardPanel extends JPanel
 		}
 		catch (Exception e)
 		{
-			JOptionPane.showMessageDialog(Driver.getInstance(), "Enter a valid number between 3 and 16 for the dimensions of the board.",
-					"Invalid Submission", JOptionPane.PLAIN_MESSAGE);
+			JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("CustomBoardPanel.enterValidNumber"), //$NON-NLS-1$
+					Messages.getString("CustomBoardPanel.invalidSubmission"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$
 			return false;
 		}
 		try
@@ -241,8 +241,8 @@ public class CustomBoardPanel extends JPanel
 		}
 		catch (Exception e)
 		{
-			JOptionPane.showMessageDialog(Driver.getInstance(), "Enter a valid number between 3 and 10 for the dimensions of the board.",
-					"Invalid Submission", JOptionPane.PLAIN_MESSAGE);
+			JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("CustomBoardPanel.enterValidNumber"), //$NON-NLS-1$
+					Messages.getString("CustomBoardPanel.invalidSubmission"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$
 			return false;
 		}
 		return true;

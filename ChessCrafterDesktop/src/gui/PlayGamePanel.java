@@ -82,7 +82,7 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 		m_globalGlassPane.setOpaque(false);
 		Driver.getInstance().setGlassPane(m_globalGlassPane);
 
-		setGame(Builder.newGame("Classic"));
+		setGame(Builder.newGame(Messages.getString("PlayGamePanel.classic"))); //$NON-NLS-1$
 		PlayGamePanel.mIsPlayback = isPlayback;
 		PlayGamePanel.mWhiteTimer = getGame().getWhiteTimer();
 		PlayGamePanel.mBlackTimer = getGame().getBlackTimer();
@@ -155,9 +155,9 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 		{
 			mInCheckLabel.setVisible(true);
 			if (getGame().getBlackRules().objectivePiece(true).isInCheck())
-				mInCheckLabel.setBorder(BorderFactory.createTitledBorder("Black Team"));
+				mInCheckLabel.setBorder(BorderFactory.createTitledBorder(Messages.getString("PlayGamePanel.blackTeam"))); //$NON-NLS-1$
 			else
-				mInCheckLabel.setBorder(BorderFactory.createTitledBorder("White Team"));
+				mInCheckLabel.setBorder(BorderFactory.createTitledBorder(Messages.getString("PlayGamePanel.whiteTeam"))); //$NON-NLS-1$
 
 			for (Piece piece : getGame().getThreats(objectivePiece))
 				piece.getSquare().setColor(Color.red);
@@ -224,8 +224,8 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 		}
 		else if (result != Result.DRAW)
 		{
-			JOptionPane.showMessageDialog(null, "No moves were made and the time ran out. Returning to the Main Menu.",
-					"Time Ran Out", JOptionPane.PLAIN_MESSAGE);
+			JOptionPane.showMessageDialog(null, Messages.getString("PlayGamePanel.noMovesMade"), //$NON-NLS-1$
+					Messages.getString("PlayGamePanel.timeRanOut"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$
 			PlayNetGamePanel.mIsRunning = false;
 			Driver.getInstance().revertToMainPanel();
 			Driver.getInstance().setFileMenuVisibility(true);
@@ -235,7 +235,7 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 		if (mIsPlayback)
 			return;
 
-		Object[] options = new String[] { "Save Record of Game", "New Game", "Quit" };
+		Object[] options = new String[] { Messages.getString("PlayGamePanel.saveRecord"), Messages.getString("PlayGamePanel.newGame"), Messages.getString("PlayGamePanel.quit") }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		mOptionsMenu.setVisible(false);
 		switch (JOptionPane.showOptionDialog(Driver.getInstance(), result.getGUIText(), result.winText(), JOptionPane.YES_NO_CANCEL_OPTION,
 				JOptionPane.PLAIN_MESSAGE, null, options, options[0]))
@@ -248,9 +248,9 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 				{
 					preferencesFile.createNewFile();
 					BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(preferencesFile, true));
-					bufferedWriter.write("DefaultPreferencesSet = false");
+					bufferedWriter.write("DefaultPreferencesSet = false"); //$NON-NLS-1$
 					bufferedWriter.newLine();
-					bufferedWriter.write("DefaultSaveLocation = " + FileUtility.getDefaultCompletedLocation());
+					bufferedWriter.write("DefaultSaveLocation = " + FileUtility.getDefaultCompletedLocation()); //$NON-NLS-1$
 					bufferedWriter.close();
 				}
 				catch (IOException e)
@@ -269,40 +269,40 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 				fileInputStream.close();
 				in.close();
 				br.close();
-				if (line.contains("false"))
+				if (line.contains("false")) //$NON-NLS-1$
 				{
 					PrintWriter printWriter = new PrintWriter(preferencesFile);
-					printWriter.print("");
+					printWriter.print(""); //$NON-NLS-1$
 					printWriter.close();
-					JOptionPane.showMessageDialog(Driver.getInstance(), "Since this is your first time playing " + AppConstants.APP_NAME
-							+ ", please choose a default completed game save location.\n"
-							+ "Pressing cancel will use the default save location.", "Save Location", JOptionPane.PLAIN_MESSAGE);
+					JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("PlayGamePanel.sinceFirstTime") + AppConstants.APP_NAME //$NON-NLS-1$
+							+ Messages.getString("PlayGamePanel.pleaseChooseDefault") //$NON-NLS-1$
+							+ Messages.getString("PlayGamePanel.pressingCancel"), Messages.getString("PlayGamePanel.saveLocation"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
 					JFileChooser fileChooser = new JFileChooser();
 					fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 					int returnVal = fileChooser.showOpenDialog(Driver.getInstance());
 					BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(preferencesFile, true));
-					bufferedWriter.write("DefaultPreferencesSet = true");
+					bufferedWriter.write("DefaultPreferencesSet = true"); //$NON-NLS-1$
 					bufferedWriter.newLine();
 					if (returnVal == JFileChooser.APPROVE_OPTION)
 					{
-						bufferedWriter.write("DefaultSaveLocation = " + fileChooser.getSelectedFile().getAbsolutePath());
+						bufferedWriter.write("DefaultSaveLocation = " + fileChooser.getSelectedFile().getAbsolutePath()); //$NON-NLS-1$
 						bufferedWriter.close();
 					}
 					else
 					{
-						bufferedWriter.write("DefaultSaveLocation = " + FileUtility.getDefaultCompletedLocation());
+						bufferedWriter.write("DefaultSaveLocation = " + FileUtility.getDefaultCompletedLocation()); //$NON-NLS-1$
 						bufferedWriter.close();
 					}
 				}
 			}
 			catch (Exception e)
 			{
-				JOptionPane.showMessageDialog(null, "That is not a valid location to save your completed games.", "Invalid Location",
+				JOptionPane.showMessageDialog(null, Messages.getString("PlayGamePanel.notAValidLocation"), Messages.getString("PlayGamePanel.invalidLocation"), //$NON-NLS-1$ //$NON-NLS-2$
 						JOptionPane.PLAIN_MESSAGE);
 				e.printStackTrace();
 			}
 
-			String saveFileName = JOptionPane.showInputDialog(Driver.getInstance(), "Enter a name for the save file:", "Saving...",
+			String saveFileName = JOptionPane.showInputDialog(Driver.getInstance(), Messages.getString("PlayGamePanel.enterAName"), Messages.getString("PlayGamePanel.saving"), //$NON-NLS-1$ //$NON-NLS-2$
 					JOptionPane.PLAIN_MESSAGE);
 			getGame().saveGame(saveFileName, getGame().isClassicChess());
 			mGame.setBlackMove(false);
@@ -322,7 +322,7 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 
 	public void saveGame()
 	{
-		String fileName = JOptionPane.showInputDialog(Driver.getInstance(), "Enter a name for the save file:", "Saving...", JOptionPane.PLAIN_MESSAGE);
+		String fileName = JOptionPane.showInputDialog(Driver.getInstance(), Messages.getString("PlayGamePanel.enterAName"), Messages.getString("PlayGamePanel.saving"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
 		if (fileName == null)
 			return;
 		getGame().saveGame(fileName, false);
@@ -349,7 +349,7 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 		for (int i = numberOfRows; i > 0; i--)
 		{
 			if(!isJail){
-				JLabel label = new JLabel("" + i);
+				JLabel label = new JLabel("" + i); //$NON-NLS-1$
 				label.setHorizontalAlignment(SwingConstants.CENTER);
 				gridPanel.add(label);
 			}
@@ -374,13 +374,13 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 			{
 				if (k != 0)
 				{
-					JLabel label = new JLabel("" + (char) (k - 1 + 'A'));
+					JLabel label = new JLabel("" + (char) (k - 1 + 'A')); //$NON-NLS-1$
 					label.setHorizontalAlignment(SwingConstants.CENTER);
 					gridPanel.add(label);
 				}
 				else
 				{
-					gridPanel.add(new JLabel(""));
+					gridPanel.add(new JLabel("")); //$NON-NLS-1$
 				}
 			}
 		}
@@ -389,12 +389,12 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 
 	public JMenu createMenuBar()
 	{
-		mOptionsMenu = new JMenu("Menu");
+		mOptionsMenu = new JMenu(Messages.getString("PlayGamePanel.menu")); //$NON-NLS-1$
 
 		if (!mIsPlayback)
 		{
-			JMenuItem drawMenuItem = new JMenuItem("Declare Draw", KeyEvent.VK_D);
-			JMenuItem saveMenuItem = new JMenuItem("Save & Quit", KeyEvent.VK_S);
+			JMenuItem drawMenuItem = new JMenuItem(Messages.getString("PlayGamePanel.declareDraw"), KeyEvent.VK_D); //$NON-NLS-1$
+			JMenuItem saveMenuItem = new JMenuItem(Messages.getString("PlayGamePanel.saveAndQuit"), KeyEvent.VK_S); //$NON-NLS-1$
 
 			drawMenuItem.addActionListener(new ActionListener()
 			{
@@ -406,7 +406,7 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 
 					mOptionsMenu.setVisible(false);
 					Result result = Result.DRAW;
-					result.setGuiText("Draw! \nWhat would you like to do? \n");
+					result.setGuiText(Messages.getString("PlayGamePanel.drawWhatNow")); //$NON-NLS-1$
 					getGame().getLastMove().setResult(result);
 					endOfGame(result);
 				}
@@ -435,11 +435,11 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 
 	private void initComponents(boolean isPlayback) throws Exception
 	{
-		mInCheckLabel = new JLabel("You're In Check!");
+		mInCheckLabel = new JLabel(Messages.getString("PlayGamePanel.youreInCheck")); //$NON-NLS-1$
 		mInCheckLabel.setHorizontalTextPosition(SwingConstants.CENTER);
 		mInCheckLabel.setForeground(Color.RED);
 
-		JButton undoButton = new JButton("Undo");
+		JButton undoButton = new JButton(Messages.getString("PlayGamePanel.undo")); //$NON-NLS-1$
 		undoButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -515,7 +515,7 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 			twoBoardsGridBagOffset += 10;
 		}
 
-		JButton nextButton = new JButton("Next");
+		JButton nextButton = new JButton(Messages.getString("PlayGamePanel.next")); //$NON-NLS-1$
 		nextButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -535,7 +535,7 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 			}
 		});
 
-		JButton prevButton = new JButton("Previous");
+		JButton prevButton = new JButton(Messages.getString("PlayGamePanel.previous")); //$NON-NLS-1$
 		prevButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -555,13 +555,13 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 			}
 		});
 
-		mWhiteLabel = new JLabel("WHITE");
+		mWhiteLabel = new JLabel(Messages.getString("PlayGamePanel.whiteCaps")); //$NON-NLS-1$
 		mWhiteLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		mWhiteLabel.setBorder(BorderFactory.createTitledBorder(""));
+		mWhiteLabel.setBorder(BorderFactory.createTitledBorder("")); //$NON-NLS-1$
 
-		mBlackLabel = new JLabel("BLACK");
+		mBlackLabel = new JLabel(Messages.getString("PlayGamePanel.blackCaps")); //$NON-NLS-1$
 		mBlackLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		mBlackLabel.setBorder(BorderFactory.createTitledBorder(""));
+		mBlackLabel.setBorder(BorderFactory.createTitledBorder("")); //$NON-NLS-1$
 
 		mWhiteLabel.setOpaque(true);
 		mBlackLabel.setOpaque(true);
@@ -582,7 +582,7 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 
 		mWhiteCapturesJail = new Board(jailBoardSize, jailBoardSize, false);
 		mWhiteCapturePanel = createGrid(mWhiteCapturesJail, isPlayback, true);
-		mWhiteCapturePanel.setBorder(BorderFactory.createTitledBorder("Captured Pieces"));
+		mWhiteCapturePanel.setBorder(BorderFactory.createTitledBorder(Messages.getString("PlayGamePanel.capturedPieces"))); //$NON-NLS-1$
 		mWhiteCapturePanel.setLayout(new GridLayout(jailBoardSize, jailBoardSize));
 
 		mWhiteCapturePanel.setPreferredSize(new Dimension((mWhiteCapturesJail.getMaxCol() + 1) * 25, (mWhiteCapturesJail
@@ -590,7 +590,7 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 
 		mBlackCapturesJail = new Board(jailBoardSize, jailBoardSize, false);
 		mBlackCapturePanel = createGrid(mBlackCapturesJail, isPlayback, true);
-		mBlackCapturePanel.setBorder(BorderFactory.createTitledBorder("Captured Pieces"));
+		mBlackCapturePanel.setBorder(BorderFactory.createTitledBorder(Messages.getString("PlayGamePanel.capturedPieces"))); //$NON-NLS-1$
 		mBlackCapturePanel.setLayout(new GridLayout(jailBoardSize, jailBoardSize));
 
 		mBlackCapturePanel.setPreferredSize(new Dimension((mBlackCapturesJail.getMaxCol() + 1) * 25, (mBlackCapturesJail

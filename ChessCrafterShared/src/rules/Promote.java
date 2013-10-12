@@ -82,12 +82,12 @@ public enum Promote
 			return pieceToPromote;
 		if (!pieceCanBePromoted && pieceTypeToPromoteFrom == null && mGame.isBlackMove() == pieceToPromote.isBlack())
 		{
-			mPromotedToClass = "";
+			mPromotedToClass = ""; //$NON-NLS-1$
 			if (pieceToPromote.getPromotesTo().size() == 1)
 				mPromotedToClass = pieceToPromote.getPromotesTo().get(0);
-			while (mPromotedToClass.equals(""))
+			while (mPromotedToClass.equals("")) //$NON-NLS-1$
 			{
-				String result = (String) JOptionPane.showInputDialog(null, "Select the Promotion type:", "Promo choice",
+				String result = (String) JOptionPane.showInputDialog(null, Messages.getString("selectPromotionType"), Messages.getString("promoChoice"), //$NON-NLS-1$ //$NON-NLS-2$
 						JOptionPane.PLAIN_MESSAGE, null, pieceToPromote.getPromotesTo().toArray(), null);
 
 				if (result == null)
