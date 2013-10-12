@@ -20,15 +20,12 @@ import utility.AppConstants;
 import utility.FileUtility;
 import utility.GuiUtility;
 
-public class AboutFrame extends JFrame
-{
-	public AboutFrame(JPanel mainPanel)
-	{
+public class AboutFrame extends JFrame {
+	public AboutFrame(JPanel mainPanel) {
 		initGUIComponents(mainPanel);
 	}
 
-	private void initGUIComponents(JPanel mainPanel)
-	{
+	private void initGUIComponents(JPanel mainPanel) {
 		setTitle("About " + AppConstants.APP_NAME);
 		setSize(350, 375);
 		setResizable(false);
@@ -39,13 +36,12 @@ public class AboutFrame extends JFrame
 
 		JLabel frontPageImage = null;
 		JLabel piecePicture = null;
-		try
-		{
-			frontPageImage = new JLabel(GuiUtility.createImageIcon(300, 200, FileUtility.getImagePath("chess_logo.png", true)));
-			piecePicture = new JLabel(GuiUtility.createImageIcon(48, 48, FileUtility.getImagePath("d_king.png", true)));
-		}
-		catch (IOException e1)
-		{
+		try {
+			frontPageImage = new JLabel(GuiUtility.createImageIcon(300, 200,
+					FileUtility.getImagePath("chess_logo.png", true)));
+			piecePicture = new JLabel(GuiUtility.createImageIcon(48, 48,
+					FileUtility.getImagePath("d_king.png", true)));
+		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
 
@@ -63,19 +59,14 @@ public class AboutFrame extends JFrame
 
 		JButton siteButton = new JButton();
 		siteButton.setIcon(piecePicture.getIcon());
-		siteButton.addActionListener(new ActionListener()
-		{
+		siteButton.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent event)
-			{
-				if (Desktop.isDesktopSupported())
-				{
-					try
-					{
-						Desktop.getDesktop().browse(new URI(AppConstants.PROJECT_URL));
-					}
-					catch (Exception e)
-					{
+			public void actionPerformed(ActionEvent event) {
+				if (Desktop.isDesktopSupported()) {
+					try {
+						Desktop.getDesktop().browse(
+								new URI(AppConstants.PROJECT_URL));
+					} catch (Exception e) {
 						e.printStackTrace();
 					}
 				}
