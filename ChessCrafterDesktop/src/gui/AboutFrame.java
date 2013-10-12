@@ -17,6 +17,7 @@ import javax.swing.JTextArea;
 import javax.swing.WindowConstants;
 
 import utility.AppConstants;
+import utility.FileUtility;
 import utility.GuiUtility;
 
 public class AboutFrame extends JFrame
@@ -40,8 +41,8 @@ public class AboutFrame extends JFrame
 		JLabel piecePicture = null;
 		try
 		{
-			frontPageImage = new JLabel(GuiUtility.createImageIcon(300, 200, "/front_page_image.jpeg"));
-			piecePicture = new JLabel(GuiUtility.createImageIcon(48, 48, "/d_King.png"));
+			frontPageImage = new JLabel(GuiUtility.createImageIcon(300, 200, FileUtility.getImagePath("chess_logo.png", true)));
+			piecePicture = new JLabel(GuiUtility.createImageIcon(48, 48, FileUtility.getImagePath("d_king.png", true)));
 		}
 		catch (IOException e1)
 		{

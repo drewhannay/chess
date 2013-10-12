@@ -131,7 +131,7 @@ public final class Driver extends JFrame implements ChessCrafter
 	{
 		setTitle(AppConstants.APP_NAME);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(325, 340);
+		setSize(685, 450);
 		setLayout(new FlowLayout());
 		setResizable(true);
 
@@ -149,18 +149,19 @@ public final class Driver extends JFrame implements ChessCrafter
 		mMainPanel = new JPanel();
 		mMainPanel.setBorder(BorderFactory.createLoweredBevelBorder());
 		mMainPanel.setLayout(new GridBagLayout());
+		
+		mButtonPanel = new JPanel();
+		mButtonPanel.setLayout(new GridBagLayout());
 
 		GridBagConstraints c = new GridBagConstraints();
 
 		// home screen image
 		c.fill = GridBagConstraints.HORIZONTAL;
-		c.weightx = 0.0;
-		c.gridwidth = 4;
 		c.gridx = 0;
 		c.gridy = 0;
 		try
 		{
-			mMainPanel.add(new JLabel(GuiUtility.createImageIcon(300, 200, FileUtility.getImagePath("chess_logo.png", true))), c);
+			mMainPanel.add(new JLabel(GuiUtility.createImageIcon(506, 380, FileUtility.getImagePath("chess_logo.png", true))), c);
 		}
 		catch (IOException e)
 		{
@@ -169,42 +170,48 @@ public final class Driver extends JFrame implements ChessCrafter
 		}
 
 		// new game
-		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
-		c.gridy = 1;
-		c.gridwidth = 1;
-		mMainPanel.add(createNewGameButton(), c);
+		c.gridy = 0;
+		mButtonPanel.add(createNewGameButton(), c);
 
 		//open variant menu
-		c.gridx = 2;
+		c.gridx = 0;
 		c.gridy = 1;
-		mMainPanel.add(variantMenuButton(), c);
+		mButtonPanel.add(variantMenuButton(), c);
 
-		c.gridx = 3;
-		c.gridy = 1;
-		mMainPanel.add(pieceMenuButton(), c);
+		//Pieces
+		c.gridx = 0;
+		c.gridy = 2;
+		mButtonPanel.add(pieceMenuButton(), c);
 		
 		// continue
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
-		c.gridy = 2;
-		c.gridwidth = 2;
-		mMainPanel.add(createContinueGameButton(), c);
+		c.gridy = 3;
+		mButtonPanel.add(createContinueGameButton(), c);
 
 		// view completed game
-		c.gridx = 2;
-		c.gridy = 2;
-		c.gridwidth = 1;
-		mMainPanel.add(createViewCompletedGamesButton(), c);
-
+		c.gridx = 0;
+		c.gridy = 4;
+		mButtonPanel.add(createViewCompletedGamesButton(), c);
+		
+		c.gridx = 1;
+		c.gridy = 0;
+		mMainPanel.add(mButtonPanel, c);
+		
 		add(mMainPanel);
 		setVisible(true);
 	}
 
 	private JButton pieceMenuButton()
 	{
-		JButton pieceButton = new JButton("Pieces");
+		JButton pieceButton = new JButton("Chess Pieces");
 		pieceButton.setToolTipText("Create, edit, or remove custom pieces.");
+		try {
+			pieceButton.setIcon(GuiUtility.createImageIcon(10, 30, FileUtility.getImagePath("pieces.png", true)));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		pieceButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -389,9 +396,14 @@ public final class Driver extends JFrame implements ChessCrafter
 
 	private JButton createNewGameButton()
 	{
-		JButton newGameButton = new JButton("New Game");
+		JButton newGameButton = new JButton("Start New Game");
 
 		newGameButton.setToolTipText("Start a new game of Chess");
+		try {
+			newGameButton.setIcon(GuiUtility.createImageIcon(30, 30, FileUtility.getImagePath("start_game.png", true)));
+		} catch (IOException ae) {
+			ae.printStackTrace();
+		}
 		newGameButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -406,8 +418,13 @@ public final class Driver extends JFrame implements ChessCrafter
 
 	private JButton createContinueGameButton()
 	{
-		JButton continueGameButton = new JButton("Load Game");
+		JButton continueGameButton = new JButton("Saved Games");
 		continueGameButton.setToolTipText("Load a saved game");
+		try {
+			continueGameButton.setIcon(GuiUtility.createImageIcon(30, 30, FileUtility.getImagePath("saved_games.png", true)));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		continueGameButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -553,6 +570,11 @@ public final class Driver extends JFrame implements ChessCrafter
 
 		JButton viewCompletedGameButton = new JButton("Completed Games");
 		viewCompletedGameButton.setToolTipText("Review a finished game");
+		try {
+			viewCompletedGameButton.setIcon(GuiUtility.createImageIcon(30, 30, FileUtility.getImagePath("view_completed.png", true)));
+		} catch (IOException ae) {
+			ae.printStackTrace();
+		}
 		viewCompletedGameButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -717,8 +739,13 @@ public final class Driver extends JFrame implements ChessCrafter
 
 	private JButton variantMenuButton()
 	{
-		JButton variantButton = new JButton("Variants");
+		JButton variantButton = new JButton("Chess Variants");
 		variantButton.setToolTipText("Create, edit, or remove game variants.");
+		try {
+			variantButton.setIcon(GuiUtility.createImageIcon(30, 30, FileUtility.getImagePath("chess_variants.jpg", true)));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		variantButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -788,6 +815,7 @@ public final class Driver extends JFrame implements ChessCrafter
 	private JMenuItem mMainMenuItem;
 	private JPanel mMainPanel;
 	private JPanel mOtherPanel;
+	private JPanel mButtonPanel;
 	private WindowListener mWindowListener;
 	private PlayGamePanel m_playGameScreen;
 	private PlayNetGamePanel m_playNetGameScreen;
