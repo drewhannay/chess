@@ -232,7 +232,7 @@ public class Piece implements Serializable
 		 * Special genLegalDests for Pawns, to incorporate enPassant, special
 		 * initial movement, and diagonal capturing.
 		 */
-		if (mName.equals("Pawn"))
+		if (mName.equals(Messages.getString("pawn"))) //$NON-NLS-1$
 		{
 			Square dest = null;
 			int dir, row, col;
@@ -671,7 +671,7 @@ public class Piece implements Serializable
 	 */
 	public Square[] getLineOfSight(int targetRow, int targetCol, boolean inclusive)
 	{
-		if (mName.equals("Pawn"))
+		if (mName.equals(Messages.getString("pawn"))) //$NON-NLS-1$
 			return null;
 		if ((mIsBlack ? mBoard.getGame().getBlackRules() : mBoard.getGame().getWhiteRules()).objectivePiece(mIsBlack).equals(this))
 			return null;
@@ -938,7 +938,7 @@ public class Piece implements Serializable
 	 */
 	public boolean isLegalAttack(Square threatened)
 	{
-		if (mName.equals("Pawn"))
+		if (mName.equals(Messages.getString("pawn"))) //$NON-NLS-1$
 		{
 			if (mBoard.getGame().isStaleLegalDests())
 				mBoard.getGame().genLegalDests();

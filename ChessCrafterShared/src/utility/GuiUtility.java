@@ -28,7 +28,7 @@ public final class GuiUtility
 	public static ChessCrafter getChessCrafter()
 	{
 		if (s_chessCrafter == null)
-			System.out.println("ChessCrafter object is null. Please use setChessCrafter() before calling get().");
+			System.out.println("ChessCrafter object is null. Please use setChessCrafter() before calling get()."); //$NON-NLS-1$
 		return s_chessCrafter;
 	}
 		
@@ -93,7 +93,7 @@ public final class GuiUtility
 		{
 			if (!file.renameTo(FileUtility.getAIFile(file.getName())))
 			{
-				JOptionPane.showMessageDialog(parent, "File was not installed successfully", "Error",
+				JOptionPane.showMessageDialog(parent, Messages.getString("fileNotInstalledSuccessfully"), Messages.getString("error"), //$NON-NLS-1$ //$NON-NLS-2$
 						JOptionPane.PLAIN_MESSAGE);
 			}
 			else

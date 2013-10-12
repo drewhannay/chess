@@ -37,7 +37,7 @@ public final class PreferenceUtility
 
 	public static void createPreferencePopup(Component relativeComponent)
 	{
-		final JFrame popupFrame = new JFrame("Square Options");
+		final JFrame popupFrame = new JFrame(Messages.getString("PreferenceUtility.squareOptions")); //$NON-NLS-1$
 		popupFrame.setSize(370, 120);
 		popupFrame.setLocationRelativeTo(relativeComponent);
 		popupFrame.setLayout(new GridBagLayout());
@@ -45,13 +45,13 @@ public final class PreferenceUtility
 		GridBagConstraints constraints = new GridBagConstraints();
 
 		final JPanel holder = new JPanel();
-		holder.setBorder(BorderFactory.createTitledBorder("Default Completed Game Save Location"));
-		final JLabel currentSaveLocationLabel = new JLabel("Current Save Location");
+		holder.setBorder(BorderFactory.createTitledBorder(Messages.getString("PreferenceUtility.defaultCompletedLocation"))); //$NON-NLS-1$
+		final JLabel currentSaveLocationLabel = new JLabel(Messages.getString("PreferenceUtility.currentSaveLocation")); //$NON-NLS-1$
 		final JTextField currentSaveLocationField = new JTextField(FileUtility.getDefaultCompletedLocation());
 		currentSaveLocationField.setEditable(false);
-		final JButton changeLocationButton = new JButton("Choose New Save Location");
-		final JButton resetButton = new JButton("Reset to Default Location");
-		final JButton cancelButton = new JButton("Done");
+		final JButton changeLocationButton = new JButton(Messages.getString("PreferenceUtility.chooseNewSaveLocation")); //$NON-NLS-1$
+		final JButton resetButton = new JButton(Messages.getString("PreferenceUtility.resetToDefaultLocation")); //$NON-NLS-1$
+		final JButton cancelButton = new JButton(Messages.getString("PreferenceUtility.done")); //$NON-NLS-1$
 		GuiUtility.setupCancelButton(cancelButton, popupFrame);
 
 		holder.add(currentSaveLocationLabel);
@@ -68,9 +68,9 @@ public final class PreferenceUtility
 				{
 					preferencesFile.createNewFile();
 					BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(preferencesFile, true));
-					bufferedWriter.write("DefaultPreferencesSet = true");
+					bufferedWriter.write("DefaultPreferencesSet = true"); //$NON-NLS-1$
 					bufferedWriter.newLine();
-					bufferedWriter.write("DefaultSaveLocation = " + defaultSaveLocation);
+					bufferedWriter.write("DefaultSaveLocation = " + defaultSaveLocation); //$NON-NLS-1$
 					bufferedWriter.close();
 				}
 				catch (IOException e)
@@ -98,12 +98,12 @@ public final class PreferenceUtility
 					try
 					{
 						PrintWriter printWriter = new PrintWriter(preferencesFile);
-						printWriter.print("");
+						printWriter.print(""); //$NON-NLS-1$
 						printWriter.close();
 						BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(preferencesFile, true));
-						bufferedWriter.write("DefaultPreferencesSet = true");
+						bufferedWriter.write("DefaultPreferencesSet = true"); //$NON-NLS-1$
 						bufferedWriter.newLine();
-						bufferedWriter.write("DefaultSaveLocation = " + defaultSaveLocation);
+						bufferedWriter.write("DefaultSaveLocation = " + defaultSaveLocation); //$NON-NLS-1$
 						bufferedWriter.close();
 						currentSaveLocationField.setText(defaultSaveLocation);
 					}
@@ -126,9 +126,9 @@ public final class PreferenceUtility
 						{
 							preferencesFile.createNewFile();
 							BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-							bufferedWriter.write("DefaultPreferencesSet = false");
+							bufferedWriter.write("DefaultPreferencesSet = false"); //$NON-NLS-1$
 							bufferedWriter.newLine();
-							bufferedWriter.write("DefaultSaveLocation = " + defaultSaveLocation);
+							bufferedWriter.write("DefaultSaveLocation = " + defaultSaveLocation); //$NON-NLS-1$
 							bufferedWriter.close();
 						}
 						PrintWriter printWriter = new PrintWriter(preferencesFile);
@@ -136,13 +136,13 @@ public final class PreferenceUtility
 						fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 						int returnVal = fileChooser.showOpenDialog(Driver.getInstance());
 						BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-						bufferedWriter.write("DefaultPreferencesSet = true");
+						bufferedWriter.write("DefaultPreferencesSet = true"); //$NON-NLS-1$
 						bufferedWriter.newLine();
 						if (returnVal == JFileChooser.APPROVE_OPTION)
 						{
-							printWriter.print("");
+							printWriter.print(""); //$NON-NLS-1$
 							printWriter.close();
-							bufferedWriter.write("DefaultSaveLocation = " + fileChooser.getSelectedFile().getAbsolutePath());
+							bufferedWriter.write("DefaultSaveLocation = " + fileChooser.getSelectedFile().getAbsolutePath()); //$NON-NLS-1$
 							bufferedWriter.close();
 							currentSaveLocationField.setText(fileChooser.getSelectedFile().getAbsolutePath());
 						}
@@ -164,8 +164,8 @@ public final class PreferenceUtility
 		}
 		catch (Exception e)
 		{
-			JOptionPane.showMessageDialog(Driver.getInstance(), "That is not a valid location to save your completed games.",
-					"Invalid Location", JOptionPane.PLAIN_MESSAGE);
+			JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("PreferenceUtility.notAValidLocation"), //$NON-NLS-1$
+					Messages.getString("PreferenceUtility.invalidLocation"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$
 			e.printStackTrace();
 		}
 

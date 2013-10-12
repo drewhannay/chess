@@ -41,26 +41,26 @@ public class CustomPlayerPanel extends JPanel
 		GridBagConstraints constraints = new GridBagConstraints();
 		setBorder(BorderFactory.createLoweredBevelBorder());
 
-		JLabel playerOneTurnsLabel = new JLabel("How many turns in a row for White? ");
-		JLabel playerTwoTurnsLabel = new JLabel("How many turns in a row for Black? ");
+		JLabel playerOneTurnsLabel = new JLabel(Messages.getString("CustomPlayerPanel.howManyWhite")); //$NON-NLS-1$
+		JLabel playerTwoTurnsLabel = new JLabel(Messages.getString("CustomPlayerPanel.howManyBlack")); //$NON-NLS-1$
 		mPlayerOneTurnsField = new JTextField(4);
 		GuiUtility.requestFocus(mPlayerOneTurnsField);
 		mPlayerOneTurnsField.setText(Integer.toString(mWhiteRules.getNextTurn().getWhiteMoves()));
-		mPlayerOneTurnsField.setToolTipText("This will be the amount of turns for the First Player (white in classic)");
+		mPlayerOneTurnsField.setToolTipText(Messages.getString("CustomPlayerPanel.amountForFirstPlayer")); //$NON-NLS-1$
 		mPlayerTwoTurnsField = new JTextField(4);
 		mPlayerTwoTurnsField.setText(Integer.toString(mWhiteRules.getNextTurn().getBlackMoves()));
-		mPlayerTwoTurnsField.setToolTipText("This will be the amount of turns for the First Player (white in classic)");
-		mIncrementTurnsLabel = new JLabel("Increase turns by how many each round? ");
+		mPlayerTwoTurnsField.setToolTipText(Messages.getString("CustomPlayerPanel.amountForSecondPlayer")); //$NON-NLS-1$
+		mIncrementTurnsLabel = new JLabel(Messages.getString("CustomPlayerPanel.increaseByHowMany")); //$NON-NLS-1$
 		mIncrementTurnsField = new JTextField(4);
 		mIncrementTurnsField.setText(Integer.toString(mWhiteRules.getNextTurn().getIncrement()));
-		mIncrementTurnsField.setToolTipText("This will be the number of turns each player gains for each time their turn occurs");
+		mIncrementTurnsField.setToolTipText(Messages.getString("CustomPlayerPanel.amountOfIncrease")); //$NON-NLS-1$
 
-		JButton cancelButton = new JButton("Cancel");
-		cancelButton.setToolTipText("Press to return to the main Variant window");
+		JButton cancelButton = new JButton(Messages.getString("CustomPlayerPanel.cancel")); //$NON-NLS-1$
+		cancelButton.setToolTipText(Messages.getString("CustomPlayerPanel.pressToReturn")); //$NON-NLS-1$
 		GuiUtility.setupVariantCancelButton(cancelButton, this, mFrame);
 
-		JButton submitButton = new JButton("Save");
-		submitButton.setToolTipText("Press to save turn settings");
+		JButton submitButton = new JButton(Messages.getString("CustomPlayerPanel.save")); //$NON-NLS-1$
+		submitButton.setToolTipText(Messages.getString("CustomPlayerPanel.pressToSave")); //$NON-NLS-1$
 		submitButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -130,13 +130,13 @@ public class CustomPlayerPanel extends JPanel
 			int increment = Integer.parseInt(mIncrementTurnsField.getText());
 			if (whiteTurns < 0)
 			{
-				JOptionPane.showMessageDialog(this, "The White team's turns cannot be negative", "No Negatives",
+				JOptionPane.showMessageDialog(this, Messages.getString("CustomPlayerPanel.whiteCannotBeNegative"), Messages.getString("CustomPlayerPanel.noNegatives"), //$NON-NLS-1$ //$NON-NLS-2$
 						JOptionPane.PLAIN_MESSAGE);
 				return false;
 			}
 			else if (blackTurns < 0)
 			{
-				JOptionPane.showMessageDialog(this, "The Black team's turns cannot be negative", "No Negatives",
+				JOptionPane.showMessageDialog(this, Messages.getString("CustomPlayerPanel.blackCannotBeNegative"), Messages.getString("CustomPlayerPanel.noNegatives"), //$NON-NLS-1$ //$NON-NLS-2$
 						JOptionPane.PLAIN_MESSAGE);
 				return false;
 			}
@@ -161,7 +161,7 @@ public class CustomPlayerPanel extends JPanel
 		}
 		catch (Exception e)
 		{
-			JOptionPane.showMessageDialog(Driver.getInstance(), "Enter a valid number of turns for both players.", "Incomplete Form",
+			JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("CustomPlayerPanel.enterValidTurnNumbers"), Messages.getString("CustomPlayerPanel.incompleteForm"), //$NON-NLS-1$ //$NON-NLS-2$
 					JOptionPane.PLAIN_MESSAGE);
 			return false;
 		}
