@@ -57,7 +57,7 @@ Once you've picked an issue to work on and claimed it as your own in the comment
 
 When you are ready to commit, go back to SmartGit. Your changed files should appear in the the main section of the window. Select each of the files you want to commit and press the "Stage" button located directly above the list of files.  Next, click "Commit" (next to the Stage button).  You will now be required to enter a commit messgae. Each commit should be associated with an Issue number from our [Issues list](https://github.com/drewhannay/chess/issues). Your commit messages should be in this form (where "N" is the appropriate issue number):
 
-<code>Short sentence describing what was changed. Issue #N<br /><br />Any other description required should go in paragraph form below the initial message with a new line separating the two</code>
+<code>Issue #N Short sentence describing what was changed<br /><br />Any other description required should go in paragraph form below the initial message with a new line separating the two</code>
 
 This formatting is very important because with it, github will conveniently link your commit message to the related issue number.
 
