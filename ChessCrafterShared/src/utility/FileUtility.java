@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URL;
 
 import javax.imageio.ImageIO;
 
@@ -31,7 +32,7 @@ public final class FileUtility
 		String imagePath;
 		if (isBuiltInFile)
 		{
-			imagePath = ROOT_RUNNING_DIR+ SLASH + IMAGES + SLASH + imageName;
+			imagePath = ROOT_RUNNING_DIR + SLASH + IMAGES + SLASH + imageName;
 		}
 		else
 		{
@@ -48,14 +49,14 @@ public final class FileUtility
 		file.mkdirs();
 		return file.list();
 	}
-	
+
 	public static String[] getCustomPieceArray()
 	{
 		File file = new File(HIDDEN_DIR + SLASH + PIECES);
 		file.mkdirs();
 		return file.list();
 	}
-	
+
 	public static String[] getVariantsFileArrayNoClassic()
 	{
 		String[] variants = getVariantsFileArray();
@@ -75,7 +76,7 @@ public final class FileUtility
 	{
 		return new File(HIDDEN_DIR + SLASH + VARIANTS + SLASH + variantName);
 	}
-	
+
 	public static File getPieceFile(String pieceName)
 	{
 		return new File(HIDDEN_DIR + SLASH + PIECES + SLASH + pieceName);
@@ -148,10 +149,10 @@ public final class FileUtility
 		{
 			HIDDEN_DIR = System.getProperty("user.home") + "\\chess"; //$NON-NLS-1$ //$NON-NLS-2$
 			SLASH = "\\"; //$NON-NLS-1$
-			
+
 			String userDir = System.getProperty("user.dir"); //$NON-NLS-1$
-			
-			ROOT_RUNNING_DIR = userDir.substring(0, userDir.lastIndexOf("\\"))+"\\ChessCrafterShared"; //$NON-NLS-1$ //$NON-NLS-2$
+
+			ROOT_RUNNING_DIR = userDir.substring(0, userDir.lastIndexOf("\\")) + "\\ChessCrafterShared"; //$NON-NLS-1$ //$NON-NLS-2$
 			try
 			{
 				Runtime rt = Runtime.getRuntime();
@@ -175,25 +176,28 @@ public final class FileUtility
 	public static BufferedImage getFrontPageImage()
 	{
 		BufferedImage frontPage = null;
+		String path = null;
 		try
 		{
-			frontPage = ImageIO.read(new File(getImagePath("chess_logo.png", true))); //$NON-NLS-1$
+			URL resource = FileUtility.class.getResource("/chess_logo.png");
+			frontPage = ImageIO.read(resource); //$NON-NLS-1$
 		}
 		catch (IOException e)
 		{
+			System.out.println("Can't find path:" + path);
 			e.printStackTrace();
 		}
 		return frontPage;
 	}
-	
+
 	public static void deletePiece(String pieceName)
 	{
 		File pieceFile = getPieceFile(pieceName);
 		pieceFile.delete();
-		new File((getImagePath("l_"+pieceName+".png", false))).delete(); //$NON-NLS-1$ //$NON-NLS-2$
-		new File((getImagePath("d_"+pieceName+".png", false))).delete(); //$NON-NLS-1$ //$NON-NLS-2$
+		new File((getImagePath("l_" + pieceName + ".png", false))).delete(); //$NON-NLS-1$ //$NON-NLS-2$
+		new File((getImagePath("d_" + pieceName + ".png", false))).delete(); //$NON-NLS-1$ //$NON-NLS-2$
 	}
-	
+
 	private static final String HIDDEN_DIR;
 	private static final String ROOT_RUNNING_DIR;
 	private static final String AI = "AI"; //$NON-NLS-1$

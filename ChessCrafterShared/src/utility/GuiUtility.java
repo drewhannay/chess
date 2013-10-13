@@ -24,14 +24,14 @@ public final class GuiUtility
 	{
 		s_chessCrafter = chessCrafter;
 	}
-	
+
 	public static ChessCrafter getChessCrafter()
 	{
 		if (s_chessCrafter == null)
 			System.out.println("ChessCrafter object is null. Please use setChessCrafter() before calling get()."); //$NON-NLS-1$
 		return s_chessCrafter;
 	}
-		
+
 	public static void requestFocus(final JComponent component)
 	{
 		SwingUtilities.invokeLater(new Runnable()
@@ -74,15 +74,20 @@ public final class GuiUtility
 		return createImageIcon(imageWidth, imageHeight, imageLocation, true);
 	}
 
-	public static ImageIcon createImageIcon(int imageWidth, int imageHeight, String imageLocation, boolean isBuiltInFile) throws IOException
+	public static ImageIcon createImageIcon(int imageWidth, int imageHeight, String imageLocation, boolean isBuiltInFile)
+			throws IOException
 	{
-			BufferedImage bufferedImage = ImageIO.read(new File(imageLocation));
+		BufferedImage bufferedImage;
+		if (isBuiltInFile)
+			bufferedImage = ImageIO.read(GuiUtility.class.getResource(imageLocation));
+		else
+			bufferedImage = ImageIO.read(new File(imageLocation));
 
-			ImageIcon imageIcon = new ImageIcon(bufferedImage);
-			imageIcon.setImage(imageIcon.getImage().getScaledInstance(imageWidth, imageHeight, Image.SCALE_SMOOTH));
-			return imageIcon;
+		ImageIcon imageIcon = new ImageIcon(bufferedImage);
+		imageIcon.setImage(imageIcon.getImage().getScaledInstance(imageWidth, imageHeight, Image.SCALE_SMOOTH));
+		return imageIcon;
 	}
-	
+
 	public static boolean tryAIFileInstall(Component parent)
 	{
 		JFileChooser fileChooser = new JFileChooser();
@@ -104,6 +109,6 @@ public final class GuiUtility
 
 		return false;
 	}
-	
+
 	private static ChessCrafter s_chessCrafter;
 }
