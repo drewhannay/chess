@@ -29,7 +29,7 @@ public final class ImageUtility
 	public static ImageIcon getLightImage(String pieceName) throws IOException
 	{
 		boolean isBuiltInFile = PIECE_NAMES.contains(pieceName);
-		return GuiUtility.createImageIcon(48, 48, FileUtility.getImagePath(LIGHT_PREFIX + pieceName + PNG, isBuiltInFile), isBuiltInFile);
+		return GuiUtility.createImageIcon(48, 48, (isBuiltInFile ? "/" : "") + LIGHT_PREFIX + pieceName + PNG, isBuiltInFile);
 	}
 
 	public static ImageIcon getDarkImage(String pieceName)
@@ -37,7 +37,7 @@ public final class ImageUtility
 		boolean isBuiltInFile = PIECE_NAMES.contains(pieceName);
 		try
 		{
-			return GuiUtility.createImageIcon(48, 48, FileUtility.getImagePath(DARK_PREFIX + pieceName + PNG, isBuiltInFile), isBuiltInFile);
+			return GuiUtility.createImageIcon(48, 48, (isBuiltInFile ? "/" : "") + DARK_PREFIX + pieceName + PNG, isBuiltInFile);
 		}
 		catch (IOException e)
 		{
