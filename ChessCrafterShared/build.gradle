@@ -1,0 +1,25 @@
+apply plugin: 'java'
+
+sourceCompatibility = 1.6
+version = '1.0'
+
+sourceSets.main {
+	java {
+		srcDirs = ['src']
+	}
+	resources {
+		srcDirs = ['images', 'resources']
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	compile group: 'com.google.guava', name: 'guava', version: '15.0'
+}
+
+jar {
+    from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+}

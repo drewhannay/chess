@@ -1,0 +1,46 @@
+apply plugin: 'java'
+
+sourceCompatibility = 1.6
+version = '1.0'
+
+sourceSets.main {
+	java {
+		srcDirs = ['src']
+	}
+	resources {
+		srcDir 'resources'
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	compile project(':ChessCrafterShared')
+	compile group: 'com.google.guava', name: 'guava', version: '15.0'
+}
+
+jar {
+	manifest.attributes("Main-Class": "gui.Driver", "provider": "gradle")
+    from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+}
+
+apply plugin: 'macAppBundle'
+
+macAppBundle {
+    mainClassName = "gui.Driver"
+	appName = "Chess Crafter"
+}
+
+buildscript {
+    repositories {
+		ivy {
+	        artifactPattern 'http://gradle-macappbundle.googlecode.com/files/[module]-[revision].[ext]'
+	    }
+    }
+
+    dependencies {
+		classpath 'edu.sc.seis:gradle-macappbundle:1.0.4'
+    }
+}
