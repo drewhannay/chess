@@ -40,6 +40,7 @@ _Of course, there may be alternate ways to do many of these steps, but these are
 
 ### Building in Release Mode
 Chess Crafter uses the [Gradle build system](http://www.gradle.org/) for compiling our app for distribution. This lets us create an executable jar file (for Windows & Linux) and a .dmg/.app file (for Mac OS X) with one simple command. After making changes to the code, you should compile the app using our gradle script and test to make sure everything works in release mode.
+* FOR WINDOWS USERS: You may have to add in an environment path variable to your JDK if you installed a JRE first. To do that go to Control Panel -> System -> Advanced System Settings -> Advanced Tab -> Environment Variables -> create a new variable called JAVA_HOME and point it to the top level folder of the JDK (e.g G:/JDK/)
 * Using your favorite terminal/shell program, navigate to the root directory of the repository
 * Execute the following command: ```gradlew build``` (note: you may need to use ```./gradlew build```).
  * Alternatively, on a Mac, you should use ```gradlew createDmg``` to create a .dmg file as well as the executable jar

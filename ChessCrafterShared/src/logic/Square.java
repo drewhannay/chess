@@ -9,7 +9,6 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
-import utility.FileUtility;
 import utility.GuiUtility;
 
 public class Square extends JLabel implements Serializable
@@ -20,7 +19,7 @@ public class Square extends JLabel implements Serializable
 	{
 		try
 		{
-			s_uninhabitableIcon = GuiUtility.createImageIcon(48, 48, FileUtility.getImagePath("Uninhabitable.png", true)); //$NON-NLS-1$
+			s_uninhabitableIcon = GuiUtility.createImageIcon(48, 48, "/Uninhabitable.png"); //$NON-NLS-1$
 		}
 
 		catch (IOException ioe)
