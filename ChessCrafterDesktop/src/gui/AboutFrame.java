@@ -28,7 +28,7 @@ public class AboutFrame extends JFrame
 
 	private void initGUIComponents(JPanel mainPanel)
 	{
-		setTitle(Messages.getString("AboutFrame.about") + AppConstants.APP_NAME);  //$NON-NLS-1$
+		setTitle(Messages.getString("AboutFrame.about") + AppConstants.APP_NAME); //$NON-NLS-1$
 		setSize(350, 375);
 		setResizable(false);
 		setLocationRelativeTo(this);

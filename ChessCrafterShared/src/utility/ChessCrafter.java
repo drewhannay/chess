@@ -4,7 +4,8 @@ import gui.PlayGameScreen;
 import gui.PlayNetGameScreen;
 import logic.Game;
 
-public interface ChessCrafter {
+public interface ChessCrafter
+{
 
 	public PlayGameScreen getPlayGameScreen();
 

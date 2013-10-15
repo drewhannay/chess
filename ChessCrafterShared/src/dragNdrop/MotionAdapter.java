@@ -7,7 +7,6 @@ import java.awt.event.MouseMotionAdapter;
 
 import javax.swing.SwingUtilities;
 
-
 public class MotionAdapter extends MouseMotionAdapter
 {
 	public MotionAdapter(GlassPane glassPane)

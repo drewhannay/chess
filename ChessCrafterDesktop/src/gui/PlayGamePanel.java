@@ -59,15 +59,18 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 	public PlayGamePanel()
 	{
 		m_dropManager = new DropManager();
-		try {
+		try
+		{
 			if (m_instance == null)
 				m_instance = new PlayGamePanel(false, null);
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} 
+		}
 	}
-	
+
 	public PlayGamePanel(boolean isPlayback, File acnFile) throws Exception
 	{
 		m_dropManager = new DropManager();
@@ -131,7 +134,7 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 			mHistoryIndex = -3;
 			initComponents(isPlayback);
 		}
-		
+
 		m_instance = this;
 
 		boardRefresh(game.getBoards());
@@ -174,7 +177,7 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 				mWhiteCapturesJail.getSquare(i, j).refreshJail();
 			}
 		}
-		
+
 		index = 0;
 		Piece[] whiteCapturedPieces = getGame().getCapturedPieces(false);
 		for (int i = mBlackCapturesJail.getMaxRow(); i >= 1; i--)
@@ -228,30 +231,35 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 		if (mIsPlayback)
 			return;
 
-		Object[] options = new String[] { Messages.getString("PlayGamePanel.saveRecord"), Messages.getString("PlayGamePanel.newGame"), Messages.getString("PlayGamePanel.quit") }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		Object[] options = new String[] {
+				Messages.getString("PlayGamePanel.saveRecord"), Messages.getString("PlayGamePanel.newGame"), Messages.getString("PlayGamePanel.quit") }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		mOptionsMenu.setVisible(false);
-		switch (JOptionPane.showOptionDialog(Driver.getInstance(), result.getGUIText(), result.winText(), JOptionPane.YES_NO_CANCEL_OPTION,
-				JOptionPane.PLAIN_MESSAGE, null, options, options[0]))
+		switch (JOptionPane.showOptionDialog(Driver.getInstance(), result.getGUIText(), result.winText(),
+				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]))
 		{
 		case JOptionPane.YES_OPTION:
 
-				m_preference = PreferenceUtility.getPreference();
-				
-				if (!m_preference.isDefaultPreferences())
-				{
-					JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("PlayGamePanel.sinceFirstTime") + AppConstants.APP_NAME //$NON-NLS-1$
-							+ Messages.getString("PlayGamePanel.pleaseChooseDefault") //$NON-NLS-1$
-							+ Messages.getString("PlayGamePanel.pressingCancel"), Messages.getString("PlayGamePanel.saveLocation"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
-					JFileChooser fileChooser = new JFileChooser();
-					fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-					int returnVal = fileChooser.showOpenDialog(Driver.getInstance());
-					if (returnVal == JFileChooser.APPROVE_OPTION)
-						m_preference.setSaveLocation(fileChooser.getSelectedFile().getAbsolutePath());
-					else
-						m_preference.setSaveLocation(FileUtility.getDefaultCompletedLocation());
-				}
+			m_preference = PreferenceUtility.getPreference();
 
-			String saveFileName = JOptionPane.showInputDialog(Driver.getInstance(), Messages.getString("PlayGamePanel.enterAName"), Messages.getString("PlayGamePanel.saving"), //$NON-NLS-1$ //$NON-NLS-2$
+			if (!m_preference.isDefaultPreferences())
+			{
+				JOptionPane
+						.showMessageDialog(
+								Driver.getInstance(),
+								Messages.getString("PlayGamePanel.sinceFirstTime") + AppConstants.APP_NAME //$NON-NLS-1$
+										+ Messages.getString("PlayGamePanel.pleaseChooseDefault") //$NON-NLS-1$
+										+ Messages.getString("PlayGamePanel.pressingCancel"), Messages.getString("PlayGamePanel.saveLocation"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
+				JFileChooser fileChooser = new JFileChooser();
+				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				int returnVal = fileChooser.showOpenDialog(Driver.getInstance());
+				if (returnVal == JFileChooser.APPROVE_OPTION)
+					m_preference.setSaveLocation(fileChooser.getSelectedFile().getAbsolutePath());
+				else
+					m_preference.setSaveLocation(FileUtility.getDefaultCompletedLocation());
+			}
+
+			String saveFileName = JOptionPane.showInputDialog(Driver.getInstance(),
+					Messages.getString("PlayGamePanel.enterAName"), Messages.getString("PlayGamePanel.saving"), //$NON-NLS-1$ //$NON-NLS-2$
 					JOptionPane.PLAIN_MESSAGE);
 			getGame().saveGame(saveFileName, getGame().isClassicChess());
 			mGame.setBlackMove(false);
@@ -271,7 +279,8 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 
 	public void saveGame()
 	{
-		String fileName = JOptionPane.showInputDialog(Driver.getInstance(), Messages.getString("PlayGamePanel.enterAName"), Messages.getString("PlayGamePanel.saving"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
+		String fileName = JOptionPane.showInputDialog(Driver.getInstance(),
+				Messages.getString("PlayGamePanel.enterAName"), Messages.getString("PlayGamePanel.saving"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
 		if (fileName == null)
 			return;
 		getGame().saveGame(fileName, false);
@@ -297,7 +306,8 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 		int numOfColumns = board.numCols();
 		for (int i = numberOfRows; i > 0; i--)
 		{
-			if(!isJail){
+			if (!isJail)
+			{
 				JLabel label = new JLabel("" + i); //$NON-NLS-1$
 				label.setHorizontalAlignment(SwingConstants.CENTER);
 				gridPanel.add(label);
@@ -308,7 +318,8 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 				Square square = board.getSquare(i, j);
 				if (!isPlayback)
 				{
-					if(!isJail){
+					if (!isJail)
+					{
 						square.addMouseListener(new SquareListener(square, board));
 						square.addMouseMotionListener(new MotionAdapter(m_globalGlassPane));
 					}
@@ -318,7 +329,8 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 			}
 
 		}
-		if(!isJail){
+		if (!isJail)
+		{
 			for (int k = 0; k <= numOfColumns; k++)
 			{
 				if (k != 0)
@@ -534,16 +546,16 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 		mWhiteCapturePanel.setBorder(BorderFactory.createTitledBorder(Messages.getString("PlayGamePanel.capturedPieces"))); //$NON-NLS-1$
 		mWhiteCapturePanel.setLayout(new GridLayout(jailBoardSize, jailBoardSize));
 
-		mWhiteCapturePanel.setPreferredSize(new Dimension((mWhiteCapturesJail.getMaxCol() + 1) * 25, (mWhiteCapturesJail
-				.getMaxRow() + 1) * 25));
+		mWhiteCapturePanel.setPreferredSize(new Dimension((mWhiteCapturesJail.getMaxCol() + 1) * 25,
+				(mWhiteCapturesJail.getMaxRow() + 1) * 25));
 
 		mBlackCapturesJail = new Board(jailBoardSize, jailBoardSize, false);
 		mBlackCapturePanel = createGrid(mBlackCapturesJail, isPlayback, true);
 		mBlackCapturePanel.setBorder(BorderFactory.createTitledBorder(Messages.getString("PlayGamePanel.capturedPieces"))); //$NON-NLS-1$
 		mBlackCapturePanel.setLayout(new GridLayout(jailBoardSize, jailBoardSize));
 
-		mBlackCapturePanel.setPreferredSize(new Dimension((mBlackCapturesJail.getMaxCol() + 1) * 25, (mBlackCapturesJail
-				.getMaxRow() + 1) * 25));
+		mBlackCapturePanel.setPreferredSize(new Dimension((mBlackCapturesJail.getMaxCol() + 1) * 25,
+				(mBlackCapturesJail.getMaxRow() + 1) * 25));
 
 		// add the Black Name
 		constraints.fill = GridBagConstraints.NONE;
@@ -727,25 +739,25 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 		public void mousePressed(MouseEvent event)
 		{
 			// TODO: dropping from a jail currently doesn't work
-//			if (m_nextMoveMustPlacePiece)
-//			{
-//				m_nextMoveMustPlacePiece = false;
-//				getGame().nextTurn();
-//				if (!m_clickedSquare.isOccupied() && m_clickedSquare.isHabitable() && m_pieceToPlace != null)
-//				{
-//					m_pieceToPlace.setSquare(m_clickedSquare);
-//					m_clickedSquare.setPiece(m_pieceToPlace);
-//					m_pieceToPlace = null;
-//					m_nextMoveMustPlacePiece = false;
-//					boardRefresh(getGame().getBoards());
-//					getGame().genLegalDests();
-//				}
-//
-//				return;
-//			}
+			// if (m_nextMoveMustPlacePiece)
+			// {
+			// m_nextMoveMustPlacePiece = false;
+			// getGame().nextTurn();
+			// if (!m_clickedSquare.isOccupied() &&
+			// m_clickedSquare.isHabitable() && m_pieceToPlace != null)
+			// {
+			// m_pieceToPlace.setSquare(m_clickedSquare);
+			// m_clickedSquare.setPiece(m_pieceToPlace);
+			// m_pieceToPlace = null;
+			// m_nextMoveMustPlacePiece = false;
+			// boardRefresh(getGame().getBoards());
+			// getGame().genLegalDests();
+			// }
+			//
+			// return;
+			// }
 
-			if (m_square.getPiece() == null || 
-					m_square.getPiece().isBlack() != getGame().isBlackMove())
+			if (m_square.getPiece() == null || m_square.getPiece().isBlack() != getGame().isBlackMove())
 			{
 				return;
 			}
@@ -754,8 +766,10 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 			if (destinations.size() > 0)
 			{
 				m_preference = PreferenceUtility.getPreference();
-				if (m_preference.isHighlightMoves()) {
-					for (Square destination : destinations) {
+				if (m_preference.isHighlightMoves())
+				{
+					for (Square destination : destinations)
+					{
 						destination.setBackgroundColor(Square.HIGHLIGHT_COLOR);
 					}
 				}
@@ -763,7 +777,7 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 			m_dropManager.setComponentList(destinations);
 			m_dropManager.setBoard(m_board);
 
-			if(m_square.getPiece() == null)
+			if (m_square.getPiece() == null)
 				return;
 			else
 				m_square.hideIcon();
@@ -862,10 +876,10 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 	protected static int mHistoryIndex;
 
 	private Preference m_preference;
-	
+
 	private final DropManager m_dropManager;
 
 	protected GlassPane m_globalGlassPane;
-	
+
 	private static PlayGamePanel m_instance;
 }

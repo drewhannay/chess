@@ -52,14 +52,15 @@ public class ObjectiveMakerPanel extends JPanel
 		if (customSetupMenu.mWhiteRules.getEndOfGame() == EndOfGame.CAPTURE_ALL_PIECES)
 			whiteCaptureAllButton.setSelected(true);
 
-		final JRadioButton whiteCaptureAllTypeButton = new JRadioButton(Messages.getString("ObjectiveMakerPanel.captureAllOfType"), false); //$NON-NLS-1$
-		whiteCaptureAllTypeButton
-				.setToolTipText(Messages.getString("ObjectiveMakerPanel.pressForCaptureAllOfType")); //$NON-NLS-1$
+		final JRadioButton whiteCaptureAllTypeButton = new JRadioButton(
+				Messages.getString("ObjectiveMakerPanel.captureAllOfType"), false); //$NON-NLS-1$
+		whiteCaptureAllTypeButton.setToolTipText(Messages.getString("ObjectiveMakerPanel.pressForCaptureAllOfType")); //$NON-NLS-1$
 		objectiveWhitePanel.add(whiteCaptureAllTypeButton);
 		if (customSetupMenu.mWhiteRules.getEndOfGame() == EndOfGame.CAPTURE_ALL_OF_TYPE)
 			whiteCaptureAllTypeButton.setSelected(true);
 
-		final JRadioButton whiteProtectObjectiveButton = new JRadioButton(Messages.getString("ObjectiveMakerPanel.protectObjective"), false); //$NON-NLS-1$
+		final JRadioButton whiteProtectObjectiveButton = new JRadioButton(
+				Messages.getString("ObjectiveMakerPanel.protectObjective"), false); //$NON-NLS-1$
 		whiteProtectObjectiveButton.setToolTipText(Messages.getString("ObjectiveMakerPanel.pressForProtectObjective")); //$NON-NLS-1$
 		objectiveWhitePanel.add(whiteProtectObjectiveButton);
 		if (customSetupMenu.mWhiteRules.getEndOfGame() == EndOfGame.CLASSIC)
@@ -72,8 +73,7 @@ public class ObjectiveMakerPanel extends JPanel
 			whiteLoseAllButton.setSelected(true);
 
 		final JRadioButton whiteCheckTimesButton = new JRadioButton(Messages.getString("ObjectiveMakerPanel.checkNumTimes"), false); //$NON-NLS-1$
-		whiteCheckTimesButton
-				.setToolTipText(Messages.getString("ObjectiveMakerPanel.pressForCheckNumTimes")); //$NON-NLS-1$
+		whiteCheckTimesButton.setToolTipText(Messages.getString("ObjectiveMakerPanel.pressForCheckNumTimes")); //$NON-NLS-1$
 		objectiveWhitePanel.add(whiteCheckTimesButton);
 		if (customSetupMenu.mWhiteRules.getEndOfGame() == EndOfGame.CHECK_N_TIMES)
 			whiteCheckTimesButton.setSelected(true);
@@ -93,14 +93,15 @@ public class ObjectiveMakerPanel extends JPanel
 		if (customSetupMenu.mBlackRules.getEndOfGame() == EndOfGame.CAPTURE_ALL_PIECES)
 			blackCaptureAllButton.setSelected(true);
 
-		final JRadioButton blackCaptureAllTypeButton = new JRadioButton(Messages.getString("ObjectiveMakerPanel.captureAllOfType"), false); //$NON-NLS-1$
-		blackCaptureAllTypeButton
-				.setToolTipText(Messages.getString("ObjectiveMakerPanel.pressForCaptureAllOfType")); //$NON-NLS-1$
+		final JRadioButton blackCaptureAllTypeButton = new JRadioButton(
+				Messages.getString("ObjectiveMakerPanel.captureAllOfType"), false); //$NON-NLS-1$
+		blackCaptureAllTypeButton.setToolTipText(Messages.getString("ObjectiveMakerPanel.pressForCaptureAllOfType")); //$NON-NLS-1$
 		objectiveBlackPanel.add(blackCaptureAllTypeButton);
 		if (customSetupMenu.mBlackRules.getEndOfGame() == EndOfGame.CAPTURE_ALL_OF_TYPE)
 			blackCaptureAllTypeButton.setSelected(true);
 
-		final JRadioButton blackProtectObjectiveButton = new JRadioButton(Messages.getString("ObjectiveMakerPanel.protectObjective"), false); //$NON-NLS-1$
+		final JRadioButton blackProtectObjectiveButton = new JRadioButton(
+				Messages.getString("ObjectiveMakerPanel.protectObjective"), false); //$NON-NLS-1$
 		blackProtectObjectiveButton.setToolTipText(Messages.getString("ObjectiveMakerPanel.pressForProtect")); //$NON-NLS-1$
 		objectiveBlackPanel.add(blackProtectObjectiveButton);
 		if (customSetupMenu.mBlackRules.getEndOfGame() == EndOfGame.CLASSIC)
@@ -113,8 +114,7 @@ public class ObjectiveMakerPanel extends JPanel
 			blackLoseAllButton.setSelected(true);
 
 		final JRadioButton blackCheckTimesButton = new JRadioButton(Messages.getString("ObjectiveMakerPanel.checkNumTimes"), false); //$NON-NLS-1$
-		blackCheckTimesButton
-				.setToolTipText(Messages.getString("ObjectiveMakerPanel.pressForCheckNumTimes")); //$NON-NLS-1$
+		blackCheckTimesButton.setToolTipText(Messages.getString("ObjectiveMakerPanel.pressForCheckNumTimes")); //$NON-NLS-1$
 		objectiveBlackPanel.add(blackCheckTimesButton);
 		if (customSetupMenu.mBlackRules.getEndOfGame() == EndOfGame.CHECK_N_TIMES)
 			blackCheckTimesButton.setSelected(true);
@@ -141,7 +141,8 @@ public class ObjectiveMakerPanel extends JPanel
 				{
 					if (!(whiteProtectObjectiveButton.isSelected() && blackProtectObjectiveButton.isSelected()))
 					{
-						if (JOptionPane.showConfirmDialog(Driver.getInstance(),
+						if (JOptionPane.showConfirmDialog(
+								Driver.getInstance(),
 								Messages.getString("ObjectiveMakerPanel.usingProtectNotRecommended") //$NON-NLS-1$
 										+ Messages.getString("ObjectiveMakerPanel.continueAnyway"), Messages.getString("ObjectiveMakerPanel.continueQ"), JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) //$NON-NLS-1$ //$NON-NLS-2$
 							return;
@@ -160,7 +161,8 @@ public class ObjectiveMakerPanel extends JPanel
 				{
 					if (!(whiteCheckTimesButton.isSelected() && blackCheckTimesButton.isSelected()))
 					{
-						if (JOptionPane.showConfirmDialog(Driver.getInstance(),
+						if (JOptionPane.showConfirmDialog(
+								Driver.getInstance(),
 								Messages.getString("ObjectiveMakerPanel.checkNumTimesCombo") //$NON-NLS-1$
 										+ Messages.getString("ObjectiveMakerPanel.continueAnyways"), Messages.getString("ObjectiveMakerPanel.continueQ"), JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) //$NON-NLS-1$ //$NON-NLS-2$
 							return;
@@ -169,11 +171,13 @@ public class ObjectiveMakerPanel extends JPanel
 
 				if (whiteCaptureAllButton.isSelected())
 				{
-					mWhiteRules.addEndOfGame(EndOfGame.CAPTURE_ALL_PIECES.init(0, Messages.getString("ObjectiveMakerPanel.empty"), false)); //$NON-NLS-1$
+					mWhiteRules.addEndOfGame(EndOfGame.CAPTURE_ALL_PIECES.init(0,
+							Messages.getString("ObjectiveMakerPanel.empty"), false)); //$NON-NLS-1$
 				}
 				if (whiteCaptureAllTypeButton.isSelected())
 				{
-					mWhiteRules.addEndOfGame(EndOfGame.CAPTURE_ALL_OF_TYPE.init(0, Messages.getString("ObjectiveMakerPanel.knight"), false)); //$NON-NLS-1$
+					mWhiteRules.addEndOfGame(EndOfGame.CAPTURE_ALL_OF_TYPE.init(0,
+							Messages.getString("ObjectiveMakerPanel.knight"), false)); //$NON-NLS-1$
 				}
 				if (whiteProtectObjectiveButton.isSelected())
 				{
@@ -192,11 +196,13 @@ public class ObjectiveMakerPanel extends JPanel
 
 				if (blackCaptureAllButton.isSelected())
 				{
-					mBlackRules.addEndOfGame(EndOfGame.CAPTURE_ALL_PIECES.init(0, Messages.getString("ObjectiveMakerPanel.empty"), true)); //$NON-NLS-1$
+					mBlackRules.addEndOfGame(EndOfGame.CAPTURE_ALL_PIECES.init(0,
+							Messages.getString("ObjectiveMakerPanel.empty"), true)); //$NON-NLS-1$
 				}
 				if (blackCaptureAllTypeButton.isSelected())
 				{
-					mBlackRules.addEndOfGame(EndOfGame.CAPTURE_ALL_OF_TYPE.init(0, Messages.getString("ObjectiveMakerPanel.knight"), true)); //$NON-NLS-1$
+					mBlackRules.addEndOfGame(EndOfGame.CAPTURE_ALL_OF_TYPE.init(0,
+							Messages.getString("ObjectiveMakerPanel.knight"), true)); //$NON-NLS-1$
 					m_needsObjectivePiece = false;
 				}
 				if (blackProtectObjectiveButton.isSelected())

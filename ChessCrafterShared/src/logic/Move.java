@@ -242,7 +242,7 @@ public class Move implements Serializable
 
 		if (!origin.isOccupied())
 			throw new Exception(Messages.getString("noPieceToMove"));// If there is no Piece to //$NON-NLS-1$
-													// Move, get angry.
+		// Move, get angry.
 
 		if (getPiece().isBlack() != board.isBlackTurn())
 			throw new Exception(Messages.getString("notYourTurn")); //$NON-NLS-1$

@@ -2,7 +2,8 @@ package gui;
 
 import ai.FakeMove;
 
-public interface PlayNetGameScreen {
+public interface PlayNetGameScreen
+{
 
 	public boolean isBlackPlayer();
 

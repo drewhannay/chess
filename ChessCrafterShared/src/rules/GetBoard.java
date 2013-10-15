@@ -5,8 +5,7 @@ import logic.Game;
 
 public enum GetBoard
 {
-	CLASSIC,
-	OPPOSITE_BOARD;
+	CLASSIC, OPPOSITE_BOARD;
 
 	public Board getBoard(Board startBoard)
 	{

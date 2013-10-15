@@ -224,7 +224,7 @@ public class Board implements Serializable
 		mWrapsAround = wrapAround;
 		return toReturn;
 	}
-	
+
 	private static final long serialVersionUID = -3660560968400318452L;
 
 	private Game mGame;

@@ -8,8 +8,7 @@ import logic.PieceBuilder;
 
 public enum Promote
 {
-	CLASSIC,
-	NO_PROMOTIONS;
+	CLASSIC, NO_PROMOTIONS;
 
 	public Piece promotePiece(Piece pieceToPromote, boolean pieceCanBePromoted, String pieceTypeToPromoteFrom)
 	{
@@ -64,7 +63,8 @@ public enum Promote
 		{
 			try
 			{
-				Piece promoted = PieceBuilder.makePiece(pieceTypeToPromoteFrom, pieceToPromote.isBlack(), pieceToPromote.getSquare(), pieceToPromote.getBoard());
+				Piece promoted = PieceBuilder.makePiece(pieceTypeToPromoteFrom, pieceToPromote.isBlack(), pieceToPromote.getSquare(),
+						pieceToPromote.getBoard());
 				if (promoted.isBlack())
 					mGame.getBlackTeam().set(mGame.getBlackTeam().indexOf(pieceToPromote), promoted);
 				else
@@ -87,7 +87,8 @@ public enum Promote
 				mPromotedToClass = pieceToPromote.getPromotesTo().get(0);
 			while (mPromotedToClass.equals("")) //$NON-NLS-1$
 			{
-				String result = (String) JOptionPane.showInputDialog(null, Messages.getString("selectPromotionType"), Messages.getString("promoChoice"), //$NON-NLS-1$ //$NON-NLS-2$
+				String result = (String) JOptionPane.showInputDialog(null,
+						Messages.getString("selectPromotionType"), Messages.getString("promoChoice"), //$NON-NLS-1$ //$NON-NLS-2$
 						JOptionPane.PLAIN_MESSAGE, null, pieceToPromote.getPromotesTo().toArray(), null);
 
 				if (result == null)
@@ -97,14 +98,16 @@ public enum Promote
 				pieceTypeToPromoteFrom = result;
 			}
 		}
-		else if (pieceTypeToPromoteFrom != null && pieceToPromote.getPromotesTo() != null && pieceToPromote.getPromotesTo().contains(pieceTypeToPromoteFrom))
+		else if (pieceTypeToPromoteFrom != null && pieceToPromote.getPromotesTo() != null
+				&& pieceToPromote.getPromotesTo().contains(pieceTypeToPromoteFrom))
 		{
 			mPromotedToClass = pieceTypeToPromoteFrom;
 		}
 
 		try
 		{
-			Piece promoted = PieceBuilder.makePiece(mPromotedToClass, pieceToPromote.isBlack(), pieceToPromote.getSquare(), pieceToPromote.getBoard());
+			Piece promoted = PieceBuilder.makePiece(mPromotedToClass, pieceToPromote.isBlack(), pieceToPromote.getSquare(),
+					pieceToPromote.getBoard());
 			if (promoted.isBlack())
 				mGame.getBlackTeam().set(mGame.getBlackTeam().indexOf(pieceToPromote), promoted);
 			else

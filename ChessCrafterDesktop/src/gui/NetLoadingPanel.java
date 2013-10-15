@@ -32,7 +32,7 @@ public class NetLoadingPanel extends JPanel
 			public void actionPerformed(ActionEvent event)
 			{
 				AnimatedLabel.m_isFinished = true;
-//				NewGameMenu.mIsCancelled = true;
+				// NewGameMenu.mIsCancelled = true;
 				Driver.getInstance().setFileMenuVisibility(true);
 				Driver.getInstance().revertToMainPanel();
 			}

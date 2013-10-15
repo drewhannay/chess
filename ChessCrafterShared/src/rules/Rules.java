@@ -37,7 +37,7 @@ public class Rules implements Serializable
 
 	public void addAfterMove(AfterMove afterMove)
 	{
-			mAfterMoves.add(afterMove);
+		mAfterMoves.add(afterMove);
 	}
 
 	public void addCropLegalDests(CropLegalDestinations cropLegalDests)
@@ -49,12 +49,12 @@ public class Rules implements Serializable
 	{
 		mCropLegalDests.clear();
 	}
-	
+
 	public void clearAfterMoves()
 	{
 		mAfterMoves.clear();
 	}
-	
+
 	public void addEndOfGame(EndOfGame endOfGame)
 	{
 		mEndOfGame = endOfGame;
@@ -132,7 +132,7 @@ public class Rules implements Serializable
 		mEndOfGame.setGame(game);
 		mObjectivePiece.setGame(game);
 		mGetBoard.setGame(game);
-//		mGetPromotionSquares.setGame(game);
+		// mGetPromotionSquares.setGame(game);
 		mPromote.setGame(game);
 
 		for (AfterMove rule : mAfterMoves)
@@ -184,7 +184,7 @@ public class Rules implements Serializable
 	{
 		return !(mAfterMoves.contains(AfterMove.CAPTURER_PLACES_CAPTURED) || mAfterMoves.contains(AfterMove.CAPTURER_STEALS_CAPTURED));
 	}
-	
+
 	public boolean getCaptureMandatory()
 	{
 		return mAdjustTeamLegalDestinations.equals(AdjustTeamLegalDestinations.MUST_CAPTURE);
@@ -194,32 +194,32 @@ public class Rules implements Serializable
 	{
 		return mCropLegalDests.contains(CropLegalDestinations.STATIONARY_OBJECTIVE);
 	}
-	
+
 	public boolean getCapturedReturnToStart()
 	{
 		return mAfterMoves.contains(AfterMove.CAPTURED_PIECE_TO_ORIGIN);
 	}
-	
+
 	public boolean getPiecesDrop()
 	{
 		return mAfterMoves.contains(AfterMove.CAPTURER_PLACES_CAPTURED);
 	}
-	
+
 	public boolean getPiecesDropAndSwitch()
 	{
 		return mAfterMoves.contains(AfterMove.CAPTURER_STEALS_CAPTURED);
 	}
-	
+
 	public boolean getNoAfterMovesSelected()
 	{
 		return (!getCapturedReturnToStart()) && (!getPiecesDrop()) && (!getPiecesDropAndSwitch());
 	}
-	
+
 	public boolean isAtomic()
 	{
 		return mAfterMoves.contains(AfterMove.ATOMIC_CAPTURE);
 	}
-	
+
 	public boolean switchBoards()
 	{
 		return mGetBoard.equals(GetBoard.OPPOSITE_BOARD);
