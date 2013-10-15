@@ -155,7 +155,7 @@ public final class NetworkPlayManager
 						});
 
 						final JButton cancelButton = new JButton(Messages.getString("NetworkPlayManager.cancel")); //$NON-NLS-1$
-						GuiUtility.setupCancelButton(cancelButton, popupFrame);
+						GuiUtility.setupDoneButton(cancelButton, popupFrame);
 
 						JPanel topLevelPanel = new JPanel();
 						topLevelPanel.setLayout(new GridBagLayout());
