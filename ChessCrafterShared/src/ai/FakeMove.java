@@ -35,7 +35,7 @@ public class FakeMove implements Serializable
 	public String toString()
 	{
 		String space = " "; //$NON-NLS-1$
-		return mBoardIndex + space + mOriginRow + space + mOriginColumn + space + mDestinationRow + space + mDestinationColumn; 
+		return mBoardIndex + space + mOriginRow + space + mOriginColumn + space + mDestinationRow + space + mDestinationColumn;
 	}
 
 	private static final long serialVersionUID = -7511895104920021930L;

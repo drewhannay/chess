@@ -10,11 +10,7 @@ import logic.Result;
 
 public enum EndOfGame
 {
-	CLASSIC,
-	CHECK_N_TIMES,
-	LOSE_ALL_PIECES,
-	CAPTURE_ALL_PIECES,
-	CAPTURE_ALL_OF_TYPE;
+	CLASSIC, CHECK_N_TIMES, LOSE_ALL_PIECES, CAPTURE_ALL_PIECES, CAPTURE_ALL_OF_TYPE;
 
 	public void checkEndOfGame(Piece objectivePiece)
 	{

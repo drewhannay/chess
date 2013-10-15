@@ -122,7 +122,7 @@ public class CustomPlayerPanel extends JPanel
 	{
 		mWhiteRules = whiteRules;
 		mBlackRules = blackRules;
-		
+
 		try
 		{
 			int whiteTurns = Integer.parseInt(mPlayerOneTurnsField.getText());
@@ -130,14 +130,20 @@ public class CustomPlayerPanel extends JPanel
 			int increment = Integer.parseInt(mIncrementTurnsField.getText());
 			if (whiteTurns < 0)
 			{
-				JOptionPane.showMessageDialog(this, Messages.getString("CustomPlayerPanel.whiteCannotBeNegative"), Messages.getString("CustomPlayerPanel.noNegatives"), //$NON-NLS-1$ //$NON-NLS-2$
-						JOptionPane.PLAIN_MESSAGE);
+				JOptionPane
+						.showMessageDialog(
+								this,
+								Messages.getString("CustomPlayerPanel.whiteCannotBeNegative"), Messages.getString("CustomPlayerPanel.noNegatives"), //$NON-NLS-1$ //$NON-NLS-2$
+								JOptionPane.PLAIN_MESSAGE);
 				return false;
 			}
 			else if (blackTurns < 0)
 			{
-				JOptionPane.showMessageDialog(this, Messages.getString("CustomPlayerPanel.blackCannotBeNegative"), Messages.getString("CustomPlayerPanel.noNegatives"), //$NON-NLS-1$ //$NON-NLS-2$
-						JOptionPane.PLAIN_MESSAGE);
+				JOptionPane
+						.showMessageDialog(
+								this,
+								Messages.getString("CustomPlayerPanel.blackCannotBeNegative"), Messages.getString("CustomPlayerPanel.noNegatives"), //$NON-NLS-1$ //$NON-NLS-2$
+								JOptionPane.PLAIN_MESSAGE);
 				return false;
 			}
 			else
@@ -161,8 +167,11 @@ public class CustomPlayerPanel extends JPanel
 		}
 		catch (Exception e)
 		{
-			JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("CustomPlayerPanel.enterValidTurnNumbers"), Messages.getString("CustomPlayerPanel.incompleteForm"), //$NON-NLS-1$ //$NON-NLS-2$
-					JOptionPane.PLAIN_MESSAGE);
+			JOptionPane
+					.showMessageDialog(
+							Driver.getInstance(),
+							Messages.getString("CustomPlayerPanel.enterValidTurnNumbers"), Messages.getString("CustomPlayerPanel.incompleteForm"), //$NON-NLS-1$ //$NON-NLS-2$
+							JOptionPane.PLAIN_MESSAGE);
 			return false;
 		}
 		return true;

@@ -50,62 +50,64 @@ public final class PreferenceUtility
 		final JButton resetButton = new JButton(Messages.getString("PreferenceUtility.resetToDefaultLocation")); //$NON-NLS-1$
 		final JCheckBox highlightingCheckBox = new JCheckBox(Messages.getString("PreferenceUtility.enableHighlighting")); //$NON-NLS-1$
 		final JButton cancelButton = new JButton(Messages.getString("PreferenceUtility.cancel")); //$NON-NLS-1$
-		
-		final JButton doneButton = new JButton(
-				Messages.getString("PreferenceUtility.done")); //$NON-NLS-1$
+
+		final JButton doneButton = new JButton(Messages.getString("PreferenceUtility.done")); //$NON-NLS-1$
 		GuiUtility.setupDoneButton(doneButton, popupFrame);
 
 		holder.add(currentSaveLocationLabel);
 		holder.add(currentSaveLocationField);
 
-		final String defaultSaveLocation = FileUtility
-				.getDefaultCompletedLocation();
+		final String defaultSaveLocation = FileUtility.getDefaultCompletedLocation();
 
 		Preference preference = getPreference();
-				currentSaveLocationField.setText(preference.getSaveLocation());
-				highlightingCheckBox.setSelected(preference.isHighlightMoves());
+		currentSaveLocationField.setText(preference.getSaveLocation());
+		highlightingCheckBox.setSelected(preference.isHighlightMoves());
 
-			resetButton.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent event) {
-					currentSaveLocationField.setText(defaultSaveLocation);
+		resetButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent event)
+			{
+				currentSaveLocationField.setText(defaultSaveLocation);
+			}
+		});
+
+		changeLocationButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent event)
+			{
+				try
+				{
+					JFileChooser fileChooser = new JFileChooser();
+					fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+					int returnVal = fileChooser.showOpenDialog(Driver.getInstance());
+					if (returnVal == JFileChooser.APPROVE_OPTION)
+						currentSaveLocationField.setText(fileChooser.getSelectedFile().getAbsolutePath());
+					else
+						return;
 				}
-			});
-
-		changeLocationButton.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent event) {
-					try {
-						JFileChooser fileChooser = new JFileChooser();
-						fileChooser
-								.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-						int returnVal = fileChooser.showOpenDialog(Driver
-								.getInstance());
-						if (returnVal == JFileChooser.APPROVE_OPTION)
-							currentSaveLocationField.setText(fileChooser
-									.getSelectedFile().getAbsolutePath());
-						else
-							return;
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
+				catch (Exception e)
+				{
+					e.printStackTrace();
 				}
-			});
+			}
+		});
 
-		doneButton.addActionListener(new ActionListener() {
+		doneButton.addActionListener(new ActionListener()
+		{
 
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e)
+			{
 
 				Preference preference = new Preference();
-				preference.setSaveLocation(currentSaveLocationField
-						.getText());
-				preference.setHighlightMoves(highlightingCheckBox
-						.isSelected());
+				preference.setSaveLocation(currentSaveLocationField.getText());
+				preference.setHighlightMoves(highlightingCheckBox.isSelected());
 				savePreference(preference);
 			}
 		});
-		
+
 		GuiUtility.setupDoneButton(cancelButton, popupFrame);
 
 		constraints.gridx = 0;
@@ -135,7 +137,7 @@ public final class PreferenceUtility
 		constraints.gridwidth = 1;
 		constraints.anchor = GridBagConstraints.CENTER;
 		popupFrame.add(cancelButton, constraints);
-		
+
 		constraints.gridx = 1;
 		constraints.gridy = 4;
 		constraints.gridwidth = 1;
@@ -150,27 +152,32 @@ public final class PreferenceUtility
 		popupFrame.pack();
 		popupFrame.setVisible(true);
 	}
-	
+
 	public static Preference getPreference()
 	{
 		ObjectInputStream in;
-		try {
+		try
+		{
 			in = new ObjectInputStream(new FileInputStream(FileUtility.getPreferencesFile()));
 			Preference toReturn = (Preference) in.readObject();
 			in.close();
 			return toReturn;
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			return createDefaultPreference();
 		}
 	}
-	
+
 	public static Preference createDefaultPreference()
 	{
 		File preferencesFile = FileUtility.getPreferencesFile();
 		FileOutputStream f_out;
 		Preference preference = null;
-		try {
-			if (!preferencesFile.exists()) {
+		try
+		{
+			if (!preferencesFile.exists())
+			{
 				preferencesFile.createNewFile();
 			}
 			f_out = new FileOutputStream(preferencesFile);
@@ -179,26 +186,31 @@ public final class PreferenceUtility
 			out.writeObject(preference);
 			out.close();
 			f_out.close();
-		} catch (Exception e1) {
+		}
+		catch (Exception e1)
+		{
 			e1.printStackTrace();
 		}
 		return preference;
 	}
-	
+
 	public static void savePreference(Preference preference)
 	{
 		if (preference.equals(getPreference()))
 			return;
-		
+
 		File preferencesFile = FileUtility.getPreferencesFile();
 		FileOutputStream f_out;
-		try {
+		try
+		{
 			f_out = new FileOutputStream(preferencesFile);
 			ObjectOutputStream out = new ObjectOutputStream(f_out);
 			out.writeObject(preference);
 			out.close();
 			f_out.close();
-		} catch (Exception e1) {
+		}
+		catch (Exception e1)
+		{
 			e1.printStackTrace();
 		}
 	}

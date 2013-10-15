@@ -105,10 +105,8 @@ public class CustomBoardPanel extends JPanel
 		mWrapAroundLabel = new JLabel(Messages.getString("CustomBoardPanel.shouldWrap") //$NON-NLS-1$
 				+ Messages.getString("CustomBoardPanel.aroundHorizontally")); //$NON-NLS-1$
 		mWrapAroundCheckBox = new JCheckBox(Messages.getString("CustomBoardPanel.yes")); //$NON-NLS-1$
-		mWrapAroundCheckBox.setSelected(variant.getBuilder().getBoards()[0]
-				.isWrapAround());
-		mWrapAroundCheckBox
-				.setToolTipText(Messages.getString("CustomBoardPanel.pressToHaveWrapAround")); //$NON-NLS-1$
+		mWrapAroundCheckBox.setSelected(variant.getBuilder().getBoards()[0].isWrapAround());
+		mWrapAroundCheckBox.setToolTipText(Messages.getString("CustomBoardPanel.pressToHaveWrapAround")); //$NON-NLS-1$
 
 		// Create button and add ActionListener
 		mSubmitButton = new JButton(Messages.getString("CustomBoardPanel.save")); //$NON-NLS-1$
@@ -125,49 +123,42 @@ public class CustomBoardPanel extends JPanel
 					{
 						// create Board[] based on which radio button is
 						// selected.
-						Board[] boards = (mOneBoardButton.isSelected()) ? new Board[1]
-								: new Board[2];
+						Board[] boards = (mOneBoardButton.isSelected()) ? new Board[1] : new Board[2];
 						for (int i = 0; i < boards.length; i++)
 						{
 							// initialize each board with the given rows and
 							// columns
 							// and wraparound boolean.
 							if (changeCode == WRAP_ONLY)
-								boards[i] = variant.getBuilder().getBoards()[i].makeCopyWithWrapSelection(mWrapAroundCheckBox.isSelected());
+								boards[i] = variant.getBuilder().getBoards()[i].makeCopyWithWrapSelection(mWrapAroundCheckBox
+										.isSelected());
 							else
-								boards[i] = new Board(
-									Integer.parseInt(mNumberOfRowsTextField
-											.getText()), Integer
-											.parseInt(mNumberOfColumnsTextField
-													.getText()),
-									mWrapAroundCheckBox.isSelected());
+								boards[i] = new Board(Integer.parseInt(mNumberOfRowsTextField.getText()), Integer
+										.parseInt(mNumberOfColumnsTextField.getText()), mWrapAroundCheckBox.isSelected());
 						}
 
-					variant.drawBoards(boards, mTwoBoardsButton.isSelected());
-					mHolder.removeAll();
-					mFrame.setVisible(false);
-				}
+						variant.drawBoards(boards, mTwoBoardsButton.isSelected());
+						mHolder.removeAll();
+						mFrame.setVisible(false);
+					}
 				}
 			}
 
-			private int boardsChanged() {
+			private int boardsChanged()
+			{
 				Board[] oldBoards = variant.getBuilder().getBoards();
 				int change = NO_CHANGES;
 
-				if (oldBoards[0].isWrapAround() != mWrapAroundCheckBox
-						.isSelected())
+				if (oldBoards[0].isWrapAround() != mWrapAroundCheckBox.isSelected())
 					change = WRAP_ONLY;
 
 				if (mTwoBoardsButton.isSelected() && oldBoards.length != 2)
 					change = SHAPE_CHANGE;
-				else if (!mTwoBoardsButton.isSelected()
-						&& oldBoards.length != 1)
+				else if (!mTwoBoardsButton.isSelected() && oldBoards.length != 1)
 					change = SHAPE_CHANGE;
-				else if (oldBoards[0].numCols() != Integer
-						.parseInt(mNumberOfColumnsTextField.getText()))
+				else if (oldBoards[0].numCols() != Integer.parseInt(mNumberOfColumnsTextField.getText()))
 					change = SHAPE_CHANGE;
-				else if (oldBoards[0].numRows() != Integer
-						.parseInt(mNumberOfRowsTextField.getText()))
+				else if (oldBoards[0].numRows() != Integer.parseInt(mNumberOfRowsTextField.getText()))
 					change = SHAPE_CHANGE;
 
 				return change;
@@ -215,7 +206,10 @@ public class CustomBoardPanel extends JPanel
 	{
 		if (!mOneBoardButton.isSelected() && !mTwoBoardsButton.isSelected())
 		{
-			JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("CustomBoardPanel.selectNumberOfBoards"), Messages.getString("CustomBoardPanel.incompleteForm"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
+			JOptionPane
+					.showMessageDialog(
+							Driver.getInstance(),
+							Messages.getString("CustomBoardPanel.selectNumberOfBoards"), Messages.getString("CustomBoardPanel.incompleteForm"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
 			return false;
 		}
 		try

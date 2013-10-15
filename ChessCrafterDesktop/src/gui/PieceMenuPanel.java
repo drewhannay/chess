@@ -26,14 +26,14 @@ public class PieceMenuPanel extends JPanel
 		mPieceListModel = new DefaultListModel();
 		initGuiComponents();
 	}
-	
+
 	public PieceMenuPanel(JFrame frame)
 	{
 		mFrame = frame;
 		mPieceListModel = new DefaultListModel();
 		initGuiComponents();
 	}
-	
+
 	private void initGuiComponents()
 	{
 		setLayout(new GridBagLayout());
@@ -60,8 +60,7 @@ public class PieceMenuPanel extends JPanel
 
 		editDeletePanel.setBorder(BorderFactory.createLoweredBevelBorder());
 		editDeletePanel.setLayout(new GridBagLayout());
-		
-		
+
 		constraints.gridy = 1;
 		constraints.ipadx = 7;
 		constraints.insets = new Insets(5, 5, 0, 5);
@@ -74,7 +73,7 @@ public class PieceMenuPanel extends JPanel
 		refreshList();
 		pieceList.setModel(mPieceListModel);
 		pieceList.doLayout();
-		
+
 		editDeletePanel.add(scrollPane, constraints);
 		editDeletePanel.setVisible(mPieceListModel.size() != 0);
 
@@ -140,7 +139,6 @@ public class PieceMenuPanel extends JPanel
 			}
 		});
 
-		
 		if (mFrame == null)
 		{
 			JButton backButton = new JButton(Messages.getString("PieceMenuPanel.returnToMenu")); //$NON-NLS-1$
@@ -163,21 +161,20 @@ public class PieceMenuPanel extends JPanel
 			doneButton.setToolTipText(Messages.getString("PieceMenuPanel.returnToVariant")); //$NON-NLS-1$
 			doneButton.addActionListener(new ActionListener()
 			{
-				
+
 				@Override
 				public void actionPerformed(ActionEvent arg0)
 				{
 					mFrame.dispose();
 				}
 			});
-			
+
 			constraints.gridy = 2;
 			add(doneButton, constraints);
 		}
-		
-		
+
 		if (mFrame != null)
-		{	
+		{
 			mFrame.setTitle(Messages.getString("PieceMenuPanel.pieceMenu")); //$NON-NLS-1$
 			mFrame.setSize(225, 300);
 			mFrame.add(this);
@@ -187,18 +184,18 @@ public class PieceMenuPanel extends JPanel
 	}
 
 	private static final long serialVersionUID = -6371389704966320508L;
-	
+
 	private DefaultListModel mPieceListModel;
 	private JFrame mFrame;
-	
+
 	public void refreshList()
 	{
 		if (mPieceListModel == null)
 		{
-			
+
 		}
 		mPieceListModel.clear();
-		
+
 		String[] pieceArray = FileUtility.getCustomPieceArray();
 		for (int i = 0; i < pieceArray.length; i++)
 		{

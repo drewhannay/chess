@@ -16,12 +16,15 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import utility.FileUtility;
 
-public class VariantMenuPanel extends JPanel {
-	public VariantMenuPanel() {
+public class VariantMenuPanel extends JPanel
+{
+	public VariantMenuPanel()
+	{
 		initGuiComponents();
 	}
 
-	private void initGuiComponents() {
+	private void initGuiComponents()
+	{
 		setLayout(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
 
@@ -31,10 +34,13 @@ public class VariantMenuPanel extends JPanel {
 		constraints.anchor = GridBagConstraints.CENTER;
 
 		JButton createNewVariantButton = new JButton(Messages.getString("VariantMenuPanel.createNew")); //$NON-NLS-1$
-		createNewVariantButton.addActionListener(new ActionListener() {
+		createNewVariantButton.addActionListener(new ActionListener()
+		{
 			@Override
-			public void actionPerformed(ActionEvent event) {
-				if (mPopupFrame == null) {
+			public void actionPerformed(ActionEvent event)
+			{
+				if (mPopupFrame == null)
+				{
 					Driver.getInstance().setPanel(new CustomSetupPanel(null));
 				}
 			}
@@ -52,7 +58,8 @@ public class VariantMenuPanel extends JPanel {
 		final JList variantList = new JList();
 		DefaultListModel variantListModel = new DefaultListModel();
 		String[] variantArray = FileUtility.getVariantsFileArrayNoClassic();
-		for (int i = 0; i < variantArray.length; i++) {
+		for (int i = 0; i < variantArray.length; i++)
+		{
 			variantListModel.addElement(variantArray[i]);
 		}
 		variantList.setModel(variantListModel);
@@ -66,11 +73,16 @@ public class VariantMenuPanel extends JPanel {
 		constraints.ipadx = 7;
 		final JButton editButton = new JButton(Messages.getString("VariantMenuPanel.edit")); //$NON-NLS-1$
 		editButton.setEnabled(false);
-		editButton.addActionListener(new ActionListener() {
+		editButton.addActionListener(new ActionListener()
+		{
 			@Override
-			public void actionPerformed(ActionEvent event) {
-				if (mPopupFrame == null) {
-					Driver.getInstance().setPanel(new CustomSetupPanel(((DefaultListModel) variantList.getModel()).get(variantList.getSelectedIndex()).toString()));
+			public void actionPerformed(ActionEvent event)
+			{
+				if (mPopupFrame == null)
+				{
+					Driver.getInstance().setPanel(
+							new CustomSetupPanel(((DefaultListModel) variantList.getModel()).get(variantList.getSelectedIndex())
+									.toString()));
 				}
 			}
 		});
@@ -78,22 +90,26 @@ public class VariantMenuPanel extends JPanel {
 
 		final JButton deleteButton = new JButton(Messages.getString("VariantMenuPanel.delete")); //$NON-NLS-1$
 		deleteButton.setEnabled(false);
-		deleteButton.addActionListener(new ActionListener() {
+		deleteButton.addActionListener(new ActionListener()
+		{
 			@Override
-			public void actionPerformed(ActionEvent event) {
-				DefaultListModel dlm = (DefaultListModel) variantList
-						.getModel();
-				
-				if (variantList.getSelectedIndices().length > 0) {
+			public void actionPerformed(ActionEvent event)
+			{
+				DefaultListModel dlm = (DefaultListModel) variantList.getModel();
+
+				if (variantList.getSelectedIndices().length > 0)
+				{
 					int[] selectedIndices = variantList.getSelectedIndices();
-					for (int i = selectedIndices.length - 1; i >= 0; i--) {				
-						File variantFile = FileUtility.getVariantsFile(dlm.get(selectedIndices[i]).toString());					
+					for (int i = selectedIndices.length - 1; i >= 0; i--)
+					{
+						File variantFile = FileUtility.getVariantsFile(dlm.get(selectedIndices[i]).toString());
 						dlm.removeElementAt(selectedIndices[i]);
 						variantFile.delete();
 					}
 				}
 
-				if (dlm.size() == 1) {
+				if (dlm.size() == 1)
+				{
 					editButton.setEnabled(false);
 					deleteButton.setEnabled(false);
 					editDeletePanel.setVisible(false);
@@ -109,9 +125,11 @@ public class VariantMenuPanel extends JPanel {
 		constraints.gridy = 1;
 		add(editDeletePanel, constraints);
 
-		variantList.addListSelectionListener(new ListSelectionListener() {
+		variantList.addListSelectionListener(new ListSelectionListener()
+		{
 			@Override
-			public void valueChanged(ListSelectionEvent arg0) {
+			public void valueChanged(ListSelectionEvent arg0)
+			{
 				deleteButton.setEnabled(true);
 				editButton.setEnabled(true);
 			}
@@ -119,9 +137,11 @@ public class VariantMenuPanel extends JPanel {
 
 		JButton backButton = new JButton(Messages.getString("VariantMenuPanel.return")); //$NON-NLS-1$
 		backButton.setToolTipText(Messages.getString("VariantMenuPanel.return")); //$NON-NLS-1$
-		backButton.addActionListener(new ActionListener() {
+		backButton.addActionListener(new ActionListener()
+		{
 			@Override
-			public void actionPerformed(ActionEvent event) {
+			public void actionPerformed(ActionEvent event)
+			{
 				Driver.getInstance().revertToMainPanel();
 			}
 		});

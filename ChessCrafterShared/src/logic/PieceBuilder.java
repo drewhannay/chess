@@ -94,7 +94,7 @@ public class PieceBuilder implements Serializable
 	 * @param origin The Square the Piece occupies
 	 * @param board The Board the Piece occupies
 	 * @return The new Piece
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public static Piece makePiece(String name, boolean isBlack, Square origin, Board board) throws IOException
 	{
@@ -165,7 +165,7 @@ public class PieceBuilder implements Serializable
 	 * @param origin The Square this Piece is on
 	 * @param board the Board this Piece is on
 	 * @return The created Piece object
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	private Piece makePiece(boolean isBlack, Square origin, Board board) throws IOException
 	{
@@ -207,12 +207,12 @@ public class PieceBuilder implements Serializable
 	{
 		return mName;
 	}
-	
+
 	public Map<Character, Integer> getMovements()
 	{
 		return mMovements;
 	}
-	
+
 	public boolean canJump()
 	{
 		return mCanJump;
@@ -227,16 +227,16 @@ public class PieceBuilder implements Serializable
 	{
 		mIsKnightLike = isKnightLike;
 	}
-	
+
 	public boolean getIsKnightLike()
 	{
 		return mIsKnightLike;
 	}
-	
+
 	private static final long serialVersionUID = -1351201562740885961L;
 
 	private static Map<String, PieceBuilder> mPieceTypes;
-	
+
 	public static final char NORTH = 'n';
 	public static final char SOUTH = 's';
 	public static final char EAST = 'e';
@@ -247,10 +247,10 @@ public class PieceBuilder implements Serializable
 	public static final char SOUTHEAST = 'd';
 	public static final char KNIGHT_ONE = 'x';
 	public static final char KNIGHT_TWO = 'y';
-	
+
 	private boolean mCanJump;
 	private boolean mIsKnightLike;
-		
+
 	private String mName;
-	private Map<Character, Integer> mMovements;	
+	private Map<Character, Integer> mMovements;
 }
