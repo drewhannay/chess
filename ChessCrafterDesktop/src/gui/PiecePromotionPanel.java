@@ -50,9 +50,9 @@ public class PiecePromotionPanel extends JPanel
 
 		final DefaultListModel canPromoteList = new DefaultListModel();
 		final DefaultListModel cantPromoteList = new DefaultListModel();
-		
+
 		List<String> promotions = mCustomSetupMenu.getPromotionMap().get(mPieceBeingPromotedName);
-		
+
 		Object[] allPieces = PieceBuilder.getSet().toArray();
 		for (int i = 0; i < allPieces.length; i++)
 		{

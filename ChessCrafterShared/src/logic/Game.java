@@ -24,6 +24,7 @@ import com.google.common.collect.Lists;
 public class Game implements Serializable
 {
 	private Map<String, List<String>> mPromotionMap;
+
 	/**
 	 * Constructor. Initializes and saves state of Game information.
 	 * 
@@ -31,7 +32,7 @@ public class Game implements Serializable
 	 * @param boards Reference to boards Array.
 	 * @param whiteRules The rules for the white team
 	 * @param blackRules The rules for the black team
-	 * @param promotionMap 
+	 * @param promotionMap
 	 */
 	public Game(String gameType, Board[] boards, Rules whiteRules, Rules blackRules, Map<String, List<String>> promotionMap)
 	{
@@ -46,7 +47,7 @@ public class Game implements Serializable
 		setBlackMove(false);
 
 		setPromotionMap(promotionMap);
-		
+
 		for (Board b : mBoards)
 			b.setGame(this);
 
@@ -212,7 +213,8 @@ public class Game implements Serializable
 
 		for (int i = 0; i < team.size(); i++)
 		{
-			if (team.get(i).isCaptured()){
+			if (team.get(i).isCaptured())
+			{
 				count++;
 			}
 		}
@@ -652,8 +654,8 @@ public class Game implements Serializable
 	{
 		Board to = mBoards[m.mBoardIndex];
 		Board from = ((mIsBlackMove) ? mBlackRules : mWhiteRules).getBoard(to);
-		return new Move(from, from.getSquare(m.mOriginRow, m.mOriginColumn),
-				to.getSquare(m.mDestinationRow, m.mDestinationColumn), m.mPromotionPieceName);
+		return new Move(from, from.getSquare(m.mOriginRow, m.mOriginColumn), to.getSquare(m.mDestinationRow, m.mDestinationColumn),
+				m.mPromotionPieceName);
 	}
 
 	/**
@@ -671,11 +673,13 @@ public class Game implements Serializable
 		return new FakeMove(boardNum, m.origin.getRow(), m.origin.getCol(), m.getDest().getRow(), m.getDest().getCol(), promoName);
 	}
 
-	public Map<String, List<String>> getPromotionMap() {
+	public Map<String, List<String>> getPromotionMap()
+	{
 		return mPromotionMap;
 	}
 
-	public void setPromotionMap(Map<String, List<String>> mPromotionMap) {
+	public void setPromotionMap(Map<String, List<String>> mPromotionMap)
+	{
 		this.mPromotionMap = mPromotionMap;
 	}
 

@@ -57,7 +57,8 @@ public class Builder implements Serializable
 
 	/**
 	 * Build the classic game of chess for the user.
-	 * @throws IOException 
+	 * 
+	 * @throws IOException
 	 */
 	private static void buildClassic() throws IOException
 	{
@@ -98,7 +99,7 @@ public class Builder implements Serializable
 	 * @param square What square does this piece start on?
 	 * @param board The board the piece is on
 	 * @return The constructed bishop.
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public static Piece createBishop(boolean isBlack, Square square, Board board) throws IOException
 	{
@@ -118,7 +119,7 @@ public class Builder implements Serializable
 	 * @param square What square does this piece start on?
 	 * @param board The board the piece is on
 	 * @return The constructed king.
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public static Piece createKing(boolean isBlack, Square square, Board board) throws IOException
 	{
@@ -142,7 +143,7 @@ public class Builder implements Serializable
 	 * @param square What square does this piece start on?
 	 * @param board The board the piece is on
 	 * @return The constructed knight.
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public static Piece createKnight(boolean isBlack, Square square, Board board) throws IOException
 	{
@@ -160,7 +161,7 @@ public class Builder implements Serializable
 	 * @param square What square does this piece start on?
 	 * @param board The board the piece is on
 	 * @return The constructed pawn.
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public static Piece createPawn(boolean isBlack, Square square, Board board) throws IOException
 	{
@@ -182,7 +183,7 @@ public class Builder implements Serializable
 	 * @param square What square does this piece start on?
 	 * @param board The board the piece is on
 	 * @return The constructed queen.
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public static Piece createQueen(boolean isBlack, Square square, Board board) throws IOException
 	{
@@ -206,7 +207,7 @@ public class Builder implements Serializable
 	 * @param square What square does this piece start on?
 	 * @param board The board the piece is on
 	 * @return The constructed rook.
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public static Piece createRook(boolean isBlack, Square square, Board board) throws IOException
 	{
@@ -222,7 +223,7 @@ public class Builder implements Serializable
 	 * Get the Set of names of Game types
 	 * 
 	 * @return A Set containing the names of Game types
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public static String[] getVariantFileArray() throws IOException
 	{
@@ -322,17 +323,17 @@ public class Builder implements Serializable
 	{
 		mPromotionMap.put(key, value);
 	}
-	
+
 	public void setPromotionMap(Map<String, List<String>> promotionMap)
 	{
 		mPromotionMap = promotionMap;
 	}
-	
+
 	public Map<String, List<String>> getPromotionMap()
 	{
 		return mPromotionMap;
 	}
-	
+
 	private static final long serialVersionUID = 2099226533521671457L;
 
 	private String mName;

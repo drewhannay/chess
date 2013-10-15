@@ -145,7 +145,7 @@ public class NewGamePanel extends JPanel
 				mPopupFrame.dispose();
 				mPopupFrame = null;
 			}
-		});		
+		});
 	}
 
 	private void createNewGamePopup()
@@ -375,7 +375,8 @@ public class NewGamePanel extends JPanel
 				File aiFile = FileUtility.getAIFile(aiFileName);
 				if (aiComboBox.getSelectedItem() == null)
 				{
-					JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("NewGamePanel.youHaveNotSelectedAI"), Messages.getString("NewGamePanel.noAIFile"), //$NON-NLS-1$ //$NON-NLS-2$
+					JOptionPane.showMessageDialog(Driver.getInstance(),
+							Messages.getString("NewGamePanel.youHaveNotSelectedAI"), Messages.getString("NewGamePanel.noAIFile"), //$NON-NLS-1$ //$NON-NLS-2$
 							JOptionPane.PLAIN_MESSAGE);
 					return;
 				}
@@ -404,10 +405,12 @@ public class NewGamePanel extends JPanel
 
 				if (!task.call())
 				{
-					JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("NewGamePanel.compilationFailed") //$NON-NLS-1$
-							+ Messages.getString("NewGamePanel.makeSureClassImplementsAIPlugin") //$NON-NLS-1$
-							+ Messages.getString("NewGamePanel.makeSureClassIncludes") + "import ai.*;\n" //$NON-NLS-1$ //$NON-NLS-2$
-							+ "import ai.AIAdapter.*;\n", Messages.getString("NewGamePanel.compilationFailure"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
+					JOptionPane.showMessageDialog(
+							Driver.getInstance(),
+							Messages.getString("NewGamePanel.compilationFailed") //$NON-NLS-1$
+									+ Messages.getString("NewGamePanel.makeSureClassImplementsAIPlugin") //$NON-NLS-1$
+									+ Messages.getString("NewGamePanel.makeSureClassIncludes") + "import ai.*;\n" //$NON-NLS-1$ //$NON-NLS-2$
+									+ "import ai.AIAdapter.*;\n", Messages.getString("NewGamePanel.compilationFailure"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
 					return;
 				}
 
@@ -480,7 +483,7 @@ public class NewGamePanel extends JPanel
 		constraints.gridy = 3;
 		mPopupFrame.add(buttonPanel, constraints);
 
-		mPopupFrame.setVisible(true);		
+		mPopupFrame.setVisible(true);
 	}
 
 	public boolean validAIFilesExist()

@@ -35,8 +35,9 @@ public class PlayNetGamePanel extends PlayGamePanel implements PlayNetGameScreen
 		PlayNetGamePanel.mIsBlackPlayer = isBlack;
 		initGUIComponents(isPlayback);
 	}
-	
-	public PlayNetGamePanel() {
+
+	public PlayNetGamePanel()
+	{
 		// TODO Auto-generated constructor stub
 	}
 
@@ -173,8 +174,8 @@ public class PlayNetGamePanel extends PlayGamePanel implements PlayNetGameScreen
 		mWhiteCapturePanel.setBorder(BorderFactory.createTitledBorder(Messages.getString("PlayNetGamePanel.capturedPieces"))); //$NON-NLS-1$
 		mWhiteCapturesJail = new Board(jailBoardSize, jailBoardSize, isPlayback);
 		mWhiteCapturePanel.setLayout(new GridLayout(jailBoardSize, jailBoardSize));
-		mWhiteCapturePanel.setPreferredSize(new Dimension((mWhiteCapturesJail.getMaxCol() + 1) * 25, (mWhiteCapturesJail
-				.getMaxRow() + 1) * 25));
+		mWhiteCapturePanel.setPreferredSize(new Dimension((mWhiteCapturesJail.getMaxCol() + 1) * 25,
+				(mWhiteCapturesJail.getMaxRow() + 1) * 25));
 		for (int i = jailBoardSize; i > 0; i--)
 		{
 			for (int j = 1; j <= jailBoardSize; j++)
@@ -185,8 +186,8 @@ public class PlayNetGamePanel extends PlayGamePanel implements PlayNetGameScreen
 		mBlackCapturePanel.setBorder(BorderFactory.createTitledBorder(Messages.getString("PlayNetGamePanel.captuedPieces"))); //$NON-NLS-1$
 		mBlackCapturesJail = new Board(jailBoardSize, jailBoardSize, isPlayback);
 		mBlackCapturePanel.setLayout(new GridLayout(jailBoardSize, jailBoardSize));
-		mBlackCapturePanel.setPreferredSize(new Dimension((mBlackCapturesJail.getMaxCol() + 1) * 25, (mBlackCapturesJail
-				.getMaxRow() + 1) * 25));
+		mBlackCapturePanel.setPreferredSize(new Dimension((mBlackCapturesJail.getMaxCol() + 1) * 25,
+				(mBlackCapturesJail.getMaxRow() + 1) * 25));
 		for (int i = jailBoardSize; i > 0; i--)
 		{
 			for (int j = 1; j <= jailBoardSize; j++)
@@ -308,98 +309,101 @@ public class PlayNetGamePanel extends PlayGamePanel implements PlayNetGameScreen
 		return mIsBlackPlayer;
 	}
 
-//	class ButtonListener implements MouseListener
-//	{
-//		public ButtonListener(Square square, Board board)
-//		{
-//			m_clickedSquare = square;
-//			m_board = board;
-//		}
-//
-//		@Override
-//		public void mouseClicked(MouseEvent event)
-//		{
-//			if (getGame().isBlackMove() == m_isBlackPlayer)
-//			{
-//				if (m_nextMoveMustPlacePiece)
-//				{
-//					m_nextMoveMustPlacePiece = false;
-//					getGame().nextTurn();
-//					if (!m_clickedSquare.isOccupied() && m_clickedSquare.isHabitable() && m_pieceToPlace != null)
-//					{
-//						m_pieceToPlace.setSquare(m_clickedSquare);
-//						m_clickedSquare.setPiece(m_pieceToPlace);
-//						m_pieceToPlace = null;
-//						m_nextMoveMustPlacePiece = false;
-//						boardRefresh(getGame().getBoards());
-//						getGame().genLegalDests();
-//					}
-//
-//					return;
-//				}
-//				if (m_mustMove && m_clickedSquare == m_storedSquare)
-//				{
-//					boardRefresh(getGame().getBoards());
-//					m_mustMove = false;
-//				}
-//				else if (m_mustMove && m_clickedSquare.getColor() == Square.HIGHLIGHT_COLOR)
-//				{
-//					try
-//					{
-//						Move move = new Move(m_board, m_storedSquare, m_clickedSquare);
-//						getGame().playMove(move);
-//
-//						m_netMove = m_game.moveToFakeMove(move);
-//
-//						m_mustMove = false;
-//						boardRefresh(getGame().getBoards());
-//					}
-//					catch (Exception e)
-//					{
-//						System.out.println(e.getMessage());
-//						e.printStackTrace();
-//					}
-//				}
-//				else if (!m_mustMove && m_clickedSquare.getPiece() != null
-//						&& m_clickedSquare.getPiece().isBlack() == getGame().isBlackMove())
-//				{
-//					List<Square> destinationList = m_clickedSquare.getPiece().getLegalDests();
-//					if (destinationList.size() > 0)
-//					{
-//						for (Square destination : destinationList)
-//							destination.setBackgroundColor(Square.HIGHLIGHT_COLOR);
-//
-//						m_storedSquare = m_clickedSquare;
-//						m_mustMove = true;
-//					}
-//				}
-//			}
-//		}
-//
-//		@Override
-//		public void mouseEntered(MouseEvent event)
-//		{
-//		}
-//
-//		@Override
-//		public void mouseExited(MouseEvent event)
-//		{
-//		}
-//
-//		@Override
-//		public void mousePressed(MouseEvent event)
-//		{
-//		}
-//
-//		@Override
-//		public void mouseReleased(MouseEvent event)
-//		{
-//		}
-//
-//		private Square m_clickedSquare;
-//		private Square m_storedSquare;
-//		private Board m_board;
-//	}
+	// class ButtonListener implements MouseListener
+	// {
+	// public ButtonListener(Square square, Board board)
+	// {
+	// m_clickedSquare = square;
+	// m_board = board;
+	// }
+	//
+	// @Override
+	// public void mouseClicked(MouseEvent event)
+	// {
+	// if (getGame().isBlackMove() == m_isBlackPlayer)
+	// {
+	// if (m_nextMoveMustPlacePiece)
+	// {
+	// m_nextMoveMustPlacePiece = false;
+	// getGame().nextTurn();
+	// if (!m_clickedSquare.isOccupied() && m_clickedSquare.isHabitable() &&
+	// m_pieceToPlace != null)
+	// {
+	// m_pieceToPlace.setSquare(m_clickedSquare);
+	// m_clickedSquare.setPiece(m_pieceToPlace);
+	// m_pieceToPlace = null;
+	// m_nextMoveMustPlacePiece = false;
+	// boardRefresh(getGame().getBoards());
+	// getGame().genLegalDests();
+	// }
+	//
+	// return;
+	// }
+	// if (m_mustMove && m_clickedSquare == m_storedSquare)
+	// {
+	// boardRefresh(getGame().getBoards());
+	// m_mustMove = false;
+	// }
+	// else if (m_mustMove && m_clickedSquare.getColor() ==
+	// Square.HIGHLIGHT_COLOR)
+	// {
+	// try
+	// {
+	// Move move = new Move(m_board, m_storedSquare, m_clickedSquare);
+	// getGame().playMove(move);
+	//
+	// m_netMove = m_game.moveToFakeMove(move);
+	//
+	// m_mustMove = false;
+	// boardRefresh(getGame().getBoards());
+	// }
+	// catch (Exception e)
+	// {
+	// System.out.println(e.getMessage());
+	// e.printStackTrace();
+	// }
+	// }
+	// else if (!m_mustMove && m_clickedSquare.getPiece() != null
+	// && m_clickedSquare.getPiece().isBlack() == getGame().isBlackMove())
+	// {
+	// List<Square> destinationList =
+	// m_clickedSquare.getPiece().getLegalDests();
+	// if (destinationList.size() > 0)
+	// {
+	// for (Square destination : destinationList)
+	// destination.setBackgroundColor(Square.HIGHLIGHT_COLOR);
+	//
+	// m_storedSquare = m_clickedSquare;
+	// m_mustMove = true;
+	// }
+	// }
+	// }
+	// }
+	//
+	// @Override
+	// public void mouseEntered(MouseEvent event)
+	// {
+	// }
+	//
+	// @Override
+	// public void mouseExited(MouseEvent event)
+	// {
+	// }
+	//
+	// @Override
+	// public void mousePressed(MouseEvent event)
+	// {
+	// }
+	//
+	// @Override
+	// public void mouseReleased(MouseEvent event)
+	// {
+	// }
+	//
+	// private Square m_clickedSquare;
+	// private Square m_storedSquare;
+	// private Board m_board;
+	// }
 
 	private JPanel createGrid(Board board, boolean isPlayback)
 	{
@@ -483,14 +487,16 @@ public class PlayNetGamePanel extends PlayGamePanel implements PlayNetGameScreen
 
 	private boolean requestDraw()
 	{
-		int result = JOptionPane.showConfirmDialog(Driver.getInstance(), Messages.getString("PlayNetGamePanel.sendDrawRequest"), Messages.getString("PlayNetGamePanel.draw"), //$NON-NLS-1$ //$NON-NLS-2$
+		int result = JOptionPane.showConfirmDialog(Driver.getInstance(),
+				Messages.getString("PlayNetGamePanel.sendDrawRequest"), Messages.getString("PlayNetGamePanel.draw"), //$NON-NLS-1$ //$NON-NLS-2$
 				JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
 		return result == JOptionPane.YES_OPTION;
 	}
 
 	private boolean requestAIDraw()
 	{
-		int result = JOptionPane.showConfirmDialog(Driver.getInstance(), Messages.getString("PlayNetGamePanel.sureAboutDraw"), Messages.getString("PlayNetGamePanel.draw"), //$NON-NLS-1$ //$NON-NLS-2$
+		int result = JOptionPane.showConfirmDialog(Driver.getInstance(),
+				Messages.getString("PlayNetGamePanel.sureAboutDraw"), Messages.getString("PlayNetGamePanel.draw"), //$NON-NLS-1$ //$NON-NLS-2$
 				JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
 		return result == JOptionPane.YES_OPTION;
 	}
@@ -502,35 +508,41 @@ public class PlayNetGamePanel extends PlayGamePanel implements PlayNetGameScreen
 	}
 
 	@Override
-	public void setIsRunning(boolean isRunning) {
+	public void setIsRunning(boolean isRunning)
+	{
 		mIsRunning = isRunning;
 	}
-	
+
 	@Override
-	public boolean isRunning() {
+	public boolean isRunning()
+	{
 		return mIsRunning;
 	}
-	
+
 	@Override
-	public FakeMove getNetMove() {
+	public FakeMove getNetMove()
+	{
 		return mNetMove;
 	}
-	
+
 	@Override
-	public boolean drawRequested() {
+	public boolean drawRequested()
+	{
 		return mDrawRequested;
 	}
-	
+
 	@Override
-	public void setDrawRequested(boolean drawRequested) {
-		mDrawRequested = drawRequested;		
+	public void setDrawRequested(boolean drawRequested)
+	{
+		mDrawRequested = drawRequested;
 	}
-	
+
 	@Override
-	public void setNetMove(FakeMove fakeMove) {
+	public void setNetMove(FakeMove fakeMove)
+	{
 		mNetMove = fakeMove;
 	}
-	
+
 	private static final long serialVersionUID = -4220208356045682711L;
 
 	private static boolean mIsBlackPlayer;
@@ -540,5 +552,4 @@ public class PlayNetGamePanel extends PlayGamePanel implements PlayNetGameScreen
 	private boolean mIsAIGame;
 	public boolean mDrawRequested = false;
 
-	
 }

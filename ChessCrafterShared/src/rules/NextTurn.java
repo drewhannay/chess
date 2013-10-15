@@ -4,9 +4,11 @@ import java.io.Serializable;
 
 import utility.GuiUtility;
 
-public class NextTurn implements Serializable {
-	
-	public enum NextTurnOption {
+public class NextTurn implements Serializable
+{
+
+	public enum NextTurnOption
+	{
 		CLASSIC, INCREASING_TOGETHER, INCREASING_SEPARATELY, DIFFERENT_NUMBER_OF_TURNS
 	};
 
@@ -15,7 +17,8 @@ public class NextTurn implements Serializable {
 	 */
 	private static final long serialVersionUID = 4504947872189771271L;
 
-	public NextTurn(NextTurnOption option, int whiteMoves, int blackMoves, int increment) {
+	public NextTurn(NextTurnOption option, int whiteMoves, int blackMoves, int increment)
+	{
 		mNumberOfWhiteMovesBeforeTurnChange = whiteMoves;
 		mNumberOfBlackMovesBeforeTurnChange = blackMoves;
 		mTurnIncrement = increment;
@@ -24,8 +27,10 @@ public class NextTurn implements Serializable {
 		mNextTurnOption = option;
 	}
 
-	public boolean getNextTurn() {
-		switch (mNextTurnOption) {
+	public boolean getNextTurn()
+	{
+		switch (mNextTurnOption)
+		{
 		case CLASSIC:
 			return classicNextTurn();
 		case INCREASING_TOGETHER:
@@ -39,8 +44,10 @@ public class NextTurn implements Serializable {
 		}
 	}
 
-	public boolean undo() {
-		switch (mNextTurnOption) {
+	public boolean undo()
+	{
+		switch (mNextTurnOption)
+		{
 		case CLASSIC:
 			return undoClassic();
 		case INCREASING_TOGETHER:
@@ -111,8 +118,7 @@ public class NextTurn implements Serializable {
 
 	private boolean increasingTurnsSeparately()
 	{
-		if (++mCurrentNumberOfMovesMade >= (mIsBlackMove ? mNumberOfBlackMovesBeforeTurnChange
-				: mNumberOfWhiteMovesBeforeTurnChange))
+		if (++mCurrentNumberOfMovesMade >= (mIsBlackMove ? mNumberOfBlackMovesBeforeTurnChange : mNumberOfWhiteMovesBeforeTurnChange))
 		{
 			mIsBlackMove = !mIsBlackMove;
 			GuiUtility.getChessCrafter().getPlayGameScreen().turn(mIsBlackMove);
@@ -132,16 +138,14 @@ public class NextTurn implements Serializable {
 			mNumberOfWhiteMovesBeforeTurnChange -= mTurnIncrement;
 			GuiUtility.getChessCrafter().getPlayGameScreen().turn(mIsBlackMove);
 
-			mCurrentNumberOfMovesMade = mIsBlackMove ? mNumberOfBlackMovesBeforeTurnChange
-					: mNumberOfWhiteMovesBeforeTurnChange;
+			mCurrentNumberOfMovesMade = mIsBlackMove ? mNumberOfBlackMovesBeforeTurnChange : mNumberOfWhiteMovesBeforeTurnChange;
 		}
 		return mIsBlackMove;
 	}
 
 	private boolean differentNumberOfTurns()
 	{
-		if (++mCurrentNumberOfMovesMade >= (mIsBlackMove ? mNumberOfBlackMovesBeforeTurnChange
-				: mNumberOfWhiteMovesBeforeTurnChange))
+		if (++mCurrentNumberOfMovesMade >= (mIsBlackMove ? mNumberOfBlackMovesBeforeTurnChange : mNumberOfWhiteMovesBeforeTurnChange))
 		{
 			mIsBlackMove = !mIsBlackMove;
 			GuiUtility.getChessCrafter().getPlayGameScreen().turn(mIsBlackMove);
@@ -158,8 +162,7 @@ public class NextTurn implements Serializable {
 			mIsBlackMove = !mIsBlackMove;
 			GuiUtility.getChessCrafter().getPlayGameScreen().turn(mIsBlackMove);
 
-			mCurrentNumberOfMovesMade = mIsBlackMove ? mNumberOfBlackMovesBeforeTurnChange
-					: mNumberOfWhiteMovesBeforeTurnChange;
+			mCurrentNumberOfMovesMade = mIsBlackMove ? mNumberOfBlackMovesBeforeTurnChange : mNumberOfWhiteMovesBeforeTurnChange;
 		}
 		return mIsBlackMove;
 	}

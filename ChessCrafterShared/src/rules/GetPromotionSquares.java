@@ -9,8 +9,7 @@ import com.google.common.collect.Lists;
 
 public enum GetPromotionSquares
 {
-	CLASSIC,
-	NO_PROMOTIONS;
+	CLASSIC, NO_PROMOTIONS;
 
 	public List<Square> getPromotionSquares(Piece piece)
 	{

@@ -43,8 +43,8 @@ public class NetworkClient
 			}
 			catch (Exception e)
 			{
-//				if (NewGameMenu.mIsCancelled)
-//					return;
+				// if (NewGameMenu.mIsCancelled)
+				// return;
 			}
 		}
 		AnimatedLabel.m_isFinished = true;
@@ -76,7 +76,8 @@ public class NetworkClient
 						if (surrender == 0)
 						{
 							// if this player also accepts the Draw
-							// write out a new object which shows you accepted the Draw
+							// write out a new object which shows you accepted
+							// the Draw
 							out.writeObject(new FakeMove(-2, -2, -2, -2, -2, null));
 							Result result = Result.DRAW;
 							result.setGuiText(Messages.getString("NetworkClient.gameEndedInDraw")); //$NON-NLS-1$
@@ -86,7 +87,8 @@ public class NetworkClient
 						}
 						else
 						{
-							// else, write out an object which shows you did NOT accept the Draw
+							// else, write out an object which shows you did NOT
+							// accept the Draw
 							out.writeObject(new FakeMove(-3, -3, -3, -3, -3, null));
 							continue;
 						}
@@ -140,7 +142,10 @@ public class NetworkClient
 		catch (SocketException e)
 		{
 			e.printStackTrace();
-			JOptionPane.showMessageDialog(null, Messages.getString("NetworkClient.opponentClosedGame"), Messages.getString("NetworkClient.oops"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
+			JOptionPane
+					.showMessageDialog(
+							null,
+							Messages.getString("NetworkClient.opponentClosedGame"), Messages.getString("NetworkClient.oops"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
 			Driver.getInstance().setFileMenuVisibility(true);
 			Driver.getInstance().setOptionsMenuVisibility(false);
 			Driver.getInstance().revertToMainPanel();
@@ -153,7 +158,10 @@ public class NetworkClient
 				return;
 			if (!GuiUtility.getChessCrafter().getNetGameScreen(g, false, g.isBlackMove()).isRunning())
 				return;
-			JOptionPane.showMessageDialog(null, Messages.getString("NetworkClient.opponentClosedGame"), Messages.getString("NetworkClient.oops"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
+			JOptionPane
+					.showMessageDialog(
+							null,
+							Messages.getString("NetworkClient.opponentClosedGame"), Messages.getString("NetworkClient.oops"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
 			g.getBlackTimer().stopTimer();
 			g.getWhiteTimer().stopTimer();
 			Driver.getInstance().setFileMenuVisibility(true);

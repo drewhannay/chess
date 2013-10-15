@@ -95,8 +95,8 @@ public class AIAdapter
 		try
 		{
 			Board board = mGame.getBoards()[move.mBoardIndex];
-			mGame.playMove(new Move(board, board.getSquare(move.mOriginRow, move.mOriginColumn), board.getSquare(
-					move.mDestinationRow, move.mDestinationColumn), move.mPromotionPieceName));
+			mGame.playMove(new Move(board, board.getSquare(move.mOriginRow, move.mOriginColumn), board.getSquare(move.mDestinationRow,
+					move.mDestinationColumn), move.mPromotionPieceName));
 			return true;
 		}
 		catch (Exception e)
@@ -393,6 +393,6 @@ public class AIAdapter
 			return legalDests;
 		}
 	}
-	
+
 	private PlayNetGameScreen m_playNetGameScreen;
 }

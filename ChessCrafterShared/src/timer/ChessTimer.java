@@ -46,7 +46,8 @@ public abstract class ChessTimer implements ActionListener, Serializable
 		return timer instanceof WordTimer;
 	}
 
-	public static ChessTimer createTimer(TimerTypes timerType, RunnableOfT<Boolean> timeElapsedCallback, long incrementAmount, long startTime, boolean isBlackTeamTimer)
+	public static ChessTimer createTimer(TimerTypes timerType, RunnableOfT<Boolean> timeElapsedCallback, long incrementAmount,
+			long startTime, boolean isBlackTeamTimer)
 	{
 		switch (timerType)
 		{
@@ -59,7 +60,8 @@ public abstract class ChessTimer implements ActionListener, Serializable
 		case FISCHER_AFTER:
 			return new FischerTimer(timeElapsedCallback, incrementAmount, startTime, true, isBlackTeamTimer);
 		case HOUR_GLASS:
-			// time is halved since it is actually the time the player may not exceed
+			// time is halved since it is actually the time the player may not
+			// exceed
 			return new HourGlassTimer(timeElapsedCallback, startTime / 2, isBlackTeamTimer);
 		case SIMPLE_DELAY:
 			return new SimpleDelayTimer(timeElapsedCallback, incrementAmount, startTime, isBlackTeamTimer);
