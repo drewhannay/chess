@@ -15,15 +15,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -51,6 +43,7 @@ import timer.ChessTimer;
 import timer.TimerTypes;
 import utility.AppConstants;
 import utility.FileUtility;
+import utility.Preference;
 
 import com.google.common.collect.ImmutableList;
 
@@ -241,66 +234,22 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 				JOptionPane.PLAIN_MESSAGE, null, options, options[0]))
 		{
 		case JOptionPane.YES_OPTION:
-			File preferencesFile = FileUtility.getPreferencesFile();
-			if (!preferencesFile.exists())
-			{
-				try
-				{
-					preferencesFile.createNewFile();
-					BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(preferencesFile, true));
-					bufferedWriter.write("DefaultPreferencesSet = false"); //$NON-NLS-1$
-					bufferedWriter.newLine();
-					bufferedWriter.write("DefaultSaveLocation = " + FileUtility.getDefaultCompletedLocation()); //$NON-NLS-1$
-					bufferedWriter.close();
-				}
-				catch (IOException e)
-				{
-					e.printStackTrace();
-				}
-			}
 
-			try
-			{
-				FileInputStream fileInputStream = new FileInputStream(preferencesFile);
-				DataInputStream in = new DataInputStream(fileInputStream);
-				BufferedReader br = new BufferedReader(new InputStreamReader(in));
-				String line;
-				line = br.readLine();
-				fileInputStream.close();
-				in.close();
-				br.close();
-				if (line.contains("false")) //$NON-NLS-1$
+				m_preference = PreferenceUtility.getPreference();
+				
+				if (!m_preference.isDefaultPreferences())
 				{
-					PrintWriter printWriter = new PrintWriter(preferencesFile);
-					printWriter.print(""); //$NON-NLS-1$
-					printWriter.close();
 					JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("PlayGamePanel.sinceFirstTime") + AppConstants.APP_NAME //$NON-NLS-1$
 							+ Messages.getString("PlayGamePanel.pleaseChooseDefault") //$NON-NLS-1$
 							+ Messages.getString("PlayGamePanel.pressingCancel"), Messages.getString("PlayGamePanel.saveLocation"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
 					JFileChooser fileChooser = new JFileChooser();
 					fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 					int returnVal = fileChooser.showOpenDialog(Driver.getInstance());
-					BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(preferencesFile, true));
-					bufferedWriter.write("DefaultPreferencesSet = true"); //$NON-NLS-1$
-					bufferedWriter.newLine();
 					if (returnVal == JFileChooser.APPROVE_OPTION)
-					{
-						bufferedWriter.write("DefaultSaveLocation = " + fileChooser.getSelectedFile().getAbsolutePath()); //$NON-NLS-1$
-						bufferedWriter.close();
-					}
+						m_preference.setSaveLocation(fileChooser.getSelectedFile().getAbsolutePath());
 					else
-					{
-						bufferedWriter.write("DefaultSaveLocation = " + FileUtility.getDefaultCompletedLocation()); //$NON-NLS-1$
-						bufferedWriter.close();
-					}
+						m_preference.setSaveLocation(FileUtility.getDefaultCompletedLocation());
 				}
-			}
-			catch (Exception e)
-			{
-				JOptionPane.showMessageDialog(null, Messages.getString("PlayGamePanel.notAValidLocation"), Messages.getString("PlayGamePanel.invalidLocation"), //$NON-NLS-1$ //$NON-NLS-2$
-						JOptionPane.PLAIN_MESSAGE);
-				e.printStackTrace();
-			}
 
 			String saveFileName = JOptionPane.showInputDialog(Driver.getInstance(), Messages.getString("PlayGamePanel.enterAName"), Messages.getString("PlayGamePanel.saving"), //$NON-NLS-1$ //$NON-NLS-2$
 					JOptionPane.PLAIN_MESSAGE);
@@ -804,8 +753,12 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 			List<Square> destinations = m_square.getPiece().getLegalDests();
 			if (destinations.size() > 0)
 			{
-				for (Square destination : destinations)
-					destination.setBackgroundColor(Square.HIGHLIGHT_COLOR);
+				m_preference = PreferenceUtility.getPreference();
+				if (m_preference.isHighlightMoves()) {
+					for (Square destination : destinations) {
+						destination.setBackgroundColor(Square.HIGHLIGHT_COLOR);
+					}
+				}
 			}
 			m_dropManager.setComponentList(destinations);
 			m_dropManager.setBoard(m_board);
@@ -908,6 +861,8 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 	protected static Move[] mHistory;
 	protected static int mHistoryIndex;
 
+	private Preference m_preference;
+	
 	private final DropManager m_dropManager;
 
 	protected GlassPane m_globalGlassPane;
