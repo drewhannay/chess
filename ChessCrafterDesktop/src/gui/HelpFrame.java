@@ -51,7 +51,7 @@ public class HelpFrame extends JFrame
 		gamePlayHelpPanel.add(gamePlayHelpText);
 
 		JLabel generalHelpText = new JLabel();
-		generalHelpText.setText(Messages.getString("HelpFrame.generalHelpText")); //$NON-NLS-1$ //$NON-NLS-2$
+		generalHelpText.setText(Messages.getString("HelpFrame.generalHelpText")); //$NON-NLS-1$
 		generalHelpPanel.add(generalHelpText);
 
 		JLabel variantMakingHelpText = new JLabel();

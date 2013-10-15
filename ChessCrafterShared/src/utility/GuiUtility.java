@@ -44,9 +44,9 @@ public final class GuiUtility
 		});
 	}
 
-	public static void setupCancelButton(JButton cancelButton, final JFrame popup)
+	public static void setupDoneButton(JButton doneButton, final JFrame popup)
 	{
-		cancelButton.addActionListener(new ActionListener()
+		doneButton.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent event)

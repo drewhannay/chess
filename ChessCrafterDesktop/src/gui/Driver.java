@@ -164,7 +164,7 @@ public final class Driver extends JFrame implements ChessCrafter
 		c.gridy = 0;
 		try
 		{
-			mMainPanel.add(new JLabel(GuiUtility.createImageIcon(506, 380, "/chess_logo.png")), c);
+			mMainPanel.add(new JLabel(GuiUtility.createImageIcon(506, 380, "/chess_logo.png")), c); //$NON-NLS-1$
 		}
 		catch (IOException e)
 		{
@@ -212,7 +212,7 @@ public final class Driver extends JFrame implements ChessCrafter
 		pieceButton.setToolTipText(Messages.getString("Driver.createEditRemove")); //$NON-NLS-1$
 		try
 		{
-			pieceButton.setIcon(GuiUtility.createImageIcon(10, 30, "/pieces.png"));
+			pieceButton.setIcon(GuiUtility.createImageIcon(10, 30, "/pieces.png")); //$NON-NLS-1$
 		}
 		catch (IOException e)
 		{
@@ -412,7 +412,7 @@ public final class Driver extends JFrame implements ChessCrafter
 		newGameButton.setToolTipText(Messages.getString("Driver.startANewGame")); //$NON-NLS-1$
 		try
 		{
-			newGameButton.setIcon(GuiUtility.createImageIcon(30, 30, "/start_game.png"));
+			newGameButton.setIcon(GuiUtility.createImageIcon(30, 30, "/start_game.png")); //$NON-NLS-1$
 		}
 		catch (IOException ae)
 		{
@@ -436,7 +436,7 @@ public final class Driver extends JFrame implements ChessCrafter
 		continueGameButton.setToolTipText(Messages.getString("Driver.loadASavedGame")); //$NON-NLS-1$
 		try
 		{
-			continueGameButton.setIcon(GuiUtility.createImageIcon(30, 30, "/saved_games.png"));
+			continueGameButton.setIcon(GuiUtility.createImageIcon(30, 30, "/saved_games.png")); //$NON-NLS-1$
 		}
 		catch (IOException e)
 		{
@@ -513,7 +513,7 @@ public final class Driver extends JFrame implements ChessCrafter
 				});
 
 				JButton cancelButton = new JButton(Messages.getString("Driver.cancel")); //$NON-NLS-1$
-				GuiUtility.setupCancelButton(cancelButton, poppedFrame);
+				GuiUtility.setupDoneButton(cancelButton, poppedFrame);
 
 				JButton deleteButton = new JButton(Messages.getString("Driver.deleteSavedGame")); //$NON-NLS-1$
 				deleteButton.addActionListener(new ActionListener()
@@ -590,7 +590,7 @@ public final class Driver extends JFrame implements ChessCrafter
 		viewCompletedGameButton.setToolTipText(Messages.getString("Driver.reviewFinishedGame")); //$NON-NLS-1$
 		try
 		{
-			viewCompletedGameButton.setIcon(GuiUtility.createImageIcon(30, 30, "/view_completed.png"));
+			viewCompletedGameButton.setIcon(GuiUtility.createImageIcon(30, 30, "/view_completed.png")); //$NON-NLS-1$
 		}
 		catch (IOException ae)
 		{
@@ -679,7 +679,7 @@ public final class Driver extends JFrame implements ChessCrafter
 					});
 
 					JButton cancelButton = new JButton(Messages.getString("Driver.cancel")); //$NON-NLS-1$
-					GuiUtility.setupCancelButton(cancelButton, poppedFrame);
+					GuiUtility.setupDoneButton(cancelButton, poppedFrame);
 
 					JButton deleteButton = new JButton(Messages.getString("Driver.deleteCompleted")); //$NON-NLS-1$
 					deleteButton.addActionListener(new ActionListener()
@@ -766,7 +766,7 @@ public final class Driver extends JFrame implements ChessCrafter
 		variantButton.setToolTipText(Messages.getString("Driver.createEditRemoveVariants")); //$NON-NLS-1$
 		try
 		{
-			variantButton.setIcon(GuiUtility.createImageIcon(30, 30, "/chess_variants.jpg"));
+			variantButton.setIcon(GuiUtility.createImageIcon(30, 30, "/chess_variants.jpg")); //$NON-NLS-1$
 		}
 		catch (IOException e)
 		{
