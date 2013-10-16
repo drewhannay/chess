@@ -202,7 +202,7 @@ public class PieceMakerPanel extends JPanel
 		JLabel movementPictureHolder = null;
 		try
 		{
-			movementPictureHolder = new JLabel(GuiUtility.createImageIcon(130, 130, "/movement_directions.png")); //$NON-NLS-1$
+			movementPictureHolder = new JLabel(GuiUtility.createImageIcon(130, 130, FileUtility.getImagePath("movement_directions.png", true))); //$NON-NLS-1$
 		}
 		catch (IOException e1)
 		{

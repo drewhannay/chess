@@ -400,6 +400,7 @@ public class RuleMakerPanel extends JPanel
 						mWhiteRules.addEndOfGame(EndOfGame.CAPTURE_ALL_OF_TYPE.init(0, whitePieceList.getSelectedItem().toString(),
 								false));
 					}
+					mBuilder.addToPromotionMap(mWhiteRules.getObjectiveName(), null, Builder.WHITE);
 				}
 				if (blackNumberOfChecksField.isVisible())
 				{
@@ -440,6 +441,7 @@ public class RuleMakerPanel extends JPanel
 						mBlackRules.addEndOfGame(EndOfGame.CAPTURE_ALL_OF_TYPE.init(0, blackPiecesList.getSelectedItem().toString(),
 								true));
 					}
+					mBuilder.addToPromotionMap(mBlackRules.getObjectiveName(), null, Builder.BLACK);					
 				}
 
 				customSetupMenu.mWhiteRules = mWhiteRules;
