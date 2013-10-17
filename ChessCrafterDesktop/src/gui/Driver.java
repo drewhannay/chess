@@ -164,7 +164,7 @@ public final class Driver extends JFrame implements ChessCrafter
 		c.gridy = 0;
 		try
 		{
-			mMainPanel.add(new JLabel(GuiUtility.createImageIcon(506, 380, FileUtility.getImagePath("chess_logo.png", true))), c); //$NON-NLS-1$
+			mMainPanel.add(new JLabel(GuiUtility.createImageIcon(506, 380, "/chess_logo.png")), c); //$NON-NLS-1$
 		}
 		catch (IOException e)
 		{
@@ -212,7 +212,7 @@ public final class Driver extends JFrame implements ChessCrafter
 		pieceButton.setToolTipText(Messages.getString("Driver.createEditRemove")); //$NON-NLS-1$
 		try
 		{
-			pieceButton.setIcon(GuiUtility.createImageIcon(10, 30, FileUtility.getImagePath("pieces.png", true))); //$NON-NLS-1$
+			pieceButton.setIcon(GuiUtility.createImageIcon(10, 30, "/pieces.png")); //$NON-NLS-1$
 		}
 		catch (IOException e)
 		{
@@ -412,7 +412,7 @@ public final class Driver extends JFrame implements ChessCrafter
 		newGameButton.setToolTipText(Messages.getString("Driver.startANewGame")); //$NON-NLS-1$
 		try
 		{
-			newGameButton.setIcon(GuiUtility.createImageIcon(30, 30, FileUtility.getImagePath("start_game.png", true))); //$NON-NLS-1$
+			newGameButton.setIcon(GuiUtility.createImageIcon(30, 30, "/start_game.png")); //$NON-NLS-1$
 		}
 		catch (IOException ae)
 		{
@@ -436,7 +436,7 @@ public final class Driver extends JFrame implements ChessCrafter
 		continueGameButton.setToolTipText(Messages.getString("Driver.loadASavedGame")); //$NON-NLS-1$
 		try
 		{
-			continueGameButton.setIcon(GuiUtility.createImageIcon(30, 30, FileUtility.getImagePath("saved_games.png", true))); //$NON-NLS-1$
+			continueGameButton.setIcon(GuiUtility.createImageIcon(30, 30, "/saved_games.png")); //$NON-NLS-1$
 		}
 		catch (IOException e)
 		{
@@ -590,7 +590,7 @@ public final class Driver extends JFrame implements ChessCrafter
 		viewCompletedGameButton.setToolTipText(Messages.getString("Driver.reviewFinishedGame")); //$NON-NLS-1$
 		try
 		{
-			viewCompletedGameButton.setIcon(GuiUtility.createImageIcon(30, 30, FileUtility.getImagePath("view_completed.png", true))); //$NON-NLS-1$
+			viewCompletedGameButton.setIcon(GuiUtility.createImageIcon(30, 30, "/view_completed.png")); //$NON-NLS-1$
 		}
 		catch (IOException ae)
 		{
@@ -766,7 +766,7 @@ public final class Driver extends JFrame implements ChessCrafter
 		variantButton.setToolTipText(Messages.getString("Driver.createEditRemoveVariants")); //$NON-NLS-1$
 		try
 		{
-			variantButton.setIcon(GuiUtility.createImageIcon(30, 30, FileUtility.getImagePath("chess_variants.jpg", true))); //$NON-NLS-1$
+			variantButton.setIcon(GuiUtility.createImageIcon(30, 30, "/chess_variants.jpg")); //$NON-NLS-1$
 		}
 		catch (IOException e)
 		{

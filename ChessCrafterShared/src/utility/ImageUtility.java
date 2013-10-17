@@ -16,34 +16,27 @@ public final class ImageUtility
 	{
 		if (image == null)
 			throw new Exception();
-		ImageIO.write(image, "PNG", new File(FileUtility.getImagePath(LIGHT_PREFIX + pieceName + PNG, false))); //$NON-NLS-1$
+
+		ImageIO.write(image, "PNG", new File(FileUtility.getImagePath(LIGHT_PREFIX + pieceName + PNG))); //$NON-NLS-1$
 	}
 
 	public static void writeDarkImage(String pieceName, BufferedImage image) throws Exception
 	{
 		if (image == null)
 			throw new Exception();
-		ImageIO.write(image, "PNG", new File(FileUtility.getImagePath(DARK_PREFIX + pieceName + PNG, false))); //$NON-NLS-1$
+		ImageIO.write(image, "PNG", new File(FileUtility.getImagePath(DARK_PREFIX + pieceName + PNG))); //$NON-NLS-1$
 	}
 
 	public static ImageIcon getLightImage(String pieceName) throws IOException
 	{
 		boolean isBuiltInFile = PIECE_NAMES.contains(pieceName);
-		return GuiUtility.createImageIcon(48, 48, FileUtility.getImagePath(LIGHT_PREFIX + pieceName + PNG, isBuiltInFile));
+		return GuiUtility.createImageIcon(48, 48, (isBuiltInFile ? "/" : "") + LIGHT_PREFIX + pieceName + PNG, isBuiltInFile); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
-	public static ImageIcon getDarkImage(String pieceName)
+	public static ImageIcon getDarkImage(String pieceName) throws IOException
 	{
 		boolean isBuiltInFile = PIECE_NAMES.contains(pieceName);
-		try
-		{
-			return GuiUtility.createImageIcon(48, 48, FileUtility.getImagePath(DARK_PREFIX + pieceName + PNG, isBuiltInFile));
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-			return null;
-		}
+		return GuiUtility.createImageIcon(48, 48, (isBuiltInFile ? "/" : "") + DARK_PREFIX + pieceName + PNG, isBuiltInFile); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	private static final String LIGHT_PREFIX = "l_"; //$NON-NLS-1$

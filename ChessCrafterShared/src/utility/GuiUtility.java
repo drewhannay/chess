@@ -69,15 +69,26 @@ public final class GuiUtility
 		});
 	}
 
-	public static ImageIcon createImageIcon(int imageWidth, int imageHeight, String imagePath) throws IOException
+	public static ImageIcon createImageIcon(int imageWidth, int imageHeight, String imageLocation) throws IOException
 	{
-		return createImageIcon(imageWidth, imageHeight, true, imagePath);
+		return createImageIcon(imageWidth, imageHeight, imageLocation, true);
 	}
 
-	public static ImageIcon createImageIcon(int imageWidth, int imageHeight, boolean isBuiltInFile, String imagePath)
-			throws IOException
+	public static BufferedImage createBufferedImage(int width, int height, String name) throws IOException
 	{
-		BufferedImage bufferedImage = ImageIO.read(new File(imagePath));
+		BufferedImage bufferedImage = ImageIO.read(new File(FileUtility.getImagePath(name)));
+		return bufferedImage;
+	}
+	
+	public static ImageIcon createImageIcon(int imageWidth, int imageHeight, String imageLocation, boolean isBuiltInFile)
+		throws IOException
+	{
+		System.out.println(imageLocation);
+		BufferedImage bufferedImage;
+		if (isBuiltInFile)
+			bufferedImage = ImageIO.read(GuiUtility.class.getResource(imageLocation));
+		else
+			bufferedImage = ImageIO.read(new File(FileUtility.getImagePath(imageLocation)));
 
 		ImageIcon imageIcon = new ImageIcon(bufferedImage);
 		imageIcon.setImage(imageIcon.getImage().getScaledInstance(imageWidth, imageHeight, Image.SCALE_SMOOTH));
