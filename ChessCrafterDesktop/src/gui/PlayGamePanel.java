@@ -102,7 +102,9 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 	public PlayGamePanel(Game game, boolean isPlayback) throws Exception
 	{
 		PlayGamePanel.setGame(game);
+		mGame = game;
 		PlayGamePanel.mIsPlayback = isPlayback;
+		mIsPlayback = isPlayback;
 		m_dropManager = new DropManager();
 		if (isPlayback)
 		{
@@ -696,7 +698,7 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 
 	public static void setGame(Game game)
 	{
-		PlayGamePanel.mGame = game;
+		mGame = game;
 	}
 
 	public static Game getGame()

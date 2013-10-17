@@ -75,7 +75,6 @@ public class CustomSetupPanel extends JPanel
 		{
 			gameToEdit = Builder.newGame(variantName);
 
-			mBuilder = new Builder(variantName);
 			mWhiteTeam = gameToEdit.getWhiteTeam();
 			mBlackTeam = gameToEdit.getBlackTeam();
 
@@ -93,6 +92,8 @@ public class CustomSetupPanel extends JPanel
 
 			for (int i = 0; i < mBoardPanels.length; i++)
 				mBoardPanels[i] = new JPanel();
+			
+			mBuilder = new Builder(variantName, gameToEdit.getBoards(), mWhiteTeam, mBlackTeam, mWhiteRules, mBlackRules);
 		}
 		else
 		{
@@ -107,6 +108,9 @@ public class CustomSetupPanel extends JPanel
 			mWhitePromotionMap = Maps.newHashMap();
 			mBlackPromotionMap = Maps.newHashMap();
 			mBoardPanels = new JPanel[] { new JPanel(), new JPanel() };
+			
+			mBuilder.mBlackTeam = mBlackTeam;
+			mBuilder.mWhiteTeam = mWhiteTeam;
 		}
 
 		Board board = new Board(2, 1, false);
