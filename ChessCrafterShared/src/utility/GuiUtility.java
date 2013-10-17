@@ -83,7 +83,6 @@ public final class GuiUtility
 	public static ImageIcon createImageIcon(int imageWidth, int imageHeight, String imageLocation, boolean isBuiltInFile)
 		throws IOException
 	{
-		System.out.println(imageLocation);
 		BufferedImage bufferedImage;
 		if (isBuiltInFile)
 			bufferedImage = ImageIO.read(GuiUtility.class.getResource(imageLocation));
