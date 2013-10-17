@@ -81,9 +81,13 @@ public class CustomSetupPanel extends JPanel
 
 			mWhiteRules = gameToEdit.getWhiteRules();
 			mBlackRules = gameToEdit.getBlackRules();
-			mPromotionMap = gameToEdit.getPromotionMap();
-			if (mPromotionMap == null)
-				mPromotionMap = Maps.newHashMap();
+			mWhitePromotionMap = gameToEdit.getWhitePromotionMap();
+			if (mWhitePromotionMap == null)
+				mWhitePromotionMap = Maps.newHashMap();
+
+			mBlackPromotionMap = gameToEdit.getBlackPromotionMap();
+			if (mBlackPromotionMap == null)
+				mBlackPromotionMap = Maps.newHashMap();
 
 			mBoardPanels = new JPanel[gameToEdit.getBoards().length];
 
@@ -100,7 +104,8 @@ public class CustomSetupPanel extends JPanel
 			mWhiteRules = new Rules(false);
 			mBlackRules = new Rules(true);
 
-			mPromotionMap = Maps.newHashMap();
+			mWhitePromotionMap = Maps.newHashMap();
+			mBlackPromotionMap = Maps.newHashMap();
 			mBoardPanels = new JPanel[] { new JPanel(), new JPanel() };
 		}
 
@@ -220,9 +225,9 @@ public class CustomSetupPanel extends JPanel
 				mBuilder.setName(variantNameField.getText());
 
 				for (Piece piece : mWhiteTeam)
-					piece.setPromotesTo(mPromotionMap.get(piece.getName()));
+					piece.setPromotesTo(mWhitePromotionMap.get(piece.getName()));
 				for (Piece piece : mBlackTeam)
-					piece.setPromotesTo(mPromotionMap.get(piece.getName()));
+					piece.setPromotesTo(mBlackPromotionMap.get(piece.getName()));
 
 				int numberOfObjectives = 0;
 
@@ -283,7 +288,7 @@ public class CustomSetupPanel extends JPanel
 			public void actionPerformed(ActionEvent event)
 			{
 				mOptionsFrame.dispose();
-				mOptionsFrame = new JFrame();
+				mOptionsFrame = new JFrame(Messages.getString("CustomSetupPanel.piecePromotion")); //$NON-NLS-1$
 				new PiecePromotionPanel((String) mPieceTypeList.getSelectedValue(), CustomSetupPanel.this, mOptionsFrame);
 			}
 		});
@@ -295,7 +300,7 @@ public class CustomSetupPanel extends JPanel
 			public void actionPerformed(ActionEvent event)
 			{
 				mOptionsFrame.dispose();
-				mOptionsFrame = new JFrame();
+				mOptionsFrame = new JFrame(Messages.getString("CustomSetupPanel.customBoardSetup")); //$NON-NLS-1$
 
 				new CustomBoardPanel(CustomSetupPanel.this, mOptionsFrame);
 			}
@@ -684,19 +689,34 @@ public class CustomSetupPanel extends JPanel
 		private Square m_square;
 	}
 
-	public void putPromotionMap(String pieceName, List<String> promotesTo)
+	public void putPromotionMap(String pieceName, List<String> promotesTo, int colorCode)
 	{
-		mPromotionMap.put(pieceName, promotesTo);
-		if (mBuilder.getPromotionMap() == null)
-			mBuilder.setPromotionMap(mPromotionMap);
-		mBuilder.addToPromotionMap(pieceName, promotesTo);
+		if (colorCode == Builder.BLACK || colorCode == Builder.BOTH)
+		{
+			mBlackPromotionMap.put(pieceName, promotesTo);
+			if (mBuilder.getBlackPromotionMap() == null)
+				mBuilder.setBlackPromotionMap(mBlackPromotionMap);
+			mBuilder.addToPromotionMap(pieceName, promotesTo, colorCode);
+		}
+		if (colorCode == Builder.WHITE || colorCode == Builder.BOTH)
+		{
+			mWhitePromotionMap.put(pieceName, promotesTo);
+			if (mBuilder.getWhitePromotionMap() == null)
+				mBuilder.setWhitePromotionMap(mWhitePromotionMap);
+			mBuilder.addToPromotionMap(pieceName, promotesTo, colorCode);
+		}
 	}
 
-	public Map<String, List<String>> getPromotionMap()
+	public Map<String, List<String>> getWhitePromotionMap()
 	{
-		return mPromotionMap;
+		return mWhitePromotionMap;
 	}
 
+	public Map<String, List<String>> getBlackPromotionMap()
+	{
+		return mBlackPromotionMap;
+	}
+	
 	private final class PieceDisplayBoardListener extends DropAdapter implements MouseListener
 	{
 		public PieceDisplayBoardListener(Square square)
@@ -932,7 +952,8 @@ public class CustomSetupPanel extends JPanel
 
 	private JPanel[] mBoardPanels;
 	private JPanel mPieceListPanel = new JPanel();
-	private Map<String, List<String>> mPromotionMap;
+	private Map<String, List<String>> mWhitePromotionMap;
+	private Map<String, List<String>> mBlackPromotionMap;
 	private Builder mBuilder;
 	private List<Piece> mWhiteTeam;
 	private List<Piece> mBlackTeam;

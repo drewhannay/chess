@@ -1045,7 +1045,6 @@ public class Piece implements Serializable
 	public void setPromotesTo(List<String> promotesTo)
 	{
 		mPromotesTo = promotesTo;
-
 	}
 
 	private static final long serialVersionUID = -6571501595221097922L;

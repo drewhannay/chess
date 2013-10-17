@@ -29,7 +29,6 @@ import javax.swing.JTextField;
 import javax.swing.filechooser.FileFilter;
 
 import logic.PieceBuilder;
-import utility.FileUtility;
 import utility.GuiUtility;
 import utility.ImageUtility;
 
@@ -109,19 +108,29 @@ public class PieceMakerPanel extends JPanel
 		constraints.gridy = 0;
 		pieceCreationPanel.add(namePanel, constraints);
 
-		final ImageIcon blankSquare = new ImageIcon(FileUtility.getImagePath("WhiteSquare.gif", true)); //$NON-NLS-1$
+		ImageIcon blankSquare = null;
+		try
+		{
+			blankSquare = GuiUtility.createImageIcon(48, 48, "/WhiteSquare.png"); //$NON-NLS-1$
+		}
+		catch (IOException e4)
+		{
+			// TODO Auto-generated catch block
+			e4.printStackTrace();
+		}
+
 		blankSquare.setImage(blankSquare.getImage().getScaledInstance(48, 48, Image.SCALE_SMOOTH));
 		final JPanel lightIconPanel = new JPanel();
 		lightIconPanel.setLayout(new FlowLayout());
 		final JLabel lightIconLabel = new JLabel();
 		lightIconLabel.setSize(48, 48);
+		
 		try
 		{
 			lightIconLabel.setIcon(builder == null ? blankSquare : ImageUtility.getLightImage(builder.getName()));
 		}
 		catch (IOException e3)
 		{
-			// TODO Auto-generated catch block
 			e3.printStackTrace();
 		}
 
@@ -129,7 +138,8 @@ public class PieceMakerPanel extends JPanel
 		{
 			try
 			{
-				mLightImage = ImageIO.read(new File(FileUtility.getImagePath("l_" + builder.getName() + ".png", false))); //$NON-NLS-1$ //$NON-NLS-2$
+				mLightImage = GuiUtility.createBufferedImage(48, 48, "l_"+builder.getName()+".png"); //$NON-NLS-1$ //$NON-NLS-2$
+				mDarkImage = GuiUtility.createBufferedImage(48, 48, "d_"+builder.getName()+".png"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 			catch (IOException e1)
 			{
@@ -151,18 +161,14 @@ public class PieceMakerPanel extends JPanel
 		darkIconPanel.setLayout(new FlowLayout());
 		final JLabel darkIconLabel = new JLabel();
 		darkIconLabel.setSize(48, 48);
-		darkIconLabel.setIcon(builder == null ? blankSquare : ImageUtility.getDarkImage(builder.getName()));
 
-		if (builder != null)
+		try
 		{
-			try
-			{
-				mDarkImage = ImageIO.read(new File(FileUtility.getImagePath("d_" + builder.getName() + ".png", false))); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-			catch (IOException e1)
-			{
-				e1.printStackTrace();
-			}
+			darkIconLabel.setIcon(builder == null ? blankSquare : ImageUtility.getDarkImage(builder.getName()));
+		}
+		catch (IOException e2)
+		{
+			e2.printStackTrace();
 		}
 
 		final JButton darkImageButton = new JButton(Messages.getString("PieceMakerPanel.chooseDark")); //$NON-NLS-1$
