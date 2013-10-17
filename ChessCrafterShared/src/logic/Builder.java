@@ -23,6 +23,10 @@ import com.google.common.collect.Maps;
  */
 public class Builder implements Serializable
 {
+	public static final int BLACK = 1;
+	public static final int WHITE = 2;
+	public static final int BOTH = 3;
+	
 	/**
 	 * Constructor
 	 * 
@@ -254,7 +258,7 @@ public class Builder implements Serializable
 				{
 					ObjectInputStream in = new ObjectInputStream(new FileInputStream(FileUtility.getVariantsFile(name)));
 					Builder b = (Builder) in.readObject();
-					Game toReturn = new Game(name, b.mBoards, b.mWhiteRules, b.mBlackRules, b.mPromotionMap);
+					Game toReturn = new Game(name, b.mBoards, b.mWhiteRules, b.mBlackRules, b.mWhitePromotionMap, b.mBlackPromotionMap);
 					toReturn.setWhiteTeam(b.mWhiteTeam);
 					toReturn.setBlackTeam(b.mBlackTeam);
 					in.close();
@@ -319,19 +323,37 @@ public class Builder implements Serializable
 		mName = name;
 	}
 
-	public void addToPromotionMap(String key, List<String> value)
+	public void addToPromotionMap(String key, List<String> value, int colorCode)
 	{
-		mPromotionMap.put(key, value);
+		if (mWhitePromotionMap == null)
+			mWhitePromotionMap = Maps.newHashMap();
+		if (mBlackPromotionMap == null)
+			mBlackPromotionMap = Maps.newHashMap();
+		
+		if (colorCode == WHITE || colorCode == BOTH)
+			mWhitePromotionMap.put(key, value);
+		if (colorCode == BLACK || colorCode == BOTH)
+			mBlackPromotionMap.put(key, value);
 	}
 
-	public void setPromotionMap(Map<String, List<String>> promotionMap)
+	public void setWhitePromotionMap(Map<String, List<String>> promotionMap)
 	{
-		mPromotionMap = promotionMap;
+		mWhitePromotionMap = promotionMap;
 	}
 
-	public Map<String, List<String>> getPromotionMap()
+	public void setBlackPromotionMap(Map<String, List<String>> promotionMap)
 	{
-		return mPromotionMap;
+		mBlackPromotionMap = promotionMap;
+	}
+	
+	public Map<String, List<String>> getWhitePromotionMap()
+	{
+		return mWhitePromotionMap;
+	}
+	
+	public Map<String, List<String>> getBlackPromotionMap()
+	{
+		return mBlackPromotionMap;
 	}
 
 	private static final long serialVersionUID = 2099226533521671457L;
@@ -342,5 +364,6 @@ public class Builder implements Serializable
 	public List<Piece> mBlackTeam;
 	private Rules mWhiteRules;
 	private Rules mBlackRules;
-	private Map<String, List<String>> mPromotionMap;
+	private Map<String, List<String>> mWhitePromotionMap;
+	private Map<String, List<String>> mBlackPromotionMap;
 }
