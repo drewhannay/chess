@@ -35,14 +35,14 @@ public final class NetworkPlayManager
 
 	public boolean networkPlayIsAvailable()
 	{
-//		try
-//		{
-//			return InetAddress.getLocalHost().getHostName().contains("cslab");
-//		}
-//		catch (Exception e)
-//		{
-//			e.printStackTrace();
-//		}
+		// try
+		// {
+		// return InetAddress.getLocalHost().getHostName().contains("cslab");
+		// }
+		// catch (Exception e)
+		// {
+		// e.printStackTrace();
+		// }
 
 		// TODO: This is only false because we don't have network play right now
 		return false;
@@ -87,7 +87,9 @@ public final class NetworkPlayManager
 							{
 								if (connectToField.getText().equals("")) //$NON-NLS-1$
 								{
-									JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("NetworkPlayManager.enterNumber"), Messages.getString("NetworkPlayManager.numberNeeded"), //$NON-NLS-1$ //$NON-NLS-2$
+									JOptionPane.showMessageDialog(
+											Driver.getInstance(),
+											Messages.getString("NetworkPlayManager.enterNumber"), Messages.getString("NetworkPlayManager.numberNeeded"), //$NON-NLS-1$ //$NON-NLS-2$
 											JOptionPane.PLAIN_MESSAGE);
 									return;
 								}
@@ -102,7 +104,8 @@ public final class NetworkPlayManager
 									}
 									catch (Exception e)
 									{
-										JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("NetworkPlayManager.enterNumberBetween"), //$NON-NLS-1$
+										JOptionPane.showMessageDialog(Driver.getInstance(),
+												Messages.getString("NetworkPlayManager.enterNumberBetween"), //$NON-NLS-1$
 												Messages.getString("NetworkPlayManager.numberNeeded"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$
 										return;
 									}
@@ -118,12 +121,13 @@ public final class NetworkPlayManager
 									}
 									catch (Exception e)
 									{
-										JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("NetworkPlayManager.enterNumberBetween"), //$NON-NLS-1$
+										JOptionPane.showMessageDialog(Driver.getInstance(),
+												Messages.getString("NetworkPlayManager.enterNumberBetween"), //$NON-NLS-1$
 												Messages.getString("NetworkPlayManager.numberNeeded"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$
 										return;
 									}
 								}
-//								NewGameMenu.mIsCancelled = false;
+								// NewGameMenu.mIsCancelled = false;
 								try
 								{
 									Thread clientThread = new Thread(new Runnable()
@@ -155,7 +159,7 @@ public final class NetworkPlayManager
 						});
 
 						final JButton cancelButton = new JButton(Messages.getString("NetworkPlayManager.cancel")); //$NON-NLS-1$
-						GuiUtility.setupCancelButton(cancelButton, popupFrame);
+						GuiUtility.setupDoneButton(cancelButton, popupFrame);
 
 						JPanel topLevelPanel = new JPanel();
 						topLevelPanel.setLayout(new GridBagLayout());
@@ -197,74 +201,77 @@ public final class NetworkPlayManager
 					public void actionPerformed(ActionEvent event)
 					{
 						// TODO: Need to do something here...
-						// here's what we used to do in NewGameMenu.createNewGamePopup
-//						if (isNetworkPlay)
-//						{
-//							List<String> filteredList = Lists.newArrayList();
-//							for (String variant : variantTypes)
-//							{
-//								Game game = Builder.newGame(variant);
-//								if (game.getWhiteRules().rulesAreNetworkable() && game.getBlackRules().rulesAreNetworkable())
-//									filteredList.add(variant);
-//							}
-//							variantTypes = new String[filteredList.size()];
-//							int i = 0;
-//							for (String variantName : filteredList)
-//								variantTypes[i++] = variantName;
-//						}
+						// here's what we used to do in
+						// NewGameMenu.createNewGamePopup
+						// if (isNetworkPlay)
+						// {
+						// List<String> filteredList = Lists.newArrayList();
+						// for (String variant : variantTypes)
+						// {
+						// Game game = Builder.newGame(variant);
+						// if (game.getWhiteRules().rulesAreNetworkable() &&
+						// game.getBlackRules().rulesAreNetworkable())
+						// filteredList.add(variant);
+						// }
+						// variantTypes = new String[filteredList.size()];
+						// int i = 0;
+						// for (String variantName : filteredList)
+						// variantTypes[i++] = variantName;
+						// }
 
-//						Game gameToPlay = Builder.newGame((String) dropdown.getSelectedItem());
-//						gameToPlay.setTimers(whiteTimer, blackTimer);
-//						final PlayNetGame game;
-//						// TODO: this if statement can't be right...
-//						if (mHostName.equals(event.toString()))
-//						{
-//							try
-//							{
-//								game = new PlayNetGame(gameToPlay, false, true);
-//							}
-//							catch (Exception e)
-//							{
-//								return;
-//							}
-//						}
-//						else
-//						{
-//							try
-//							{
-//								game = new PlayNetGame(gameToPlay, false, false);
-//							}
-//							catch (Exception e)
-//							{
-//								return;
-//							}
-//						}
-//						try
-//						{
-//							NewGameMenu.mIsCancelled = false;
-//							Thread host = new Thread(new Runnable()
-//							{
-//								@Override
-//								public void run()
-//								{
-//									try
-//									{
-//										new NetworkServer().host(game);
-//									}
-//									catch (Exception e)
-//									{
-//										e.printStackTrace();
-//									}
-//								}
-//							});
-//							Driver.getInstance().setPanel(new NetLoading());
-//							host.start();
-//						}
-//						catch (Exception e)
-//						{
-//							System.out.println("Host");
-//							e.printStackTrace();
-//						}
+						// Game gameToPlay = Builder.newGame((String)
+						// dropdown.getSelectedItem());
+						// gameToPlay.setTimers(whiteTimer, blackTimer);
+						// final PlayNetGame game;
+						// // TODO: this if statement can't be right...
+						// if (mHostName.equals(event.toString()))
+						// {
+						// try
+						// {
+						// game = new PlayNetGame(gameToPlay, false, true);
+						// }
+						// catch (Exception e)
+						// {
+						// return;
+						// }
+						// }
+						// else
+						// {
+						// try
+						// {
+						// game = new PlayNetGame(gameToPlay, false, false);
+						// }
+						// catch (Exception e)
+						// {
+						// return;
+						// }
+						// }
+						// try
+						// {
+						// NewGameMenu.mIsCancelled = false;
+						// Thread host = new Thread(new Runnable()
+						// {
+						// @Override
+						// public void run()
+						// {
+						// try
+						// {
+						// new NetworkServer().host(game);
+						// }
+						// catch (Exception e)
+						// {
+						// e.printStackTrace();
+						// }
+						// }
+						// });
+						// Driver.getInstance().setPanel(new NetLoading());
+						// host.start();
+						// }
+						// catch (Exception e)
+						// {
+						// System.out.println("Host");
+						// e.printStackTrace();
+						// }
 
 						popupFrame.dispose();
 					}

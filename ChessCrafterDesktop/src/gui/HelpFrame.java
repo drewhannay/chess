@@ -34,10 +34,14 @@ public class HelpFrame extends JFrame
 		JPanel pieceMakingHelpPanel = new JPanel();
 
 		JTabbedPane helpTypesTabbedPane = new JTabbedPane();
-		helpTypesTabbedPane.addTab(Messages.getString("HelpFrame.generalHelp"), null, generalHelpPanel, Messages.getString("HelpFrame.clickForGeneralHelp") + AppConstants.APP_NAME); //$NON-NLS-1$ //$NON-NLS-2$
-		helpTypesTabbedPane.addTab(Messages.getString("HelpFrame.gamePlayHelp"), null, gamePlayHelpPanel, Messages.getString("HelpFrame.clickForHelpPlaying")); //$NON-NLS-1$ //$NON-NLS-2$
-		helpTypesTabbedPane.addTab(Messages.getString("HelpFrame.variantHelp"), null, variantMakingHelpPanel, Messages.getString("HelpFrame.clickForNewGameHelp")); //$NON-NLS-1$ //$NON-NLS-2$
-		helpTypesTabbedPane.addTab(Messages.getString("HelpFrame.pieceMakingHelp"), null, pieceMakingHelpPanel, Messages.getString("HelpFrame.clickForPieceMakingHelp")); //$NON-NLS-1$ //$NON-NLS-2$
+		helpTypesTabbedPane
+				.addTab(Messages.getString("HelpFrame.generalHelp"), null, generalHelpPanel, Messages.getString("HelpFrame.clickForGeneralHelp") + AppConstants.APP_NAME); //$NON-NLS-1$ //$NON-NLS-2$
+		helpTypesTabbedPane
+				.addTab(Messages.getString("HelpFrame.gamePlayHelp"), null, gamePlayHelpPanel, Messages.getString("HelpFrame.clickForHelpPlaying")); //$NON-NLS-1$ //$NON-NLS-2$
+		helpTypesTabbedPane
+				.addTab(Messages.getString("HelpFrame.variantHelp"), null, variantMakingHelpPanel, Messages.getString("HelpFrame.clickForNewGameHelp")); //$NON-NLS-1$ //$NON-NLS-2$
+		helpTypesTabbedPane
+				.addTab(Messages.getString("HelpFrame.pieceMakingHelp"), null, pieceMakingHelpPanel, Messages.getString("HelpFrame.clickForPieceMakingHelp")); //$NON-NLS-1$ //$NON-NLS-2$
 		helpTypesTabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 
 		constraints.gridy = 0;
@@ -51,7 +55,7 @@ public class HelpFrame extends JFrame
 		gamePlayHelpPanel.add(gamePlayHelpText);
 
 		JLabel generalHelpText = new JLabel();
-		generalHelpText.setText(Messages.getString("HelpFrame.generalHelpText")); //$NON-NLS-1$ //$NON-NLS-2$
+		generalHelpText.setText(Messages.getString("HelpFrame.generalHelpText")); //$NON-NLS-1$
 		generalHelpPanel.add(generalHelpText);
 
 		JLabel variantMakingHelpText = new JLabel();
@@ -64,6 +68,6 @@ public class HelpFrame extends JFrame
 
 		setVisible(true);
 	}
-	
+
 	private static final long serialVersionUID = -3375921014569944071L;
 }

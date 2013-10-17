@@ -50,8 +50,8 @@ public class NetworkServer
 			}
 			catch (Exception e)
 			{
-//				if (NewGameMenu.mIsCancelled)
-//					return;
+				// if (NewGameMenu.mIsCancelled)
+				// return;
 			}
 		}
 
@@ -179,7 +179,10 @@ public class NetworkServer
 		catch (SocketException e)
 		{
 			e.printStackTrace();
-			JOptionPane.showMessageDialog(null, Messages.getString("NetworkServer.opponentClosed"), Messages.getString("NetworkServer.oops"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
+			JOptionPane
+					.showMessageDialog(
+							null,
+							Messages.getString("NetworkServer.opponentClosed"), Messages.getString("NetworkServer.oops"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
 			Driver.getInstance().setFileMenuVisibility(true);
 			Driver.getInstance().setOptionsMenuVisibility(false);
 			Driver.getInstance().revertToMainPanel();
@@ -191,7 +194,10 @@ public class NetworkServer
 			e.printStackTrace();
 			if (g.getHistory().size() != 0 && g.getHistory().get(g.getHistory().size() - 1).getResult() != null)
 				return;
-			JOptionPane.showMessageDialog(null, Messages.getString("NetworkServer.opponentClosed"), Messages.getString("NetworkServer.oops"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
+			JOptionPane
+					.showMessageDialog(
+							null,
+							Messages.getString("NetworkServer.opponentClosed"), Messages.getString("NetworkServer.oops"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
 			g.getBlackTimer().stopTimer();
 			g.getWhiteTimer().stopTimer();
 			Driver.getInstance().setFileMenuVisibility(true);

@@ -5,8 +5,10 @@ import java.io.Serializable;
 import logic.Game;
 import logic.Piece;
 
-public class ObjectivePiece implements Serializable {
-	public enum ObjectivePieceTypes {
+public class ObjectivePiece implements Serializable
+{
+	public enum ObjectivePieceTypes
+	{
 		CLASSIC, NO_OBJECTIVE, CUSTOM_OBJECTIVE;
 	}
 
@@ -20,13 +22,13 @@ public class ObjectivePiece implements Serializable {
 		mObjectivePieceType = type;
 		mObjectivePieceName = objectivePieceName;
 	}
-	
+
 	public ObjectivePiece(ObjectivePieceTypes type)
 	{
-			this(type, Messages.getString("king")); //$NON-NLS-1$
+		this(type, Messages.getString("king")); //$NON-NLS-1$
 	}
 
-	public ObjectivePiece() 
+	public ObjectivePiece()
 	{
 		this(ObjectivePieceTypes.NO_OBJECTIVE, null);
 	}
@@ -35,9 +37,11 @@ public class ObjectivePiece implements Serializable {
 	{
 		return mObjectivePieceType;
 	}
-	
-	public Piece getObjectivePiece(boolean isBlack) {
-		switch (mObjectivePieceType) {
+
+	public Piece getObjectivePiece(boolean isBlack)
+	{
+		switch (mObjectivePieceType)
+		{
 		case CLASSIC:
 			return classicObjectivePiece(isBlack);
 		case CUSTOM_OBJECTIVE:

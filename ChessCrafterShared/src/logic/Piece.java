@@ -27,7 +27,7 @@ public class Piece implements Serializable
 	 * @param curSquare The Square this Piece occupies
 	 * @param board The Board this Piece occupies
 	 * @param movements Map of legal movements for this Piece
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public Piece(String name, boolean isBlack, Square curSquare, Board board, Map<Character, Integer> movements) throws IOException
 	{

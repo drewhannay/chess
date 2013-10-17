@@ -6,8 +6,7 @@ import logic.Piece;
 
 public enum CropLegalDestinations
 {
-	CLASSIC,
-	STATIONARY_OBJECTIVE;
+	CLASSIC, STATIONARY_OBJECTIVE;
 
 	public void cropLegalDestinations(Piece movingObjectivePiece, Piece pieceToAdjust, List<Piece> enemyTeam)
 	{

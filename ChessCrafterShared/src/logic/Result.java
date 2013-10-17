@@ -4,10 +4,7 @@ import java.io.Serializable;
 
 public enum Result implements Serializable
 {
-	UNDECIDED,
-	DRAW,
-	WHITE_WIN,
-	BLACK_WIN;
+	UNDECIDED, DRAW, WHITE_WIN, BLACK_WIN;
 
 	public String winText()
 	{

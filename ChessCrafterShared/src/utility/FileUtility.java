@@ -126,9 +126,8 @@ public final class FileUtility
 
 	public static File getPreferencesFile()
 	{
-		String path = HIDDEN_DIR;
-		new File(path).mkdirs();
-		return new File(path + SLASH + PREFERENCES);
+		new File(HIDDEN_DIR).mkdirs();
+		return new File(HIDDEN_DIR + SLASH + PREFERENCES);
 	}
 
 	public static String getHiddenDir()
@@ -179,12 +178,12 @@ public final class FileUtility
 		String path = null;
 		try
 		{
-			URL resource = FileUtility.class.getResource("/chess_logo.png");
-			frontPage = ImageIO.read(resource); //$NON-NLS-1$
+			URL resource = FileUtility.class.getResource("/chess_logo.png"); //$NON-NLS-1$
+			frontPage = ImageIO.read(resource);
 		}
 		catch (IOException e)
 		{
-			System.out.println("Can't find path:" + path);
+			System.out.println(Messages.getString("cantFindPath") + path); //$NON-NLS-1$
 			e.printStackTrace();
 		}
 		return frontPage;

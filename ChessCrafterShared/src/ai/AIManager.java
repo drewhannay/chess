@@ -6,7 +6,6 @@ import utility.FileUtility;
 
 import com.google.common.collect.Lists;
 
-
 public final class AIManager
 {
 	private AIManager()

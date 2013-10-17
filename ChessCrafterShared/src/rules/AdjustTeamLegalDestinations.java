@@ -9,8 +9,7 @@ import com.google.common.collect.Lists;
 
 public enum AdjustTeamLegalDestinations
 {
-	CLASSIC,
-	MUST_CAPTURE;
+	CLASSIC, MUST_CAPTURE;
 
 	public void adjustDestinations(List<Piece> team)
 	{
