@@ -166,7 +166,7 @@ public class Board implements Serializable
 	{
 		if (move == null)
 			return false;
-
+		move.board = this;
 		move.execute();
 		move.undo();
 

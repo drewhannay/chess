@@ -465,7 +465,7 @@ public class Move implements Serializable
 	public char pieceToChar(Piece p)
 	{
 		if (p.getName().equals(Messages.getString("knight"))) //$NON-NLS-1$
-			return 'N';
+			return AlgebraicConverter.KNIGHT;
 		else
 			return p.getName().charAt(0);
 	}
