@@ -108,10 +108,10 @@ public class Builder implements Serializable
 	public static Piece createBishop(boolean isBlack, Square square, Board board) throws IOException
 	{
 		Map<Character, Integer> bishopMovement = Maps.newHashMap();
-		bishopMovement.put('R', -1);
-		bishopMovement.put('r', -1);
-		bishopMovement.put('L', -1);
-		bishopMovement.put('l', -1);
+		bishopMovement.put(PieceBuilder.NORTHEAST, -1);
+		bishopMovement.put(PieceBuilder.SOUTHEAST, -1);
+		bishopMovement.put(PieceBuilder.NORTHWEST, -1);
+		bishopMovement.put(PieceBuilder.SOUTHWEST, -1);
 		return new Piece(Messages.getString("bishop"), isBlack, square, board, bishopMovement); //$NON-NLS-1$
 	}
 
@@ -128,14 +128,14 @@ public class Builder implements Serializable
 	public static Piece createKing(boolean isBlack, Square square, Board board) throws IOException
 	{
 		Map<Character, Integer> kingMovement = Maps.newHashMap();
-		kingMovement.put('N', 1);
-		kingMovement.put('S', 1);
-		kingMovement.put('E', 1);
-		kingMovement.put('W', 1);
-		kingMovement.put('R', 1);
-		kingMovement.put('r', 1);
-		kingMovement.put('L', 1);
-		kingMovement.put('l', 1);
+		kingMovement.put(PieceBuilder.NORTH, 1);
+		kingMovement.put(PieceBuilder.SOUTH, 1);
+		kingMovement.put(PieceBuilder.EAST, 1);
+		kingMovement.put(PieceBuilder.WEST, 1);
+		kingMovement.put(PieceBuilder.NORTHEAST, 1);
+		kingMovement.put(PieceBuilder.SOUTHEAST, 1);
+		kingMovement.put(PieceBuilder.NORTHWEST, 1);
+		kingMovement.put(PieceBuilder.SOUTHWEST, 1);
 		return new Piece(Messages.getString("king"), isBlack, square, board, kingMovement); //$NON-NLS-1$
 	}
 
@@ -152,8 +152,8 @@ public class Builder implements Serializable
 	public static Piece createKnight(boolean isBlack, Square square, Board board) throws IOException
 	{
 		Map<Character, Integer> knightMovement = Maps.newHashMap();
-		knightMovement.put('x', 1);
-		knightMovement.put('y', 2);
+		knightMovement.put(PieceBuilder.KNIGHT_ONE, 1);
+		knightMovement.put(PieceBuilder.KNIGHT_TWO, 2);
 		return new Piece(Messages.getString("knight"), isBlack, square, board, knightMovement); //$NON-NLS-1$
 	}
 
@@ -192,14 +192,14 @@ public class Builder implements Serializable
 	public static Piece createQueen(boolean isBlack, Square square, Board board) throws IOException
 	{
 		Map<Character, Integer> queenMovement = Maps.newHashMap();
-		queenMovement.put('N', -1);
-		queenMovement.put('S', -1);
-		queenMovement.put('W', -1);
-		queenMovement.put('E', -1);
-		queenMovement.put('R', -1);
-		queenMovement.put('r', -1);
-		queenMovement.put('L', -1);
-		queenMovement.put('l', -1);
+		queenMovement.put(PieceBuilder.NORTH, -1);
+		queenMovement.put(PieceBuilder.SOUTH, -1);
+		queenMovement.put(PieceBuilder.WEST, -1);
+		queenMovement.put(PieceBuilder.EAST, -1);
+		queenMovement.put(PieceBuilder.NORTHEAST, -1);
+		queenMovement.put(PieceBuilder.SOUTHEAST, -1);
+		queenMovement.put(PieceBuilder.NORTHWEST, -1);
+		queenMovement.put(PieceBuilder.SOUTHWEST, -1);
 		return new Piece(Messages.getString("queen"), isBlack, square, board, queenMovement); //$NON-NLS-1$
 	}
 
@@ -216,10 +216,10 @@ public class Builder implements Serializable
 	public static Piece createRook(boolean isBlack, Square square, Board board) throws IOException
 	{
 		Map<Character, Integer> rookMovement = Maps.newHashMap();
-		rookMovement.put('N', -1);
-		rookMovement.put('S', -1);
-		rookMovement.put('W', -1);
-		rookMovement.put('E', -1);
+		rookMovement.put(PieceBuilder.NORTH, -1);
+		rookMovement.put(PieceBuilder.SOUTH, -1);
+		rookMovement.put(PieceBuilder.WEST, -1);
+		rookMovement.put(PieceBuilder.EAST, -1);
 		return new Piece(Messages.getString("rook"), isBlack, square, board, rookMovement); //$NON-NLS-1$
 	}
 

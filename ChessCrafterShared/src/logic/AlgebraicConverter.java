@@ -29,6 +29,11 @@ public final class AlgebraicConverter
 	 */
 	private static final String columns = "%abcdefgh"; //$NON-NLS-1$
 
+	public static final char KNIGHT = 'N';	
+	public static final char BISHOP = 'B';
+	public static final char KING = 'K';
+	public static final char QUEEN = 'Q';
+	public static final char ROOK = 'R';
 	/**
 	 * HashMap to move from the char representation of a Class to the actual
 	 * Class
@@ -37,11 +42,11 @@ public final class AlgebraicConverter
 
 	static
 	{
-		map.put('B', Messages.getString("bishop")); //$NON-NLS-1$
-		map.put('K', Messages.getString("king")); //$NON-NLS-1$
-		map.put('N', Messages.getString("knight")); //$NON-NLS-1$
-		map.put('Q', Messages.getString("queen")); //$NON-NLS-1$
-		map.put('R', Messages.getString("rook")); //$NON-NLS-1$
+		map.put(BISHOP, Messages.getString("bishop")); //$NON-NLS-1$
+		map.put(KING, Messages.getString("king")); //$NON-NLS-1$
+		map.put(KNIGHT, Messages.getString("knight")); //$NON-NLS-1$
+		map.put(QUEEN, Messages.getString("queen")); //$NON-NLS-1$
+		map.put(ROOK, Messages.getString("rook")); //$NON-NLS-1$
 	}
 
 	/**
