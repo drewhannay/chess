@@ -31,6 +31,7 @@ apply plugin: 'macAppBundle'
 macAppBundle {
     mainClassName = "gui.Driver"
 	appName = "Chess Crafter"
+	icon = "chess.icns"
 }
 
 buildscript {
