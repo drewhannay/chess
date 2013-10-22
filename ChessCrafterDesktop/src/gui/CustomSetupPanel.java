@@ -92,7 +92,7 @@ public class CustomSetupPanel extends JPanel
 
 			for (int i = 0; i < mBoardPanels.length; i++)
 				mBoardPanels[i] = new JPanel();
-			
+
 			mBuilder = new Builder(variantName, gameToEdit.getBoards(), mWhiteTeam, mBlackTeam, mWhiteRules, mBlackRules);
 		}
 		else
@@ -108,7 +108,7 @@ public class CustomSetupPanel extends JPanel
 			mWhitePromotionMap = Maps.newHashMap();
 			mBlackPromotionMap = Maps.newHashMap();
 			mBoardPanels = new JPanel[] { new JPanel(), new JPanel() };
-			
+
 			mBuilder.mBlackTeam = mBlackTeam;
 			mBuilder.mWhiteTeam = mWhiteTeam;
 		}
@@ -720,7 +720,7 @@ public class CustomSetupPanel extends JPanel
 	{
 		return mBlackPromotionMap;
 	}
-	
+
 	private final class PieceDisplayBoardListener extends DropAdapter implements MouseListener
 	{
 		public PieceDisplayBoardListener(Square square)

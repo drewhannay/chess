@@ -97,8 +97,8 @@ public enum EndOfGame
 						mGame.getHistory().add(mGame.getLastMove());
 
 					// let the user see the final move
-					GuiUtility.getChessCrafter().getPlayGameScreen().boardRefresh(mGame.getBoards());
-					GuiUtility.getChessCrafter().getPlayGameScreen().endOfGame(result);
+					GuiUtility.getChessCrafter().getPlayGameScreen(mGame).boardRefresh(mGame.getBoards());
+					GuiUtility.getChessCrafter().getPlayGameScreen(mGame).endOfGame(result);
 				}
 			}
 			// if the King isn't threatened, then it's stalemate
@@ -115,8 +115,8 @@ public enum EndOfGame
 						mGame.getHistory().add(mGame.getLastMove());
 					}
 					// let the user see the final move
-					GuiUtility.getChessCrafter().getPlayGameScreen().boardRefresh(mGame.getBoards());
-					GuiUtility.getChessCrafter().getPlayGameScreen().endOfGame(result);
+					GuiUtility.getChessCrafter().getPlayGameScreen(mGame).boardRefresh(mGame.getBoards());
+					GuiUtility.getChessCrafter().getPlayGameScreen(mGame).endOfGame(result);
 				}
 			}
 		}
@@ -131,7 +131,7 @@ public enum EndOfGame
 			{
 				Result result = !mIsBlackRuleSet ? Result.WHITE_WIN : Result.BLACK_WIN;
 				result.setGuiText(Messages.getString("gameOverExcSpace") + result.winText() + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
-				GuiUtility.getChessCrafter().getPlayGameScreen().endOfGame(result);
+				GuiUtility.getChessCrafter().getPlayGameScreen(mGame).endOfGame(result);
 			}
 		}
 		mMove = mGame.getLastMove();
@@ -153,7 +153,7 @@ public enum EndOfGame
 		}
 		Result result = mIsBlackRuleSet ? Result.BLACK_WIN : Result.WHITE_WIN;
 		result.setGuiText(Messages.getString("gameOverExcSpace") + result.winText() + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
-		GuiUtility.getChessCrafter().getPlayGameScreen().endOfGame(result);
+		GuiUtility.getChessCrafter().getPlayGameScreen(mGame).endOfGame(result);
 	}
 
 	private void captureAllPieces()
@@ -166,7 +166,7 @@ public enum EndOfGame
 		}
 		Result result = !mIsBlackRuleSet ? Result.BLACK_WIN : Result.WHITE_WIN;
 		result.setGuiText(Messages.getString("gameOverExcSpace") + result.winText() + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
-		GuiUtility.getChessCrafter().getPlayGameScreen().endOfGame(result);
+		GuiUtility.getChessCrafter().getPlayGameScreen(mGame).endOfGame(result);
 	}
 
 	private void checkCaptureAllOfType()
@@ -179,7 +179,7 @@ public enum EndOfGame
 		}
 		Result result = mIsBlackRuleSet ? Result.BLACK_WIN : Result.WHITE_WIN;
 		result.setGuiText(Messages.getString("gameOverExcSpace") + result.winText() + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
-		GuiUtility.getChessCrafter().getPlayGameScreen().endOfGame(result);
+		GuiUtility.getChessCrafter().getPlayGameScreen(mGame).endOfGame(result);
 	}
 
 	private Game mGame;

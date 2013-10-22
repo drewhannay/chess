@@ -40,11 +40,13 @@ public class NetworkServer
 		Socket clientSocket = null;
 		serverSocket = new ServerSocket(27335);
 		serverSocket.setSoTimeout(1000);
+		Game g = PlayGamePanel.getGame();
+
 		while (clientSocket == null)
 		{
 			try
 			{
-				GuiUtility.getChessCrafter().getPlayGameScreen().resetTimers();
+				GuiUtility.getChessCrafter().getPlayGameScreen(g).resetTimers();
 
 				clientSocket = serverSocket.accept();
 			}
@@ -62,11 +64,10 @@ public class NetworkServer
 		Object fromUser;
 		Object fromServer;
 
-		Game g = PlayGamePanel.getGame();
 		fromServer = g;
 		if (fromServer != null)
 			out.writeObject(fromServer);
-		GuiUtility.getChessCrafter().getPlayGameScreen().resetTimers();
+		GuiUtility.getChessCrafter().getPlayGameScreen(g).resetTimers();
 		Driver.getInstance().setPanel(png);
 		try
 		{
@@ -107,7 +108,7 @@ public class NetworkServer
 							Result result = Result.DRAW;
 							result.setGuiText(Messages.getString("NetworkServer.endedInDraw")); //$NON-NLS-1$
 							g.getLastMove().setResult(result);
-							GuiUtility.getChessCrafter().getPlayGameScreen().endOfGame(result);
+							GuiUtility.getChessCrafter().getPlayGameScreen(g).endOfGame(result);
 							throw new Exception();
 						}
 						else
@@ -149,7 +150,7 @@ public class NetworkServer
 							Result result = Result.DRAW;
 							result.setGuiText(Messages.getString("NetworkServer.endedInDraw")); //$NON-NLS-1$
 							g.getLastMove().setResult(result);
-							GuiUtility.getChessCrafter().getPlayGameScreen().endOfGame(result);
+							GuiUtility.getChessCrafter().getPlayGameScreen(g).endOfGame(result);
 							png.mDrawRequested = false;
 							throw new Exception();
 						}

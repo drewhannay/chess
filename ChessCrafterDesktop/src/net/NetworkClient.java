@@ -56,7 +56,7 @@ public class NetworkClient
 
 		Game g = (Game) in.readObject();
 		PlayNetGameScreen png = GuiUtility.getChessCrafter().getNetGameScreen(g, false, true);
-		PlayGameScreen pgs = GuiUtility.getChessCrafter().getPlayGameScreen();
+		PlayGameScreen pgs = GuiUtility.getChessCrafter().getPlayGameScreen(g);
 		pgs.resetTimers();
 		GuiUtility.getChessCrafter().setPanel(png);
 
@@ -82,7 +82,7 @@ public class NetworkClient
 							Result result = Result.DRAW;
 							result.setGuiText(Messages.getString("NetworkClient.gameEndedInDraw")); //$NON-NLS-1$
 							g.getLastMove().setResult(result);
-							GuiUtility.getChessCrafter().getPlayGameScreen().endOfGame(result);
+							GuiUtility.getChessCrafter().getPlayGameScreen(g).endOfGame(result);
 							throw new Exception();
 						}
 						else

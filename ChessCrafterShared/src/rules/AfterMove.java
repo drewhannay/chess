@@ -138,8 +138,8 @@ public enum AfterMove
 		if (move.isVerified())
 		{
 			JOptionPane.showMessageDialog(null, Messages.getString("pieceIsOnYourSide")); //$NON-NLS-1$
-			GuiUtility.getChessCrafter().getPlayGameScreen().setNextMoveMustPlacePiece(true);
-			GuiUtility.getChessCrafter().getPlayGameScreen().setPieceToPlace(toPlace);
+			GuiUtility.getChessCrafter().getPlayGameScreen(mGame).setNextMoveMustPlacePiece(true);
+			GuiUtility.getChessCrafter().getPlayGameScreen(mGame).setPieceToPlace(toPlace);
 		}
 
 	}
@@ -164,8 +164,8 @@ public enum AfterMove
 			toPlace.setSquare(move.getOldPos());
 			move.getOldPos().setPiece(toPlace);
 			toPlace.setIsCaptured(false);
-			GuiUtility.getChessCrafter().getPlayGameScreen().setNextMoveMustPlacePiece(false);
-			GuiUtility.getChessCrafter().getPlayGameScreen().setPieceToPlace(null);
+			GuiUtility.getChessCrafter().getPlayGameScreen(mGame).setNextMoveMustPlacePiece(false);
+			GuiUtility.getChessCrafter().getPlayGameScreen(mGame).setPieceToPlace(null);
 			move.setOldPos(null);
 		}
 	}
@@ -186,8 +186,8 @@ public enum AfterMove
 		{
 			toPlace.setIsCaptured(false);
 			JOptionPane.showMessageDialog(null, Messages.getString("youCapturedPiece")); //$NON-NLS-1$
-			GuiUtility.getChessCrafter().getPlayGameScreen().setNextMoveMustPlacePiece(true);
-			GuiUtility.getChessCrafter().getPlayGameScreen().setPieceToPlace(toPlace);
+			GuiUtility.getChessCrafter().getPlayGameScreen(mGame).setNextMoveMustPlacePiece(true);
+			GuiUtility.getChessCrafter().getPlayGameScreen(mGame).setPieceToPlace(toPlace);
 		}
 	}
 
@@ -208,8 +208,8 @@ public enum AfterMove
 			toPlace.setSquare(move.getOldPos());
 			move.getOldPos().setPiece(toPlace);
 			toPlace.setIsCaptured(false);
-			GuiUtility.getChessCrafter().getPlayGameScreen().setNextMoveMustPlacePiece(false);
-			GuiUtility.getChessCrafter().getPlayGameScreen().setPieceToPlace(null);
+			GuiUtility.getChessCrafter().getPlayGameScreen(mGame).setNextMoveMustPlacePiece(false);
+			GuiUtility.getChessCrafter().getPlayGameScreen(mGame).setPieceToPlace(null);
 			move.setOldPos(null);
 		}
 	}

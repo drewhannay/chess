@@ -29,7 +29,7 @@ public final class AlgebraicConverter
 	 */
 	private static final String columns = "%abcdefgh"; //$NON-NLS-1$
 
-	public static final char KNIGHT = 'N';	
+	public static final char KNIGHT = 'N';
 	public static final char BISHOP = 'B';
 	public static final char KING = 'K';
 	public static final char QUEEN = 'Q';
@@ -146,21 +146,20 @@ public final class AlgebraicConverter
 	 * to the history of the Game. Make sure as you're moving through the file
 	 * that you haven't reached the end and gotten null Moves.
 	 * 
-	 * @param g The Game in which to play the Moves
+	 * @param game The Game in which to play the Moves
 	 * @param f The File from which to read in ACN
 	 * @return The Game object with it's history added
 	 * @throws Exception when dealing with files, handle exceptions.
 	 */
-	public static Game convert(Game g, File f) throws Exception
+	public static Game convert(Game game, File f) throws Exception
 	{
-		Game game = g;
 		// Since this is Classic chess, it'll always be Boards[0]
 		Board board = game.getBoards()[0];
+		game.setIsPlayback(true);
 		try
 		{
 			StringTokenizer st;
 			Scanner in = new Scanner(f);
-			Move temp = null;
 			while (in.hasNext())
 			{
 				st = new StringTokenizer(in.nextLine());
@@ -172,25 +171,32 @@ public final class AlgebraicConverter
 					break;
 				}
 				String blackMove = st.nextToken();
-				temp = algToMove(whiteMove, board);
+				Move temp = algToMove(whiteMove, board);
 				if (temp == null)
 				{
 					break;
 				}
-				// Play the Move on the Board so it'll be added the history
-				g.playMove(temp);
 
+				temp.execute();
+				game.getHistory().add(temp);
+				game.setBlackMove(true);
+
+				temp = null;
 				temp = algToMove(blackMove, board);
 				if (temp == null)
 				{
 					break;
 				}
-				g.playMove(temp);
+
+				temp.execute();
+				game.getHistory().add(temp);
+				game.setBlackMove(false);
 			}
 			in.close();
 		}
 		catch (Exception e)
 		{
+			e.printStackTrace();
 			return null;
 		}
 		return game;

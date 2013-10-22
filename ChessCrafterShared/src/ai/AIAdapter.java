@@ -58,7 +58,15 @@ public class AIAdapter
 	public void runGame(AIPlugin aiPlugin)
 	{
 		if (m_playNetGameScreen == null)
-			m_playNetGameScreen = GuiUtility.getChessCrafter().getNetGameScreen();
+			try
+			{
+				m_playNetGameScreen = GuiUtility.getChessCrafter().getNetGameScreen();
+			}
+			catch (Exception e1)
+			{
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		m_playNetGameScreen.setIsRunning(true);
 		while (m_playNetGameScreen.isRunning())
 		{

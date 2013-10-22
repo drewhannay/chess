@@ -79,7 +79,7 @@ public class NextTurn implements Serializable
 	private boolean classicNextTurn()
 	{
 		mIsBlackMove = !mIsBlackMove;
-		GuiUtility.getChessCrafter().getPlayGameScreen().turn(mIsBlackMove);
+		GuiUtility.getChessCrafter().getPlayGameScreen(null).turn(mIsBlackMove);
 
 		return mIsBlackMove;
 	}
@@ -87,7 +87,7 @@ public class NextTurn implements Serializable
 	private boolean undoClassic()
 	{
 		mIsBlackMove = !mIsBlackMove;
-		GuiUtility.getChessCrafter().getPlayGameScreen().turn(mIsBlackMove);
+		GuiUtility.getChessCrafter().getPlayGameScreen(null).turn(mIsBlackMove);
 
 		return mIsBlackMove;
 	}
@@ -97,7 +97,7 @@ public class NextTurn implements Serializable
 		if (++mCurrentNumberOfMovesMade >= mNumberOfWhiteMovesBeforeTurnChange)
 		{
 			mIsBlackMove = !mIsBlackMove;
-			GuiUtility.getChessCrafter().getPlayGameScreen().turn(mIsBlackMove);
+			GuiUtility.getChessCrafter().getPlayGameScreen(null).turn(mIsBlackMove);
 			mNumberOfWhiteMovesBeforeTurnChange += mTurnIncrement;
 			mCurrentNumberOfMovesMade = 0;
 		}
@@ -109,7 +109,7 @@ public class NextTurn implements Serializable
 		if (--mCurrentNumberOfMovesMade < 0)
 		{
 			mIsBlackMove = !mIsBlackMove;
-			GuiUtility.getChessCrafter().getPlayGameScreen().turn(mIsBlackMove);
+			GuiUtility.getChessCrafter().getPlayGameScreen(null).turn(mIsBlackMove);
 			mNumberOfWhiteMovesBeforeTurnChange -= mTurnIncrement;
 			mCurrentNumberOfMovesMade = mNumberOfWhiteMovesBeforeTurnChange - 1;
 		}
@@ -121,7 +121,7 @@ public class NextTurn implements Serializable
 		if (++mCurrentNumberOfMovesMade >= (mIsBlackMove ? mNumberOfBlackMovesBeforeTurnChange : mNumberOfWhiteMovesBeforeTurnChange))
 		{
 			mIsBlackMove = !mIsBlackMove;
-			GuiUtility.getChessCrafter().getPlayGameScreen().turn(mIsBlackMove);
+			GuiUtility.getChessCrafter().getPlayGameScreen(null).turn(mIsBlackMove);
 			mNumberOfBlackMovesBeforeTurnChange += mTurnIncrement;
 			mNumberOfWhiteMovesBeforeTurnChange += mTurnIncrement;
 			mCurrentNumberOfMovesMade = 0;
@@ -136,7 +136,7 @@ public class NextTurn implements Serializable
 			mIsBlackMove = !mIsBlackMove;
 			mNumberOfBlackMovesBeforeTurnChange -= mTurnIncrement;
 			mNumberOfWhiteMovesBeforeTurnChange -= mTurnIncrement;
-			GuiUtility.getChessCrafter().getPlayGameScreen().turn(mIsBlackMove);
+			GuiUtility.getChessCrafter().getPlayGameScreen(null).turn(mIsBlackMove);
 
 			mCurrentNumberOfMovesMade = mIsBlackMove ? mNumberOfBlackMovesBeforeTurnChange : mNumberOfWhiteMovesBeforeTurnChange;
 		}
@@ -148,7 +148,7 @@ public class NextTurn implements Serializable
 		if (++mCurrentNumberOfMovesMade >= (mIsBlackMove ? mNumberOfBlackMovesBeforeTurnChange : mNumberOfWhiteMovesBeforeTurnChange))
 		{
 			mIsBlackMove = !mIsBlackMove;
-			GuiUtility.getChessCrafter().getPlayGameScreen().turn(mIsBlackMove);
+			GuiUtility.getChessCrafter().getPlayGameScreen(null).turn(mIsBlackMove);
 
 			mCurrentNumberOfMovesMade = 0;
 		}
@@ -160,7 +160,7 @@ public class NextTurn implements Serializable
 		if (--mCurrentNumberOfMovesMade < 0)
 		{
 			mIsBlackMove = !mIsBlackMove;
-			GuiUtility.getChessCrafter().getPlayGameScreen().turn(mIsBlackMove);
+			GuiUtility.getChessCrafter().getPlayGameScreen(null).turn(mIsBlackMove);
 
 			mCurrentNumberOfMovesMade = mIsBlackMove ? mNumberOfBlackMovesBeforeTurnChange : mNumberOfWhiteMovesBeforeTurnChange;
 		}
