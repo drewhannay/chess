@@ -32,7 +32,8 @@ public class Game implements Serializable
 	 * @param blackRules The rules for the black team
 	 * @param whitePromotionMap
 	 */
-	public Game(String gameType, Board[] boards, Rules whiteRules, Rules blackRules, Map<String, List<String>> whitePromotionMap, Map<String, List<String>> blackPromotionMap)
+	public Game(String gameType, Board[] boards, Rules whiteRules, Rules blackRules, Map<String, List<String>> whitePromotionMap,
+			Map<String, List<String>> blackPromotionMap)
 	{
 		mGameType = gameType;
 		mBoards = boards;
@@ -536,16 +537,16 @@ public class Game implements Serializable
 		{
 			if (ACN)
 			{
-				FileOutputStream f_out = new FileOutputStream(FileUtility.getCompletedGamesFile(fileName + ".acn")); //$NON-NLS-1$
+				FileOutputStream f_out = new FileOutputStream(FileUtility.getCompletedGamesFile(fileName));
 				ObjectOutputStream out = new ObjectOutputStream(f_out);
 				out.writeObject(this);
 				out.close();
 				f_out.close();
-				AlgebraicConverter.convert(getHistory(), (fileName + ".acn")); //$NON-NLS-1$
+				AlgebraicConverter.convert(getHistory(), (fileName));
 			}
 			else
 			{
-				FileOutputStream f_out = new FileOutputStream(FileUtility.getGamesInProgressFile(fileName + ".var")); //$NON-NLS-1$
+				FileOutputStream f_out = new FileOutputStream(FileUtility.getGamesInProgressFile(fileName));
 				ObjectOutputStream out = new ObjectOutputStream(f_out);
 				out.writeObject(this);
 				out.close();
@@ -675,7 +676,7 @@ public class Game implements Serializable
 	{
 		return mWhitePromotionMap;
 	}
-	
+
 	public Map<String, List<String>> getBlackPromotionMap()
 	{
 		return mBlackPromotionMap;
@@ -687,6 +688,16 @@ public class Game implements Serializable
 		mBlackPromotionMap = blackPromotionMap;
 	}
 
+	public void setIsPlayback(boolean isPlayback)
+	{
+		mIsPlayback = isPlayback;
+	}
+
+	public boolean isPlayback()
+	{
+		return mIsPlayback;
+	}
+
 	private static final long serialVersionUID = 7291801823624891384L;
 
 	private Board[] mBoards;
@@ -696,6 +707,7 @@ public class Game implements Serializable
 	private ChessTimer mWhiteTimer;
 	private ChessTimer mBlackTimer;
 	private boolean mIsBlackMove;
+	private boolean mIsPlayback;
 	private List<Piece> mWhiteTeam;
 	private List<Piece> mBlackTeam;
 	private Piece mWhiteObjectivePiece;

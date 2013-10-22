@@ -216,6 +216,12 @@ public class Square extends JLabel implements Serializable
 		mRow = row;
 	}
 
+	@Override
+	public String toString()
+	{
+		return toString(new boolean[] { false, false });
+	}
+
 	/**
 	 * Get a String representation of this Square
 	 * 

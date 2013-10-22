@@ -441,7 +441,7 @@ public class RuleMakerPanel extends JPanel
 						mBlackRules.addEndOfGame(EndOfGame.CAPTURE_ALL_OF_TYPE.init(0, blackPiecesList.getSelectedItem().toString(),
 								true));
 					}
-					mBuilder.addToPromotionMap(mBlackRules.getObjectiveName(), null, Builder.BLACK);					
+					mBuilder.addToPromotionMap(mBlackRules.getObjectiveName(), null, Builder.BLACK);
 				}
 
 				customSetupMenu.mWhiteRules = mWhiteRules;

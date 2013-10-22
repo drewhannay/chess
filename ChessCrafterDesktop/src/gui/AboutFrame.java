@@ -40,8 +40,8 @@ public class AboutFrame extends JFrame
 		JLabel piecePicture = null;
 		try
 		{
-			 frontPageImage = new JLabel(GuiUtility.createImageIcon(300, 200, "/front_page_image.jpeg")); //$NON-NLS-1$
-			 piecePicture = new JLabel(GuiUtility.createImageIcon(48, 48, "/d_King.png")); //$NON-NLS-1$
+			frontPageImage = new JLabel(GuiUtility.createImageIcon(300, 200, "/front_page_image.jpeg")); //$NON-NLS-1$
+			piecePicture = new JLabel(GuiUtility.createImageIcon(48, 48, "/d_King.png")); //$NON-NLS-1$
 		}
 		catch (IOException e1)
 		{

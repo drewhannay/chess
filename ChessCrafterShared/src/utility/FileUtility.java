@@ -1,12 +1,10 @@
 package utility;
 
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.net.URL;
 
 import javax.imageio.ImageIO;
@@ -101,13 +99,12 @@ public final class FileUtility
 		new File(path).mkdirs();
 		try
 		{
-			DataInputStream dataInputStream = new DataInputStream(new FileInputStream(getPreferencesFile()));
-			BufferedReader reader = new BufferedReader(new InputStreamReader(dataInputStream));
-			String line;
-			line = reader.readLine();
-			line = reader.readLine();
-			path = line.substring(22);
-			reader.close();
+			FileInputStream fileInputStream = new FileInputStream(getPreferencesFile());
+			ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+			Preference preference = (Preference) objectInputStream.readObject();
+			path = preference.getSaveLocation();
+			objectInputStream.close();
+			fileInputStream.close();
 		}
 		catch (Exception e)
 		{
@@ -192,6 +189,7 @@ public final class FileUtility
 	private static final String PIECES = "pieces"; //$NON-NLS-1$
 	private static final String GAMES_IN_PROGRESS = "gamesInProgress"; //$NON-NLS-1$
 	private static final String COMPLETED_GAMES = "completedGames"; //$NON-NLS-1$
-	private static final String PREFERENCES = "preferences.txt"; //$NON-NLS-1$
+	private static final String PREFERENCES = "preferences"; //$NON-NLS-1$
+
 	private static final String SLASH;
 }

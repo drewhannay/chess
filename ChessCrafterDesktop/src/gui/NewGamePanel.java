@@ -260,7 +260,7 @@ public class NewGamePanel extends JPanel
 					{
 						Result result = isBlackTimer ? Result.WHITE_WIN : Result.BLACK_WIN;
 						result.setGuiText(Messages.getString("NewGamePanel.timeHasRunOut") + result.winText() + Messages.getString("NewGamePanel.newLine")); //$NON-NLS-1$ //$NON-NLS-2$
-						GuiUtility.getChessCrafter().getPlayGameScreen().endOfGame(result);
+						GuiUtility.getChessCrafter().getWatchGameScreen(null).endOfGame(result);
 					}
 				};
 				ChessTimer blackTimer = ChessTimer.createTimer(timerType, timeElapsedCallback, increment, startTime, true);
@@ -268,17 +268,8 @@ public class NewGamePanel extends JPanel
 
 				Game gameToPlay = Builder.newGame((String) dropdown.getSelectedItem());
 				gameToPlay.setTimers(whiteTimer, blackTimer);
-				PlayGamePanel game = null;
-				try
-				{
-					game = new PlayGamePanel(gameToPlay, false);
-				}
-				catch (Exception e)
-				{
-					e.printStackTrace();
-					return;
-				}
-				Driver.getInstance().setPanel(game);
+				PlayGamePanel gamePanel = new PlayGamePanel(gameToPlay);
+				Driver.getInstance().setPanel(gamePanel);
 				mPopupFrame.dispose();
 				mPopupFrame = null;
 			}

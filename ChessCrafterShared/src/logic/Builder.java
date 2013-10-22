@@ -26,7 +26,7 @@ public class Builder implements Serializable
 	public static final int BLACK = 1;
 	public static final int WHITE = 2;
 	public static final int BOTH = 3;
-	
+
 	/**
 	 * Constructor
 	 * 
@@ -329,7 +329,7 @@ public class Builder implements Serializable
 			mWhitePromotionMap = Maps.newHashMap();
 		if (mBlackPromotionMap == null)
 			mBlackPromotionMap = Maps.newHashMap();
-		
+
 		if (colorCode == WHITE || colorCode == BOTH)
 			mWhitePromotionMap.put(key, value);
 		if (colorCode == BLACK || colorCode == BOTH)
@@ -345,12 +345,12 @@ public class Builder implements Serializable
 	{
 		mBlackPromotionMap = promotionMap;
 	}
-	
+
 	public Map<String, List<String>> getWhitePromotionMap()
 	{
 		return mWhitePromotionMap;
 	}
-	
+
 	public Map<String, List<String>> getBlackPromotionMap()
 	{
 		return mBlackPromotionMap;

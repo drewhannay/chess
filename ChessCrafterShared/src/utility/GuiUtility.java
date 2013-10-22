@@ -79,9 +79,9 @@ public final class GuiUtility
 		BufferedImage bufferedImage = ImageIO.read(new File(FileUtility.getImagePath(name)));
 		return bufferedImage;
 	}
-	
+
 	public static ImageIcon createImageIcon(int imageWidth, int imageHeight, String imageLocation, boolean isBuiltInFile)
-		throws IOException
+			throws IOException
 	{
 		BufferedImage bufferedImage;
 		if (isBuiltInFile)

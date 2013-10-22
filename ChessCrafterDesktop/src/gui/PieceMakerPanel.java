@@ -124,7 +124,7 @@ public class PieceMakerPanel extends JPanel
 		lightIconPanel.setLayout(new FlowLayout());
 		final JLabel lightIconLabel = new JLabel();
 		lightIconLabel.setSize(48, 48);
-		
+
 		try
 		{
 			lightIconLabel.setIcon(builder == null ? blankSquare : ImageUtility.getLightImage(builder.getName()));
@@ -138,8 +138,8 @@ public class PieceMakerPanel extends JPanel
 		{
 			try
 			{
-				mLightImage = GuiUtility.createBufferedImage(48, 48, "l_"+builder.getName()+".png"); //$NON-NLS-1$ //$NON-NLS-2$
-				mDarkImage = GuiUtility.createBufferedImage(48, 48, "d_"+builder.getName()+".png"); //$NON-NLS-1$ //$NON-NLS-2$
+				mLightImage = GuiUtility.createBufferedImage(48, 48, "l_" + builder.getName() + ".png"); //$NON-NLS-1$ //$NON-NLS-2$
+				mDarkImage = GuiUtility.createBufferedImage(48, 48, "d_" + builder.getName() + ".png"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 			catch (IOException e1)
 			{

@@ -62,7 +62,8 @@ public enum Promote
 		}
 		else if (pieceTypeToPromoteFrom != null && !pieceTypeToPromoteFrom.equals(pieceToPromote.getName()))
 		{
-			//we don't want to promote the objective pieces. That makes things weird...
+			// we don't want to promote the objective pieces. That makes things
+			// weird...
 			if ((pieceToPromote.isBlack() && !mGame.getBlackRules().getObjectiveName().equals(pieceToPromote.getName()))
 					|| (!pieceToPromote.isBlack() && !mGame.getWhiteRules().getObjectiveName().equals(pieceToPromote.getName())))
 			{
@@ -87,12 +88,12 @@ public enum Promote
 		else if (pieceTypeToPromoteFrom == null && mGame.isBlackMove() == pieceToPromote.isBlack())
 		{
 			mPromotedToClass = ""; //$NON-NLS-1$
-			if ((!pieceToPromote.isBlack() && pieceToPromote.getPromotesTo().size() == 1)
-					|| pieceToPromote.isBlack() && pieceToPromote.getPromotesTo().size() == 1)
+			if ((!pieceToPromote.isBlack() && pieceToPromote.getPromotesTo().size() == 1) || pieceToPromote.isBlack()
+					&& pieceToPromote.getPromotesTo().size() == 1)
 				mPromotedToClass = pieceToPromote.getPromotesTo().get(0);
 			while (mPromotedToClass.equals("")) //$NON-NLS-1$
 			{
-				List<String> promotion = pieceToPromote.isBlack()? pieceToPromote.getPromotesTo() : pieceToPromote.getPromotesTo();
+				List<String> promotion = pieceToPromote.isBlack() ? pieceToPromote.getPromotesTo() : pieceToPromote.getPromotesTo();
 				String result = (String) JOptionPane.showInputDialog(null,
 						Messages.getString("selectPromotionType"), Messages.getString("promoChoice"), //$NON-NLS-1$ //$NON-NLS-2$
 						JOptionPane.PLAIN_MESSAGE, null, promotion.toArray(), null);

@@ -202,9 +202,8 @@ public class Move implements Serializable
 	/**
 	 * Execute the constructed Move.
 	 * 
-	 * @throws Exception If this move was illegal
 	 */
-	public void execute() throws Exception
+	public boolean execute()
 	{
 		prevEnpassantCol = board.getEnpassantCol();
 
@@ -241,11 +240,10 @@ public class Move implements Serializable
 		setPiece(origin.getPiece());
 
 		if (!origin.isOccupied())
-			throw new Exception(Messages.getString("noPieceToMove"));// If there is no Piece to //$NON-NLS-1$
-		// Move, get angry.
+			return false; // If there is no Piece to move, return unsuccessful
 
 		if (getPiece().isBlack() != board.isBlackTurn())
-			throw new Exception(Messages.getString("notYourTurn")); //$NON-NLS-1$
+			return false;
 
 		setCaptured(getDest().getPiece());
 
@@ -351,9 +349,14 @@ public class Move implements Serializable
 		}
 
 		setVerified(true);
-		GuiUtility.getChessCrafter().getPlayGameScreen().boardRefresh(board.getGame().getBoards());
-		board.getGame().nextTurn();
-		executed = true;
+
+		if (!board.getGame().isPlayback())
+		{
+			GuiUtility.getChessCrafter().getPlayGameScreen(board.getGame()).boardRefresh(board.getGame().getBoards());
+			board.getGame().nextTurn();
+			executed = true;
+		}
+		return true;
 	}
 
 	/**
@@ -634,7 +637,7 @@ public class Move implements Serializable
 	 * 
 	 * @throws Exception If the undo doesn't work properly
 	 */
-	public void undo() throws Exception
+	public boolean undo()
 	{
 		board.setEnpassantCol(prevEnpassantCol);
 
@@ -695,13 +698,18 @@ public class Move implements Serializable
 			board.getGame().getWhiteTimer().setClockDirection(oldWhiteDirection);
 			board.getGame().getBlackTimer().setClockDirection(oldBlackDirection);
 		}
-		board.getGame().prevTurn();
+		if (!board.getGame().isPlayback())
+			board.getGame().prevTurn();
 		board.getGame().setLastMove(prev);
 
 		executed = false;
 
 		board.getGame().setStaleLegalDests(true);
-		GuiUtility.getChessCrafter().getPlayGameScreen().boardRefresh(board.getGame().getBoards());
+
+		if (!board.getGame().isPlayback())
+			GuiUtility.getChessCrafter().getPlayGameScreen(board.getGame()).boardRefresh(board.getGame().getBoards());
+
+		return true;
 	}
 
 	/**

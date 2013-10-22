@@ -315,7 +315,8 @@ public class Piece implements Serializable
 				if (!wraparound)
 					northMax = board.getMaxCol();
 			}
-			for (int c = mCurrentSquare.getCol() + 1; ((mMovements.get(PieceBuilder.EAST) == -1 && wraparound) ? true : c <= northMax) && !done; c++)
+			for (int c = mCurrentSquare.getCol() + 1; ((mMovements.get(PieceBuilder.EAST) == -1 && wraparound) ? true : c <= northMax)
+					&& !done; c++)
 			{
 				int j = c;
 				if (wraparound)
@@ -345,7 +346,8 @@ public class Piece implements Serializable
 				if (!wraparound)
 					southMax = 1;
 			}
-			for (int c = mCurrentSquare.getCol() - 1; ((mMovements.get(PieceBuilder.WEST) == -1 && wraparound) ? true : c >= southMax) && !done; c--)
+			for (int c = mCurrentSquare.getCol() - 1; ((mMovements.get(PieceBuilder.WEST) == -1 && wraparound) ? true : c >= southMax)
+					&& !done; c--)
 			{
 				int j = c;
 				if (wraparound)
@@ -436,7 +438,7 @@ public class Piece implements Serializable
 
 			int southMin = mCurrentSquare.getRow() - mMovements.get(PieceBuilder.SOUTHEAST);
 
-			if (southMin <= 1 || mMovements.get(PieceBuilder.SOUTHEAST) == -1)  
+			if (southMin <= 1 || mMovements.get(PieceBuilder.SOUTHEAST) == -1)
 				southMin = 1;
 
 			for (int r = mCurrentSquare.getRow() - 1, c = mCurrentSquare.getCol() + 1; r >= southMin && c <= eastMax && !done; r--, c++)
@@ -812,28 +814,36 @@ public class Piece implements Serializable
 		{
 		case PieceBuilder.SOUTH: // South
 			if (mMovements.containsKey(PieceBuilder.SOUTH))
-				return (destRow - mCurrentSquare.getRow()) < mMovements.get(PieceBuilder.SOUTH) || mMovements.get(PieceBuilder.SOUTH) == -1;
+				return (destRow - mCurrentSquare.getRow()) < mMovements.get(PieceBuilder.SOUTH)
+						|| mMovements.get(PieceBuilder.SOUTH) == -1;
 		case PieceBuilder.NORTH: // North
 			if (mMovements.containsKey(PieceBuilder.NORTH))
-				return (mCurrentSquare.getRow() - destRow) < mMovements.get(PieceBuilder.NORTH) || mMovements.get(PieceBuilder.NORTH) == -1;
+				return (mCurrentSquare.getRow() - destRow) < mMovements.get(PieceBuilder.NORTH)
+						|| mMovements.get(PieceBuilder.NORTH) == -1;
 		case PieceBuilder.EAST: // East
 			if (mMovements.containsKey(PieceBuilder.EAST))
-				return (destCol - mCurrentSquare.getCol()) < mMovements.get(PieceBuilder.EAST) || mMovements.get(PieceBuilder.EAST) == -1;
+				return (destCol - mCurrentSquare.getCol()) < mMovements.get(PieceBuilder.EAST)
+						|| mMovements.get(PieceBuilder.EAST) == -1;
 		case PieceBuilder.WEST: // West
 			if (mMovements.containsKey(PieceBuilder.WEST))
-				return (mCurrentSquare.getCol() - destCol) < mMovements.get(PieceBuilder.WEST) || mMovements.get(PieceBuilder.WEST) == -1;
+				return (mCurrentSquare.getCol() - destCol) < mMovements.get(PieceBuilder.WEST)
+						|| mMovements.get(PieceBuilder.WEST) == -1;
 		case PieceBuilder.NORTHEAST: // NorthEast
 			if (mMovements.containsKey(PieceBuilder.NORTHEAST))
-				return (mCurrentSquare.getCol() - destCol) < mMovements.get(PieceBuilder.NORTHEAST) || mMovements.get(PieceBuilder.NORTHEAST) == -1;
+				return (mCurrentSquare.getCol() - destCol) < mMovements.get(PieceBuilder.NORTHEAST)
+						|| mMovements.get(PieceBuilder.NORTHEAST) == -1;
 		case PieceBuilder.SOUTHEAST: // SouthEast
 			if (mMovements.containsKey(PieceBuilder.SOUTHEAST))
-				return (mCurrentSquare.getCol() - destCol) < mMovements.get(PieceBuilder.SOUTHEAST) || mMovements.get(PieceBuilder.SOUTHEAST) == -1;
+				return (mCurrentSquare.getCol() - destCol) < mMovements.get(PieceBuilder.SOUTHEAST)
+						|| mMovements.get(PieceBuilder.SOUTHEAST) == -1;
 		case PieceBuilder.NORTHWEST: // NorthWest
 			if (mMovements.containsKey(PieceBuilder.NORTHWEST))
-				return (destCol - mCurrentSquare.getCol()) < mMovements.get(PieceBuilder.NORTHWEST) || mMovements.get(PieceBuilder.NORTHWEST) == -1;
+				return (destCol - mCurrentSquare.getCol()) < mMovements.get(PieceBuilder.NORTHWEST)
+						|| mMovements.get(PieceBuilder.NORTHWEST) == -1;
 		case PieceBuilder.SOUTHWEST: // SouthWest
 			if (mMovements.containsKey(PieceBuilder.SOUTHWEST))
-				return (destCol - mCurrentSquare.getCol()) < mMovements.get(PieceBuilder.SOUTHWEST) || mMovements.get(PieceBuilder.SOUTHWEST) == -1;
+				return (destCol - mCurrentSquare.getCol()) < mMovements.get(PieceBuilder.SOUTHWEST)
+						|| mMovements.get(PieceBuilder.SOUTHWEST) == -1;
 		default:
 			return false;
 		}
