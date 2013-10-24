@@ -98,8 +98,13 @@ public class PieceBuilder implements Serializable
 	 */
 	public static Piece makePiece(String name, boolean isBlack, Square origin, Board board) throws IOException
 	{
+		PieceBuilder loadedBuilder = loadFromDisk(name);
+		if (loadedBuilder == null)
+		{
+			loadedBuilder = new PieceBuilder(name);
+		}
 		if (!mPieceTypes.containsKey(name))
-			mPieceTypes.put(name, new PieceBuilder(name));
+			mPieceTypes.put(name, loadedBuilder);
 		return mPieceTypes.get(name).makePiece(isBlack, origin, board);
 	}
 
@@ -131,6 +136,10 @@ public class PieceBuilder implements Serializable
 	public static PieceBuilder loadFromDisk(String pieceName)
 	{
 		PieceBuilder toReturn;
+		
+		if (mPieceTypes.containsKey(pieceName))
+			return mPieceTypes.get(pieceName);
+		
 		try
 		{
 			ObjectInputStream in = new ObjectInputStream(new FileInputStream(FileUtility.getPieceFile(pieceName)));
@@ -183,7 +192,7 @@ public class PieceBuilder implements Serializable
 		if (mName.equals(Messages.getString("rook"))) //$NON-NLS-1$
 			return Builder.createRook(isBlack, origin, board);
 		else
-			return new Piece(mName, isBlack, origin, board, mMovements);
+			return new Piece(mName, isBlack, origin, board, mMovements, mCanJump);
 		// try {
 		//
 		// Class<?> klazz = Class.forName("logic." + name);

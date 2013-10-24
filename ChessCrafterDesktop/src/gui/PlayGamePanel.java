@@ -1,5 +1,7 @@
 package gui;
 
+import gui.PreferenceUtility.PieceToolTipPreferenceChangedListener;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -580,7 +582,7 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 		mBlackTimer.reset();
 	}
 
-	protected class SquareListener extends DropAdapter implements MouseListener
+	protected class SquareListener extends DropAdapter implements MouseListener, PieceToolTipPreferenceChangedListener
 	{
 		public SquareListener(Square square, Board board)
 		{
@@ -588,6 +590,11 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 			m_square = square;
 			m_board = board;
 			addDropListener(m_dropManager);
+			if (PreferenceUtility.getPreference().showPieceToolTips() && m_square.isOccupied())
+				m_square.setToolTipText(m_square.getPiece().getToolTipText());
+			else
+				m_square.setToolTipText(null);
+			PreferenceUtility.addPieceToolTipListener(this);
 		}
 
 		@Override
@@ -690,6 +697,14 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 
 		private Square m_square;
 		private Board m_board;
+		@Override
+		public void onPieceToolTipPreferenceChanged()
+		{
+			if (PreferenceUtility.getPreference().showPieceToolTips() && m_square.isOccupied())
+				m_square.setToolTipText(m_square.getPiece().getToolTipText());
+			else
+				m_square.setToolTipText(null);
+		}
 	}
 
 	private static class DropManager extends AbstractDropManager
