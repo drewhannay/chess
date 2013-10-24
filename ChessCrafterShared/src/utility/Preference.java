@@ -44,12 +44,23 @@ public class Preference implements Serializable
 		m_shouldHighlightMoves = highlightMoves;
 	}
 
+	public boolean showPieceToolTips()
+	{
+		return m_showPieceToolTips;
+	}
+
+	public void setShowPieceToolTips(boolean m_showPieceToolTips)
+	{
+		this.m_showPieceToolTips = m_showPieceToolTips;
+	}
+
 	private static String s_defaultSaveLocation;
 
 	private boolean m_pathSet;
 	private boolean m_highlightSet;
 	private String m_saveLocation;
 	private boolean m_shouldHighlightMoves;
+	private boolean m_showPieceToolTips;
 
 	private static final long serialVersionUID = 6126269552471996685L;
 }

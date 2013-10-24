@@ -34,6 +34,11 @@ import utility.ImageUtility;
 
 public class PieceMakerPanel extends JPanel
 {
+	public interface PieceListChangedListener
+	{
+		public void onPieceListChanged();
+	}
+	
 	public PieceMakerPanel(PieceMenuPanel menuPanel)
 	{
 		mLeaperCheckBox = new JCheckBox(Messages.getString("PieceMakerPanel.canJump"), false); //$NON-NLS-1$
@@ -58,7 +63,7 @@ public class PieceMakerPanel extends JPanel
 		mFrame = new JFrame(Messages.getString("PieceMakerPanel.pieceEditor")); //$NON-NLS-1$
 		mFrame.add(this);
 		mFrame.setSize(400, 600);
-		mFrame.setLocationRelativeTo(Driver.getInstance());
+		mFrame.setLocationRelativeTo(menuPanel);
 		mLeaperCheckBox = new JCheckBox(Messages.getString("PieceMakerPanel.canJump"), false); //$NON-NLS-1$
 		mKnightMovementsCheckBox = new JCheckBox(Messages.getString("PieceMakerPanel.knightLike"), false); //$NON-NLS-1$
 		mPieceNameField = new JTextField(15);
@@ -345,7 +350,7 @@ public class PieceMakerPanel extends JPanel
 				if (pieceName.isEmpty() || PieceBuilder.isPieceType(mPieceNameField.getText()))
 				{
 					JOptionPane.showMessageDialog(
-							Driver.getInstance(),
+							PieceMakerPanel.this,
 							Messages.getString("PieceMakerPanel.enterUniqueName"), Messages.getString("PieceMakerPanel.invalidPieceName"), //$NON-NLS-1$ //$NON-NLS-2$
 							JOptionPane.PLAIN_MESSAGE);
 					return;
@@ -382,7 +387,7 @@ public class PieceMakerPanel extends JPanel
 				catch (Exception e)
 				{
 					JOptionPane.showMessageDialog(
-							Driver.getInstance(),
+							PieceMakerPanel.this,
 							Messages.getString("PieceMakerPanel.cannotWriteImageFiles"), Messages.getString("PieceMakerPanel.ImageError"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
 					return;
 				}
@@ -415,7 +420,7 @@ public class PieceMakerPanel extends JPanel
 				{
 					if (hasChanged())
 					{
-						switch (JOptionPane.showConfirmDialog(Driver.getInstance(),
+						switch (JOptionPane.showConfirmDialog(PieceMakerPanel.this,
 								Messages.getString("PieceMakerPanel.ifYouContinue"), Messages.getString("PieceMakerPanel.pieceMaker"), //$NON-NLS-1$ //$NON-NLS-2$
 								JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE))
 						{
@@ -507,7 +512,7 @@ public class PieceMakerPanel extends JPanel
 		{
 			JOptionPane
 					.showMessageDialog(
-							Driver.getInstance(),
+							PieceMakerPanel.this,
 							Messages.getString("PieceMakerPanel.allMovementDist") + textField.getToolTipText() //$NON-NLS-1$
 									+ Messages.getString("PieceMakerPanel.directionBox"), Messages.getString("PieceMakerPanel.error"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
 			return false;
@@ -528,7 +533,7 @@ public class PieceMakerPanel extends JPanel
 			Object[] options = new String[] {
 					Messages.getString("PieceMakerPanel.browseComputer"), Messages.getString("PieceMakerPanel.imageFromInternet"), Messages.getString("PieceMakerPanel.cancel") }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
-			switch (JOptionPane.showOptionDialog(Driver.getInstance(),
+			switch (JOptionPane.showOptionDialog(PieceMakerPanel.this,
 					Messages.getString("PieceMakerPanel.whereFrom"), Messages.getString("PieceMakerPanel.chooseImage"), //$NON-NLS-1$ //$NON-NLS-2$
 					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]))
 			{
@@ -552,7 +557,7 @@ public class PieceMakerPanel extends JPanel
 					}
 				});
 
-				if (fileChooser.showOpenDialog(Driver.getInstance()) == JFileChooser.APPROVE_OPTION)
+				if (fileChooser.showOpenDialog(PieceMakerPanel.this) == JFileChooser.APPROVE_OPTION)
 				{
 					try
 					{
@@ -576,7 +581,7 @@ public class PieceMakerPanel extends JPanel
 				}
 				break;
 			case JOptionPane.NO_OPTION:
-				String url = JOptionPane.showInputDialog(Driver.getInstance(),
+				String url = JOptionPane.showInputDialog(PieceMakerPanel.this,
 						Messages.getString("PieceMakerPanel.enterURL"), Messages.getString("PieceMakerPanel.inputURL"), //$NON-NLS-1$ //$NON-NLS-2$
 						JOptionPane.PLAIN_MESSAGE);
 				try

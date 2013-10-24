@@ -1,5 +1,8 @@
 package gui;
 
+import gui.PieceMakerPanel.PieceListChangedListener;
+import gui.PreferenceUtility.PieceToolTipPreferenceChangedListener;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -60,7 +63,7 @@ import dragNdrop.DropEvent;
 import dragNdrop.GlassPane;
 import dragNdrop.MotionAdapter;
 
-public class CustomSetupPanel extends JPanel
+public class CustomSetupPanel extends JPanel implements PieceListChangedListener
 {
 	public CustomSetupPanel(String variantName)
 	{
@@ -113,9 +116,9 @@ public class CustomSetupPanel extends JPanel
 			mBuilder.mWhiteTeam = mWhiteTeam;
 		}
 
-		Board board = new Board(2, 1, false);
-		mPieceDisplaySquares[WHITE_INDEX] = board.getSquare(1, 1);
-		mPieceDisplaySquares[BLACK_INDEX] = board.getSquare(2, 1);
+		mDisplayBoard = new Board(2, 1, false);
+		mPieceDisplaySquares[WHITE_INDEX] = mDisplayBoard.getSquare(1, 1);
+		mPieceDisplaySquares[BLACK_INDEX] = mDisplayBoard.getSquare(2, 1);
 
 		mOptionsFrame = new JFrame();
 		mOptionsFrame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -144,6 +147,8 @@ public class CustomSetupPanel extends JPanel
 		constraints.insets = new Insets(0, 10, 100, 0);
 		add(showPiecePanel, constraints);
 
+		setupPiecesList();
+		
 		for (Square square : mPieceDisplaySquares)
 		{
 			square.addMouseListener(new PieceDisplayBoardListener(square));
@@ -192,7 +197,6 @@ public class CustomSetupPanel extends JPanel
 			}
 		}
 
-		setupPiecesList();
 		drawBoards(temp, temp.length > 1);
 
 		// main menu button
@@ -356,7 +360,7 @@ public class CustomSetupPanel extends JPanel
 			{
 				mOptionsFrame.dispose();
 				mOptionsFrame = new JFrame();
-				new PieceMenuPanel(mOptionsFrame);
+				(new PieceMenuPanel(mOptionsFrame)).setPieceListChangedListener(CustomSetupPanel.this);
 			}
 		});
 
@@ -500,11 +504,13 @@ public class CustomSetupPanel extends JPanel
 
 		Object[] standardPieces = PieceBuilder.getSet().toArray();
 		for (int i = 0; i < standardPieces.length; i++)
-			list.addElement(standardPieces[i]);
+			if (!list.contains(standardPieces[i]))
+					list.addElement(standardPieces[i]);
 
 		String[] customPieces = FileUtility.getCustomPieceArray();
 		for (int i = 0; i < customPieces.length; i++)
-			list.addElement(customPieces[i]);
+			if (!list.contains(customPieces[i]))
+				list.addElement(customPieces[i]);
 
 		mPieceTypeList = new JList(list);
 
@@ -519,9 +525,9 @@ public class CustomSetupPanel extends JPanel
 		try
 		{
 			whitePieceBeingDisplayed = PieceBuilder.makePiece((String) list.elementAt(0), false, mPieceDisplaySquares[WHITE_INDEX],
-					null);
+					mDisplayBoard);
 			blackPieceBeingDisplayed = PieceBuilder.makePiece((String) list.elementAt(0), true, mPieceDisplaySquares[BLACK_INDEX],
-					null);
+					mDisplayBoard);
 		}
 		catch (IOException e)
 		{
@@ -561,9 +567,9 @@ public class CustomSetupPanel extends JPanel
 					try
 					{
 						whitePieceBeingDisplayed = PieceBuilder.makePiece((String) list.elementAt(selection), false,
-								mPieceDisplaySquares[WHITE_INDEX], null);
+								mPieceDisplaySquares[WHITE_INDEX], mDisplayBoard);
 						blackPieceBeingDisplayed = PieceBuilder.makePiece((String) list.elementAt(selection), true,
-								mPieceDisplaySquares[BLACK_INDEX], null);
+								mPieceDisplaySquares[BLACK_INDEX], mDisplayBoard);
 					}
 					catch (IOException e)
 					{
@@ -580,6 +586,13 @@ public class CustomSetupPanel extends JPanel
 					{
 						square.resetColor();
 						square.refresh();
+						for (MouseListener listener : square.getMouseListeners())
+						{
+							if (listener instanceof PieceDisplayBoardListener)
+								((PieceDisplayBoardListener) listener).onPieceSelectionChanged();
+							else if (listener instanceof PieceNormalBoardListener)
+								((PieceNormalBoardListener) listener).onPieceSelectionChanged();
+						}
 					}
 				}
 			}
@@ -611,6 +624,11 @@ public class CustomSetupPanel extends JPanel
 		public SquareSetupMouseListener(Square square)
 		{
 			m_square = square;
+			if (m_square.isOccupied())
+			{
+				m_square.setToolTipText(m_square.getPiece().getName());
+				m_square.refresh();
+			}
 		}
 
 		@Override
@@ -721,13 +739,22 @@ public class CustomSetupPanel extends JPanel
 		return mBlackPromotionMap;
 	}
 
-	private final class PieceDisplayBoardListener extends DropAdapter implements MouseListener
+	private final class PieceDisplayBoardListener extends DropAdapter implements MouseListener, PieceToolTipPreferenceChangedListener
 	{
 		public PieceDisplayBoardListener(Square square)
 		{
 			super(mGlobalGlassPane);
 			m_square = square;
 			addDropListener(mDropManager);
+			if (m_square.getPiece() != null && PreferenceUtility.getPreference().showPieceToolTips())
+				m_square.setToolTipText(m_square.getPiece().getToolTipText());
+			PreferenceUtility.addPieceToolTipListener(this);
+		}
+
+		public void onPieceSelectionChanged()
+		{
+			if (m_square.getPiece() != null && PreferenceUtility.getPreference().showPieceToolTips())
+				m_square.setToolTipText(m_square.getPiece().getToolTipText());
 		}
 
 		@Override
@@ -782,15 +809,27 @@ public class CustomSetupPanel extends JPanel
 		}
 
 		private final Square m_square;
+
+		@Override
+		public void onPieceToolTipPreferenceChanged()
+		{
+			if (m_square.getPiece() != null && PreferenceUtility.getPreference().showPieceToolTips())
+				m_square.setToolTipText(m_square.getPiece().getToolTipText());
+			else
+				m_square.setToolTipText(null);
+		}
 	};
 
-	private final class PieceNormalBoardListener extends DropAdapter implements MouseListener
+	private final class PieceNormalBoardListener extends DropAdapter implements MouseListener, PieceToolTipPreferenceChangedListener
 	{
 		public PieceNormalBoardListener(Square square)
 		{
 			super(mGlobalGlassPane);
 			m_square = square;
 			addDropListener(mDropManager);
+			if (m_square.getPiece() != null && PreferenceUtility.getPreference().showPieceToolTips())
+				m_square.setToolTipText(m_square.getPiece().getToolTipText());
+			PreferenceUtility.addPieceToolTipListener(this);
 		}
 
 		@Override
@@ -833,6 +872,12 @@ public class CustomSetupPanel extends JPanel
 			fireDropEvent(new DropEvent(point, m_square), false);
 		}
 
+		public void onPieceSelectionChanged()
+		{
+			if (m_square.getPiece() != null)
+				m_square.setToolTipText(m_square.getPiece().getToolTipText());
+		}
+		
 		@Override
 		public void mouseExited(MouseEvent event)
 		{
@@ -848,6 +893,15 @@ public class CustomSetupPanel extends JPanel
 		{
 		}
 
+		@Override
+		public void onPieceToolTipPreferenceChanged()
+		{
+			if (m_square.getPiece() != null && PreferenceUtility.getPreference().showPieceToolTips())
+				m_square.setToolTipText(m_square.getPiece().getToolTipText());
+			else
+				m_square.setToolTipText(null);
+		}
+		
 		private final Square m_square;
 	};
 
@@ -942,7 +996,13 @@ public class CustomSetupPanel extends JPanel
 			}
 		}
 	};
-
+	
+	@Override
+	public void onPieceListChanged()
+	{
+		setupPiecesList();
+	}	
+	
 	private static final long serialVersionUID = 7830479492072657640L;
 	private static final int WHITE_INDEX = 0;
 	private static final int BLACK_INDEX = 1;
@@ -966,4 +1026,5 @@ public class CustomSetupPanel extends JPanel
 	private JFrame mOptionsFrame;
 	private JScrollPane mScrollPane = new JScrollPane();
 	private MotionAdapter m_motionAdapter;
+	private Board mDisplayBoard;
 }

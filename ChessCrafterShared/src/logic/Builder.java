@@ -112,7 +112,7 @@ public class Builder implements Serializable
 		bishopMovement.put(PieceBuilder.SOUTHEAST, -1);
 		bishopMovement.put(PieceBuilder.NORTHWEST, -1);
 		bishopMovement.put(PieceBuilder.SOUTHWEST, -1);
-		return new Piece(Messages.getString("bishop"), isBlack, square, board, bishopMovement); //$NON-NLS-1$
+		return new Piece(Messages.getString("bishop"), isBlack, square, board, bishopMovement, false); //$NON-NLS-1$
 	}
 
 	/**
@@ -136,7 +136,7 @@ public class Builder implements Serializable
 		kingMovement.put(PieceBuilder.SOUTHEAST, 1);
 		kingMovement.put(PieceBuilder.NORTHWEST, 1);
 		kingMovement.put(PieceBuilder.SOUTHWEST, 1);
-		return new Piece(Messages.getString("king"), isBlack, square, board, kingMovement); //$NON-NLS-1$
+		return new Piece(Messages.getString("king"), isBlack, square, board, kingMovement, false); //$NON-NLS-1$
 	}
 
 	/**
@@ -154,7 +154,7 @@ public class Builder implements Serializable
 		Map<Character, Integer> knightMovement = Maps.newHashMap();
 		knightMovement.put(PieceBuilder.KNIGHT_ONE, 1);
 		knightMovement.put(PieceBuilder.KNIGHT_TWO, 2);
-		return new Piece(Messages.getString("knight"), isBlack, square, board, knightMovement); //$NON-NLS-1$
+		return new Piece(Messages.getString("knight"), isBlack, square, board, knightMovement, true); //$NON-NLS-1$
 	}
 
 	/**
@@ -169,7 +169,7 @@ public class Builder implements Serializable
 	 */
 	public static Piece createPawn(boolean isBlack, Square square, Board board) throws IOException
 	{
-		Piece pawn = new Piece(Messages.getString("pawn"), isBlack, square, board, null); //$NON-NLS-1$
+		Piece pawn = new Piece(Messages.getString("pawn"), isBlack, square, board, null, false); //$NON-NLS-1$
 		List<String> promotesTo = Lists.newArrayList();
 		promotesTo.add(Messages.getString("queen")); //$NON-NLS-1$
 		promotesTo.add(Messages.getString("bishop")); //$NON-NLS-1$
@@ -200,7 +200,7 @@ public class Builder implements Serializable
 		queenMovement.put(PieceBuilder.SOUTHEAST, -1);
 		queenMovement.put(PieceBuilder.NORTHWEST, -1);
 		queenMovement.put(PieceBuilder.SOUTHWEST, -1);
-		return new Piece(Messages.getString("queen"), isBlack, square, board, queenMovement); //$NON-NLS-1$
+		return new Piece(Messages.getString("queen"), isBlack, square, board, queenMovement, false); //$NON-NLS-1$
 	}
 
 	/**
@@ -220,7 +220,7 @@ public class Builder implements Serializable
 		rookMovement.put(PieceBuilder.SOUTH, -1);
 		rookMovement.put(PieceBuilder.WEST, -1);
 		rookMovement.put(PieceBuilder.EAST, -1);
-		return new Piece(Messages.getString("rook"), isBlack, square, board, rookMovement); //$NON-NLS-1$
+		return new Piece(Messages.getString("rook"), isBlack, square, board, rookMovement, false); //$NON-NLS-1$
 	}
 
 	/**

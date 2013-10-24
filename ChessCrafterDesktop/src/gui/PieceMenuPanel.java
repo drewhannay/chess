@@ -1,11 +1,11 @@
 package gui;
 
+import gui.PieceMakerPanel.PieceListChangedListener;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -15,7 +15,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-
 import utility.FileUtility;
 
 public class PieceMenuPanel extends JPanel
@@ -188,12 +187,15 @@ public class PieceMenuPanel extends JPanel
 	private DefaultListModel mPieceListModel;
 	private JFrame mFrame;
 
+	private PieceListChangedListener mListener;
+	
+	public void setPieceListChangedListener(PieceListChangedListener listener)
+	{
+		mListener = listener;
+	}
+	
 	public void refreshList()
 	{
-		if (mPieceListModel == null)
-		{
-
-		}
 		mPieceListModel.clear();
 
 		String[] pieceArray = FileUtility.getCustomPieceArray();
@@ -201,5 +203,8 @@ public class PieceMenuPanel extends JPanel
 		{
 			mPieceListModel.addElement(pieceArray[i]);
 		}
+		
+		if (mListener != null)
+			mListener.onPieceListChanged();
 	}
 }

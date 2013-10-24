@@ -27,12 +27,14 @@ public class Piece implements Serializable
 	 * @param curSquare The Square this Piece occupies
 	 * @param board The Board this Piece occupies
 	 * @param movements Map of legal movements for this Piece
+	 * @param canJump
 	 * @throws IOException
 	 */
-	public Piece(String name, boolean isBlack, Square curSquare, Board board, Map<Character, Integer> movements) throws IOException
+	public Piece(String name, boolean isBlack, Square curSquare, Board board, Map<Character, Integer> movements, boolean canJump)
+			throws IOException
 	{
 		mName = name;
-
+		mIsLeaper = canJump;
 		mLightIcon = ImageUtility.getLightImage(name);
 		mDarkIcon = ImageUtility.getDarkImage(name);
 
@@ -887,6 +889,76 @@ public class Piece implements Serializable
 		return mCurrentSquare;
 	}
 
+	public String getToolTipText()
+	{
+		boolean hasKnightlike = false;
+		StringBuilder builder = new StringBuilder("<html><b>"); //$NON-NLS-1$
+		builder.append(mIsBlack ? Messages.getString("Piece.black") : Messages.getString("Piece.white")); //$NON-NLS-1$ //$NON-NLS-2$
+		builder.append(mName);
+		builder.append("</b><br/>"); //$NON-NLS-1$
+
+		builder.append("<table><tr>"); //$NON-NLS-1$
+		if (mMovements != null)
+		{
+			builder.append("<td>"); //$NON-NLS-1$
+			builder.append("<table border=\"1\"> <tr> <td align=\"center\">"); //$NON-NLS-1$
+			builder.append(mMovements.get(PieceBuilder.NORTHWEST) == null ? "0" : mMovements.get(PieceBuilder.NORTHWEST)); //$NON-NLS-1$
+			builder.append("</td><td align=\"center\">"); //$NON-NLS-1$
+			builder.append(mMovements.get(PieceBuilder.NORTH) == null ? "0" : mMovements.get(PieceBuilder.NORTH)); //$NON-NLS-1$
+			builder.append("</td><td align=\"center\">"); //$NON-NLS-1$
+			builder.append(mMovements.get(PieceBuilder.NORTHEAST) == null ? "0" : mMovements.get(PieceBuilder.NORTHEAST)); //$NON-NLS-1$
+			builder.append("</td></tr>"); //$NON-NLS-1$
+
+			builder.append("<tr> <td align=\"center\">"); //$NON-NLS-1$
+			builder.append(mMovements.get(PieceBuilder.WEST) == null ? "0" : mMovements.get(PieceBuilder.WEST)); //$NON-NLS-1$
+			builder.append("</td><td align=\"center\">"); //$NON-NLS-1$
+			builder.append(mName.equals(Messages.getString("Piece.knight")) ? Messages.getString("Piece.knightChar") : mName.charAt(0)); //$NON-NLS-1$ //$NON-NLS-2$
+			builder.append("</td><td align=\"center\">"); //$NON-NLS-1$
+			builder.append(mMovements.get(PieceBuilder.EAST) == null ? "0" : mMovements.get(PieceBuilder.EAST)); //$NON-NLS-1$
+			builder.append("</td></tr>"); //$NON-NLS-1$
+
+			builder.append("<tr> <td align=\"center\">"); //$NON-NLS-1$
+			builder.append(mMovements.get(PieceBuilder.SOUTHWEST) == null ? "0" : mMovements.get(PieceBuilder.SOUTHWEST)); //$NON-NLS-1$
+			builder.append("</td><td align=\"center\">"); //$NON-NLS-1$
+			builder.append(mMovements.get(PieceBuilder.SOUTH) == null ? "0" : mMovements.get(PieceBuilder.SOUTH)); //$NON-NLS-1$
+			builder.append("</td><td align=\"center\">"); //$NON-NLS-1$
+			builder.append(mMovements.get(PieceBuilder.SOUTHEAST) == null ? "0" : mMovements.get(PieceBuilder.SOUTHEAST)); //$NON-NLS-1$
+			builder.append("</td></tr>"); //$NON-NLS-1$
+
+			builder.append("</table>"); //$NON-NLS-1$
+
+			builder.append("</td>"); //$NON-NLS-1$
+			if (mMovements.get(PieceBuilder.KNIGHT_ONE) != null)
+				hasKnightlike = true;
+		}
+
+		builder.append("<td>"); //$NON-NLS-1$
+			if (mIsLeaper)
+			{
+				builder.append(Messages.getString("Piece.ableToLeapBr")); //$NON-NLS-1$
+			}
+			else
+			{
+				builder.append(Messages.getString("Piece.notAbleToLeapBr")); //$NON-NLS-1$
+			}
+			
+			if (hasKnightlike)
+			{
+				builder.append("- "); //$NON-NLS-1$
+				builder.append(mMovements.get(PieceBuilder.KNIGHT_ONE));
+				builder.append(" x "); //$NON-NLS-1$
+				builder.append(mMovements.get(PieceBuilder.KNIGHT_TWO));
+			}
+			else
+			{
+				builder.append(Messages.getString("Piece.noKnightLikeMovements")); //$NON-NLS-1$
+			}
+			builder.append("</td>"); //$NON-NLS-1$
+		
+		builder.append("</html>"); //$NON-NLS-1$
+		return builder.toString();
+	}
+
 	public boolean isBlack()
 	{
 		return (mIsBlack);
@@ -1069,7 +1141,7 @@ public class Piece implements Serializable
 	protected Map<Character, Integer> mMovements;
 	protected ImageIcon mLightIcon;
 	protected ImageIcon mDarkIcon;
-	protected boolean mIsLeaper = false;
+	protected boolean mIsLeaper;
 	protected int mMoveCount;
 	protected Piece mPinnedBy;
 	protected Square mOriginalSquare;
