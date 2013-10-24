@@ -7,12 +7,19 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.URL;
+import java.util.List;
 import java.util.Map;
-
+import java.util.StringTokenizer;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -27,10 +34,14 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileFilter;
-
+import logic.Builder;
+import logic.KnightMovement;
+import logic.Piece;
 import logic.PieceBuilder;
+import utility.FileUtility;
 import utility.GuiUtility;
 import utility.ImageUtility;
+import com.google.common.collect.Lists;
 
 public class PieceMakerPanel extends JPanel
 {
@@ -38,7 +49,7 @@ public class PieceMakerPanel extends JPanel
 	{
 		public void onPieceListChanged();
 	}
-	
+
 	public PieceMakerPanel(PieceMenuPanel menuPanel)
 	{
 		mLeaperCheckBox = new JCheckBox(Messages.getString("PieceMakerPanel.canJump"), false); //$NON-NLS-1$
@@ -54,6 +65,9 @@ public class PieceMakerPanel extends JPanel
 		mNorthWestField = new JTextField(4);
 		mKnightOneField = new JTextField(4);
 		mKnightTwoField = new JTextField(4);
+		mKnightComboBox = new JComboBox();
+		mAddKnightMoveButton = new JButton(Messages.getString("PieceMakerPanel.add")); //$NON-NLS-1$
+		mRemoveKnightMoveButton = new JButton(Messages.getString("PieceMakerPanel.remove")); //$NON-NLS-1$
 		new PieceMakerPanel(null, menuPanel);
 	}
 
@@ -77,10 +91,29 @@ public class PieceMakerPanel extends JPanel
 		mNorthWestField = new JTextField(4);
 		mKnightOneField = new JTextField(4);
 		mKnightTwoField = new JTextField(4);
+		mAddKnightMoveButton = new JButton(Messages.getString("PieceMakerPanel.add")); //$NON-NLS-1$
+		mRemoveKnightMoveButton = new JButton(Messages.getString("PieceMakerPanel.remove")); //$NON-NLS-1$
 		PieceBuilder.initPieceTypes();
 		PieceBuilder builder = null;
 		if (pieceName != null)
 			builder = PieceBuilder.loadFromDisk(pieceName);
+
+		mTempKnightMovements = Lists.newArrayList();
+		if (builder != null && builder.getKnightMovements() != null)
+		{
+			mKnightComboBox = new JComboBox(builder.getKnightMovements().toArray());
+			for (KnightMovement kMovement : builder.getKnightMovements())
+			{
+				mTempKnightMovements.add(kMovement.toString());
+			}
+			mKnightComboBox.setSelectedIndex(0);
+		}
+		else
+		{
+			mKnightComboBox = new JComboBox();
+			mKnightComboBox.setEnabled(false);
+		}
+
 		initGUIComponents(builder);
 	}
 
@@ -217,7 +250,6 @@ public class PieceMakerPanel extends JPanel
 		}
 		catch (IOException e1)
 		{
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 
@@ -260,23 +292,27 @@ public class PieceMakerPanel extends JPanel
 		distanceField.setToolTipText(Messages.getString("PieceMakerPanel.greatestSpaces")); //$NON-NLS-1$
 
 		mKnightOneField.setToolTipText(Messages.getString("PieceMakerPanel.enterKnightLike")); //$NON-NLS-1$
-
+		mKnightOneField.setEnabled(false);
 		mKnightTwoField.setToolTipText(Messages.getString("PieceMakerPanel.enterOtherDirection")); //$NON-NLS-1$
 		mKnightTwoField.setEnabled(false);
+
+		mKnightOneField.addKeyListener(getKnightFieldKeyListener());
+		mKnightTwoField.addKeyListener(getKnightFieldKeyListener());
 
 		if (builder == null)
 		{
 			mKnightOneField.setEnabled(false);
 			mKnightTwoField.setEnabled(false);
+			mAddKnightMoveButton.setEnabled(false);
+			mRemoveKnightMoveButton.setEnabled(false);
+			mKnightComboBox.setEnabled(false);
 		}
 		else
 		{
 			mKnightOneField.setEnabled(builder.getIsKnightLike());
-			if (mKnightOneField.isEnabled())
-				mKnightOneField.setText(builder.getMovements().get(PieceBuilder.KNIGHT_ONE) + ""); //$NON-NLS-1$
 			mKnightTwoField.setEnabled(builder.getIsKnightLike());
-			if (mKnightTwoField.isEnabled())
-				mKnightTwoField.setText(builder.getMovements().get(PieceBuilder.KNIGHT_TWO) + ""); //$NON-NLS-1$
+			mRemoveKnightMoveButton.setEnabled(builder.getIsKnightLike() && builder.getKnightMovements().size() != 0);
+			mKnightComboBox.setEnabled(builder.getIsKnightLike());
 		}
 
 		mKnightMovementsCheckBox.setToolTipText(Messages.getString("PieceMakerPanel.pressForKnightLike")); //$NON-NLS-1$
@@ -291,6 +327,39 @@ public class PieceMakerPanel extends JPanel
 			{
 				mKnightOneField.setEnabled(mKnightMovementsCheckBox.isSelected());
 				mKnightTwoField.setEnabled(mKnightMovementsCheckBox.isSelected());
+				mAddKnightMoveButton.setEnabled(mKnightMovementsCheckBox.isSelected());
+			}
+		});
+
+		mAddKnightMoveButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent arg0)
+			{
+				mKnightComboBox.setEnabled(true);
+				mRemoveKnightMoveButton.setEnabled(true);
+				String toAdd = mKnightOneField.getText() + " x " + mKnightTwoField.getText(); //$NON-NLS-1$
+				mTempKnightMovements.add(toAdd);
+				mKnightComboBox.addItem(toAdd);
+				mKnightOneField.setText(""); //$NON-NLS-1$
+				mKnightTwoField.setText(""); //$NON-NLS-1$
+				mAddKnightMoveButton.setEnabled(false);
+			}
+		});
+		mAddKnightMoveButton.setEnabled(false);
+
+		mRemoveKnightMoveButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				mKnightComboBox.setEnabled(mKnightComboBox.getItemCount() != 0);
+				mTempKnightMovements.remove(mKnightComboBox.getSelectedItem().toString());
+				mKnightComboBox.removeAllItems();
+				for (String kMovement : mTempKnightMovements)
+				{
+					mKnightComboBox.addItem(kMovement);
+				}
 			}
 		});
 
@@ -300,10 +369,60 @@ public class PieceMakerPanel extends JPanel
 
 		final JPanel knightMovementPanel = new JPanel();
 		knightMovementPanel.setToolTipText(Messages.getString("PieceMakerPanel.useForKnight")); //$NON-NLS-1$
-		knightMovementPanel.setLayout(new FlowLayout());
-		knightMovementPanel.add(mKnightOneField);
-		knightMovementPanel.add(new JLabel(Messages.getString("PieceMakerPanel.51"))); //$NON-NLS-1$
-		knightMovementPanel.add(mKnightTwoField);
+		knightMovementPanel.setLayout(new GridBagLayout());
+
+		constraints.anchor = GridBagConstraints.CENTER;
+		constraints.insets = new Insets(1, 1, 1, 1);
+		constraints.gridx = 0;
+		constraints.gridy = 0;
+		constraints.gridheight = 1;
+		constraints.gridwidth = 1;
+		knightMovementPanel.add(mKnightComboBox, constraints);
+
+		final JPanel inputPanel = new JPanel();
+		inputPanel.setLayout(new GridBagLayout());
+
+		constraints.anchor = GridBagConstraints.CENTER;
+		constraints.gridx = 0;
+		constraints.gridy = 0;
+		constraints.gridheight = 1;
+		constraints.gridwidth = 1;
+		inputPanel.add(mKnightOneField, constraints);
+
+		constraints.anchor = GridBagConstraints.CENTER;
+		constraints.gridx = 1;
+		constraints.gridy = 0;
+		constraints.gridheight = 1;
+		constraints.gridwidth = 1;
+		inputPanel.add(new JLabel(Messages.getString("PieceMakerPanel.51")), constraints); //$NON-NLS-1$
+
+		constraints.anchor = GridBagConstraints.CENTER;
+		constraints.gridx = 2;
+		constraints.gridy = 0;
+		constraints.gridheight = 1;
+		constraints.gridwidth = 1;
+		inputPanel.add(mKnightTwoField, constraints);
+
+		constraints.anchor = GridBagConstraints.CENTER;
+		constraints.gridx = 1;
+		constraints.gridy = 0;
+		constraints.gridheight = 1;
+		constraints.gridwidth = 1;
+		knightMovementPanel.add(inputPanel, constraints);
+
+		constraints.anchor = GridBagConstraints.CENTER;
+		constraints.gridx = 0;
+		constraints.gridy = 1;
+		constraints.gridheight = 1;
+		constraints.gridwidth = 1;
+		knightMovementPanel.add(mRemoveKnightMoveButton, constraints);
+
+		constraints.anchor = GridBagConstraints.CENTER;
+		constraints.gridx = 1;
+		constraints.gridy = 1;
+		constraints.gridheight = 1;
+		constraints.gridwidth = 1;
+		knightMovementPanel.add(mAddKnightMoveButton, constraints);
 
 		JPanel movementPanel = new JPanel();
 		movementPanel.setLayout(new BoxLayout(movementPanel, BoxLayout.Y_AXIS));
@@ -370,12 +489,18 @@ public class PieceMakerPanel extends JPanel
 					mBuilder.addMove(PieceBuilder.SOUTHWEST, Integer.parseInt(mSouthWestField.getText()));
 				}
 
-				if (mKnightOneField.isEnabled())
+				if (mKnightComboBox.getItemCount() != 0)
 				{
-					if (isIntegerDistance(mKnightOneField) && isIntegerDistance(mKnightTwoField))
+					mBuilder.clearKnightMovements();
+					for (int i = 0; i < mKnightComboBox.getItemCount(); i++)
 					{
-						mBuilder.addMove(PieceBuilder.KNIGHT_ONE, Integer.parseInt(mKnightOneField.getText()));
-						mBuilder.addMove(PieceBuilder.KNIGHT_TWO, Integer.parseInt(mKnightTwoField.getText()));
+						String line = mKnightComboBox.getItemAt(i).toString();
+						StringTokenizer tokenizer = new StringTokenizer(line);
+
+						int k1 = Integer.parseInt(tokenizer.nextToken());
+						tokenizer.nextToken();
+						int k2 = Integer.parseInt(tokenizer.nextToken());
+						mBuilder.addKnightMovement(new KnightMovement(k1, k2));
 					}
 				}
 
@@ -394,9 +519,10 @@ public class PieceMakerPanel extends JPanel
 
 				mBuilder.setName(pieceName);
 				mBuilder.setCanJump(mLeaperCheckBox.isSelected());
-				mBuilder.setIsKnightLike(mKnightMovementsCheckBox.isSelected());
 				PieceBuilder.savePieceType(mBuilder);
 				PieceBuilder.writeToDisk(mBuilder);
+
+				refreshVariants();
 
 				mFrame.dispose();
 				mPieceMenuPanel.refreshList();
@@ -418,24 +544,16 @@ public class PieceMakerPanel extends JPanel
 				}
 				else
 				{
-					if (hasChanged())
+					switch (JOptionPane.showConfirmDialog(PieceMakerPanel.this,
+							Messages.getString("PieceMakerPanel.ifYouContinue"), Messages.getString("PieceMakerPanel.pieceMaker"), //$NON-NLS-1$ //$NON-NLS-2$
+							JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE))
 					{
-						switch (JOptionPane.showConfirmDialog(PieceMakerPanel.this,
-								Messages.getString("PieceMakerPanel.ifYouContinue"), Messages.getString("PieceMakerPanel.pieceMaker"), //$NON-NLS-1$ //$NON-NLS-2$
-								JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE))
-						{
-						case JOptionPane.YES_OPTION:
-							mFrame.dispose();
-							PieceMakerPanel.this.removeAll();
-							break;
-						case JOptionPane.NO_OPTION:
-							break;
-						}
-					}
-					else
-					{
+					case JOptionPane.YES_OPTION:
 						mFrame.dispose();
 						PieceMakerPanel.this.removeAll();
+						break;
+					case JOptionPane.NO_OPTION:
+						break;
 					}
 				}
 			}
@@ -458,51 +576,49 @@ public class PieceMakerPanel extends JPanel
 		mFrame.pack();
 	}
 
-	protected boolean hasChanged()
+	/**
+	 * Once a piece has been changed, we need to update any variants that use
+	 * this piece to use the new version.
+	 */
+	private void refreshVariants()
 	{
-		boolean changed = false;
-		if (mBuilder != null)
+		String[] vars = FileUtility.getVariantsFileArray();
+		for (String s : vars)
 		{
 			try
 			{
-				if (mBuilder.canJump() != mLeaperCheckBox.isSelected())
-					changed = true;
-				if (!mBuilder.getName().equals(mPieceNameField.getText()))
-					changed = true;
-				if (mBuilder.getIsKnightLike() != mKnightMovementsCheckBox.isSelected())
-					changed = true;
-				Map<Character, Integer> moveMap = mBuilder.getMovements();
-				if (!mNorthField.getText().equals(moveMap.get(PieceBuilder.NORTH) + "")) //$NON-NLS-1$
-					changed = true;
-				if (!mNorthEastField.getText().equals(moveMap.get(PieceBuilder.NORTHEAST) + "")) //$NON-NLS-1$
-					changed = true;
-				if (!mNorthWestField.getText().equals(moveMap.get(PieceBuilder.NORTHWEST) + "")) //$NON-NLS-1$
-					changed = true;
-				if (!mEastField.getText().equals(moveMap.get(PieceBuilder.EAST) + "")) //$NON-NLS-1$
-					changed = true;
-				if (!mSouthEastField.getText().equals(moveMap.get(PieceBuilder.SOUTHEAST) + "")) //$NON-NLS-1$
-					changed = true;
-				if (!mSouthField.getText().equals(moveMap.get(PieceBuilder.SOUTH) + "")) //$NON-NLS-1$
-					changed = true;
-				if (!mSouthWestField.getText().equals(moveMap.get(PieceBuilder.SOUTHWEST) + "")) //$NON-NLS-1$
-					changed = true;
-				if (!mWestField.getText().equals(moveMap.get(PieceBuilder.WEST) + "")) //$NON-NLS-1$
-					changed = true;
-				if (mKnightOneField.isEnabled() && !mKnightOneField.getText().equals(moveMap.get(PieceBuilder.KNIGHT_ONE) + "")) //$NON-NLS-1$
-					changed = true;
-				if (mKnightTwoField.isEnabled() && !mKnightTwoField.getText().equals(moveMap.get(PieceBuilder.KNIGHT_TWO) + "")) //$NON-NLS-1$
-					changed = true;
+				File variantFile = FileUtility.getVariantsFile(s);
+				ObjectInputStream in = new ObjectInputStream(new FileInputStream(variantFile));
+				Builder builder = (Builder) in.readObject();
+
+				for (Piece piece : builder.getWhiteTeam())
+				{
+					if (piece.getName().equals(mPieceNameField.getText()))
+						piece = PieceBuilder.makePiece(piece.getName(), false, piece.getOriginalSquare(), piece.getBoard());
+				}
+				for (Piece piece : builder.getBlackTeam())
+				{
+					if (piece.getName().equals(mPieceNameField.getText()))
+						piece = PieceBuilder.makePiece(piece.getName(), true, piece.getOriginalSquare(), piece.getBoard());
+				}
+
+				in.close();
+
+				ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(variantFile));
+				out.writeObject(builder);
+				out.close();
 			}
 			catch (Exception e)
 			{
-				return true;
+				e.printStackTrace();
 			}
 		}
-		return changed;
 	}
 
 	private boolean isIntegerDistance(JTextField textField)
 	{
+		if (textField.getText().equals("")) //$NON-NLS-1$
+			return false;
 		try
 		{
 			Integer.parseInt(textField.getText());
@@ -517,6 +633,28 @@ public class PieceMakerPanel extends JPanel
 									+ Messages.getString("PieceMakerPanel.directionBox"), Messages.getString("PieceMakerPanel.error"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
 			return false;
 		}
+	}
+
+	private KeyListener getKnightFieldKeyListener()
+	{
+		return new KeyListener()
+		{
+			@Override
+			public void keyTyped(KeyEvent arg0)
+			{
+			}
+
+			@Override
+			public void keyReleased(KeyEvent arg0)
+			{
+				mAddKnightMoveButton.setEnabled(isIntegerDistance(mKnightOneField) && isIntegerDistance(mKnightTwoField));
+			}
+
+			@Override
+			public void keyPressed(KeyEvent arg0)
+			{
+			}
+		};
 	}
 
 	private final class ImageButtonActionListener implements ActionListener
@@ -630,9 +768,13 @@ public class PieceMakerPanel extends JPanel
 	private final JTextField mNorthWestField;
 	private final JTextField mKnightOneField;
 	private final JTextField mKnightTwoField;
+	private final JComboBox mKnightComboBox;
+	private final JButton mAddKnightMoveButton;
+	private final JButton mRemoveKnightMoveButton;
 	private PieceBuilder mBuilder;
 	private PieceMenuPanel mPieceMenuPanel;
 	private BufferedImage mLightImage;
 	private BufferedImage mDarkImage;
 	private JFrame mFrame;
+	private List<String> mTempKnightMovements;
 }

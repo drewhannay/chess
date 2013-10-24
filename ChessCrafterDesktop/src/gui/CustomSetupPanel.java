@@ -148,7 +148,7 @@ public class CustomSetupPanel extends JPanel implements PieceListChangedListener
 		add(showPiecePanel, constraints);
 
 		setupPiecesList();
-		
+
 		for (Square square : mPieceDisplaySquares)
 		{
 			square.addMouseListener(new PieceDisplayBoardListener(square));
@@ -197,7 +197,7 @@ public class CustomSetupPanel extends JPanel implements PieceListChangedListener
 			}
 		}
 
-		drawBoards(temp, temp.length > 1);
+		drawBoards(temp);
 
 		// main menu button
 		JButton returnToMainButton = new JButton(Messages.getString("CustomSetupPanel.returnToMainMenu")); //$NON-NLS-1$
@@ -427,10 +427,11 @@ public class CustomSetupPanel extends JPanel implements PieceListChangedListener
 
 	}
 
-	public void drawBoards(Board[] boards, boolean hasMultipleBoards)
+	public void drawBoards(Board[] boards)
 	{
 		// Get the set the board into the builder.
 		mBuilder.setBoards(boards);
+		mGameBoards = boards;
 
 		for (JPanel panel : mBoardPanels)
 		{
@@ -459,6 +460,25 @@ public class CustomSetupPanel extends JPanel implements PieceListChangedListener
 					Square square = boards[boardIndex].getSquare(row, column);
 					if (square.isOccupied())
 					{
+						for (int i = 0; i < mPieceTypeList.getModel().getSize(); i++)
+						{
+							if (!mPieceTypeList.getModel().getElementAt(i).toString().equals(square.getPiece().getName()))
+								continue;
+
+							Piece platonicIdeal = null;
+							try
+							{
+								platonicIdeal = PieceBuilder.makePiece(mPieceTypeList.getModel().getElementAt(i).toString(), square
+										.getPiece().isBlack(), square, boards[boardIndex]);
+							}
+							catch (IOException e)
+							{
+								e.printStackTrace();
+							}
+							if (!square.getPiece().equals(platonicIdeal))
+								square.setPiece(platonicIdeal);
+
+						}
 						square.addMouseListener(new PieceNormalBoardListener(square));
 						square.addMouseMotionListener(m_motionAdapter);
 					}
@@ -505,7 +525,7 @@ public class CustomSetupPanel extends JPanel implements PieceListChangedListener
 		Object[] standardPieces = PieceBuilder.getSet().toArray();
 		for (int i = 0; i < standardPieces.length; i++)
 			if (!list.contains(standardPieces[i]))
-					list.addElement(standardPieces[i]);
+				list.addElement(standardPieces[i]);
 
 		String[] customPieces = FileUtility.getCustomPieceArray();
 		for (int i = 0; i < customPieces.length; i++)
@@ -519,28 +539,7 @@ public class CustomSetupPanel extends JPanel implements PieceListChangedListener
 		mPieceTypeList.setVisibleRowCount(-1);
 		mPieceTypeList.setSelectedIndex(0);
 
-		Piece whitePieceBeingDisplayed = null;
-		Piece blackPieceBeingDisplayed = null;
-
-		try
-		{
-			whitePieceBeingDisplayed = PieceBuilder.makePiece((String) list.elementAt(0), false, mPieceDisplaySquares[WHITE_INDEX],
-					mDisplayBoard);
-			blackPieceBeingDisplayed = PieceBuilder.makePiece((String) list.elementAt(0), true, mPieceDisplaySquares[BLACK_INDEX],
-					mDisplayBoard);
-		}
-		catch (IOException e)
-		{
-			JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("CustomSetupPanel.errorCouldNotLoadPiece")); //$NON-NLS-1$
-			e.printStackTrace();
-			return;
-		}
-
-		mPieceDisplaySquares[WHITE_INDEX].setPiece(whitePieceBeingDisplayed);
-		mPieceDisplaySquares[BLACK_INDEX].setPiece(blackPieceBeingDisplayed);
-
-		for (Square square : mPieceDisplaySquares)
-			square.refresh();
+		updateDisplaySquares();
 
 		ListSelectionModel selectList = mPieceTypeList.getSelectionModel();
 
@@ -551,50 +550,7 @@ public class CustomSetupPanel extends JPanel implements PieceListChangedListener
 			@Override
 			public void valueChanged(ListSelectionEvent event)
 			{
-				ListSelectionModel listSelectionModel = (ListSelectionModel) event.getSource();
-
-				int selection = listSelectionModel.getAnchorSelectionIndex();
-				if (!listSelectionModel.getValueIsAdjusting())
-				{
-					for (Square square : mPieceDisplaySquares)
-						square.setVisible(true);
-
-					mChangePromotionButton.setEnabled(true);
-
-					Piece whitePieceBeingDisplayed;
-					Piece blackPieceBeingDisplayed;
-
-					try
-					{
-						whitePieceBeingDisplayed = PieceBuilder.makePiece((String) list.elementAt(selection), false,
-								mPieceDisplaySquares[WHITE_INDEX], mDisplayBoard);
-						blackPieceBeingDisplayed = PieceBuilder.makePiece((String) list.elementAt(selection), true,
-								mPieceDisplaySquares[BLACK_INDEX], mDisplayBoard);
-					}
-					catch (IOException e)
-					{
-						JOptionPane.showMessageDialog(Driver.getInstance(),
-								Messages.getString("CustomSetupPanel.errorCouldNotLoadPiece")); //$NON-NLS-1$
-						e.printStackTrace();
-						return;
-					}
-
-					mPieceDisplaySquares[WHITE_INDEX].setPiece(whitePieceBeingDisplayed);
-					mPieceDisplaySquares[BLACK_INDEX].setPiece(blackPieceBeingDisplayed);
-
-					for (Square square : mPieceDisplaySquares)
-					{
-						square.resetColor();
-						square.refresh();
-						for (MouseListener listener : square.getMouseListeners())
-						{
-							if (listener instanceof PieceDisplayBoardListener)
-								((PieceDisplayBoardListener) listener).onPieceSelectionChanged();
-							else if (listener instanceof PieceNormalBoardListener)
-								((PieceNormalBoardListener) listener).onPieceSelectionChanged();
-						}
-					}
-				}
+				updateDisplaySquares();
 			}
 		});
 
@@ -877,7 +833,7 @@ public class CustomSetupPanel extends JPanel implements PieceListChangedListener
 			if (m_square.getPiece() != null)
 				m_square.setToolTipText(m_square.getPiece().getToolTipText());
 		}
-		
+
 		@Override
 		public void mouseExited(MouseEvent event)
 		{
@@ -901,7 +857,7 @@ public class CustomSetupPanel extends JPanel implements PieceListChangedListener
 			else
 				m_square.setToolTipText(null);
 		}
-		
+
 		private final Square m_square;
 	};
 
@@ -996,13 +952,51 @@ public class CustomSetupPanel extends JPanel implements PieceListChangedListener
 			}
 		}
 	};
-	
+
 	@Override
 	public void onPieceListChanged()
 	{
 		setupPiecesList();
-	}	
-	
+		drawBoards(mGameBoards);
+		updateDisplaySquares();
+	}
+
+	private void updateDisplaySquares()
+	{
+		Piece whitePieceBeingDisplayed = null;
+		Piece blackPieceBeingDisplayed = null;
+
+		try
+		{
+			whitePieceBeingDisplayed = PieceBuilder.makePiece(mPieceTypeList.getSelectedValue().toString(), false,
+					mPieceDisplaySquares[WHITE_INDEX], mDisplayBoard);
+			blackPieceBeingDisplayed = PieceBuilder.makePiece(mPieceTypeList.getSelectedValue().toString(), true,
+					mPieceDisplaySquares[BLACK_INDEX], mDisplayBoard);
+		}
+		catch (IOException e)
+		{
+			JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("CustomSetupPanel.errorCouldNotLoadPiece")); //$NON-NLS-1$
+			e.printStackTrace();
+			return;
+		}
+
+		mPieceDisplaySquares[WHITE_INDEX].setPiece(whitePieceBeingDisplayed);
+		mPieceDisplaySquares[BLACK_INDEX].setPiece(blackPieceBeingDisplayed);
+
+		for (Square square : mPieceDisplaySquares)
+		{
+			square.resetColor();
+			square.refresh();
+			for (MouseListener listener : square.getMouseListeners())
+			{
+				if (listener instanceof PieceDisplayBoardListener)
+					((PieceDisplayBoardListener) listener).onPieceSelectionChanged();
+				else if (listener instanceof PieceNormalBoardListener)
+					((PieceNormalBoardListener) listener).onPieceSelectionChanged();
+			}
+		}
+	}
+
 	private static final long serialVersionUID = 7830479492072657640L;
 	private static final int WHITE_INDEX = 0;
 	private static final int BLACK_INDEX = 1;
@@ -1027,4 +1021,5 @@ public class CustomSetupPanel extends JPanel implements PieceListChangedListener
 	private JScrollPane mScrollPane = new JScrollPane();
 	private MotionAdapter m_motionAdapter;
 	private Board mDisplayBoard;
+	private Board[] mGameBoards;
 }

@@ -39,7 +39,7 @@ public final class PreferenceUtility
 	{
 		public void onPieceToolTipPreferenceChanged();
 	}
-	
+
 	public static void createPreferencePopup(Component relativeComponent)
 	{
 		final JFrame popupFrame = new JFrame(Messages.getString("PreferenceUtility.preferences")); //$NON-NLS-1$
@@ -58,7 +58,7 @@ public final class PreferenceUtility
 		final JButton resetButton = new JButton(Messages.getString("PreferenceUtility.resetToDefaultLocation")); //$NON-NLS-1$
 		final JCheckBox highlightingCheckBox = new JCheckBox(Messages.getString("PreferenceUtility.enableHighlighting")); //$NON-NLS-1$
 		final JCheckBox pieceToolTipCheckBox = new JCheckBox(Messages.getString("PreferenceUtility.showPieceTooltips")); //$NON-NLS-1$
-		
+
 		final JButton cancelButton = new JButton(Messages.getString("PreferenceUtility.cancel")); //$NON-NLS-1$
 
 		final JButton doneButton = new JButton(Messages.getString("PreferenceUtility.done")); //$NON-NLS-1$
@@ -149,7 +149,7 @@ public final class PreferenceUtility
 		constraints.gridwidth = 1;
 		constraints.anchor = GridBagConstraints.CENTER;
 		popupFrame.add(pieceToolTipCheckBox, constraints);
-		
+
 		constraints.gridx = 0;
 		constraints.gridy = 4;
 		constraints.gridwidth = 1;
@@ -231,13 +231,13 @@ public final class PreferenceUtility
 		{
 			e1.printStackTrace();
 		}
-		
+
 		for (PieceToolTipPreferenceChangedListener listener : mToolTipListeners)
 		{
 			listener.onPieceToolTipPreferenceChanged();
 		}
 	}
-	
+
 	public static void addPieceToolTipListener(PieceToolTipPreferenceChangedListener listener)
 	{
 		if (mToolTipListeners == null)
@@ -245,6 +245,6 @@ public final class PreferenceUtility
 		if (!mToolTipListeners.contains(listener))
 			mToolTipListeners.add(listener);
 	}
-	
+
 	private static List<PieceToolTipPreferenceChangedListener> mToolTipListeners;
 }
