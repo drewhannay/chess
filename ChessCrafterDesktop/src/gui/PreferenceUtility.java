@@ -44,7 +44,8 @@ public final class PreferenceUtility
 		final JPanel holder = new JPanel();
 		holder.setBorder(BorderFactory.createTitledBorder(Messages.getString("PreferenceUtility.defaultCompletedLocation"))); //$NON-NLS-1$
 		final JLabel currentSaveLocationLabel = new JLabel(Messages.getString("PreferenceUtility.currentSaveLocation")); //$NON-NLS-1$
-		final JTextField currentSaveLocationField = new JTextField(FileUtility.getDefaultCompletedLocation());
+		final JTextField currentSaveLocationField = new JTextField(25);
+		currentSaveLocationField.setText(FileUtility.getDefaultCompletedLocation());
 		currentSaveLocationField.setEditable(false);
 		final JButton changeLocationButton = new JButton(Messages.getString("PreferenceUtility.chooseNewSaveLocation")); //$NON-NLS-1$
 		final JButton resetButton = new JButton(Messages.getString("PreferenceUtility.resetToDefaultLocation")); //$NON-NLS-1$
@@ -54,6 +55,10 @@ public final class PreferenceUtility
 		final JButton doneButton = new JButton(Messages.getString("PreferenceUtility.done")); //$NON-NLS-1$
 		GuiUtility.setupDoneButton(doneButton, popupFrame);
 
+		final JPanel buttonHolder = new JPanel();
+		buttonHolder.add(cancelButton);
+		buttonHolder.add(doneButton);
+		
 		holder.add(currentSaveLocationLabel);
 		holder.add(currentSaveLocationField);
 
@@ -134,20 +139,9 @@ public final class PreferenceUtility
 
 		constraints.gridx = 0;
 		constraints.gridy = 4;
-		constraints.gridwidth = 1;
-		constraints.anchor = GridBagConstraints.CENTER;
-		popupFrame.add(cancelButton, constraints);
-
-		constraints.gridx = 1;
-		constraints.gridy = 4;
-		constraints.gridwidth = 1;
-		constraints.anchor = GridBagConstraints.CENTER;
-		popupFrame.add(doneButton, constraints);
-
-		constraints.gridx = 0;
-		constraints.gridy = 2;
 		constraints.gridwidth = 2;
 		constraints.anchor = GridBagConstraints.CENTER;
+		popupFrame.add(buttonHolder, constraints);
 
 		popupFrame.pack();
 		popupFrame.setVisible(true);

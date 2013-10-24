@@ -16,7 +16,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import utility.FileUtility;
 
-public class VariantMenuPanel extends JPanel
+public class VariantMenuPanel extends ChessPanel
 {
 	public VariantMenuPanel()
 	{
@@ -41,7 +41,7 @@ public class VariantMenuPanel extends JPanel
 			{
 				if (mPopupFrame == null)
 				{
-					Driver.getInstance().setPanel(new CustomSetupPanel(null));
+					Driver.getInstance().setPanel(new VariantCreationPanel(null));
 				}
 			}
 		});
@@ -81,7 +81,7 @@ public class VariantMenuPanel extends JPanel
 				if (mPopupFrame == null)
 				{
 					Driver.getInstance().setPanel(
-							new CustomSetupPanel(((DefaultListModel) variantList.getModel()).get(variantList.getSelectedIndex())
+							new VariantCreationPanel(((DefaultListModel) variantList.getModel()).get(variantList.getSelectedIndex())
 									.toString()));
 				}
 			}

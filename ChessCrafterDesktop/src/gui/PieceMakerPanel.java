@@ -33,7 +33,7 @@ import utility.FileUtility;
 import utility.GuiUtility;
 import utility.ImageUtility;
 
-public class PieceMakerPanel extends JPanel
+public class PieceMakerPanel extends ChessPanel
 {
 	public PieceMakerPanel(PieceMenuPanel menuPanel)
 	{
@@ -94,9 +94,11 @@ public class PieceMakerPanel extends JPanel
 		JPanel pieceCreationPanel = new JPanel();
 		pieceCreationPanel.setLayout(new GridBagLayout());
 		pieceCreationPanel.setBorder(BorderFactory.createTitledBorder(Messages.getString("PieceMakerPanel.newPiece"))); //$NON-NLS-1$
+		pieceCreationPanel.setOpaque(false);
 
 		JPanel namePanel = new JPanel();
 		namePanel.setLayout(new FlowLayout());
+		namePanel.setOpaque(false);
 
 		namePanel.add(new JLabel(Messages.getString("PieceMakerPanel.pieceName"))); //$NON-NLS-1$
 		mPieceNameField.setToolTipText(Messages.getString("PieceMakerPanel.enterNameOfNewPiece")); //$NON-NLS-1$
@@ -113,6 +115,7 @@ public class PieceMakerPanel extends JPanel
 		blankSquare.setImage(blankSquare.getImage().getScaledInstance(48, 48, Image.SCALE_SMOOTH));
 		final JPanel lightIconPanel = new JPanel();
 		lightIconPanel.setLayout(new FlowLayout());
+		lightIconPanel.setOpaque(false);
 		final JLabel lightIconLabel = new JLabel();
 		lightIconLabel.setSize(48, 48);
 		try
@@ -149,6 +152,7 @@ public class PieceMakerPanel extends JPanel
 
 		final JPanel darkIconPanel = new JPanel();
 		darkIconPanel.setLayout(new FlowLayout());
+		darkIconPanel.setOpaque(false);
 		final JLabel darkIconLabel = new JLabel();
 		darkIconLabel.setSize(48, 48);
 		darkIconLabel.setIcon(builder == null ? blankSquare : ImageUtility.getDarkImage(builder.getName()));
@@ -212,6 +216,7 @@ public class PieceMakerPanel extends JPanel
 
 		JPanel movement = new JPanel();
 		movement.setLayout(new GridBagLayout());
+		movement.setOpaque(false);
 
 		constraints.gridx = 0;
 		constraints.gridy = 0;
@@ -297,6 +302,7 @@ public class PieceMakerPanel extends JPanel
 		JPanel movementPanel = new JPanel();
 		movementPanel.setLayout(new BoxLayout(movementPanel, BoxLayout.Y_AXIS));
 		movementPanel.setLayout(new GridBagLayout());
+		movementPanel.setOpaque(false);
 
 		constraints.insets = new Insets(5, 0, 5, 0);
 		constraints.gridx = 0;

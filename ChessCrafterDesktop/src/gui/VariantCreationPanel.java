@@ -60,9 +60,9 @@ import dragNdrop.DropEvent;
 import dragNdrop.GlassPane;
 import dragNdrop.MotionAdapter;
 
-public class CustomSetupPanel extends JPanel
+public class VariantCreationPanel extends ChessPanel
 {
-	public CustomSetupPanel(String variantName)
+	public VariantCreationPanel(String variantName)
 	{
 		mDropManager = new DropManager();
 		mGlobalGlassPane = new GlassPane();
@@ -123,6 +123,7 @@ public class CustomSetupPanel extends JPanel
 		setBorder(BorderFactory.createLoweredBevelBorder());
 
 		final JPanel showPiecePanel = new JPanel();
+		showPiecePanel.setOpaque(false);
 		showPiecePanel.setLayout(new GridLayout(2, 1));
 		showPiecePanel.setPreferredSize(new Dimension(50, 100));
 
@@ -208,7 +209,7 @@ public class CustomSetupPanel extends JPanel
 			{
 				if (variantNameField.getText().trim().isEmpty())
 				{
-					JOptionPane.showMessageDialog(CustomSetupPanel.this,
+					JOptionPane.showMessageDialog(VariantCreationPanel.this,
 							Messages.getString("CustomSetupPanel.enterAName"), Messages.getString("CustomSetupPanel.enterName"), //$NON-NLS-1$ //$NON-NLS-2$
 							JOptionPane.PLAIN_MESSAGE);
 					return;
@@ -284,7 +285,7 @@ public class CustomSetupPanel extends JPanel
 			{
 				mOptionsFrame.dispose();
 				mOptionsFrame = new JFrame();
-				new PiecePromotionPanel((String) mPieceTypeList.getSelectedValue(), CustomSetupPanel.this, mOptionsFrame);
+				new PiecePromotionPanel((String) mPieceTypeList.getSelectedValue(), VariantCreationPanel.this, mOptionsFrame);
 			}
 		});
 
@@ -297,7 +298,7 @@ public class CustomSetupPanel extends JPanel
 				mOptionsFrame.dispose();
 				mOptionsFrame = new JFrame();
 
-				new CustomBoardPanel(CustomSetupPanel.this, mOptionsFrame);
+				new CustomBoardPanel(VariantCreationPanel.this, mOptionsFrame);
 			}
 		});
 
@@ -310,7 +311,7 @@ public class CustomSetupPanel extends JPanel
 				mOptionsFrame.dispose();
 				mOptionsFrame = new JFrame();
 
-				new ObjectiveMakerPanel(CustomSetupPanel.this, mOptionsFrame);
+				new ObjectiveMakerPanel(VariantCreationPanel.this, mOptionsFrame);
 			}
 		});
 
@@ -323,7 +324,7 @@ public class CustomSetupPanel extends JPanel
 				mOptionsFrame.dispose();
 				mOptionsFrame = new JFrame();
 
-				new RuleMakerPanel(CustomSetupPanel.this, mOptionsFrame);
+				new RuleMakerPanel(VariantCreationPanel.this, mOptionsFrame);
 			}
 		});
 
@@ -335,7 +336,7 @@ public class CustomSetupPanel extends JPanel
 			{
 				mOptionsFrame.dispose();
 				mOptionsFrame = new JFrame();
-				new CustomPlayerPanel(CustomSetupPanel.this, mOptionsFrame);
+				new CustomPlayerPanel(VariantCreationPanel.this, mOptionsFrame);
 			}
 		});
 
@@ -354,6 +355,7 @@ public class CustomSetupPanel extends JPanel
 		GridBagConstraints mainPanelConstraints = new GridBagConstraints();
 
 		mPieceListPanel.setLayout(new GridBagLayout());
+		mPieceListPanel.setOpaque(false);
 		mainPanelConstraints.gridx = 0;
 		mainPanelConstraints.gridy = 0;
 		mainPanelConstraints.gridwidth = 2;
@@ -387,6 +389,7 @@ public class CustomSetupPanel extends JPanel
 		mPieceListPanel.add(playerSetupButton, mainPanelConstraints);
 
 		JPanel optionsPanel = new JPanel();
+		optionsPanel.setOpaque(false);
 		optionsPanel.setLayout(new GridBagLayout());
 
 		mainPanelConstraints.fill = GridBagConstraints.CENTER;

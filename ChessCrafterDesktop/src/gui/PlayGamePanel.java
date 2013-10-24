@@ -53,7 +53,7 @@ import dragNdrop.DropEvent;
 import dragNdrop.GlassPane;
 import dragNdrop.MotionAdapter;
 
-public class PlayGamePanel extends JPanel implements PlayGameScreen
+public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 {
 
 	public PlayGamePanel()
@@ -300,6 +300,7 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 		final JPanel gridPanel = new JPanel();
 
 		gridPanel.setLayout(new GridLayout(board.numRows() + 1, board.numCols()));
+		gridPanel.setOpaque(false);
 		gridPanel.setPreferredSize(new Dimension((board.numCols() + 1) * 48, (board.numRows() + 1) * 48));
 
 		int numberOfRows = board.numRows();
@@ -308,7 +309,8 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 		{
 			if (!isJail)
 			{
-				JLabel label = new JLabel("" + i); //$NON-NLS-1$
+				JLabel label = new JLabel("<html><font color=\"#FFFFFF\">" + i + "</font></html>"); //$NON-NLS-1$
+				label.setOpaque(false);
 				label.setHorizontalAlignment(SwingConstants.CENTER);
 				gridPanel.add(label);
 			}
@@ -335,7 +337,8 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 			{
 				if (k != 0)
 				{
-					JLabel label = new JLabel("" + (char) (k - 1 + 'A')); //$NON-NLS-1$
+					JLabel label = new JLabel("<html><font color=\"#FFFFFF\">" + (char) (k - 1 + 'A') + "</font></html>"); //$NON-NLS-1$
+					label.setOpaque(false);
 					label.setHorizontalAlignment(SwingConstants.CENTER);
 					gridPanel.add(label);
 				}
@@ -543,7 +546,7 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 
 		mWhiteCapturesJail = new Board(jailBoardSize, jailBoardSize, false);
 		mWhiteCapturePanel = createGrid(mWhiteCapturesJail, isPlayback, true);
-		mWhiteCapturePanel.setBorder(BorderFactory.createTitledBorder(Messages.getString("PlayGamePanel.capturedPieces"))); //$NON-NLS-1$
+		mWhiteCapturePanel.setBorder(BorderFactory.createTitledBorder("<html><font color=\"#FFFFFF\">" + Messages.getString("PlayGamePanel.capturedPieces") + "</font></html>")); //$NON-NLS-1$
 		mWhiteCapturePanel.setLayout(new GridLayout(jailBoardSize, jailBoardSize));
 
 		mWhiteCapturePanel.setPreferredSize(new Dimension((mWhiteCapturesJail.getMaxCol() + 1) * 25,
@@ -551,7 +554,7 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 
 		mBlackCapturesJail = new Board(jailBoardSize, jailBoardSize, false);
 		mBlackCapturePanel = createGrid(mBlackCapturesJail, isPlayback, true);
-		mBlackCapturePanel.setBorder(BorderFactory.createTitledBorder(Messages.getString("PlayGamePanel.capturedPieces"))); //$NON-NLS-1$
+		mBlackCapturePanel.setBorder(BorderFactory.createTitledBorder("<html><font color=\"#FFFFFF\">" + Messages.getString("PlayGamePanel.capturedPieces") + "</font></html>")); //$NON-NLS-1$
 		mBlackCapturePanel.setLayout(new GridLayout(jailBoardSize, jailBoardSize));
 
 		mBlackCapturePanel.setPreferredSize(new Dimension((mBlackCapturesJail.getMaxCol() + 1) * 25,
@@ -562,15 +565,13 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 		constraints.anchor = GridBagConstraints.BASELINE;
 		constraints.gridwidth = 3;
 		constraints.gridheight = 1;
-		constraints.insets = new Insets(10, 10, 10, 0);
+		constraints.insets = new Insets(10, 0, 10, 0);
 		constraints.ipadx = 100;
 		constraints.gridx = 11 + twoBoardsGridBagOffset;
 		constraints.gridy = 0;
 		add(mBlackLabel, constraints);
 
 		// add the Black Jail
-		constraints.fill = GridBagConstraints.NONE;
-		constraints.anchor = GridBagConstraints.BASELINE;
 		constraints.gridwidth = 3;
 		constraints.gridheight = 3;
 		constraints.ipadx = 0;
@@ -592,7 +593,7 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 			add(mBlackTimer.getDisplayLabel(), constraints);
 
 			// adds the undo button
-			constraints.fill = GridBagConstraints.HORIZONTAL;
+			constraints.fill = GridBagConstraints.NONE;
 			constraints.anchor = GridBagConstraints.BASELINE;
 			constraints.gridwidth = 3;
 			constraints.gridheight = 1;
@@ -607,6 +608,7 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 			constraints.gridwidth = 3;
 			constraints.gridheight = 1;
 			constraints.ipadx = 100;
+			constraints.insets = new Insets(0, 25, 10, 25);
 			constraints.gridx = 11 + twoBoardsGridBagOffset;
 			constraints.gridy = 6;
 			add(mWhiteTimer.getDisplayLabel(), constraints);

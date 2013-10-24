@@ -149,11 +149,11 @@ public final class Driver extends JFrame implements ChessCrafter
 		createMenuBar();
 
 		// set up a new panel to hold everything in the main window
-		mMainPanel = new JPanel();
+		mMainPanel = new ChessPanel();
 		mMainPanel.setBorder(BorderFactory.createLoweredBevelBorder());
 		mMainPanel.setLayout(new GridBagLayout());
 
-		mButtonPanel = new JPanel();
+		mButtonPanel = new ChessPanel();
 		mButtonPanel.setLayout(new GridBagLayout());
 
 		GridBagConstraints c = new GridBagConstraints();
@@ -823,7 +823,6 @@ public final class Driver extends JFrame implements ChessCrafter
 		}
 		catch (Exception e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return m_playNetGameScreen;

@@ -18,7 +18,7 @@ import javax.swing.event.ListSelectionListener;
 
 import utility.FileUtility;
 
-public class PieceMenuPanel extends JPanel
+public class PieceMenuPanel extends ChessPanel
 {
 
 	public PieceMenuPanel()

@@ -33,9 +33,9 @@ import rules.ObjectivePiece.ObjectivePieceTypes;
 import rules.Rules;
 import utility.GuiUtility;
 
-public class RuleMakerPanel extends JPanel
+public class RuleMakerPanel extends ChessPanel
 {
-	public RuleMakerPanel(CustomSetupPanel customSetupMenu, JFrame optionsFrame)
+	public RuleMakerPanel(VariantCreationPanel customSetupMenu, JFrame optionsFrame)
 	{
 		mFrame = optionsFrame;
 		mFrame.setVisible(true);
@@ -49,7 +49,7 @@ public class RuleMakerPanel extends JPanel
 		initGUIComponents(customSetupMenu);
 	}
 
-	private void initGUIComponents(final CustomSetupPanel customSetupMenu)
+	private void initGUIComponents(final VariantCreationPanel customSetupMenu)
 	{
 		revalidate();
 		repaint();

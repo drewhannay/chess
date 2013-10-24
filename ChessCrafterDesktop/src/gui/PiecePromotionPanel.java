@@ -24,14 +24,14 @@ import utility.GuiUtility;
 
 import com.google.common.collect.Lists;
 
-public class PiecePromotionPanel extends JPanel
+public class PiecePromotionPanel extends ChessPanel
 {
 	/**
 	 * 
 	 * @param pieceName
 	 * @param customSetupMenu
 	 */
-	public PiecePromotionPanel(String pieceName, CustomSetupPanel customSetupMenu, JFrame optionsFrame)
+	public PiecePromotionPanel(String pieceName, VariantCreationPanel customSetupMenu, JFrame optionsFrame)
 	{
 		mPieceBeingPromotedName = pieceName;
 		mCustomSetupMenu = customSetupMenu;
@@ -190,6 +190,7 @@ public class PiecePromotionPanel extends JPanel
 		GuiUtility.setupVariantCancelButton(cancelButton, this, mFrame);
 
 		JPanel optionsPanel = new JPanel();
+		optionsPanel.setOpaque(false);
 		optionsPanel.add(saveButton);
 		optionsPanel.add(cancelButton);
 
@@ -209,7 +210,7 @@ public class PiecePromotionPanel extends JPanel
 		constraints.gridx = 0;
 		constraints.gridy = 0;
 		constraints.insets = new Insets(10, 0, 10, 0);
-		add(new JLabel(Messages.getString("PiecePromotionPanel.cantPromoteHTML")), constraints); //$NON-NLS-1$
+		add(new JLabel("<html><font color=\"#FFFFFF\">" + Messages.getString("PiecePromotionPanel.cantPromoteHTML") + "</font></html>"), constraints); //$NON-NLS-1$
 		constraints.gridx = 0;
 		constraints.gridy = 1;
 		constraints.insets = new Insets(0, 10, 10, 0);
@@ -221,7 +222,7 @@ public class PiecePromotionPanel extends JPanel
 		constraints.gridx = 2;
 		constraints.gridy = 0;
 		constraints.insets = new Insets(10, 0, 10, 0);
-		add(new JLabel(Messages.getString("PiecePromotionPanel.canPromoteHTML")), constraints); //$NON-NLS-1$
+		add(new JLabel("<html><font color=\"#FFFFFF\">" + Messages.getString("PiecePromotionPanel.canPromoteHTML") + "</font></html>"), constraints); //$NON-NLS-1$
 		constraints.gridx = 2;
 		constraints.gridy = 1;
 		constraints.insets = new Insets(0, 0, 10, 10);
@@ -239,6 +240,6 @@ public class PiecePromotionPanel extends JPanel
 	private static final long serialVersionUID = -3940357256712099377L;
 
 	private String mPieceBeingPromotedName;
-	private CustomSetupPanel mCustomSetupMenu;
+	private VariantCreationPanel mCustomSetupMenu;
 	private JFrame mFrame;
 }

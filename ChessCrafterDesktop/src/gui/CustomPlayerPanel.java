@@ -20,9 +20,9 @@ import rules.Rules;
 import rules.NextTurn.NextTurnOption;
 import utility.GuiUtility;
 
-public class CustomPlayerPanel extends JPanel
+public class CustomPlayerPanel extends ChessPanel
 {
-	public CustomPlayerPanel(CustomSetupPanel customSetupMenu, JFrame optionsFrame)
+	public CustomPlayerPanel(VariantCreationPanel customSetupMenu, JFrame optionsFrame)
 	{
 		mWhiteRules = customSetupMenu.mWhiteRules;
 		mBlackRules = customSetupMenu.mBlackRules;
@@ -35,7 +35,7 @@ public class CustomPlayerPanel extends JPanel
 		initGUIComponents(customSetupMenu);
 	}
 
-	private void initGUIComponents(final CustomSetupPanel customSetupMenu)
+	private void initGUIComponents(final VariantCreationPanel customSetupMenu)
 	{
 		setLayout(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();

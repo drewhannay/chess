@@ -9,11 +9,10 @@ import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 import net.AnimatedLabel;
 
-public class NetLoadingPanel extends JPanel
+public class NetLoadingPanel extends ChessPanel
 {
 	public NetLoadingPanel()
 	{
