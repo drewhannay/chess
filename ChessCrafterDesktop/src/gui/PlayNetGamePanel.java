@@ -31,14 +31,9 @@ public class PlayNetGamePanel extends PlayGamePanel implements PlayNetGameScreen
 {
 	public PlayNetGamePanel(Game game, boolean isPlayback, boolean isBlack) throws Exception
 	{
-		super(game, isPlayback);
+		super(game);
 		PlayNetGamePanel.mIsBlackPlayer = isBlack;
 		initGUIComponents(isPlayback);
-	}
-
-	public PlayNetGamePanel()
-	{
-		// TODO Auto-generated constructor stub
 	}
 
 	private void initGUIComponents(boolean isPlayback)
@@ -445,42 +440,39 @@ public class PlayNetGamePanel extends PlayGamePanel implements PlayNetGameScreen
 	public JMenu createMenuBar()
 	{
 		mOptionsMenu = new JMenu(Messages.getString("PlayNetGamePanel.menu")); //$NON-NLS-1$
-		if (!mIsPlayback)
+		JMenuItem m_drawMenuItem = new JMenuItem(Messages.getString("PlayNetGamePanel.requestDraw"), KeyEvent.VK_R); //$NON-NLS-1$
+		m_drawMenuItem.addActionListener(new ActionListener()
 		{
-			JMenuItem m_drawMenuItem = new JMenuItem(Messages.getString("PlayNetGamePanel.requestDraw"), KeyEvent.VK_R); //$NON-NLS-1$
-			m_drawMenuItem.addActionListener(new ActionListener()
+			@Override
+			public void actionPerformed(ActionEvent event)
 			{
-				@Override
-				public void actionPerformed(ActionEvent event)
+				if (getGame().isBlackMove() == mIsBlackPlayer)
 				{
-					if (getGame().isBlackMove() == mIsBlackPlayer)
+					if (mIsAIGame)
 					{
-						if (mIsAIGame)
-						{
-							if (requestAIDraw())
-								return;
+						if (requestAIDraw())
+							return;
 
-							Result result = Result.DRAW;
-							result.setGuiText(Messages.getString("PlayNetGamePanel.youDeclaredDraw")); //$NON-NLS-1$
-							GuiUtility.getChessCrafter().getPlayGameScreen().endOfGame(result);
-						}
-						else
-						{
-							if (requestDraw())
-								return;
+						Result result = Result.DRAW;
+						result.setGuiText(Messages.getString("PlayNetGamePanel.youDeclaredDraw")); //$NON-NLS-1$
+						GuiUtility.getChessCrafter().getPlayGameScreen(getGame()).endOfGame(result);
+					}
+					else
+					{
+						if (requestDraw())
+							return;
 
-							// send move indicating surrender request
-							mNetMove = new FakeMove(-1, -1, -1, -1, -1, null);
-						}
+						// send move indicating surrender request
+						mNetMove = new FakeMove(-1, -1, -1, -1, -1, null);
 					}
 				}
-			});
+			}
+		});
 
-			if (mIsAIGame)
-				m_drawMenuItem.setText(Messages.getString("PlayNetGamePanel.declareDraw")); //$NON-NLS-1$
+		if (mIsAIGame)
+			m_drawMenuItem.setText(Messages.getString("PlayNetGamePanel.declareDraw")); //$NON-NLS-1$
 
-			mOptionsMenu.add(m_drawMenuItem);
-		}
+		mOptionsMenu.add(m_drawMenuItem);
 
 		return mOptionsMenu;
 	}

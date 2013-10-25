@@ -162,15 +162,14 @@ public class Board implements Serializable
 	 * @throws Exception Throws if there was an illegal move, or failure to
 	 * undo.
 	 */
-	public boolean isLegalMove(Move move) throws Exception
+	public boolean isLegalMove(Move move)
 	{
 		if (move == null)
 			return false;
-
-		move.execute();
-		move.undo();
-
-		return true;
+		move.board = this;
+		if (move.execute())
+			return move.undo();
+		return false;
 	}
 
 	public boolean isRowValid(int row)

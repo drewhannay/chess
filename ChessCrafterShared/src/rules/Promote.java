@@ -1,5 +1,7 @@
 package rules;
 
+import java.util.List;
+
 import javax.swing.JOptionPane;
 
 import logic.Game;
@@ -19,7 +21,7 @@ public enum Promote
 		switch (this)
 		{
 		case CLASSIC:
-			promotedPiece = classicPromotion(pieceToPromote, pieceCanBePromoted, pieceTypeToPromoteFrom);
+			promotedPiece = classicPromotion(pieceToPromote, pieceTypeToPromoteFrom);
 			break;
 		case NO_PROMOTIONS:
 			promotedPiece = pieceToPromote;
@@ -50,46 +52,51 @@ public enum Promote
 		mGame = game;
 	}
 
-	private Piece classicPromotion(Piece pieceToPromote, boolean pieceCanBePromoted, String pieceTypeToPromoteFrom)
+	private Piece classicPromotion(Piece pieceToPromote, String pieceTypeToPromoteFrom)
 	{
-		if (!pieceCanBePromoted && (pieceToPromote.getPromotesTo() == null || pieceToPromote.getPromotesTo().size() == 0))
-			return pieceToPromote;
-		if (!pieceCanBePromoted)
+		if (pieceToPromote.getPromotesTo() == null || pieceToPromote.getPromotesTo().size() == 0)
 		{
 			m_lastPromotedFromPieceName = pieceToPromote.getName();
 			mPromotedToClass = pieceToPromote.getName();
-		}
-		if (pieceCanBePromoted && pieceTypeToPromoteFrom != null && !pieceTypeToPromoteFrom.equals(pieceToPromote.getName()))
-		{
-			try
-			{
-				Piece promoted = PieceBuilder.makePiece(pieceTypeToPromoteFrom, pieceToPromote.isBlack(), pieceToPromote.getSquare(),
-						pieceToPromote.getBoard());
-				if (promoted.isBlack())
-					mGame.getBlackTeam().set(mGame.getBlackTeam().indexOf(pieceToPromote), promoted);
-				else
-					mGame.getWhiteTeam().set(mGame.getWhiteTeam().indexOf(pieceToPromote), promoted);
-				promoted.getLegalDests().clear();
-				promoted.setMoveCount(pieceToPromote.getMoveCount());
-				return promoted;
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-			}
-		}
-		if (!pieceCanBePromoted && (pieceToPromote.getPromotesTo() == null || pieceToPromote.getPromotesTo().size() == 0))
 			return pieceToPromote;
-		if (!pieceCanBePromoted && pieceTypeToPromoteFrom == null && mGame.isBlackMove() == pieceToPromote.isBlack())
+		}
+		else if (pieceTypeToPromoteFrom != null && !pieceTypeToPromoteFrom.equals(pieceToPromote.getName()))
+		{
+			// we don't want to promote the objective pieces. That makes things
+			// weird...
+			if ((pieceToPromote.isBlack() && !mGame.getBlackRules().getObjectiveName().equals(pieceToPromote.getName()))
+					|| (!pieceToPromote.isBlack() && !mGame.getWhiteRules().getObjectiveName().equals(pieceToPromote.getName())))
+			{
+				try
+				{
+					Piece promoted = PieceBuilder.makePiece(pieceTypeToPromoteFrom, pieceToPromote.isBlack(),
+							pieceToPromote.getSquare(), pieceToPromote.getBoard());
+					if (promoted.isBlack())
+						mGame.getBlackTeam().set(mGame.getBlackTeam().indexOf(pieceToPromote), promoted);
+					else
+						mGame.getWhiteTeam().set(mGame.getWhiteTeam().indexOf(pieceToPromote), promoted);
+					promoted.getLegalDests().clear();
+					promoted.setMoveCount(pieceToPromote.getMoveCount());
+					return promoted;
+				}
+				catch (Exception e)
+				{
+					e.printStackTrace();
+				}
+			}
+		}
+		else if (pieceTypeToPromoteFrom == null && mGame.isBlackMove() == pieceToPromote.isBlack())
 		{
 			mPromotedToClass = ""; //$NON-NLS-1$
-			if (pieceToPromote.getPromotesTo().size() == 1)
+			if ((!pieceToPromote.isBlack() && pieceToPromote.getPromotesTo().size() == 1) || pieceToPromote.isBlack()
+					&& pieceToPromote.getPromotesTo().size() == 1)
 				mPromotedToClass = pieceToPromote.getPromotesTo().get(0);
 			while (mPromotedToClass.equals("")) //$NON-NLS-1$
 			{
+				List<String> promotion = pieceToPromote.isBlack() ? pieceToPromote.getPromotesTo() : pieceToPromote.getPromotesTo();
 				String result = (String) JOptionPane.showInputDialog(null,
 						Messages.getString("selectPromotionType"), Messages.getString("promoChoice"), //$NON-NLS-1$ //$NON-NLS-2$
-						JOptionPane.PLAIN_MESSAGE, null, pieceToPromote.getPromotesTo().toArray(), null);
+						JOptionPane.PLAIN_MESSAGE, null, promotion.toArray(), null);
 
 				if (result == null)
 					continue;
@@ -98,7 +105,12 @@ public enum Promote
 				pieceTypeToPromoteFrom = result;
 			}
 		}
-		else if (pieceTypeToPromoteFrom != null && pieceToPromote.getPromotesTo() != null
+		else if (pieceTypeToPromoteFrom != null && !pieceToPromote.isBlack() && pieceToPromote.getPromotesTo() != null
+				&& pieceToPromote.getPromotesTo().contains(pieceTypeToPromoteFrom))
+		{
+			mPromotedToClass = pieceTypeToPromoteFrom;
+		}
+		else if (pieceTypeToPromoteFrom != null && pieceToPromote.isBlack() && pieceToPromote.getPromotesTo() != null
 				&& pieceToPromote.getPromotesTo().contains(pieceTypeToPromoteFrom))
 		{
 			mPromotedToClass = pieceTypeToPromoteFrom;
@@ -118,13 +130,14 @@ public enum Promote
 		}
 		catch (Exception e)
 		{
+			e.printStackTrace();
 			return pieceToPromote;
 		}
 	}
 
 	private Piece classicUndo(Piece pieceToUnpromote)
 	{
-		return classicPromotion(pieceToUnpromote, true, m_lastPromotedFromPieceName);
+		return classicPromotion(pieceToUnpromote, m_lastPromotedFromPieceName);
 	}
 
 	private static String m_lastPromotedFromPieceName;

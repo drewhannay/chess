@@ -8,10 +8,8 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
-
 import rules.Rules;
 import utility.FileUtility;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -23,6 +21,10 @@ import com.google.common.collect.Maps;
  */
 public class Builder implements Serializable
 {
+	public static final int BLACK = 1;
+	public static final int WHITE = 2;
+	public static final int BOTH = 3;
+
 	/**
 	 * Constructor
 	 * 
@@ -51,8 +53,8 @@ public class Builder implements Serializable
 		mBoards = boards;
 		mWhiteTeam = whiteTeam;
 		mBlackTeam = blackTeam;
-		mWhiteRules = whiteRules;
-		mBlackRules = blackRules;
+		setWhiteRules(whiteRules);
+		setBlackRules(blackRules);
 	}
 
 	/**
@@ -104,11 +106,11 @@ public class Builder implements Serializable
 	public static Piece createBishop(boolean isBlack, Square square, Board board) throws IOException
 	{
 		Map<Character, Integer> bishopMovement = Maps.newHashMap();
-		bishopMovement.put('R', -1);
-		bishopMovement.put('r', -1);
-		bishopMovement.put('L', -1);
-		bishopMovement.put('l', -1);
-		return new Piece(Messages.getString("bishop"), isBlack, square, board, bishopMovement); //$NON-NLS-1$
+		bishopMovement.put(PieceBuilder.NORTHEAST, -1);
+		bishopMovement.put(PieceBuilder.SOUTHEAST, -1);
+		bishopMovement.put(PieceBuilder.NORTHWEST, -1);
+		bishopMovement.put(PieceBuilder.SOUTHWEST, -1);
+		return new Piece(Messages.getString("bishop"), isBlack, square, board, bishopMovement, false); //$NON-NLS-1$
 	}
 
 	/**
@@ -124,15 +126,15 @@ public class Builder implements Serializable
 	public static Piece createKing(boolean isBlack, Square square, Board board) throws IOException
 	{
 		Map<Character, Integer> kingMovement = Maps.newHashMap();
-		kingMovement.put('N', 1);
-		kingMovement.put('S', 1);
-		kingMovement.put('E', 1);
-		kingMovement.put('W', 1);
-		kingMovement.put('R', 1);
-		kingMovement.put('r', 1);
-		kingMovement.put('L', 1);
-		kingMovement.put('l', 1);
-		return new Piece(Messages.getString("king"), isBlack, square, board, kingMovement); //$NON-NLS-1$
+		kingMovement.put(PieceBuilder.NORTH, 1);
+		kingMovement.put(PieceBuilder.SOUTH, 1);
+		kingMovement.put(PieceBuilder.EAST, 1);
+		kingMovement.put(PieceBuilder.WEST, 1);
+		kingMovement.put(PieceBuilder.NORTHEAST, 1);
+		kingMovement.put(PieceBuilder.SOUTHEAST, 1);
+		kingMovement.put(PieceBuilder.NORTHWEST, 1);
+		kingMovement.put(PieceBuilder.SOUTHWEST, 1);
+		return new Piece(Messages.getString("king"), isBlack, square, board, kingMovement, false); //$NON-NLS-1$
 	}
 
 	/**
@@ -147,10 +149,9 @@ public class Builder implements Serializable
 	 */
 	public static Piece createKnight(boolean isBlack, Square square, Board board) throws IOException
 	{
-		Map<Character, Integer> knightMovement = Maps.newHashMap();
-		knightMovement.put('x', 1);
-		knightMovement.put('y', 2);
-		return new Piece(Messages.getString("knight"), isBlack, square, board, knightMovement); //$NON-NLS-1$
+		Piece knight = new Piece(Messages.getString("knight"), isBlack, square, board, null, true); //$NON-NLS-1$
+		knight.addKnightMove(new KnightMovement(1, 2));
+		return knight;
 	}
 
 	/**
@@ -165,7 +166,7 @@ public class Builder implements Serializable
 	 */
 	public static Piece createPawn(boolean isBlack, Square square, Board board) throws IOException
 	{
-		Piece pawn = new Piece(Messages.getString("pawn"), isBlack, square, board, null); //$NON-NLS-1$
+		Piece pawn = new Piece(Messages.getString("pawn"), isBlack, square, board, null, false); //$NON-NLS-1$
 		List<String> promotesTo = Lists.newArrayList();
 		promotesTo.add(Messages.getString("queen")); //$NON-NLS-1$
 		promotesTo.add(Messages.getString("bishop")); //$NON-NLS-1$
@@ -188,15 +189,15 @@ public class Builder implements Serializable
 	public static Piece createQueen(boolean isBlack, Square square, Board board) throws IOException
 	{
 		Map<Character, Integer> queenMovement = Maps.newHashMap();
-		queenMovement.put('N', -1);
-		queenMovement.put('S', -1);
-		queenMovement.put('W', -1);
-		queenMovement.put('E', -1);
-		queenMovement.put('R', -1);
-		queenMovement.put('r', -1);
-		queenMovement.put('L', -1);
-		queenMovement.put('l', -1);
-		return new Piece(Messages.getString("queen"), isBlack, square, board, queenMovement); //$NON-NLS-1$
+		queenMovement.put(PieceBuilder.NORTH, -1);
+		queenMovement.put(PieceBuilder.SOUTH, -1);
+		queenMovement.put(PieceBuilder.WEST, -1);
+		queenMovement.put(PieceBuilder.EAST, -1);
+		queenMovement.put(PieceBuilder.NORTHEAST, -1);
+		queenMovement.put(PieceBuilder.SOUTHEAST, -1);
+		queenMovement.put(PieceBuilder.NORTHWEST, -1);
+		queenMovement.put(PieceBuilder.SOUTHWEST, -1);
+		return new Piece(Messages.getString("queen"), isBlack, square, board, queenMovement, false); //$NON-NLS-1$
 	}
 
 	/**
@@ -212,11 +213,11 @@ public class Builder implements Serializable
 	public static Piece createRook(boolean isBlack, Square square, Board board) throws IOException
 	{
 		Map<Character, Integer> rookMovement = Maps.newHashMap();
-		rookMovement.put('N', -1);
-		rookMovement.put('S', -1);
-		rookMovement.put('W', -1);
-		rookMovement.put('E', -1);
-		return new Piece(Messages.getString("rook"), isBlack, square, board, rookMovement); //$NON-NLS-1$
+		rookMovement.put(PieceBuilder.NORTH, -1);
+		rookMovement.put(PieceBuilder.SOUTH, -1);
+		rookMovement.put(PieceBuilder.WEST, -1);
+		rookMovement.put(PieceBuilder.EAST, -1);
+		return new Piece(Messages.getString("rook"), isBlack, square, board, rookMovement, false); //$NON-NLS-1$
 	}
 
 	/**
@@ -254,7 +255,8 @@ public class Builder implements Serializable
 				{
 					ObjectInputStream in = new ObjectInputStream(new FileInputStream(FileUtility.getVariantsFile(name)));
 					Builder b = (Builder) in.readObject();
-					Game toReturn = new Game(name, b.mBoards, b.mWhiteRules, b.mBlackRules, b.mPromotionMap);
+					Game toReturn = new Game(name, b.mBoards, b.getWhiteRules(), b.getBlackRules(), b.mWhitePromotionMap,
+							b.mBlackPromotionMap);
 					toReturn.setWhiteTeam(b.mWhiteTeam);
 					toReturn.setBlackTeam(b.mBlackTeam);
 					in.close();
@@ -299,8 +301,8 @@ public class Builder implements Serializable
 	 */
 	public void writeFile(Rules whiteRules, Rules blackRules)
 	{
-		mWhiteRules = whiteRules;
-		mBlackRules = blackRules;
+		setWhiteRules(whiteRules);
+		setBlackRules(blackRules);
 		try
 		{
 			FileOutputStream f_out = new FileOutputStream(FileUtility.getVariantsFile(mName));
@@ -319,19 +321,72 @@ public class Builder implements Serializable
 		mName = name;
 	}
 
-	public void addToPromotionMap(String key, List<String> value)
+	public void addToPromotionMap(String key, List<String> value, int colorCode)
 	{
-		mPromotionMap.put(key, value);
+		if (mWhitePromotionMap == null)
+			mWhitePromotionMap = Maps.newHashMap();
+		if (mBlackPromotionMap == null)
+			mBlackPromotionMap = Maps.newHashMap();
+
+		if (colorCode == WHITE || colorCode == BOTH)
+			mWhitePromotionMap.put(key, value);
+		if (colorCode == BLACK || colorCode == BOTH)
+			mBlackPromotionMap.put(key, value);
 	}
 
-	public void setPromotionMap(Map<String, List<String>> promotionMap)
+	public void setWhitePromotionMap(Map<String, List<String>> promotionMap)
 	{
-		mPromotionMap = promotionMap;
+		mWhitePromotionMap = promotionMap;
 	}
 
-	public Map<String, List<String>> getPromotionMap()
+	public void setBlackPromotionMap(Map<String, List<String>> promotionMap)
 	{
-		return mPromotionMap;
+		mBlackPromotionMap = promotionMap;
+	}
+
+	public Map<String, List<String>> getWhitePromotionMap()
+	{
+		return mWhitePromotionMap;
+	}
+
+	public Map<String, List<String>> getBlackPromotionMap()
+	{
+		return mBlackPromotionMap;
+	}
+
+	public Rules getWhiteRules()
+	{
+		return mWhiteRules;
+	}
+
+	public void setWhiteRules(Rules mWhiteRules)
+	{
+		this.mWhiteRules = mWhiteRules;
+	}
+
+	public Rules getBlackRules()
+	{
+		return mBlackRules;
+	}
+
+	public void setBlackRules(Rules mBlackRules)
+	{
+		this.mBlackRules = mBlackRules;
+	}
+
+	public String getName()
+	{
+		return mName;
+	}
+
+	public List<Piece> getWhiteTeam()
+	{
+		return mWhiteTeam;
+	}
+
+	public List<Piece> getBlackTeam()
+	{
+		return mBlackTeam;
 	}
 
 	private static final long serialVersionUID = 2099226533521671457L;
@@ -342,5 +397,6 @@ public class Builder implements Serializable
 	public List<Piece> mBlackTeam;
 	private Rules mWhiteRules;
 	private Rules mBlackRules;
-	private Map<String, List<String>> mPromotionMap;
+	private Map<String, List<String>> mWhitePromotionMap;
+	private Map<String, List<String>> mBlackPromotionMap;
 }

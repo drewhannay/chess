@@ -9,11 +9,17 @@ public class Preference implements Serializable
 	{
 		m_shouldHighlightMoves = true;
 		s_defaultSaveLocation = FileUtility.getDefaultCompletedLocation();
+		m_saveLocation = s_defaultSaveLocation;
 	}
 
-	public boolean isDefaultPreferences()
+	public boolean isPathSet()
 	{
-		return m_saveLocation.equals(s_defaultSaveLocation) && isHighlightMoves();
+		return !m_pathSet;
+	}
+
+	public boolean isHighlightSet()
+	{
+		return !m_highlightSet;
 	}
 
 	public String getSaveLocation()
@@ -23,6 +29,7 @@ public class Preference implements Serializable
 
 	public void setSaveLocation(String saveLocation)
 	{
+		m_pathSet = true;
 		m_saveLocation = saveLocation;
 	}
 
@@ -33,13 +40,27 @@ public class Preference implements Serializable
 
 	public void setHighlightMoves(boolean highlightMoves)
 	{
+		m_highlightSet = true;
 		m_shouldHighlightMoves = highlightMoves;
+	}
+
+	public boolean showPieceToolTips()
+	{
+		return m_showPieceToolTips;
+	}
+
+	public void setShowPieceToolTips(boolean m_showPieceToolTips)
+	{
+		this.m_showPieceToolTips = m_showPieceToolTips;
 	}
 
 	private static String s_defaultSaveLocation;
 
+	private boolean m_pathSet;
+	private boolean m_highlightSet;
 	private String m_saveLocation;
 	private boolean m_shouldHighlightMoves;
+	private boolean m_showPieceToolTips;
 
 	private static final long serialVersionUID = 6126269552471996685L;
 }

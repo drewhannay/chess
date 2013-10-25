@@ -25,18 +25,15 @@ public enum GetPromotionSquares
 
 	private List<Square> classicPromoSquares(Piece piece)
 	{
-		// if (!(p.getName().equals("Pawn")))
-		// return null; //TODO uncomment these lines, make a promotion method
-		// that gets from the user the promotion squares of each type (looks up
-		// in a map). Can eventually replace this method.
 		List<Square> toReturn = Lists.newArrayList();
 		int maxRow = piece.getBoard().getMaxRow();
-		for (int i = 1; i <= maxRow; i++)
+		int maxCol = piece.getBoard().getMaxCol();
+		for (int i = 1; i <= maxCol; i++)
 		{
 			if (piece.isBlack())
 				toReturn.add(piece.getBoard().getSquare(1, i));
 			else
-				toReturn.add(piece.getBoard().getSquare(8, i));
+				toReturn.add(piece.getBoard().getSquare(maxRow, i));
 		}
 		return toReturn;
 	}

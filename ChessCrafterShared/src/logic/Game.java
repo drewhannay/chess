@@ -23,8 +23,6 @@ import com.google.common.collect.Lists;
  */
 public class Game implements Serializable
 {
-	private Map<String, List<String>> mPromotionMap;
-
 	/**
 	 * Constructor. Initializes and saves state of Game information.
 	 * 
@@ -32,9 +30,10 @@ public class Game implements Serializable
 	 * @param boards Reference to boards Array.
 	 * @param whiteRules The rules for the white team
 	 * @param blackRules The rules for the black team
-	 * @param promotionMap
+	 * @param whitePromotionMap
 	 */
-	public Game(String gameType, Board[] boards, Rules whiteRules, Rules blackRules, Map<String, List<String>> promotionMap)
+	public Game(String gameType, Board[] boards, Rules whiteRules, Rules blackRules, Map<String, List<String>> whitePromotionMap,
+			Map<String, List<String>> blackPromotionMap)
 	{
 		mGameType = gameType;
 		mBoards = boards;
@@ -46,7 +45,7 @@ public class Game implements Serializable
 		blackRules.setGame(this);
 		setBlackMove(false);
 
-		setPromotionMap(promotionMap);
+		setPromotionMaps(whitePromotionMap, blackPromotionMap);
 
 		for (Board b : mBoards)
 			b.setGame(this);
@@ -538,16 +537,16 @@ public class Game implements Serializable
 		{
 			if (ACN)
 			{
-				FileOutputStream f_out = new FileOutputStream(FileUtility.getCompletedGamesFile(fileName + ".acn")); //$NON-NLS-1$
+				FileOutputStream f_out = new FileOutputStream(FileUtility.getCompletedGamesFile(fileName));
 				ObjectOutputStream out = new ObjectOutputStream(f_out);
 				out.writeObject(this);
 				out.close();
 				f_out.close();
-				AlgebraicConverter.convert(getHistory(), (fileName + ".acn")); //$NON-NLS-1$
+				AlgebraicConverter.convert(getHistory(), (fileName));
 			}
 			else
 			{
-				FileOutputStream f_out = new FileOutputStream(FileUtility.getGamesInProgressFile(fileName + ".var")); //$NON-NLS-1$
+				FileOutputStream f_out = new FileOutputStream(FileUtility.getGamesInProgressFile(fileName));
 				ObjectOutputStream out = new ObjectOutputStream(f_out);
 				out.writeObject(this);
 				out.close();
@@ -673,14 +672,30 @@ public class Game implements Serializable
 		return new FakeMove(boardNum, m.origin.getRow(), m.origin.getCol(), m.getDest().getRow(), m.getDest().getCol(), promoName);
 	}
 
-	public Map<String, List<String>> getPromotionMap()
+	public Map<String, List<String>> getWhitePromotionMap()
 	{
-		return mPromotionMap;
+		return mWhitePromotionMap;
 	}
 
-	public void setPromotionMap(Map<String, List<String>> mPromotionMap)
+	public Map<String, List<String>> getBlackPromotionMap()
 	{
-		this.mPromotionMap = mPromotionMap;
+		return mBlackPromotionMap;
+	}
+
+	public void setPromotionMaps(Map<String, List<String>> whitePromotionMap, Map<String, List<String>> blackPromotionMap)
+	{
+		mWhitePromotionMap = whitePromotionMap;
+		mBlackPromotionMap = blackPromotionMap;
+	}
+
+	public void setIsPlayback(boolean isPlayback)
+	{
+		mIsPlayback = isPlayback;
+	}
+
+	public boolean isPlayback()
+	{
+		return mIsPlayback;
 	}
 
 	private static final long serialVersionUID = 7291801823624891384L;
@@ -692,6 +707,7 @@ public class Game implements Serializable
 	private ChessTimer mWhiteTimer;
 	private ChessTimer mBlackTimer;
 	private boolean mIsBlackMove;
+	private boolean mIsPlayback;
 	private List<Piece> mWhiteTeam;
 	private List<Piece> mBlackTeam;
 	private Piece mWhiteObjectivePiece;
@@ -699,4 +715,6 @@ public class Game implements Serializable
 	private boolean mStaleLegalDests = true;
 	private List<Move> mHistory;
 	private Move mLastMove = null;
+	private Map<String, List<String>> mWhitePromotionMap;
+	private Map<String, List<String>> mBlackPromotionMap;
 }

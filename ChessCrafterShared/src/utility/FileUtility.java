@@ -1,12 +1,10 @@
 package utility;
 
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.net.URL;
 
 import javax.imageio.ImageIO;
@@ -27,19 +25,11 @@ public final class FileUtility
 		return new File(path + SLASH + aiName);
 	}
 
-	public static String getImagePath(String imageName, boolean isBuiltInFile)
+	public static String getImagePath(String imageName)
 	{
-		String imagePath;
-		if (isBuiltInFile)
-		{
-			imagePath = ROOT_RUNNING_DIR + SLASH + IMAGES + SLASH + imageName;
-		}
-		else
-		{
-			File file = new File(HIDDEN_DIR + SLASH + IMAGES);
-			file.mkdirs();
-			imagePath = HIDDEN_DIR + SLASH + IMAGES + SLASH + imageName;
-		}
+		File file = new File(HIDDEN_DIR + SLASH + IMAGES);
+		file.mkdirs();
+		String imagePath = HIDDEN_DIR + SLASH + IMAGES + SLASH + imageName;
 		return imagePath;
 	}
 
@@ -109,13 +99,12 @@ public final class FileUtility
 		new File(path).mkdirs();
 		try
 		{
-			DataInputStream dataInputStream = new DataInputStream(new FileInputStream(getPreferencesFile()));
-			BufferedReader reader = new BufferedReader(new InputStreamReader(dataInputStream));
-			String line;
-			line = reader.readLine();
-			line = reader.readLine();
-			path = line.substring(22);
-			reader.close();
+			FileInputStream fileInputStream = new FileInputStream(getPreferencesFile());
+			ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+			Preference preference = (Preference) objectInputStream.readObject();
+			path = preference.getSaveLocation();
+			objectInputStream.close();
+			fileInputStream.close();
 		}
 		catch (Exception e)
 		{
@@ -149,9 +138,6 @@ public final class FileUtility
 			HIDDEN_DIR = System.getProperty("user.home") + "\\chess"; //$NON-NLS-1$ //$NON-NLS-2$
 			SLASH = "\\"; //$NON-NLS-1$
 
-			String userDir = System.getProperty("user.dir"); //$NON-NLS-1$
-
-			ROOT_RUNNING_DIR = userDir.substring(0, userDir.lastIndexOf("\\")) + "\\ChessCrafterShared"; //$NON-NLS-1$ //$NON-NLS-2$
 			try
 			{
 				Runtime rt = Runtime.getRuntime();
@@ -167,7 +153,6 @@ public final class FileUtility
 		{
 			// if we're not on Windows, just add a period
 			HIDDEN_DIR = System.getProperty("user.home") + "/.chess"; //$NON-NLS-1$ //$NON-NLS-2$
-			ROOT_RUNNING_DIR = System.getProperty("user.dir"); //$NON-NLS-1$
 			SLASH = "/"; //$NON-NLS-1$
 		}
 	}
@@ -193,18 +178,18 @@ public final class FileUtility
 	{
 		File pieceFile = getPieceFile(pieceName);
 		pieceFile.delete();
-		new File((getImagePath("l_" + pieceName + ".png", false))).delete(); //$NON-NLS-1$ //$NON-NLS-2$
-		new File((getImagePath("d_" + pieceName + ".png", false))).delete(); //$NON-NLS-1$ //$NON-NLS-2$
+		new File((getImagePath("l_" + pieceName + ".png"))).delete(); //$NON-NLS-1$ //$NON-NLS-2$
+		new File((getImagePath("d_" + pieceName + ".png"))).delete(); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	private static final String HIDDEN_DIR;
-	private static final String ROOT_RUNNING_DIR;
 	private static final String AI = "AI"; //$NON-NLS-1$
 	private static final String IMAGES = "images"; //$NON-NLS-1$
 	private static final String VARIANTS = "variants"; //$NON-NLS-1$
 	private static final String PIECES = "pieces"; //$NON-NLS-1$
 	private static final String GAMES_IN_PROGRESS = "gamesInProgress"; //$NON-NLS-1$
 	private static final String COMPLETED_GAMES = "completedGames"; //$NON-NLS-1$
-	private static final String PREFERENCES = "preferences.txt"; //$NON-NLS-1$
+	private static final String PREFERENCES = "preferences"; //$NON-NLS-1$
+
 	private static final String SLASH;
 }

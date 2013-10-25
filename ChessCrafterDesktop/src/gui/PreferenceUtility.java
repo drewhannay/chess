@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -22,6 +23,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
+import com.google.common.collect.Lists;
+
 import utility.FileUtility;
 import utility.GuiUtility;
 import utility.Preference;
@@ -30,6 +33,11 @@ public final class PreferenceUtility
 {
 	private PreferenceUtility()
 	{
+	}
+
+	public interface PieceToolTipPreferenceChangedListener
+	{
+		public void onPieceToolTipPreferenceChanged();
 	}
 
 	public static void createPreferencePopup(Component relativeComponent)
@@ -49,6 +57,8 @@ public final class PreferenceUtility
 		final JButton changeLocationButton = new JButton(Messages.getString("PreferenceUtility.chooseNewSaveLocation")); //$NON-NLS-1$
 		final JButton resetButton = new JButton(Messages.getString("PreferenceUtility.resetToDefaultLocation")); //$NON-NLS-1$
 		final JCheckBox highlightingCheckBox = new JCheckBox(Messages.getString("PreferenceUtility.enableHighlighting")); //$NON-NLS-1$
+		final JCheckBox pieceToolTipCheckBox = new JCheckBox(Messages.getString("PreferenceUtility.showPieceTooltips")); //$NON-NLS-1$
+
 		final JButton cancelButton = new JButton(Messages.getString("PreferenceUtility.cancel")); //$NON-NLS-1$
 
 		final JButton doneButton = new JButton(Messages.getString("PreferenceUtility.done")); //$NON-NLS-1$
@@ -62,6 +72,7 @@ public final class PreferenceUtility
 		Preference preference = getPreference();
 		currentSaveLocationField.setText(preference.getSaveLocation());
 		highlightingCheckBox.setSelected(preference.isHighlightMoves());
+		pieceToolTipCheckBox.setSelected(preference.showPieceToolTips());
 
 		resetButton.addActionListener(new ActionListener()
 		{
@@ -104,6 +115,7 @@ public final class PreferenceUtility
 				Preference preference = new Preference();
 				preference.setSaveLocation(currentSaveLocationField.getText());
 				preference.setHighlightMoves(highlightingCheckBox.isSelected());
+				preference.setShowPieceToolTips(pieceToolTipCheckBox.isSelected());
 				savePreference(preference);
 			}
 		});
@@ -128,9 +140,15 @@ public final class PreferenceUtility
 
 		constraints.gridx = 0;
 		constraints.gridy = 3;
-		constraints.gridwidth = 2;
+		constraints.gridwidth = 1;
 		constraints.anchor = GridBagConstraints.CENTER;
 		popupFrame.add(highlightingCheckBox, constraints);
+
+		constraints.gridx = 1;
+		constraints.gridy = 3;
+		constraints.gridwidth = 1;
+		constraints.anchor = GridBagConstraints.CENTER;
+		popupFrame.add(pieceToolTipCheckBox, constraints);
 
 		constraints.gridx = 0;
 		constraints.gridy = 4;
@@ -213,5 +231,20 @@ public final class PreferenceUtility
 		{
 			e1.printStackTrace();
 		}
+
+		for (PieceToolTipPreferenceChangedListener listener : mToolTipListeners)
+		{
+			listener.onPieceToolTipPreferenceChanged();
+		}
 	}
+
+	public static void addPieceToolTipListener(PieceToolTipPreferenceChangedListener listener)
+	{
+		if (mToolTipListeners == null)
+			mToolTipListeners = Lists.newArrayList();
+		if (!mToolTipListeners.contains(listener))
+			mToolTipListeners.add(listener);
+	}
+
+	private static List<PieceToolTipPreferenceChangedListener> mToolTipListeners;
 }

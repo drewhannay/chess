@@ -95,6 +95,11 @@ public final class Driver extends JFrame implements ChessCrafter
 
 	public void setPanel(JPanel panel)
 	{
+		if (panel instanceof PlayGamePanel)
+			m_playGameScreen = (PlayGamePanel) panel;
+		else if (panel instanceof WatchGamePanel)
+			m_watchGameScreen = (WatchGamePanel) panel;
+
 		remove(mMainPanel);
 		if (mOtherPanel != null)
 			remove(mOtherPanel);
@@ -499,7 +504,8 @@ public final class Driver extends JFrame implements ChessCrafter
 							if (mOptionsMenu != null)
 								mOptionsMenu.setVisible(true);
 
-							setPanel(new PlayGamePanel(gameToPlay, false));
+							m_playGameScreen = new PlayGamePanel(gameToPlay);
+							setPanel(m_playGameScreen);
 							poppedFrame.dispose();
 						}
 						catch (Exception e)
@@ -638,41 +644,9 @@ public final class Driver extends JFrame implements ChessCrafter
 							}
 
 							File file = FileUtility.getCompletedGamesFile(completedGamesList.getSelectedValue().toString());
-							FileInputStream fileInputStream;
-							ObjectInputStream objectInputStream;
-							Game gameToView;
-							if (completedGamesList.getSelectedValue().toString().endsWith(".acn")) //$NON-NLS-1$
-							{
-								try
-								{
-									mOtherPanel = new PlayGamePanel(true, file);
-								}
-								catch (Exception e)
-								{
-									JOptionPane.showMessageDialog(Driver.getInstance(),
-											Messages.getString("Driver.invalidACNNotation"), //$NON-NLS-1$
-											Messages.getString("Driver.invalidNotation"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$
-									return;
-								}
-							}
-							else
-							{
-								try
-								{
-									fileInputStream = new FileInputStream(file);
-									objectInputStream = new ObjectInputStream(fileInputStream);
-									gameToView = (Game) objectInputStream.readObject();
-
-									setPanel(new PlayGamePanel(gameToView, false));
-									poppedFrame.dispose();
-								}
-								catch (Exception e)
-								{
-									e.printStackTrace();
-									JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("Driver.gameIsCorrupted"), //$NON-NLS-1$
-											Messages.getString("Driver.invalidCompletedGame"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$
-								}
-							}
+							m_watchGameScreen = new WatchGamePanel(file);
+							setPanel(m_watchGameScreen);
+							mOtherPanel = m_watchGameScreen;
 							deactivateWindowListener();
 							poppedFrame.dispose();
 						}
@@ -799,18 +773,34 @@ public final class Driver extends JFrame implements ChessCrafter
 	}
 
 	@Override
-	public PlayGameScreen getPlayGameScreen()
+	public PlayGameScreen getPlayGameScreen(Game game)
 	{
 		if (m_playGameScreen == null)
-			m_playGameScreen = new PlayGamePanel();
+			m_playGameScreen = new PlayGamePanel(game);
 		return m_playGameScreen;
+	}
+
+	@Override
+	public WatchGamePanel getWatchGameScreen(File acnFile)
+	{
+		if (m_watchGameScreen == null)
+			m_watchGameScreen = new WatchGamePanel(acnFile);
+		return m_watchGameScreen;
 	}
 
 	@Override
 	public PlayNetGameScreen getNetGameScreen()
 	{
 		if (m_playNetGameScreen == null)
-			m_playNetGameScreen = new PlayNetGamePanel();
+			try
+			{
+				m_playNetGameScreen = new PlayNetGamePanel(null, false, false);
+			}
+			catch (Exception e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		return m_playNetGameScreen;
 	}
 
@@ -851,5 +841,6 @@ public final class Driver extends JFrame implements ChessCrafter
 	private JPanel mButtonPanel;
 	private WindowListener mWindowListener;
 	private PlayGamePanel m_playGameScreen;
+	private WatchGamePanel m_watchGameScreen;
 	private PlayNetGamePanel m_playNetGameScreen;
 }
