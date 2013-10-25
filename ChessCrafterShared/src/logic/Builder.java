@@ -8,10 +8,8 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
-
 import rules.Rules;
 import utility.FileUtility;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -55,8 +53,8 @@ public class Builder implements Serializable
 		mBoards = boards;
 		mWhiteTeam = whiteTeam;
 		mBlackTeam = blackTeam;
-		mWhiteRules = whiteRules;
-		mBlackRules = blackRules;
+		setWhiteRules(whiteRules);
+		setBlackRules(blackRules);
 	}
 
 	/**
@@ -151,10 +149,9 @@ public class Builder implements Serializable
 	 */
 	public static Piece createKnight(boolean isBlack, Square square, Board board) throws IOException
 	{
-		Map<Character, Integer> knightMovement = Maps.newHashMap();
-		knightMovement.put(PieceBuilder.KNIGHT_ONE, 1);
-		knightMovement.put(PieceBuilder.KNIGHT_TWO, 2);
-		return new Piece(Messages.getString("knight"), isBlack, square, board, knightMovement, true); //$NON-NLS-1$
+		Piece knight = new Piece(Messages.getString("knight"), isBlack, square, board, null, true); //$NON-NLS-1$
+		knight.addKnightMove(new KnightMovement(1, 2));
+		return knight;
 	}
 
 	/**
@@ -258,7 +255,8 @@ public class Builder implements Serializable
 				{
 					ObjectInputStream in = new ObjectInputStream(new FileInputStream(FileUtility.getVariantsFile(name)));
 					Builder b = (Builder) in.readObject();
-					Game toReturn = new Game(name, b.mBoards, b.mWhiteRules, b.mBlackRules, b.mWhitePromotionMap, b.mBlackPromotionMap);
+					Game toReturn = new Game(name, b.mBoards, b.getWhiteRules(), b.getBlackRules(), b.mWhitePromotionMap,
+							b.mBlackPromotionMap);
 					toReturn.setWhiteTeam(b.mWhiteTeam);
 					toReturn.setBlackTeam(b.mBlackTeam);
 					in.close();
@@ -303,8 +301,8 @@ public class Builder implements Serializable
 	 */
 	public void writeFile(Rules whiteRules, Rules blackRules)
 	{
-		mWhiteRules = whiteRules;
-		mBlackRules = blackRules;
+		setWhiteRules(whiteRules);
+		setBlackRules(blackRules);
 		try
 		{
 			FileOutputStream f_out = new FileOutputStream(FileUtility.getVariantsFile(mName));
@@ -354,6 +352,41 @@ public class Builder implements Serializable
 	public Map<String, List<String>> getBlackPromotionMap()
 	{
 		return mBlackPromotionMap;
+	}
+
+	public Rules getWhiteRules()
+	{
+		return mWhiteRules;
+	}
+
+	public void setWhiteRules(Rules mWhiteRules)
+	{
+		this.mWhiteRules = mWhiteRules;
+	}
+
+	public Rules getBlackRules()
+	{
+		return mBlackRules;
+	}
+
+	public void setBlackRules(Rules mBlackRules)
+	{
+		this.mBlackRules = mBlackRules;
+	}
+
+	public String getName()
+	{
+		return mName;
+	}
+
+	public List<Piece> getWhiteTeam()
+	{
+		return mWhiteTeam;
+	}
+
+	public List<Piece> getBlackTeam()
+	{
+		return mBlackTeam;
 	}
 
 	private static final long serialVersionUID = 2099226533521671457L;

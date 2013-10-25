@@ -188,12 +188,12 @@ public class PieceMenuPanel extends JPanel
 	private JFrame mFrame;
 
 	private PieceListChangedListener mListener;
-	
+
 	public void setPieceListChangedListener(PieceListChangedListener listener)
 	{
 		mListener = listener;
 	}
-	
+
 	public void refreshList()
 	{
 		mPieceListModel.clear();
@@ -203,7 +203,7 @@ public class PieceMenuPanel extends JPanel
 		{
 			mPieceListModel.addElement(pieceArray[i]);
 		}
-		
+
 		if (mListener != null)
 			mListener.onPieceListChanged();
 	}

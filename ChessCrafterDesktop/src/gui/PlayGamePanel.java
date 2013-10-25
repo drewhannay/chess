@@ -697,6 +697,7 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 
 		private Square m_square;
 		private Board m_board;
+
 		@Override
 		public void onPieceToolTipPreferenceChanged()
 		{

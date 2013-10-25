@@ -136,7 +136,7 @@ public class CustomBoardPanel extends JPanel
 										.parseInt(mNumberOfColumnsTextField.getText()), mWrapAroundCheckBox.isSelected());
 						}
 
-						variant.drawBoards(boards, mTwoBoardsButton.isSelected());
+						variant.drawBoards(boards);
 						mHolder.removeAll();
 						mFrame.setVisible(false);
 					}
