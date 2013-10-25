@@ -44,12 +44,12 @@ public class NextTurn implements Serializable
 		}
 	}
 
-	public boolean undo()
+	public boolean undo(boolean isPlayback)
 	{
 		switch (mNextTurnOption)
 		{
 		case CLASSIC:
-			return undoClassic();
+			return undoClassic(isPlayback);
 		case INCREASING_TOGETHER:
 			return undoIncreasingTurnsTogether();
 		case INCREASING_SEPARATELY:
@@ -84,10 +84,11 @@ public class NextTurn implements Serializable
 		return mIsBlackMove;
 	}
 
-	private boolean undoClassic()
+	private boolean undoClassic(boolean isPlayback)
 	{
 		mIsBlackMove = !mIsBlackMove;
-		GuiUtility.getChessCrafter().getPlayGameScreen(null).turn(mIsBlackMove);
+		if (isPlayback)
+			GuiUtility.getChessCrafter().getPlayGameScreen(null).turn(mIsBlackMove);
 
 		return mIsBlackMove;
 	}

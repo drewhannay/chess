@@ -521,7 +521,7 @@ public class Game implements Serializable
 	 */
 	public void prevTurn()
 	{
-		setBlackMove(getWhiteRules().prevTurn());
+		setBlackMove(getWhiteRules().prevTurn(mIsPlayback));
 	}
 
 	/**
@@ -530,19 +530,21 @@ public class Game implements Serializable
 	 * @param dirName The directory in which to save the game
 	 * @param fileName The name for the game file
 	 * @param ACN Whether the game should be saved in ACN
+	 * @param inProgress 
 	 */
-	public void saveGame(String fileName, boolean ACN)
+	public void saveGame(String fileName, boolean ACN, boolean inProgress)
 	{
 		try
 		{
-			if (ACN)
+			if (!inProgress)
 			{
 				FileOutputStream f_out = new FileOutputStream(FileUtility.getCompletedGamesFile(fileName));
 				ObjectOutputStream out = new ObjectOutputStream(f_out);
 				out.writeObject(this);
 				out.close();
 				f_out.close();
-				AlgebraicConverter.convert(getHistory(), (fileName));
+				if (ACN)
+					AlgebraicConverter.convert(getHistory(), fileName);
 			}
 			else
 			{
