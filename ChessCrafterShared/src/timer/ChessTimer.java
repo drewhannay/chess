@@ -19,7 +19,7 @@ public abstract class ChessTimer implements ActionListener, Serializable
 	{
 		mDisplayLabel = new JLabel();
 		mDisplayLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		mDisplayLabel.setOpaque(true);
+		mDisplayLabel.setOpaque(false);
 		mNumberFormat = NumberFormat.getNumberInstance();
 		mNumberFormat.setMinimumIntegerDigits(2);
 		mTimer = new Timer(1000, this);

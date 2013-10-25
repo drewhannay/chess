@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -49,6 +50,7 @@ public class ObjectiveMakerPanel extends ChessPanel
 		final JRadioButton whiteCaptureAllButton = new JRadioButton(Messages.getString("ObjectiveMakerPanel.captureAll"), false); //$NON-NLS-1$
 		GuiUtility.requestFocus(whiteCaptureAllButton);
 		whiteCaptureAllButton.setOpaque(false);
+		whiteCaptureAllButton.setForeground(Color.white);
 		whiteCaptureAllButton.setToolTipText(Messages.getString("ObjectiveMakerPanel.pressForCaptureAll")); //$NON-NLS-1$
 		objectiveWhitePanel.add(whiteCaptureAllButton);
 		if (customSetupMenu.mWhiteRules.getEndOfGame() == EndOfGame.CAPTURE_ALL_PIECES)
@@ -57,6 +59,7 @@ public class ObjectiveMakerPanel extends ChessPanel
 		final JRadioButton whiteCaptureAllTypeButton = new JRadioButton(
 				Messages.getString("ObjectiveMakerPanel.captureAllOfType"), false); //$NON-NLS-1$
 		whiteCaptureAllTypeButton.setOpaque(false);
+		whiteCaptureAllTypeButton.setForeground(Color.white);
 		whiteCaptureAllTypeButton.setToolTipText(Messages.getString("ObjectiveMakerPanel.pressForCaptureAllOfType")); //$NON-NLS-1$
 		objectiveWhitePanel.add(whiteCaptureAllTypeButton);
 		if (customSetupMenu.mWhiteRules.getEndOfGame() == EndOfGame.CAPTURE_ALL_OF_TYPE)
@@ -65,6 +68,7 @@ public class ObjectiveMakerPanel extends ChessPanel
 		final JRadioButton whiteProtectObjectiveButton = new JRadioButton(
 				Messages.getString("ObjectiveMakerPanel.protectObjective"), false); //$NON-NLS-1$
 		whiteProtectObjectiveButton.setOpaque(false);
+		whiteProtectObjectiveButton.setForeground(Color.white);
 		whiteProtectObjectiveButton.setToolTipText(Messages.getString("ObjectiveMakerPanel.pressForProtectObjective")); //$NON-NLS-1$
 		objectiveWhitePanel.add(whiteProtectObjectiveButton);
 		if (customSetupMenu.mWhiteRules.getEndOfGame() == EndOfGame.CLASSIC)
@@ -72,6 +76,7 @@ public class ObjectiveMakerPanel extends ChessPanel
 
 		final JRadioButton whiteLoseAllButton = new JRadioButton(Messages.getString("ObjectiveMakerPanel.loseAllPieces"), false); //$NON-NLS-1$
 		whiteLoseAllButton.setOpaque(false);
+		whiteLoseAllButton.setForeground(Color.white);
 		whiteLoseAllButton.setToolTipText(Messages.getString("ObjectiveMakerPanel.pressForLoseAllPieces")); //$NON-NLS-1$
 		objectiveWhitePanel.add(whiteLoseAllButton);
 		if (customSetupMenu.mWhiteRules.getEndOfGame() == EndOfGame.LOSE_ALL_PIECES)
@@ -79,6 +84,7 @@ public class ObjectiveMakerPanel extends ChessPanel
 
 		final JRadioButton whiteCheckTimesButton = new JRadioButton(Messages.getString("ObjectiveMakerPanel.checkNumTimes"), false); //$NON-NLS-1$
 		whiteCheckTimesButton.setOpaque(false);
+		whiteCheckTimesButton.setForeground(Color.white);
 		whiteCheckTimesButton.setToolTipText(Messages.getString("ObjectiveMakerPanel.pressForCheckNumTimes")); //$NON-NLS-1$
 		objectiveWhitePanel.add(whiteCheckTimesButton);
 		if (customSetupMenu.mWhiteRules.getEndOfGame() == EndOfGame.CHECK_N_TIMES)
@@ -96,6 +102,7 @@ public class ObjectiveMakerPanel extends ChessPanel
 		objectiveBlackPanel.setLayout(new GridLayout(5, 1));
 		final JRadioButton blackCaptureAllButton = new JRadioButton(Messages.getString("ObjectiveMakerPanel.captureAll"), false); //$NON-NLS-1$
 		blackCaptureAllButton.setOpaque(false);
+		blackCaptureAllButton.setForeground(Color.white);
 		blackCaptureAllButton.setToolTipText(Messages.getString("ObjectiveMakerPanel.pressForCaptureAll")); //$NON-NLS-1$
 		objectiveBlackPanel.add(blackCaptureAllButton);
 		if (customSetupMenu.mBlackRules.getEndOfGame() == EndOfGame.CAPTURE_ALL_PIECES)
@@ -104,6 +111,7 @@ public class ObjectiveMakerPanel extends ChessPanel
 		final JRadioButton blackCaptureAllTypeButton = new JRadioButton(
 				Messages.getString("ObjectiveMakerPanel.captureAllOfType"), false); //$NON-NLS-1$
 		blackCaptureAllTypeButton.setOpaque(false);
+		blackCaptureAllTypeButton.setForeground(Color.white);
 		blackCaptureAllTypeButton.setToolTipText(Messages.getString("ObjectiveMakerPanel.pressForCaptureAllOfType")); //$NON-NLS-1$
 		objectiveBlackPanel.add(blackCaptureAllTypeButton);
 		if (customSetupMenu.mBlackRules.getEndOfGame() == EndOfGame.CAPTURE_ALL_OF_TYPE)
@@ -112,6 +120,7 @@ public class ObjectiveMakerPanel extends ChessPanel
 		final JRadioButton blackProtectObjectiveButton = new JRadioButton(
 				Messages.getString("ObjectiveMakerPanel.protectObjective"), false); //$NON-NLS-1$
 		blackProtectObjectiveButton.setOpaque(false);
+		blackProtectObjectiveButton.setForeground(Color.white);
 		blackProtectObjectiveButton.setToolTipText(Messages.getString("ObjectiveMakerPanel.pressForProtect")); //$NON-NLS-1$
 		objectiveBlackPanel.add(blackProtectObjectiveButton);
 		if (customSetupMenu.mBlackRules.getEndOfGame() == EndOfGame.CLASSIC)
@@ -119,6 +128,7 @@ public class ObjectiveMakerPanel extends ChessPanel
 
 		final JRadioButton blackLoseAllButton = new JRadioButton(Messages.getString("ObjectiveMakerPanel.loseAllPieces"), false); //$NON-NLS-1$
 		blackLoseAllButton.setOpaque(false);
+		blackLoseAllButton.setForeground(Color.white);
 		blackLoseAllButton.setToolTipText(Messages.getString("ObjectiveMakerPanel.pressForLoseAllPieces")); //$NON-NLS-1$
 		objectiveBlackPanel.add(blackLoseAllButton);
 		if (customSetupMenu.mBlackRules.getEndOfGame() == EndOfGame.LOSE_ALL_PIECES)
@@ -126,6 +136,7 @@ public class ObjectiveMakerPanel extends ChessPanel
 
 		final JRadioButton blackCheckTimesButton = new JRadioButton(Messages.getString("ObjectiveMakerPanel.checkNumTimes"), false); //$NON-NLS-1$
 		blackCheckTimesButton.setOpaque(false);
+		blackCheckTimesButton.setForeground(Color.white);
 		blackCheckTimesButton.setToolTipText(Messages.getString("ObjectiveMakerPanel.pressForCheckNumTimes")); //$NON-NLS-1$
 		objectiveBlackPanel.add(blackCheckTimesButton);
 		if (customSetupMenu.mBlackRules.getEndOfGame() == EndOfGame.CHECK_N_TIMES)
@@ -240,7 +251,7 @@ public class ObjectiveMakerPanel extends ChessPanel
 
 		JPanel whiteTeamPanel = new JPanel();
 		whiteTeamPanel.setOpaque(false);
-		whiteTeamPanel.setBorder(BorderFactory.createTitledBorder(Messages.getString("ObjectiveMakerPanel.whiteTeam"))); //$NON-NLS-1$
+		whiteTeamPanel.setBorder(BorderFactory.createTitledBorder("<html><font color=\"#FFFFFF\">" + Messages.getString("ObjectiveMakerPanel.whiteTeam") + "</font></html>")); //$NON-NLS-1$
 		whiteTeamPanel.setLayout(new GridBagLayout());
 
 		JPanel whiteObjectivePanel = new JPanel();
@@ -250,7 +261,7 @@ public class ObjectiveMakerPanel extends ChessPanel
 		constraints.gridx = 0;
 		constraints.gridy = 1;
 		constraints.insets = new Insets(5, 0, 10, 0);
-		whiteObjectivePanel.add(new JLabel(Messages.getString("ObjectiveMakerPanel.objectiveHTML")), constraints); //$NON-NLS-1$
+		whiteObjectivePanel.add(new JLabel("<html><font color=\"#FFFFFF\">" + Messages.getString("ObjectiveMakerPanel.objectiveHTML") + "</font></html>"), constraints); //$NON-NLS-1$
 		constraints.insets = new Insets(0, 0, 0, 0);
 		constraints.gridx = 0;
 		constraints.gridy = 2;
@@ -265,7 +276,7 @@ public class ObjectiveMakerPanel extends ChessPanel
 
 		JPanel blackTeamPanel = new JPanel();
 		blackTeamPanel.setOpaque(false);
-		blackTeamPanel.setBorder(BorderFactory.createTitledBorder(Messages.getString("ObjectiveMakerPanel.blackTeam"))); //$NON-NLS-1$
+		blackTeamPanel.setBorder(BorderFactory.createTitledBorder("<html><font color=\"#FFFFFF\">" + Messages.getString("ObjectiveMakerPanel.blackTeam") + "</font></html>")); //$NON-NLS-1$
 		blackTeamPanel.setLayout(new GridBagLayout());
 
 		JPanel blackObjectivePanel = new JPanel();
@@ -275,7 +286,7 @@ public class ObjectiveMakerPanel extends ChessPanel
 		constraints.gridx = 0;
 		constraints.gridy = 1;
 		constraints.insets = new Insets(5, 0, 10, 0);
-		blackObjectivePanel.add(new JLabel(Messages.getString("ObjectiveMakerPanel.objectiveHTML")), constraints); //$NON-NLS-1$
+		blackObjectivePanel.add(new JLabel("<html><font color=\"#FFFFFF\">" + Messages.getString("ObjectiveMakerPanel.objectiveHTML") + "</font></html>"), constraints); //$NON-NLS-1$
 		constraints.insets = new Insets(0, 0, 0, 0);
 		constraints.gridx = 0;
 		constraints.gridy = 2;

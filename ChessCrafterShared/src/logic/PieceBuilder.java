@@ -6,11 +6,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import utility.FileUtility;
-
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 public class PieceBuilder implements Serializable
@@ -44,6 +44,7 @@ public class PieceBuilder implements Serializable
 	public PieceBuilder()
 	{
 		mMovements = Maps.newHashMap();
+		mKnightMovements = Lists.newArrayList();
 	}
 
 	/**
@@ -60,9 +61,15 @@ public class PieceBuilder implements Serializable
 		 */
 		mName = name;
 		if (!PieceBuilder.isPieceType(name))
+		{
 			mMovements = Maps.newHashMap();
+			mKnightMovements = Lists.newArrayList();
+		}
 		else
-			mMovements = mPieceTypes.get(name).mMovements;
+		{
+			mMovements = mPieceTypes.get(name).getMovements();
+			mKnightMovements = mPieceTypes.get(name).getKnightMovements();
+		}
 	}
 
 	/**
@@ -98,8 +105,13 @@ public class PieceBuilder implements Serializable
 	 */
 	public static Piece makePiece(String name, boolean isBlack, Square origin, Board board) throws IOException
 	{
+		PieceBuilder loadedBuilder = loadFromDisk(name);
+		if (loadedBuilder == null)
+		{
+			loadedBuilder = new PieceBuilder(name);
+		}
 		if (!mPieceTypes.containsKey(name))
-			mPieceTypes.put(name, new PieceBuilder(name));
+			mPieceTypes.put(name, loadedBuilder);
 		return mPieceTypes.get(name).makePiece(isBlack, origin, board);
 	}
 
@@ -131,6 +143,10 @@ public class PieceBuilder implements Serializable
 	public static PieceBuilder loadFromDisk(String pieceName)
 	{
 		PieceBuilder toReturn;
+
+		if (mPieceTypes.containsKey(pieceName))
+			return mPieceTypes.get(pieceName);
+
 		try
 		{
 			ObjectInputStream in = new ObjectInputStream(new FileInputStream(FileUtility.getPieceFile(pieceName)));
@@ -183,7 +199,12 @@ public class PieceBuilder implements Serializable
 		if (mName.equals(Messages.getString("rook"))) //$NON-NLS-1$
 			return Builder.createRook(isBlack, origin, board);
 		else
-			return new Piece(mName, isBlack, origin, board, mMovements);
+		{
+			Piece toReturn = new Piece(mName, isBlack, origin, board, mMovements, mCanJump);
+			for (KnightMovement kMovement : mKnightMovements)
+				toReturn.addKnightMove(kMovement);
+			return toReturn;
+		}
 		// try {
 		//
 		// Class<?> klazz = Class.forName("logic." + name);
@@ -223,14 +244,28 @@ public class PieceBuilder implements Serializable
 		this.mCanJump = mCanJump;
 	}
 
-	public void setIsKnightLike(boolean isKnightLike)
+	public List<KnightMovement> getKnightMovements()
 	{
-		mIsKnightLike = isKnightLike;
+		return mKnightMovements;
+	}
+
+	public void clearKnightMovements()
+	{
+		if (mKnightMovements != null)
+			mKnightMovements.clear();
+	}
+
+	public void addKnightMovement(KnightMovement knightMovement)
+	{
+		if (mKnightMovements == null)
+			mKnightMovements = Lists.newArrayList();
+		if (!mKnightMovements.contains(knightMovement))
+			mKnightMovements.add(knightMovement);
 	}
 
 	public boolean getIsKnightLike()
 	{
-		return mIsKnightLike;
+		return mKnightMovements != null && mKnightMovements.size() != 0;
 	}
 
 	private static final long serialVersionUID = -1351201562740885961L;
@@ -245,12 +280,10 @@ public class PieceBuilder implements Serializable
 	public static final char NORTHEAST = 'g';
 	public static final char SOUTHWEST = 'a';
 	public static final char SOUTHEAST = 'd';
-	public static final char KNIGHT_ONE = 'x';
-	public static final char KNIGHT_TWO = 'y';
 
 	private boolean mCanJump;
-	private boolean mIsKnightLike;
-
 	private String mName;
 	private Map<Character, Integer> mMovements;
+	private List<KnightMovement> mKnightMovements;
+
 }

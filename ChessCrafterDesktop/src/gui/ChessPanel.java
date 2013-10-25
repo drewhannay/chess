@@ -11,6 +11,10 @@ import javax.swing.JPanel;
 
 public class ChessPanel extends JPanel
 {
+	ChessPanel(){
+		setOpaque(false);
+	}
+	
 	public void paintComponent(Graphics g){
         Graphics2D g2 = (Graphics2D)g.create();
 

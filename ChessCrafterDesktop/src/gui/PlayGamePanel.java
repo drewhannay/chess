@@ -1,5 +1,7 @@
 package gui;
 
+import gui.PreferenceUtility.PieceToolTipPreferenceChangedListener;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -15,7 +17,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -31,16 +32,13 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
-import logic.AlgebraicConverter;
 import logic.Board;
-import logic.Builder;
 import logic.Game;
 import logic.Move;
 import logic.Piece;
 import logic.Result;
 import logic.Square;
 import timer.ChessTimer;
-import timer.TimerTypes;
 import utility.AppConstants;
 import utility.FileUtility;
 import utility.Preference;
@@ -55,88 +53,36 @@ import dragNdrop.MotionAdapter;
 
 public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 {
-
-	public PlayGamePanel()
+	public PlayGamePanel(Game game)
 	{
+		if (game != null)
+			setGame(game);
+		else
+			game = getGame();
+
 		m_dropManager = new DropManager();
+		m_globalGlassPane = new GlassPane();
+		m_globalGlassPane.setOpaque(false);
+		Driver.getInstance().setGlassPane(m_globalGlassPane);
+
+		PlayGamePanel.mWhiteTimer = game.getWhiteTimer();
+		PlayGamePanel.mBlackTimer = game.getBlackTimer();
+		mWhiteTimer.restart();
+		mBlackTimer.restart();
+		turn(game.isBlackMove());
+		mHistory = null;
+		mHistoryIndex = -3;
 		try
 		{
-			if (m_instance == null)
-				m_instance = new PlayGamePanel(false, null);
+			initComponents(game.isPlayback());
 		}
 		catch (Exception e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
 
-	public PlayGamePanel(boolean isPlayback, File acnFile) throws Exception
-	{
-		m_dropManager = new DropManager();
-		m_globalGlassPane = new GlassPane();
-		m_globalGlassPane.setOpaque(false);
-		Driver.getInstance().setGlassPane(m_globalGlassPane);
-
-		setGame(Builder.newGame(Messages.getString("PlayGamePanel.classic"))); //$NON-NLS-1$
-		PlayGamePanel.mIsPlayback = isPlayback;
-		PlayGamePanel.mWhiteTimer = getGame().getWhiteTimer();
-		PlayGamePanel.mBlackTimer = getGame().getBlackTimer();
-		mWhiteTimer.restart();
-		mBlackTimer.restart();
-		turn(getGame().getBoards()[0].isBlackTurn());
-		initComponents(isPlayback);
-		setGame(AlgebraicConverter.convert(getGame(), acnFile));
-		mHistory = new Move[getGame().getHistory().size()];
-		getGame().getHistory().toArray(mHistory);
-		mHistoryIndex = mHistory.length - 1;
-
-		while (mHistoryIndex >= 0)
-			mHistory[mHistoryIndex--].undo();
-
-		m_instance = this;
-
-		boardRefresh(getGame().getBoards());
-	}
-
-	public PlayGamePanel(Game game, boolean isPlayback) throws Exception
-	{
-		PlayGamePanel.setGame(game);
-		PlayGamePanel.mIsPlayback = isPlayback;
-		m_dropManager = new DropManager();
-		if (isPlayback)
-		{
-			PlayGamePanel.mWhiteTimer = ChessTimer.createTimer(TimerTypes.NO_TIMER, null, 0, 0, false);
-			PlayGamePanel.mBlackTimer = ChessTimer.createTimer(TimerTypes.NO_TIMER, null, 0, 0, true);
-			mHistory = new Move[game.getHistory().size()];
-			game.getHistory().toArray(mHistory);
-			initComponents(isPlayback);
-			mHistoryIndex = mHistory.length - 1;
-
-			while (mHistoryIndex >= 0)
-			{
-				mHistory[mHistoryIndex].undo();
-				mHistoryIndex--;
-			}
-		}
-		else
-		{
-			m_globalGlassPane = new GlassPane();
-			m_globalGlassPane.setOpaque(false);
-			Driver.getInstance().setGlassPane(m_globalGlassPane);
-
-			PlayGamePanel.mWhiteTimer = game.getWhiteTimer();
-			PlayGamePanel.mBlackTimer = game.getBlackTimer();
-			mWhiteTimer.restart();
-			mBlackTimer.restart();
-			turn(game.isBlackMove());
-			mHistory = null;
-			mHistoryIndex = -3;
-			initComponents(isPlayback);
-		}
-
-		m_instance = this;
-
+		s_instance = this;
 		boardRefresh(game.getBoards());
 	}
 
@@ -228,9 +174,6 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 			return;
 		}
 
-		if (mIsPlayback)
-			return;
-
 		Object[] options = new String[] {
 				Messages.getString("PlayGamePanel.saveRecord"), Messages.getString("PlayGamePanel.newGame"), Messages.getString("PlayGamePanel.quit") }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		mOptionsMenu.setVisible(false);
@@ -241,7 +184,7 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 
 			m_preference = PreferenceUtility.getPreference();
 
-			if (!m_preference.isDefaultPreferences())
+			if (!m_preference.isPathSet())
 			{
 				JOptionPane
 						.showMessageDialog(
@@ -295,7 +238,7 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 		}
 	}
 
-	private JPanel createGrid(Board board, boolean isPlayback, boolean isJail)
+	private JPanel createGrid(Board board, boolean isJail)
 	{
 		final JPanel gridPanel = new JPanel();
 
@@ -318,13 +261,10 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 			for (int j = 1; j <= numOfColumns; j++)
 			{
 				Square square = board.getSquare(i, j);
-				if (!isPlayback)
+				if (!isJail)
 				{
-					if (!isJail)
-					{
-						square.addMouseListener(new SquareListener(square, board));
-						square.addMouseMotionListener(new MotionAdapter(m_globalGlassPane));
-					}
+					square.addMouseListener(new SquareListener(square, board));
+					square.addMouseMotionListener(new MotionAdapter(m_globalGlassPane));
 				}
 
 				gridPanel.add(square);
@@ -355,44 +295,41 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 	{
 		mOptionsMenu = new JMenu(Messages.getString("PlayGamePanel.menu")); //$NON-NLS-1$
 
-		if (!mIsPlayback)
+		JMenuItem drawMenuItem = new JMenuItem(Messages.getString("PlayGamePanel.declareDraw"), KeyEvent.VK_D); //$NON-NLS-1$
+		JMenuItem saveMenuItem = new JMenuItem(Messages.getString("PlayGamePanel.saveAndQuit"), KeyEvent.VK_S); //$NON-NLS-1$
+
+		drawMenuItem.addActionListener(new ActionListener()
 		{
-			JMenuItem drawMenuItem = new JMenuItem(Messages.getString("PlayGamePanel.declareDraw"), KeyEvent.VK_D); //$NON-NLS-1$
-			JMenuItem saveMenuItem = new JMenuItem(Messages.getString("PlayGamePanel.saveAndQuit"), KeyEvent.VK_S); //$NON-NLS-1$
-
-			drawMenuItem.addActionListener(new ActionListener()
+			@Override
+			public void actionPerformed(ActionEvent event)
 			{
-				@Override
-				public void actionPerformed(ActionEvent event)
-				{
-					if (getGame().getLastMove() == null)
-						return;
+				if (getGame().getLastMove() == null)
+					return;
 
-					mOptionsMenu.setVisible(false);
-					Result result = Result.DRAW;
-					result.setGuiText(Messages.getString("PlayGamePanel.drawWhatNow")); //$NON-NLS-1$
-					getGame().getLastMove().setResult(result);
-					endOfGame(result);
-				}
-			});
+				mOptionsMenu.setVisible(false);
+				Result result = Result.DRAW;
+				result.setGuiText(Messages.getString("PlayGamePanel.drawWhatNow")); //$NON-NLS-1$
+				getGame().getLastMove().setResult(result);
+				endOfGame(result);
+			}
+		});
 
-			saveMenuItem.addActionListener(new ActionListener()
+		saveMenuItem.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent event)
 			{
-				@Override
-				public void actionPerformed(ActionEvent event)
-				{
-					mWhiteTimer.stopTimer();
-					mBlackTimer.stopTimer();
-					saveGame();
+				mWhiteTimer.stopTimer();
+				mBlackTimer.stopTimer();
+				saveGame();
 
-					mOptionsMenu.setVisible(false);
-					Driver.getInstance().revertToMainPanel();
-				}
-			});
+				mOptionsMenu.setVisible(false);
+				Driver.getInstance().revertToMainPanel();
+			}
+		});
 
-			mOptionsMenu.add(drawMenuItem);
-			mOptionsMenu.add(saveMenuItem);
-		}
+		mOptionsMenu.add(drawMenuItem);
+		mOptionsMenu.add(saveMenuItem);
 
 		return mOptionsMenu;
 	}
@@ -431,7 +368,7 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 		if (mOptionsMenu == null || !mOptionsMenu.isVisible())
 			Driver.getInstance().setMenu(createMenuBar());
 
-		Driver.getInstance().setOptionsMenuVisibility(!isPlayback);
+		Driver.getInstance().setOptionsMenuVisibility(true);
 
 		setLayout(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
@@ -457,7 +394,7 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 			constraints.insets = new Insets(10, 0, 0, 0);
 			constraints.gridx = 0;
 
-			add(createGrid(boards[0], isPlayback, false), constraints);
+			add(createGrid(boards[0], false), constraints);
 		}
 		else
 		{
@@ -468,56 +405,16 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 			constraints.insets = new Insets(10, 0, 0, 0);
 			constraints.gridx = 0;
 
-			add(createGrid(boards[0], isPlayback, false), constraints);
+			add(createGrid(boards[0], false), constraints);
 
 			constraints.fill = GridBagConstraints.HORIZONTAL;
 			constraints.gridwidth = 10;
 			constraints.insets = new Insets(10, 0, 0, 0);
 			constraints.gridx = 11;
-			add(createGrid(boards[1], isPlayback, false), constraints);
+			add(createGrid(boards[1], false), constraints);
 
 			twoBoardsGridBagOffset += 10;
 		}
-
-		JButton nextButton = new JButton(Messages.getString("PlayGamePanel.next")); //$NON-NLS-1$
-		nextButton.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent event)
-			{
-				if (mHistoryIndex + 1 == mHistory.length)
-					return;
-
-				try
-				{
-					mHistory[++mHistoryIndex].execute();
-				}
-				catch (Exception e)
-				{
-					e.printStackTrace();
-				}
-			}
-		});
-
-		JButton prevButton = new JButton(Messages.getString("PlayGamePanel.previous")); //$NON-NLS-1$
-		prevButton.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent event)
-			{
-				if (mHistoryIndex == -1)
-					return;
-
-				try
-				{
-					mHistory[mHistoryIndex--].undo();
-				}
-				catch (Exception e)
-				{
-					e.printStackTrace();
-				}
-			}
-		});
 
 		mWhiteLabel = new JLabel(Messages.getString("PlayGamePanel.whiteCaps")); //$NON-NLS-1$
 		mWhiteLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -545,7 +442,7 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 		}
 
 		mWhiteCapturesJail = new Board(jailBoardSize, jailBoardSize, false);
-		mWhiteCapturePanel = createGrid(mWhiteCapturesJail, isPlayback, true);
+		mWhiteCapturePanel = createGrid(mWhiteCapturesJail, true);
 		mWhiteCapturePanel.setBorder(BorderFactory.createTitledBorder("<html><font color=\"#FFFFFF\">" + Messages.getString("PlayGamePanel.capturedPieces") + "</font></html>")); //$NON-NLS-1$
 		mWhiteCapturePanel.setLayout(new GridLayout(jailBoardSize, jailBoardSize));
 
@@ -553,7 +450,7 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 				(mWhiteCapturesJail.getMaxRow() + 1) * 25));
 
 		mBlackCapturesJail = new Board(jailBoardSize, jailBoardSize, false);
-		mBlackCapturePanel = createGrid(mBlackCapturesJail, isPlayback, true);
+		mBlackCapturePanel = createGrid(mBlackCapturesJail, true);
 		mBlackCapturePanel.setBorder(BorderFactory.createTitledBorder("<html><font color=\"#FFFFFF\">" + Messages.getString("PlayGamePanel.capturedPieces") + "</font></html>")); //$NON-NLS-1$
 		mBlackCapturePanel.setLayout(new GridLayout(jailBoardSize, jailBoardSize));
 
@@ -590,6 +487,7 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 			constraints.ipadx = 100;
 			constraints.gridx = 11 + twoBoardsGridBagOffset;
 			constraints.gridy = 4;
+			mBlackTimer.getDisplayLabel().setForeground(Color.white);
 			add(mBlackTimer.getDisplayLabel(), constraints);
 
 			// adds the undo button
@@ -611,6 +509,7 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 			constraints.insets = new Insets(0, 25, 10, 25);
 			constraints.gridx = 11 + twoBoardsGridBagOffset;
 			constraints.gridy = 6;
+			mWhiteTimer.getDisplayLabel().setForeground(Color.white);
 			add(mWhiteTimer.getDisplayLabel(), constraints);
 		}
 		else
@@ -623,18 +522,17 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 			constraints.ipadx = 100;
 			constraints.gridx = 11 + twoBoardsGridBagOffset;
 			constraints.gridy = 4;
-			add(nextButton, constraints);
-
-			// adds the White timer
-			constraints.fill = GridBagConstraints.HORIZONTAL;
-			constraints.anchor = GridBagConstraints.BASELINE;
-			constraints.gridwidth = 3;
-			constraints.gridheight = 1;
-			constraints.ipadx = 100;
-			constraints.gridx = 11 + twoBoardsGridBagOffset;
-			constraints.gridy = 5;
-			add(prevButton, constraints);
+			add(undoButton, constraints);
 		}
+		// adds the White timer
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		constraints.anchor = GridBagConstraints.BASELINE;
+		constraints.gridwidth = 3;
+		constraints.gridheight = 1;
+		constraints.ipadx = 100;
+		constraints.gridx = 11 + twoBoardsGridBagOffset;
+		constraints.gridy = 6;
+		add(mWhiteTimer.getDisplayLabel(), constraints);
 
 		// adds the White Jail
 		constraints.fill = GridBagConstraints.NONE;
@@ -698,7 +596,7 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 
 	public static void setGame(Game game)
 	{
-		PlayGamePanel.mGame = game;
+		mGame = game;
 	}
 
 	public static Game getGame()
@@ -712,7 +610,7 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 		mBlackTimer.reset();
 	}
 
-	protected class SquareListener extends DropAdapter implements MouseListener
+	protected class SquareListener extends DropAdapter implements MouseListener, PieceToolTipPreferenceChangedListener
 	{
 		public SquareListener(Square square, Board board)
 		{
@@ -720,6 +618,11 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 			m_square = square;
 			m_board = board;
 			addDropListener(m_dropManager);
+			if (PreferenceUtility.getPreference().showPieceToolTips() && m_square.isOccupied())
+				m_square.setToolTipText(m_square.getPiece().getToolTipText());
+			else
+				m_square.setToolTipText(null);
+			PreferenceUtility.addPieceToolTipListener(this);
 		}
 
 		@Override
@@ -822,6 +725,15 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 
 		private Square m_square;
 		private Board m_board;
+
+		@Override
+		public void onPieceToolTipPreferenceChanged()
+		{
+			if (PreferenceUtility.getPreference().showPieceToolTips() && m_square.isOccupied())
+				m_square.setToolTipText(m_square.getPiece().getToolTipText());
+			else
+				m_square.setToolTipText(null);
+		}
 	}
 
 	private static class DropManager extends AbstractDropManager
@@ -847,7 +759,7 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 			try
 			{
 				getGame().playMove(new Move(m_board, originSquare, destinationSquare));
-				m_instance.boardRefresh(getGame().getBoards());
+				s_instance.boardRefresh(getGame().getBoards());
 			}
 			catch (Exception e)
 			{
@@ -861,7 +773,6 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 	private static final long serialVersionUID = -2507232401817253688L;
 
 	protected static boolean mNextMoveMustPlacePiece;
-	protected static boolean mIsPlayback;
 	protected static Game mGame;
 	protected static ChessTimer mWhiteTimer;
 	protected static ChessTimer mBlackTimer;
@@ -883,5 +794,5 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 
 	protected GlassPane m_globalGlassPane;
 
-	private static PlayGamePanel m_instance;
+	private static PlayGamePanel s_instance;
 }

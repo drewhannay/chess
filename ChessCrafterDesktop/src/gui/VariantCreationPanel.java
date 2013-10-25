@@ -1,5 +1,7 @@
 package gui;
 
+import gui.PreferenceUtility.PieceToolTipPreferenceChangedListener;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -75,24 +77,29 @@ public class VariantCreationPanel extends ChessPanel
 		{
 			gameToEdit = Builder.newGame(variantName);
 
-			mBuilder = new Builder(variantName);
 			mWhiteTeam = gameToEdit.getWhiteTeam();
 			mBlackTeam = gameToEdit.getBlackTeam();
 
 			mWhiteRules = gameToEdit.getWhiteRules();
 			mBlackRules = gameToEdit.getBlackRules();
-			mPromotionMap = gameToEdit.getPromotionMap();
-			if (mPromotionMap == null)
-				mPromotionMap = Maps.newHashMap();
+			mWhitePromotionMap = gameToEdit.getWhitePromotionMap();
+			if (mWhitePromotionMap == null)
+				mWhitePromotionMap = Maps.newHashMap();
+
+			mBlackPromotionMap = gameToEdit.getBlackPromotionMap();
+			if (mBlackPromotionMap == null)
+				mBlackPromotionMap = Maps.newHashMap();
 
 			mBoardPanels = new JPanel[gameToEdit.getBoards().length];
 
 			for (int i = 0; i < mBoardPanels.length; i++)
 				mBoardPanels[i] = new JPanel();
+
+			mBuilder = new Builder(variantName, gameToEdit.getBoards(), mWhiteTeam, mBlackTeam, mWhiteRules, mBlackRules);
 		}
 		else
 		{
-			mBuilder = new Builder(Messages.getString("CustomSetupPanel.newVariant")); //$NON-NLS-1$
+			mBuilder = new Builder(Messages.getString("VariantCreationPanel.newVariant")); //$NON-NLS-1$
 
 			mWhiteTeam = Lists.newArrayList();
 			mBlackTeam = Lists.newArrayList();
@@ -100,13 +107,17 @@ public class VariantCreationPanel extends ChessPanel
 			mWhiteRules = new Rules(false);
 			mBlackRules = new Rules(true);
 
-			mPromotionMap = Maps.newHashMap();
+			mWhitePromotionMap = Maps.newHashMap();
+			mBlackPromotionMap = Maps.newHashMap();
 			mBoardPanels = new JPanel[] { new JPanel(), new JPanel() };
+
+			mBuilder.mBlackTeam = mBlackTeam;
+			mBuilder.mWhiteTeam = mWhiteTeam;
 		}
 
-		Board board = new Board(2, 1, false);
-		mPieceDisplaySquares[WHITE_INDEX] = board.getSquare(1, 1);
-		mPieceDisplaySquares[BLACK_INDEX] = board.getSquare(2, 1);
+		mDisplayBoard = new Board(2, 1, false);
+		mPieceDisplaySquares[WHITE_INDEX] = mDisplayBoard.getSquare(1, 1);
+		mPieceDisplaySquares[BLACK_INDEX] = mDisplayBoard.getSquare(2, 1);
 
 		mOptionsFrame = new JFrame();
 		mOptionsFrame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -136,6 +147,8 @@ public class VariantCreationPanel extends ChessPanel
 		constraints.insets = new Insets(0, 10, 100, 0);
 		add(showPiecePanel, constraints);
 
+		setupPiecesList();
+
 		for (Square square : mPieceDisplaySquares)
 		{
 			square.addMouseListener(new PieceDisplayBoardListener(square));
@@ -147,8 +160,8 @@ public class VariantCreationPanel extends ChessPanel
 
 		if (game == null)
 		{
-			mWhiteRules.addEndOfGame(EndOfGame.CLASSIC.init(0, Messages.getString("CustomSetupPanel.empty"), false)); //$NON-NLS-1$
-			mBlackRules.addEndOfGame(EndOfGame.CLASSIC.init(0, Messages.getString("CustomSetupPanel.empty"), true)); //$NON-NLS-1$
+			mWhiteRules.addEndOfGame(EndOfGame.CLASSIC.init(0, Messages.getString("VariantCreationPanel.empty"), false)); //$NON-NLS-1$
+			mBlackRules.addEndOfGame(EndOfGame.CLASSIC.init(0, Messages.getString("VariantCreationPanel.empty"), true)); //$NON-NLS-1$
 
 			mWhiteRules.setObjectivePiece(new ObjectivePiece(ObjectivePieceTypes.CLASSIC));
 			mBlackRules.setObjectivePiece(new ObjectivePiece(ObjectivePieceTypes.CLASSIC));
@@ -159,7 +172,7 @@ public class VariantCreationPanel extends ChessPanel
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.insets = new Insets(10, 10, 10, 5);
 		constraints.anchor = GridBagConstraints.CENTER;
-		add(new JLabel(Messages.getString("CustomSetupPanel.variantName")), constraints); //$NON-NLS-1$
+		add(new JLabel("<html><font color=\"#FFFFFF\">" + Messages.getString("VariantCreationPanel.variantName") + "</font></html>"), constraints); //$NON-NLS-1$
 
 		final JTextField variantNameField = new JTextField(25);
 		constraints.gridx = 2;
@@ -184,11 +197,10 @@ public class VariantCreationPanel extends ChessPanel
 			}
 		}
 
-		setupPiecesList();
-		drawBoards(temp, temp.length > 1);
+		drawBoards(temp);
 
 		// main menu button
-		JButton returnToMainButton = new JButton(Messages.getString("CustomSetupPanel.returnToMainMenu")); //$NON-NLS-1$
+		JButton returnToMainButton = new JButton(Messages.getString("VariantCreationPanel.returnToMainMenu")); //$NON-NLS-1$
 		// returnToMainButton.setToolTipText("Press to return to the Main Menu");
 		returnToMainButton.addActionListener(new ActionListener()
 		{
@@ -200,7 +212,7 @@ public class VariantCreationPanel extends ChessPanel
 		});
 
 		// Create button and add ActionListener
-		JButton submitButton = new JButton(Messages.getString("CustomSetupPanel.saveAndQuit")); //$NON-NLS-1$
+		JButton submitButton = new JButton(Messages.getString("VariantCreationPanel.saveAndQuit")); //$NON-NLS-1$
 		// submitButton.setToolTipText("Save a finished variant");
 		submitButton.addActionListener(new ActionListener()
 		{
@@ -210,7 +222,7 @@ public class VariantCreationPanel extends ChessPanel
 				if (variantNameField.getText().trim().isEmpty())
 				{
 					JOptionPane.showMessageDialog(VariantCreationPanel.this,
-							Messages.getString("CustomSetupPanel.enterAName"), Messages.getString("CustomSetupPanel.enterName"), //$NON-NLS-1$ //$NON-NLS-2$
+							Messages.getString("VariantCreationPanel.enterAName"), Messages.getString("VariantCreationPanel.enterName"), //$NON-NLS-1$ //$NON-NLS-2$
 							JOptionPane.PLAIN_MESSAGE);
 					return;
 				}
@@ -221,9 +233,9 @@ public class VariantCreationPanel extends ChessPanel
 				mBuilder.setName(variantNameField.getText());
 
 				for (Piece piece : mWhiteTeam)
-					piece.setPromotesTo(mPromotionMap.get(piece.getName()));
+					piece.setPromotesTo(mWhitePromotionMap.get(piece.getName()));
 				for (Piece piece : mBlackTeam)
-					piece.setPromotesTo(mPromotionMap.get(piece.getName()));
+					piece.setPromotesTo(mBlackPromotionMap.get(piece.getName()));
 
 				int numberOfObjectives = 0;
 
@@ -237,8 +249,8 @@ public class VariantCreationPanel extends ChessPanel
 					if (numberOfObjectives != 1)
 					{
 						JOptionPane.showMessageDialog(Driver.getInstance(),
-								Messages.getString("CustomSetupPanel.placeOneWhiteObjective"), //$NON-NLS-1$
-								Messages.getString("CustomSetupPanel.objectiveMissing"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$
+								Messages.getString("VariantCreationPanel.placeOneWhiteObjective"), //$NON-NLS-1$
+								Messages.getString("VariantCreationPanel.objectiveMissing"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$
 						return;
 					}
 				}
@@ -254,8 +266,8 @@ public class VariantCreationPanel extends ChessPanel
 					if (numberOfObjectives != 1)
 					{
 						JOptionPane.showMessageDialog(Driver.getInstance(),
-								Messages.getString("CustomSetupPanel.placeOneBlackObjective"), //$NON-NLS-1$
-								Messages.getString("CustomSetupPanel.objectiveMissing"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$
+								Messages.getString("VariantCreationPanel.placeOneBlackObjective"), //$NON-NLS-1$
+								Messages.getString("VariantCreationPanel.objectiveMissing"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$
 						return;
 					}
 				}
@@ -276,33 +288,33 @@ public class VariantCreationPanel extends ChessPanel
 			}
 		});
 
-		mChangePromotionButton = new JButton(Messages.getString("CustomSetupPanel.promoteThisPiece")); //$NON-NLS-1$
-		mChangePromotionButton.setToolTipText(Messages.getString("CustomSetupPanel.pressToSetUpPromotion")); //$NON-NLS-1$
+		mChangePromotionButton = new JButton(Messages.getString("VariantCreationPanel.promoteThisPiece")); //$NON-NLS-1$
+		mChangePromotionButton.setToolTipText(Messages.getString("VariantCreationPanel.pressToSetUpPromotion")); //$NON-NLS-1$
 		mChangePromotionButton.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent event)
 			{
 				mOptionsFrame.dispose();
-				mOptionsFrame = new JFrame();
+				mOptionsFrame = new JFrame(Messages.getString("VariantCreationPanel.piecePromotion")); //$NON-NLS-1$
 				new PiecePromotionPanel((String) mPieceTypeList.getSelectedValue(), VariantCreationPanel.this, mOptionsFrame);
 			}
 		});
 
-		JButton boardSetupButton = new JButton(Messages.getString("CustomSetupPanel.customizeGameBoard")); //$NON-NLS-1$
+		JButton boardSetupButton = new JButton(Messages.getString("VariantCreationPanel.customizeGameBoard")); //$NON-NLS-1$
 		boardSetupButton.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent event)
 			{
 				mOptionsFrame.dispose();
-				mOptionsFrame = new JFrame();
+				mOptionsFrame = new JFrame(Messages.getString("VariantCreationPanel.customBoardSetup")); //$NON-NLS-1$
 
 				new CustomBoardPanel(VariantCreationPanel.this, mOptionsFrame);
 			}
 		});
 
-		JButton objectiveSetupButton = new JButton(Messages.getString("CustomSetupPanel.setUpObjectives")); //$NON-NLS-1$
+		JButton objectiveSetupButton = new JButton(Messages.getString("VariantCreationPanel.setUpObjectives")); //$NON-NLS-1$
 		objectiveSetupButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -315,7 +327,7 @@ public class VariantCreationPanel extends ChessPanel
 			}
 		});
 
-		JButton ruleSetupButton = new JButton(Messages.getString("CustomSetupPanel.setUpGameRules")); //$NON-NLS-1$
+		JButton ruleSetupButton = new JButton(Messages.getString("VariantCreationPanel.setUpGameRules")); //$NON-NLS-1$
 		ruleSetupButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -328,7 +340,7 @@ public class VariantCreationPanel extends ChessPanel
 			}
 		});
 
-		JButton playerSetupButton = new JButton(Messages.getString("CustomSetupPanel.setUpPlayerRules")); //$NON-NLS-1$
+		JButton playerSetupButton = new JButton(Messages.getString("VariantCreationPanel.setUpPlayerRules")); //$NON-NLS-1$
 		playerSetupButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -340,7 +352,7 @@ public class VariantCreationPanel extends ChessPanel
 			}
 		});
 
-		JButton pieceSetupButton = new JButton(Messages.getString("CustomSetupPanel.pieceEditor")); //$NON-NLS-1$
+		JButton pieceSetupButton = new JButton(Messages.getString("VariantCreationPanel.pieceEditor")); //$NON-NLS-1$
 		pieceSetupButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -348,7 +360,7 @@ public class VariantCreationPanel extends ChessPanel
 			{
 				mOptionsFrame.dispose();
 				mOptionsFrame = new JFrame();
-				new PieceMenuPanel(mOptionsFrame);
+				(new PieceMenuPanel(mOptionsFrame)).setPieceListChangedListener(VariantCreationPanel.this);
 			}
 		});
 
@@ -417,10 +429,11 @@ public class VariantCreationPanel extends ChessPanel
 
 	}
 
-	public void drawBoards(Board[] boards, boolean hasMultipleBoards)
+	public void drawBoards(Board[] boards)
 	{
 		// Get the set the board into the builder.
 		mBuilder.setBoards(boards);
+		mGameBoards = boards;
 
 		for (JPanel panel : mBoardPanels)
 		{
@@ -449,6 +462,25 @@ public class VariantCreationPanel extends ChessPanel
 					Square square = boards[boardIndex].getSquare(row, column);
 					if (square.isOccupied())
 					{
+						for (int i = 0; i < mPieceTypeList.getModel().getSize(); i++)
+						{
+							if (!mPieceTypeList.getModel().getElementAt(i).toString().equals(square.getPiece().getName()))
+								continue;
+
+							Piece platonicIdeal = null;
+							try
+							{
+								platonicIdeal = PieceBuilder.makePiece(mPieceTypeList.getModel().getElementAt(i).toString(), square
+										.getPiece().isBlack(), square, boards[boardIndex]);
+							}
+							catch (IOException e)
+							{
+								e.printStackTrace();
+							}
+							if (!square.getPiece().equals(platonicIdeal))
+								square.setPiece(platonicIdeal);
+
+						}
 						square.addMouseListener(new PieceNormalBoardListener(square));
 						square.addMouseMotionListener(m_motionAdapter);
 					}
@@ -494,11 +526,13 @@ public class VariantCreationPanel extends ChessPanel
 
 		Object[] standardPieces = PieceBuilder.getSet().toArray();
 		for (int i = 0; i < standardPieces.length; i++)
-			list.addElement(standardPieces[i]);
+			if (!list.contains(standardPieces[i]))
+				list.addElement(standardPieces[i]);
 
 		String[] customPieces = FileUtility.getCustomPieceArray();
 		for (int i = 0; i < customPieces.length; i++)
-			list.addElement(customPieces[i]);
+			if (!list.contains(customPieces[i]))
+				list.addElement(customPieces[i]);
 
 		mPieceTypeList = new JList(list);
 
@@ -507,28 +541,7 @@ public class VariantCreationPanel extends ChessPanel
 		mPieceTypeList.setVisibleRowCount(-1);
 		mPieceTypeList.setSelectedIndex(0);
 
-		Piece whitePieceBeingDisplayed = null;
-		Piece blackPieceBeingDisplayed = null;
-
-		try
-		{
-			whitePieceBeingDisplayed = PieceBuilder.makePiece((String) list.elementAt(0), false, mPieceDisplaySquares[WHITE_INDEX],
-					null);
-			blackPieceBeingDisplayed = PieceBuilder.makePiece((String) list.elementAt(0), true, mPieceDisplaySquares[BLACK_INDEX],
-					null);
-		}
-		catch (IOException e)
-		{
-			JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("CustomSetupPanel.errorCouldNotLoadPiece")); //$NON-NLS-1$
-			e.printStackTrace();
-			return;
-		}
-
-		mPieceDisplaySquares[WHITE_INDEX].setPiece(whitePieceBeingDisplayed);
-		mPieceDisplaySquares[BLACK_INDEX].setPiece(blackPieceBeingDisplayed);
-
-		for (Square square : mPieceDisplaySquares)
-			square.refresh();
+		updateDisplaySquares();
 
 		ListSelectionModel selectList = mPieceTypeList.getSelectionModel();
 
@@ -539,43 +552,7 @@ public class VariantCreationPanel extends ChessPanel
 			@Override
 			public void valueChanged(ListSelectionEvent event)
 			{
-				ListSelectionModel listSelectionModel = (ListSelectionModel) event.getSource();
-
-				int selection = listSelectionModel.getAnchorSelectionIndex();
-				if (!listSelectionModel.getValueIsAdjusting())
-				{
-					for (Square square : mPieceDisplaySquares)
-						square.setVisible(true);
-
-					mChangePromotionButton.setEnabled(true);
-
-					Piece whitePieceBeingDisplayed;
-					Piece blackPieceBeingDisplayed;
-
-					try
-					{
-						whitePieceBeingDisplayed = PieceBuilder.makePiece((String) list.elementAt(selection), false,
-								mPieceDisplaySquares[WHITE_INDEX], null);
-						blackPieceBeingDisplayed = PieceBuilder.makePiece((String) list.elementAt(selection), true,
-								mPieceDisplaySquares[BLACK_INDEX], null);
-					}
-					catch (IOException e)
-					{
-						JOptionPane.showMessageDialog(Driver.getInstance(),
-								Messages.getString("CustomSetupPanel.errorCouldNotLoadPiece")); //$NON-NLS-1$
-						e.printStackTrace();
-						return;
-					}
-
-					mPieceDisplaySquares[WHITE_INDEX].setPiece(whitePieceBeingDisplayed);
-					mPieceDisplaySquares[BLACK_INDEX].setPiece(blackPieceBeingDisplayed);
-
-					for (Square square : mPieceDisplaySquares)
-					{
-						square.resetColor();
-						square.refresh();
-					}
-				}
+				updateDisplaySquares();
 			}
 		});
 
@@ -605,6 +582,11 @@ public class VariantCreationPanel extends ChessPanel
 		public SquareSetupMouseListener(Square square)
 		{
 			m_square = square;
+			if (m_square.isOccupied())
+			{
+				m_square.setToolTipText(m_square.getPiece().getName());
+				m_square.refresh();
+			}
 		}
 
 		@Override
@@ -625,12 +607,12 @@ public class VariantCreationPanel extends ChessPanel
 
 		private void showSquareOptions()
 		{
-			final JFrame popupFrame = new JFrame(Messages.getString("CustomSetupPanel.squareOptions")); //$NON-NLS-1$
+			final JFrame popupFrame = new JFrame(Messages.getString("VariantCreationPanel.squareOptions")); //$NON-NLS-1$
 			popupFrame.setSize(370, 120);
 			popupFrame.setLocationRelativeTo(Driver.getInstance());
 			popupFrame.setLayout(new FlowLayout());
 
-			final JButton colorChooserButton = new JButton(Messages.getString("CustomSetupPanel.setSquareColor")); //$NON-NLS-1$
+			final JButton colorChooserButton = new JButton(Messages.getString("VariantCreationPanel.setSquareColor")); //$NON-NLS-1$
 			colorChooserButton.addActionListener(new ActionListener()
 			{
 
@@ -638,7 +620,7 @@ public class VariantCreationPanel extends ChessPanel
 				public void actionPerformed(ActionEvent event)
 				{
 					Color color = JColorChooser.showDialog(popupFrame,
-							Messages.getString("CustomSetupPanel.chooseColor"), m_square.getColor()); //$NON-NLS-1$
+							Messages.getString("VariantCreationPanel.chooseColor"), m_square.getColor()); //$NON-NLS-1$
 					if (color == null)
 						return;
 					// TODO: verify that this can be removed
@@ -654,7 +636,7 @@ public class VariantCreationPanel extends ChessPanel
 						// the chances of this happening is EXTREMELY small...
 						JOptionPane.showMessageDialog(
 								popupFrame,
-								Messages.getString("CustomSetupPanel.colorCannotBeSelected"), Messages.getString("CustomSetupPanel.invalidColor"), //$NON-NLS-1$ //$NON-NLS-2$
+								Messages.getString("VariantCreationPanel.colorCannotBeSelected"), Messages.getString("VariantCreationPanel.invalidColor"), //$NON-NLS-1$ //$NON-NLS-2$
 								JOptionPane.PLAIN_MESSAGE);
 					}
 
@@ -663,10 +645,10 @@ public class VariantCreationPanel extends ChessPanel
 			popupFrame.add(colorChooserButton);
 
 			final JCheckBox uninhabitableButton = new JCheckBox(
-					Messages.getString("CustomSetupPanel.uninhabited"), !m_square.isHabitable()); //$NON-NLS-1$
+					Messages.getString("VariantCreationPanel.uninhabited"), !m_square.isHabitable()); //$NON-NLS-1$
 			popupFrame.add(uninhabitableButton);
 
-			final JButton doneButton = new JButton(Messages.getString("CustomSetupPanel.done")); //$NON-NLS-1$
+			final JButton doneButton = new JButton(Messages.getString("VariantCreationPanel.done")); //$NON-NLS-1$
 			doneButton.addActionListener(new ActionListener()
 			{
 				@Override
@@ -687,26 +669,50 @@ public class VariantCreationPanel extends ChessPanel
 		private Square m_square;
 	}
 
-	public void putPromotionMap(String pieceName, List<String> promotesTo)
+	public void putPromotionMap(String pieceName, List<String> promotesTo, int colorCode)
 	{
-		mPromotionMap.put(pieceName, promotesTo);
-		if (mBuilder.getPromotionMap() == null)
-			mBuilder.setPromotionMap(mPromotionMap);
-		mBuilder.addToPromotionMap(pieceName, promotesTo);
+		if (colorCode == Builder.BLACK || colorCode == Builder.BOTH)
+		{
+			mBlackPromotionMap.put(pieceName, promotesTo);
+			if (mBuilder.getBlackPromotionMap() == null)
+				mBuilder.setBlackPromotionMap(mBlackPromotionMap);
+			mBuilder.addToPromotionMap(pieceName, promotesTo, colorCode);
+		}
+		if (colorCode == Builder.WHITE || colorCode == Builder.BOTH)
+		{
+			mWhitePromotionMap.put(pieceName, promotesTo);
+			if (mBuilder.getWhitePromotionMap() == null)
+				mBuilder.setWhitePromotionMap(mWhitePromotionMap);
+			mBuilder.addToPromotionMap(pieceName, promotesTo, colorCode);
+		}
 	}
 
-	public Map<String, List<String>> getPromotionMap()
+	public Map<String, List<String>> getWhitePromotionMap()
 	{
-		return mPromotionMap;
+		return mWhitePromotionMap;
 	}
 
-	private final class PieceDisplayBoardListener extends DropAdapter implements MouseListener
+	public Map<String, List<String>> getBlackPromotionMap()
+	{
+		return mBlackPromotionMap;
+	}
+
+	private final class PieceDisplayBoardListener extends DropAdapter implements MouseListener, PieceToolTipPreferenceChangedListener
 	{
 		public PieceDisplayBoardListener(Square square)
 		{
 			super(mGlobalGlassPane);
 			m_square = square;
 			addDropListener(mDropManager);
+			if (m_square.getPiece() != null && PreferenceUtility.getPreference().showPieceToolTips())
+				m_square.setToolTipText(m_square.getPiece().getToolTipText());
+			PreferenceUtility.addPieceToolTipListener(this);
+		}
+
+		public void onPieceSelectionChanged()
+		{
+			if (m_square.getPiece() != null && PreferenceUtility.getPreference().showPieceToolTips())
+				m_square.setToolTipText(m_square.getPiece().getToolTipText());
 		}
 
 		@Override
@@ -761,15 +767,26 @@ public class VariantCreationPanel extends ChessPanel
 		}
 
 		private final Square m_square;
+
+		public void onPieceToolTipPreferenceChanged()
+		{
+			if (m_square.getPiece() != null && PreferenceUtility.getPreference().showPieceToolTips())
+				m_square.setToolTipText(m_square.getPiece().getToolTipText());
+			else
+				m_square.setToolTipText(null);
+		}
 	};
 
-	private final class PieceNormalBoardListener extends DropAdapter implements MouseListener
+	private final class PieceNormalBoardListener extends DropAdapter implements MouseListener, PieceToolTipPreferenceChangedListener
 	{
 		public PieceNormalBoardListener(Square square)
 		{
 			super(mGlobalGlassPane);
 			m_square = square;
 			addDropListener(mDropManager);
+			if (m_square.getPiece() != null && PreferenceUtility.getPreference().showPieceToolTips())
+				m_square.setToolTipText(m_square.getPiece().getToolTipText());
+			PreferenceUtility.addPieceToolTipListener(this);
 		}
 
 		@Override
@@ -812,6 +829,12 @@ public class VariantCreationPanel extends ChessPanel
 			fireDropEvent(new DropEvent(point, m_square), false);
 		}
 
+		public void onPieceSelectionChanged()
+		{
+			if (m_square.getPiece() != null)
+				m_square.setToolTipText(m_square.getPiece().getToolTipText());
+		}
+
 		@Override
 		public void mouseExited(MouseEvent event)
 		{
@@ -825,6 +848,15 @@ public class VariantCreationPanel extends ChessPanel
 		@Override
 		public void mouseClicked(MouseEvent event)
 		{
+		}
+
+		@Override
+		public void onPieceToolTipPreferenceChanged()
+		{
+			if (m_square.getPiece() != null && PreferenceUtility.getPreference().showPieceToolTips())
+				m_square.setToolTipText(m_square.getPiece().getToolTipText());
+			else
+				m_square.setToolTipText(null);
 		}
 
 		private final Square m_square;
@@ -879,7 +911,7 @@ public class VariantCreationPanel extends ChessPanel
 				}
 				catch (IOException e)
 				{
-					JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("CustomSetupPanel.errorCouldNotLoadPiece")); //$NON-NLS-1$
+					JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("VariantCreationPanel.errorCouldNotLoadPiece")); //$NON-NLS-1$
 					e.printStackTrace();
 					return;
 				}
@@ -916,11 +948,54 @@ public class VariantCreationPanel extends ChessPanel
 			else
 			{
 				JOptionPane.showMessageDialog(Driver.getInstance(),
-						Messages.getString("CustomSetupPanel.squareIsUninhabitable"), Messages.getString("CustomSetupPanel.warning"), //$NON-NLS-1$ //$NON-NLS-2$
+						Messages.getString("VariantCreationPanel.squareIsUninhabitable"), Messages.getString("VariantCreationPanel.warning"), //$NON-NLS-1$ //$NON-NLS-2$
 						JOptionPane.PLAIN_MESSAGE);
 			}
 		}
 	};
+
+	public void onPieceListChanged()
+	{
+		setupPiecesList();
+		drawBoards(mGameBoards);
+		updateDisplaySquares();
+	}
+
+	private void updateDisplaySquares()
+	{
+		Piece whitePieceBeingDisplayed = null;
+		Piece blackPieceBeingDisplayed = null;
+
+		try
+		{
+			whitePieceBeingDisplayed = PieceBuilder.makePiece(mPieceTypeList.getSelectedValue().toString(), false,
+					mPieceDisplaySquares[WHITE_INDEX], mDisplayBoard);
+			blackPieceBeingDisplayed = PieceBuilder.makePiece(mPieceTypeList.getSelectedValue().toString(), true,
+					mPieceDisplaySquares[BLACK_INDEX], mDisplayBoard);
+		}
+		catch (IOException e)
+		{
+			JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("VariantCreationPanel.errorCouldNotLoadPiece")); //$NON-NLS-1$
+			e.printStackTrace();
+			return;
+		}
+
+		mPieceDisplaySquares[WHITE_INDEX].setPiece(whitePieceBeingDisplayed);
+		mPieceDisplaySquares[BLACK_INDEX].setPiece(blackPieceBeingDisplayed);
+
+		for (Square square : mPieceDisplaySquares)
+		{
+			square.resetColor();
+			square.refresh();
+			for (MouseListener listener : square.getMouseListeners())
+			{
+				if (listener instanceof PieceDisplayBoardListener)
+					((PieceDisplayBoardListener) listener).onPieceSelectionChanged();
+				else if (listener instanceof PieceNormalBoardListener)
+					((PieceNormalBoardListener) listener).onPieceSelectionChanged();
+			}
+		}
+	}
 
 	private static final long serialVersionUID = 7830479492072657640L;
 	private static final int WHITE_INDEX = 0;
@@ -935,7 +1010,8 @@ public class VariantCreationPanel extends ChessPanel
 
 	private JPanel[] mBoardPanels;
 	private JPanel mPieceListPanel = new JPanel();
-	private Map<String, List<String>> mPromotionMap;
+	private Map<String, List<String>> mWhitePromotionMap;
+	private Map<String, List<String>> mBlackPromotionMap;
 	private Builder mBuilder;
 	private List<Piece> mWhiteTeam;
 	private List<Piece> mBlackTeam;
@@ -944,4 +1020,6 @@ public class VariantCreationPanel extends ChessPanel
 	private JFrame mOptionsFrame;
 	private JScrollPane mScrollPane = new JScrollPane();
 	private MotionAdapter m_motionAdapter;
+	private Board mDisplayBoard;
+	private Board[] mGameBoards;
 }

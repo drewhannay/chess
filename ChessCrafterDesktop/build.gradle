@@ -31,16 +31,15 @@ apply plugin: 'macAppBundle'
 macAppBundle {
     mainClassName = "gui.Driver"
 	appName = "Chess Crafter"
+	icon = "chess.icns"
 }
 
 buildscript {
     repositories {
-		ivy {
-	        artifactPattern 'http://gradle-macappbundle.googlecode.com/files/[module]-[revision].[ext]'
-	    }
+        mavenCentral()
     }
 
     dependencies {
-		classpath 'edu.sc.seis:gradle-macappbundle:1.0.4'
+        classpath 'edu.sc.seis.gradle:macappbundle:1.0.9'
     }
 }

@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -63,21 +64,29 @@ public class RuleMakerPanel extends ChessPanel
 		// capture mandatory check boxes
 		final JPanel whiteLegalDestinationPanel = new JPanel();
 		whiteLegalDestinationPanel.setLayout(new GridLayout(2, 1));
+		whiteLegalDestinationPanel.setOpaque(false);
 		final JCheckBox whiteCaptureMandatoryCheckBox = new JCheckBox(Messages.getString("RuleMakerPanel.captureMandatory")); //$NON-NLS-1$
+		whiteCaptureMandatoryCheckBox.setForeground(Color.white);
+		whiteCaptureMandatoryCheckBox.setOpaque(false);
 		whiteCaptureMandatoryCheckBox.setToolTipText(Messages.getString("RuleMakerPanel.capturingMustBe")); //$NON-NLS-1$
 		whiteCaptureMandatoryCheckBox.setSelected(customSetupMenu.mWhiteRules.getCaptureMandatory());
 		whiteLegalDestinationPanel.add(whiteCaptureMandatoryCheckBox);
 
 		final JPanel blackLegalDestinationPanel = new JPanel();
 		blackLegalDestinationPanel.setLayout(new GridLayout(2, 1));
+		blackLegalDestinationPanel.setOpaque(false);
 		final JCheckBox blackCaptureMandatoryCheckBox = new JCheckBox(Messages.getString("RuleMakerPanel.captureMandatory")); //$NON-NLS-1$
 		blackCaptureMandatoryCheckBox.setToolTipText(Messages.getString("RuleMakerPanel.capturingMustBe")); //$NON-NLS-1$
 		blackCaptureMandatoryCheckBox.setSelected(customSetupMenu.mBlackRules.getCaptureMandatory());
+		blackCaptureMandatoryCheckBox.setForeground(Color.white);
+		blackCaptureMandatoryCheckBox.setOpaque(false);
 		blackLegalDestinationPanel.add(blackCaptureMandatoryCheckBox);
 
 		// can't move objective check boxes
 		final JCheckBox whiteNoMoveObjectiveCheckBox = new JCheckBox(Messages.getString("RuleMakerPanel.cantMoveObj")); //$NON-NLS-1$
 		whiteNoMoveObjectiveCheckBox.setToolTipText(Messages.getString("RuleMakerPanel.movingObjIllegal")); //$NON-NLS-1$
+		whiteNoMoveObjectiveCheckBox.setForeground(Color.white);
+		whiteNoMoveObjectiveCheckBox.setOpaque(false);
 		if (mWhiteRules.getEndOfGame() == EndOfGame.CLASSIC || mWhiteRules.getEndOfGame() == EndOfGame.CHECK_N_TIMES)
 		{
 			whiteNoMoveObjectiveCheckBox.setSelected(customSetupMenu.mWhiteRules.getObjectiveIsStationary());
@@ -86,6 +95,8 @@ public class RuleMakerPanel extends ChessPanel
 
 		final JCheckBox blackNoMoveObjectiveCheckBox = new JCheckBox(Messages.getString("RuleMakerPanel.cantMoveObj")); //$NON-NLS-1$
 		blackNoMoveObjectiveCheckBox.setToolTipText(Messages.getString("RuleMakerPanel.movingObjIllegal")); //$NON-NLS-1$
+		blackNoMoveObjectiveCheckBox.setForeground(Color.white);
+		blackNoMoveObjectiveCheckBox.setOpaque(false);
 		if (mBlackRules.getEndOfGame() == EndOfGame.CLASSIC || mBlackRules.getEndOfGame() == EndOfGame.CHECK_N_TIMES)
 		{
 			blackNoMoveObjectiveCheckBox.setSelected(customSetupMenu.mBlackRules.getObjectiveIsStationary());
@@ -94,9 +105,12 @@ public class RuleMakerPanel extends ChessPanel
 
 		final JPanel whiteAfterCapturePanel = new JPanel();
 		whiteAfterCapturePanel.setLayout(new GridLayout(4, 1));
+		whiteAfterCapturePanel.setOpaque(false);
 
 		final ButtonGroup whiteAfterOptions = new ButtonGroup();
 		final JRadioButton whiteChangeColorRadioButton = new JRadioButton(Messages.getString("RuleMakerPanel.captererChangesColor")); //$NON-NLS-1$
+		whiteChangeColorRadioButton.setForeground(Color.white);
+		whiteChangeColorRadioButton.setOpaque(false);
 		whiteChangeColorRadioButton.setToolTipText(Messages.getString("RuleMakerPanel.capturingPieceChanges")); //$NON-NLS-1$
 
 		if (mWhiteRules.getEndOfGame() != EndOfGame.CLASSIC)
@@ -108,10 +122,14 @@ public class RuleMakerPanel extends ChessPanel
 		final JRadioButton whitePieceReturnRadioButton = new JRadioButton(Messages.getString("RuleMakerPanel.capturedReturns")); //$NON-NLS-1$
 		whitePieceReturnRadioButton.setToolTipText(Messages.getString("RuleMakerPanel.capturedReturnToTheirStart")); //$NON-NLS-1$
 		whitePieceReturnRadioButton.setSelected(mWhiteRules.getCapturedReturnToStart());
+		whitePieceReturnRadioButton.setForeground(Color.white);
+		whitePieceReturnRadioButton.setOpaque(false);
 		whiteAfterOptions.add(whitePieceReturnRadioButton);
 		whiteAfterCapturePanel.add(whitePieceReturnRadioButton);
 
 		final JRadioButton whiteDropPiecesRadioButton = new JRadioButton(Messages.getString("RuleMakerPanel.capturedPiecesDrop")); //$NON-NLS-1$
+		whiteDropPiecesRadioButton.setForeground(Color.white);
+		whiteDropPiecesRadioButton.setOpaque(false);
 		if (mWhiteRules.getEndOfGame() != EndOfGame.CAPTURE_ALL_OF_TYPE || mWhiteRules.getEndOfGame() != EndOfGame.LOSE_ALL_PIECES)
 		{
 			whiteDropPiecesRadioButton.setToolTipText(Messages.getString("RuleMakerPanel.capturedArePlaced")); //$NON-NLS-1$
@@ -120,23 +138,29 @@ public class RuleMakerPanel extends ChessPanel
 			whiteAfterCapturePanel.add(whiteDropPiecesRadioButton);
 		}
 
-		final JRadioButton whiteCapturedColorAndDropRadioButton = new JRadioButton(
-				Messages.getString("RuleMakerPanel.capturedChangesAnd")); //$NON-NLS-1$
+		final JRadioButton whiteCapturedColorAndDropRadioButton = new JRadioButton(Messages.getString("RuleMakerPanel.capturedChangesAnd")); //$NON-NLS-1$
 		whiteCapturedColorAndDropRadioButton.setToolTipText(Messages.getString("RuleMakerPanel.capturedChangesTeams")); //$NON-NLS-1$
 		whiteCapturedColorAndDropRadioButton.setSelected(mWhiteRules.getPiecesDropAndSwitch());
+		whiteCapturedColorAndDropRadioButton.setForeground(Color.white);
+		whiteCapturedColorAndDropRadioButton.setOpaque(false);
 		whiteAfterOptions.add(whiteCapturedColorAndDropRadioButton);
 		whiteAfterCapturePanel.add(whiteCapturedColorAndDropRadioButton);
 
 		final JRadioButton whiteNoAfterMoveRadioButton = new JRadioButton(Messages.getString("RuleMakerPanel.doNothing")); //$NON-NLS-1$
 		whiteNoAfterMoveRadioButton.setSelected(mWhiteRules.getNoAfterMovesSelected());
+		whiteNoAfterMoveRadioButton.setForeground(Color.white);
+		whiteNoAfterMoveRadioButton.setOpaque(false);
 		whiteAfterOptions.add(whiteNoAfterMoveRadioButton);
 		whiteAfterCapturePanel.add(whiteNoAfterMoveRadioButton);
 
 		final JPanel blackAfterPanel = new JPanel();
+		blackAfterPanel.setOpaque(false);
 		final ButtonGroup blackAfterOptions = new ButtonGroup();
 
 		blackAfterPanel.setLayout(new GridLayout(4, 1));
-		final JRadioButton blackChangeColorRadioButton = new JRadioButton(Messages.getString("RuleMakerPanel.capturerChanges")); //$NON-NLS-1$
+		final JRadioButton blackChangeColorRadioButton = new JRadioButton(Messages.getString("RuleMakerPanel.captererChangesColor")); //$NON-NLS-1$
+		blackChangeColorRadioButton.setForeground(Color.white);
+		blackChangeColorRadioButton.setOpaque(false);
 		blackChangeColorRadioButton.setToolTipText(Messages.getString("RuleMakerPanel.capturingPieceChanges")); //$NON-NLS-1$
 
 		if (mBlackRules.getEndOfGame() != EndOfGame.CLASSIC)
@@ -148,11 +172,15 @@ public class RuleMakerPanel extends ChessPanel
 		final JRadioButton blackPieceReturnRadioButton = new JRadioButton(Messages.getString("RuleMakerPanel.capturedReturns")); //$NON-NLS-1$
 		blackPieceReturnRadioButton.setToolTipText(Messages.getString("RuleMakerPanel.capturedReturnToTheirStart")); //$NON-NLS-1$
 		blackPieceReturnRadioButton.setSelected(mBlackRules.getCapturedReturnToStart());
+		blackPieceReturnRadioButton.setForeground(Color.white);
+		blackPieceReturnRadioButton.setOpaque(false);
 		blackAfterPanel.add(blackPieceReturnRadioButton);
 		blackAfterOptions.add(blackPieceReturnRadioButton);
 
 		final JRadioButton blackDropPiecesRadioButton = new JRadioButton(Messages.getString("RuleMakerPanel.capturedPiecesDrop")); //$NON-NLS-1$
 		blackDropPiecesRadioButton.setToolTipText(Messages.getString("RuleMakerPanel.capturedArePlaced")); //$NON-NLS-1$
+		blackDropPiecesRadioButton.setForeground(Color.white);
+		blackDropPiecesRadioButton.setOpaque(false);
 		if (mBlackRules.getEndOfGame() != EndOfGame.CAPTURE_ALL_OF_TYPE || mBlackRules.getEndOfGame() != EndOfGame.LOSE_ALL_PIECES)
 		{
 			blackDropPiecesRadioButton.setSelected(mBlackRules.getPiecesDrop());
@@ -160,34 +188,43 @@ public class RuleMakerPanel extends ChessPanel
 			blackAfterOptions.add(blackDropPiecesRadioButton);
 		}
 
-		final JRadioButton blackCapturedColorAndDropRadioButton = new JRadioButton(
-				Messages.getString("RuleMakerPanel.capturedChangesAnd")); //$NON-NLS-1$
+		final JRadioButton blackCapturedColorAndDropRadioButton = new JRadioButton(Messages.getString("RuleMakerPanel.capturedChangesAnd")); //$NON-NLS-1$
 		blackCapturedColorAndDropRadioButton.setToolTipText(Messages.getString("RuleMakerPanel.capturedChangesTeams")); //$NON-NLS-1$
 		blackCapturedColorAndDropRadioButton.setSelected(mBlackRules.getPiecesDropAndSwitch());
+		blackCapturedColorAndDropRadioButton.setForeground(Color.white);
+		blackCapturedColorAndDropRadioButton.setOpaque(false);
 		blackAfterPanel.add(blackCapturedColorAndDropRadioButton);
 		blackAfterOptions.add(blackCapturedColorAndDropRadioButton);
 
 		final JRadioButton blackNoAfterMoveRadioButton = new JRadioButton(Messages.getString("RuleMakerPanel.doNothing")); //$NON-NLS-1$
 		blackNoAfterMoveRadioButton.setSelected(mBlackRules.getNoAfterMovesSelected());
+		blackNoAfterMoveRadioButton.setForeground(Color.white);
+		blackNoAfterMoveRadioButton.setOpaque(false);
 		blackAfterOptions.add(blackNoAfterMoveRadioButton);
 		blackAfterPanel.add(blackNoAfterMoveRadioButton);
 
 		final JPanel specialRulesPanel = new JPanel();
 		specialRulesPanel.setLayout(new GridLayout(2, 1));
+		specialRulesPanel.setOpaque(false);
 
 		final JCheckBox atomicChessCheckBox = new JCheckBox(Messages.getString("RuleMakerPanel.atomicChess")); //$NON-NLS-1$
 		atomicChessCheckBox.setToolTipText(Messages.getString("RuleMakerPanel.captureRemovesBoth")); //$NON-NLS-1$
 		atomicChessCheckBox.setEnabled(mWhiteRules.isAtomic() || mWhiteRules.getNoAfterMovesSelected());
 		atomicChessCheckBox.setSelected(mWhiteRules.isAtomic());
+		atomicChessCheckBox.setForeground(Color.white);
+		atomicChessCheckBox.setOpaque(false);
 		specialRulesPanel.add(atomicChessCheckBox);
 
 		final JCheckBox switchBoardsCheckBox = new JCheckBox(Messages.getString("RuleMakerPanel.moveToOtherBoard")); //$NON-NLS-1$
 		switchBoardsCheckBox.setToolTipText(Messages.getString("RuleMakerPanel.eachPiecesMoves")); //$NON-NLS-1$
 		switchBoardsCheckBox.setEnabled(mWhiteRules.switchBoards());
+		switchBoardsCheckBox.setForeground(Color.white);
+		switchBoardsCheckBox.setOpaque(false);
 		specialRulesPanel.add(switchBoardsCheckBox);
 
 		final JPanel whiteExtrasPanel = new JPanel();
 		whiteExtrasPanel.setLayout(new GridBagLayout());
+		whiteExtrasPanel.setOpaque(false);
 		final JTextField whiteNumberOfChecksField = new JTextField(2);
 		Object[] allPieces = PieceBuilder.getSet().toArray();
 		final JComboBox whitePieceList = new JComboBox(allPieces);
@@ -202,8 +239,8 @@ public class RuleMakerPanel extends ChessPanel
 				blackObjectiveIndex = i;
 		}
 
-		JLabel whiteNumberOfChecksLabel = new JLabel(Messages.getString("RuleMakerPanel.howManyTimesForCheck")); //$NON-NLS-1$
-		JLabel whiteObjectivePieceLabel = new JLabel(Messages.getString("RuleMakerPanel.whichIsObjective")); //$NON-NLS-1$
+		JLabel whiteNumberOfChecksLabel = new JLabel("<html><font color=\"#FFFFFF\">" + Messages.getString("RuleMakerPanel.howManyTimesForCheck") + "</font></html>"); //$NON-NLS-1$
+		JLabel whiteObjectivePieceLabel = new JLabel("<html><font color=\"#FFFFFF\">" + Messages.getString("RuleMakerPanel.whichIsObjective") + "</font></html>"); //$NON-NLS-1$
 
 		whiteNumberOfChecksField.setVisible(false);
 		whitePieceList.setVisible(false);
@@ -211,7 +248,7 @@ public class RuleMakerPanel extends ChessPanel
 		if (mWhiteRules.getEndOfGame() == EndOfGame.CLASSIC || mWhiteRules.getEndOfGame() == EndOfGame.CAPTURE_ALL_OF_TYPE)
 		{
 			if (mWhiteRules.getEndOfGame() == EndOfGame.CAPTURE_ALL_OF_TYPE)
-				whiteObjectivePieceLabel.setText(Messages.getString("RuleMakerPanel.whichPieceTypeCaptured")); //$NON-NLS-1$
+				whiteObjectivePieceLabel.setText("<html><font color=\"#FFFFFF\">" + Messages.getString("RuleMakerPanel.whichPieceTypeCaptured") + "</font></html>"); //$NON-NLS-1$
 
 			whitePieceList.setVisible(true);
 			whitePieceList.setSelectedIndex(whiteObjectiveIndex);
@@ -245,13 +282,14 @@ public class RuleMakerPanel extends ChessPanel
 		}
 
 		final JPanel blackExtrasPanel = new JPanel();
+		blackExtrasPanel.setOpaque(false);
 		blackExtrasPanel.setLayout(new GridBagLayout());
 
 		final JTextField blackNumberOfChecksField = new JTextField(2);
 		final JComboBox blackPiecesList = new JComboBox(allPieces);
 
-		JLabel blackNumberOfChecksLabel = new JLabel(Messages.getString("RuleMakerPanel.howManyTimesForCheck")); //$NON-NLS-1$
-		JLabel blackObjectivePieceLabel = new JLabel(Messages.getString("RuleMakerPanel.whichIsObjective")); //$NON-NLS-1$
+		JLabel blackNumberOfChecksLabel = new JLabel("<html><font color=\"#FFFFFF\">" + Messages.getString("RuleMakerPanel.howManyTimesForCheck") + "</font></html>"); //$NON-NLS-1$
+		JLabel blackObjectivePieceLabel = new JLabel("<html><font color=\"#FFFFFF\">" + Messages.getString("RuleMakerPanel.whichIsObjective") + "</font></html>"); //$NON-NLS-1$
 
 		blackNumberOfChecksField.setVisible(false);
 		blackPiecesList.setVisible(false);
@@ -400,6 +438,7 @@ public class RuleMakerPanel extends ChessPanel
 						mWhiteRules.addEndOfGame(EndOfGame.CAPTURE_ALL_OF_TYPE.init(0, whitePieceList.getSelectedItem().toString(),
 								false));
 					}
+					mBuilder.addToPromotionMap(mWhiteRules.getObjectiveName(), null, Builder.WHITE);
 				}
 				if (blackNumberOfChecksField.isVisible())
 				{
@@ -440,6 +479,7 @@ public class RuleMakerPanel extends ChessPanel
 						mBlackRules.addEndOfGame(EndOfGame.CAPTURE_ALL_OF_TYPE.init(0, blackPiecesList.getSelectedItem().toString(),
 								true));
 					}
+					mBuilder.addToPromotionMap(mBlackRules.getObjectiveName(), null, Builder.BLACK);
 				}
 
 				customSetupMenu.mWhiteRules = mWhiteRules;
@@ -450,14 +490,16 @@ public class RuleMakerPanel extends ChessPanel
 		});
 
 		JPanel whiteTeamPanel = new JPanel();
-		whiteTeamPanel.setBorder(BorderFactory.createTitledBorder(Messages.getString("RuleMakerPanel.whiteTeam"))); //$NON-NLS-1$
+		whiteTeamPanel.setBorder(BorderFactory.createTitledBorder("<html><font color=\"#FFFFFF\">" + Messages.getString("RuleMakerPanel.whiteTeam") + "</font></html>")); //$NON-NLS-1$
 		whiteTeamPanel.setLayout(new GridBagLayout());
+		whiteTeamPanel.setOpaque(false);
 
 		JPanel whiteLegalDestinationsPanel = new JPanel();
+		whiteLegalDestinationsPanel.setOpaque(false);
 		whiteLegalDestinationsPanel.setLayout(new GridBagLayout());
 		constraints.gridx = 0;
 		constraints.gridy = 1;
-		whiteLegalDestinationsPanel.add(new JLabel(Messages.getString("RuleMakerPanel.legalDestinationHTML")), constraints); //$NON-NLS-1$
+		whiteLegalDestinationsPanel.add(new JLabel("<html><font color=\"#FFFFFF\">" + Messages.getString("RuleMakerPanel.legalDestinationHTML") + "</font></html>"), constraints); //$NON-NLS-1$
 		constraints.gridx = 0;
 		constraints.gridy = 2;
 		whiteLegalDestinationsPanel.add(whiteLegalDestinationPanel, constraints);
@@ -472,11 +514,12 @@ public class RuleMakerPanel extends ChessPanel
 		whiteTeamPanel.add(whiteExtrasPanel, constraints);
 
 		JPanel whiteCapturePanel = new JPanel();
+		whiteCapturePanel.setOpaque(false);
 		whiteCapturePanel.setLayout(new GridBagLayout());
 		constraints.gridheight = 1;
 		constraints.gridx = 0;
 		constraints.gridy = 1;
-		whiteCapturePanel.add(new JLabel(Messages.getString("RuleMakerPanel.afterCapturingHTML")), //$NON-NLS-1$
+		whiteCapturePanel.add(new JLabel("<html><font color=\"#FFFFFF\">" + Messages.getString("RuleMakerPanel.afterCapturingHTML") + "</font></html>"), //$NON-NLS-1$
 				constraints);
 		constraints.gridx = 0;
 		constraints.gridy = 2;
@@ -487,14 +530,16 @@ public class RuleMakerPanel extends ChessPanel
 		whiteTeamPanel.add(whiteCapturePanel, constraints);
 
 		JPanel blackTeamPanel = new JPanel();
-		blackTeamPanel.setBorder(BorderFactory.createTitledBorder(Messages.getString("RuleMakerPanel.blackTeam"))); //$NON-NLS-1$
+		blackTeamPanel.setOpaque(false);
+		blackTeamPanel.setBorder(BorderFactory.createTitledBorder("<html><font color=\"#FFFFFF\">" + Messages.getString("RuleMakerPanel.blackTeam") + "</font></html>")); //$NON-NLS-1$
 		blackTeamPanel.setLayout(new GridBagLayout());
 
 		JPanel blackLegalDestinationsPanel = new JPanel();
+		blackLegalDestinationsPanel.setOpaque(false);
 		blackLegalDestinationsPanel.setLayout(new GridBagLayout());
 		constraints.gridx = 0;
 		constraints.gridy = 1;
-		blackLegalDestinationsPanel.add(new JLabel(Messages.getString("RuleMakerPanel.legalDestinationHTML")), constraints); //$NON-NLS-1$
+		blackLegalDestinationsPanel.add(new JLabel("<html><font color=\"#FFFFFF\">" + Messages.getString("RuleMakerPanel.legalDestinationHTML") + "</font></html>"), constraints); //$NON-NLS-1$
 		constraints.gridx = 0;
 		constraints.gridy = 2;
 		blackLegalDestinationsPanel.add(blackLegalDestinationPanel, constraints);
@@ -504,11 +549,12 @@ public class RuleMakerPanel extends ChessPanel
 		blackTeamPanel.add(blackLegalDestinationsPanel, constraints);
 
 		JPanel blackCapturePanel = new JPanel();
+		blackCapturePanel.setOpaque(false);
 		blackCapturePanel.setLayout(new GridBagLayout());
 		constraints.gridheight = 1;
 		constraints.gridx = 0;
 		constraints.gridy = 1;
-		blackCapturePanel.add(new JLabel(Messages.getString("RuleMakerPanel.afterCapturingHTML")), //$NON-NLS-1$
+		blackCapturePanel.add(new JLabel("<html><font color=\"#FFFFFF\">" + Messages.getString("RuleMakerPanel.afterCapturingHTML") + "</font></html>"), //$NON-NLS-1$
 				constraints);
 		constraints.gridx = 0;
 		constraints.gridy = 2;
@@ -534,7 +580,8 @@ public class RuleMakerPanel extends ChessPanel
 		add(blackTeamPanel, constraints);
 
 		JPanel specialRules = new JPanel();
-		specialRules.setBorder(BorderFactory.createTitledBorder(Messages.getString("RuleMakerPanel.specialRules"))); //$NON-NLS-1$
+		specialRules.setOpaque(false);
+		specialRules.setBorder(BorderFactory.createTitledBorder("<html><font color=\"#FFFFFF\">" + Messages.getString("RuleMakerPanel.specialRules") + "</font></html>")); //$NON-NLS-1$
 		specialRules.setLayout(new GridBagLayout());
 
 		constraints.gridx = 0;
@@ -550,6 +597,7 @@ public class RuleMakerPanel extends ChessPanel
 		add(specialRules, constraints);
 
 		JPanel buttonsPanel = new JPanel();
+		buttonsPanel.setOpaque(false);
 		buttonsPanel.setLayout(new FlowLayout());
 		buttonsPanel.add(saveButton);
 		buttonsPanel.add(cancelButton);

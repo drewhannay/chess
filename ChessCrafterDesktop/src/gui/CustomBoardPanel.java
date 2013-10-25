@@ -25,12 +25,11 @@ public class CustomBoardPanel extends ChessPanel
 	public CustomBoardPanel(VariantCreationPanel variant, JFrame optionsFrame)
 	{
 		mFrame = optionsFrame;
-		mFrame.setVisible(true);
 		mFrame.add(this);
-		mFrame.setVisible(true);
 		mFrame.setSize(300, 250);
 		mFrame.setLocationRelativeTo(Driver.getInstance());
 		initGUIComponents(variant);
+		mFrame.setVisible(true);
 	}
 
 	private void initGUIComponents(final VariantCreationPanel variant)
@@ -142,7 +141,7 @@ public class CustomBoardPanel extends ChessPanel
 										.parseInt(mNumberOfColumnsTextField.getText()), mWrapAroundCheckBox.isSelected());
 						}
 
-						variant.drawBoards(boards, mTwoBoardsButton.isSelected());
+						variant.drawBoards(boards);
 						mHolder.removeAll();
 						mFrame.setVisible(false);
 					}

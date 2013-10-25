@@ -19,7 +19,9 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import logic.Builder;
 import logic.PieceBuilder;
+import utility.FileUtility;
 import utility.GuiUtility;
 
 import com.google.common.collect.Lists;
@@ -36,66 +38,88 @@ public class PiecePromotionPanel extends ChessPanel
 		mPieceBeingPromotedName = pieceName;
 		mCustomSetupMenu = customSetupMenu;
 		mFrame = optionsFrame;
-		mFrame.setVisible(true);
+
+		mFrame.setSize(600, 800);
 		mFrame.add(this);
-		mFrame.setVisible(true);
-		mFrame.setSize(600, 500);
-		mFrame.setLocationRelativeTo(Driver.getInstance());
 		initComponents();
+		mFrame.setLocationRelativeTo(null);
+		mFrame.setVisible(true);
 	}
 
 	private void initComponents()
 	{
 		setLayout(new GridBagLayout());
 
-		final DefaultListModel canPromoteList = new DefaultListModel();
-		final DefaultListModel cantPromoteList = new DefaultListModel();
+		final DefaultListModel whiteCanPromoteList = new DefaultListModel();
+		final DefaultListModel whiteCantPromoteList = new DefaultListModel();
+		final DefaultListModel blackCanPromoteList = new DefaultListModel();
+		final DefaultListModel blackCantPromoteList = new DefaultListModel();
 
-		List<String> promotions = mCustomSetupMenu.getPromotionMap().get(mPieceBeingPromotedName);
+		List<String> whitePromotions = mCustomSetupMenu.getWhitePromotionMap().get(mPieceBeingPromotedName);
+		List<String> blackPromotions = mCustomSetupMenu.getBlackPromotionMap().get(mPieceBeingPromotedName);
 
-		Object[] allPieces = PieceBuilder.getSet().toArray();
-		for (int i = 0; i < allPieces.length; i++)
+		List<String> customPieces = Lists.newArrayList(FileUtility.getCustomPieceArray());
+		List<Object> allPieces = Lists.newArrayList(PieceBuilder.getSet().toArray());
+		allPieces.addAll(customPieces);
+
+		for (int i = 0; i < allPieces.size(); i++)
 		{
-			if (promotions != null && promotions.contains(allPieces[i]))
-				canPromoteList.addElement(allPieces[i]);
-			else if (!allPieces[i].equals(mPieceBeingPromotedName))
-				cantPromoteList.addElement(allPieces[i]);
+			if (!allPieces.get(i).equals(mPieceBeingPromotedName))
+			{
+				if (!mCustomSetupMenu.mWhiteRules.getObjectiveName().equals(mPieceBeingPromotedName))
+				{
+					if (whitePromotions != null && whitePromotions.contains(allPieces.get(i)))
+						whiteCanPromoteList.addElement(allPieces.get(i));
+					else
+						whiteCantPromoteList.addElement(allPieces.get(i));
+				}
+
+				if (!mCustomSetupMenu.mBlackRules.getObjectiveName().equals(mPieceBeingPromotedName))
+				{
+					if (blackPromotions != null && blackPromotions.contains(allPieces.get(i)))
+						blackCanPromoteList.addElement(allPieces.get(i));
+					else
+						blackCantPromoteList.addElement(allPieces.get(i));
+				}
+			}
 		}
-		final JList cantPromoteToDisplay = new JList(cantPromoteList);
-		final JList canPromoteToDisplay = new JList(canPromoteList);
+		final JList whiteCantPromoteToDisplay = new JList(whiteCantPromoteList);
+		final JList whiteCanPromoteToDisplay = new JList(whiteCanPromoteList);
+		final JList blackCantPromoteToDisplay = new JList(blackCantPromoteList);
+		final JList blackCanPromoteToDisplay = new JList(blackCanPromoteList);
 
-		final JButton moveLeftButton = new JButton();
-		moveLeftButton.addActionListener(new ActionListener()
+		final JButton whiteMoveLeftButton = new JButton();
+		whiteMoveLeftButton.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
 				try
 				{
-					int index = canPromoteToDisplay.getSelectedIndex();
+					int index = whiteCanPromoteToDisplay.getSelectedIndex();
 
-					cantPromoteList.addElement(canPromoteList.elementAt(index));
-					canPromoteList.remove(index);
+					whiteCantPromoteList.addElement(whiteCanPromoteList.elementAt(index));
+					whiteCanPromoteList.remove(index);
 				}
 				catch (Exception e)
 				{
 				}
 			}
 		});
-		moveLeftButton.setText("<---"); //$NON-NLS-1$
+		whiteMoveLeftButton.setText("<---"); //$NON-NLS-1$
 
-		final JButton moveRightButton = new JButton();
-		moveRightButton.addActionListener(new ActionListener()
+		final JButton whiteMoveRightButton = new JButton();
+		whiteMoveRightButton.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
-				int index = cantPromoteToDisplay.getSelectedIndex();
+				int index = whiteCantPromoteToDisplay.getSelectedIndex();
 
 				try
 				{
-					canPromoteList.addElement(cantPromoteList.elementAt(index));
-					cantPromoteList.remove(index);
+					whiteCanPromoteList.addElement(whiteCantPromoteList.elementAt(index));
+					whiteCantPromoteList.remove(index);
 				}
 				catch (Exception e)
 				{
@@ -103,24 +127,75 @@ public class PiecePromotionPanel extends ChessPanel
 
 			}
 		});
-		moveRightButton.setText("--->"); //$NON-NLS-1$
+		whiteMoveRightButton.setText("--->"); //$NON-NLS-1$
 
-		cantPromoteToDisplay.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		cantPromoteToDisplay.setLayoutOrientation(JList.VERTICAL);
-		cantPromoteToDisplay.setVisibleRowCount(-1);
-		cantPromoteToDisplay.setSelectedIndex(0);
+		whiteCantPromoteToDisplay.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		whiteCantPromoteToDisplay.setLayoutOrientation(JList.VERTICAL);
+		whiteCantPromoteToDisplay.setVisibleRowCount(-1);
+		whiteCantPromoteToDisplay.setSelectedIndex(0);
 
-		canPromoteToDisplay.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		canPromoteToDisplay.setLayoutOrientation(JList.VERTICAL);
-		canPromoteToDisplay.setVisibleRowCount(-1);
-		canPromoteToDisplay.setSelectedIndex(0);
+		whiteCanPromoteToDisplay.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		whiteCanPromoteToDisplay.setLayoutOrientation(JList.VERTICAL);
+		whiteCanPromoteToDisplay.setVisibleRowCount(-1);
+		whiteCanPromoteToDisplay.setSelectedIndex(0);
+
+		final JButton blackMoveLeftButton = new JButton();
+		blackMoveLeftButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent arg0)
+			{
+				try
+				{
+					int index = blackCanPromoteToDisplay.getSelectedIndex();
+
+					blackCantPromoteList.addElement(blackCanPromoteList.elementAt(index));
+					blackCanPromoteList.remove(index);
+				}
+				catch (Exception e)
+				{
+				}
+			}
+		});
+		blackMoveLeftButton.setText("<---"); //$NON-NLS-1$
+
+		final JButton blackMoveRightButton = new JButton();
+		blackMoveRightButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent arg0)
+			{
+				int index = blackCantPromoteToDisplay.getSelectedIndex();
+
+				try
+				{
+					blackCanPromoteList.addElement(blackCantPromoteList.elementAt(index));
+					blackCantPromoteList.remove(index);
+				}
+				catch (Exception e)
+				{
+				}
+
+			}
+		});
+		blackMoveRightButton.setText("--->"); //$NON-NLS-1$
+
+		blackCantPromoteToDisplay.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		blackCantPromoteToDisplay.setLayoutOrientation(JList.VERTICAL);
+		blackCantPromoteToDisplay.setVisibleRowCount(-1);
+		blackCantPromoteToDisplay.setSelectedIndex(0);
+
+		blackCanPromoteToDisplay.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		blackCanPromoteToDisplay.setLayoutOrientation(JList.VERTICAL);
+		blackCanPromoteToDisplay.setVisibleRowCount(-1);
+		blackCanPromoteToDisplay.setSelectedIndex(0);
 
 		// LIST - CANT PROMOTE TO
-		JScrollPane cantPromoteScrollPane = new JScrollPane(cantPromoteToDisplay);
-		cantPromoteScrollPane.setPreferredSize(new Dimension(200, 200));
+		JScrollPane whiteCantPromoteScrollPane = new JScrollPane(whiteCantPromoteToDisplay);
+		whiteCantPromoteScrollPane.setPreferredSize(new Dimension(200, 200));
 
-		ListSelectionModel cantPromoteButtonDisabler = cantPromoteToDisplay.getSelectionModel();
-		cantPromoteButtonDisabler.addListSelectionListener(new ListSelectionListener()
+		ListSelectionModel whiteCantPromoteButtonDisabler = whiteCantPromoteToDisplay.getSelectionModel();
+		whiteCantPromoteButtonDisabler.addListSelectionListener(new ListSelectionListener()
 		{
 			@Override
 			public void valueChanged(ListSelectionEvent event)
@@ -128,25 +203,25 @@ public class PiecePromotionPanel extends ChessPanel
 				if (event.getValueIsAdjusting() == false)
 				{
 
-					if (cantPromoteToDisplay.getSelectedIndex() == -1)
+					if (whiteCantPromoteToDisplay.getSelectedIndex() == -1)
 					{
-						moveLeftButton.setEnabled(false);
-						moveRightButton.setEnabled(false);
+						whiteMoveLeftButton.setEnabled(false);
+						whiteMoveRightButton.setEnabled(false);
 					}
 					else
 					{
-						moveLeftButton.setEnabled(true);
-						moveRightButton.setEnabled(true);
+						whiteMoveLeftButton.setEnabled(true);
+						whiteMoveRightButton.setEnabled(true);
 					}
 				}
 			}
 		});
 
-		JScrollPane canPromoteScrollPane = new JScrollPane(canPromoteToDisplay);
-		canPromoteScrollPane.setPreferredSize(new Dimension(200, 200));
+		JScrollPane whiteCanPromoteScrollPane = new JScrollPane(whiteCanPromoteToDisplay);
+		whiteCanPromoteScrollPane.setPreferredSize(new Dimension(200, 200));
 
-		ListSelectionModel canPromoteDisplayButtonDisabler = canPromoteToDisplay.getSelectionModel();
-		canPromoteDisplayButtonDisabler.addListSelectionListener(new ListSelectionListener()
+		ListSelectionModel whiteCanPromoteDisplayButtonDisabler = whiteCanPromoteToDisplay.getSelectionModel();
+		whiteCanPromoteDisplayButtonDisabler.addListSelectionListener(new ListSelectionListener()
 		{
 			@Override
 			public void valueChanged(ListSelectionEvent e)
@@ -155,32 +230,95 @@ public class PiecePromotionPanel extends ChessPanel
 				{ // If the user is still selecting.
 
 					// If the user has not selected anything yet.
-					if (canPromoteToDisplay.getSelectedIndex() == -1)
+					if (whiteCanPromoteToDisplay.getSelectedIndex() == -1)
 					{
 						// No selection, disable the buttons.
-						moveLeftButton.setEnabled(false);
-						moveRightButton.setEnabled(false);
+						whiteMoveLeftButton.setEnabled(false);
+						whiteMoveRightButton.setEnabled(false);
 					}
 					else
 					{
 						// Selection, enable the buttons.
-						moveLeftButton.setEnabled(true);
-						moveRightButton.setEnabled(true);
+						whiteMoveLeftButton.setEnabled(true);
+						whiteMoveRightButton.setEnabled(true);
 					}
 				}
 			}
 		});
+
+		JScrollPane blackCantPromoteScrollPane = new JScrollPane(blackCantPromoteToDisplay);
+		blackCantPromoteScrollPane.setPreferredSize(new Dimension(200, 200));
+
+		ListSelectionModel blackCantPromoteButtonDisabler = blackCantPromoteToDisplay.getSelectionModel();
+		blackCantPromoteButtonDisabler.addListSelectionListener(new ListSelectionListener()
+		{
+			@Override
+			public void valueChanged(ListSelectionEvent event)
+			{
+				if (event.getValueIsAdjusting() == false)
+				{
+
+					if (blackCantPromoteToDisplay.getSelectedIndex() == -1)
+					{
+						blackMoveLeftButton.setEnabled(false);
+						blackMoveRightButton.setEnabled(false);
+					}
+					else
+					{
+						blackMoveLeftButton.setEnabled(true);
+						blackMoveRightButton.setEnabled(true);
+					}
+				}
+			}
+		});
+
+		JScrollPane blackCanPromoteScrollPane = new JScrollPane(blackCanPromoteToDisplay);
+		blackCanPromoteScrollPane.setPreferredSize(new Dimension(200, 200));
+
+		ListSelectionModel blackCanPromoteDisplayButtonDisabler = blackCanPromoteToDisplay.getSelectionModel();
+		blackCanPromoteDisplayButtonDisabler.addListSelectionListener(new ListSelectionListener()
+		{
+			@Override
+			public void valueChanged(ListSelectionEvent e)
+			{
+				if (e.getValueIsAdjusting() == false)
+				{ // If the user is still selecting.
+
+					// If the user has not selected anything yet.
+					if (blackCanPromoteToDisplay.getSelectedIndex() == -1)
+					{
+						// No selection, disable the buttons.
+						blackMoveLeftButton.setEnabled(false);
+						blackMoveRightButton.setEnabled(false);
+					}
+					else
+					{
+						// Selection, enable the buttons.
+						blackMoveLeftButton.setEnabled(true);
+						blackMoveRightButton.setEnabled(true);
+					}
+				}
+			}
+		});
+
 		JButton saveButton = new JButton(Messages.getString("PiecePromotionPanel.save")); //$NON-NLS-1$
 		saveButton.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
-				List<String> promotesTo = Lists.newArrayList();
-				for (int i = 0; i < canPromoteList.size(); i++)
-					promotesTo.add((String) canPromoteList.get(i));
+				List<String> whitePromotesTo = Lists.newArrayList();
+				for (int i = 0; i < whiteCanPromoteList.size(); i++)
+					whitePromotesTo.add((String) whiteCanPromoteList.get(i));
 
-				mCustomSetupMenu.putPromotionMap(mPieceBeingPromotedName, promotesTo);
+				mCustomSetupMenu.putPromotionMap(mPieceBeingPromotedName, whitePromotesTo, Builder.WHITE);
+
+				List<String> blackPromotesTo = Lists.newArrayList();
+				for (int i = 0; i < blackCanPromoteList.size(); i++)
+					blackPromotesTo.add((String) blackCanPromoteList.get(i));
+
+				mCustomSetupMenu.putPromotionMap(mPieceBeingPromotedName, blackPromotesTo, Builder.BLACK);
+
 				PiecePromotionPanel.this.removeAll();
 				mFrame.setVisible(false);
 			}
@@ -194,17 +332,17 @@ public class PiecePromotionPanel extends ChessPanel
 		optionsPanel.add(saveButton);
 		optionsPanel.add(cancelButton);
 
-		JPanel arrowsPanel = new JPanel();
-		arrowsPanel.setLayout(new GridBagLayout());
+		JPanel whiteArrowsPanel = new JPanel();
+		whiteArrowsPanel.setLayout(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 0;
 		constraints.gridy = 1;
-		arrowsPanel.add(moveRightButton, constraints);
+		whiteArrowsPanel.add(whiteMoveRightButton, constraints);
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 0;
 		constraints.gridy = 2;
-		arrowsPanel.add(moveLeftButton, constraints);
+		whiteArrowsPanel.add(whiteMoveLeftButton, constraints);
 
 		constraints.fill = GridBagConstraints.NONE;
 		constraints.gridx = 0;
@@ -214,11 +352,11 @@ public class PiecePromotionPanel extends ChessPanel
 		constraints.gridx = 0;
 		constraints.gridy = 1;
 		constraints.insets = new Insets(0, 10, 10, 0);
-		add(cantPromoteScrollPane, constraints);
+		add(whiteCantPromoteScrollPane, constraints);
 		constraints.gridx = 1;
 		constraints.gridy = 1;
 		constraints.insets = new Insets(0, 10, 0, 10);
-		add(arrowsPanel, constraints);
+		add(whiteArrowsPanel, constraints);
 		constraints.gridx = 2;
 		constraints.gridy = 0;
 		constraints.insets = new Insets(10, 0, 10, 0);
@@ -226,12 +364,60 @@ public class PiecePromotionPanel extends ChessPanel
 		constraints.gridx = 2;
 		constraints.gridy = 1;
 		constraints.insets = new Insets(0, 0, 10, 10);
-		add(canPromoteScrollPane, constraints);
+		add(whiteCanPromoteScrollPane, constraints);
+
+		JPanel blackArrowsPanel = new JPanel();
+		blackArrowsPanel.setLayout(new GridBagLayout());
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		constraints.insets = new Insets(0, 0, 0, 0);
+		constraints.gridx = 0;
+		constraints.gridy = 3;
+		blackArrowsPanel.add(blackMoveRightButton, constraints);
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		constraints.gridx = 0;
+		constraints.gridy = 4;
+		blackArrowsPanel.add(blackMoveLeftButton, constraints);
+
+		constraints.fill = GridBagConstraints.NONE;
 		constraints.gridx = 0;
 		constraints.gridy = 2;
+		constraints.insets = new Insets(10, 0, 10, 0);
+		add(new JLabel(Messages.getString("PiecePromotionPanel.blackCantPromoteHTML")), constraints); //$NON-NLS-1$
+		constraints.gridx = 0;
+		constraints.gridy = 3;
+		constraints.insets = new Insets(0, 10, 10, 0);
+		add(blackCantPromoteScrollPane, constraints);
+		constraints.gridx = 1;
+		constraints.gridy = 3;
+		constraints.insets = new Insets(0, 10, 0, 10);
+		add(blackArrowsPanel, constraints);
+		constraints.gridx = 2;
+		constraints.gridy = 2;
+		constraints.insets = new Insets(10, 0, 10, 0);
+		add(new JLabel(Messages.getString("PiecePromotionPanel.blackCanPromoteHTML")), constraints); //$NON-NLS-1$
+		constraints.gridx = 2;
+		constraints.gridy = 3;
+		constraints.insets = new Insets(0, 0, 10, 10);
+		add(blackCanPromoteScrollPane, constraints);
+		constraints.gridx = 0;
+		constraints.gridy = 4;
 		constraints.gridwidth = 3;
 		constraints.insets = new Insets(0, 0, 10, 0);
+
 		add(optionsPanel, constraints);
+
+		boolean isBlackObjective = mPieceBeingPromotedName.equals(mCustomSetupMenu.mBlackRules.getObjectiveName());
+		boolean isWhiteObjective = mPieceBeingPromotedName.equals(mCustomSetupMenu.mWhiteRules.getObjectiveName());
+
+		blackCanPromoteScrollPane.setEnabled(!isBlackObjective);
+		blackMoveLeftButton.setEnabled(!isBlackObjective);
+		blackMoveRightButton.setEnabled(!isBlackObjective);
+
+		whiteCanPromoteScrollPane.setEnabled(!isWhiteObjective);
+		whiteMoveLeftButton.setEnabled(!isWhiteObjective);
+		whiteMoveRightButton.setEnabled(!isWhiteObjective);
+
+		whiteArrowsPanel.setEnabled(!mPieceBeingPromotedName.equals(mCustomSetupMenu.mWhiteRules.getObjectiveName()));
 
 		setVisible(true);
 		mFrame.pack();

@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -42,7 +43,9 @@ public class CustomPlayerPanel extends ChessPanel
 		setBorder(BorderFactory.createLoweredBevelBorder());
 
 		JLabel playerOneTurnsLabel = new JLabel(Messages.getString("CustomPlayerPanel.howManyWhite")); //$NON-NLS-1$
+		playerOneTurnsLabel.setForeground(Color.white);
 		JLabel playerTwoTurnsLabel = new JLabel(Messages.getString("CustomPlayerPanel.howManyBlack")); //$NON-NLS-1$
+		playerTwoTurnsLabel.setForeground(Color.white);
 		mPlayerOneTurnsField = new JTextField(4);
 		GuiUtility.requestFocus(mPlayerOneTurnsField);
 		mPlayerOneTurnsField.setText(Integer.toString(mWhiteRules.getNextTurn().getWhiteMoves()));
@@ -51,6 +54,7 @@ public class CustomPlayerPanel extends ChessPanel
 		mPlayerTwoTurnsField.setText(Integer.toString(mWhiteRules.getNextTurn().getBlackMoves()));
 		mPlayerTwoTurnsField.setToolTipText(Messages.getString("CustomPlayerPanel.amountForSecondPlayer")); //$NON-NLS-1$
 		mIncrementTurnsLabel = new JLabel(Messages.getString("CustomPlayerPanel.increaseByHowMany")); //$NON-NLS-1$
+		mIncrementTurnsLabel.setForeground(Color.white);
 		mIncrementTurnsField = new JTextField(4);
 		mIncrementTurnsField.setText(Integer.toString(mWhiteRules.getNextTurn().getIncrement()));
 		mIncrementTurnsField.setToolTipText(Messages.getString("CustomPlayerPanel.amountOfIncrease")); //$NON-NLS-1$
@@ -78,6 +82,7 @@ public class CustomPlayerPanel extends ChessPanel
 
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new FlowLayout());
+		buttonPanel.setOpaque(false);
 		buttonPanel.add(submitButton);
 		buttonPanel.add(cancelButton);
 
