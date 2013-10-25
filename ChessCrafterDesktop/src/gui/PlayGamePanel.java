@@ -204,7 +204,7 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 			String saveFileName = JOptionPane.showInputDialog(Driver.getInstance(),
 					Messages.getString("PlayGamePanel.enterAName"), Messages.getString("PlayGamePanel.saving"), //$NON-NLS-1$ //$NON-NLS-2$
 					JOptionPane.PLAIN_MESSAGE);
-			getGame().saveGame(saveFileName, getGame().isClassicChess());
+			getGame().saveGame(saveFileName, getGame().isClassicChess(), false);
 			mGame.setBlackMove(false);
 			Driver.getInstance().setFileMenuVisibility(true);
 			Driver.getInstance().revertToMainPanel();
@@ -226,7 +226,7 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 				Messages.getString("PlayGamePanel.enterAName"), Messages.getString("PlayGamePanel.saving"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
 		if (fileName == null)
 			return;
-		getGame().saveGame(fileName, false);
+		getGame().saveGame(fileName, false, true);
 	}
 
 	public void turn(boolean isBlackTurn)

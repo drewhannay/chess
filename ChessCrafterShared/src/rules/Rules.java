@@ -112,9 +112,9 @@ public class Rules implements Serializable
 		return mNextTurn.getNextTurn();
 	}
 
-	public boolean prevTurn()
+	public boolean prevTurn(boolean isPlayback)
 	{
-		return mNextTurn.undo();
+		return mNextTurn.undo(isPlayback);
 	}
 
 	public Piece objectivePiece(boolean isBlack)

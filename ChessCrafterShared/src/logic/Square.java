@@ -4,11 +4,9 @@ import java.awt.Color;
 import java.awt.Image;
 import java.io.IOException;
 import java.io.Serializable;
-
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-
 import utility.GuiUtility;
 
 public class Square extends JLabel implements Serializable
@@ -84,19 +82,20 @@ public class Square extends JLabel implements Serializable
 			return;
 		}
 
-		// if there's a Piece here...
 		if (mPiece != null)
 		{
-			// ...and it has no Icon
 			if (mPiece.getIcon() == null)
-				setText(mPiece.getName());// Use it's name
+				setText(mPiece.getName());
 			else
-				setIcon(mPiece.getIcon());// Otherwise, use it's Icon
+				setIcon(mPiece.getIcon());
+			
+			setToolTipText(mPiece.getToolTipText());
 		}
 		else
-		{// If there's no Piece, clear the Icon and Text of the Square.
+		{// If there's no Piece, clear the Icon, tooltip, and Text of the Square.
 			setIcon(null);
 			setText(""); //$NON-NLS-1$
+			setToolTipText(null);
 		}
 		resetColor();// Then reset the color too.
 	}
@@ -108,24 +107,20 @@ public class Square extends JLabel implements Serializable
 	public void refreshJail()
 	{
 		setOpaque(true);
-		// if there's a Piece here...
+
 		if (mPiece != null)
 		{
-			// ...and it has no Icon
 			if (mPiece.getIcon() == null)
-				setText(mPiece.getName());// Use it's name
+				setText(mPiece.getName());
 			else
-				setIcon(new ImageIcon(mPiece.getIcon().getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH)));// Otherwise,
-																													// use
-																													// it's
-																													// Icon
+				setIcon(new ImageIcon(mPiece.getIcon().getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH)));
 		}
 		else
-		{// If there's no Piece, clear the Icon and Text of the Square.
+		{
 			setIcon(null);
 			setText(""); //$NON-NLS-1$
 		}
-		resetColor();// Then reset the color too.
+		resetColor();
 	}
 
 	/**

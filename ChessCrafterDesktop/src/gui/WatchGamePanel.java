@@ -9,12 +9,13 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
@@ -31,19 +32,30 @@ import timer.TimerTypes;
 
 public class WatchGamePanel extends JPanel implements WatchGameScreen
 {
-	public WatchGamePanel(File acnFile)
+	public WatchGamePanel(File saveFile)
 	{
-		if (acnFile == null)
+		if (saveFile == null)
 			return;
 
 		Game game = null;
 		try
 		{
-			game = AlgebraicConverter.convert(Builder.newGame(Messages.getString("PlayGamePanel.classic")), acnFile); //$NON-NLS-1$
+			game = AlgebraicConverter.convert(Builder.newGame(Messages.getString("PlayGamePanel.classic")), saveFile); //$NON-NLS-1$
 		}
 		catch (Exception e1)
 		{
-			e1.printStackTrace();
+			try
+			{
+				ObjectInputStream in = new ObjectInputStream(new FileInputStream(saveFile));
+				game = (Game) in.readObject();
+				game.setIsPlayback(true);
+				game.setBlackMove(false);
+				in.close();
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
 		}
 
 		if (game != null)
@@ -109,6 +121,10 @@ public class WatchGamePanel extends JPanel implements WatchGameScreen
 					mWhiteCapturesJail.getSquare(i, j).setPiece(blackCapturedPieces[index]);
 					index++;
 				}
+				else
+				{
+					mWhiteCapturesJail.getSquare(i, j).setPiece(null);
+				}
 				mWhiteCapturesJail.getSquare(i, j).refreshJail();
 			}
 		}
@@ -123,6 +139,10 @@ public class WatchGamePanel extends JPanel implements WatchGameScreen
 				{
 					mBlackCapturesJail.getSquare(i, j).setPiece(whiteCapturedPieces[index]);
 					index++;
+				}
+				else
+				{
+					mWhiteCapturesJail.getSquare(i, j).setPiece(null);
 				}
 				mBlackCapturesJail.getSquare(i, j).refreshJail();
 			}
@@ -144,15 +164,6 @@ public class WatchGamePanel extends JPanel implements WatchGameScreen
 					boards[k].getSquare(i, j).refresh();
 			}
 		}
-	}
-
-	public void saveGame()
-	{
-		String fileName = JOptionPane.showInputDialog(Driver.getInstance(),
-				Messages.getString("PlayGamePanel.enterAName"), Messages.getString("PlayGamePanel.saving"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
-		if (fileName == null)
-			return;
-		getGame().saveGame(fileName, false);
 	}
 
 	public void turn(boolean isBlackTurn)
@@ -313,6 +324,7 @@ public class WatchGamePanel extends JPanel implements WatchGameScreen
 					mHistory[mHistoryIndex--].undo();
 					getGame().setBlackMove(!getGame().isBlackMove());
 					boardRefresh(boards);
+					
 					if (mHistoryIndex == -1)
 						prevButton.setEnabled(false);
 				}
@@ -503,6 +515,10 @@ public class WatchGamePanel extends JPanel implements WatchGameScreen
 	@Override
 	public void endOfGame(Result result)
 	{
-		// TODO Not sure what options we would want to present here...
+	}
+
+	@Override
+	public void saveGame()
+	{
 	}
 }
