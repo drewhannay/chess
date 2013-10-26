@@ -463,18 +463,20 @@ public final class Driver extends JFrame implements ChessCrafter
 				}
 
 				final JFrame poppedFrame = new JFrame(Messages.getString("Driver.loadSavedGame")); //$NON-NLS-1$
-				poppedFrame.setLayout(new GridBagLayout());
 				poppedFrame.setSize(225, 200);
 				poppedFrame.setResizable(false);
 				poppedFrame.setLocationRelativeTo(Driver.this);
 				GridBagConstraints constraints = new GridBagConstraints();
+				
+				final ChessPanel popupPanel = new ChessPanel();
+				popupPanel.setLayout(new GridBagLayout());
 
 				final JList gamesInProgressList = new JList(FileUtility.getGamesInProgressFileArray());
 				final JScrollPane scrollPane = new JScrollPane(gamesInProgressList);
 				scrollPane.setPreferredSize(new Dimension(200, 200));
 				gamesInProgressList.setSelectedIndex(0);
 
-				JButton nextButton = new JButton(Messages.getString("Driver.next")); //$NON-NLS-1$
+				JButton nextButton = new JButton(Messages.getString("Driver.loadSavedGame")); //$NON-NLS-1$
 				nextButton.addActionListener(new ActionListener()
 				{
 					@Override
@@ -563,11 +565,11 @@ public final class Driver extends JFrame implements ChessCrafter
 				constraints.gridy = 0;
 				constraints.gridwidth = 2;
 				constraints.insets = new Insets(5, 5, 5, 5);
-				poppedFrame.add(scrollPane, constraints);
+				popupPanel.add(scrollPane, constraints);
 
 				constraints.gridx = 0;
 				constraints.gridy = 1;
-				poppedFrame.add(deleteButton, constraints);
+				popupPanel.add(deleteButton, constraints);
 
 				constraints.weighty = 1.0;
 				constraints.weightx = 1.0;
@@ -575,13 +577,14 @@ public final class Driver extends JFrame implements ChessCrafter
 				constraints.gridy = 2;
 				constraints.gridwidth = 1;
 				constraints.anchor = GridBagConstraints.EAST;
-				poppedFrame.add(nextButton, constraints);
+				popupPanel.add(nextButton, constraints);
 
 				constraints.gridx = 1;
 				constraints.gridy = 2;
 				constraints.anchor = GridBagConstraints.WEST;
-				poppedFrame.add(cancelButton, constraints);
-
+				popupPanel.add(cancelButton, constraints);
+				
+				poppedFrame.add(popupPanel);
 				poppedFrame.setVisible(true);
 				poppedFrame.pack();
 			}

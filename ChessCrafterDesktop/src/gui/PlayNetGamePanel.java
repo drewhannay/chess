@@ -299,6 +299,7 @@ public class PlayNetGamePanel extends PlayGamePanel implements PlayNetGameScreen
 		add(mWhiteLabel, constraints);
 	}
 
+	@Override
 	public boolean isBlackPlayer()
 	{
 		return mIsBlackPlayer;
@@ -493,6 +494,7 @@ public class PlayNetGamePanel extends PlayGamePanel implements PlayNetGameScreen
 		return result == JOptionPane.YES_OPTION;
 	}
 
+	@Override
 	public void setIsAIGame(boolean isAIGame)
 	{
 		mIsAIGame = isAIGame;

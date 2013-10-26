@@ -223,7 +223,8 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 			{
 				if (variantNameField.getText().trim().isEmpty())
 				{
-					JOptionPane.showMessageDialog(VariantCreationPanel.this,
+					JOptionPane.showMessageDialog(
+							VariantCreationPanel.this,
 							Messages.getString("VariantCreationPanel.enterAName"), Messages.getString("VariantCreationPanel.enterName"), //$NON-NLS-1$ //$NON-NLS-2$
 							JOptionPane.PLAIN_MESSAGE);
 					return;
@@ -611,10 +612,10 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 			final JFrame popupFrame = new JFrame(Messages.getString("VariantCreationPanel.squareOptions")); //$NON-NLS-1$
 			popupFrame.setLocationRelativeTo(Driver.getInstance());
 			popupFrame.setLayout(new FlowLayout());
-			
+
 			final ChessPanel popupPanel = new ChessPanel();
 			popupPanel.setLayout(new GridBagLayout());
-			
+
 			GridBagConstraints constraints = new GridBagConstraints();
 
 			final JButton colorChooserButton = new JButton(Messages.getString("VariantCreationPanel.setSquareColor")); //$NON-NLS-1$
@@ -655,7 +656,7 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 			final JCheckBox uninhabitableButton = new JCheckBox(
 					"<html><font color=#FFFFFF>" + Messages.getString("VariantCreationPanel.uninhabited") + "</font></html>", !m_square.isHabitable()); //$NON-NLS-1$
 			uninhabitableButton.setOpaque(false);
-			
+
 			constraints.gridy = 1;
 			popupPanel.add(uninhabitableButton, constraints);
 
@@ -675,7 +676,7 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 			constraints.gridy = 2;
 			constraints.insets = new Insets(10, 5, 10, 5);
 			popupPanel.add(doneButton, constraints);
-			
+
 			popupFrame.add(popupPanel);
 
 			popupFrame.pack();
@@ -928,7 +929,8 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 				}
 				catch (IOException e)
 				{
-					JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("VariantCreationPanel.errorCouldNotLoadPiece")); //$NON-NLS-1$
+					JOptionPane.showMessageDialog(Driver.getInstance(),
+							Messages.getString("VariantCreationPanel.errorCouldNotLoadPiece")); //$NON-NLS-1$
 					e.printStackTrace();
 					return;
 				}
@@ -964,9 +966,11 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 			}
 			else
 			{
-				JOptionPane.showMessageDialog(Driver.getInstance(),
-						Messages.getString("VariantCreationPanel.squareIsUninhabitable"), Messages.getString("VariantCreationPanel.warning"), //$NON-NLS-1$ //$NON-NLS-2$
-						JOptionPane.PLAIN_MESSAGE);
+				JOptionPane
+						.showMessageDialog(
+								Driver.getInstance(),
+								Messages.getString("VariantCreationPanel.squareIsUninhabitable"), Messages.getString("VariantCreationPanel.warning"), //$NON-NLS-1$ //$NON-NLS-2$
+								JOptionPane.PLAIN_MESSAGE);
 			}
 		}
 	};

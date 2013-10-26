@@ -22,7 +22,7 @@ public class HelpFrame extends JFrame
 	private void initGUIComponents()
 	{
 		setTitle(Messages.getString("HelpFrame.help")); //$NON-NLS-1$
-		//setSize(825, 525);
+		// setSize(825, 525);
 		setResizable(false);
 		setLocationRelativeTo(Driver.getInstance());
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -30,7 +30,7 @@ public class HelpFrame extends JFrame
 
 		mHelpPanel = new ChessPanel();
 		mHelpPanel.setLayout(new GridBagLayout());
-		
+
 		JPanel gamePlayHelpPanel = new ChessPanel();
 		JPanel variantMakingHelpPanel = new ChessPanel();
 		JPanel generalHelpPanel = new ChessPanel();
@@ -67,9 +67,9 @@ public class HelpFrame extends JFrame
 		pieceMakingHelpPanel.add(pieceMakingHelpText);
 
 		add(mHelpPanel);
-		
-		this.pack();
-		
+
+		pack();
+
 		setVisible(true);
 	}
 

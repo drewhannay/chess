@@ -34,10 +34,10 @@ public class AboutFrame extends JFrame
 		setLocationRelativeTo(this);
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		GridBagConstraints constraints = new GridBagConstraints();
-		
+
 		mAboutPanel = new ChessPanel();
 		mAboutPanel.setLayout(new GridBagLayout());
-		
+
 		JLabel frontPageImage = null;
 		JLabel piecePicture = null;
 		try
@@ -55,7 +55,7 @@ public class AboutFrame extends JFrame
 		title.setFont(font);
 
 		JLabel versionLabel = GuiUtility.createJLabel(Messages.getString("AboutFrame.version")); //$NON-NLS-1$
-		JLabel visitSiteLabel = GuiUtility.createJLabel(Messages.getString("AboutFrame.visitOurSite"));  //$NON-NLS-1$
+		JLabel visitSiteLabel = GuiUtility.createJLabel(Messages.getString("AboutFrame.visitOurSite")); //$NON-NLS-1$
 
 		JButton siteButton = new JButton();
 		siteButton.setIcon(piecePicture.getIcon());
@@ -94,7 +94,7 @@ public class AboutFrame extends JFrame
 		mAboutPanel.add(siteButton, constraints);
 
 		add(mAboutPanel);
-		
+
 		setVisible(true);
 	}
 

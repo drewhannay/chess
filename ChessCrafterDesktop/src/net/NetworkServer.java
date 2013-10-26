@@ -13,10 +13,9 @@ import java.net.SocketException;
 
 import javax.swing.JOptionPane;
 
-import utility.GuiUtility;
-
 import logic.Game;
 import logic.Result;
+import utility.GuiUtility;
 import ai.FakeMove;
 
 /**

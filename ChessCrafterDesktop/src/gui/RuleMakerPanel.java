@@ -492,7 +492,7 @@ public class RuleMakerPanel extends ChessPanel
 		});
 
 		JPanel whiteTeamPanel = new JPanel();
-		whiteTeamPanel.setBorder(BorderFactory.createTitledBorder("<html><font color=#FFFFFF>" + Messages.getString("RuleMakerPanel.whiteTeam") + "</font></html>")); //$NON-NLS-1$
+		whiteTeamPanel.setBorder(GuiUtility.createBorder(Messages.getString("RuleMakerPanel.whiteTeam"))); //$NON-NLS-1$
 		whiteTeamPanel.setLayout(new GridBagLayout());
 		whiteTeamPanel.setOpaque(false);
 
@@ -501,7 +501,8 @@ public class RuleMakerPanel extends ChessPanel
 		whiteLegalDestinationsPanel.setLayout(new GridBagLayout());
 		constraints.gridx = 0;
 		constraints.gridy = 1;
-		whiteLegalDestinationsPanel.add(GuiUtility.createJLabel(Messages.getString("RuleMakerPanel.legalDestinationHTML")), constraints); //$NON-NLS-1$
+		whiteLegalDestinationsPanel.add(
+				GuiUtility.createJLabel(Messages.getString("RuleMakerPanel.legalDestinationHTML")), constraints); //$NON-NLS-1$
 		constraints.gridx = 0;
 		constraints.gridy = 2;
 		whiteLegalDestinationsPanel.add(whiteLegalDestinationPanel, constraints);
@@ -532,7 +533,7 @@ public class RuleMakerPanel extends ChessPanel
 		whiteTeamPanel.add(whiteCapturePanel, constraints);
 
 		JPanel blackTeamPanel = new JPanel();
-		blackTeamPanel.setBorder(BorderFactory.createTitledBorder("<html><font color=#FFFFFF>" + Messages.getString("RuleMakerPanel.blackTeam") + "</font></html>")); //$NON-NLS-1$
+		blackTeamPanel.setBorder(GuiUtility.createBorder(Messages.getString("RuleMakerPanel.blackTeam"))); //$NON-NLS-1$
 		blackTeamPanel.setLayout(new GridBagLayout());
 		blackTeamPanel.setOpaque(false);
 
@@ -541,7 +542,8 @@ public class RuleMakerPanel extends ChessPanel
 		blackLegalDestinationsPanel.setOpaque(false);
 		constraints.gridx = 0;
 		constraints.gridy = 1;
-		blackLegalDestinationsPanel.add(GuiUtility.createJLabel(Messages.getString("RuleMakerPanel.legalDestinationHTML")), constraints); //$NON-NLS-1$
+		blackLegalDestinationsPanel.add(
+				GuiUtility.createJLabel(Messages.getString("RuleMakerPanel.legalDestinationHTML")), constraints); //$NON-NLS-1$
 		constraints.gridx = 0;
 		constraints.gridy = 2;
 		blackLegalDestinationsPanel.add(blackLegalDestinationPanel, constraints);
@@ -582,7 +584,7 @@ public class RuleMakerPanel extends ChessPanel
 		add(blackTeamPanel, constraints);
 
 		JPanel specialRules = new JPanel();
-		specialRules.setBorder(BorderFactory.createTitledBorder("<html><font color=#FFFFFF>" + Messages.getString("RuleMakerPanel.specialRules") + "</font></html>")); //$NON-NLS-1$
+		specialRules.setBorder(GuiUtility.createBorder(Messages.getString("RuleMakerPanel.specialRules"))); //$NON-NLS-1$
 		specialRules.setLayout(new GridBagLayout());
 		specialRules.setOpaque(false);
 
