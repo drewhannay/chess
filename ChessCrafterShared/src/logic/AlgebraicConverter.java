@@ -156,49 +156,42 @@ public final class AlgebraicConverter
 		// Since this is Classic chess, it'll always be Boards[0]
 		Board board = game.getBoards()[0];
 		game.setIsPlayback(true);
-		try
+
+		StringTokenizer st;
+		Scanner in = new Scanner(f);
+		while (in.hasNext())
 		{
-			StringTokenizer st;
-			Scanner in = new Scanner(f);
-			while (in.hasNext())
+			st = new StringTokenizer(in.nextLine());
+			// Move past the turn number...we don't care about that
+			st.nextToken();
+			String whiteMove = st.nextToken();
+			if (!st.hasMoreTokens())
 			{
-				st = new StringTokenizer(in.nextLine());
-				// Move past the turn number...we don't care about that
-				st.nextToken();
-				String whiteMove = st.nextToken();
-				if (!st.hasMoreTokens())
-				{
-					break;
-				}
-				String blackMove = st.nextToken();
-				Move temp = algToMove(whiteMove, board);
-				if (temp == null)
-				{
-					break;
-				}
-
-				temp.execute();
-				game.getHistory().add(temp);
-				game.setBlackMove(true);
-
-				temp = null;
-				temp = algToMove(blackMove, board);
-				if (temp == null)
-				{
-					break;
-				}
-
-				temp.execute();
-				game.getHistory().add(temp);
-				game.setBlackMove(false);
+				break;
 			}
-			in.close();
+			String blackMove = st.nextToken();
+			Move temp = algToMove(whiteMove, board);
+			if (temp == null)
+			{
+				break;
+			}
+
+			temp.execute();
+			game.getHistory().add(temp);
+			game.setBlackMove(true);
+
+			temp = null;
+			temp = algToMove(blackMove, board);
+			if (temp == null)
+			{
+				break;
+			}
+
+			temp.execute();
+			game.getHistory().add(temp);
+			game.setBlackMove(false);
 		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			return null;
-		}
+		in.close();
 		return game;
 	}
 

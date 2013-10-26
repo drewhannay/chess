@@ -41,6 +41,7 @@ import logic.Square;
 import timer.ChessTimer;
 import utility.AppConstants;
 import utility.FileUtility;
+import utility.GuiUtility;
 import utility.Preference;
 
 import com.google.common.collect.ImmutableList;
@@ -51,7 +52,7 @@ import dragNdrop.DropEvent;
 import dragNdrop.GlassPane;
 import dragNdrop.MotionAdapter;
 
-public class PlayGamePanel extends JPanel implements PlayGameScreen
+public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 {
 	public PlayGamePanel(Game game)
 	{
@@ -204,7 +205,7 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 			String saveFileName = JOptionPane.showInputDialog(Driver.getInstance(),
 					Messages.getString("PlayGamePanel.enterAName"), Messages.getString("PlayGamePanel.saving"), //$NON-NLS-1$ //$NON-NLS-2$
 					JOptionPane.PLAIN_MESSAGE);
-			getGame().saveGame(saveFileName, getGame().isClassicChess());
+			getGame().saveGame(saveFileName, getGame().isClassicChess(), false);
 			mGame.setBlackMove(false);
 			Driver.getInstance().setFileMenuVisibility(true);
 			Driver.getInstance().revertToMainPanel();
@@ -226,7 +227,7 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 				Messages.getString("PlayGamePanel.enterAName"), Messages.getString("PlayGamePanel.saving"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
 		if (fileName == null)
 			return;
-		getGame().saveGame(fileName, false);
+		getGame().saveGame(fileName, false, true);
 	}
 
 	public void turn(boolean isBlackTurn)
@@ -241,7 +242,7 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 	private JPanel createGrid(Board board, boolean isJail)
 	{
 		final JPanel gridPanel = new JPanel();
-
+		gridPanel.setOpaque(false);
 		gridPanel.setLayout(new GridLayout(board.numRows() + 1, board.numCols()));
 		gridPanel.setPreferredSize(new Dimension((board.numCols() + 1) * 48, (board.numRows() + 1) * 48));
 
@@ -251,7 +252,7 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 		{
 			if (!isJail)
 			{
-				JLabel label = new JLabel("" + i); //$NON-NLS-1$
+				JLabel label = GuiUtility.createJLabel("" + i); //$NON-NLS-1$
 				label.setHorizontalAlignment(SwingConstants.CENTER);
 				gridPanel.add(label);
 			}
@@ -275,13 +276,13 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 			{
 				if (k != 0)
 				{
-					JLabel label = new JLabel("" + (char) (k - 1 + 'A')); //$NON-NLS-1$
+					JLabel label = GuiUtility.createJLabel("" + (char) (k - 1 + 'A')); //$NON-NLS-1$
 					label.setHorizontalAlignment(SwingConstants.CENTER);
 					gridPanel.add(label);
 				}
 				else
 				{
-					gridPanel.add(new JLabel("")); //$NON-NLS-1$
+					gridPanel.add(GuiUtility.createJLabel("")); //$NON-NLS-1$
 				}
 			}
 		}
@@ -333,7 +334,7 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 
 	private void initComponents() throws Exception
 	{
-		mInCheckLabel = new JLabel(Messages.getString("PlayGamePanel.youreInCheck")); //$NON-NLS-1$
+		mInCheckLabel = GuiUtility.createJLabel(Messages.getString("PlayGamePanel.youreInCheck")); //$NON-NLS-1$
 		mInCheckLabel.setHorizontalTextPosition(SwingConstants.CENTER);
 		mInCheckLabel.setForeground(Color.RED);
 
@@ -384,7 +385,7 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 		if (boards.length == 1)
 		{
 			constraints.gridheight = 12;
-			constraints.gridy = 2;
+			constraints.gridy = 0;
 			constraints.fill = GridBagConstraints.HORIZONTAL;
 			constraints.gridwidth = 10;
 			constraints.gridheight = 10;
@@ -396,7 +397,7 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 		else
 		{
 			constraints.gridheight = 12;
-			constraints.gridy = 2;
+			constraints.gridy = 0;
 			constraints.fill = GridBagConstraints.HORIZONTAL;
 			constraints.gridwidth = 10;
 			constraints.insets = new Insets(10, 0, 0, 0);
@@ -413,11 +414,11 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 			twoBoardsGridBagOffset += 10;
 		}
 
-		mWhiteLabel = new JLabel(Messages.getString("PlayGamePanel.whiteCaps")); //$NON-NLS-1$
+		mWhiteLabel = GuiUtility.createJLabel(Messages.getString("PlayGamePanel.whiteCaps")); //$NON-NLS-1$
 		mWhiteLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		mWhiteLabel.setBorder(BorderFactory.createTitledBorder("")); //$NON-NLS-1$
 
-		mBlackLabel = new JLabel(Messages.getString("PlayGamePanel.blackCaps")); //$NON-NLS-1$
+		mBlackLabel = GuiUtility.createJLabel(Messages.getString("PlayGamePanel.blackCaps")); //$NON-NLS-1$
 		mBlackLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		mBlackLabel.setBorder(BorderFactory.createTitledBorder("")); //$NON-NLS-1$
 
@@ -440,7 +441,7 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 
 		mWhiteCapturesJail = new Board(jailBoardSize, jailBoardSize, false);
 		mWhiteCapturePanel = createGrid(mWhiteCapturesJail, true);
-		mWhiteCapturePanel.setBorder(BorderFactory.createTitledBorder(Messages.getString("PlayGamePanel.capturedPieces"))); //$NON-NLS-1$
+		mWhiteCapturePanel.setBorder(BorderFactory.createTitledBorder("<html><font color=#FFFFFF>" + Messages.getString("PlayGamePanel.capturedPieces") + "</font></html>")); //$NON-NLS-1$
 		mWhiteCapturePanel.setLayout(new GridLayout(jailBoardSize, jailBoardSize));
 
 		mWhiteCapturePanel.setPreferredSize(new Dimension((mWhiteCapturesJail.getMaxCol() + 1) * 25,
@@ -448,7 +449,7 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 
 		mBlackCapturesJail = new Board(jailBoardSize, jailBoardSize, false);
 		mBlackCapturePanel = createGrid(mBlackCapturesJail, true);
-		mBlackCapturePanel.setBorder(BorderFactory.createTitledBorder(Messages.getString("PlayGamePanel.capturedPieces"))); //$NON-NLS-1$
+		mBlackCapturePanel.setBorder(BorderFactory.createTitledBorder("<html><font color=#FFFFFF>" + Messages.getString("PlayGamePanel.capturedPieces") + "</font></html>")); //$NON-NLS-1$
 		mBlackCapturePanel.setLayout(new GridLayout(jailBoardSize, jailBoardSize));
 
 		mBlackCapturePanel.setPreferredSize(new Dimension((mBlackCapturesJail.getMaxCol() + 1) * 25,
@@ -459,7 +460,7 @@ public class PlayGamePanel extends JPanel implements PlayGameScreen
 		constraints.anchor = GridBagConstraints.BASELINE;
 		constraints.gridwidth = 3;
 		constraints.gridheight = 1;
-		constraints.insets = new Insets(10, 10, 10, 0);
+		constraints.insets = new Insets(10, 0, 10, 0);
 		constraints.ipadx = 100;
 		constraints.gridx = 11 + twoBoardsGridBagOffset;
 		constraints.gridy = 0;
