@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -15,7 +16,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -45,7 +45,7 @@ import ai.AIPlugin;
 
 import com.google.common.collect.Lists;
 
-public class NewGamePanel extends JPanel
+public class NewGamePanel extends ChessPanel
 {
 	public NewGamePanel()
 	{
@@ -61,11 +61,11 @@ public class NewGamePanel extends JPanel
 		constraints.ipadx = 0;
 		constraints.insets = new Insets(5, 50, 5, 50);
 		constraints.anchor = GridBagConstraints.CENTER;
-		add(new JLabel(Messages.getString("NewGamePanel.howToPlay")), constraints); //$NON-NLS-1$
+		add(GuiUtility.createJLabel(Messages.getString("NewGamePanel.howToPlay")), constraints); //$NON-NLS-1$
 
 		JPanel buttonPanel = new JPanel();
-		buttonPanel.setBorder(BorderFactory.createLoweredBevelBorder());
 		buttonPanel.setLayout(new GridBagLayout());
+		buttonPanel.setOpaque(false);
 
 		JButton humanPlayButton = new JButton(Messages.getString("NewGamePanel.humanPlay")); //$NON-NLS-1$
 		humanPlayButton.addActionListener(new ActionListener()
@@ -130,7 +130,6 @@ public class NewGamePanel extends JPanel
 	private void initPopup()
 	{
 		mPopupFrame = new JFrame(Messages.getString("NewGamePanel.newGame")); //$NON-NLS-1$
-		mPopupFrame.setLayout(new GridBagLayout());
 		mPopupFrame.setSize(325, 225);
 		mPopupFrame.setResizable(false);
 		Driver.centerFrame();
@@ -146,12 +145,14 @@ public class NewGamePanel extends JPanel
 				mPopupFrame = null;
 			}
 		});
+		mPopupPanel = new ChessPanel();
+		mPopupPanel.setLayout(new GridBagLayout());
 	}
 
 	private void createNewGamePopup()
 	{
 		initPopup();
-
+		
 		GridBagConstraints constraints = new GridBagConstraints();
 
 		final JComboBox dropdown;
@@ -170,21 +171,23 @@ public class NewGamePanel extends JPanel
 		constraints.gridx = 0;
 		constraints.gridy = 0;
 		constraints.anchor = GridBagConstraints.WEST;
-		mPopupFrame.add(new JLabel(Messages.getString("NewGamePanel.type")), constraints); //$NON-NLS-1$
+		mPopupPanel.add(GuiUtility.createJLabel(Messages.getString("NewGamePanel.type")), constraints); //$NON-NLS-1$
 
 		constraints.gridx = 1;
 		constraints.gridy = 0;
 		constraints.fill = GridBagConstraints.HORIZONTAL;
-		mPopupFrame.add(dropdown, constraints);
+		mPopupPanel.add(dropdown, constraints);
 
 		// total time and increment fields
-		final JLabel totalTimeLabel = new JLabel(Messages.getString("NewGamePanel.totalTime")); //$NON-NLS-1$
+		final JLabel totalTimeLabel = GuiUtility.createJLabel(Messages.getString("NewGamePanel.totalTime")); //$NON-NLS-1$
 		totalTimeLabel.setEnabled(false);
+		totalTimeLabel.setForeground(Color.white);
 		final JTextField totalTimeField = new JTextField("120", 3); //$NON-NLS-1$
 		totalTimeField.setEnabled(false);
 
-		final JLabel incrementLabel = new JLabel(Messages.getString("NewGamePanel.increment")); //$NON-NLS-1$
+		final JLabel incrementLabel = GuiUtility.createJLabel(Messages.getString("NewGamePanel.increment")); //$NON-NLS-1$
 		incrementLabel.setEnabled(false);
+		incrementLabel.setForeground(Color.white);
 		final JTextField incrementField = new JTextField("10", 3); //$NON-NLS-1$
 		incrementField.setEnabled(false);
 
@@ -216,31 +219,31 @@ public class NewGamePanel extends JPanel
 		// add the combo box to the frame
 		constraints.gridx = 0;
 		constraints.gridy = 1;
-		mPopupFrame.add(new JLabel(Messages.getString("NewGamePanel.timer")), constraints); //$NON-NLS-1$
+		mPopupPanel.add(GuiUtility.createJLabel(Messages.getString("NewGamePanel.timer")), constraints); //$NON-NLS-1$
 
 		constraints.gridx = 1;
 		constraints.gridy = 1;
 		constraints.fill = GridBagConstraints.HORIZONTAL;
-		mPopupFrame.add(timerComboBox, constraints);
+		mPopupPanel.add(timerComboBox, constraints);
 
 		// add the total time field to the frame
 		constraints.gridx = 0;
 		constraints.gridy = 2;
-		mPopupFrame.add(totalTimeLabel, constraints);
+		mPopupPanel.add(totalTimeLabel, constraints);
 
 		constraints.gridx = 1;
 		constraints.gridy = 2;
-		mPopupFrame.add(totalTimeField, constraints);
+		mPopupPanel.add(totalTimeField, constraints);
 
 		// add the increment field to the frame
 		constraints.gridx = 0;
 		constraints.gridy = 3;
 		constraints.anchor = GridBagConstraints.CENTER;
-		mPopupFrame.add(incrementLabel, constraints);
+		mPopupPanel.add(incrementLabel, constraints);
 
 		constraints.gridx = 1;
 		constraints.gridy = 3;
-		mPopupFrame.add(incrementField, constraints);
+		mPopupPanel.add(incrementField, constraints);
 
 		// set up the done button
 		final JButton doneButton = new JButton(Messages.getString("NewGamePanel.start")); //$NON-NLS-1$
@@ -291,6 +294,7 @@ public class NewGamePanel extends JPanel
 		// add the done and cancel buttons to the panel
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new FlowLayout());
+		buttonPanel.setOpaque(false);
 		buttonPanel.add(doneButton);
 		buttonPanel.add(cancelButton);
 
@@ -298,8 +302,9 @@ public class NewGamePanel extends JPanel
 		constraints.gridy = 4;
 		constraints.gridwidth = 2;
 		constraints.fill = GridBagConstraints.HORIZONTAL;
-		mPopupFrame.add(buttonPanel, constraints);
+		mPopupPanel.add(buttonPanel, constraints);
 
+		mPopupFrame.add(mPopupPanel);
 		mPopupFrame.setVisible(true);
 	}
 
@@ -309,20 +314,20 @@ public class NewGamePanel extends JPanel
 			return;
 
 		initPopup();
-
+		
 		GridBagConstraints constraints = new GridBagConstraints();
 
 		// add the variant type selector to the frame
 		constraints.gridx = 0;
 		constraints.gridy = 0;
-		mPopupFrame.add(new JLabel(Messages.getString("NewGamePanel.type")), constraints); //$NON-NLS-1$
+		mPopupPanel.add(GuiUtility.createJLabel(Messages.getString("NewGamePanel.type")), constraints); //$NON-NLS-1$
 
 		constraints.gridx = 1;
 		constraints.gridy = 0;
 		constraints.insets = new Insets(3, 0, 3, 0);
 		try
 		{
-			mPopupFrame.add(new JComboBox(Builder.getVariantFileArray()), constraints);
+			mPopupPanel.add(new JComboBox(Builder.getVariantFileArray()), constraints);
 		}
 		catch (IOException e1)
 		{
@@ -333,13 +338,13 @@ public class NewGamePanel extends JPanel
 		// add the AI selector to the frame
 		constraints.gridx = 0;
 		constraints.gridy = 1;
-		mPopupFrame.add(new JLabel(Messages.getString("NewGamePanel.ai")), constraints); //$NON-NLS-1$
+		mPopupPanel.add(GuiUtility.createJLabel(Messages.getString("NewGamePanel.ai")), constraints); //$NON-NLS-1$
 
 		final JComboBox aiComboBox = new JComboBox(AIManager.getInstance().getAIFiles());
 		constraints.gridx = 1;
 		constraints.gridy = 1;
 		constraints.fill = GridBagConstraints.HORIZONTAL;
-		mPopupFrame.add(aiComboBox, constraints);
+		mPopupPanel.add(aiComboBox, constraints);
 
 		// add a button to the frame for installing a new AI
 		JButton addAIFileButton = new JButton(Messages.getString("NewGamePanel.installNewAI")); //$NON-NLS-1$
@@ -462,6 +467,7 @@ public class NewGamePanel extends JPanel
 
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new FlowLayout());
+		buttonPanel.setOpaque(false);
 		buttonPanel.add(nextButton);
 		buttonPanel.add(cancelButton);
 
@@ -469,11 +475,13 @@ public class NewGamePanel extends JPanel
 		constraints.gridy = 2;
 		constraints.gridwidth = 2;
 		constraints.insets = new Insets(5, 0, 5, 0);
-		mPopupFrame.add(addAIFileButton, constraints);
+		mPopupPanel.add(addAIFileButton, constraints);
 
 		constraints.gridx = 0;
 		constraints.gridy = 3;
-		mPopupFrame.add(buttonPanel, constraints);
+		mPopupPanel.add(buttonPanel, constraints);
+		
+		mPopupFrame.add(mPopupPanel);
 
 		mPopupFrame.setVisible(true);
 	}
@@ -502,4 +510,5 @@ public class NewGamePanel extends JPanel
 	private static final long serialVersionUID = -6371389704966320508L;
 
 	private JFrame mPopupFrame;
+	private ChessPanel mPopupPanel;
 }

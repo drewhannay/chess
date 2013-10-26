@@ -6,17 +6,17 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import utility.FileUtility;
 
-public class VariantMenuPanel extends JPanel
+public class VariantMenuPanel extends ChessPanel
 {
 	public VariantMenuPanel()
 	{
@@ -30,7 +30,7 @@ public class VariantMenuPanel extends JPanel
 
 		constraints.gridy = 0;
 		constraints.ipadx = 0;
-		constraints.insets = new Insets(5, 50, 5, 50);
+		constraints.insets = new Insets(5, 5, 0, 5);
 		constraints.anchor = GridBagConstraints.CENTER;
 
 		JButton createNewVariantButton = new JButton(Messages.getString("VariantMenuPanel.createNew")); //$NON-NLS-1$
@@ -41,21 +41,23 @@ public class VariantMenuPanel extends JPanel
 			{
 				if (mPopupFrame == null)
 				{
-					Driver.getInstance().setPanel(new CustomSetupPanel(null));
+					Driver.getInstance().setPanel(new VariantCreationPanel(null));
 				}
 			}
 		});
 		add(createNewVariantButton, constraints);
 
 		final JPanel editDeletePanel = new JPanel();
-		editDeletePanel.setBorder(BorderFactory.createLoweredBevelBorder());
 		editDeletePanel.setLayout(new GridBagLayout());
+		editDeletePanel.setOpaque(false);
 
 		constraints.gridy = 1;
 		constraints.ipadx = 7;
 		constraints.insets = new Insets(5, 5, 0, 5);
+		constraints.fill = GridBagConstraints.HORIZONTAL;
 
 		final JList variantList = new JList();
+		JScrollPane scrollPane = new JScrollPane();
 		DefaultListModel variantListModel = new DefaultListModel();
 		String[] variantArray = FileUtility.getVariantsFileArrayNoClassic();
 		for (int i = 0; i < variantArray.length; i++)
@@ -63,14 +65,19 @@ public class VariantMenuPanel extends JPanel
 			variantListModel.addElement(variantArray[i]);
 		}
 		variantList.setModel(variantListModel);
+		scrollPane.setViewportView(variantList);
+		scrollPane.setSize(500, 500);
+		variantList.setSize(500, 500);
 
-		editDeletePanel.add(variantList, constraints);
+		editDeletePanel.add(scrollPane, constraints);
 
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new GridBagLayout());
+		buttonPanel.setOpaque(false);
 
 		constraints.gridy = 2;
 		constraints.ipadx = 7;
+		constraints.fill = GridBagConstraints.NONE;
 		final JButton editButton = new JButton(Messages.getString("VariantMenuPanel.edit")); //$NON-NLS-1$
 		editButton.setEnabled(false);
 		editButton.addActionListener(new ActionListener()
@@ -81,7 +88,7 @@ public class VariantMenuPanel extends JPanel
 				if (mPopupFrame == null)
 				{
 					Driver.getInstance().setPanel(
-							new CustomSetupPanel(((DefaultListModel) variantList.getModel()).get(variantList.getSelectedIndex())
+							new VariantCreationPanel(((DefaultListModel) variantList.getModel()).get(variantList.getSelectedIndex())
 									.toString()));
 				}
 			}
@@ -147,6 +154,8 @@ public class VariantMenuPanel extends JPanel
 		});
 
 		constraints.gridy = 2;
+		constraints.insets = new Insets(10, 5, 10, 5);
+		constraints.fill = GridBagConstraints.HORIZONTAL;
 		add(backButton, constraints);
 	}
 

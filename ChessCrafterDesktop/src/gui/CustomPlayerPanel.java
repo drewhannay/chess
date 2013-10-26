@@ -20,9 +20,9 @@ import rules.Rules;
 import rules.NextTurn.NextTurnOption;
 import utility.GuiUtility;
 
-public class CustomPlayerPanel extends JPanel
+public class CustomPlayerPanel extends ChessPanel
 {
-	public CustomPlayerPanel(CustomSetupPanel customSetupMenu, JFrame optionsFrame)
+	public CustomPlayerPanel(VariantCreationPanel customSetupMenu, JFrame optionsFrame)
 	{
 		mWhiteRules = customSetupMenu.mWhiteRules;
 		mBlackRules = customSetupMenu.mBlackRules;
@@ -35,14 +35,14 @@ public class CustomPlayerPanel extends JPanel
 		initGUIComponents(customSetupMenu);
 	}
 
-	private void initGUIComponents(final CustomSetupPanel customSetupMenu)
+	private void initGUIComponents(final VariantCreationPanel customSetupMenu)
 	{
 		setLayout(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
 		setBorder(BorderFactory.createLoweredBevelBorder());
 
-		JLabel playerOneTurnsLabel = new JLabel(Messages.getString("CustomPlayerPanel.howManyWhite")); //$NON-NLS-1$
-		JLabel playerTwoTurnsLabel = new JLabel(Messages.getString("CustomPlayerPanel.howManyBlack")); //$NON-NLS-1$
+		JLabel playerOneTurnsLabel = GuiUtility.createJLabel(Messages.getString("CustomPlayerPanel.howManyWhite")); //$NON-NLS-1$
+		JLabel playerTwoTurnsLabel = GuiUtility.createJLabel(Messages.getString("CustomPlayerPanel.howManyBlack")); //$NON-NLS-1$
 		mPlayerOneTurnsField = new JTextField(4);
 		GuiUtility.requestFocus(mPlayerOneTurnsField);
 		mPlayerOneTurnsField.setText(Integer.toString(mWhiteRules.getNextTurn().getWhiteMoves()));
@@ -50,7 +50,7 @@ public class CustomPlayerPanel extends JPanel
 		mPlayerTwoTurnsField = new JTextField(4);
 		mPlayerTwoTurnsField.setText(Integer.toString(mWhiteRules.getNextTurn().getBlackMoves()));
 		mPlayerTwoTurnsField.setToolTipText(Messages.getString("CustomPlayerPanel.amountForSecondPlayer")); //$NON-NLS-1$
-		mIncrementTurnsLabel = new JLabel(Messages.getString("CustomPlayerPanel.increaseByHowMany")); //$NON-NLS-1$
+		mIncrementTurnsLabel = GuiUtility.createJLabel(Messages.getString("CustomPlayerPanel.increaseByHowMany")); //$NON-NLS-1$
 		mIncrementTurnsField = new JTextField(4);
 		mIncrementTurnsField.setText(Integer.toString(mWhiteRules.getNextTurn().getIncrement()));
 		mIncrementTurnsField.setToolTipText(Messages.getString("CustomPlayerPanel.amountOfIncrease")); //$NON-NLS-1$
@@ -78,6 +78,7 @@ public class CustomPlayerPanel extends JPanel
 
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new FlowLayout());
+		buttonPanel.setOpaque(false);
 		buttonPanel.add(submitButton);
 		buttonPanel.add(cancelButton);
 
