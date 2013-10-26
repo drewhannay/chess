@@ -898,7 +898,6 @@ public class Piece implements Serializable
 
 	public String getToolTipText()
 	{
-		boolean hasKnightlike = false;
 		StringBuilder builder = new StringBuilder("<html><b>"); //$NON-NLS-1$
 		builder.append(mIsBlack ? Messages.getString("Piece.black") : Messages.getString("Piece.white")); //$NON-NLS-1$ //$NON-NLS-2$
 		builder.append(mName);
@@ -909,36 +908,34 @@ public class Piece implements Serializable
 		{
 			builder.append("<td>"); //$NON-NLS-1$
 			builder.append("<table border=\"1\"> <tr> <td align=\"center\">"); //$NON-NLS-1$
-			builder.append(mMovements.get(PieceBuilder.NORTHWEST) == null ? "0" : mMovements.get(PieceBuilder.NORTHWEST)); //$NON-NLS-1$
+			builder.append(directionToTooltip(mMovements.get(PieceBuilder.NORTHWEST)));
 			builder.append("</td><td align=\"center\">"); //$NON-NLS-1$
-			builder.append(mMovements.get(PieceBuilder.NORTH) == null ? "0" : mMovements.get(PieceBuilder.NORTH)); //$NON-NLS-1$
+			builder.append(directionToTooltip(mMovements.get(PieceBuilder.NORTH)));
 			builder.append("</td><td align=\"center\">"); //$NON-NLS-1$
-			builder.append(mMovements.get(PieceBuilder.NORTHEAST) == null ? "0" : mMovements.get(PieceBuilder.NORTHEAST)); //$NON-NLS-1$
+			builder.append(directionToTooltip(mMovements.get(PieceBuilder.NORTHEAST)));
 			builder.append("</td></tr>"); //$NON-NLS-1$
 
 			builder.append("<tr> <td align=\"center\">"); //$NON-NLS-1$
-			builder.append(mMovements.get(PieceBuilder.WEST) == null ? "0" : mMovements.get(PieceBuilder.WEST)); //$NON-NLS-1$
+			builder.append(directionToTooltip(mMovements.get(PieceBuilder.WEST)));
 			builder.append("</td><td align=\"center\">"); //$NON-NLS-1$
 			builder.append(mName.equals(Messages.getString("Piece.knight")) ? Messages.getString("Piece.knightChar") : mName.charAt(0)); //$NON-NLS-1$ //$NON-NLS-2$
 			builder.append("</td><td align=\"center\">"); //$NON-NLS-1$
-			builder.append(mMovements.get(PieceBuilder.EAST) == null ? "0" : mMovements.get(PieceBuilder.EAST)); //$NON-NLS-1$
+			builder.append(directionToTooltip(mMovements.get(PieceBuilder.EAST)));
 			builder.append("</td></tr>"); //$NON-NLS-1$
 
 			builder.append("<tr> <td align=\"center\">"); //$NON-NLS-1$
-			builder.append(mMovements.get(PieceBuilder.SOUTHWEST) == null ? "0" : mMovements.get(PieceBuilder.SOUTHWEST)); //$NON-NLS-1$
+			builder.append(directionToTooltip(mMovements.get(PieceBuilder.SOUTHWEST)));
 			builder.append("</td><td align=\"center\">"); //$NON-NLS-1$
-			builder.append(mMovements.get(PieceBuilder.SOUTH) == null ? "0" : mMovements.get(PieceBuilder.SOUTH)); //$NON-NLS-1$
+			builder.append(directionToTooltip(mMovements.get(PieceBuilder.SOUTH)));
 			builder.append("</td><td align=\"center\">"); //$NON-NLS-1$
-			builder.append(mMovements.get(PieceBuilder.SOUTHEAST) == null ? "0" : mMovements.get(PieceBuilder.SOUTHEAST)); //$NON-NLS-1$
+			builder.append(directionToTooltip(mMovements.get(PieceBuilder.SOUTHEAST)));
 			builder.append("</td></tr>"); //$NON-NLS-1$
 
 			builder.append("</table>"); //$NON-NLS-1$
 
 			builder.append("</td>"); //$NON-NLS-1$
-			if (mKnightMovements != null && mKnightMovements.size() != 0)
-				hasKnightlike = true;
 		}
-
+		
 		builder.append("<td>"); //$NON-NLS-1$
 		if (mIsLeaper)
 		{
@@ -949,7 +946,7 @@ public class Piece implements Serializable
 			builder.append(Messages.getString("Piece.notAbleToLeapBr")); //$NON-NLS-1$
 		}
 
-		if (hasKnightlike)
+		if (mKnightMovements != null && mKnightMovements.size() != 0)
 		{
 			for (KnightMovement movement : mKnightMovements)
 			{
@@ -970,6 +967,18 @@ public class Piece implements Serializable
 		return builder.toString();
 	}
 
+	private String directionToTooltip(Integer direction)
+	{
+		if (direction == null)
+			return "0"; //$NON-NLS-1$
+		else
+		{
+			if (direction == -1)
+				return "&infin;"; //$NON-NLS-1$
+		}
+		return direction.toString();
+	}
+	
 	public boolean isBlack()
 	{
 		return (mIsBlack);

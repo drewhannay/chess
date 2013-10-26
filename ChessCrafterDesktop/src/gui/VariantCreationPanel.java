@@ -209,6 +209,7 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 			@Override
 			public void actionPerformed(ActionEvent event)
 			{
+				PreferenceUtility.clearTooltipListeners();
 				Driver.getInstance().revertToMainPanel();
 			}
 		});
@@ -286,7 +287,8 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 					mBlackRules.setObjectivePiece(new ObjectivePiece(ObjectivePieceTypes.CLASSIC));
 
 				mBuilder.writeFile(mWhiteRules, mBlackRules);
-				// Return to the main screen.
+
+				PreferenceUtility.clearTooltipListeners();
 				Driver.getInstance().revertToMainPanel();
 			}
 		});
@@ -586,10 +588,7 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 		{
 			mSquareLabel = squareLabel;
 			if (mSquareLabel.getSquare().isOccupied())
-			{
-				mSquareLabel.setToolTipText(mSquareLabel.getSquare().getPiece().getName());
 				mSquareLabel.refresh();
-			}
 		}
 
 		@Override
@@ -655,7 +654,7 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 			popupPanel.add(colorChooserButton, constraints);
 
 			final JCheckBox uninhabitableButton = new JCheckBox(
-					"<html><font color=#FFFFFF>" + Messages.getString("VariantCreationPanel.uninhabited") + "</font></html>", !mSquareLabel.getSquare().isHabitable()); //$NON-NLS-1$
+					"<html><font color=#FFFFFF>" + Messages.getString("VariantCreationPanel.uninhabited") + "</font></html>", !mSquareLabel.getSquare().isHabitable()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			uninhabitableButton.setOpaque(false);
 
 			constraints.gridy = 1;
@@ -722,15 +721,12 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 			super(mGlobalGlassPane);
 			mSquareLabel = squareLabel;
 			addDropListener(mDropManager);
-			if (mSquareLabel.getSquare().getPiece() != null && PreferenceUtility.getPreference().showPieceToolTips())
-				mSquareLabel.setToolTipText(mSquareLabel.getSquare().getPiece().getToolTipText());
 			PreferenceUtility.addPieceToolTipListener(this);
 		}
 
 		public void onPieceSelectionChanged()
 		{
-			if (mSquareLabel.getSquare().getPiece() != null && PreferenceUtility.getPreference().showPieceToolTips())
-				mSquareLabel.setToolTipText(mSquareLabel.getSquare().getPiece().getToolTipText());
+			mSquareLabel.refresh();
 		}
 
 		@Override
@@ -789,10 +785,7 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 		@Override
 		public void onPieceToolTipPreferenceChanged()
 		{
-			if (mSquareLabel.getSquare().getPiece() != null && PreferenceUtility.getPreference().showPieceToolTips())
-				mSquareLabel.setToolTipText(mSquareLabel.getSquare().getPiece().getToolTipText());
-			else
-				mSquareLabel.setToolTipText(null);
+			mSquareLabel.refresh();
 		}
 	};
 

@@ -176,6 +176,7 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 			JOptionPane.showMessageDialog(null, Messages.getString("PlayGamePanel.noMovesMade"), //$NON-NLS-1$
 					Messages.getString("PlayGamePanel.timeRanOut"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$
 			PlayNetGamePanel.mIsRunning = false;
+			PreferenceUtility.clearTooltipListeners();
 			Driver.getInstance().revertToMainPanel();
 			Driver.getInstance().setFileMenuVisibility(true);
 			return;
@@ -214,6 +215,7 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 			getGame().saveGame(saveFileName, getGame().isClassicChess(), false);
 			mGame.setBlackMove(false);
 			Driver.getInstance().setFileMenuVisibility(true);
+			PreferenceUtility.clearTooltipListeners();
 			Driver.getInstance().revertToMainPanel();
 			break;
 		case JOptionPane.NO_OPTION:
@@ -335,6 +337,7 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 				saveGame();
 
 				mOptionsMenu.setVisible(false);
+				PreferenceUtility.clearTooltipListeners();
 				Driver.getInstance().revertToMainPanel();
 			}
 		});
@@ -612,12 +615,9 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 		{
 			super(mGlobalGlassPane);
 			mSquareLabel = squareLabel;
+			mSquareLabel.refresh();
 			mBoard = board;
 			addDropListener(mDropManager);
-			if (PreferenceUtility.getPreference().showPieceToolTips() && mSquareLabel.getSquare().isOccupied())
-				mSquareLabel.setToolTipText(mSquareLabel.getSquare().getPiece().getToolTipText());
-			else
-				mSquareLabel.setToolTipText(null);
 			PreferenceUtility.addPieceToolTipListener(this);
 		}
 
@@ -731,10 +731,7 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 		@Override
 		public void onPieceToolTipPreferenceChanged()
 		{
-			if (PreferenceUtility.getPreference().showPieceToolTips() && mSquareLabel.getSquare().isOccupied())
-				mSquareLabel.setToolTipText(mSquareLabel.getSquare().getPiece().getToolTipText());
-			else
-				mSquareLabel.setToolTipText(null);
+			mSquareLabel.refresh();
 		}
 	}
 
