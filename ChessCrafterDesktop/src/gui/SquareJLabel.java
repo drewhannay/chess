@@ -83,7 +83,10 @@ public class SquareJLabel extends JLabel
 			else
 				setIcon(mSquare.getPiece().getIcon());
 
-			setToolTipText(mSquare.getPiece().getToolTipText());
+			if (PreferenceUtility.getPreference().showPieceToolTips())
+				setToolTipText(mSquare.getPiece().getToolTipText());
+			else
+				setToolTipText(null);
 		}
 		else
 		{
