@@ -164,7 +164,7 @@ public class PieceMakerPanel extends ChessPanel
 		final JPanel lightIconPanel = new JPanel();
 		lightIconPanel.setLayout(new FlowLayout());
 		lightIconPanel.setOpaque(false);
-		final JLabel lightIconLabel = GuiUtility.createJLabel("");
+		final JLabel lightIconLabel = GuiUtility.createJLabel(""); //$NON-NLS-1$
 		lightIconLabel.setSize(48, 48);
 
 		try
@@ -202,7 +202,7 @@ public class PieceMakerPanel extends ChessPanel
 		final JPanel darkIconPanel = new JPanel();
 		darkIconPanel.setLayout(new FlowLayout());
 		darkIconPanel.setOpaque(false);
-		final JLabel darkIconLabel = GuiUtility.createJLabel("");
+		final JLabel darkIconLabel = GuiUtility.createJLabel(""); //$NON-NLS-1$
 		darkIconLabel.setSize(48, 48);
 
 		try
@@ -298,12 +298,11 @@ public class PieceMakerPanel extends ChessPanel
 		distanceField.setToolTipText(Messages.getString("PieceMakerPanel.greatestSpaces")); //$NON-NLS-1$
 
 		mKnightOneField.setToolTipText(Messages.getString("PieceMakerPanel.enterKnightLike")); //$NON-NLS-1$
-		mKnightOneField.setText("3");
 		mKnightTwoField.setToolTipText(Messages.getString("PieceMakerPanel.enterOtherDirection")); //$NON-NLS-1$
-		mKnightTwoField.setText("2");
 		mKnightOneField.addKeyListener(getKnightFieldKeyListener());
 		mKnightTwoField.addKeyListener(getKnightFieldKeyListener());
 
+		mAddKnightMoveButton.setEnabled(false);
 		mAddKnightMoveButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -320,18 +319,20 @@ public class PieceMakerPanel extends ChessPanel
 			}
 		});
 
+		mRemoveKnightMoveButton.setEnabled(mKnightComboBox.getItemCount() != 0);
 		mRemoveKnightMoveButton.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				mKnightComboBox.setEnabled(mKnightComboBox.getItemCount() != 0);
 				mTempKnightMovements.remove(mKnightComboBox.getSelectedItem().toString());
 				mKnightComboBox.removeAllItems();
 				for (String kMovement : mTempKnightMovements)
 				{
 					mKnightComboBox.addItem(kMovement);
 				}
+				mKnightComboBox.setEnabled(mKnightComboBox.getItemCount() != 0);
+				mRemoveKnightMoveButton.setEnabled(mKnightComboBox.getItemCount() != 0);
 			}
 		});
 
