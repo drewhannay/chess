@@ -360,7 +360,7 @@ public class VariantCreationPanel extends ChessPanel
 			{
 				mOptionsFrame.dispose();
 				mOptionsFrame = new JFrame();
-				(new PieceMenuPanel(mOptionsFrame)).setPieceListChangedListener(VariantCreationPanel.this);
+				new PieceMenuPanel(mOptionsFrame);
 			}
 		});
 
@@ -608,9 +608,13 @@ public class VariantCreationPanel extends ChessPanel
 		private void showSquareOptions()
 		{
 			final JFrame popupFrame = new JFrame(Messages.getString("VariantCreationPanel.squareOptions")); //$NON-NLS-1$
-			popupFrame.setSize(370, 120);
+			//popupFrame.setSize(370, 120);
 			popupFrame.setLocationRelativeTo(Driver.getInstance());
 			popupFrame.setLayout(new FlowLayout());
+			
+			final ChessPanel popupPanel = new ChessPanel();
+			popupPanel.setLayout(new FlowLayout());
+			popupPanel.setOpaque(false);
 
 			final JButton colorChooserButton = new JButton(Messages.getString("VariantCreationPanel.setSquareColor")); //$NON-NLS-1$
 			colorChooserButton.addActionListener(new ActionListener()
@@ -642,11 +646,12 @@ public class VariantCreationPanel extends ChessPanel
 
 				}
 			});
-			popupFrame.add(colorChooserButton);
+			popupPanel.add(colorChooserButton);
 
 			final JCheckBox uninhabitableButton = new JCheckBox(
-					Messages.getString("VariantCreationPanel.uninhabited"), !m_square.isHabitable()); //$NON-NLS-1$
-			popupFrame.add(uninhabitableButton);
+					"<html><font color=#FFFFFF>" + Messages.getString("VariantCreationPanel.uninhabited") + "</font></html>", !m_square.isHabitable()); //$NON-NLS-1$
+			uninhabitableButton.setOpaque(false);
+			popupPanel.add(uninhabitableButton);
 
 			final JButton doneButton = new JButton(Messages.getString("VariantCreationPanel.done")); //$NON-NLS-1$
 			doneButton.addActionListener(new ActionListener()
@@ -661,7 +666,9 @@ public class VariantCreationPanel extends ChessPanel
 					popupFrame.dispose();
 				}
 			});
-			popupFrame.add(doneButton);
+			popupPanel.add(doneButton);
+			popupFrame.add(popupPanel);
+			popupFrame.pack();
 
 			popupFrame.setVisible(true);
 		}

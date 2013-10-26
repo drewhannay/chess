@@ -348,7 +348,7 @@ public class PiecePromotionPanel extends ChessPanel
 		constraints.gridx = 0;
 		constraints.gridy = 0;
 		constraints.insets = new Insets(10, 0, 10, 0);
-		add(new JLabel("<html><font color=\"#FFFFFF\">" + Messages.getString("PiecePromotionPanel.cantPromoteHTML") + "</font></html>"), constraints); //$NON-NLS-1$
+		add(new JLabel("<html><font color=\"#FFFFFF\">" + Messages.getString("PiecePromotionPanel.whiteCantPromoteHTML") + "</font></html>"), constraints); //$NON-NLS-1$
 		constraints.gridx = 0;
 		constraints.gridy = 1;
 		constraints.insets = new Insets(0, 10, 10, 0);
@@ -360,7 +360,7 @@ public class PiecePromotionPanel extends ChessPanel
 		constraints.gridx = 2;
 		constraints.gridy = 0;
 		constraints.insets = new Insets(10, 0, 10, 0);
-		add(new JLabel("<html><font color=\"#FFFFFF\">" + Messages.getString("PiecePromotionPanel.canPromoteHTML") + "</font></html>"), constraints); //$NON-NLS-1$
+		add(new JLabel("<html><font color=\"#FFFFFF\">" + Messages.getString("PiecePromotionPanel.whiteCanPromoteHTML") + "</font></html>"), constraints); //$NON-NLS-1$
 		constraints.gridx = 2;
 		constraints.gridy = 1;
 		constraints.insets = new Insets(0, 0, 10, 10);
@@ -382,7 +382,7 @@ public class PiecePromotionPanel extends ChessPanel
 		constraints.gridx = 0;
 		constraints.gridy = 2;
 		constraints.insets = new Insets(10, 0, 10, 0);
-		add(new JLabel(Messages.getString("PiecePromotionPanel.blackCantPromoteHTML")), constraints); //$NON-NLS-1$
+		add(new JLabel("<html><font color=\"#FFFFFF\">" + Messages.getString("PiecePromotionPanel.blackCantPromoteHTML") + "</font></html>"), constraints); //$NON-NLS-1$
 		constraints.gridx = 0;
 		constraints.gridy = 3;
 		constraints.insets = new Insets(0, 10, 10, 0);
@@ -394,7 +394,7 @@ public class PiecePromotionPanel extends ChessPanel
 		constraints.gridx = 2;
 		constraints.gridy = 2;
 		constraints.insets = new Insets(10, 0, 10, 0);
-		add(new JLabel(Messages.getString("PiecePromotionPanel.blackCanPromoteHTML")), constraints); //$NON-NLS-1$
+		add(new JLabel("<html><font color=\"#FFFFFF\">" + Messages.getString("PiecePromotionPanel.blackCanPromoteHTML") + "</font></html>"), constraints); //$NON-NLS-1$
 		constraints.gridx = 2;
 		constraints.gridy = 3;
 		constraints.insets = new Insets(0, 0, 10, 10);
