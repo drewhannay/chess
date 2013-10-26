@@ -11,7 +11,6 @@ import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -26,14 +25,14 @@ import utility.GuiUtility;
 
 import com.google.common.collect.Lists;
 
-public class PiecePromotionPanel extends JPanel
+public class PiecePromotionPanel extends ChessPanel
 {
 	/**
 	 * 
 	 * @param pieceName
 	 * @param customSetupMenu
 	 */
-	public PiecePromotionPanel(String pieceName, CustomSetupPanel customSetupMenu, JFrame optionsFrame)
+	public PiecePromotionPanel(String pieceName, VariantCreationPanel customSetupMenu, JFrame optionsFrame)
 	{
 		mPieceBeingPromotedName = pieceName;
 		mCustomSetupMenu = customSetupMenu;
@@ -328,15 +327,18 @@ public class PiecePromotionPanel extends JPanel
 		GuiUtility.setupVariantCancelButton(cancelButton, this, mFrame);
 
 		JPanel optionsPanel = new JPanel();
+		optionsPanel.setOpaque(false);
 		optionsPanel.add(saveButton);
 		optionsPanel.add(cancelButton);
 
 		JPanel whiteArrowsPanel = new JPanel();
+		whiteArrowsPanel.setOpaque(false);
 		whiteArrowsPanel.setLayout(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 0;
 		constraints.gridy = 1;
+		constraints.insets = new Insets(5, 0, 5, 0);
 		whiteArrowsPanel.add(whiteMoveRightButton, constraints);
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 0;
@@ -347,7 +349,7 @@ public class PiecePromotionPanel extends JPanel
 		constraints.gridx = 0;
 		constraints.gridy = 0;
 		constraints.insets = new Insets(10, 0, 10, 0);
-		add(new JLabel(Messages.getString("PiecePromotionPanel.whiteCantPromoteHTML")), constraints); //$NON-NLS-1$
+		add(GuiUtility.createJLabel(Messages.getString("PiecePromotionPanel.whiteCantPromoteHTML")), constraints); //$NON-NLS-1$
 		constraints.gridx = 0;
 		constraints.gridy = 1;
 		constraints.insets = new Insets(0, 10, 10, 0);
@@ -359,16 +361,17 @@ public class PiecePromotionPanel extends JPanel
 		constraints.gridx = 2;
 		constraints.gridy = 0;
 		constraints.insets = new Insets(10, 0, 10, 0);
-		add(new JLabel(Messages.getString("PiecePromotionPanel.whiteCanPromoteHTML")), constraints); //$NON-NLS-1$
+		add(GuiUtility.createJLabel(Messages.getString("PiecePromotionPanel.whiteCanPromoteHTML")), constraints); //$NON-NLS-1$
 		constraints.gridx = 2;
 		constraints.gridy = 1;
 		constraints.insets = new Insets(0, 0, 10, 10);
 		add(whiteCanPromoteScrollPane, constraints);
 
 		JPanel blackArrowsPanel = new JPanel();
+		blackArrowsPanel.setOpaque(false);
 		blackArrowsPanel.setLayout(new GridBagLayout());
 		constraints.fill = GridBagConstraints.HORIZONTAL;
-		constraints.insets = new Insets(0, 0, 0, 0);
+		constraints.insets = new Insets(5, 0, 5, 0);
 		constraints.gridx = 0;
 		constraints.gridy = 3;
 		blackArrowsPanel.add(blackMoveRightButton, constraints);
@@ -381,7 +384,7 @@ public class PiecePromotionPanel extends JPanel
 		constraints.gridx = 0;
 		constraints.gridy = 2;
 		constraints.insets = new Insets(10, 0, 10, 0);
-		add(new JLabel(Messages.getString("PiecePromotionPanel.blackCantPromoteHTML")), constraints); //$NON-NLS-1$
+		add(GuiUtility.createJLabel(Messages.getString("PiecePromotionPanel.blackCantPromoteHTML")), constraints); //$NON-NLS-1$
 		constraints.gridx = 0;
 		constraints.gridy = 3;
 		constraints.insets = new Insets(0, 10, 10, 0);
@@ -393,7 +396,7 @@ public class PiecePromotionPanel extends JPanel
 		constraints.gridx = 2;
 		constraints.gridy = 2;
 		constraints.insets = new Insets(10, 0, 10, 0);
-		add(new JLabel(Messages.getString("PiecePromotionPanel.blackCanPromoteHTML")), constraints); //$NON-NLS-1$
+		add(GuiUtility.createJLabel(Messages.getString("PiecePromotionPanel.blackCanPromoteHTML")), constraints); //$NON-NLS-1$
 		constraints.gridx = 2;
 		constraints.gridy = 3;
 		constraints.insets = new Insets(0, 0, 10, 10);
@@ -425,6 +428,6 @@ public class PiecePromotionPanel extends JPanel
 	private static final long serialVersionUID = -3940357256712099377L;
 
 	private String mPieceBeingPromotedName;
-	private CustomSetupPanel mCustomSetupMenu;
+	private VariantCreationPanel mCustomSetupMenu;
 	private JFrame mFrame;
 }

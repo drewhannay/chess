@@ -29,7 +29,6 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JColorChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -63,15 +62,17 @@ import dragNdrop.DropEvent;
 import dragNdrop.GlassPane;
 import dragNdrop.MotionAdapter;
 
-public class CustomSetupPanel extends JPanel implements PieceListChangedListener
+public class VariantCreationPanel extends ChessPanel implements PieceListChangedListener
 {
-	public CustomSetupPanel(String variantName)
+	public VariantCreationPanel(String variantName)
 	{
 		mDropManager = new DropManager();
 		mGlobalGlassPane = new GlassPane();
 		mGlobalGlassPane.setOpaque(false);
 		Driver.getInstance().setGlassPane(mGlobalGlassPane);
 		m_motionAdapter = new MotionAdapter(mGlobalGlassPane);
+		mPieceListPanel = new JPanel();
+		mPieceListPanel.setOpaque(false);
 
 		Game gameToEdit = null;
 		if (variantName != null)
@@ -100,7 +101,7 @@ public class CustomSetupPanel extends JPanel implements PieceListChangedListener
 		}
 		else
 		{
-			mBuilder = new Builder(Messages.getString("CustomSetupPanel.newVariant")); //$NON-NLS-1$
+			mBuilder = new Builder(Messages.getString("VariantCreationPanel.newVariant")); //$NON-NLS-1$
 
 			mWhiteTeam = Lists.newArrayList();
 			mBlackTeam = Lists.newArrayList();
@@ -137,6 +138,7 @@ public class CustomSetupPanel extends JPanel implements PieceListChangedListener
 		final JPanel showPiecePanel = new JPanel();
 		showPiecePanel.setLayout(new GridLayout(2, 1));
 		showPiecePanel.setPreferredSize(new Dimension(50, 100));
+		showPiecePanel.setOpaque(false);
 
 		for (Square square : mPieceDisplaySquares)
 			showPiecePanel.add(square);
@@ -160,8 +162,8 @@ public class CustomSetupPanel extends JPanel implements PieceListChangedListener
 
 		if (game == null)
 		{
-			mWhiteRules.addEndOfGame(EndOfGame.CLASSIC.init(0, Messages.getString("CustomSetupPanel.empty"), false)); //$NON-NLS-1$
-			mBlackRules.addEndOfGame(EndOfGame.CLASSIC.init(0, Messages.getString("CustomSetupPanel.empty"), true)); //$NON-NLS-1$
+			mWhiteRules.addEndOfGame(EndOfGame.CLASSIC.init(0, Messages.getString("VariantCreationPanel.empty"), false)); //$NON-NLS-1$
+			mBlackRules.addEndOfGame(EndOfGame.CLASSIC.init(0, Messages.getString("VariantCreationPanel.empty"), true)); //$NON-NLS-1$
 
 			mWhiteRules.setObjectivePiece(new ObjectivePiece(ObjectivePieceTypes.CLASSIC));
 			mBlackRules.setObjectivePiece(new ObjectivePiece(ObjectivePieceTypes.CLASSIC));
@@ -172,7 +174,7 @@ public class CustomSetupPanel extends JPanel implements PieceListChangedListener
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.insets = new Insets(10, 10, 10, 5);
 		constraints.anchor = GridBagConstraints.CENTER;
-		add(new JLabel(Messages.getString("CustomSetupPanel.variantName")), constraints); //$NON-NLS-1$
+		add(GuiUtility.createJLabel(Messages.getString("VariantCreationPanel.variantName")), constraints); //$NON-NLS-1$
 
 		final JTextField variantNameField = new JTextField(25);
 		constraints.gridx = 2;
@@ -200,7 +202,7 @@ public class CustomSetupPanel extends JPanel implements PieceListChangedListener
 		drawBoards(temp);
 
 		// main menu button
-		JButton returnToMainButton = new JButton(Messages.getString("CustomSetupPanel.returnToMainMenu")); //$NON-NLS-1$
+		JButton returnToMainButton = new JButton(Messages.getString("VariantCreationPanel.returnToMainMenu")); //$NON-NLS-1$
 		// returnToMainButton.setToolTipText("Press to return to the Main Menu");
 		returnToMainButton.addActionListener(new ActionListener()
 		{
@@ -212,7 +214,7 @@ public class CustomSetupPanel extends JPanel implements PieceListChangedListener
 		});
 
 		// Create button and add ActionListener
-		JButton submitButton = new JButton(Messages.getString("CustomSetupPanel.saveAndQuit")); //$NON-NLS-1$
+		JButton submitButton = new JButton(Messages.getString("VariantCreationPanel.saveAndQuit")); //$NON-NLS-1$
 		// submitButton.setToolTipText("Save a finished variant");
 		submitButton.addActionListener(new ActionListener()
 		{
@@ -221,8 +223,8 @@ public class CustomSetupPanel extends JPanel implements PieceListChangedListener
 			{
 				if (variantNameField.getText().trim().isEmpty())
 				{
-					JOptionPane.showMessageDialog(CustomSetupPanel.this,
-							Messages.getString("CustomSetupPanel.enterAName"), Messages.getString("CustomSetupPanel.enterName"), //$NON-NLS-1$ //$NON-NLS-2$
+					JOptionPane.showMessageDialog(VariantCreationPanel.this,
+							Messages.getString("VariantCreationPanel.enterAName"), Messages.getString("VariantCreationPanel.enterName"), //$NON-NLS-1$ //$NON-NLS-2$
 							JOptionPane.PLAIN_MESSAGE);
 					return;
 				}
@@ -249,8 +251,8 @@ public class CustomSetupPanel extends JPanel implements PieceListChangedListener
 					if (numberOfObjectives != 1)
 					{
 						JOptionPane.showMessageDialog(Driver.getInstance(),
-								Messages.getString("CustomSetupPanel.placeOneWhiteObjective"), //$NON-NLS-1$
-								Messages.getString("CustomSetupPanel.objectiveMissing"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$
+								Messages.getString("VariantCreationPanel.placeOneWhiteObjective"), //$NON-NLS-1$
+								Messages.getString("VariantCreationPanel.objectiveMissing"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$
 						return;
 					}
 				}
@@ -266,8 +268,8 @@ public class CustomSetupPanel extends JPanel implements PieceListChangedListener
 					if (numberOfObjectives != 1)
 					{
 						JOptionPane.showMessageDialog(Driver.getInstance(),
-								Messages.getString("CustomSetupPanel.placeOneBlackObjective"), //$NON-NLS-1$
-								Messages.getString("CustomSetupPanel.objectiveMissing"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$
+								Messages.getString("VariantCreationPanel.placeOneBlackObjective"), //$NON-NLS-1$
+								Messages.getString("VariantCreationPanel.objectiveMissing"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$
 						return;
 					}
 				}
@@ -288,33 +290,33 @@ public class CustomSetupPanel extends JPanel implements PieceListChangedListener
 			}
 		});
 
-		mChangePromotionButton = new JButton(Messages.getString("CustomSetupPanel.promoteThisPiece")); //$NON-NLS-1$
-		mChangePromotionButton.setToolTipText(Messages.getString("CustomSetupPanel.pressToSetUpPromotion")); //$NON-NLS-1$
+		mChangePromotionButton = new JButton(Messages.getString("VariantCreationPanel.promoteThisPiece")); //$NON-NLS-1$
+		mChangePromotionButton.setToolTipText(Messages.getString("VariantCreationPanel.pressToSetUpPromotion")); //$NON-NLS-1$
 		mChangePromotionButton.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent event)
 			{
 				mOptionsFrame.dispose();
-				mOptionsFrame = new JFrame(Messages.getString("CustomSetupPanel.piecePromotion")); //$NON-NLS-1$
-				new PiecePromotionPanel((String) mPieceTypeList.getSelectedValue(), CustomSetupPanel.this, mOptionsFrame);
+				mOptionsFrame = new JFrame(Messages.getString("VariantCreationPanel.piecePromotion")); //$NON-NLS-1$
+				new PiecePromotionPanel((String) mPieceTypeList.getSelectedValue(), VariantCreationPanel.this, mOptionsFrame);
 			}
 		});
 
-		JButton boardSetupButton = new JButton(Messages.getString("CustomSetupPanel.customizeGameBoard")); //$NON-NLS-1$
+		JButton boardSetupButton = new JButton(Messages.getString("VariantCreationPanel.customizeGameBoard")); //$NON-NLS-1$
 		boardSetupButton.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent event)
 			{
 				mOptionsFrame.dispose();
-				mOptionsFrame = new JFrame(Messages.getString("CustomSetupPanel.customBoardSetup")); //$NON-NLS-1$
+				mOptionsFrame = new JFrame(Messages.getString("VariantCreationPanel.customBoardSetup")); //$NON-NLS-1$
 
-				new CustomBoardPanel(CustomSetupPanel.this, mOptionsFrame);
+				new CustomBoardPanel(VariantCreationPanel.this, mOptionsFrame);
 			}
 		});
 
-		JButton objectiveSetupButton = new JButton(Messages.getString("CustomSetupPanel.setUpObjectives")); //$NON-NLS-1$
+		JButton objectiveSetupButton = new JButton(Messages.getString("VariantCreationPanel.setUpObjectives")); //$NON-NLS-1$
 		objectiveSetupButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -323,11 +325,11 @@ public class CustomSetupPanel extends JPanel implements PieceListChangedListener
 				mOptionsFrame.dispose();
 				mOptionsFrame = new JFrame();
 
-				new ObjectiveMakerPanel(CustomSetupPanel.this, mOptionsFrame);
+				new ObjectiveMakerPanel(VariantCreationPanel.this, mOptionsFrame);
 			}
 		});
 
-		JButton ruleSetupButton = new JButton(Messages.getString("CustomSetupPanel.setUpGameRules")); //$NON-NLS-1$
+		JButton ruleSetupButton = new JButton(Messages.getString("VariantCreationPanel.setUpGameRules")); //$NON-NLS-1$
 		ruleSetupButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -336,11 +338,11 @@ public class CustomSetupPanel extends JPanel implements PieceListChangedListener
 				mOptionsFrame.dispose();
 				mOptionsFrame = new JFrame();
 
-				new RuleMakerPanel(CustomSetupPanel.this, mOptionsFrame);
+				new RuleMakerPanel(VariantCreationPanel.this, mOptionsFrame);
 			}
 		});
 
-		JButton playerSetupButton = new JButton(Messages.getString("CustomSetupPanel.setUpPlayerRules")); //$NON-NLS-1$
+		JButton playerSetupButton = new JButton(Messages.getString("VariantCreationPanel.setUpPlayerRules")); //$NON-NLS-1$
 		playerSetupButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -348,11 +350,11 @@ public class CustomSetupPanel extends JPanel implements PieceListChangedListener
 			{
 				mOptionsFrame.dispose();
 				mOptionsFrame = new JFrame();
-				new CustomPlayerPanel(CustomSetupPanel.this, mOptionsFrame);
+				new CustomPlayerPanel(VariantCreationPanel.this, mOptionsFrame);
 			}
 		});
 
-		JButton pieceSetupButton = new JButton(Messages.getString("CustomSetupPanel.pieceEditor")); //$NON-NLS-1$
+		JButton pieceSetupButton = new JButton(Messages.getString("VariantCreationPanel.pieceEditor")); //$NON-NLS-1$
 		pieceSetupButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -360,7 +362,7 @@ public class CustomSetupPanel extends JPanel implements PieceListChangedListener
 			{
 				mOptionsFrame.dispose();
 				mOptionsFrame = new JFrame();
-				(new PieceMenuPanel(mOptionsFrame)).setPieceListChangedListener(CustomSetupPanel.this);
+				(new PieceMenuPanel(mOptionsFrame)).setPieceListChangedListener(VariantCreationPanel.this);
 			}
 		});
 
@@ -400,6 +402,7 @@ public class CustomSetupPanel extends JPanel implements PieceListChangedListener
 		mPieceListPanel.add(playerSetupButton, mainPanelConstraints);
 
 		JPanel optionsPanel = new JPanel();
+		optionsPanel.setOpaque(false);
 		optionsPanel.setLayout(new GridBagLayout());
 
 		mainPanelConstraints.fill = GridBagConstraints.CENTER;
@@ -605,12 +608,16 @@ public class CustomSetupPanel extends JPanel implements PieceListChangedListener
 
 		private void showSquareOptions()
 		{
-			final JFrame popupFrame = new JFrame(Messages.getString("CustomSetupPanel.squareOptions")); //$NON-NLS-1$
-			popupFrame.setSize(370, 120);
+			final JFrame popupFrame = new JFrame(Messages.getString("VariantCreationPanel.squareOptions")); //$NON-NLS-1$
 			popupFrame.setLocationRelativeTo(Driver.getInstance());
 			popupFrame.setLayout(new FlowLayout());
+			
+			final ChessPanel popupPanel = new ChessPanel();
+			popupPanel.setLayout(new GridBagLayout());
+			
+			GridBagConstraints constraints = new GridBagConstraints();
 
-			final JButton colorChooserButton = new JButton(Messages.getString("CustomSetupPanel.setSquareColor")); //$NON-NLS-1$
+			final JButton colorChooserButton = new JButton(Messages.getString("VariantCreationPanel.setSquareColor")); //$NON-NLS-1$
 			colorChooserButton.addActionListener(new ActionListener()
 			{
 
@@ -618,7 +625,7 @@ public class CustomSetupPanel extends JPanel implements PieceListChangedListener
 				public void actionPerformed(ActionEvent event)
 				{
 					Color color = JColorChooser.showDialog(popupFrame,
-							Messages.getString("CustomSetupPanel.chooseColor"), m_square.getColor()); //$NON-NLS-1$
+							Messages.getString("VariantCreationPanel.chooseColor"), m_square.getColor()); //$NON-NLS-1$
 					if (color == null)
 						return;
 					// TODO: verify that this can be removed
@@ -634,19 +641,25 @@ public class CustomSetupPanel extends JPanel implements PieceListChangedListener
 						// the chances of this happening is EXTREMELY small...
 						JOptionPane.showMessageDialog(
 								popupFrame,
-								Messages.getString("CustomSetupPanel.colorCannotBeSelected"), Messages.getString("CustomSetupPanel.invalidColor"), //$NON-NLS-1$ //$NON-NLS-2$
+								Messages.getString("VariantCreationPanel.colorCannotBeSelected"), Messages.getString("VariantCreationPanel.invalidColor"), //$NON-NLS-1$ //$NON-NLS-2$
 								JOptionPane.PLAIN_MESSAGE);
 					}
 
 				}
 			});
-			popupFrame.add(colorChooserButton);
+			constraints.gridx = 0;
+			constraints.gridy = 0;
+			constraints.insets = new Insets(5, 5, 5, 5);
+			popupPanel.add(colorChooserButton, constraints);
 
 			final JCheckBox uninhabitableButton = new JCheckBox(
-					Messages.getString("CustomSetupPanel.uninhabited"), !m_square.isHabitable()); //$NON-NLS-1$
-			popupFrame.add(uninhabitableButton);
+					"<html><font color=#FFFFFF>" + Messages.getString("VariantCreationPanel.uninhabited") + "</font></html>", !m_square.isHabitable()); //$NON-NLS-1$
+			uninhabitableButton.setOpaque(false);
+			
+			constraints.gridy = 1;
+			popupPanel.add(uninhabitableButton, constraints);
 
-			final JButton doneButton = new JButton(Messages.getString("CustomSetupPanel.done")); //$NON-NLS-1$
+			final JButton doneButton = new JButton(Messages.getString("VariantCreationPanel.done")); //$NON-NLS-1$
 			doneButton.addActionListener(new ActionListener()
 			{
 				@Override
@@ -659,8 +672,13 @@ public class CustomSetupPanel extends JPanel implements PieceListChangedListener
 					popupFrame.dispose();
 				}
 			});
-			popupFrame.add(doneButton);
+			constraints.gridy = 2;
+			constraints.insets = new Insets(10, 5, 10, 5);
+			popupPanel.add(doneButton, constraints);
+			
+			popupFrame.add(popupPanel);
 
+			popupFrame.pack();
 			popupFrame.setVisible(true);
 		}
 
@@ -910,7 +928,7 @@ public class CustomSetupPanel extends JPanel implements PieceListChangedListener
 				}
 				catch (IOException e)
 				{
-					JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("CustomSetupPanel.errorCouldNotLoadPiece")); //$NON-NLS-1$
+					JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("VariantCreationPanel.errorCouldNotLoadPiece")); //$NON-NLS-1$
 					e.printStackTrace();
 					return;
 				}
@@ -947,7 +965,7 @@ public class CustomSetupPanel extends JPanel implements PieceListChangedListener
 			else
 			{
 				JOptionPane.showMessageDialog(Driver.getInstance(),
-						Messages.getString("CustomSetupPanel.squareIsUninhabitable"), Messages.getString("CustomSetupPanel.warning"), //$NON-NLS-1$ //$NON-NLS-2$
+						Messages.getString("VariantCreationPanel.squareIsUninhabitable"), Messages.getString("VariantCreationPanel.warning"), //$NON-NLS-1$ //$NON-NLS-2$
 						JOptionPane.PLAIN_MESSAGE);
 			}
 		}
@@ -975,7 +993,7 @@ public class CustomSetupPanel extends JPanel implements PieceListChangedListener
 		}
 		catch (IOException e)
 		{
-			JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("CustomSetupPanel.errorCouldNotLoadPiece")); //$NON-NLS-1$
+			JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("VariantCreationPanel.errorCouldNotLoadPiece")); //$NON-NLS-1$
 			e.printStackTrace();
 			return;
 		}
@@ -1009,7 +1027,7 @@ public class CustomSetupPanel extends JPanel implements PieceListChangedListener
 	public Rules mBlackRules;
 
 	private JPanel[] mBoardPanels;
-	private JPanel mPieceListPanel = new JPanel();
+	private JPanel mPieceListPanel;
 	private Map<String, List<String>> mWhitePromotionMap;
 	private Map<String, List<String>> mBlackPromotionMap;
 	private Builder mBuilder;

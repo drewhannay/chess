@@ -6,7 +6,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -17,7 +16,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import utility.FileUtility;
 
-public class PieceMenuPanel extends JPanel
+public class PieceMenuPanel extends ChessPanel
 {
 
 	public PieceMenuPanel()
@@ -40,7 +39,7 @@ public class PieceMenuPanel extends JPanel
 
 		constraints.gridy = 0;
 		constraints.ipadx = 0;
-		constraints.insets = new Insets(5, 10, 5, 10);
+		constraints.insets = new Insets(5, 10, 0, 10);
 		constraints.anchor = GridBagConstraints.CENTER;
 
 		JButton createNewPieceButton = new JButton(Messages.getString("PieceMenuPanel.createNew")); //$NON-NLS-1$
@@ -56,13 +55,14 @@ public class PieceMenuPanel extends JPanel
 
 		final JPanel editDeletePanel = new JPanel();
 		editDeletePanel.setSize(500, 500);
+		editDeletePanel.setOpaque(false);
 
-		editDeletePanel.setBorder(BorderFactory.createLoweredBevelBorder());
 		editDeletePanel.setLayout(new GridBagLayout());
 
 		constraints.gridy = 1;
 		constraints.ipadx = 7;
 		constraints.insets = new Insets(5, 5, 0, 5);
+		constraints.fill = GridBagConstraints.HORIZONTAL;
 
 		JScrollPane scrollPane = new JScrollPane();
 		final JList pieceList = new JList();
@@ -78,6 +78,7 @@ public class PieceMenuPanel extends JPanel
 
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new GridBagLayout());
+		buttonPanel.setOpaque(false);
 
 		constraints.gridy = 2;
 		constraints.ipadx = 7;
@@ -152,6 +153,7 @@ public class PieceMenuPanel extends JPanel
 			});
 
 			constraints.gridy = 2;
+			constraints.insets = new Insets(15, 5, 10, 5);
 			add(backButton, constraints);
 		}
 		else
@@ -169,6 +171,7 @@ public class PieceMenuPanel extends JPanel
 			});
 
 			constraints.gridy = 2;
+			constraints.insets = new Insets(15, 5, 10, 5);
 			add(doneButton, constraints);
 		}
 

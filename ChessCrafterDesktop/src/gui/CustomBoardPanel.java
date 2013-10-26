@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -20,9 +21,9 @@ import javax.swing.JTextField;
 import logic.Board;
 import utility.GuiUtility;
 
-public class CustomBoardPanel extends JPanel
+public class CustomBoardPanel extends ChessPanel
 {
-	public CustomBoardPanel(CustomSetupPanel variant, JFrame optionsFrame)
+	public CustomBoardPanel(VariantCreationPanel variant, JFrame optionsFrame)
 	{
 		mFrame = optionsFrame;
 		mFrame.add(this);
@@ -32,7 +33,7 @@ public class CustomBoardPanel extends JPanel
 		mFrame.setVisible(true);
 	}
 
-	private void initGUIComponents(final CustomSetupPanel variant)
+	private void initGUIComponents(final VariantCreationPanel variant)
 	{
 		setBorder(BorderFactory.createLoweredBevelBorder());
 		setLayout(new GridBagLayout());
@@ -45,15 +46,20 @@ public class CustomBoardPanel extends JPanel
 		GuiUtility.setupVariantCancelButton(mCancelButton, this, mFrame);
 
 		// Create JLabels and JRadioButtons.
-		mNumberOfBoardsLabel = new JLabel(Messages.getString("CustomBoardPanel.howManyBoards")); //$NON-NLS-1$
+		mNumberOfBoardsLabel = GuiUtility.createJLabel(Messages.getString("CustomBoardPanel.howManyBoards")); //$NON-NLS-1$
 		mOneBoardButton = new JRadioButton(Messages.getString("CustomBoardPanel.1")); //$NON-NLS-1$
 		GuiUtility.requestFocus(mOneBoardButton);
 		mOneBoardButton.setToolTipText(Messages.getString("CustomBoardPanel.selectForOneBoard")); //$NON-NLS-1$
+		mOneBoardButton.setOpaque(false);
+		mOneBoardButton.setForeground(Color.white);
 		// Set oneBoard to be initially selected.
 		mTwoBoardsButton = new JRadioButton(Messages.getString("CustomBoardPanel.2")); //$NON-NLS-1$
 		mTwoBoardsButton.setToolTipText(Messages.getString("CustomBoardPanel.selectForTwoBoards")); //$NON-NLS-1$
+		mTwoBoardsButton.setOpaque(false);
+		mTwoBoardsButton.setForeground(Color.white);
 
 		JPanel boards = new JPanel();
+		boards.setOpaque(false);
 		boards.add(mOneBoardButton);
 		boards.add(mTwoBoardsButton);
 
@@ -71,18 +77,19 @@ public class CustomBoardPanel extends JPanel
 		group.add(mTwoBoardsButton);
 
 		// Create JLabels and JTextFields. Default size 8*8
-		mDimensionsLabel = new JLabel(Messages.getString("CustomBoardPanel.dimensions")); //$NON-NLS-1$
-		mNumberOfRowsLabel = new JLabel(Messages.getString("CustomBoardPanel.rows")); //$NON-NLS-1$
+		mDimensionsLabel = GuiUtility.createJLabel(Messages.getString("CustomBoardPanel.dimensions")); //$NON-NLS-1$
+		mNumberOfRowsLabel = GuiUtility.createJLabel(Messages.getString("CustomBoardPanel.rows")); //$NON-NLS-1$
 		mNumberOfRowsTextField = new JTextField(5);
 		mNumberOfRowsTextField.setText(board[0].numRows() + Messages.getString("CustomBoardPanel.empty")); //$NON-NLS-1$
 		mNumberOfRowsTextField.setToolTipText(Messages.getString("CustomBoardPanel.enterRowAmount")); //$NON-NLS-1$
-		mNumberOfColumnsLabel = new JLabel(Messages.getString("CustomBoardPanel.columns")); //$NON-NLS-1$
+		mNumberOfColumnsLabel = GuiUtility.createJLabel(Messages.getString("CustomBoardPanel.columns")); //$NON-NLS-1$
 		mNumberOfColumnsTextField = new JTextField(5);
 		mNumberOfColumnsTextField.setText(board[0].numCols() + Messages.getString("CustomBoardPanel.empty")); //$NON-NLS-1$
 		mNumberOfColumnsTextField.setToolTipText(Messages.getString("CustomBoardPanel.amountOfColumns")); //$NON-NLS-1$
 
 		JPanel rowCol = new JPanel();
 		rowCol.setLayout(new GridBagLayout());
+		rowCol.setOpaque(false);
 		constraints.gridx = 0;
 		constraints.gridy = 0;
 		constraints.insets = new Insets(2, 15, 1, 5);
@@ -101,11 +108,13 @@ public class CustomBoardPanel extends JPanel
 		rowCol.add(mNumberOfColumnsTextField, constraints);
 
 		// Create JLabel and JCheckBox
-		mWrapAroundLabel = new JLabel(Messages.getString("CustomBoardPanel.shouldWrap") //$NON-NLS-1$
+		mWrapAroundLabel = GuiUtility.createJLabel(Messages.getString("CustomBoardPanel.shouldWrap") //$NON-NLS-1$
 				+ Messages.getString("CustomBoardPanel.aroundHorizontally")); //$NON-NLS-1$
 		mWrapAroundCheckBox = new JCheckBox(Messages.getString("CustomBoardPanel.yes")); //$NON-NLS-1$
 		mWrapAroundCheckBox.setSelected(variant.getBuilder().getBoards()[0].isWrapAround());
 		mWrapAroundCheckBox.setToolTipText(Messages.getString("CustomBoardPanel.pressToHaveWrapAround")); //$NON-NLS-1$
+		mWrapAroundCheckBox.setOpaque(false);
+		mWrapAroundCheckBox.setForeground(Color.white);
 
 		// Create button and add ActionListener
 		mSubmitButton = new JButton(Messages.getString("CustomBoardPanel.save")); //$NON-NLS-1$
@@ -169,6 +178,7 @@ public class CustomBoardPanel extends JPanel
 		});
 
 		JPanel buttons = new JPanel();
+		buttons.setOpaque(false);
 		buttons.add(mSubmitButton);
 		buttons.add(mCancelButton);
 

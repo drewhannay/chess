@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -21,7 +22,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 import javax.imageio.ImageIO;
-import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -43,7 +43,7 @@ import utility.GuiUtility;
 import utility.ImageUtility;
 import com.google.common.collect.Lists;
 
-public class PieceMakerPanel extends JPanel
+public class PieceMakerPanel extends ChessPanel
 {
 	public interface PieceListChangedListener
 	{
@@ -79,7 +79,11 @@ public class PieceMakerPanel extends JPanel
 		mFrame.setSize(400, 600);
 		mFrame.setLocationRelativeTo(menuPanel);
 		mLeaperCheckBox = new JCheckBox(Messages.getString("PieceMakerPanel.canJump"), false); //$NON-NLS-1$
+		mLeaperCheckBox.setOpaque(false);
+		mLeaperCheckBox.setForeground(Color.white);
 		mKnightMovementsCheckBox = new JCheckBox(Messages.getString("PieceMakerPanel.knightLike"), false); //$NON-NLS-1$
+		mKnightMovementsCheckBox.setOpaque(false);
+		mKnightMovementsCheckBox.setForeground(Color.white);
 		mPieceNameField = new JTextField(15);
 		mNorthField = new JTextField(4);
 		mNorthEastField = new JTextField(4);
@@ -129,13 +133,14 @@ public class PieceMakerPanel extends JPanel
 		GridBagConstraints constraints = new GridBagConstraints();
 
 		JPanel pieceCreationPanel = new JPanel();
+		pieceCreationPanel.setOpaque(false);
 		pieceCreationPanel.setLayout(new GridBagLayout());
-		pieceCreationPanel.setBorder(BorderFactory.createTitledBorder(Messages.getString("PieceMakerPanel.newPiece"))); //$NON-NLS-1$
 
 		JPanel namePanel = new JPanel();
+		namePanel.setOpaque(false);
 		namePanel.setLayout(new FlowLayout());
 
-		namePanel.add(new JLabel(Messages.getString("PieceMakerPanel.pieceName"))); //$NON-NLS-1$
+		namePanel.add(GuiUtility.createJLabel(Messages.getString("PieceMakerPanel.pieceName"))); //$NON-NLS-1$
 		mPieceNameField.setToolTipText(Messages.getString("PieceMakerPanel.enterNameOfNewPiece")); //$NON-NLS-1$
 		if (builder != null)
 			mPieceNameField.setText(builder.getName());
@@ -153,14 +158,14 @@ public class PieceMakerPanel extends JPanel
 		}
 		catch (IOException e4)
 		{
-			// TODO Auto-generated catch block
 			e4.printStackTrace();
 		}
 
 		blankSquare.setImage(blankSquare.getImage().getScaledInstance(48, 48, Image.SCALE_SMOOTH));
 		final JPanel lightIconPanel = new JPanel();
 		lightIconPanel.setLayout(new FlowLayout());
-		final JLabel lightIconLabel = new JLabel();
+		lightIconPanel.setOpaque(false);
+		final JLabel lightIconLabel = GuiUtility.createJLabel("");
 		lightIconLabel.setSize(48, 48);
 
 		try
@@ -197,7 +202,8 @@ public class PieceMakerPanel extends JPanel
 
 		final JPanel darkIconPanel = new JPanel();
 		darkIconPanel.setLayout(new FlowLayout());
-		final JLabel darkIconLabel = new JLabel();
+		darkIconPanel.setOpaque(false);
+		final JLabel darkIconLabel = GuiUtility.createJLabel("");
 		darkIconLabel.setSize(48, 48);
 
 		try
@@ -246,7 +252,7 @@ public class PieceMakerPanel extends JPanel
 		JLabel movementPictureHolder = null;
 		try
 		{
-			movementPictureHolder = new JLabel(GuiUtility.createImageIcon(130, 130, "/movement_directions.png")); //$NON-NLS-1$
+			movementPictureHolder = GuiUtility.createJLabel(GuiUtility.createImageIcon(130, 130, "/movement_directions.png")); //$NON-NLS-1$
 		}
 		catch (IOException e1)
 		{
@@ -255,6 +261,7 @@ public class PieceMakerPanel extends JPanel
 
 		JPanel movement = new JPanel();
 		movement.setLayout(new GridBagLayout());
+		movement.setOpaque(false);
 
 		constraints.gridx = 0;
 		constraints.gridy = 0;
@@ -368,6 +375,7 @@ public class PieceMakerPanel extends JPanel
 			mLeaperCheckBox.setSelected(builder.canJump());
 
 		final JPanel knightMovementPanel = new JPanel();
+		knightMovementPanel.setOpaque(false);
 		knightMovementPanel.setToolTipText(Messages.getString("PieceMakerPanel.useForKnight")); //$NON-NLS-1$
 		knightMovementPanel.setLayout(new GridBagLayout());
 
@@ -380,6 +388,7 @@ public class PieceMakerPanel extends JPanel
 		knightMovementPanel.add(mKnightComboBox, constraints);
 
 		final JPanel inputPanel = new JPanel();
+		inputPanel.setOpaque(false);
 		inputPanel.setLayout(new GridBagLayout());
 
 		constraints.anchor = GridBagConstraints.CENTER;
@@ -394,7 +403,7 @@ public class PieceMakerPanel extends JPanel
 		constraints.gridy = 0;
 		constraints.gridheight = 1;
 		constraints.gridwidth = 1;
-		inputPanel.add(new JLabel(Messages.getString("PieceMakerPanel.51")), constraints); //$NON-NLS-1$
+		inputPanel.add(GuiUtility.createJLabel(Messages.getString("PieceMakerPanel.51")), constraints); //$NON-NLS-1$
 
 		constraints.anchor = GridBagConstraints.CENTER;
 		constraints.gridx = 2;
@@ -415,6 +424,7 @@ public class PieceMakerPanel extends JPanel
 		constraints.gridy = 1;
 		constraints.gridheight = 1;
 		constraints.gridwidth = 1;
+		constraints.insets = new Insets(10, 0, 10, 0);
 		knightMovementPanel.add(mRemoveKnightMoveButton, constraints);
 
 		constraints.anchor = GridBagConstraints.CENTER;
@@ -425,6 +435,7 @@ public class PieceMakerPanel extends JPanel
 		knightMovementPanel.add(mAddKnightMoveButton, constraints);
 
 		JPanel movementPanel = new JPanel();
+		movementPanel.setOpaque(false);
 		movementPanel.setLayout(new BoxLayout(movementPanel, BoxLayout.Y_AXIS));
 		movementPanel.setLayout(new GridBagLayout());
 
@@ -432,7 +443,7 @@ public class PieceMakerPanel extends JPanel
 		constraints.gridx = 0;
 		constraints.gridy = 0;
 		constraints.anchor = GridBagConstraints.CENTER;
-		movementPanel.add(new JLabel(Messages.getString("PieceMakerPanel.normalMovementHTML")), constraints); //$NON-NLS-1$
+		movementPanel.add(GuiUtility.createJLabel(Messages.getString("PieceMakerPanel.normalMovementHTML")), constraints); //$NON-NLS-1$
 		constraints.insets = new Insets(5, 0, 0, 0);
 		constraints.gridx = 0;
 		constraints.gridy = 1;
@@ -449,7 +460,7 @@ public class PieceMakerPanel extends JPanel
 		constraints.insets = new Insets(5, 0, 5, 0);
 		constraints.gridx = 0;
 		constraints.gridy = 7;
-		movementPanel.add(new JLabel(Messages.getString("PieceMakerPanel.knightLikeMovementHTML")), constraints); //$NON-NLS-1$
+		movementPanel.add(GuiUtility.createJLabel(Messages.getString("PieceMakerPanel.knightLikeMovementHTML")), constraints); //$NON-NLS-1$
 		constraints.gridx = 0;
 		constraints.gridy = 8;
 		movementPanel.add(knightMovementPanel, constraints);

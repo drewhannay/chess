@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -12,7 +13,6 @@ import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -21,9 +21,9 @@ import rules.EndOfGame;
 import rules.Rules;
 import utility.GuiUtility;
 
-public class ObjectiveMakerPanel extends JPanel
+public class ObjectiveMakerPanel extends ChessPanel
 {
-	public ObjectiveMakerPanel(CustomSetupPanel customSetupMenu, JFrame optionsFrame)
+	public ObjectiveMakerPanel(VariantCreationPanel customSetupMenu, JFrame optionsFrame)
 	{
 		mFrame = optionsFrame;
 		mFrame.setVisible(true);
@@ -36,7 +36,7 @@ public class ObjectiveMakerPanel extends JPanel
 		initGUIComponents(customSetupMenu);
 	}
 
-	public void initGUIComponents(final CustomSetupPanel customSetupMenu)
+	public void initGUIComponents(final VariantCreationPanel customSetupMenu)
 	{
 		setLayout(new GridBagLayout());
 		setSize(600, 600);
@@ -45,8 +45,11 @@ public class ObjectiveMakerPanel extends JPanel
 
 		final JPanel objectiveWhitePanel = new JPanel();
 		objectiveWhitePanel.setLayout(new GridLayout(5, 1));
+		objectiveWhitePanel.setOpaque(false);
 		final JRadioButton whiteCaptureAllButton = new JRadioButton(Messages.getString("ObjectiveMakerPanel.captureAll"), false); //$NON-NLS-1$
 		GuiUtility.requestFocus(whiteCaptureAllButton);
+		whiteCaptureAllButton.setOpaque(false);
+		whiteCaptureAllButton.setForeground(Color.white);
 		whiteCaptureAllButton.setToolTipText(Messages.getString("ObjectiveMakerPanel.pressForCaptureAll")); //$NON-NLS-1$
 		objectiveWhitePanel.add(whiteCaptureAllButton);
 		if (customSetupMenu.mWhiteRules.getEndOfGame() == EndOfGame.CAPTURE_ALL_PIECES)
@@ -55,6 +58,8 @@ public class ObjectiveMakerPanel extends JPanel
 		final JRadioButton whiteCaptureAllTypeButton = new JRadioButton(
 				Messages.getString("ObjectiveMakerPanel.captureAllOfType"), false); //$NON-NLS-1$
 		whiteCaptureAllTypeButton.setToolTipText(Messages.getString("ObjectiveMakerPanel.pressForCaptureAllOfType")); //$NON-NLS-1$
+		whiteCaptureAllTypeButton.setOpaque(false);
+		whiteCaptureAllTypeButton.setForeground(Color.white);
 		objectiveWhitePanel.add(whiteCaptureAllTypeButton);
 		if (customSetupMenu.mWhiteRules.getEndOfGame() == EndOfGame.CAPTURE_ALL_OF_TYPE)
 			whiteCaptureAllTypeButton.setSelected(true);
@@ -62,18 +67,24 @@ public class ObjectiveMakerPanel extends JPanel
 		final JRadioButton whiteProtectObjectiveButton = new JRadioButton(
 				Messages.getString("ObjectiveMakerPanel.protectObjective"), false); //$NON-NLS-1$
 		whiteProtectObjectiveButton.setToolTipText(Messages.getString("ObjectiveMakerPanel.pressForProtectObjective")); //$NON-NLS-1$
+		whiteProtectObjectiveButton.setOpaque(false);
+		whiteProtectObjectiveButton.setForeground(Color.white);
 		objectiveWhitePanel.add(whiteProtectObjectiveButton);
 		if (customSetupMenu.mWhiteRules.getEndOfGame() == EndOfGame.CLASSIC)
 			whiteProtectObjectiveButton.setSelected(true);
 
 		final JRadioButton whiteLoseAllButton = new JRadioButton(Messages.getString("ObjectiveMakerPanel.loseAllPieces"), false); //$NON-NLS-1$
 		whiteLoseAllButton.setToolTipText(Messages.getString("ObjectiveMakerPanel.pressForLoseAllPieces")); //$NON-NLS-1$
+		whiteLoseAllButton.setOpaque(false);
+		whiteLoseAllButton.setForeground(Color.white);
 		objectiveWhitePanel.add(whiteLoseAllButton);
 		if (customSetupMenu.mWhiteRules.getEndOfGame() == EndOfGame.LOSE_ALL_PIECES)
 			whiteLoseAllButton.setSelected(true);
 
 		final JRadioButton whiteCheckTimesButton = new JRadioButton(Messages.getString("ObjectiveMakerPanel.checkNumTimes"), false); //$NON-NLS-1$
 		whiteCheckTimesButton.setToolTipText(Messages.getString("ObjectiveMakerPanel.pressForCheckNumTimes")); //$NON-NLS-1$
+		whiteCheckTimesButton.setOpaque(false);
+		whiteCheckTimesButton.setForeground(Color.white);
 		objectiveWhitePanel.add(whiteCheckTimesButton);
 		if (customSetupMenu.mWhiteRules.getEndOfGame() == EndOfGame.CHECK_N_TIMES)
 			whiteCheckTimesButton.setSelected(true);
@@ -87,8 +98,11 @@ public class ObjectiveMakerPanel extends JPanel
 
 		final JPanel objectiveBlackPanel = new JPanel();
 		objectiveBlackPanel.setLayout(new GridLayout(5, 1));
+		objectiveBlackPanel.setOpaque(false);
 		final JRadioButton blackCaptureAllButton = new JRadioButton(Messages.getString("ObjectiveMakerPanel.captureAll"), false); //$NON-NLS-1$
 		blackCaptureAllButton.setToolTipText(Messages.getString("ObjectiveMakerPanel.pressForCaptureAll")); //$NON-NLS-1$
+		blackCaptureAllButton.setOpaque(false);
+		blackCaptureAllButton.setForeground(Color.white);
 		objectiveBlackPanel.add(blackCaptureAllButton);
 		if (customSetupMenu.mBlackRules.getEndOfGame() == EndOfGame.CAPTURE_ALL_PIECES)
 			blackCaptureAllButton.setSelected(true);
@@ -96,6 +110,8 @@ public class ObjectiveMakerPanel extends JPanel
 		final JRadioButton blackCaptureAllTypeButton = new JRadioButton(
 				Messages.getString("ObjectiveMakerPanel.captureAllOfType"), false); //$NON-NLS-1$
 		blackCaptureAllTypeButton.setToolTipText(Messages.getString("ObjectiveMakerPanel.pressForCaptureAllOfType")); //$NON-NLS-1$
+		blackCaptureAllTypeButton.setOpaque(false);
+		blackCaptureAllTypeButton.setForeground(Color.white);
 		objectiveBlackPanel.add(blackCaptureAllTypeButton);
 		if (customSetupMenu.mBlackRules.getEndOfGame() == EndOfGame.CAPTURE_ALL_OF_TYPE)
 			blackCaptureAllTypeButton.setSelected(true);
@@ -103,18 +119,24 @@ public class ObjectiveMakerPanel extends JPanel
 		final JRadioButton blackProtectObjectiveButton = new JRadioButton(
 				Messages.getString("ObjectiveMakerPanel.protectObjective"), false); //$NON-NLS-1$
 		blackProtectObjectiveButton.setToolTipText(Messages.getString("ObjectiveMakerPanel.pressForProtect")); //$NON-NLS-1$
+		blackProtectObjectiveButton.setOpaque(false);
+		blackProtectObjectiveButton.setForeground(Color.white);
 		objectiveBlackPanel.add(blackProtectObjectiveButton);
 		if (customSetupMenu.mBlackRules.getEndOfGame() == EndOfGame.CLASSIC)
 			blackProtectObjectiveButton.setSelected(true);
 
 		final JRadioButton blackLoseAllButton = new JRadioButton(Messages.getString("ObjectiveMakerPanel.loseAllPieces"), false); //$NON-NLS-1$
 		blackLoseAllButton.setToolTipText(Messages.getString("ObjectiveMakerPanel.pressForLoseAllPieces")); //$NON-NLS-1$
+		blackLoseAllButton.setOpaque(false);
+		blackLoseAllButton.setForeground(Color.white);
 		objectiveBlackPanel.add(blackLoseAllButton);
 		if (customSetupMenu.mBlackRules.getEndOfGame() == EndOfGame.LOSE_ALL_PIECES)
 			blackLoseAllButton.setSelected(true);
 
 		final JRadioButton blackCheckTimesButton = new JRadioButton(Messages.getString("ObjectiveMakerPanel.checkNumTimes"), false); //$NON-NLS-1$
 		blackCheckTimesButton.setToolTipText(Messages.getString("ObjectiveMakerPanel.pressForCheckNumTimes")); //$NON-NLS-1$
+		blackCheckTimesButton.setOpaque(false);
+		blackCheckTimesButton.setForeground(Color.white);
 		objectiveBlackPanel.add(blackCheckTimesButton);
 		if (customSetupMenu.mBlackRules.getEndOfGame() == EndOfGame.CHECK_N_TIMES)
 			blackCheckTimesButton.setSelected(true);
@@ -227,42 +249,46 @@ public class ObjectiveMakerPanel extends JPanel
 		});
 
 		JPanel whiteTeamPanel = new JPanel();
-		whiteTeamPanel.setBorder(BorderFactory.createTitledBorder(Messages.getString("ObjectiveMakerPanel.whiteTeam"))); //$NON-NLS-1$
+		whiteTeamPanel.setOpaque(false);
+		whiteTeamPanel.setBorder(BorderFactory.createTitledBorder("<html><font color=#FFFFFF>" + Messages.getString("ObjectiveMakerPanel.whiteTeam") + "</font></html>")); //$NON-NLS-1$
 		whiteTeamPanel.setLayout(new GridBagLayout());
 
 		JPanel whiteObjectivePanel = new JPanel();
+		whiteObjectivePanel.setOpaque(false);
 		whiteObjectivePanel.setLayout(new GridBagLayout());
 		constraints.gridheight = 1;
 		constraints.gridx = 0;
 		constraints.gridy = 1;
-		whiteObjectivePanel.add(new JLabel(Messages.getString("ObjectiveMakerPanel.objectiveHTML")), constraints); //$NON-NLS-1$
+		whiteObjectivePanel.add(GuiUtility.createJLabel(Messages.getString("ObjectiveMakerPanel.objectiveHTML")), constraints); //$NON-NLS-1$
 		constraints.gridx = 0;
 		constraints.gridy = 2;
 		whiteObjectivePanel.add(objectiveWhitePanel, constraints);
 		constraints.gridx = 0;
 		constraints.gridy = 3;
-		whiteObjectivePanel.add(new JLabel(Messages.getString("ObjectiveMakerPanel.emptySpace")), constraints); //$NON-NLS-1$
+		whiteObjectivePanel.add(GuiUtility.createJLabel(Messages.getString("ObjectiveMakerPanel.emptySpace")), constraints); //$NON-NLS-1$
 
 		constraints.gridx = 0;
 		constraints.gridy = 1;
 		whiteTeamPanel.add(whiteObjectivePanel, constraints);
 
 		JPanel blackTeamPanel = new JPanel();
-		blackTeamPanel.setBorder(BorderFactory.createTitledBorder(Messages.getString("ObjectiveMakerPanel.blackTeam"))); //$NON-NLS-1$
+		blackTeamPanel.setOpaque(false);
+		blackTeamPanel.setBorder(BorderFactory.createTitledBorder("<html><font color=#FFFFFF>" + Messages.getString("ObjectiveMakerPanel.blackTeam") + "</font></html>")); //$NON-NLS-1$
 		blackTeamPanel.setLayout(new GridBagLayout());
 
 		JPanel blackObjectivePanel = new JPanel();
+		blackObjectivePanel.setOpaque(false);
 		blackObjectivePanel.setLayout(new GridBagLayout());
 		constraints.gridheight = 1;
 		constraints.gridx = 0;
 		constraints.gridy = 1;
-		blackObjectivePanel.add(new JLabel(Messages.getString("ObjectiveMakerPanel.objectiveHTML")), constraints); //$NON-NLS-1$
+		blackObjectivePanel.add(GuiUtility.createJLabel(Messages.getString("ObjectiveMakerPanel.objectiveHTML")), constraints); //$NON-NLS-1$
 		constraints.gridx = 0;
 		constraints.gridy = 2;
 		blackObjectivePanel.add(objectiveBlackPanel, constraints);
 		constraints.gridx = 0;
 		constraints.gridy = 3;
-		blackObjectivePanel.add(new JLabel(Messages.getString("ObjectiveMakerPanel.emptySpace")), constraints); //$NON-NLS-1$
+		blackObjectivePanel.add(GuiUtility.createJLabel(Messages.getString("ObjectiveMakerPanel.emptySpace")), constraints); //$NON-NLS-1$
 
 		constraints.gridx = 0;
 		constraints.gridy = 1;
@@ -280,6 +306,7 @@ public class ObjectiveMakerPanel extends JPanel
 
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new FlowLayout());
+		buttonPanel.setOpaque(false);
 		buttonPanel.add(saveButton);
 		buttonPanel.add(cancelButton);
 

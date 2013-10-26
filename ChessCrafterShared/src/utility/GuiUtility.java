@@ -1,5 +1,6 @@
 package utility;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -14,6 +15,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -44,6 +46,18 @@ public final class GuiUtility
 		});
 	}
 
+	public static JLabel createJLabel(String labelText){
+		JLabel newLabel = new JLabel(labelText);
+		newLabel.setForeground(Color.white);
+		return newLabel;
+	}
+	
+	public static JLabel createJLabel(ImageIcon image){
+		JLabel newLabel = new JLabel(image);
+		newLabel.setForeground(Color.white);
+		return newLabel;
+	}
+	
 	public static void setupDoneButton(JButton doneButton, final JFrame popup)
 	{
 		doneButton.addActionListener(new ActionListener()
