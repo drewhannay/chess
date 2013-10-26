@@ -23,11 +23,11 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
-import com.google.common.collect.Lists;
-
 import utility.FileUtility;
 import utility.GuiUtility;
 import utility.Preference;
+
+import com.google.common.collect.Lists;
 
 public final class PreferenceUtility
 {

@@ -3,12 +3,15 @@ package net;
 import gui.Driver;
 import gui.PlayGameScreen;
 import gui.PlayNetGameScreen;
+
 import java.io.EOFException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
+
 import javax.swing.JOptionPane;
+
 import logic.Game;
 import logic.Result;
 import utility.GuiUtility;

@@ -87,6 +87,7 @@ public class WatchGamePanel extends JPanel implements WatchGameScreen
 		boardRefresh(game.getBoards());
 	}
 
+	@Override
 	public void boardRefresh(Board[] boards)
 	{
 		refreshSquares(boards);
@@ -166,6 +167,7 @@ public class WatchGamePanel extends JPanel implements WatchGameScreen
 		}
 	}
 
+	@Override
 	public void turn(boolean isBlackTurn)
 	{
 		if (mWhiteTimer != null && mBlackTimer != null)
@@ -218,6 +220,7 @@ public class WatchGamePanel extends JPanel implements WatchGameScreen
 		return gridPanel;
 	}
 
+	@Override
 	public JMenu createMenuBar()
 	{
 		mOptionsMenu = new JMenu(Messages.getString("PlayGamePanel.menu")); //$NON-NLS-1$
@@ -324,7 +327,7 @@ public class WatchGamePanel extends JPanel implements WatchGameScreen
 					mHistory[mHistoryIndex--].undo();
 					getGame().setBlackMove(!getGame().isBlackMove());
 					boardRefresh(boards);
-					
+
 					if (mHistoryIndex == -1)
 						prevButton.setEnabled(false);
 				}
@@ -463,16 +466,19 @@ public class WatchGamePanel extends JPanel implements WatchGameScreen
 		add(mWhiteLabel, constraints);
 	}
 
+	@Override
 	public void setNextMoveMustPlacePiece(boolean nextMoveMustPlacePiece)
 	{
 		mNextMoveMustPlacePiece = nextMoveMustPlacePiece;
 	}
 
+	@Override
 	public boolean getNextMoveMustPlacePiece()
 	{
 		return mNextMoveMustPlacePiece;
 	}
 
+	@Override
 	public void setPieceToPlace(Piece piece)
 	{
 		mPieceToPlace = piece;
@@ -488,6 +494,7 @@ public class WatchGamePanel extends JPanel implements WatchGameScreen
 		return mGame;
 	}
 
+	@Override
 	public void resetTimers()
 	{
 		mWhiteTimer.reset();

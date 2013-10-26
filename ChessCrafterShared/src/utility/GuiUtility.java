@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -19,6 +20,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import javax.swing.border.TitledBorder;
 
 public final class GuiUtility
 {
@@ -56,6 +58,12 @@ public final class GuiUtility
 		JLabel newLabel = new JLabel(image);
 		newLabel.setForeground(Color.white);
 		return newLabel;
+	}
+	
+	public static TitledBorder createBorder(String borderText){
+		TitledBorder newBorder = BorderFactory.createTitledBorder(borderText);
+		newBorder.setTitleColor(Color.white);
+		return newBorder;
 	}
 	
 	public static void setupDoneButton(JButton doneButton, final JFrame popup)

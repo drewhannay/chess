@@ -87,6 +87,7 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 		boardRefresh(game.getBoards());
 	}
 
+	@Override
 	public void boardRefresh(Board[] boards)
 	{
 		refreshSquares(boards);
@@ -158,6 +159,7 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 		}
 	}
 
+	@Override
 	public void endOfGame(Result result)
 	{
 		PlayNetGamePanel.mIsRunning = false;
@@ -221,6 +223,7 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 		}
 	}
 
+	@Override
 	public void saveGame()
 	{
 		String fileName = JOptionPane.showInputDialog(Driver.getInstance(),
@@ -230,6 +233,7 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 		getGame().saveGame(fileName, false, true);
 	}
 
+	@Override
 	public void turn(boolean isBlackTurn)
 	{
 		if (mWhiteTimer != null && mBlackTimer != null)
@@ -289,6 +293,7 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 		return gridPanel;
 	}
 
+	@Override
 	public JMenu createMenuBar()
 	{
 		mOptionsMenu = new JMenu(Messages.getString("PlayGamePanel.menu")); //$NON-NLS-1$
@@ -441,7 +446,7 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 
 		mWhiteCapturesJail = new Board(jailBoardSize, jailBoardSize, false);
 		mWhiteCapturePanel = createGrid(mWhiteCapturesJail, true);
-		mWhiteCapturePanel.setBorder(BorderFactory.createTitledBorder("<html><font color=#FFFFFF>" + Messages.getString("PlayGamePanel.capturedPieces") + "</font></html>")); //$NON-NLS-1$
+		mWhiteCapturePanel.setBorder(GuiUtility.createBorder(Messages.getString("PlayGamePanel.capturedPieces"))); //$NON-NLS-1$
 		mWhiteCapturePanel.setLayout(new GridLayout(jailBoardSize, jailBoardSize));
 
 		mWhiteCapturePanel.setPreferredSize(new Dimension((mWhiteCapturesJail.getMaxCol() + 1) * 25,
@@ -449,7 +454,7 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 
 		mBlackCapturesJail = new Board(jailBoardSize, jailBoardSize, false);
 		mBlackCapturePanel = createGrid(mBlackCapturesJail, true);
-		mBlackCapturePanel.setBorder(BorderFactory.createTitledBorder("<html><font color=#FFFFFF>" + Messages.getString("PlayGamePanel.capturedPieces") + "</font></html>")); //$NON-NLS-1$
+		mBlackCapturePanel.setBorder(GuiUtility.createBorder(Messages.getString("PlayGamePanel.capturedPieces"))); //$NON-NLS-1$
 		mBlackCapturePanel.setLayout(new GridLayout(jailBoardSize, jailBoardSize));
 
 		mBlackCapturePanel.setPreferredSize(new Dimension((mBlackCapturesJail.getMaxCol() + 1) * 25,
@@ -552,16 +557,19 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 		add(mWhiteLabel, constraints);
 	}
 
+	@Override
 	public void setNextMoveMustPlacePiece(boolean nextMoveMustPlacePiece)
 	{
 		mNextMoveMustPlacePiece = nextMoveMustPlacePiece;
 	}
 
+	@Override
 	public boolean getNextMoveMustPlacePiece()
 	{
 		return mNextMoveMustPlacePiece;
 	}
 
+	@Override
 	public void setPieceToPlace(Piece piece)
 	{
 		mPieceToPlace = piece;
@@ -577,6 +585,7 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 		return mGame;
 	}
 
+	@Override
 	public void resetTimers()
 	{
 		mWhiteTimer.reset();

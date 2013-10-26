@@ -152,7 +152,7 @@ public class NewGamePanel extends ChessPanel
 	private void createNewGamePopup()
 	{
 		initPopup();
-		
+
 		GridBagConstraints constraints = new GridBagConstraints();
 
 		final JComboBox dropdown;
@@ -314,7 +314,7 @@ public class NewGamePanel extends ChessPanel
 			return;
 
 		initPopup();
-		
+
 		GridBagConstraints constraints = new GridBagConstraints();
 
 		// add the variant type selector to the frame
@@ -480,7 +480,7 @@ public class NewGamePanel extends ChessPanel
 		constraints.gridx = 0;
 		constraints.gridy = 3;
 		mPopupPanel.add(buttonPanel, constraints);
-		
+
 		mPopupFrame.add(mPopupPanel);
 
 		mPopupFrame.setVisible(true);
