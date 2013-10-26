@@ -42,9 +42,11 @@ import timer.ChessTimer;
 import utility.AppConstants;
 import utility.FileUtility;
 import utility.GuiUtility;
+import utility.Pair;
 import utility.Preference;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 
 import dragNdrop.AbstractDropManager;
 import dragNdrop.DropAdapter;
@@ -61,10 +63,12 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 		else
 			game = getGame();
 
-		m_dropManager = new DropManager();
-		m_globalGlassPane = new GlassPane();
-		m_globalGlassPane.setOpaque(false);
-		Driver.getInstance().setGlassPane(m_globalGlassPane);
+		mDropManager = new DropManager();
+		mGlobalGlassPane = new GlassPane();
+		mGlobalGlassPane.setOpaque(false);
+		Driver.getInstance().setGlassPane(mGlobalGlassPane);
+
+		mSquareLabels = Lists.newArrayList();
 
 		PlayGamePanel.mWhiteTimer = game.getWhiteTimer();
 		PlayGamePanel.mBlackTimer = game.getBlackTimer();
@@ -83,7 +87,7 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 			e.printStackTrace();
 		}
 
-		s_instance = this;
+		sInstance = this;
 		boardRefresh(game.getBoards());
 	}
 
@@ -104,7 +108,7 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 				mInCheckLabel.setBorder(BorderFactory.createTitledBorder(Messages.getString("PlayGamePanel.whiteTeam"))); //$NON-NLS-1$
 
 			for (Piece piece : getGame().getThreats(objectivePiece))
-				piece.getSquare().setColor(Color.red);
+				piece.getSquare().setIsThreatSquare(true);
 		}
 		else
 		{
@@ -122,7 +126,7 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 					mWhiteCapturesJail.getSquare(i, j).setPiece(blackCapturedPieces[index]);
 					index++;
 				}
-				mWhiteCapturesJail.getSquare(i, j).refreshJail();
+				mWhiteCapturesJail.getSquare(i, j).setJailStateChanged();
 			}
 		}
 
@@ -137,13 +141,13 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 					mBlackCapturesJail.getSquare(i, j).setPiece(whiteCapturedPieces[index]);
 					index++;
 				}
-				mBlackCapturesJail.getSquare(i, j).refreshJail();
+				mBlackCapturesJail.getSquare(i, j).setJailStateChanged();
 			}
 		}
 
-		mWhiteLabel.setBackground(getGame().isBlackMove() ? null : Square.HIGHLIGHT_COLOR);
+		mWhiteLabel.setBackground(getGame().isBlackMove() ? null : SquareJLabel.HIGHLIGHT_COLOR);
 		mWhiteLabel.setForeground(getGame().isBlackMove() ? Color.black : Color.white);
-		mBlackLabel.setBackground(getGame().isBlackMove() ? Square.HIGHLIGHT_COLOR : null);
+		mBlackLabel.setBackground(getGame().isBlackMove() ? SquareJLabel.HIGHLIGHT_COLOR : null);
 		mBlackLabel.setForeground(getGame().isBlackMove() ? Color.white : Color.black);
 	}
 
@@ -154,7 +158,7 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 			for (int i = 1; i <= boards[k].getMaxRow(); i++)
 			{
 				for (int j = 1; j <= boards[k].getMaxCol(); j++)
-					boards[k].getSquare(i, j).refresh();
+					boards[k].getSquare(i, j).setStateChanged();
 			}
 		}
 	}
@@ -185,9 +189,9 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 		{
 		case JOptionPane.YES_OPTION:
 
-			m_preference = PreferenceUtility.getPreference();
+			mPreference = PreferenceUtility.getPreference();
 
-			if (!m_preference.isPathSet())
+			if (!mPreference.isPathSet())
 			{
 				JOptionPane
 						.showMessageDialog(
@@ -199,9 +203,9 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 				int returnVal = fileChooser.showOpenDialog(Driver.getInstance());
 				if (returnVal == JFileChooser.APPROVE_OPTION)
-					m_preference.setSaveLocation(fileChooser.getSelectedFile().getAbsolutePath());
+					mPreference.setSaveLocation(fileChooser.getSelectedFile().getAbsolutePath());
 				else
-					m_preference.setSaveLocation(FileUtility.getDefaultCompletedLocation());
+					mPreference.setSaveLocation(FileUtility.getDefaultCompletedLocation());
 			}
 
 			String saveFileName = JOptionPane.showInputDialog(Driver.getInstance(),
@@ -243,9 +247,11 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 		}
 	}
 
-	private JPanel createGrid(Board board, boolean isJail)
+	private Pair<JPanel, List<SquareJLabel>> createGrid(Board board, boolean isJail)
 	{
-		final JPanel gridPanel = new JPanel();
+		JPanel gridPanel = new JPanel();
+		List<SquareJLabel> squareLabels = Lists.newArrayList();
+
 		gridPanel.setOpaque(false);
 		gridPanel.setLayout(new GridLayout(board.numRows() + 1, board.numCols()));
 		gridPanel.setPreferredSize(new Dimension((board.numCols() + 1) * 48, (board.numRows() + 1) * 48));
@@ -264,13 +270,15 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 			for (int j = 1; j <= numOfColumns; j++)
 			{
 				Square square = board.getSquare(i, j);
+				SquareJLabel squareLabel = new SquareJLabel(square);
+				squareLabels.add(squareLabel);
 				if (!isJail)
 				{
-					square.addMouseListener(new SquareListener(square, board));
-					square.addMouseMotionListener(new MotionAdapter(m_globalGlassPane));
+					squareLabel.addMouseListener(new SquareListener(squareLabel, board));
+					squareLabel.addMouseMotionListener(new MotionAdapter(mGlobalGlassPane));
 				}
 
-				gridPanel.add(square);
+				gridPanel.add(squareLabel);
 			}
 
 		}
@@ -290,7 +298,7 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 				}
 			}
 		}
-		return gridPanel;
+		return Pair.create(gridPanel, squareLabels);
 	}
 
 	@Override
@@ -397,7 +405,9 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 			constraints.insets = new Insets(10, 0, 0, 0);
 			constraints.gridx = 0;
 
-			add(createGrid(boards[0], false), constraints);
+			Pair<JPanel, List<SquareJLabel>> pair = createGrid(boards[0], false);
+			add(pair.first, constraints);
+			mSquareLabels.addAll(pair.second);
 		}
 		else
 		{
@@ -408,13 +418,17 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 			constraints.insets = new Insets(10, 0, 0, 0);
 			constraints.gridx = 0;
 
-			add(createGrid(boards[0], false), constraints);
+			Pair<JPanel, List<SquareJLabel>> pair = createGrid(boards[0], false);
+			add(pair.first, constraints);
+			mSquareLabels.addAll(pair.second);
 
 			constraints.fill = GridBagConstraints.HORIZONTAL;
 			constraints.gridwidth = 10;
 			constraints.insets = new Insets(10, 0, 0, 0);
 			constraints.gridx = 11;
-			add(createGrid(boards[1], false), constraints);
+			pair = createGrid(boards[1], false);
+			add(pair.first, constraints);
+			mSquareLabels.addAll(pair.second);
 
 			twoBoardsGridBagOffset += 10;
 		}
@@ -445,7 +459,7 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 		}
 
 		mWhiteCapturesJail = new Board(jailBoardSize, jailBoardSize, false);
-		mWhiteCapturePanel = createGrid(mWhiteCapturesJail, true);
+		mWhiteCapturePanel = createGrid(mWhiteCapturesJail, true).first;
 		mWhiteCapturePanel.setBorder(GuiUtility.createBorder(Messages.getString("PlayGamePanel.capturedPieces"))); //$NON-NLS-1$
 		mWhiteCapturePanel.setLayout(new GridLayout(jailBoardSize, jailBoardSize));
 
@@ -453,7 +467,7 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 				(mWhiteCapturesJail.getMaxRow() + 1) * 25));
 
 		mBlackCapturesJail = new Board(jailBoardSize, jailBoardSize, false);
-		mBlackCapturePanel = createGrid(mBlackCapturesJail, true);
+		mBlackCapturePanel = createGrid(mBlackCapturesJail, true).first;
 		mBlackCapturePanel.setBorder(GuiUtility.createBorder(Messages.getString("PlayGamePanel.capturedPieces"))); //$NON-NLS-1$
 		mBlackCapturePanel.setLayout(new GridLayout(jailBoardSize, jailBoardSize));
 
@@ -594,16 +608,16 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 
 	protected class SquareListener extends DropAdapter implements MouseListener, PieceToolTipPreferenceChangedListener
 	{
-		public SquareListener(Square square, Board board)
+		public SquareListener(SquareJLabel squareLabel, Board board)
 		{
-			super(m_globalGlassPane);
-			m_square = square;
-			m_board = board;
-			addDropListener(m_dropManager);
-			if (PreferenceUtility.getPreference().showPieceToolTips() && m_square.isOccupied())
-				m_square.setToolTipText(m_square.getPiece().getToolTipText());
+			super(mGlobalGlassPane);
+			mSquareLabel = squareLabel;
+			mBoard = board;
+			addDropListener(mDropManager);
+			if (PreferenceUtility.getPreference().showPieceToolTips() && mSquareLabel.getSquare().isOccupied())
+				mSquareLabel.setToolTipText(mSquareLabel.getSquare().getPiece().getToolTipText());
 			else
-				m_square.setToolTipText(null);
+				mSquareLabel.setToolTipText(null);
 			PreferenceUtility.addPieceToolTipListener(this);
 		}
 
@@ -644,30 +658,36 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 			// return;
 			// }
 
-			if (m_square.getPiece() == null || m_square.getPiece().isBlack() != getGame().isBlackMove())
+			if (mSquareLabel.getSquare().getPiece() == null
+					|| mSquareLabel.getSquare().getPiece().isBlack() != getGame().isBlackMove())
 			{
 				return;
 			}
 
-			List<Square> destinations = m_square.getPiece().getLegalDests();
+			List<Square> destinations = mSquareLabel.getSquare().getPiece().getLegalDests();
+			List<SquareJLabel> destinationLabels = Lists.newArrayList();
 			if (destinations.size() > 0)
 			{
-				m_preference = PreferenceUtility.getPreference();
-				if (m_preference.isHighlightMoves())
+				mPreference = PreferenceUtility.getPreference();
+				if (mPreference.isHighlightMoves())
 				{
-					for (Square destination : destinations)
+					for (SquareJLabel squareLabel : mSquareLabels)
 					{
-						destination.setBackgroundColor(Square.HIGHLIGHT_COLOR);
+						if (destinations.contains(squareLabel.getSquare()))
+						{
+							squareLabel.setColor(SquareJLabel.HIGHLIGHT_COLOR);
+							destinationLabels.add(squareLabel);
+						}
 					}
 				}
 			}
-			m_dropManager.setComponentList(destinations);
-			m_dropManager.setBoard(m_board);
+			mDropManager.setComponentList(destinationLabels);
+			mDropManager.setBoard(mBoard);
 
-			if (m_square.getPiece() == null)
+			if (mSquareLabel.getSquare().getPiece() == null)
 				return;
 			else
-				m_square.hideIcon();
+				mSquareLabel.hideIcon();
 
 			Driver.getInstance().setGlassPane(mGlassPane);
 			Component component = event.getComponent();
@@ -681,7 +701,7 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 			mGlassPane.setPoint(point);
 
 			BufferedImage image = null;
-			ImageIcon imageIcon = m_square.getPiece().getIcon();
+			ImageIcon imageIcon = mSquareLabel.getSquare().getPiece().getIcon();
 			int width = imageIcon.getIconWidth();
 			int height = imageIcon.getIconHeight();
 			image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
@@ -702,19 +722,19 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 			mGlassPane.setImage(null);
 			mGlassPane.setVisible(false);
 
-			fireDropEvent(new DropEvent(point, m_square), false);
+			fireDropEvent(new DropEvent(point, mSquareLabel), false);
 		}
 
-		private Square m_square;
-		private Board m_board;
+		private SquareJLabel mSquareLabel;
+		private Board mBoard;
 
 		@Override
 		public void onPieceToolTipPreferenceChanged()
 		{
-			if (PreferenceUtility.getPreference().showPieceToolTips() && m_square.isOccupied())
-				m_square.setToolTipText(m_square.getPiece().getToolTipText());
+			if (PreferenceUtility.getPreference().showPieceToolTips() && mSquareLabel.getSquare().isOccupied())
+				mSquareLabel.setToolTipText(mSquareLabel.getSquare().getPiece().getToolTipText());
 			else
-				m_square.setToolTipText(null);
+				mSquareLabel.setToolTipText(null);
 		}
 	}
 
@@ -728,20 +748,20 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 		@Override
 		public void dropped(DropEvent event, boolean fromDisplayBoard)
 		{
-			Square originSquare = (Square) event.getOriginComponent();
-			Square destinationSquare = (Square) isInTarget(event.getDropLocation());
+			SquareJLabel originSquareLabel = (SquareJLabel) event.getOriginComponent();
+			SquareJLabel destinationSquareLabel = (SquareJLabel) isInTarget(event.getDropLocation());
 
 			refreshSquares(getGame().getBoards());
 			final List<JComponent> dummyList = ImmutableList.of();
 			setComponentList(dummyList);
 
-			if (destinationSquare == null)
+			if (destinationSquareLabel == null)
 				return;
 
 			try
 			{
-				getGame().playMove(new Move(m_board, originSquare, destinationSquare));
-				s_instance.boardRefresh(getGame().getBoards());
+				getGame().playMove(new Move(m_board, originSquareLabel.getSquare(), destinationSquareLabel.getSquare()));
+				sInstance.boardRefresh(getGame().getBoards());
 			}
 			catch (Exception e)
 			{
@@ -769,12 +789,13 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 	protected static JMenu mOptionsMenu;
 	protected static Move[] mHistory;
 	protected static int mHistoryIndex;
+	protected static List<SquareJLabel> mSquareLabels;
 
-	private Preference m_preference;
+	private Preference mPreference;
 
-	private final DropManager m_dropManager;
+	private final DropManager mDropManager;
 
-	protected GlassPane m_globalGlassPane;
+	protected GlassPane mGlobalGlassPane;
 
-	private static PlayGamePanel s_instance;
+	private static PlayGamePanel sInstance;
 }

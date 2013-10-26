@@ -1,29 +1,19 @@
 package logic;
 
-import java.awt.Color;
-import java.awt.Image;
-import java.io.IOException;
 import java.io.Serializable;
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import utility.GuiUtility;
 
-public class Square extends JLabel implements Serializable
+public class Square implements Serializable
 {
-	public static final Color HIGHLIGHT_COLOR = new Color(20, 129, 191);
-
-	static
+	// TODO: future refactorings will hopefully render this interface
+	// unnecessary
+	public interface SquareStateListener
 	{
-		try
-		{
-			s_uninhabitableIcon = GuiUtility.createImageIcon(48, 48, "/Uninhabitable.png"); //$NON-NLS-1$
-		}
+		public void onSetIsThreatSquare();
 
-		catch (IOException ioe)
-		{
-			ioe.printStackTrace();
-		}
+		public void onStateChanged();
+
+		// TODO: this method definitely shouldn't be necessary
+		public void onJailStateChanged();
 	}
 
 	public Square(int row, int column)
@@ -33,14 +23,32 @@ public class Square extends JLabel implements Serializable
 		mIsHabitable = true;
 	}
 
+	public void setSquareStateListener(SquareStateListener listener)
+	{
+		mListener = listener;
+	}
+
+	public void setIsThreatSquare(boolean isThreatSquare)
+	{
+		if (mListener != null)
+			mListener.onSetIsThreatSquare();
+	}
+
+	public void setStateChanged()
+	{
+		if (mListener != null)
+			mListener.onStateChanged();
+	}
+
+	public void setJailStateChanged()
+	{
+		if (mListener != null)
+			mListener.onJailStateChanged();
+	}
+
 	public int getCol()
 	{
 		return mColumn;
-	}
-
-	public Color getColor()
-	{
-		return getBackground();
 	}
 
 	public Piece getPiece()
@@ -63,123 +71,9 @@ public class Square extends JLabel implements Serializable
 		return (mPiece != null);
 	}
 
-	public void hideIcon()
-	{
-		if (mPiece != null)
-			setIcon(null);
-	}
-
-	/**
-	 * Refresh the GUI's view of this Square with the current accurate
-	 * information.
-	 */
-	public void refresh()
-	{
-		setOpaque(true);
-		if (!mIsHabitable)
-		{
-			setIcon(s_uninhabitableIcon);
-			return;
-		}
-
-		if (mPiece != null)
-		{
-			if (mPiece.getIcon() == null)
-				setText(mPiece.getName());
-			else
-				setIcon(mPiece.getIcon());
-			
-			setToolTipText(mPiece.getToolTipText());
-		}
-		else
-		{// If there's no Piece, clear the Icon, tooltip, and Text of the Square.
-			setIcon(null);
-			setText(""); //$NON-NLS-1$
-			setToolTipText(null);
-		}
-		resetColor();// Then reset the color too.
-	}
-
-	/**
-	 * Refresh the GUI's view of this Square with the current accurate
-	 * information, but only for Jails
-	 */
-	public void refreshJail()
-	{
-		setOpaque(true);
-
-		if (mPiece != null)
-		{
-			if (mPiece.getIcon() == null)
-				setText(mPiece.getName());
-			else
-				setIcon(new ImageIcon(mPiece.getIcon().getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH)));
-		}
-		else
-		{
-			setIcon(null);
-			setText(""); //$NON-NLS-1$
-		}
-		resetColor();
-	}
-
-	/**
-	 * Reset temporary changes to the Color of the Square
-	 */
-	public void resetColor()
-	{
-		if (mBackgroundColor != null)
-		{
-			// If a custom background color has been saved, use that.
-			setBackground(mBackgroundColor);
-			return;
-		}
-		setBorder(null);
-		// Otherwise make our normal light/dark pattern.
-		if ((mRow % 2 != 0 && mColumn % 2 != 0) || (mRow % 2 == 0 && mColumn % 2 == 0))
-		{
-			setBackground(Color.LIGHT_GRAY);
-			setForeground(Color.getHSBColor(30, 70, 70));
-		}
-		else
-		{
-			setBackground(Color.getHSBColor(30, 70, 70));
-			setForeground(Color.LIGHT_GRAY);
-		}
-	}
-
-	/**
-	 * Sets the color of a square temporarily
-	 * 
-	 * @param c the color to set the background
-	 */
-	public void setColor(Color c)
-	{
-		setBackground(c);
-	}
-
-	/**
-	 * Sets the background Color of the Square permanently
-	 * 
-	 * @param c New Color
-	 */
-	public void setBackgroundColor(Color c)
-	{
-		setBackground(c);
-		setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-		// if the Color is the highlight color then change is only temporary,
-		// don't store it.
-		if (c != Square.HIGHLIGHT_COLOR)
-			mBackgroundColor = c;
-	}
-
 	public void setIsHabitable(boolean isHabitable)
 	{
 		mIsHabitable = isHabitable;
-		if (!mIsHabitable)
-			setIcon(s_uninhabitableIcon);
-		else
-			setIcon(null);
 	}
 
 	/**
@@ -241,7 +135,7 @@ public class Square extends JLabel implements Serializable
 	private Piece mPiece;
 	private int mRow;// File
 	private int mColumn;// Rank
-	private Color mBackgroundColor;
 	private boolean mIsHabitable;
-	private static ImageIcon s_uninhabitableIcon;
+
+	private SquareStateListener mListener;
 }

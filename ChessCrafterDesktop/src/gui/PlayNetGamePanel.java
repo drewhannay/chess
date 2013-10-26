@@ -150,7 +150,7 @@ public class PlayNetGamePanel extends PlayGamePanel implements PlayNetGameScreen
 		mWhiteLabel.setOpaque(true);
 		mBlackLabel.setOpaque(true);
 
-		mWhiteLabel.setBackground(getGame().isBlackMove() ? null : Square.HIGHLIGHT_COLOR);
+		mWhiteLabel.setBackground(getGame().isBlackMove() ? null : SquareJLabel.HIGHLIGHT_COLOR);
 
 		int jailBoardSize;
 
@@ -174,7 +174,7 @@ public class PlayNetGamePanel extends PlayGamePanel implements PlayNetGameScreen
 		for (int i = jailBoardSize; i > 0; i--)
 		{
 			for (int j = 1; j <= jailBoardSize; j++)
-				mWhiteCapturePanel.add(new Square(i, j));
+				mWhiteCapturePanel.add(new SquareJLabel(new Square(i, j)));
 		}
 
 		mBlackCapturePanel = new JPanel();
@@ -186,7 +186,7 @@ public class PlayNetGamePanel extends PlayGamePanel implements PlayNetGameScreen
 		for (int i = jailBoardSize; i > 0; i--)
 		{
 			for (int j = 1; j <= jailBoardSize; j++)
-				mBlackCapturePanel.add(new Square(i, j));
+				mBlackCapturePanel.add(new SquareJLabel(new Square(i, j)));
 		}
 
 		// add the Black name
@@ -416,9 +416,10 @@ public class PlayNetGamePanel extends PlayGamePanel implements PlayNetGameScreen
 			grid.add(label);
 			for (int j = 1; j <= numberOfColumns; j++)
 			{
+				SquareJLabel squareLabel = new SquareJLabel(board.getSquare(i, j));
 				if (!isPlayback)
-					board.getSquare(i, j).addMouseListener(new SquareListener(board.getSquare(i, j), board));
-				grid.add(board.getSquare(i, j));
+					squareLabel.addMouseListener(new SquareListener(squareLabel, board));
+				grid.add(squareLabel);
 			}
 		}
 		for (int k = 0; k <= numberOfColumns; k++)

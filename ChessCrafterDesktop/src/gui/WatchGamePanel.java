@@ -26,7 +26,6 @@ import logic.Game;
 import logic.Move;
 import logic.Piece;
 import logic.Result;
-import logic.Square;
 import timer.ChessTimer;
 import timer.TimerTypes;
 
@@ -104,7 +103,7 @@ public class WatchGamePanel extends JPanel implements WatchGameScreen
 				mInCheckLabel.setBorder(BorderFactory.createTitledBorder(Messages.getString("PlayGamePanel.whiteTeam"))); //$NON-NLS-1$
 
 			for (Piece piece : getGame().getThreats(objectivePiece))
-				piece.getSquare().setColor(Color.red);
+				piece.getSquare().setIsThreatSquare(true);
 		}
 		else
 		{
@@ -126,7 +125,7 @@ public class WatchGamePanel extends JPanel implements WatchGameScreen
 				{
 					mWhiteCapturesJail.getSquare(i, j).setPiece(null);
 				}
-				mWhiteCapturesJail.getSquare(i, j).refreshJail();
+				mWhiteCapturesJail.getSquare(i, j).setJailStateChanged();
 			}
 		}
 
@@ -145,13 +144,13 @@ public class WatchGamePanel extends JPanel implements WatchGameScreen
 				{
 					mWhiteCapturesJail.getSquare(i, j).setPiece(null);
 				}
-				mBlackCapturesJail.getSquare(i, j).refreshJail();
+				mBlackCapturesJail.getSquare(i, j).setJailStateChanged();
 			}
 		}
 
-		mWhiteLabel.setBackground(getGame().isBlackMove() ? null : Square.HIGHLIGHT_COLOR);
+		mWhiteLabel.setBackground(getGame().isBlackMove() ? null : SquareJLabel.HIGHLIGHT_COLOR);
 		mWhiteLabel.setForeground(getGame().isBlackMove() ? Color.black : Color.white);
-		mBlackLabel.setBackground(getGame().isBlackMove() ? Square.HIGHLIGHT_COLOR : null);
+		mBlackLabel.setBackground(getGame().isBlackMove() ? SquareJLabel.HIGHLIGHT_COLOR : null);
 		mBlackLabel.setForeground(getGame().isBlackMove() ? Color.white : Color.black);
 	}
 
@@ -162,7 +161,7 @@ public class WatchGamePanel extends JPanel implements WatchGameScreen
 			for (int i = 1; i <= boards[k].getMaxRow(); i++)
 			{
 				for (int j = 1; j <= boards[k].getMaxCol(); j++)
-					boards[k].getSquare(i, j).refresh();
+					boards[k].getSquare(i, j).setStateChanged();
 			}
 		}
 	}
@@ -196,9 +195,7 @@ public class WatchGamePanel extends JPanel implements WatchGameScreen
 			}
 
 			for (int j = 1; j <= numOfColumns; j++)
-			{
-				gridPanel.add(board.getSquare(i, j));
-			}
+				gridPanel.add(new SquareJLabel(board.getSquare(i, j)));
 
 		}
 		if (!isJail)
