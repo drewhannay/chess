@@ -10,6 +10,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.WindowConstants;
 
 import utility.AppConstants;
+import utility.GuiUtility;
 
 public class HelpFrame extends JFrame
 {
@@ -21,19 +22,22 @@ public class HelpFrame extends JFrame
 	private void initGUIComponents()
 	{
 		setTitle(Messages.getString("HelpFrame.help")); //$NON-NLS-1$
-		setSize(825, 525);
+		//setSize(825, 525);
 		setResizable(false);
 		setLocationRelativeTo(Driver.getInstance());
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		setLayout(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
 
-		JPanel gamePlayHelpPanel = new JPanel();
-		JPanel variantMakingHelpPanel = new JPanel();
-		JPanel generalHelpPanel = new JPanel();
-		JPanel pieceMakingHelpPanel = new JPanel();
+		mHelpPanel = new ChessPanel();
+		mHelpPanel.setLayout(new GridBagLayout());
+		
+		JPanel gamePlayHelpPanel = new ChessPanel();
+		JPanel variantMakingHelpPanel = new ChessPanel();
+		JPanel generalHelpPanel = new ChessPanel();
+		JPanel pieceMakingHelpPanel = new ChessPanel();
 
 		JTabbedPane helpTypesTabbedPane = new JTabbedPane();
+		helpTypesTabbedPane.setOpaque(false);
 		helpTypesTabbedPane
 				.addTab(Messages.getString("HelpFrame.generalHelp"), null, generalHelpPanel, Messages.getString("HelpFrame.clickForGeneralHelp") + AppConstants.APP_NAME); //$NON-NLS-1$ //$NON-NLS-2$
 		helpTypesTabbedPane
@@ -46,28 +50,29 @@ public class HelpFrame extends JFrame
 
 		constraints.gridy = 0;
 		constraints.fill = GridBagConstraints.HORIZONTAL;
-		add(helpTypesTabbedPane, constraints);
+		mHelpPanel.add(helpTypesTabbedPane, constraints);
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridy = 1;
 
-		JLabel gamePlayHelpText = new JLabel();
-		gamePlayHelpText.setText(Messages.getString("HelpFrame.gamePlayText")); //$NON-NLS-1$
+		JLabel gamePlayHelpText = GuiUtility.createJLabel(Messages.getString("HelpFrame.gamePlayText")); //$NON-NLS-1$
 		gamePlayHelpPanel.add(gamePlayHelpText);
 
-		JLabel generalHelpText = new JLabel();
-		generalHelpText.setText(Messages.getString("HelpFrame.generalHelpText")); //$NON-NLS-1$
+		JLabel generalHelpText = GuiUtility.createJLabel(Messages.getString("HelpFrame.generalHelpText")); //$NON-NLS-1$
 		generalHelpPanel.add(generalHelpText);
 
-		JLabel variantMakingHelpText = new JLabel();
-		variantMakingHelpText.setText(Messages.getString("HelpFrame.variantHelpText")); //$NON-NLS-1$
+		JLabel variantMakingHelpText = GuiUtility.createJLabel(Messages.getString("HelpFrame.variantHelpText")); //$NON-NLS-1$
 		variantMakingHelpPanel.add(variantMakingHelpText);
 
-		JLabel pieceMakingHelpText = new JLabel();
-		pieceMakingHelpText.setText(Messages.getString("HelpFrame.pieceOptionsText")); //$NON-NLS-1$
+		JLabel pieceMakingHelpText = GuiUtility.createJLabel(Messages.getString("HelpFrame.pieceOptionsText")); //$NON-NLS-1$
 		pieceMakingHelpPanel.add(pieceMakingHelpText);
 
+		add(mHelpPanel);
+		
+		this.pack();
+		
 		setVisible(true);
 	}
 
 	private static final long serialVersionUID = -3375921014569944071L;
+	private ChessPanel mHelpPanel;
 }
