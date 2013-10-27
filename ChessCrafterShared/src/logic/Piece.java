@@ -1,6 +1,5 @@
 package logic;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -24,7 +23,6 @@ public class Piece implements Serializable
 	 * @param board The Board this Piece occupies
 	 * @param movements Map of legal movements for this Piece
 	 * @param canJump
-	 * @throws IOException
 	 */
 	public Piece(String name, boolean isBlack, Square curSquare, Board board, Map<Character, Integer> movements, boolean canJump)
 	{
