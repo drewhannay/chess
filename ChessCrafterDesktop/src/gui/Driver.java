@@ -1,7 +1,7 @@
 package gui;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
@@ -140,7 +140,7 @@ public final class Driver extends JFrame implements ChessCrafter
 		setTitle(AppConstants.APP_NAME);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(685, 450);
-		setLayout(new FlowLayout());
+		setLayout(new BorderLayout());
 		setResizable(true);
 
 		// put the window in the center of the screen, regardless of resolution
@@ -148,6 +148,7 @@ public final class Driver extends JFrame implements ChessCrafter
 
 		// make the app match the look and feel of the user's system
 		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		UIManager.put("TabbedPane.contentOpaque", false);
 		createWindowsTrayIconIfNecessary();
 
 		// create the menu bar
@@ -208,7 +209,7 @@ public final class Driver extends JFrame implements ChessCrafter
 		c.gridy = 0;
 		mMainPanel.add(mButtonPanel, c);
 
-		add(mMainPanel);
+		add(mMainPanel, BorderLayout.CENTER);
 		pack();
 		setVisible(true);
 	}
