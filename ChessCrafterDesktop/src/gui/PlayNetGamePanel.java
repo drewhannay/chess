@@ -221,7 +221,7 @@ public class PlayNetGamePanel extends PlayGamePanel implements PlayNetGameScreen
 			constraints.ipadx = 100;
 			constraints.gridx = 11 + twoBoardGridBagOffset;
 			constraints.gridy = 4;
-			add(mBlackTimer.getDisplayLabel(), constraints);
+			add(new ChessTimerLabel(mBlackTimer), constraints);
 
 			// add the White timer
 			constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -231,7 +231,7 @@ public class PlayNetGamePanel extends PlayGamePanel implements PlayNetGameScreen
 			constraints.ipadx = 100;
 			constraints.gridx = 11 + twoBoardGridBagOffset;
 			constraints.gridy = 6;
-			add(mWhiteTimer.getDisplayLabel(), constraints);
+			add(new ChessTimerLabel(mWhiteTimer), constraints);
 		}
 		else
 		{

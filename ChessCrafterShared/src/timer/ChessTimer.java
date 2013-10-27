@@ -1,37 +1,38 @@
 package timer;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.Serializable;
 import java.text.NumberFormat;
 
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-import javax.swing.Timer;
+import utility.RunnableOfT;
 
 import com.google.common.base.Preconditions;
 
-import utility.RunnableOfT;
-
-public abstract class ChessTimer implements ActionListener, Serializable
+public abstract class ChessTimer implements Serializable
 {
+	public interface ChessTimerListener
+	{
+		public void onDisplayUpdated(String displayText);
+
+		public void onTimerStart();
+
+		public void onTimerStop();
+
+		public void setInitialDelay(int initialDelay);
+
+		public void onTimerRestart();
+	}
+
 	public void init(RunnableOfT<Boolean> timeElapsedCallback)
 	{
-		mDisplayLabel = new JLabel();
-		mDisplayLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		mDisplayLabel.setOpaque(true);
 		mNumberFormat = NumberFormat.getNumberInstance();
 		mNumberFormat.setMinimumIntegerDigits(2);
-		mTimer = new Timer(1000, this);
-		mTimer.setInitialDelay(0);
 		mTimeElapsedCallback = timeElapsedCallback;
 		mIsStopped = false;
 	}
 
-	@Override
-	public void actionPerformed(ActionEvent ae)
+	public void setChessTimerListener(ChessTimerListener listener)
 	{
-		updateDisplay();
+		mListener = listener;
 	}
 
 	// FIXME: this is a terrible method...
@@ -83,11 +84,6 @@ public abstract class ChessTimer implements ActionListener, Serializable
 		return mClockDirection;
 	}
 
-	public JLabel getDisplayLabel()
-	{
-		return mDisplayLabel;
-	}
-
 	public long getStartTime()
 	{
 		return mInitialStartTime;
@@ -113,8 +109,8 @@ public abstract class ChessTimer implements ActionListener, Serializable
 	 */
 	public void restart()
 	{
-		mTimer = new Timer(1000, this);
-		mTimer.setInitialDelay(0);
+		if (mListener != null)
+			mListener.onTimerRestart();
 		mClockLastUpdatedTime = System.currentTimeMillis();
 	}
 
@@ -136,14 +132,16 @@ public abstract class ChessTimer implements ActionListener, Serializable
 	public void timeElapsed()
 	{
 		mTimeElapsedCallback.run(mIsBlackTeamTimer);
-		mTimer.stop();
+		if (mListener != null)
+			mListener.onTimerStop();
 	}
 
-	protected void updateDisplay()
+	public void updateDisplay()
 	{
 		if (mIsStopped)
 		{
-			mTimer.stop();
+			if (mListener != null)
+				mListener.onTimerStop();
 			return;
 		}
 		long now = System.currentTimeMillis();
@@ -158,7 +156,8 @@ public abstract class ChessTimer implements ActionListener, Serializable
 
 		int minutes = (int) (mCurrentTime / 60000);
 		int seconds = (int) ((mCurrentTime % 60000) / 1000);
-		mDisplayLabel.setText(mNumberFormat.format(minutes) + ":" + mNumberFormat.format(seconds)); //$NON-NLS-1$
+		if (mListener != null)
+			mListener.onDisplayUpdated(mNumberFormat.format(minutes) + ":" + mNumberFormat.format(seconds)); //$NON-NLS-1$
 		if (mCurrentTime <= 0)
 		{
 			mCurrentTime = Math.abs(mCurrentTime);
@@ -170,9 +169,7 @@ public abstract class ChessTimer implements ActionListener, Serializable
 
 	protected long mCurrentTime;
 	protected long mClockLastUpdatedTime;
-	protected JLabel mDisplayLabel;
 	protected NumberFormat mNumberFormat;
-	protected Timer mTimer;
 	protected boolean mIsDelayedTimer;
 	protected boolean mIsBlackTeamTimer;
 	protected boolean mTimeWasRecentlyReset;
@@ -182,4 +179,5 @@ public abstract class ChessTimer implements ActionListener, Serializable
 	protected int mClockDirection = 1;
 	protected static boolean mIsStopped;
 	protected RunnableOfT<Boolean> mTimeElapsedCallback;
+	protected ChessTimerListener mListener;
 }

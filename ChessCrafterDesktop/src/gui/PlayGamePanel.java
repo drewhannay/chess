@@ -507,7 +507,7 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 		constraints.ipadx = 100;
 		constraints.gridx = 11 + twoBoardsGridBagOffset;
 		constraints.gridy = 4;
-		add(mBlackTimer.getDisplayLabel(), constraints);
+		add(new ChessTimerLabel(mBlackTimer), constraints);
 
 		// adds the undo button
 		constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -527,7 +527,7 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 		constraints.ipadx = 100;
 		constraints.gridx = 11 + twoBoardsGridBagOffset;
 		constraints.gridy = 6;
-		add(mWhiteTimer.getDisplayLabel(), constraints);
+		add(new ChessTimerLabel(mWhiteTimer), constraints);
 
 		// adds the White Jail
 		constraints.fill = GridBagConstraints.NONE;

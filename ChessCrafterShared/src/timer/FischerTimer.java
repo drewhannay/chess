@@ -35,7 +35,8 @@ class FischerTimer extends ChessTimer
 		mIsFirstTime = false;
 
 		mClockLastUpdatedTime = System.currentTimeMillis();
-		mTimer.start();
+		if (mListener != null)
+			mListener.onTimerStart();
 	}
 
 	@Override
@@ -47,7 +48,8 @@ class FischerTimer extends ChessTimer
 		mTimeWasRecentlyReset = false;
 		mClockLastUpdatedTime = System.currentTimeMillis();
 		updateDisplay();
-		mTimer.stop();
+		if (mListener != null)
+			mListener.onTimerStop();
 	}
 
 	private static final long serialVersionUID = 6129683219865263879L;
