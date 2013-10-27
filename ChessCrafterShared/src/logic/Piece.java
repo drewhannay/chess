@@ -14,10 +14,6 @@ public class Piece implements Serializable
 	 * Constructor Initialize instance variables.
 	 * 
 	 * @param name The name of this Piece
-	 * @param lightIcon The Icon representing the white version of Piece in the
-	 * GUI
-	 * @param darkIcon The Icon representing the black version of Piece in the
-	 * GUI
 	 * @param isBlack The color of this Piece
 	 * @param curSquare The Square this Piece occupies
 	 * @param board The Board this Piece occupies
@@ -32,7 +28,7 @@ public class Piece implements Serializable
 		setBlack(isBlack);
 		mCurrentSquare = curSquare;
 		setOriginalSquare(curSquare);
-		// Tell the Square what Piece is on it.
+		// tell the Square what Piece is on it
 		curSquare.setPiece(this);
 		mBoard = board;
 		mMovements = movements;
@@ -53,8 +49,8 @@ public class Piece implements Serializable
 	 */
 	public boolean addLegalDest(Square dest)
 	{
-		// If the Square is not habitable, don't add it, but return true so we
-		// can move past it.
+		// if the Square is not habitable, don't add it, but return true so we
+		// can move past it
 		if (!dest.isHabitable())
 			return true;
 
@@ -63,13 +59,13 @@ public class Piece implements Serializable
 
 		if (dest.isOccupied() && dest.getPiece().isBlack() == isBlack())
 		{
-			// If the destination has a Piece from the same team, we must be
+			// if the destination has a Piece from the same team, we must be
 			// guarding that Piece
 			getGuardSquares().add(dest);
 			return false;
 		}
 
-		// Otherwise, add the Piece and return true.
+		// otherwise, add the Piece and return true
 		getLegalDests().add(dest);
 		return true;
 	}
@@ -83,7 +79,6 @@ public class Piece implements Serializable
 	 */
 	public void adjustPinsLegalDests(Piece objectivePiece, List<Piece> enemyTeam)
 	{
-
 		if (((isBlack() ? mBoard.getGame().getBlackRules() : mBoard.getGame().getWhiteRules()).objectivePiece(isBlack()) == this)
 				&& (mBoard.getGame().isBlackMove() == isBlack()))
 		{
@@ -93,7 +88,7 @@ public class Piece implements Serializable
 			List<Square> legalDests = Lists.newArrayList();
 			setLegalDests(legalDests);
 
-			// Make sure the you don't move into check
+			// make sure the you don't move into check
 			Square dest;
 			while (perlimMoves.hasNext())
 			{
@@ -105,11 +100,11 @@ public class Piece implements Serializable
 
 			if (mBoard.getGame().isClassicChess())
 			{
-				// Castling
+				// castling
 				if (getMoveCount() == 0)
 				{
 					boolean blocked = false;
-					// Castle Queen side
+					// castle Queen side
 					Piece rook = mBoard.getSquare(mCurrentSquare.getRow(), 1).getPiece();
 					if (rook != null && rook.getMoveCount() == 0)
 					{
@@ -128,7 +123,7 @@ public class Piece implements Serializable
 							addLegalDest(mBoard.getSquare(((isBlack()) ? 8 : 1), 3));
 					}
 
-					// Castle King side
+					// castle King side
 					rook = mBoard.getSquare(mCurrentSquare.getRow(), mBoard.getMaxCol()).getPiece();
 					if (rook != null && rook.getMoveCount() == 0)
 					{
@@ -148,6 +143,7 @@ public class Piece implements Serializable
 					}
 				}
 			}
+
 			return;
 		}
 
@@ -156,16 +152,16 @@ public class Piece implements Serializable
 		Piece tmp;
 		boolean done = false;
 
-		if (mCaptured)
+		if (mIsCaptured)
 			return;
 
 		if (line != null)
 		{
 			List<Square> temp = Lists.newArrayList();
-			for (Square sq : line)
+			for (Square square : line)
 			{
-				if (mLegalDests.contains(sq) || sq.equals(mCurrentSquare))
-					temp.add(sq);
+				if (mLegalDests.contains(square) || square.equals(mCurrentSquare))
+					temp.add(square);
 			}
 			line = new Square[temp.size()];
 			temp.toArray(line);
@@ -173,7 +169,7 @@ public class Piece implements Serializable
 			if (mBoard.getGame().isStaleLegalDests())
 				mBoard.getGame().genLegalDests();
 
-			// Start i at 1 since 0 is this Piece
+			// start i at 1 since 0 is this Piece
 			for (int i = 1; i < line.length && !done; i++)
 			{
 				tmp = line[i].getPiece();
@@ -208,34 +204,31 @@ public class Piece implements Serializable
 	}
 
 	/**
-	 * Generate the ArrayList of legal destinations for this Piece
+	 * Generate the List of legal destinations for this Piece
 	 * 
 	 * @param board The Board on which to look for legal destinations
 	 * @return The number of legal destinations for this Piece
 	 */
 	public int genLegalDests(Board board)
 	{
-		// Clear both ArrayLists
+		// clear both ArrayLists
 		getLegalDests().clear();
 		getGuardSquares().clear();
 		setPinnedBy(null);
-		// Boolean to tell when we are done generating destinations
 
-		/*
-		 * Special genLegalDests for Pawns, to incorporate enPassant, special
-		 * initial movement, and diagonal capturing.
-		 */
+		// special genLegalDests for Pawns, to incorporate enPassant, special
+		// initial movement, and diagonal capturing
 		if (mName.equals(Messages.getString("pawn"))) //$NON-NLS-1$
 		{
 			Square dest = null;
 			int dir, row, col;
 			setPinnedBy(null);
-			if (mCaptured)
+			if (mIsCaptured)
 				return 0;
 
 			dir = (isBlack()) ? -1 : 1;
 
-			// Take one step forward
+			// take one step forward
 			if (board.isRowValid(mCurrentSquare.getRow() + dir))
 			{
 				dest = board.getSquare(mCurrentSquare.getRow() + dir, mCurrentSquare.getCol());
@@ -243,7 +236,7 @@ public class Piece implements Serializable
 					addLegalDest(dest);
 			}
 
-			// Take an opposing piece
+			// take an opposing piece
 			if (board.isRowValid(row = (mCurrentSquare.getRow() + dir)))
 			{
 				col = mCurrentSquare.getCol();
@@ -291,16 +284,15 @@ public class Piece implements Serializable
 						addLegalDest(board.getSquare(row, (col - 1)));
 				}
 			}
+
 			return getLegalDests().size();
 		}
 
 		boolean done = false;
 		Square dest;
 		boolean wraparound = board.isWrapAround();
-		/*
-		 * East
-		 */
 
+		// east
 		if (mMovements != null)
 		{
 			if (mMovements.containsKey(PieceBuilder.EAST))
@@ -331,9 +323,8 @@ public class Piece implements Serializable
 				}
 			}
 			done = false;
-			/*
-			 * West
-			 */
+
+			// west
 			if (mMovements.containsKey(PieceBuilder.WEST))
 			{
 				int southMax = mCurrentSquare.getCol() - mMovements.get(PieceBuilder.WEST);
@@ -359,9 +350,8 @@ public class Piece implements Serializable
 				}
 			}
 			done = false;
-			/*
-			 * North
-			 */
+
+			// north
 			if (mMovements.containsKey(PieceBuilder.NORTH))
 			{
 				int eastMax = mMovements.get(PieceBuilder.NORTH) + mCurrentSquare.getRow();
@@ -379,9 +369,8 @@ public class Piece implements Serializable
 				}
 			}
 			done = false;
-			/*
-			 * South
-			 */
+
+			// south
 			if (mMovements.containsKey(PieceBuilder.SOUTH))
 			{
 				int westMax = mCurrentSquare.getRow() - mMovements.get(PieceBuilder.SOUTH);
@@ -398,10 +387,9 @@ public class Piece implements Serializable
 							.equals(board.getGame().getOtherObjectivePiece(isBlack())))));
 				}
 			}
-			/*
-			 * NorthEast
-			 */
 			done = false;
+
+			// northeast
 			if (mMovements.containsKey(PieceBuilder.NORTHEAST))
 			{
 				int neMax = ((mCurrentSquare.getRow() >= mCurrentSquare.getCol()) ? mCurrentSquare.getRow() : mCurrentSquare.getCol())
@@ -420,11 +408,9 @@ public class Piece implements Serializable
 							.equals(board.getGame().getOtherObjectivePiece(isBlack())))));
 				}
 			}
-
-			/*
-			 * SouthEast
-			 */
 			done = false;
+
+			// southeast
 			if (mMovements.containsKey(PieceBuilder.SOUTHEAST))
 			{
 				int eastMax = mCurrentSquare.getCol() + mMovements.get(PieceBuilder.SOUTHEAST);
@@ -445,10 +431,9 @@ public class Piece implements Serializable
 							.equals(board.getGame().getOtherObjectivePiece(isBlack())))));
 				}
 			}
-			/*
-			 * NorthWest
-			 */
 			done = false;
+
+			// northwest
 			if (mMovements.containsKey(PieceBuilder.NORTHWEST))
 			{
 				int westMin = mCurrentSquare.getCol() - mMovements.get(PieceBuilder.NORTHWEST);
@@ -467,10 +452,9 @@ public class Piece implements Serializable
 							.equals(board.getGame().getOtherObjectivePiece(isBlack())))));
 				}
 			}
-			/*
-			 * SouthWest
-			 */
 			done = false;
+
+			// southwest
 			if (mMovements.containsKey(PieceBuilder.SOUTHWEST))
 			{
 				int westMin = mCurrentSquare.getCol() - mMovements.get(PieceBuilder.SOUTHWEST);
@@ -493,7 +477,6 @@ public class Piece implements Serializable
 
 		/*
 		 * Knight / Leaper Movements
-		 * 
 		 * 
 		 * Store of Knight Movements are as followed:
 		 * 
@@ -622,7 +605,7 @@ public class Piece implements Serializable
 		Iterator<Square> oldLegalDests = getLegalDests().iterator();
 		Square sq = null;
 
-		if (mCaptured)
+		if (mIsCaptured)
 			return;
 
 		List<Square> legalDests = Lists.newArrayList();
@@ -652,9 +635,8 @@ public class Piece implements Serializable
 	public List<Square> getLegalDests()
 	{
 		if (mBoard.getGame().isStaleLegalDests())
-		{
 			mBoard.getGame().genLegalDests();
-		}
+
 		return mLegalDests;
 	}
 
@@ -798,54 +780,53 @@ public class Piece implements Serializable
 
 	/**
 	 * @param destRow The row you wish to move to
-	 * @param destCol The col you wish to move to
+	 * @param destCol The column you wish to move to
 	 * @param direction The direction that space is from you.
-	 * @return Whether you are allowed to take that space and/or the piece on
-	 * it.
+	 * @return true if you are allowed to take that space and/or the piece on
+	 * it, false otherwise
 	 */
 	public boolean canAttack(int destRow, int destCol, char direction)
 	{
-		if (mMovements != null)
+		if (mMovements == null)
+			return false;
+
+		switch (direction)
 		{
-			switch (direction)
-			{
-			case PieceBuilder.SOUTH: // South
-				if (mMovements.containsKey(PieceBuilder.SOUTH))
-					return (destRow - mCurrentSquare.getRow()) < mMovements.get(PieceBuilder.SOUTH)
-							|| mMovements.get(PieceBuilder.SOUTH) == -1;
-			case PieceBuilder.NORTH: // North
-				if (mMovements.containsKey(PieceBuilder.NORTH))
-					return (mCurrentSquare.getRow() - destRow) < mMovements.get(PieceBuilder.NORTH)
-							|| mMovements.get(PieceBuilder.NORTH) == -1;
-			case PieceBuilder.EAST: // East
-				if (mMovements.containsKey(PieceBuilder.EAST))
-					return (destCol - mCurrentSquare.getCol()) < mMovements.get(PieceBuilder.EAST)
-							|| mMovements.get(PieceBuilder.EAST) == -1;
-			case PieceBuilder.WEST: // West
-				if (mMovements.containsKey(PieceBuilder.WEST))
-					return (mCurrentSquare.getCol() - destCol) < mMovements.get(PieceBuilder.WEST)
-							|| mMovements.get(PieceBuilder.WEST) == -1;
-			case PieceBuilder.NORTHEAST: // NorthEast
-				if (mMovements.containsKey(PieceBuilder.NORTHEAST))
-					return (mCurrentSquare.getCol() - destCol) < mMovements.get(PieceBuilder.NORTHEAST)
-							|| mMovements.get(PieceBuilder.NORTHEAST) == -1;
-			case PieceBuilder.SOUTHEAST: // SouthEast
-				if (mMovements.containsKey(PieceBuilder.SOUTHEAST))
-					return (mCurrentSquare.getCol() - destCol) < mMovements.get(PieceBuilder.SOUTHEAST)
-							|| mMovements.get(PieceBuilder.SOUTHEAST) == -1;
-			case PieceBuilder.NORTHWEST: // NorthWest
-				if (mMovements.containsKey(PieceBuilder.NORTHWEST))
-					return (destCol - mCurrentSquare.getCol()) < mMovements.get(PieceBuilder.NORTHWEST)
-							|| mMovements.get(PieceBuilder.NORTHWEST) == -1;
-			case PieceBuilder.SOUTHWEST: // SouthWest
-				if (mMovements.containsKey(PieceBuilder.SOUTHWEST))
-					return (destCol - mCurrentSquare.getCol()) < mMovements.get(PieceBuilder.SOUTHWEST)
-							|| mMovements.get(PieceBuilder.SOUTHWEST) == -1;
-			default:
-				return false;
-			}
+		case PieceBuilder.SOUTH:
+			if (mMovements.containsKey(PieceBuilder.SOUTH))
+				return (destRow - mCurrentSquare.getRow()) < mMovements.get(PieceBuilder.SOUTH)
+						|| mMovements.get(PieceBuilder.SOUTH) == -1;
+		case PieceBuilder.NORTH:
+			if (mMovements.containsKey(PieceBuilder.NORTH))
+				return (mCurrentSquare.getRow() - destRow) < mMovements.get(PieceBuilder.NORTH)
+						|| mMovements.get(PieceBuilder.NORTH) == -1;
+		case PieceBuilder.EAST:
+			if (mMovements.containsKey(PieceBuilder.EAST))
+				return (destCol - mCurrentSquare.getCol()) < mMovements.get(PieceBuilder.EAST)
+						|| mMovements.get(PieceBuilder.EAST) == -1;
+		case PieceBuilder.WEST:
+			if (mMovements.containsKey(PieceBuilder.WEST))
+				return (mCurrentSquare.getCol() - destCol) < mMovements.get(PieceBuilder.WEST)
+						|| mMovements.get(PieceBuilder.WEST) == -1;
+		case PieceBuilder.NORTHEAST:
+			if (mMovements.containsKey(PieceBuilder.NORTHEAST))
+				return (mCurrentSquare.getCol() - destCol) < mMovements.get(PieceBuilder.NORTHEAST)
+						|| mMovements.get(PieceBuilder.NORTHEAST) == -1;
+		case PieceBuilder.SOUTHEAST:
+			if (mMovements.containsKey(PieceBuilder.SOUTHEAST))
+				return (mCurrentSquare.getCol() - destCol) < mMovements.get(PieceBuilder.SOUTHEAST)
+						|| mMovements.get(PieceBuilder.SOUTHEAST) == -1;
+		case PieceBuilder.NORTHWEST:
+			if (mMovements.containsKey(PieceBuilder.NORTHWEST))
+				return (destCol - mCurrentSquare.getCol()) < mMovements.get(PieceBuilder.NORTHWEST)
+						|| mMovements.get(PieceBuilder.NORTHWEST) == -1;
+		case PieceBuilder.SOUTHWEST:
+			if (mMovements.containsKey(PieceBuilder.SOUTHWEST))
+				return (destCol - mCurrentSquare.getCol()) < mMovements.get(PieceBuilder.SOUTHWEST)
+						|| mMovements.get(PieceBuilder.SOUTHWEST) == -1;
+		default:
+			throw new IllegalArgumentException("Unknown movement direction character");
 		}
-		return false;
 	}
 
 	/**
@@ -960,17 +941,15 @@ public class Piece implements Serializable
 	{
 		if (direction == null)
 			return "0"; //$NON-NLS-1$
+		else if (direction == -1)
+			return "&infin;"; //$NON-NLS-1$
 		else
-		{
-			if (direction == -1)
-				return "&infin;"; //$NON-NLS-1$
-		}
-		return direction.toString();
+			return direction.toString();
 	}
 
 	public boolean isBlack()
 	{
-		return (mIsBlack);
+		return mIsBlack;
 	}
 
 	/**
@@ -999,12 +978,12 @@ public class Piece implements Serializable
 
 	public boolean isCaptured()
 	{
-		return mCaptured;
+		return mIsCaptured;
 	}
 
 	public boolean isGuarding(Square sq)
 	{
-		if (!mCaptured)
+		if (!mIsCaptured)
 		{
 			if (mBoard.getGame().isStaleLegalDests())
 				mBoard.getGame().genLegalDests();
@@ -1034,7 +1013,7 @@ public class Piece implements Serializable
 			if (mBoard.getGame().isStaleLegalDests())
 				mBoard.getGame().genLegalDests();
 
-			if (mCaptured)
+			if (mIsCaptured)
 				return false;
 
 			if (threatened.getCol() == mCurrentSquare.getCol())
@@ -1054,16 +1033,14 @@ public class Piece implements Serializable
 	 */
 	public boolean isLegalDest(Square dest)
 	{
-		if (!mCaptured)
+		if (!mIsCaptured)
 		{
 			if (mBoard.getGame().isStaleLegalDests())
 				mBoard.getGame().genLegalDests();
 			return getLegalDests().contains(dest);
 		}
-		else
-		{
-			return false;
-		}
+
+		return false;
 	}
 
 	public void setBlack(boolean isBlack)
@@ -1071,13 +1048,13 @@ public class Piece implements Serializable
 		mIsBlack = isBlack;
 	}
 
-	public void setIsCaptured(boolean t)
+	public void setIsCaptured(boolean isCaptured)
 	{
-		// Clear both Lists so the Piece can't move anymore
+		// clear both Lists so the Piece can't move anymore
 		getLegalDests().clear();
 		getGuardSquares().clear();
 		setPinnedBy(null);
-		mCaptured = t;
+		mIsCaptured = isCaptured;
 	}
 
 	public void setGuardSquares(List<Square> guardSquares)
@@ -1123,11 +1100,6 @@ public class Piece implements Serializable
 		mCurrentSquare = curSquare;
 	}
 
-	public void setIsLeaper()
-	{
-		mIsLeaper = true;
-	}
-
 	public List<String> getPromotesTo()
 	{
 		return mPromotesTo;
@@ -1148,19 +1120,19 @@ public class Piece implements Serializable
 	private static final long serialVersionUID = -6571501595221097922L;
 
 	private boolean mIsBlack;
-	protected boolean mCaptured;
-	protected List<Square> mGuardSquares;
-	protected List<Square> mLegalDests;
-	protected Square mCurrentSquare;
-	protected Board mBoard;
-	protected String mName;
-	protected Map<Character, Integer> mMovements;
+	private boolean mIsCaptured;
+	private List<Square> mGuardSquares;
+	private List<Square> mLegalDests;
+	private Square mCurrentSquare;
+	private Board mBoard;
+	private String mName;
+	private Map<Character, Integer> mMovements;
 
-	protected List<KnightMovement> mKnightMovements;
+	private List<KnightMovement> mKnightMovements;
 
-	protected boolean mIsLeaper;
-	protected int mMoveCount;
-	protected Piece mPinnedBy;
-	protected Square mOriginalSquare;
-	protected List<String> mPromotesTo = Lists.newArrayList();
+	private boolean mIsLeaper;
+	private int mMoveCount;
+	private Piece mPinnedBy;
+	private Square mOriginalSquare;
+	private List<String> mPromotesTo = Lists.newArrayList();
 }
