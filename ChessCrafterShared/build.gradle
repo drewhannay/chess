@@ -26,7 +26,8 @@ repositories {
 
 dependencies {
 	compile group: 'com.google.guava', name: 'guava', version: '15.0'
-	testCompile 'junit:junit:[4,)'
+	compile 'com.google.code.gson:gson:2.2.4'
+	testCompile 'junit:junit:4.10'
 }
 
 test {
