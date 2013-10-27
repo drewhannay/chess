@@ -185,7 +185,7 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 		Object[] options = new String[] {
 				Messages.getString("PlayGamePanel.saveRecord"), Messages.getString("PlayGamePanel.newGame"), Messages.getString("PlayGamePanel.quit") }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		mOptionsMenu.setVisible(false);
-		switch (JOptionPane.showOptionDialog(Driver.getInstance(), result.getGUIText(), result.winText(),
+		switch (JOptionPane.showOptionDialog(Driver.getInstance(), result.getGuiText(), result.winText(),
 				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]))
 		{
 		case JOptionPane.YES_OPTION:

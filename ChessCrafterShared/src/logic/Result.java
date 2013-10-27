@@ -26,7 +26,7 @@ public enum Result implements Serializable
 		mGuiText = text;
 	}
 
-	public String getGUIText()
+	public String getGuiText()
 	{
 		return mGuiText;
 	}

@@ -48,10 +48,10 @@ public class Piece implements Serializable
 	}
 
 	/**
-	 * Add a legal destination to the ArrayList.
+	 * Add a legal destination to the List.
 	 * 
 	 * @param dest The Square to be added to the List
-	 * @return If the Square was successfully added to the ArrayList
+	 * @return If the Square was successfully added to the List
 	 */
 	public boolean addLegalDest(Square dest)
 	{
