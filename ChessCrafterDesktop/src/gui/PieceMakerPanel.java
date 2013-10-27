@@ -21,6 +21,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
+
 import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -34,6 +35,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileFilter;
+
 import logic.Builder;
 import logic.KnightMovement;
 import logic.Piece;
@@ -41,6 +43,7 @@ import logic.PieceBuilder;
 import utility.FileUtility;
 import utility.GuiUtility;
 import utility.ImageUtility;
+
 import com.google.common.collect.Lists;
 
 public class PieceMakerPanel extends ChessPanel
@@ -54,7 +57,6 @@ public class PieceMakerPanel extends ChessPanel
 	{
 		mLeaperCheckBox = new JCheckBox(Messages.getString("PieceMakerPanel.canJump"), false); //$NON-NLS-1$
 		mPieceNameField = new JTextField(15);
-		mKnightMovementsCheckBox = new JCheckBox(Messages.getString("PieceMakerPanel.knightLike"), false); //$NON-NLS-1$
 		mNorthField = new JTextField(4);
 		mNorthEastField = new JTextField(4);
 		mEastField = new JTextField(4);
@@ -81,9 +83,6 @@ public class PieceMakerPanel extends ChessPanel
 		mLeaperCheckBox = new JCheckBox(Messages.getString("PieceMakerPanel.canJump"), false); //$NON-NLS-1$
 		mLeaperCheckBox.setOpaque(false);
 		mLeaperCheckBox.setForeground(Color.white);
-		mKnightMovementsCheckBox = new JCheckBox(Messages.getString("PieceMakerPanel.knightLike"), false); //$NON-NLS-1$
-		mKnightMovementsCheckBox.setOpaque(false);
-		mKnightMovementsCheckBox.setForeground(Color.white);
 		mPieceNameField = new JTextField(15);
 		mNorthField = new JTextField(4);
 		mNorthEastField = new JTextField(4);
@@ -165,7 +164,7 @@ public class PieceMakerPanel extends ChessPanel
 		final JPanel lightIconPanel = new JPanel();
 		lightIconPanel.setLayout(new FlowLayout());
 		lightIconPanel.setOpaque(false);
-		final JLabel lightIconLabel = GuiUtility.createJLabel("");
+		final JLabel lightIconLabel = GuiUtility.createJLabel(""); //$NON-NLS-1$
 		lightIconLabel.setSize(48, 48);
 
 		try
@@ -203,7 +202,7 @@ public class PieceMakerPanel extends ChessPanel
 		final JPanel darkIconPanel = new JPanel();
 		darkIconPanel.setLayout(new FlowLayout());
 		darkIconPanel.setOpaque(false);
-		final JLabel darkIconLabel = GuiUtility.createJLabel("");
+		final JLabel darkIconLabel = GuiUtility.createJLabel(""); //$NON-NLS-1$
 		darkIconLabel.setSize(48, 48);
 
 		try
@@ -299,45 +298,11 @@ public class PieceMakerPanel extends ChessPanel
 		distanceField.setToolTipText(Messages.getString("PieceMakerPanel.greatestSpaces")); //$NON-NLS-1$
 
 		mKnightOneField.setToolTipText(Messages.getString("PieceMakerPanel.enterKnightLike")); //$NON-NLS-1$
-		mKnightOneField.setEnabled(false);
 		mKnightTwoField.setToolTipText(Messages.getString("PieceMakerPanel.enterOtherDirection")); //$NON-NLS-1$
-		mKnightTwoField.setEnabled(false);
-
 		mKnightOneField.addKeyListener(getKnightFieldKeyListener());
 		mKnightTwoField.addKeyListener(getKnightFieldKeyListener());
 
-		if (builder == null)
-		{
-			mKnightOneField.setEnabled(false);
-			mKnightTwoField.setEnabled(false);
-			mAddKnightMoveButton.setEnabled(false);
-			mRemoveKnightMoveButton.setEnabled(false);
-			mKnightComboBox.setEnabled(false);
-		}
-		else
-		{
-			mKnightOneField.setEnabled(builder.getIsKnightLike());
-			mKnightTwoField.setEnabled(builder.getIsKnightLike());
-			mRemoveKnightMoveButton.setEnabled(builder.getIsKnightLike() && builder.getKnightMovements().size() != 0);
-			mKnightComboBox.setEnabled(builder.getIsKnightLike());
-		}
-
-		mKnightMovementsCheckBox.setToolTipText(Messages.getString("PieceMakerPanel.pressForKnightLike")); //$NON-NLS-1$
-
-		if (builder != null)
-			mKnightMovementsCheckBox.setSelected(builder.getIsKnightLike());
-
-		mKnightMovementsCheckBox.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent event)
-			{
-				mKnightOneField.setEnabled(mKnightMovementsCheckBox.isSelected());
-				mKnightTwoField.setEnabled(mKnightMovementsCheckBox.isSelected());
-				mAddKnightMoveButton.setEnabled(mKnightMovementsCheckBox.isSelected());
-			}
-		});
-
+		mAddKnightMoveButton.setEnabled(false);
 		mAddKnightMoveButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -353,20 +318,21 @@ public class PieceMakerPanel extends ChessPanel
 				mAddKnightMoveButton.setEnabled(false);
 			}
 		});
-		mAddKnightMoveButton.setEnabled(false);
 
+		mRemoveKnightMoveButton.setEnabled(mKnightComboBox.getItemCount() != 0);
 		mRemoveKnightMoveButton.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				mKnightComboBox.setEnabled(mKnightComboBox.getItemCount() != 0);
 				mTempKnightMovements.remove(mKnightComboBox.getSelectedItem().toString());
 				mKnightComboBox.removeAllItems();
 				for (String kMovement : mTempKnightMovements)
 				{
 					mKnightComboBox.addItem(kMovement);
 				}
+				mKnightComboBox.setEnabled(mKnightComboBox.getItemCount() != 0);
+				mRemoveKnightMoveButton.setEnabled(mKnightComboBox.getItemCount() != 0);
 			}
 		});
 
@@ -454,15 +420,12 @@ public class PieceMakerPanel extends ChessPanel
 		constraints.gridy = 5;
 		movementPanel.add(mLeaperCheckBox, constraints);
 		constraints.insets = new Insets(5, 0, 0, 0);
-		constraints.gridx = 0;
-		constraints.gridy = 6;
-		movementPanel.add(mKnightMovementsCheckBox, constraints);
 		constraints.insets = new Insets(5, 0, 5, 0);
 		constraints.gridx = 0;
-		constraints.gridy = 7;
+		constraints.gridy = 6;
 		movementPanel.add(GuiUtility.createJLabel(Messages.getString("PieceMakerPanel.knightLikeMovementHTML")), constraints); //$NON-NLS-1$
 		constraints.gridx = 0;
-		constraints.gridy = 8;
+		constraints.gridy = 7;
 		movementPanel.add(knightMovementPanel, constraints);
 
 		constraints.gridx = 0;
@@ -766,7 +729,6 @@ public class PieceMakerPanel extends ChessPanel
 			Messages.getString("PieceMakerPanel.north"), Messages.getString("PieceMakerPanel.northEast"), Messages.getString("PieceMakerPanel.east"), Messages.getString("PieceMakerPanel.southEast"), Messages.getString("PieceMakerPanel.south"), Messages.getString("PieceMakerPanel.southWest"), Messages.getString("PieceMakerPanel.west"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$
 			Messages.getString("PieceMakerPanel.northWest") }; //$NON-NLS-1$
 
-	private final JCheckBox mKnightMovementsCheckBox;
 	private final JTextField mPieceNameField;
 	private final JCheckBox mLeaperCheckBox;
 	private final JTextField mNorthField;

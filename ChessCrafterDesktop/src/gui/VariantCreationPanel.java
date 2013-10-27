@@ -118,8 +118,8 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 		}
 
 		mDisplayBoard = new Board(2, 1, false);
-		mPieceDisplaySquares[WHITE_INDEX] = mDisplayBoard.getSquare(1, 1);
-		mPieceDisplaySquares[BLACK_INDEX] = mDisplayBoard.getSquare(2, 1);
+		mPieceDisplaySquares[WHITE_INDEX] = new SquareJLabel(mDisplayBoard.getSquare(1, 1));
+		mPieceDisplaySquares[BLACK_INDEX] = new SquareJLabel(mDisplayBoard.getSquare(2, 1));
 
 		mOptionsFrame = new JFrame();
 		mOptionsFrame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -140,8 +140,8 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 		showPiecePanel.setPreferredSize(new Dimension(50, 100));
 		showPiecePanel.setOpaque(false);
 
-		for (Square square : mPieceDisplaySquares)
-			showPiecePanel.add(square);
+		for (SquareJLabel squareLabel : mPieceDisplaySquares)
+			showPiecePanel.add(squareLabel);
 
 		constraints.gridx = 5;
 		constraints.gridy = 1;
@@ -151,10 +151,10 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 
 		setupPiecesList();
 
-		for (Square square : mPieceDisplaySquares)
+		for (SquareJLabel squareLabel : mPieceDisplaySquares)
 		{
-			square.addMouseListener(new PieceDisplayBoardListener(square));
-			square.addMouseMotionListener(m_motionAdapter);
+			squareLabel.addMouseListener(new PieceDisplayBoardListener(squareLabel));
+			squareLabel.addMouseMotionListener(m_motionAdapter);
 		}
 
 		mPieceDisplaySquares[WHITE_INDEX].setBackgroundColor(Color.LIGHT_GRAY);
@@ -209,6 +209,7 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 			@Override
 			public void actionPerformed(ActionEvent event)
 			{
+				PreferenceUtility.clearTooltipListeners();
 				Driver.getInstance().revertToMainPanel();
 			}
 		});
@@ -223,7 +224,8 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 			{
 				if (variantNameField.getText().trim().isEmpty())
 				{
-					JOptionPane.showMessageDialog(VariantCreationPanel.this,
+					JOptionPane.showMessageDialog(
+							VariantCreationPanel.this,
 							Messages.getString("VariantCreationPanel.enterAName"), Messages.getString("VariantCreationPanel.enterName"), //$NON-NLS-1$ //$NON-NLS-2$
 							JOptionPane.PLAIN_MESSAGE);
 					return;
@@ -285,7 +287,8 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 					mBlackRules.setObjectivePiece(new ObjectivePiece(ObjectivePieceTypes.CLASSIC));
 
 				mBuilder.writeFile(mWhiteRules, mBlackRules);
-				// Return to the main screen.
+
+				PreferenceUtility.clearTooltipListeners();
 				Driver.getInstance().revertToMainPanel();
 			}
 		});
@@ -446,7 +449,7 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 
 		GridBagConstraints constraints = new GridBagConstraints();
 
-		List<Square> squareList = Lists.newArrayListWithExpectedSize(boards[0].getMaxRow() * boards[0].getMaxCol() * 2);
+		List<SquareJLabel> squareLabelList = Lists.newArrayListWithExpectedSize(boards[0].getMaxRow() * boards[0].getMaxCol() * 2);
 		for (int boardIndex = 0, gridxConstraint = 1; boardIndex < boards.length; boardIndex++, gridxConstraint += 2)
 		{
 			// create a JPanel to hold the grid and set the layout to the number
@@ -461,6 +464,7 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 				for (int column = 1; column <= numberOfColumns; column++)
 				{
 					Square square = boards[boardIndex].getSquare(row, column);
+					SquareJLabel squareLabel = new SquareJLabel(square);
 					if (square.isOccupied())
 					{
 						for (int i = 0; i < mPieceTypeList.getModel().getSize(); i++)
@@ -482,16 +486,16 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 								square.setPiece(platonicIdeal);
 
 						}
-						square.addMouseListener(new PieceNormalBoardListener(square));
-						square.addMouseMotionListener(m_motionAdapter);
+						squareLabel.addMouseListener(new PieceNormalBoardListener(squareLabel));
+						squareLabel.addMouseMotionListener(m_motionAdapter);
 					}
 					else
 					{
-						square.addMouseListener(new SquareSetupMouseListener(square));
+						squareLabel.addMouseListener(new SquareSetupMouseListener(squareLabel));
 					}
-					squareList.add(square);
-					mBoardPanels[boardIndex].add(square);
-					square.refresh();
+					squareLabelList.add(squareLabel);
+					mBoardPanels[boardIndex].add(squareLabel);
+					squareLabel.refresh();
 				}
 			}
 
@@ -509,7 +513,7 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 
 			add(mBoardPanels[boardIndex], constraints);
 		}
-		mDropManager.setComponentList(squareList);
+		mDropManager.setComponentList(squareLabelList);
 
 		for (JPanel panel : mBoardPanels)
 		{
@@ -580,25 +584,22 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 
 	private final class SquareSetupMouseListener extends MouseAdapter
 	{
-		public SquareSetupMouseListener(Square square)
+		public SquareSetupMouseListener(SquareJLabel squareLabel)
 		{
-			m_square = square;
-			if (m_square.isOccupied())
-			{
-				m_square.setToolTipText(m_square.getPiece().getName());
-				m_square.refresh();
-			}
+			mSquareLabel = squareLabel;
+			if (mSquareLabel.getSquare().isOccupied())
+				mSquareLabel.refresh();
 		}
 
 		@Override
 		public void mouseClicked(MouseEvent event)
 		{
-			if (m_square.isOccupied())
+			if (mSquareLabel.getSquare().isOccupied())
 			{
-				Piece toRemove = m_square.setPiece(null);
+				Piece toRemove = mSquareLabel.getSquare().setPiece(null);
 				(toRemove.isBlack() ? mBlackTeam : mWhiteTeam).remove(toRemove);
 
-				m_square.refresh();
+				mSquareLabel.refresh();
 			}
 			else
 			{
@@ -611,10 +612,10 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 			final JFrame popupFrame = new JFrame(Messages.getString("VariantCreationPanel.squareOptions")); //$NON-NLS-1$
 			popupFrame.setLocationRelativeTo(Driver.getInstance());
 			popupFrame.setLayout(new FlowLayout());
-			
+
 			final ChessPanel popupPanel = new ChessPanel();
 			popupPanel.setLayout(new GridBagLayout());
-			
+
 			GridBagConstraints constraints = new GridBagConstraints();
 
 			final JButton colorChooserButton = new JButton(Messages.getString("VariantCreationPanel.setSquareColor")); //$NON-NLS-1$
@@ -625,15 +626,15 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 				public void actionPerformed(ActionEvent event)
 				{
 					Color color = JColorChooser.showDialog(popupFrame,
-							Messages.getString("VariantCreationPanel.chooseColor"), m_square.getColor()); //$NON-NLS-1$
+							Messages.getString("VariantCreationPanel.chooseColor"), mSquareLabel.getColor()); //$NON-NLS-1$
 					if (color == null)
 						return;
 					// TODO: verify that this can be removed
 					// can't let them pick exactly the highlight color, or they
 					// could move to that space from anywhere
-					if (color != Square.HIGHLIGHT_COLOR)
+					if (color != SquareJLabel.HIGHLIGHT_COLOR)
 					{
-						m_square.setBackgroundColor(color);
+						mSquareLabel.setBackgroundColor(color);
 						colorChooserButton.setBackground(color);
 					}
 					else
@@ -653,9 +654,9 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 			popupPanel.add(colorChooserButton, constraints);
 
 			final JCheckBox uninhabitableButton = new JCheckBox(
-					"<html><font color=#FFFFFF>" + Messages.getString("VariantCreationPanel.uninhabited") + "</font></html>", !m_square.isHabitable()); //$NON-NLS-1$
+					"<html><font color=#FFFFFF>" + Messages.getString("VariantCreationPanel.uninhabited") + "</font></html>", !mSquareLabel.getSquare().isHabitable()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			uninhabitableButton.setOpaque(false);
-			
+
 			constraints.gridy = 1;
 			popupPanel.add(uninhabitableButton, constraints);
 
@@ -666,23 +667,23 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 				public void actionPerformed(ActionEvent event)
 				{
 					if (uninhabitableButton.isSelected())
-						m_square.setIsHabitable(false);
+						mSquareLabel.getSquare().setIsHabitable(false);
 					else
-						m_square.setIsHabitable(true);
+						mSquareLabel.getSquare().setIsHabitable(true);
 					popupFrame.dispose();
 				}
 			});
 			constraints.gridy = 2;
 			constraints.insets = new Insets(10, 5, 10, 5);
 			popupPanel.add(doneButton, constraints);
-			
+
 			popupFrame.add(popupPanel);
 
 			popupFrame.pack();
 			popupFrame.setVisible(true);
 		}
 
-		private Square m_square;
+		private SquareJLabel mSquareLabel;
 	}
 
 	public void putPromotionMap(String pieceName, List<String> promotesTo, int colorCode)
@@ -715,20 +716,17 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 
 	private final class PieceDisplayBoardListener extends DropAdapter implements MouseListener, PieceToolTipPreferenceChangedListener
 	{
-		public PieceDisplayBoardListener(Square square)
+		public PieceDisplayBoardListener(SquareJLabel squareLabel)
 		{
 			super(mGlobalGlassPane);
-			m_square = square;
+			mSquareLabel = squareLabel;
 			addDropListener(mDropManager);
-			if (m_square.getPiece() != null && PreferenceUtility.getPreference().showPieceToolTips())
-				m_square.setToolTipText(m_square.getPiece().getToolTipText());
 			PreferenceUtility.addPieceToolTipListener(this);
 		}
 
 		public void onPieceSelectionChanged()
 		{
-			if (m_square.getPiece() != null && PreferenceUtility.getPreference().showPieceToolTips())
-				m_square.setToolTipText(m_square.getPiece().getToolTipText());
+			mSquareLabel.refresh();
 		}
 
 		@Override
@@ -743,7 +741,7 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 			mGlassPane.setPoint(point);
 
 			BufferedImage image = null;
-			ImageIcon imageIcon = m_square.getPiece().getIcon();
+			ImageIcon imageIcon = mSquareLabel.getSquare().getPiece().getIcon();
 			int width = imageIcon.getIconWidth();
 			int height = imageIcon.getIconHeight();
 			image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
@@ -764,7 +762,7 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 			mGlassPane.setImage(null);
 			mGlassPane.setVisible(false);
 
-			fireDropEvent(new DropEvent(point, m_square), true);
+			fireDropEvent(new DropEvent(point, mSquareLabel), true);
 		}
 
 		@Override
@@ -782,27 +780,24 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 		{
 		}
 
-		private final Square m_square;
+		private final SquareJLabel mSquareLabel;
 
 		@Override
 		public void onPieceToolTipPreferenceChanged()
 		{
-			if (m_square.getPiece() != null && PreferenceUtility.getPreference().showPieceToolTips())
-				m_square.setToolTipText(m_square.getPiece().getToolTipText());
-			else
-				m_square.setToolTipText(null);
+			mSquareLabel.refresh();
 		}
 	};
 
 	private final class PieceNormalBoardListener extends DropAdapter implements MouseListener, PieceToolTipPreferenceChangedListener
 	{
-		public PieceNormalBoardListener(Square square)
+		public PieceNormalBoardListener(SquareJLabel squareLabel)
 		{
 			super(mGlobalGlassPane);
-			m_square = square;
+			mSquareLabel = squareLabel;
 			addDropListener(mDropManager);
-			if (m_square.getPiece() != null && PreferenceUtility.getPreference().showPieceToolTips())
-				m_square.setToolTipText(m_square.getPiece().getToolTipText());
+			if (mSquareLabel.getSquare().getPiece() != null && PreferenceUtility.getPreference().showPieceToolTips())
+				mSquareLabel.setToolTipText(mSquareLabel.getSquare().getPiece().getToolTipText());
 			PreferenceUtility.addPieceToolTipListener(this);
 		}
 
@@ -818,11 +813,11 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 			mGlassPane.setPoint(point);
 
 			BufferedImage image = null;
-			String pieceName = m_square.getPiece().getName();
+			String pieceName = mSquareLabel.getSquare().getPiece().getName();
 
 			FileUtility.getPieceFile(pieceName);
 
-			ImageIcon imageIcon = m_square.getPiece().getIcon();
+			ImageIcon imageIcon = mSquareLabel.getSquare().getPiece().getIcon();
 			int width = imageIcon.getIconWidth();
 			int height = imageIcon.getIconHeight();
 			image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
@@ -830,7 +825,7 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 			imageIcon.paintIcon(null, graphics2D, 0, 0);
 			graphics2D.dispose();
 			mGlassPane.setImage(image);
-			m_square.setIcon(null);
+			mSquareLabel.setIcon(null);
 			mGlassPane.repaint();
 		}
 
@@ -843,13 +838,13 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 			mGlassPane.setImage(null);
 			mGlassPane.setVisible(false);
 
-			fireDropEvent(new DropEvent(point, m_square), false);
+			fireDropEvent(new DropEvent(point, mSquareLabel), false);
 		}
 
 		public void onPieceSelectionChanged()
 		{
-			if (m_square.getPiece() != null)
-				m_square.setToolTipText(m_square.getPiece().getToolTipText());
+			if (mSquareLabel.getSquare().getPiece() != null)
+				mSquareLabel.setToolTipText(mSquareLabel.getSquare().getPiece().getToolTipText());
 		}
 
 		@Override
@@ -870,13 +865,13 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 		@Override
 		public void onPieceToolTipPreferenceChanged()
 		{
-			if (m_square.getPiece() != null && PreferenceUtility.getPreference().showPieceToolTips())
-				m_square.setToolTipText(m_square.getPiece().getToolTipText());
+			if (mSquareLabel.getSquare().getPiece() != null && PreferenceUtility.getPreference().showPieceToolTips())
+				mSquareLabel.setToolTipText(mSquareLabel.getSquare().getPiece().getToolTipText());
 			else
-				m_square.setToolTipText(null);
+				mSquareLabel.setToolTipText(null);
 		}
 
-		private final Square m_square;
+		private final SquareJLabel mSquareLabel;
 	};
 
 	private final class DropManager extends AbstractDropManager
@@ -884,10 +879,10 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 		@Override
 		public void dropped(DropEvent event, boolean fromDisplayBoard)
 		{
-			Square originSquare = (Square) event.getOriginComponent();
-			Square destinationSquare = (Square) isInTarget(event.getDropLocation());
+			SquareJLabel originSquareLabel = (SquareJLabel) event.getOriginComponent();
+			SquareJLabel destinationSquareLabel = (SquareJLabel) isInTarget(event.getDropLocation());
 
-			Piece originPiece = originSquare.getPiece();
+			Piece originPiece = originSquareLabel.getSquare().getPiece();
 
 			if (originPiece == null)
 				return;
@@ -897,23 +892,23 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 				(originPiece.isBlack() ? mBlackTeam : mWhiteTeam).remove(originPiece);
 
 				// drag piece off board to remove it
-				if (destinationSquare == null)
+				if (destinationSquareLabel == null)
 				{
-					originSquare.setPiece(null);
+					originSquareLabel.getSquare().setPiece(null);
 
-					for (MouseListener listener : originSquare.getMouseListeners())
-						originSquare.removeMouseListener(listener);
+					for (MouseListener listener : originSquareLabel.getMouseListeners())
+						originSquareLabel.removeMouseListener(listener);
 
-					originSquare.addMouseListener(new SquareSetupMouseListener(originSquare));
+					originSquareLabel.addMouseListener(new SquareSetupMouseListener(originSquareLabel));
 
-					originSquare.refresh();
+					originSquareLabel.refresh();
 					return;
 				}
 			}
 
-			if (destinationSquare != null && destinationSquare.isHabitable())
+			if (destinationSquareLabel != null && destinationSquareLabel.getSquare().isHabitable())
 			{
-				Piece oldPiece = destinationSquare.getPiece();
+				Piece oldPiece = destinationSquareLabel.getSquare().getPiece();
 				if (oldPiece != null)
 					(oldPiece.isBlack() ? mBlackTeam : mWhiteTeam).remove(oldPiece);
 
@@ -923,12 +918,13 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 				Piece piece = null;
 				try
 				{
-					piece = PieceBuilder.makePiece(originPiece.getName(), originPiece.isBlack(), destinationSquare,
+					piece = PieceBuilder.makePiece(originPiece.getName(), originPiece.isBlack(), destinationSquareLabel.getSquare(),
 							mBuilder.getBoards()[boardNumber]);
 				}
 				catch (IOException e)
 				{
-					JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("VariantCreationPanel.errorCouldNotLoadPiece")); //$NON-NLS-1$
+					JOptionPane.showMessageDialog(Driver.getInstance(),
+							Messages.getString("VariantCreationPanel.errorCouldNotLoadPiece")); //$NON-NLS-1$
 					e.printStackTrace();
 					return;
 				}
@@ -940,33 +936,35 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 
 				if (!fromDisplayBoard)
 				{
-					originSquare.setPiece(null);
+					originSquareLabel.getSquare().setPiece(null);
 
-					originSquare.refresh();
+					originSquareLabel.refresh();
 
 					// why is there no "clear listeners"?
-					for (MouseListener mouseListener : originSquare.getMouseListeners())
+					for (MouseListener mouseListener : originSquareLabel.getMouseListeners())
 					{
-						originSquare.removeMouseListener(mouseListener);
+						originSquareLabel.removeMouseListener(mouseListener);
 					}
-					originSquare.addMouseListener(new SquareSetupMouseListener(originSquare));
+					originSquareLabel.addMouseListener(new SquareSetupMouseListener(originSquareLabel));
 				}
-				for (MouseListener mouseListener : destinationSquare.getMouseListeners())
+				for (MouseListener mouseListener : destinationSquareLabel.getMouseListeners())
 				{
-					destinationSquare.removeMouseListener(mouseListener);
+					destinationSquareLabel.removeMouseListener(mouseListener);
 				}
-				destinationSquare.addMouseListener(new PieceNormalBoardListener(destinationSquare));
-				destinationSquare.addMouseMotionListener(m_motionAdapter);
+				destinationSquareLabel.addMouseListener(new PieceNormalBoardListener(destinationSquareLabel));
+				destinationSquareLabel.addMouseMotionListener(m_motionAdapter);
 
-				destinationSquare.setPiece(piece);
-				destinationSquare.refresh();
+				destinationSquareLabel.getSquare().setPiece(piece);
+				destinationSquareLabel.refresh();
 
 			}
 			else
 			{
-				JOptionPane.showMessageDialog(Driver.getInstance(),
-						Messages.getString("VariantCreationPanel.squareIsUninhabitable"), Messages.getString("VariantCreationPanel.warning"), //$NON-NLS-1$ //$NON-NLS-2$
-						JOptionPane.PLAIN_MESSAGE);
+				JOptionPane
+						.showMessageDialog(
+								Driver.getInstance(),
+								Messages.getString("VariantCreationPanel.squareIsUninhabitable"), Messages.getString("VariantCreationPanel.warning"), //$NON-NLS-1$ //$NON-NLS-2$
+								JOptionPane.PLAIN_MESSAGE);
 			}
 		}
 	};
@@ -987,9 +985,9 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 		try
 		{
 			whitePieceBeingDisplayed = PieceBuilder.makePiece(mPieceTypeList.getSelectedValue().toString(), false,
-					mPieceDisplaySquares[WHITE_INDEX], mDisplayBoard);
+					mPieceDisplaySquares[WHITE_INDEX].getSquare(), mDisplayBoard);
 			blackPieceBeingDisplayed = PieceBuilder.makePiece(mPieceTypeList.getSelectedValue().toString(), true,
-					mPieceDisplaySquares[BLACK_INDEX], mDisplayBoard);
+					mPieceDisplaySquares[BLACK_INDEX].getSquare(), mDisplayBoard);
 		}
 		catch (IOException e)
 		{
@@ -998,14 +996,14 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 			return;
 		}
 
-		mPieceDisplaySquares[WHITE_INDEX].setPiece(whitePieceBeingDisplayed);
-		mPieceDisplaySquares[BLACK_INDEX].setPiece(blackPieceBeingDisplayed);
+		mPieceDisplaySquares[WHITE_INDEX].getSquare().setPiece(whitePieceBeingDisplayed);
+		mPieceDisplaySquares[BLACK_INDEX].getSquare().setPiece(blackPieceBeingDisplayed);
 
-		for (Square square : mPieceDisplaySquares)
+		for (SquareJLabel squareLabel : mPieceDisplaySquares)
 		{
-			square.resetColor();
-			square.refresh();
-			for (MouseListener listener : square.getMouseListeners())
+			squareLabel.resetColor();
+			squareLabel.refresh();
+			for (MouseListener listener : squareLabel.getMouseListeners())
 			{
 				if (listener instanceof PieceDisplayBoardListener)
 					((PieceDisplayBoardListener) listener).onPieceSelectionChanged();
@@ -1021,7 +1019,7 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 
 	private final GlassPane mGlobalGlassPane;
 	private final DropManager mDropManager;
-	private final Square[] mPieceDisplaySquares = new Square[2];
+	private final SquareJLabel[] mPieceDisplaySquares = new SquareJLabel[2];
 
 	public Rules mWhiteRules;
 	public Rules mBlackRules;

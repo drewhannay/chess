@@ -250,7 +250,7 @@ public class ObjectiveMakerPanel extends ChessPanel
 
 		JPanel whiteTeamPanel = new JPanel();
 		whiteTeamPanel.setOpaque(false);
-		whiteTeamPanel.setBorder(BorderFactory.createTitledBorder("<html><font color=#FFFFFF>" + Messages.getString("ObjectiveMakerPanel.whiteTeam") + "</font></html>")); //$NON-NLS-1$
+		whiteTeamPanel.setBorder(GuiUtility.createBorder(Messages.getString("ObjectiveMakerPanel.whiteTeam"))); //$NON-NLS-1$
 		whiteTeamPanel.setLayout(new GridBagLayout());
 
 		JPanel whiteObjectivePanel = new JPanel();
@@ -273,7 +273,7 @@ public class ObjectiveMakerPanel extends ChessPanel
 
 		JPanel blackTeamPanel = new JPanel();
 		blackTeamPanel.setOpaque(false);
-		blackTeamPanel.setBorder(BorderFactory.createTitledBorder("<html><font color=#FFFFFF>" + Messages.getString("ObjectiveMakerPanel.blackTeam") + "</font></html>")); //$NON-NLS-1$
+		blackTeamPanel.setBorder(GuiUtility.createBorder(Messages.getString("ObjectiveMakerPanel.blackTeam"))); //$NON-NLS-1$
 		blackTeamPanel.setLayout(new GridBagLayout());
 
 		JPanel blackObjectivePanel = new JPanel();

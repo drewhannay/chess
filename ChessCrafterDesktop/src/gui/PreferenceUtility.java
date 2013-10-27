@@ -23,11 +23,11 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
-import com.google.common.collect.Lists;
-
 import utility.FileUtility;
 import utility.GuiUtility;
 import utility.Preference;
+
+import com.google.common.collect.Lists;
 
 public final class PreferenceUtility
 {
@@ -232,10 +232,11 @@ public final class PreferenceUtility
 			e1.printStackTrace();
 		}
 
-		for (PieceToolTipPreferenceChangedListener listener : mToolTipListeners)
-		{
-			listener.onPieceToolTipPreferenceChanged();
-		}
+		if (mToolTipListeners != null)
+			for (PieceToolTipPreferenceChangedListener listener : mToolTipListeners)
+			{
+				listener.onPieceToolTipPreferenceChanged();
+			}
 	}
 
 	public static void addPieceToolTipListener(PieceToolTipPreferenceChangedListener listener)
@@ -246,5 +247,11 @@ public final class PreferenceUtility
 			mToolTipListeners.add(listener);
 	}
 
+	public static void clearTooltipListeners()
+	{
+		if (mToolTipListeners != null)
+			mToolTipListeners.clear();
+	}
+	
 	private static List<PieceToolTipPreferenceChangedListener> mToolTipListeners;
 }
