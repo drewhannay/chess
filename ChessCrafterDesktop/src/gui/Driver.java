@@ -170,7 +170,7 @@ public final class Driver extends JFrame implements ChessCrafter
 		c.gridy = 0;
 		try
 		{
-			mMainPanel.add(new JLabel(GuiUtility.createImageIcon(506, 380, "/chess_logo.png")), c); //$NON-NLS-1$
+			mMainPanel.add(new JLabel(GuiUtility.createImageIcon(400, 400, "/chess_logo.png")), c); //$NON-NLS-1$
 		}
 		catch (IOException e)
 		{
@@ -209,6 +209,7 @@ public final class Driver extends JFrame implements ChessCrafter
 		mMainPanel.add(mButtonPanel, c);
 
 		add(mMainPanel);
+		pack();
 		setVisible(true);
 	}
 

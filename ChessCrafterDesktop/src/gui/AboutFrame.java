@@ -29,7 +29,7 @@ public class AboutFrame extends JFrame
 	private void initGUIComponents(JPanel mainPanel)
 	{
 		setTitle(Messages.getString("AboutFrame.about") + AppConstants.APP_NAME); //$NON-NLS-1$
-		setSize(350, 400);
+		setSize(350, 450);
 		setResizable(false);
 		setLocationRelativeTo(this);
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -42,7 +42,7 @@ public class AboutFrame extends JFrame
 		JLabel piecePicture = null;
 		try
 		{
-			frontPageImage = new JLabel(GuiUtility.createImageIcon(300, 200, "/chess_logo.png")); //$NON-NLS-1$
+			frontPageImage = new JLabel(GuiUtility.createImageIcon(250, 250, "/chess_logo.png")); //$NON-NLS-1$
 			piecePicture = new JLabel(GuiUtility.createImageIcon(48, 48, "/d_King.png")); //$NON-NLS-1$
 		}
 		catch (IOException e1)
