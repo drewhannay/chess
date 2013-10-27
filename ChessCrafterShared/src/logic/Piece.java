@@ -6,8 +6,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import javax.swing.ImageIcon;
-import utility.ImageUtility;
+
 import com.google.common.collect.Lists;
 
 public class Piece implements Serializable
@@ -28,12 +27,9 @@ public class Piece implements Serializable
 	 * @throws IOException
 	 */
 	public Piece(String name, boolean isBlack, Square curSquare, Board board, Map<Character, Integer> movements, boolean canJump)
-			throws IOException
 	{
 		mName = name;
 		mIsLeaper = canJump;
-		mLightIcon = ImageUtility.getLightImage(name);
-		mDarkIcon = ImageUtility.getDarkImage(name);
 
 		setBlack(isBlack);
 		mCurrentSquare = curSquare;
@@ -655,11 +651,6 @@ public class Piece implements Serializable
 		return mGuardSquares;
 	}
 
-	public ImageIcon getIcon()
-	{
-		return isBlack() ? mDarkIcon : mLightIcon;
-	}
-
 	public List<Square> getLegalDests()
 	{
 		if (mBoard.getGame().isStaleLegalDests())
@@ -935,7 +926,7 @@ public class Piece implements Serializable
 
 			builder.append("</td>"); //$NON-NLS-1$
 		}
-		
+
 		builder.append("<td>"); //$NON-NLS-1$
 		if (mIsLeaper)
 		{
@@ -978,7 +969,7 @@ public class Piece implements Serializable
 		}
 		return direction.toString();
 	}
-	
+
 	public boolean isBlack()
 	{
 		return (mIsBlack);
@@ -1169,8 +1160,6 @@ public class Piece implements Serializable
 
 	protected List<KnightMovement> mKnightMovements;
 
-	protected ImageIcon mLightIcon;
-	protected ImageIcon mDarkIcon;
 	protected boolean mIsLeaper;
 	protected int mMoveCount;
 	protected Piece mPinnedBy;

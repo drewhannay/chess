@@ -8,9 +8,11 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
+import logic.Piece;
 import logic.Square;
 import logic.Square.SquareStateListener;
 import utility.GuiUtility;
+import utility.PieceIconUtility;
 
 public class SquareJLabel extends JLabel
 {
@@ -76,15 +78,17 @@ public class SquareJLabel extends JLabel
 			return;
 		}
 
-		if (mSquare.getPiece() != null)
+		Piece piece = mSquare.getPiece();
+		if (piece != null)
 		{
-			if (mSquare.getPiece().getIcon() == null)
-				setText(mSquare.getPiece().getName());
+			ImageIcon pieceIcon = PieceIconUtility.getPieceIcon(piece.getName(), piece.isBlack());
+			if (pieceIcon == null)
+				setText(piece.getName());
 			else
-				setIcon(mSquare.getPiece().getIcon());
+				setIcon(pieceIcon);
 
 			if (PreferenceUtility.getPreference().showPieceToolTips())
-				setToolTipText(mSquare.getPiece().getToolTipText());
+				setToolTipText(piece.getToolTipText());
 			else
 				setToolTipText(null);
 		}
@@ -109,12 +113,14 @@ public class SquareJLabel extends JLabel
 	{
 		setOpaque(true);
 
-		if (mSquare.getPiece() != null)
+		Piece piece = mSquare.getPiece();
+		if (piece != null)
 		{
-			if (mSquare.getPiece().getIcon() == null)
-				setText(mSquare.getPiece().getName());
+			ImageIcon pieceIcon = PieceIconUtility.getPieceIcon(piece.getName(), piece.isBlack());
+			if (pieceIcon == null)
+				setText(piece.getName());
 			else
-				setIcon(new ImageIcon(mSquare.getPiece().getIcon().getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH)));
+				setIcon(new ImageIcon(pieceIcon.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH)));
 		}
 		else
 		{

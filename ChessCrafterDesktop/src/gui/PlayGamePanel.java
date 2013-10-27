@@ -43,6 +43,7 @@ import utility.AppConstants;
 import utility.FileUtility;
 import utility.GuiUtility;
 import utility.Pair;
+import utility.PieceIconUtility;
 import utility.Preference;
 
 import com.google.common.collect.ImmutableList;
@@ -83,7 +84,6 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 		}
 		catch (Exception e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -701,7 +701,8 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 			mGlassPane.setPoint(point);
 
 			BufferedImage image = null;
-			ImageIcon imageIcon = mSquareLabel.getSquare().getPiece().getIcon();
+			Piece piece = mSquareLabel.getSquare().getPiece();
+			ImageIcon imageIcon = PieceIconUtility.getPieceIcon(piece.getName(), piece.isBlack());
 			int width = imageIcon.getIconWidth();
 			int height = imageIcon.getIconHeight();
 			image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
