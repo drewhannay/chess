@@ -4,8 +4,10 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
+import logic.PieceMovements.MovementDirection;
+
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 
 public class Piece implements Serializable
@@ -20,8 +22,10 @@ public class Piece implements Serializable
 	 * @param movements Map of legal movements for this Piece
 	 * @param canJump
 	 */
-	public Piece(String name, boolean isBlack, Square curSquare, Board board, Map<Character, Integer> movements, boolean canJump)
+	public Piece(String name, boolean isBlack, Square curSquare, Board board, PieceMovements movements, boolean canJump)
 	{
+		Preconditions.checkArgument(movements != null);
+
 		mName = name;
 		mIsLeaper = canJump;
 
@@ -31,7 +35,7 @@ public class Piece implements Serializable
 		// tell the Square what Piece is on it
 		curSquare.setPiece(this);
 		mBoard = board;
-		mMovements = movements;
+		mPieceMovements = movements;
 
 		List<Square> legalDests = Lists.newArrayList();
 		setLegalDests(legalDests);
@@ -290,189 +294,171 @@ public class Piece implements Serializable
 
 		boolean done = false;
 		Square dest;
+		int distance;
 		boolean wraparound = board.isWrapAround();
 
 		// east
-		if (mMovements != null)
+		distance = mPieceMovements.getDistance(MovementDirection.EAST);
+		int northMax = distance + mCurrentSquare.getCol();
+		if (northMax > board.getMaxCol() || distance == PieceMovements.UNLIMITED)
 		{
-			if (mMovements.containsKey(PieceBuilder.EAST))
+			if (!wraparound)
+				northMax = board.getMaxCol();
+		}
+		for (int c = mCurrentSquare.getCol() + 1; ((distance == PieceMovements.UNLIMITED && wraparound) ? true : c <= northMax)
+				&& !done; c++)
+		{
+			int j = c;
+			if (wraparound)
 			{
-				int northMax = mMovements.get(PieceBuilder.EAST) + mCurrentSquare.getCol();
-				if (northMax > board.getMaxCol() || mMovements.get(PieceBuilder.EAST) == -1)
-				{
-					if (!wraparound)
-						northMax = board.getMaxCol();
-				}
-				for (int c = mCurrentSquare.getCol() + 1; ((mMovements.get(PieceBuilder.EAST) == -1 && wraparound) ? true
-						: c <= northMax) && !done; c++)
-				{
-					int j = c;
-					if (wraparound)
-					{
-						if (j > board.getMaxCol())
-							j = j % board.getMaxCol();
-					}
-
-					if (j == 0)
-						break;
-
-					dest = board.getSquare(mCurrentSquare.getRow(), j);
-					done = !addLegalDest(dest);
-					done = mIsLeaper ? false : (done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece()
-							.equals(board.getGame().getOtherObjectivePiece(isBlack())))));
-				}
+				if (j > board.getMaxCol())
+					j = j % board.getMaxCol();
 			}
-			done = false;
 
-			// west
-			if (mMovements.containsKey(PieceBuilder.WEST))
+			if (j == 0)
+				break;
+
+			dest = board.getSquare(mCurrentSquare.getRow(), j);
+			done = !addLegalDest(dest);
+			done = mIsLeaper ? false : (done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece().equals(
+					board.getGame().getOtherObjectivePiece(isBlack())))));
+		}
+		done = false;
+
+		// west
+		distance = mPieceMovements.getDistance(MovementDirection.WEST);
+		int southMax = mCurrentSquare.getCol() - distance;
+		if (southMax < 1 || distance == PieceMovements.UNLIMITED)
+		{
+			if (!wraparound)
+				southMax = 1;
+		}
+		for (int c = mCurrentSquare.getCol() - 1; ((distance == PieceMovements.UNLIMITED && wraparound) ? true : c >= southMax)
+				&& !done; c--)
+		{
+			int j = c;
+			if (wraparound)
 			{
-				int southMax = mCurrentSquare.getCol() - mMovements.get(PieceBuilder.WEST);
-				if (southMax < 1 || mMovements.get(PieceBuilder.WEST) == -1)
-				{
-					if (!wraparound)
-						southMax = 1;
-				}
-				for (int c = mCurrentSquare.getCol() - 1; ((mMovements.get(PieceBuilder.WEST) == -1 && wraparound) ? true
-						: c >= southMax) && !done; c--)
-				{
-					int j = c;
-					if (wraparound)
-					{
-						if (j < 1)
-							j = board.getMaxCol() + j;
-					}
-
-					dest = board.getSquare(mCurrentSquare.getRow(), j);
-					done = !addLegalDest(dest);
-					done = mIsLeaper ? false : (done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece()
-							.equals(board.getGame().getOtherObjectivePiece(isBlack())))));
-				}
+				if (j < 1)
+					j = board.getMaxCol() + j;
 			}
-			done = false;
 
-			// north
-			if (mMovements.containsKey(PieceBuilder.NORTH))
-			{
-				int eastMax = mMovements.get(PieceBuilder.NORTH) + mCurrentSquare.getRow();
+			dest = board.getSquare(mCurrentSquare.getRow(), j);
+			done = !addLegalDest(dest);
+			done = mIsLeaper ? false : (done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece().equals(
+					board.getGame().getOtherObjectivePiece(isBlack())))));
+		}
+		done = false;
 
-				if (eastMax >= board.getMaxRow() || mMovements.get(PieceBuilder.NORTH) == -1)
-					eastMax = board.getMaxRow();
+		// north
+		distance = mPieceMovements.getDistance(MovementDirection.NORTH);
+		int eastMax = distance + mCurrentSquare.getRow();
 
-				for (int r = mCurrentSquare.getRow() + 1; (r <= eastMax) && !done; r++)
-				{
-					int j = r;
-					dest = board.getSquare(j, mCurrentSquare.getCol());
-					done = !addLegalDest(dest);
-					done = mIsLeaper ? false : (done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece()
-							.equals(board.getGame().getOtherObjectivePiece(isBlack())))));
-				}
-			}
-			done = false;
+		if (eastMax >= board.getMaxRow() || distance == PieceMovements.UNLIMITED)
+			eastMax = board.getMaxRow();
 
-			// south
-			if (mMovements.containsKey(PieceBuilder.SOUTH))
-			{
-				int westMax = mCurrentSquare.getRow() - mMovements.get(PieceBuilder.SOUTH);
+		for (int r = mCurrentSquare.getRow() + 1; (r <= eastMax) && !done; r++)
+		{
+			int j = r;
+			dest = board.getSquare(j, mCurrentSquare.getCol());
+			done = !addLegalDest(dest);
+			done = mIsLeaper ? false : (done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece().equals(
+					board.getGame().getOtherObjectivePiece(isBlack())))));
+		}
+		done = false;
 
-				if (westMax < 1 || mMovements.get(PieceBuilder.SOUTH) == -1)
-					westMax = 1;
+		// south
+		distance = mPieceMovements.getDistance(MovementDirection.SOUTH);
+		int westMax = mCurrentSquare.getRow() - distance;
 
-				for (int r = mCurrentSquare.getRow() - 1; (r >= westMax) && !done; r--)
-				{
-					int j = r;
-					dest = board.getSquare(j, mCurrentSquare.getCol());
-					done = !addLegalDest(dest);
-					done = mIsLeaper ? false : (done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece()
-							.equals(board.getGame().getOtherObjectivePiece(isBlack())))));
-				}
-			}
-			done = false;
+		if (westMax < 1 || distance == PieceMovements.UNLIMITED)
+			westMax = 1;
 
-			// northeast
-			if (mMovements.containsKey(PieceBuilder.NORTHEAST))
-			{
-				int neMax = ((mCurrentSquare.getRow() >= mCurrentSquare.getCol()) ? mCurrentSquare.getRow() : mCurrentSquare.getCol())
-						+ mMovements.get(PieceBuilder.NORTHEAST);
+		for (int r = mCurrentSquare.getRow() - 1; (r >= westMax) && !done; r--)
+		{
+			int j = r;
+			dest = board.getSquare(j, mCurrentSquare.getCol());
+			done = !addLegalDest(dest);
+			done = mIsLeaper ? false : (done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece().equals(
+					board.getGame().getOtherObjectivePiece(isBlack())))));
+		}
+		done = false;
 
-				if (neMax >= board.getMaxCol() || mMovements.get(PieceBuilder.NORTHEAST) == -1)
-					neMax = board.getMaxCol();
-				if (neMax >= board.getMaxRow() || mMovements.get(PieceBuilder.NORTHEAST) == -1)
-					neMax = board.getMaxRow();
+		// northeast
+		distance = mPieceMovements.getDistance(MovementDirection.NORTHEAST);
+		int neMax = ((mCurrentSquare.getRow() >= mCurrentSquare.getCol()) ? mCurrentSquare.getRow() : mCurrentSquare.getCol())
+				+ distance;
 
-				for (int r = mCurrentSquare.getRow() + 1, c = mCurrentSquare.getCol() + 1; r <= neMax && c <= neMax && !done; r++, c++)
-				{
-					dest = board.getSquare(r, c);
-					done = !addLegalDest(dest);
-					done = mIsLeaper ? false : (done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece()
-							.equals(board.getGame().getOtherObjectivePiece(isBlack())))));
-				}
-			}
-			done = false;
+		if (neMax >= board.getMaxCol() || distance == PieceMovements.UNLIMITED)
+			neMax = board.getMaxCol();
+		if (neMax >= board.getMaxRow() || distance == PieceMovements.UNLIMITED)
+			neMax = board.getMaxRow();
 
-			// southeast
-			if (mMovements.containsKey(PieceBuilder.SOUTHEAST))
-			{
-				int eastMax = mCurrentSquare.getCol() + mMovements.get(PieceBuilder.SOUTHEAST);
+		for (int r = mCurrentSquare.getRow() + 1, c = mCurrentSquare.getCol() + 1; r <= neMax && c <= neMax && !done; r++, c++)
+		{
+			dest = board.getSquare(r, c);
+			done = !addLegalDest(dest);
+			done = mIsLeaper ? false : (done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece().equals(
+					board.getGame().getOtherObjectivePiece(isBlack())))));
+		}
+		done = false;
 
-				if (eastMax >= board.getMaxCol() || mMovements.get(PieceBuilder.SOUTHEAST) == -1)
-					eastMax = board.getMaxCol();
+		// southeast
+		distance = mPieceMovements.getDistance(MovementDirection.SOUTHEAST);
+		int eastMaximum = mCurrentSquare.getCol() + distance;
 
-				int southMin = mCurrentSquare.getRow() - mMovements.get(PieceBuilder.SOUTHEAST);
+		if (eastMaximum >= board.getMaxCol() || distance == PieceMovements.UNLIMITED)
+			eastMaximum = board.getMaxCol();
 
-				if (southMin <= 1 || mMovements.get(PieceBuilder.SOUTHEAST) == -1)
-					southMin = 1;
+		int southMin = mCurrentSquare.getRow() - distance;
 
-				for (int r = mCurrentSquare.getRow() - 1, c = mCurrentSquare.getCol() + 1; r >= southMin && c <= eastMax && !done; r--, c++)
-				{
-					dest = board.getSquare(r, c);
-					done = !addLegalDest(dest);
-					done = mIsLeaper ? false : (done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece()
-							.equals(board.getGame().getOtherObjectivePiece(isBlack())))));
-				}
-			}
-			done = false;
+		if (southMin <= 1 || distance == PieceMovements.UNLIMITED)
+			southMin = 1;
 
-			// northwest
-			if (mMovements.containsKey(PieceBuilder.NORTHWEST))
-			{
-				int westMin = mCurrentSquare.getCol() - mMovements.get(PieceBuilder.NORTHWEST);
-				if (westMin <= 1 || mMovements.get(PieceBuilder.NORTHWEST) == -1)
-					westMin = 1;
+		for (int r = mCurrentSquare.getRow() - 1, c = mCurrentSquare.getCol() + 1; r >= southMin && c <= eastMaximum && !done; r--, c++)
+		{
+			dest = board.getSquare(r, c);
+			done = !addLegalDest(dest);
+			done = mIsLeaper ? false : (done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece().equals(
+					board.getGame().getOtherObjectivePiece(isBlack())))));
+		}
+		done = false;
 
-				int NorthMax = mCurrentSquare.getRow() + mMovements.get(PieceBuilder.NORTHWEST);
-				if (NorthMax >= board.getMaxRow() || mMovements.get(PieceBuilder.NORTHWEST) == -1)
-					NorthMax = board.getMaxRow();
+		// northwest
+		distance = mPieceMovements.getDistance(MovementDirection.NORTHWEST);
+		int westMin = mCurrentSquare.getCol() - distance;
+		if (westMin <= 1 || distance == PieceMovements.UNLIMITED)
+			westMin = 1;
 
-				for (int r = mCurrentSquare.getRow() + 1, c = mCurrentSquare.getCol() - 1; r <= NorthMax && c >= westMin && !done; r++, c--)
-				{
-					dest = board.getSquare(r, c);
-					done = !addLegalDest(dest);
-					done = mIsLeaper ? false : (done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece()
-							.equals(board.getGame().getOtherObjectivePiece(isBlack())))));
-				}
-			}
-			done = false;
+		int NorthMax = mCurrentSquare.getRow() + distance;
+		if (NorthMax >= board.getMaxRow() || distance == PieceMovements.UNLIMITED)
+			NorthMax = board.getMaxRow();
 
-			// southwest
-			if (mMovements.containsKey(PieceBuilder.SOUTHWEST))
-			{
-				int westMin = mCurrentSquare.getCol() - mMovements.get(PieceBuilder.SOUTHWEST);
-				if (westMin <= 1 || mMovements.get(PieceBuilder.SOUTHWEST) == -1)
-					westMin = 1;
+		for (int r = mCurrentSquare.getRow() + 1, c = mCurrentSquare.getCol() - 1; r <= NorthMax && c >= westMin && !done; r++, c--)
+		{
+			dest = board.getSquare(r, c);
+			done = !addLegalDest(dest);
+			done = mIsLeaper ? false : (done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece().equals(
+					board.getGame().getOtherObjectivePiece(isBlack())))));
+		}
+		done = false;
 
-				int southMin = mCurrentSquare.getRow() - mMovements.get(PieceBuilder.SOUTHWEST);
-				if (southMin <= 1 || mMovements.get(PieceBuilder.SOUTHWEST) == -1)
-					southMin = 1;
+		// southwest
+		distance = mPieceMovements.getDistance(MovementDirection.SOUTHWEST);
+		westMin = mCurrentSquare.getCol() - distance;
+		if (westMin <= 1 || distance == PieceMovements.UNLIMITED)
+			westMin = 1;
 
-				for (int r = mCurrentSquare.getRow() - 1, c = mCurrentSquare.getCol() - 1; r >= southMin && c >= westMin && !done; r--, c--)
-				{
-					dest = board.getSquare(r, c);
-					done = !addLegalDest(dest);
-					done = mIsLeaper ? false : (done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece()
-							.equals(board.getGame().getOtherObjectivePiece(isBlack())))));
-				}
-			}
+		southMin = mCurrentSquare.getRow() - distance;
+		if (southMin <= 1 || distance == PieceMovements.UNLIMITED)
+			southMin = 1;
+
+		for (int r = mCurrentSquare.getRow() - 1, c = mCurrentSquare.getCol() - 1; r >= southMin && c >= westMin && !done; r--, c--)
+		{
+			dest = board.getSquare(r, c);
+			done = !addLegalDest(dest);
+			done = mIsLeaper ? false : (done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece().equals(
+					board.getGame().getOtherObjectivePiece(isBlack())))));
 		}
 
 		/*
@@ -484,109 +470,109 @@ public class Piece implements Serializable
 		 * 
 		 * IE: A knight can move 1 by 2 or 2 by 1, but not 1 by 1 or 2 by 2
 		 */
-		if (mKnightMovements != null)
+		for (BidirectionalMovement movement : mPieceMovements.getBidirectionalMovements())
 		{
-			for (KnightMovement movement : mKnightMovements)
+			int f, r;
+			int rank = movement.getRowDistance();
+			int file = movement.getColumnDistance();
+
+			// one o'clock
+			f = (mCurrentSquare.getRow() + file);
+			r = (mCurrentSquare.getCol() + rank);
+			if (wraparound)
 			{
-				int f, r;
-				int rank = movement.getKnightOne();
-				int file = movement.getKnightTwo();
-				f = (mCurrentSquare.getRow() + file);
-				r = (mCurrentSquare.getCol() + rank);
-				if (wraparound)
-				{
-					if (r > board.getMaxCol() + 1)
-						r = r % board.getMaxCol();
-				}
-
-				if (board.isRowValid(f) && board.isColValid(r))
-					addLegalDest(board.getSquare(f, r));
-
-				// two o'clock
-				f = (mCurrentSquare.getRow() + rank);
-				r = (mCurrentSquare.getCol() + file);
-				if (wraparound)
-				{
-					if (r > board.getMaxCol() + 1)
-						r = r % board.getMaxCol();
-				}
-
-				if (board.isRowValid(f) && board.isColValid(r))
-					addLegalDest(board.getSquare(f, r));
-
-				// four o'clock
-				f = (mCurrentSquare.getRow() + file);
-				r = (mCurrentSquare.getCol() - rank);
-				if (wraparound)
-				{
-					if (r < 1)
-						r = board.getMaxCol() + r;
-				}
-
-				if (board.isRowValid(f) && board.isColValid(r))
-					addLegalDest(board.getSquare(f, r));
-
-				// five o'clock
-				f = (mCurrentSquare.getRow() + rank);
-				r = (mCurrentSquare.getCol() - file);
-				if (wraparound)
-				{
-					if (r < 1)
-						r = board.getMaxCol() + r;
-				}
-
-				if (board.isRowValid(f) && board.isColValid(r))
-					addLegalDest(board.getSquare(f, r));
-
-				// seven o'clock
-				f = (mCurrentSquare.getRow() - file);
-				r = (mCurrentSquare.getCol() - rank);
-				if (wraparound)
-				{
-					if (r < 1)
-						r = board.getMaxCol() + r;
-				}
-
-				if (board.isRowValid(f) && board.isColValid(r))
-					addLegalDest(board.getSquare(f, r));
-
-				// eight o'clock
-				f = (mCurrentSquare.getRow() - rank);
-				r = (mCurrentSquare.getCol() - file);
-				if (wraparound)
-				{
-					if (r < 1)
-						r = board.getMaxCol() + r;
-				}
-
-				if (board.isRowValid(f) && board.isColValid(r))
-					addLegalDest(board.getSquare(f, r));
-
-				// ten o'clock
-				f = (mCurrentSquare.getRow() - file);
-				r = (mCurrentSquare.getCol() + rank);
-				if (wraparound)
-				{
-					if (r > board.getMaxCol() + 1)
-						r = r % board.getMaxCol();
-				}
-
-				if (board.isRowValid(f) && board.isColValid(r))
-					addLegalDest(board.getSquare(f, r));
-
-				// eleven o'clock
-				f = (mCurrentSquare.getRow() - rank);
-				r = (mCurrentSquare.getCol() + file);
-				if (wraparound)
-				{
-					if (r > board.getMaxCol() + 1)
-						r = r % board.getMaxCol();
-				}
-
-				if (board.isRowValid(f) && board.isColValid(r))
-					addLegalDest(board.getSquare(f, r));
+				if (r > board.getMaxCol() + 1)
+					r = r % board.getMaxCol();
 			}
+
+			if (board.isRowValid(f) && board.isColValid(r))
+				addLegalDest(board.getSquare(f, r));
+
+			// two o'clock
+			f = (mCurrentSquare.getRow() + rank);
+			r = (mCurrentSquare.getCol() + file);
+			if (wraparound)
+			{
+				if (r > board.getMaxCol() + 1)
+					r = r % board.getMaxCol();
+			}
+
+			if (board.isRowValid(f) && board.isColValid(r))
+				addLegalDest(board.getSquare(f, r));
+
+			// four o'clock
+			f = (mCurrentSquare.getRow() + file);
+			r = (mCurrentSquare.getCol() - rank);
+			if (wraparound)
+			{
+				if (r < 1)
+					r = board.getMaxCol() + r;
+			}
+
+			if (board.isRowValid(f) && board.isColValid(r))
+				addLegalDest(board.getSquare(f, r));
+
+			// five o'clock
+			f = (mCurrentSquare.getRow() + rank);
+			r = (mCurrentSquare.getCol() - file);
+			if (wraparound)
+			{
+				if (r < 1)
+					r = board.getMaxCol() + r;
+			}
+
+			if (board.isRowValid(f) && board.isColValid(r))
+				addLegalDest(board.getSquare(f, r));
+
+			// seven o'clock
+			f = (mCurrentSquare.getRow() - file);
+			r = (mCurrentSquare.getCol() - rank);
+			if (wraparound)
+			{
+				if (r < 1)
+					r = board.getMaxCol() + r;
+			}
+
+			if (board.isRowValid(f) && board.isColValid(r))
+				addLegalDest(board.getSquare(f, r));
+
+			// eight o'clock
+			f = (mCurrentSquare.getRow() - rank);
+			r = (mCurrentSquare.getCol() - file);
+			if (wraparound)
+			{
+				if (r < 1)
+					r = board.getMaxCol() + r;
+			}
+
+			if (board.isRowValid(f) && board.isColValid(r))
+				addLegalDest(board.getSquare(f, r));
+
+			// ten o'clock
+			f = (mCurrentSquare.getRow() - file);
+			r = (mCurrentSquare.getCol() + rank);
+			if (wraparound)
+			{
+				if (r > board.getMaxCol() + 1)
+					r = r % board.getMaxCol();
+			}
+
+			if (board.isRowValid(f) && board.isColValid(r))
+				addLegalDest(board.getSquare(f, r));
+
+			// eleven o'clock
+			f = (mCurrentSquare.getRow() - rank);
+			r = (mCurrentSquare.getCol() + file);
+			if (wraparound)
+			{
+				if (r > board.getMaxCol() + 1)
+					r = r % board.getMaxCol();
+			}
+
+			if (board.isRowValid(f) && board.isColValid(r))
+				addLegalDest(board.getSquare(f, r));
 		}
+
 		return getLegalDests().size();
 	}
 
@@ -666,7 +652,7 @@ public class Piece implements Serializable
 		if (originCol == targetCol)
 		{
 			// North
-			if (originRow < targetRow && canAttack(targetRow, targetCol, PieceBuilder.NORTH))
+			if (originRow < targetRow && canAttack(targetRow, targetCol, MovementDirection.NORTH))
 			{
 				for (r = (originRow + 1); r <= targetRow; r++)
 				{
@@ -677,7 +663,7 @@ public class Piece implements Serializable
 			// South
 			else
 			{
-				if (canAttack(targetRow, targetCol, PieceBuilder.SOUTH))
+				if (canAttack(targetRow, targetCol, MovementDirection.SOUTH))
 				{
 					for (r = (originRow - 1); r >= targetRow; r--)
 					{
@@ -692,7 +678,7 @@ public class Piece implements Serializable
 		else if (originRow == targetRow)
 		{
 			// East
-			if (originCol < targetCol && canAttack(targetRow, targetCol, PieceBuilder.EAST))
+			if (originCol < targetCol && canAttack(targetRow, targetCol, MovementDirection.EAST))
 			{
 				for (c = (originCol + 1); c <= targetCol; c++)
 				{
@@ -703,7 +689,7 @@ public class Piece implements Serializable
 			// West
 			else
 			{
-				if (canAttack(targetRow, targetCol, PieceBuilder.WEST))
+				if (canAttack(targetRow, targetCol, MovementDirection.WEST))
 				{
 					for (c = (originCol - 1); c >= targetCol; c--)
 					{
@@ -718,7 +704,7 @@ public class Piece implements Serializable
 		else if ((originCol - targetCol) == (originRow - targetRow))
 		{
 			// Northeast
-			if (originRow < targetRow && canAttack(targetRow, targetCol, PieceBuilder.NORTHEAST))
+			if (originRow < targetRow && canAttack(targetRow, targetCol, MovementDirection.NORTHEAST))
 			{
 				for (c = (originCol + 1), r = (originRow + 1); r <= targetRow; c++, r++)
 				{
@@ -729,7 +715,7 @@ public class Piece implements Serializable
 			// Southwest
 			else
 			{
-				if (canAttack(targetRow, targetCol, PieceBuilder.SOUTHWEST))
+				if (canAttack(targetRow, targetCol, MovementDirection.SOUTHWEST))
 				{
 					for (c = (originCol - 1), r = (originRow - 1); r >= targetRow; c--, r--)
 					{
@@ -743,7 +729,7 @@ public class Piece implements Serializable
 		else if ((originCol - targetCol) == ((originRow - targetRow) * -1))
 		{
 			// Northwest
-			if ((originRow - targetRow) < 0 && canAttack(targetRow, targetCol, PieceBuilder.NORTHWEST))
+			if ((originRow - targetRow) < 0 && canAttack(targetRow, targetCol, MovementDirection.NORTHWEST))
 			{
 				for (c = (originCol - 1), r = (originRow + 1); r <= targetRow; c--, r++)
 				{
@@ -754,7 +740,7 @@ public class Piece implements Serializable
 			// Southeast
 			else
 			{
-				if (canAttack(targetRow, targetCol, PieceBuilder.SOUTHEAST))
+				if (canAttack(targetRow, targetCol, MovementDirection.SOUTHEAST))
 				{
 					for (c = (originCol + 1), r = (originRow - 1); r >= targetRow; c++, r--)
 					{
@@ -785,45 +771,30 @@ public class Piece implements Serializable
 	 * @return true if you are allowed to take that space and/or the piece on
 	 * it, false otherwise
 	 */
-	public boolean canAttack(int destRow, int destCol, char direction)
+	public boolean canAttack(int destRow, int destCol, MovementDirection direction)
 	{
-		if (mMovements == null)
-			return false;
+		int distance = mPieceMovements.getDistance(direction);
+		if (distance == PieceMovements.UNLIMITED)
+			return true;
 
 		switch (direction)
 		{
-		case PieceBuilder.SOUTH:
-			if (mMovements.containsKey(PieceBuilder.SOUTH))
-				return (destRow - mCurrentSquare.getRow()) < mMovements.get(PieceBuilder.SOUTH)
-						|| mMovements.get(PieceBuilder.SOUTH) == -1;
-		case PieceBuilder.NORTH:
-			if (mMovements.containsKey(PieceBuilder.NORTH))
-				return (mCurrentSquare.getRow() - destRow) < mMovements.get(PieceBuilder.NORTH)
-						|| mMovements.get(PieceBuilder.NORTH) == -1;
-		case PieceBuilder.EAST:
-			if (mMovements.containsKey(PieceBuilder.EAST))
-				return (destCol - mCurrentSquare.getCol()) < mMovements.get(PieceBuilder.EAST)
-						|| mMovements.get(PieceBuilder.EAST) == -1;
-		case PieceBuilder.WEST:
-			if (mMovements.containsKey(PieceBuilder.WEST))
-				return (mCurrentSquare.getCol() - destCol) < mMovements.get(PieceBuilder.WEST)
-						|| mMovements.get(PieceBuilder.WEST) == -1;
-		case PieceBuilder.NORTHEAST:
-			if (mMovements.containsKey(PieceBuilder.NORTHEAST))
-				return (mCurrentSquare.getCol() - destCol) < mMovements.get(PieceBuilder.NORTHEAST)
-						|| mMovements.get(PieceBuilder.NORTHEAST) == -1;
-		case PieceBuilder.SOUTHEAST:
-			if (mMovements.containsKey(PieceBuilder.SOUTHEAST))
-				return (mCurrentSquare.getCol() - destCol) < mMovements.get(PieceBuilder.SOUTHEAST)
-						|| mMovements.get(PieceBuilder.SOUTHEAST) == -1;
-		case PieceBuilder.NORTHWEST:
-			if (mMovements.containsKey(PieceBuilder.NORTHWEST))
-				return (destCol - mCurrentSquare.getCol()) < mMovements.get(PieceBuilder.NORTHWEST)
-						|| mMovements.get(PieceBuilder.NORTHWEST) == -1;
-		case PieceBuilder.SOUTHWEST:
-			if (mMovements.containsKey(PieceBuilder.SOUTHWEST))
-				return (destCol - mCurrentSquare.getCol()) < mMovements.get(PieceBuilder.SOUTHWEST)
-						|| mMovements.get(PieceBuilder.SOUTHWEST) == -1;
+		case SOUTH:
+			return (destRow - mCurrentSquare.getRow()) < distance;
+		case NORTH:
+			return (mCurrentSquare.getRow() - destRow) < distance;
+		case EAST:
+			return (destCol - mCurrentSquare.getCol()) < distance;
+		case WEST:
+			return (mCurrentSquare.getCol() - destCol) < distance;
+		case NORTHEAST:
+			return (mCurrentSquare.getCol() - destCol) < distance;
+		case SOUTHEAST:
+			return (mCurrentSquare.getCol() - destCol) < distance;
+		case NORTHWEST:
+			return (destCol - mCurrentSquare.getCol()) < distance;
+		case SOUTHWEST:
+			return (destCol - mCurrentSquare.getCol()) < distance;
 		default:
 			throw new IllegalArgumentException("Unknown movement direction character");
 		}
@@ -874,63 +845,50 @@ public class Piece implements Serializable
 		builder.append("</b><br/>"); //$NON-NLS-1$
 
 		builder.append("<table><tr>"); //$NON-NLS-1$
-		if (mMovements != null)
-		{
-			builder.append("<td>"); //$NON-NLS-1$
-			builder.append("<table border=\"1\"> <tr> <td align=\"center\">"); //$NON-NLS-1$
-			builder.append(directionToTooltip(mMovements.get(PieceBuilder.NORTHWEST)));
-			builder.append("</td><td align=\"center\">"); //$NON-NLS-1$
-			builder.append(directionToTooltip(mMovements.get(PieceBuilder.NORTH)));
-			builder.append("</td><td align=\"center\">"); //$NON-NLS-1$
-			builder.append(directionToTooltip(mMovements.get(PieceBuilder.NORTHEAST)));
-			builder.append("</td></tr>"); //$NON-NLS-1$
+		builder.append("<td>"); //$NON-NLS-1$
+		builder.append("<table border=\"1\"> <tr> <td align=\"center\">"); //$NON-NLS-1$
+		builder.append(directionToTooltip(mPieceMovements.getDistance(MovementDirection.NORTHWEST)));
+		builder.append("</td><td align=\"center\">"); //$NON-NLS-1$
+		builder.append(directionToTooltip(mPieceMovements.getDistance(MovementDirection.NORTH)));
+		builder.append("</td><td align=\"center\">"); //$NON-NLS-1$
+		builder.append(directionToTooltip(mPieceMovements.getDistance(MovementDirection.NORTHEAST)));
+		builder.append("</td></tr>"); //$NON-NLS-1$
 
-			builder.append("<tr> <td align=\"center\">"); //$NON-NLS-1$
-			builder.append(directionToTooltip(mMovements.get(PieceBuilder.WEST)));
-			builder.append("</td><td align=\"center\">"); //$NON-NLS-1$
-			builder.append(mName.equals(Messages.getString("Piece.knight")) ? Messages.getString("Piece.knightChar") : mName.charAt(0)); //$NON-NLS-1$ //$NON-NLS-2$
-			builder.append("</td><td align=\"center\">"); //$NON-NLS-1$
-			builder.append(directionToTooltip(mMovements.get(PieceBuilder.EAST)));
-			builder.append("</td></tr>"); //$NON-NLS-1$
+		builder.append("<tr> <td align=\"center\">"); //$NON-NLS-1$
+		builder.append(directionToTooltip(mPieceMovements.getDistance(MovementDirection.WEST)));
+		builder.append("</td><td align=\"center\">"); //$NON-NLS-1$
+		builder.append(mName.equals(Messages.getString("Piece.knight")) ? Messages.getString("Piece.knightChar") : mName.charAt(0)); //$NON-NLS-1$ //$NON-NLS-2$
+		builder.append("</td><td align=\"center\">"); //$NON-NLS-1$
+		builder.append(directionToTooltip(mPieceMovements.getDistance(MovementDirection.EAST)));
+		builder.append("</td></tr>"); //$NON-NLS-1$
 
-			builder.append("<tr> <td align=\"center\">"); //$NON-NLS-1$
-			builder.append(directionToTooltip(mMovements.get(PieceBuilder.SOUTHWEST)));
-			builder.append("</td><td align=\"center\">"); //$NON-NLS-1$
-			builder.append(directionToTooltip(mMovements.get(PieceBuilder.SOUTH)));
-			builder.append("</td><td align=\"center\">"); //$NON-NLS-1$
-			builder.append(directionToTooltip(mMovements.get(PieceBuilder.SOUTHEAST)));
-			builder.append("</td></tr>"); //$NON-NLS-1$
+		builder.append("<tr> <td align=\"center\">"); //$NON-NLS-1$
+		builder.append(directionToTooltip(mPieceMovements.getDistance(MovementDirection.SOUTHWEST)));
+		builder.append("</td><td align=\"center\">"); //$NON-NLS-1$
+		builder.append(directionToTooltip(mPieceMovements.getDistance(MovementDirection.SOUTH)));
+		builder.append("</td><td align=\"center\">"); //$NON-NLS-1$
+		builder.append(directionToTooltip(mPieceMovements.getDistance(MovementDirection.SOUTHEAST)));
+		builder.append("</td></tr>"); //$NON-NLS-1$
 
-			builder.append("</table>"); //$NON-NLS-1$
+		builder.append("</table>"); //$NON-NLS-1$
 
-			builder.append("</td>"); //$NON-NLS-1$
-		}
+		builder.append("</td>"); //$NON-NLS-1$
 
 		builder.append("<td>"); //$NON-NLS-1$
 		if (mIsLeaper)
-		{
 			builder.append(Messages.getString("Piece.ableToLeapBr")); //$NON-NLS-1$
-		}
 		else
-		{
 			builder.append(Messages.getString("Piece.notAbleToLeapBr")); //$NON-NLS-1$
+
+		for (BidirectionalMovement movement : mPieceMovements.getBidirectionalMovements())
+		{
+			builder.append("- "); //$NON-NLS-1$
+			builder.append(movement.getRowDistance());
+			builder.append(" x "); //$NON-NLS-1$
+			builder.append(movement.getColumnDistance());
+			builder.append("<br/>"); //$NON-NLS-1$
 		}
 
-		if (mKnightMovements != null && mKnightMovements.size() != 0)
-		{
-			for (KnightMovement movement : mKnightMovements)
-			{
-				builder.append("- "); //$NON-NLS-1$
-				builder.append(movement.getKnightOne());
-				builder.append(" x "); //$NON-NLS-1$
-				builder.append(movement.getKnightTwo());
-				builder.append("<br/>"); //$NON-NLS-1$
-			}
-		}
-		else
-		{
-			builder.append(Messages.getString("Piece.noKnightLikeMovements")); //$NON-NLS-1$
-		}
 		builder.append("</td>"); //$NON-NLS-1$
 
 		builder.append("</html>"); //$NON-NLS-1$
@@ -939,9 +897,7 @@ public class Piece implements Serializable
 
 	private String directionToTooltip(Integer direction)
 	{
-		if (direction == null)
-			return "0"; //$NON-NLS-1$
-		else if (direction == -1)
+		if (direction == PieceMovements.UNLIMITED)
 			return "&infin;"; //$NON-NLS-1$
 		else
 			return direction.toString();
@@ -1110,13 +1066,6 @@ public class Piece implements Serializable
 		mPromotesTo = promotesTo;
 	}
 
-	public void addKnightMove(KnightMovement kMovement)
-	{
-		if (mKnightMovements == null)
-			mKnightMovements = Lists.newArrayList();
-		mKnightMovements.add(kMovement);
-	}
-
 	private static final long serialVersionUID = -6571501595221097922L;
 
 	private boolean mIsBlack;
@@ -1126,9 +1075,7 @@ public class Piece implements Serializable
 	private Square mCurrentSquare;
 	private Board mBoard;
 	private String mName;
-	private Map<Character, Integer> mMovements;
-
-	private List<KnightMovement> mKnightMovements;
+	private PieceMovements mPieceMovements;
 
 	private boolean mIsLeaper;
 	private int mMoveCount;

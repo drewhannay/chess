@@ -21,8 +21,8 @@ import javax.swing.SwingConstants;
 
 import logic.AlgebraicConverter;
 import logic.Board;
-import logic.Builder;
 import logic.Game;
+import logic.GameBuilder;
 import logic.Move;
 import logic.Piece;
 import logic.Result;
@@ -39,7 +39,7 @@ public class WatchGamePanel extends JPanel implements WatchGameScreen
 		Game game = null;
 		try
 		{
-			game = AlgebraicConverter.convert(Builder.newGame(Messages.getString("PlayGamePanel.classic")), saveFile); //$NON-NLS-1$
+			game = AlgebraicConverter.convert(GameBuilder.newGame(Messages.getString("PlayGamePanel.classic")), saveFile); //$NON-NLS-1$
 		}
 		catch (Exception e1)
 		{
@@ -79,7 +79,6 @@ public class WatchGamePanel extends JPanel implements WatchGameScreen
 		}
 		catch (Exception e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

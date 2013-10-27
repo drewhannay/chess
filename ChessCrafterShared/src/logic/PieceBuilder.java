@@ -6,11 +6,12 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import logic.PieceMovements.MovementDirection;
 import utility.FileUtility;
-import com.google.common.collect.Lists;
+
 import com.google.common.collect.Maps;
 
 public class PieceBuilder implements Serializable
@@ -43,8 +44,8 @@ public class PieceBuilder implements Serializable
 	 */
 	public PieceBuilder()
 	{
-		mMovements = Maps.newHashMap();
-		mKnightMovements = Lists.newArrayList();
+		// TODO: are both of these constructors necessary?
+		mPieceMovements = new PieceMovements();
 	}
 
 	/**
@@ -61,15 +62,9 @@ public class PieceBuilder implements Serializable
 		 */
 		mName = name;
 		if (!PieceBuilder.isPieceType(name))
-		{
-			mMovements = Maps.newHashMap();
-			mKnightMovements = Lists.newArrayList();
-		}
+			mPieceMovements = new PieceMovements();
 		else
-		{
-			mMovements = mPieceTypes.get(name).getMovements();
-			mKnightMovements = mPieceTypes.get(name).getKnightMovements();
-		}
+			mPieceMovements = mPieceTypes.get(name).getPieceMovements();
 	}
 
 	/**
@@ -161,17 +156,9 @@ public class PieceBuilder implements Serializable
 		}
 	}
 
-	/**
-	 * Add a movement to the HashMap
-	 * 
-	 * @param c Character representing the direction of movement (
-	 * @param num The number of spaces permissible to move in that direction, -1
-	 * for infinity.
-	 */
-	public void addMove(char c, int num)
+	public void addMovement(MovementDirection direction, int distance)
 	{
-		// TODO Check that c is valid.
-		mMovements.put(c, num);
+		mPieceMovements.addMovement(direction, distance);
 	}
 
 	/**
@@ -187,36 +174,19 @@ public class PieceBuilder implements Serializable
 	{
 		// TODO is it worth using reflection to get rid of that if/else?
 		if (mName.equals(Messages.getString("bishop"))) //$NON-NLS-1$
-			return Builder.createBishop(isBlack, origin, board);
+			return GameBuilder.createBishop(isBlack, origin, board);
 		if (mName.equals(Messages.getString("king"))) //$NON-NLS-1$
-			return Builder.createKing(isBlack, origin, board);
+			return GameBuilder.createKing(isBlack, origin, board);
 		if (mName.equals(Messages.getString("knight"))) //$NON-NLS-1$
-			return Builder.createKnight(isBlack, origin, board);
+			return GameBuilder.createKnight(isBlack, origin, board);
 		if (mName.equals(Messages.getString("pawn"))) //$NON-NLS-1$
-			return Builder.createPawn(isBlack, origin, board);
+			return GameBuilder.createPawn(isBlack, origin, board);
 		if (mName.equals(Messages.getString("queen"))) //$NON-NLS-1$
-			return Builder.createQueen(isBlack, origin, board);
+			return GameBuilder.createQueen(isBlack, origin, board);
 		if (mName.equals(Messages.getString("rook"))) //$NON-NLS-1$
-			return Builder.createRook(isBlack, origin, board);
+			return GameBuilder.createRook(isBlack, origin, board);
 		else
-		{
-			Piece toReturn = new Piece(mName, isBlack, origin, board, mMovements, mCanJump);
-			for (KnightMovement kMovement : mKnightMovements)
-				toReturn.addKnightMove(kMovement);
-			return toReturn;
-		}
-		// try {
-		//
-		// Class<?> klazz = Class.forName("logic." + name);
-		// Constructor<?> con = klazz.getConstructor(boolean.class,
-		// Square.class, Board.class);
-		// return (Piece) con.newInstance(isBlack, origin, board);
-		// } catch (Exception e) {
-		// //TODO Make sure darkImage and lightImage are not null. Or does that
-		// matter?
-		// return new Piece(name, darkImage, lightImage, isBlack, origin, board,
-		// movements);
-		// }
+			return new Piece(mName, isBlack, origin, board, mPieceMovements, mCanJump);
 	}
 
 	public void setName(String name)
@@ -229,9 +199,9 @@ public class PieceBuilder implements Serializable
 		return mName;
 	}
 
-	public Map<Character, Integer> getMovements()
+	public PieceMovements getPieceMovements()
 	{
-		return mMovements;
+		return mPieceMovements;
 	}
 
 	public boolean canJump()
@@ -244,46 +214,21 @@ public class PieceBuilder implements Serializable
 		this.mCanJump = mCanJump;
 	}
 
-	public List<KnightMovement> getKnightMovements()
+	public void clearBidirectionalMovements()
 	{
-		return mKnightMovements;
+		mPieceMovements.clearBidirectionalMovements();
 	}
 
-	public void clearKnightMovements()
+	public void addBidirectionalMovement(BidirectionalMovement movement)
 	{
-		if (mKnightMovements != null)
-			mKnightMovements.clear();
-	}
-
-	public void addKnightMovement(KnightMovement knightMovement)
-	{
-		if (mKnightMovements == null)
-			mKnightMovements = Lists.newArrayList();
-		if (!mKnightMovements.contains(knightMovement))
-			mKnightMovements.add(knightMovement);
-	}
-
-	public boolean getIsKnightLike()
-	{
-		return mKnightMovements != null && mKnightMovements.size() != 0;
+		mPieceMovements.addBidirectionalMovement(movement);
 	}
 
 	private static final long serialVersionUID = -1351201562740885961L;
 
 	private static Map<String, PieceBuilder> mPieceTypes;
 
-	public static final char NORTH = 'n';
-	public static final char SOUTH = 's';
-	public static final char EAST = 'e';
-	public static final char WEST = 'w';
-	public static final char NORTHWEST = 'f';
-	public static final char NORTHEAST = 'g';
-	public static final char SOUTHWEST = 'a';
-	public static final char SOUTHEAST = 'd';
-
 	private boolean mCanJump;
 	private String mName;
-	private Map<Character, Integer> mMovements;
-	private List<KnightMovement> mKnightMovements;
-
+	private PieceMovements mPieceMovements;
 }

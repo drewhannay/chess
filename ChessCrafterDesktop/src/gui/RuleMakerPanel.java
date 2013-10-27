@@ -22,7 +22,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 import logic.Board;
-import logic.Builder;
+import logic.GameBuilder;
 import logic.PieceBuilder;
 import rules.AdjustTeamLegalDestinations;
 import rules.AfterMove;
@@ -440,7 +440,7 @@ public class RuleMakerPanel extends ChessPanel
 						mWhiteRules.addEndOfGame(EndOfGame.CAPTURE_ALL_OF_TYPE.init(0, whitePieceList.getSelectedItem().toString(),
 								false));
 					}
-					mBuilder.addToPromotionMap(mWhiteRules.getObjectiveName(), null, Builder.WHITE);
+					mBuilder.addToPromotionMap(mWhiteRules.getObjectiveName(), null, GameBuilder.WHITE);
 				}
 				if (blackNumberOfChecksField.isVisible())
 				{
@@ -481,7 +481,7 @@ public class RuleMakerPanel extends ChessPanel
 						mBlackRules.addEndOfGame(EndOfGame.CAPTURE_ALL_OF_TYPE.init(0, blackPiecesList.getSelectedItem().toString(),
 								true));
 					}
-					mBuilder.addToPromotionMap(mBlackRules.getObjectiveName(), null, Builder.BLACK);
+					mBuilder.addToPromotionMap(mBlackRules.getObjectiveName(), null, GameBuilder.BLACK);
 				}
 
 				customSetupMenu.mWhiteRules = mWhiteRules;
@@ -667,7 +667,7 @@ public class RuleMakerPanel extends ChessPanel
 	private static final long serialVersionUID = 8365806731061105370L;
 	static boolean mNeedsObjectivePiece = false;
 
-	private Builder mBuilder;
+	private GameBuilder mBuilder;
 	private Rules mWhiteRules = new Rules(false);
 	private Rules mBlackRules = new Rules(true);
 	private JFrame mFrame;

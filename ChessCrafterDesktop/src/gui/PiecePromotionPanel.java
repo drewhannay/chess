@@ -18,7 +18,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import logic.Builder;
+import logic.GameBuilder;
 import logic.PieceBuilder;
 import utility.FileUtility;
 import utility.GuiUtility;
@@ -310,13 +310,13 @@ public class PiecePromotionPanel extends ChessPanel
 				for (int i = 0; i < whiteCanPromoteList.size(); i++)
 					whitePromotesTo.add((String) whiteCanPromoteList.get(i));
 
-				mCustomSetupMenu.putPromotionMap(mPieceBeingPromotedName, whitePromotesTo, Builder.WHITE);
+				mCustomSetupMenu.putPromotionMap(mPieceBeingPromotedName, whitePromotesTo, GameBuilder.WHITE);
 
 				List<String> blackPromotesTo = Lists.newArrayList();
 				for (int i = 0; i < blackCanPromoteList.size(); i++)
 					blackPromotesTo.add((String) blackCanPromoteList.get(i));
 
-				mCustomSetupMenu.putPromotionMap(mPieceBeingPromotedName, blackPromotesTo, Builder.BLACK);
+				mCustomSetupMenu.putPromotionMap(mPieceBeingPromotedName, blackPromotesTo, GameBuilder.BLACK);
 
 				PiecePromotionPanel.this.removeAll();
 				mFrame.setVisible(false);

@@ -19,7 +19,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.URL;
 import java.util.List;
-import java.util.Map;
 import java.util.StringTokenizer;
 
 import javax.imageio.ImageIO;
@@ -36,10 +35,12 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileFilter;
 
-import logic.Builder;
-import logic.KnightMovement;
+import logic.BidirectionalMovement;
+import logic.GameBuilder;
 import logic.Piece;
 import logic.PieceBuilder;
+import logic.PieceMovements;
+import logic.PieceMovements.MovementDirection;
 import utility.FileUtility;
 import utility.GuiUtility;
 import utility.ImageUtility;
@@ -67,7 +68,7 @@ public class PieceMakerPanel extends ChessPanel
 		mNorthWestField = new JTextField(4);
 		mKnightOneField = new JTextField(4);
 		mKnightTwoField = new JTextField(4);
-		mKnightComboBox = new JComboBox();
+		mBidirectionalMovementComboBox = new JComboBox();
 		mAddKnightMoveButton = new JButton(Messages.getString("PieceMakerPanel.add")); //$NON-NLS-1$
 		mRemoveKnightMoveButton = new JButton(Messages.getString("PieceMakerPanel.remove")); //$NON-NLS-1$
 		new PieceMakerPanel(null, menuPanel);
@@ -101,20 +102,20 @@ public class PieceMakerPanel extends ChessPanel
 		if (pieceName != null)
 			builder = PieceBuilder.loadFromDisk(pieceName);
 
-		mTempKnightMovements = Lists.newArrayList();
-		if (builder != null && builder.getKnightMovements() != null)
+		mTempBidirectionalMovements = Lists.newArrayList();
+		if (builder != null)
 		{
-			mKnightComboBox = new JComboBox(builder.getKnightMovements().toArray());
-			for (KnightMovement kMovement : builder.getKnightMovements())
-			{
-				mTempKnightMovements.add(kMovement.toString());
-			}
-			mKnightComboBox.setSelectedIndex(0);
+			List<BidirectionalMovement> bidirectionalMovements = builder.getPieceMovements().getBidirectionalMovements();
+			mBidirectionalMovementComboBox = new JComboBox(bidirectionalMovements.toArray());
+			for (BidirectionalMovement movement : bidirectionalMovements)
+				mTempBidirectionalMovements.add(movement.toString());
+
+			mBidirectionalMovementComboBox.setSelectedIndex(0);
 		}
 		else
 		{
-			mKnightComboBox = new JComboBox();
-			mKnightComboBox.setEnabled(false);
+			mBidirectionalMovementComboBox = new JComboBox();
+			mBidirectionalMovementComboBox.setEnabled(false);
 		}
 
 		initGUIComponents(builder);
@@ -224,29 +225,24 @@ public class PieceMakerPanel extends ChessPanel
 		constraints.gridy = 2;
 		pieceCreationPanel.add(darkIconPanel, constraints);
 
-		// TODO: What is this? I don't think we use it, and I can't imagine
-		// needing it...
-		final JComboBox dropdown = new JComboBox(DIRECTIONS);
-		dropdown.setToolTipText(Messages.getString("PieceMakerPanel.thisDropDown")); //$NON-NLS-1$
-
-		Map<Character, Integer> moveMap = builder == null ? null : builder.getMovements();
+		PieceMovements movements = builder == null ? null : builder.getPieceMovements();
 
 		mNorthField.setToolTipText(Messages.getString("PieceMakerPanel.north")); //$NON-NLS-1$
-		mNorthField.setText(builder == null ? "0" : "" + moveMap.get(PieceBuilder.NORTH)); //$NON-NLS-1$ //$NON-NLS-2$
+		mNorthField.setText(builder == null ? "0" : "" + movements.getDistance(MovementDirection.NORTH)); //$NON-NLS-1$ //$NON-NLS-2$
 		mNorthEastField.setToolTipText(Messages.getString("PieceMakerPanel.northEast")); //$NON-NLS-1$
-		mNorthEastField.setText(builder == null ? "0" : "" + moveMap.get(PieceBuilder.NORTHEAST)); //$NON-NLS-1$ //$NON-NLS-2$
+		mNorthEastField.setText(builder == null ? "0" : "" + movements.getDistance(MovementDirection.NORTHEAST)); //$NON-NLS-1$ //$NON-NLS-2$
 		mNorthWestField.setToolTipText(Messages.getString("PieceMakerPanel.northwest")); //$NON-NLS-1$
-		mNorthWestField.setText(builder == null ? "0" : "" + moveMap.get(PieceBuilder.NORTHWEST)); //$NON-NLS-1$ //$NON-NLS-2$
+		mNorthWestField.setText(builder == null ? "0" : "" + movements.getDistance(MovementDirection.NORTHWEST)); //$NON-NLS-1$ //$NON-NLS-2$
 		mEastField.setToolTipText(Messages.getString("PieceMakerPanel.east")); //$NON-NLS-1$
-		mEastField.setText(builder == null ? "0" : "" + moveMap.get(PieceBuilder.EAST)); //$NON-NLS-1$ //$NON-NLS-2$
+		mEastField.setText(builder == null ? "0" : "" + movements.getDistance(MovementDirection.EAST)); //$NON-NLS-1$ //$NON-NLS-2$
 		mSouthEastField.setToolTipText(Messages.getString("PieceMakerPanel.southEast")); //$NON-NLS-1$
-		mSouthEastField.setText(builder == null ? "0" : "" + moveMap.get(PieceBuilder.SOUTHEAST)); //$NON-NLS-1$ //$NON-NLS-2$
+		mSouthEastField.setText(builder == null ? "0" : "" + movements.getDistance(MovementDirection.SOUTHEAST)); //$NON-NLS-1$ //$NON-NLS-2$
 		mSouthField.setToolTipText(Messages.getString("PieceMakerPanel.south")); //$NON-NLS-1$
-		mSouthField.setText(builder == null ? "0" : "" + moveMap.get(PieceBuilder.SOUTH)); //$NON-NLS-1$ //$NON-NLS-2$
+		mSouthField.setText(builder == null ? "0" : "" + movements.getDistance(MovementDirection.SOUTH)); //$NON-NLS-1$ //$NON-NLS-2$
 		mSouthWestField.setToolTipText(Messages.getString("PieceMakerPanel.southWest")); //$NON-NLS-1$
-		mSouthWestField.setText(builder == null ? "0" : "" + moveMap.get(PieceBuilder.SOUTHWEST)); //$NON-NLS-1$ //$NON-NLS-2$
+		mSouthWestField.setText(builder == null ? "0" : "" + movements.getDistance(MovementDirection.SOUTHWEST)); //$NON-NLS-1$ //$NON-NLS-2$
 		mWestField.setToolTipText(Messages.getString("PieceMakerPanel.west")); //$NON-NLS-1$
-		mWestField.setText(builder == null ? "0" : "" + moveMap.get(PieceBuilder.WEST)); //$NON-NLS-1$ //$NON-NLS-2$
+		mWestField.setText(builder == null ? "0" : "" + movements.getDistance(MovementDirection.WEST)); //$NON-NLS-1$ //$NON-NLS-2$
 
 		JLabel movementPictureHolder = null;
 		try
@@ -308,31 +304,31 @@ public class PieceMakerPanel extends ChessPanel
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
-				mKnightComboBox.setEnabled(true);
+				mBidirectionalMovementComboBox.setEnabled(true);
 				mRemoveKnightMoveButton.setEnabled(true);
 				String toAdd = mKnightOneField.getText() + " x " + mKnightTwoField.getText(); //$NON-NLS-1$
-				mTempKnightMovements.add(toAdd);
-				mKnightComboBox.addItem(toAdd);
+				mTempBidirectionalMovements.add(toAdd);
+				mBidirectionalMovementComboBox.addItem(toAdd);
 				mKnightOneField.setText(""); //$NON-NLS-1$
 				mKnightTwoField.setText(""); //$NON-NLS-1$
 				mAddKnightMoveButton.setEnabled(false);
 			}
 		});
 
-		mRemoveKnightMoveButton.setEnabled(mKnightComboBox.getItemCount() != 0);
+		mRemoveKnightMoveButton.setEnabled(mBidirectionalMovementComboBox.getItemCount() != 0);
 		mRemoveKnightMoveButton.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				mTempKnightMovements.remove(mKnightComboBox.getSelectedItem().toString());
-				mKnightComboBox.removeAllItems();
-				for (String kMovement : mTempKnightMovements)
+				mTempBidirectionalMovements.remove(mBidirectionalMovementComboBox.getSelectedItem().toString());
+				mBidirectionalMovementComboBox.removeAllItems();
+				for (String kMovement : mTempBidirectionalMovements)
 				{
-					mKnightComboBox.addItem(kMovement);
+					mBidirectionalMovementComboBox.addItem(kMovement);
 				}
-				mKnightComboBox.setEnabled(mKnightComboBox.getItemCount() != 0);
-				mRemoveKnightMoveButton.setEnabled(mKnightComboBox.getItemCount() != 0);
+				mBidirectionalMovementComboBox.setEnabled(mBidirectionalMovementComboBox.getItemCount() != 0);
+				mRemoveKnightMoveButton.setEnabled(mBidirectionalMovementComboBox.getItemCount() != 0);
 			}
 		});
 
@@ -351,7 +347,7 @@ public class PieceMakerPanel extends ChessPanel
 		constraints.gridy = 0;
 		constraints.gridheight = 1;
 		constraints.gridwidth = 1;
-		knightMovementPanel.add(mKnightComboBox, constraints);
+		knightMovementPanel.add(mBidirectionalMovementComboBox, constraints);
 
 		final JPanel inputPanel = new JPanel();
 		inputPanel.setOpaque(false);
@@ -453,28 +449,28 @@ public class PieceMakerPanel extends ChessPanel
 						&& isIntegerDistance(mEastField) && isIntegerDistance(mWestField) && isIntegerDistance(mSouthField)
 						&& isIntegerDistance(mSouthEastField) && isIntegerDistance(mSouthWestField))
 				{
-					mBuilder.addMove(PieceBuilder.NORTH, Integer.parseInt(mNorthField.getText()));
-					mBuilder.addMove(PieceBuilder.NORTHEAST, Integer.parseInt(mNorthEastField.getText()));
-					mBuilder.addMove(PieceBuilder.NORTHWEST, Integer.parseInt(mNorthWestField.getText()));
-					mBuilder.addMove(PieceBuilder.EAST, Integer.parseInt(mEastField.getText()));
-					mBuilder.addMove(PieceBuilder.WEST, Integer.parseInt(mWestField.getText()));
-					mBuilder.addMove(PieceBuilder.SOUTH, Integer.parseInt(mSouthField.getText()));
-					mBuilder.addMove(PieceBuilder.SOUTHEAST, Integer.parseInt(mSouthEastField.getText()));
-					mBuilder.addMove(PieceBuilder.SOUTHWEST, Integer.parseInt(mSouthWestField.getText()));
+					mBuilder.addMovement(MovementDirection.NORTH, Integer.parseInt(mNorthField.getText()));
+					mBuilder.addMovement(MovementDirection.NORTHEAST, Integer.parseInt(mNorthEastField.getText()));
+					mBuilder.addMovement(MovementDirection.NORTHWEST, Integer.parseInt(mNorthWestField.getText()));
+					mBuilder.addMovement(MovementDirection.EAST, Integer.parseInt(mEastField.getText()));
+					mBuilder.addMovement(MovementDirection.WEST, Integer.parseInt(mWestField.getText()));
+					mBuilder.addMovement(MovementDirection.SOUTH, Integer.parseInt(mSouthField.getText()));
+					mBuilder.addMovement(MovementDirection.SOUTHEAST, Integer.parseInt(mSouthEastField.getText()));
+					mBuilder.addMovement(MovementDirection.SOUTHWEST, Integer.parseInt(mSouthWestField.getText()));
 				}
 
-				if (mKnightComboBox.getItemCount() != 0)
+				if (mBidirectionalMovementComboBox.getItemCount() != 0)
 				{
-					mBuilder.clearKnightMovements();
-					for (int i = 0; i < mKnightComboBox.getItemCount(); i++)
+					mBuilder.clearBidirectionalMovements();
+					for (int i = 0; i < mBidirectionalMovementComboBox.getItemCount(); i++)
 					{
-						String line = mKnightComboBox.getItemAt(i).toString();
+						String line = mBidirectionalMovementComboBox.getItemAt(i).toString();
 						StringTokenizer tokenizer = new StringTokenizer(line);
 
 						int k1 = Integer.parseInt(tokenizer.nextToken());
 						tokenizer.nextToken();
 						int k2 = Integer.parseInt(tokenizer.nextToken());
-						mBuilder.addKnightMovement(new KnightMovement(k1, k2));
+						mBuilder.addBidirectionalMovement(new BidirectionalMovement(k1, k2));
 					}
 				}
 
@@ -563,7 +559,7 @@ public class PieceMakerPanel extends ChessPanel
 			{
 				File variantFile = FileUtility.getVariantsFile(s);
 				ObjectInputStream in = new ObjectInputStream(new FileInputStream(variantFile));
-				Builder builder = (Builder) in.readObject();
+				GameBuilder builder = (GameBuilder) in.readObject();
 
 				for (Piece piece : builder.getWhiteTeam())
 				{
@@ -725,9 +721,6 @@ public class PieceMakerPanel extends ChessPanel
 	}
 
 	private static final long serialVersionUID = -6530771731937840358L;
-	private static final String[] DIRECTIONS = new String[] {
-			Messages.getString("PieceMakerPanel.north"), Messages.getString("PieceMakerPanel.northEast"), Messages.getString("PieceMakerPanel.east"), Messages.getString("PieceMakerPanel.southEast"), Messages.getString("PieceMakerPanel.south"), Messages.getString("PieceMakerPanel.southWest"), Messages.getString("PieceMakerPanel.west"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$
-			Messages.getString("PieceMakerPanel.northWest") }; //$NON-NLS-1$
 
 	private final JTextField mPieceNameField;
 	private final JCheckBox mLeaperCheckBox;
@@ -741,7 +734,7 @@ public class PieceMakerPanel extends ChessPanel
 	private final JTextField mNorthWestField;
 	private final JTextField mKnightOneField;
 	private final JTextField mKnightTwoField;
-	private final JComboBox mKnightComboBox;
+	private final JComboBox mBidirectionalMovementComboBox;
 	private final JButton mAddKnightMoveButton;
 	private final JButton mRemoveKnightMoveButton;
 	private PieceBuilder mBuilder;
@@ -749,5 +742,5 @@ public class PieceMakerPanel extends ChessPanel
 	private BufferedImage mLightImage;
 	private BufferedImage mDarkImage;
 	private JFrame mFrame;
-	private List<String> mTempKnightMovements;
+	private List<String> mTempBidirectionalMovements;
 }

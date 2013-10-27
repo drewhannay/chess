@@ -8,8 +8,11 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+
+import logic.PieceMovements.MovementDirection;
 import rules.Rules;
 import utility.FileUtility;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -19,7 +22,7 @@ import com.google.common.collect.Maps;
  * @author Drew Hannay, Daniel Opdyke & Alisa Maas CSCI 335, Wheaton College,
  * Spring 2011 Phase 2 April 7, 2011
  */
-public class Builder implements Serializable
+public class GameBuilder implements Serializable
 {
 	public static final int BLACK = 1;
 	public static final int WHITE = 2;
@@ -30,7 +33,7 @@ public class Builder implements Serializable
 	 * 
 	 * @param name The name of this Game type
 	 */
-	public Builder(String name)
+	public GameBuilder(String name)
 	{
 		mName = name;
 		mWhiteTeam = Lists.newArrayList();
@@ -47,7 +50,7 @@ public class Builder implements Serializable
 	 * @param blackRules The rules for the black team
 	 * @param whiteRules The rules for the white team
 	 */
-	public Builder(String name, Board[] boards, List<Piece> whiteTeam, List<Piece> blackTeam, Rules whiteRules, Rules blackRules)
+	public GameBuilder(String name, Board[] boards, List<Piece> whiteTeam, List<Piece> blackTeam, Rules whiteRules, Rules blackRules)
 	{
 		mName = name;
 		mBoards = boards;
@@ -64,7 +67,7 @@ public class Builder implements Serializable
 	 */
 	private static void buildClassic() throws IOException
 	{
-		Builder classic = new Builder(Messages.getString("classic"));// Name is Classic chess //$NON-NLS-1$
+		GameBuilder classic = new GameBuilder(Messages.getString("classic"));// Name is Classic chess //$NON-NLS-1$
 		classic.setBoards(new Board[] { new Board(8, 8, false) });
 		Board b = classic.mBoards[0];
 		for (int i = 1; i < 9; i++)
@@ -105,12 +108,14 @@ public class Builder implements Serializable
 	 */
 	public static Piece createBishop(boolean isBlack, Square square, Board board) throws IOException
 	{
-		Map<Character, Integer> bishopMovement = Maps.newHashMap();
-		bishopMovement.put(PieceBuilder.NORTHEAST, -1);
-		bishopMovement.put(PieceBuilder.SOUTHEAST, -1);
-		bishopMovement.put(PieceBuilder.NORTHWEST, -1);
-		bishopMovement.put(PieceBuilder.SOUTHWEST, -1);
-		return new Piece(Messages.getString("bishop"), isBlack, square, board, bishopMovement, false); //$NON-NLS-1$
+		PieceMovements movements = new PieceMovements();
+		movements.addMovement(MovementDirection.NORTHEAST, PieceMovements.UNLIMITED);
+		movements.addMovement(MovementDirection.NORTHEAST, PieceMovements.UNLIMITED);
+		movements.addMovement(MovementDirection.SOUTHEAST, PieceMovements.UNLIMITED);
+		movements.addMovement(MovementDirection.NORTHWEST, PieceMovements.UNLIMITED);
+		movements.addMovement(MovementDirection.SOUTHWEST, PieceMovements.UNLIMITED);
+
+		return new Piece(Messages.getString("bishop"), isBlack, square, board, movements, false); //$NON-NLS-1$
 	}
 
 	/**
@@ -125,16 +130,17 @@ public class Builder implements Serializable
 	 */
 	public static Piece createKing(boolean isBlack, Square square, Board board) throws IOException
 	{
-		Map<Character, Integer> kingMovement = Maps.newHashMap();
-		kingMovement.put(PieceBuilder.NORTH, 1);
-		kingMovement.put(PieceBuilder.SOUTH, 1);
-		kingMovement.put(PieceBuilder.EAST, 1);
-		kingMovement.put(PieceBuilder.WEST, 1);
-		kingMovement.put(PieceBuilder.NORTHEAST, 1);
-		kingMovement.put(PieceBuilder.SOUTHEAST, 1);
-		kingMovement.put(PieceBuilder.NORTHWEST, 1);
-		kingMovement.put(PieceBuilder.SOUTHWEST, 1);
-		return new Piece(Messages.getString("king"), isBlack, square, board, kingMovement, false); //$NON-NLS-1$
+		PieceMovements movements = new PieceMovements();
+		movements.addMovement(MovementDirection.NORTH, 1);
+		movements.addMovement(MovementDirection.SOUTH, 1);
+		movements.addMovement(MovementDirection.EAST, 1);
+		movements.addMovement(MovementDirection.WEST, 1);
+		movements.addMovement(MovementDirection.NORTHEAST, 1);
+		movements.addMovement(MovementDirection.SOUTHEAST, 1);
+		movements.addMovement(MovementDirection.NORTHWEST, 1);
+		movements.addMovement(MovementDirection.SOUTHWEST, 1);
+
+		return new Piece(Messages.getString("king"), isBlack, square, board, movements, false); //$NON-NLS-1$
 	}
 
 	/**
@@ -149,9 +155,10 @@ public class Builder implements Serializable
 	 */
 	public static Piece createKnight(boolean isBlack, Square square, Board board) throws IOException
 	{
-		Piece knight = new Piece(Messages.getString("knight"), isBlack, square, board, null, true); //$NON-NLS-1$
-		knight.addKnightMove(new KnightMovement(1, 2));
-		return knight;
+		PieceMovements movements = new PieceMovements();
+		movements.addBidirectionalMovement(new BidirectionalMovement(1, 2));
+
+		return new Piece(Messages.getString("knight"), isBlack, square, board, movements, true);
 	}
 
 	/**
@@ -166,13 +173,16 @@ public class Builder implements Serializable
 	 */
 	public static Piece createPawn(boolean isBlack, Square square, Board board) throws IOException
 	{
-		Piece pawn = new Piece(Messages.getString("pawn"), isBlack, square, board, null, false); //$NON-NLS-1$
+		PieceMovements movements = new PieceMovements();
+		Piece pawn = new Piece(Messages.getString("pawn"), isBlack, square, board, movements, false); //$NON-NLS-1$
+
 		List<String> promotesTo = Lists.newArrayList();
 		promotesTo.add(Messages.getString("queen")); //$NON-NLS-1$
 		promotesTo.add(Messages.getString("bishop")); //$NON-NLS-1$
 		promotesTo.add(Messages.getString("knight")); //$NON-NLS-1$
 		promotesTo.add(Messages.getString("rook")); //$NON-NLS-1$
 		pawn.setPromotesTo(promotesTo);
+
 		return pawn;
 	}
 
@@ -188,16 +198,17 @@ public class Builder implements Serializable
 	 */
 	public static Piece createQueen(boolean isBlack, Square square, Board board) throws IOException
 	{
-		Map<Character, Integer> queenMovement = Maps.newHashMap();
-		queenMovement.put(PieceBuilder.NORTH, -1);
-		queenMovement.put(PieceBuilder.SOUTH, -1);
-		queenMovement.put(PieceBuilder.WEST, -1);
-		queenMovement.put(PieceBuilder.EAST, -1);
-		queenMovement.put(PieceBuilder.NORTHEAST, -1);
-		queenMovement.put(PieceBuilder.SOUTHEAST, -1);
-		queenMovement.put(PieceBuilder.NORTHWEST, -1);
-		queenMovement.put(PieceBuilder.SOUTHWEST, -1);
-		return new Piece(Messages.getString("queen"), isBlack, square, board, queenMovement, false); //$NON-NLS-1$
+		PieceMovements movements = new PieceMovements();
+		movements.addMovement(MovementDirection.NORTH, -1);
+		movements.addMovement(MovementDirection.SOUTH, -1);
+		movements.addMovement(MovementDirection.WEST, -1);
+		movements.addMovement(MovementDirection.EAST, -1);
+		movements.addMovement(MovementDirection.NORTHEAST, -1);
+		movements.addMovement(MovementDirection.SOUTHEAST, -1);
+		movements.addMovement(MovementDirection.NORTHWEST, -1);
+		movements.addMovement(MovementDirection.SOUTHWEST, -1);
+
+		return new Piece(Messages.getString("queen"), isBlack, square, board, movements, false); //$NON-NLS-1$
 	}
 
 	/**
@@ -212,12 +223,13 @@ public class Builder implements Serializable
 	 */
 	public static Piece createRook(boolean isBlack, Square square, Board board) throws IOException
 	{
-		Map<Character, Integer> rookMovement = Maps.newHashMap();
-		rookMovement.put(PieceBuilder.NORTH, -1);
-		rookMovement.put(PieceBuilder.SOUTH, -1);
-		rookMovement.put(PieceBuilder.WEST, -1);
-		rookMovement.put(PieceBuilder.EAST, -1);
-		return new Piece(Messages.getString("rook"), isBlack, square, board, rookMovement, false); //$NON-NLS-1$
+		PieceMovements movements = new PieceMovements();
+		movements.addMovement(MovementDirection.NORTH, -1);
+		movements.addMovement(MovementDirection.SOUTH, -1);
+		movements.addMovement(MovementDirection.WEST, -1);
+		movements.addMovement(MovementDirection.EAST, -1);
+
+		return new Piece(Messages.getString("rook"), isBlack, square, board, movements, false); //$NON-NLS-1$
 	}
 
 	/**
@@ -254,7 +266,7 @@ public class Builder implements Serializable
 				try
 				{
 					ObjectInputStream in = new ObjectInputStream(new FileInputStream(FileUtility.getVariantsFile(name)));
-					Builder b = (Builder) in.readObject();
+					GameBuilder b = (GameBuilder) in.readObject();
 					Game toReturn = new Game(name, b.mBoards, b.getWhiteRules(), b.getBlackRules(), b.mWhitePromotionMap,
 							b.mBlackPromotionMap);
 					toReturn.setWhiteTeam(b.mWhiteTeam);

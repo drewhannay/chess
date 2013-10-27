@@ -41,8 +41,8 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import logic.Board;
-import logic.Builder;
 import logic.Game;
+import logic.GameBuilder;
 import logic.Piece;
 import logic.PieceBuilder;
 import logic.Square;
@@ -78,7 +78,7 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 		Game gameToEdit = null;
 		if (variantName != null)
 		{
-			gameToEdit = Builder.newGame(variantName);
+			gameToEdit = GameBuilder.newGame(variantName);
 
 			mWhiteTeam = gameToEdit.getWhiteTeam();
 			mBlackTeam = gameToEdit.getBlackTeam();
@@ -98,11 +98,11 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 			for (int i = 0; i < mBoardPanels.length; i++)
 				mBoardPanels[i] = new JPanel();
 
-			mBuilder = new Builder(variantName, gameToEdit.getBoards(), mWhiteTeam, mBlackTeam, mWhiteRules, mBlackRules);
+			mBuilder = new GameBuilder(variantName, gameToEdit.getBoards(), mWhiteTeam, mBlackTeam, mWhiteRules, mBlackRules);
 		}
 		else
 		{
-			mBuilder = new Builder(Messages.getString("VariantCreationPanel.newVariant")); //$NON-NLS-1$
+			mBuilder = new GameBuilder(Messages.getString("VariantCreationPanel.newVariant")); //$NON-NLS-1$
 
 			mWhiteTeam = Lists.newArrayList();
 			mBlackTeam = Lists.newArrayList();
@@ -568,7 +568,7 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 		Driver.getInstance().pack();
 	}
 
-	public Builder getBuilder()
+	public GameBuilder getBuilder()
 	{
 		return mBuilder;
 	}
@@ -689,14 +689,14 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 
 	public void putPromotionMap(String pieceName, List<String> promotesTo, int colorCode)
 	{
-		if (colorCode == Builder.BLACK || colorCode == Builder.BOTH)
+		if (colorCode == GameBuilder.BLACK || colorCode == GameBuilder.BOTH)
 		{
 			mBlackPromotionMap.put(pieceName, promotesTo);
 			if (mBuilder.getBlackPromotionMap() == null)
 				mBuilder.setBlackPromotionMap(mBlackPromotionMap);
 			mBuilder.addToPromotionMap(pieceName, promotesTo, colorCode);
 		}
-		if (colorCode == Builder.WHITE || colorCode == Builder.BOTH)
+		if (colorCode == GameBuilder.WHITE || colorCode == GameBuilder.BOTH)
 		{
 			mWhitePromotionMap.put(pieceName, promotesTo);
 			if (mBuilder.getWhitePromotionMap() == null)
@@ -1031,7 +1031,7 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 	private JPanel mPieceListPanel;
 	private Map<String, List<String>> mWhitePromotionMap;
 	private Map<String, List<String>> mBlackPromotionMap;
-	private Builder mBuilder;
+	private GameBuilder mBuilder;
 	private List<Piece> mWhiteTeam;
 	private List<Piece> mBlackTeam;
 	private JButton mChangePromotionButton;

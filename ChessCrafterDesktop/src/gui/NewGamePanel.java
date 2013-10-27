@@ -30,8 +30,8 @@ import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 
-import logic.Builder;
 import logic.Game;
+import logic.GameBuilder;
 import logic.Result;
 import net.NetworkPlayManager;
 import timer.ChessTimer;
@@ -158,7 +158,7 @@ public class NewGamePanel extends ChessPanel
 		final JComboBox dropdown;
 		try
 		{
-			dropdown = new JComboBox(Builder.getVariantFileArray());
+			dropdown = new JComboBox(GameBuilder.getVariantFileArray());
 		}
 		catch (IOException e1)
 		{
@@ -256,7 +256,7 @@ public class NewGamePanel extends ChessPanel
 				long startTime = Integer.parseInt(totalTimeField.getText()) * 1000;
 				long increment = Integer.parseInt(incrementField.getText()) * 1000;
 
-				final Game gameToPlay = Builder.newGame(dropdown.getSelectedItem().toString());
+				final Game gameToPlay = GameBuilder.newGame(dropdown.getSelectedItem().toString());
 
 				RunnableOfT<Boolean> timeElapsedCallback = new RunnableOfT<Boolean>()
 				{
@@ -327,7 +327,7 @@ public class NewGamePanel extends ChessPanel
 		constraints.insets = new Insets(3, 0, 3, 0);
 		try
 		{
-			mPopupPanel.add(new JComboBox(Builder.getVariantFileArray()), constraints);
+			mPopupPanel.add(new JComboBox(GameBuilder.getVariantFileArray()), constraints);
 		}
 		catch (IOException e1)
 		{
@@ -380,7 +380,7 @@ public class NewGamePanel extends ChessPanel
 				Game gameToPlay;
 				try
 				{
-					gameToPlay = Builder.newGame((String) new JComboBox(Builder.getVariantFileArray()).getSelectedItem());
+					gameToPlay = GameBuilder.newGame((String) new JComboBox(GameBuilder.getVariantFileArray()).getSelectedItem());
 				}
 				catch (IOException e1)
 				{
