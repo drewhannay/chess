@@ -19,7 +19,8 @@ class BronsteinDelayTimer extends ChessTimer
 	{
 		mClockLastUpdatedTime = System.currentTimeMillis();
 		mLagTime = System.currentTimeMillis();
-		mTimer.start();
+		if (mListener != null)
+			mListener.onTimerStart();
 	}
 
 	@Override
@@ -44,7 +45,8 @@ class BronsteinDelayTimer extends ChessTimer
 
 		mTimeWasRecentlyReset = false;
 		updateDisplay();
-		mTimer.stop();
+		if (mListener != null)
+			mListener.onTimerStop();
 	}
 
 	private static final long serialVersionUID = 5421690863308194342L;

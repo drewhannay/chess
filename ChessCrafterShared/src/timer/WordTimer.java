@@ -13,7 +13,8 @@ class WordTimer extends ChessTimer
 	public void startTimer()
 	{
 		mClockLastUpdatedTime = System.currentTimeMillis();
-		mTimer.start();
+		if (mListener != null)
+			mListener.onTimerStart();
 	}
 
 	@Override
@@ -21,7 +22,8 @@ class WordTimer extends ChessTimer
 	{
 		mClockLastUpdatedTime = System.currentTimeMillis();
 		updateDisplay();
-		mTimer.stop();
+		if (mListener != null)
+			mListener.onTimerStop();
 	}
 
 	@Override

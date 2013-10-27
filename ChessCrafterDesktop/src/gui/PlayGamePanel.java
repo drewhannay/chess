@@ -43,6 +43,7 @@ import utility.AppConstants;
 import utility.FileUtility;
 import utility.GuiUtility;
 import utility.Pair;
+import utility.PieceIconUtility;
 import utility.Preference;
 
 import com.google.common.collect.ImmutableList;
@@ -83,7 +84,6 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 		}
 		catch (Exception e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -185,7 +185,7 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 		Object[] options = new String[] {
 				Messages.getString("PlayGamePanel.saveRecord"), Messages.getString("PlayGamePanel.newGame"), Messages.getString("PlayGamePanel.quit") }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		mOptionsMenu.setVisible(false);
-		switch (JOptionPane.showOptionDialog(Driver.getInstance(), result.getGUIText(), result.winText(),
+		switch (JOptionPane.showOptionDialog(Driver.getInstance(), result.getGuiText(), result.winText(),
 				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]))
 		{
 		case JOptionPane.YES_OPTION:
@@ -507,7 +507,7 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 		constraints.ipadx = 100;
 		constraints.gridx = 11 + twoBoardsGridBagOffset;
 		constraints.gridy = 4;
-		add(mBlackTimer.getDisplayLabel(), constraints);
+		add(new ChessTimerLabel(mBlackTimer), constraints);
 
 		// adds the undo button
 		constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -527,7 +527,7 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 		constraints.ipadx = 100;
 		constraints.gridx = 11 + twoBoardsGridBagOffset;
 		constraints.gridy = 6;
-		add(mWhiteTimer.getDisplayLabel(), constraints);
+		add(new ChessTimerLabel(mWhiteTimer), constraints);
 
 		// adds the White Jail
 		constraints.fill = GridBagConstraints.NONE;
@@ -701,7 +701,8 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 			mGlassPane.setPoint(point);
 
 			BufferedImage image = null;
-			ImageIcon imageIcon = mSquareLabel.getSquare().getPiece().getIcon();
+			Piece piece = mSquareLabel.getSquare().getPiece();
+			ImageIcon imageIcon = PieceIconUtility.getPieceIcon(piece.getName(), piece.isBlack());
 			int width = imageIcon.getIconWidth();
 			int height = imageIcon.getIconHeight();
 			image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);

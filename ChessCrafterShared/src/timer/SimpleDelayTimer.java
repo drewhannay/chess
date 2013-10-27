@@ -20,9 +20,11 @@ class SimpleDelayTimer extends ChessTimer
 		mIsDelayedTimer = false;
 		mClockLastUpdatedTime = System.currentTimeMillis();
 		updateDisplay();
-		mTimer.setInitialDelay((int) mDelayTime);
+		if (mListener != null)
+			mListener.setInitialDelay((int) mDelayTime);
 		mIsDelayedTimer = true;
-		mTimer.start();
+		if (mListener != null)
+			mListener.onTimerStart();
 	}
 
 	@Override
@@ -30,7 +32,8 @@ class SimpleDelayTimer extends ChessTimer
 	{
 		mClockLastUpdatedTime = System.currentTimeMillis();
 		updateDisplay();
-		mTimer.stop();
+		if (mListener != null)
+			mListener.onTimerStop();
 	}
 
 	private static final long serialVersionUID = 5421690863308194342L;

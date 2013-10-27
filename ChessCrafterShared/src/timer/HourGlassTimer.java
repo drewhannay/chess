@@ -27,7 +27,8 @@ class HourGlassTimer extends ChessTimer
 	{
 		mClockDirection = 1;
 		mClockLastUpdatedTime = System.currentTimeMillis();
-		mTimer.start();
+		if (mListener != null)
+			mListener.onTimerStart();
 	}
 
 	@Override
@@ -35,7 +36,8 @@ class HourGlassTimer extends ChessTimer
 	{
 		mClockDirection = -1;
 		mClockLastUpdatedTime = System.currentTimeMillis();
-		mTimer.start();
+		if (mListener != null)
+			mListener.onTimerStart();
 	}
 
 	private static final long serialVersionUID = 1345233312932413270L;

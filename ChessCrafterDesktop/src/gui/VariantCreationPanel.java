@@ -52,6 +52,7 @@ import rules.ObjectivePiece.ObjectivePieceTypes;
 import rules.Rules;
 import utility.FileUtility;
 import utility.GuiUtility;
+import utility.PieceIconUtility;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -741,7 +742,8 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 			mGlassPane.setPoint(point);
 
 			BufferedImage image = null;
-			ImageIcon imageIcon = mSquareLabel.getSquare().getPiece().getIcon();
+			Piece piece = mSquareLabel.getSquare().getPiece();
+			ImageIcon imageIcon = PieceIconUtility.getPieceIcon(piece.getName(), piece.isBlack());
 			int width = imageIcon.getIconWidth();
 			int height = imageIcon.getIconHeight();
 			image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
@@ -817,7 +819,8 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 
 			FileUtility.getPieceFile(pieceName);
 
-			ImageIcon imageIcon = mSquareLabel.getSquare().getPiece().getIcon();
+			Piece piece = mSquareLabel.getSquare().getPiece();
+			ImageIcon imageIcon = PieceIconUtility.getPieceIcon(piece.getName(), piece.isBlack());
 			int width = imageIcon.getIconWidth();
 			int height = imageIcon.getIconHeight();
 			image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
