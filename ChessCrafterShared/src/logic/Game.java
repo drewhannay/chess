@@ -15,40 +15,33 @@ import ai.FakeMove;
 
 import com.google.common.collect.Lists;
 
-/**
- * Game.java Object to save Game state.
- * 
- * @author Drew Hannay, Daniel Opdyke & Alisa Maas CSCI 335, Wheaton College,
- * Spring 2011 Phase 2 April 7, 2011
- */
 public class Game implements Serializable
 {
-	/**
-	 * Constructor. Initializes and saves state of Game information.
-	 * 
-	 * @param gameType Game type identifier.
-	 * @param boards Reference to boards Array.
-	 * @param whiteRules The rules for the white team
-	 * @param blackRules The rules for the black team
-	 * @param whitePromotionMap
-	 */
-	public Game(String gameType, Board[] boards, Rules whiteRules, Rules blackRules, Map<String, List<String>> whitePromotionMap,
-			Map<String, List<String>> blackPromotionMap)
+	public Game(String gameType, Board[] boards, List<Piece> whiteTeam, List<Piece> blackTeam, Rules whiteRules, Rules blackRules,
+			Map<String, List<String>> whitePromotionMap, Map<String, List<String>> blackPromotionMap)
 	{
 		mGameType = gameType;
 		mBoards = boards;
+
 		mWhiteTimer = ChessTimer.createTimer(TimerTypes.NO_TIMER, null, 0, 0, false);
 		mBlackTimer = ChessTimer.createTimer(TimerTypes.NO_TIMER, null, 0, 0, true);
-		setWhiteRules(whiteRules);
+
+		mWhiteTeam = whiteTeam;
+		mBlackTeam = blackTeam;
+
+		mWhiteRules = whiteRules;
+		mBlackRules = blackRules;
+
+		mWhitePromotionMap = whitePromotionMap;
+		mBlackPromotionMap = blackPromotionMap;
+
 		whiteRules.setGame(this);
-		setBlackRules(blackRules);
 		blackRules.setGame(this);
-		setBlackMove(false);
 
-		setPromotionMaps(whitePromotionMap, blackPromotionMap);
+		for (Board board : mBoards)
+			board.setGame(this);
 
-		for (Board b : mBoards)
-			b.setGame(this);
+		mStaleLegalDests = true;
 
 		mHistory = Lists.newArrayList();
 	}
@@ -56,14 +49,14 @@ public class Game implements Serializable
 	/**
 	 * Call the afterMove method in the correct rules object
 	 * 
-	 * @param m The Move that has just been performed
+	 * @param move The Move that has just been performed
 	 */
-	public void afterMove(Move m)
+	public void afterMove(Move move)
 	{
 		if (isBlackMove())
-			getBlackRules().afterMove(m);
+			getBlackRules().afterMove(move);
 		else
-			getWhiteRules().afterMove(m);
+			getWhiteRules().afterMove(move);
 	}
 
 	/**
@@ -94,9 +87,9 @@ public class Game implements Serializable
 			}
 		}
 
-		movingObjectivePiece = (isBlackMove()) ? mBlackObjectivePiece : mWhiteObjectivePiece;
+		movingObjectivePiece = (isBlackMove()) ? mBlackRules.objectivePiece(true) : mWhiteRules.objectivePiece(false);
 		movingTeam = (isBlackMove()) ? getBlackTeam() : getWhiteTeam();
-		otherObjectivePiece = (isBlackMove()) ? mBlackObjectivePiece : mWhiteObjectivePiece;
+		otherObjectivePiece = (isBlackMove()) ? mBlackRules.objectivePiece(true) : mWhiteRules.objectivePiece(false);
 		otherTeam = (isBlackMove()) ? getWhiteTeam() : getBlackTeam();
 
 		// Make sure the objective piece doesn't put himself in check
@@ -126,8 +119,8 @@ public class Game implements Serializable
 
 		(isBlackMove() ? getBlackRules() : getWhiteRules()).adjustTeamLegalDestinations(movingTeam);
 
-		// If the King is in check, the legal moves list must be modified
-		// accordingly.
+		// if the objective piece is in check, the legal moves list must be
+		// modified accordingly
 		if (movingObjectivePiece != null && movingObjectivePiece.isInCheck())
 		{
 			if (getLastMove() != null)
@@ -193,18 +186,6 @@ public class Game implements Serializable
 	 */
 	public Piece[] getCapturedPieces(boolean isBlack)
 	{
-		return getCaptures(isBlack, true);
-	}
-
-	/**
-	 * Get the captured or not captured pieces from the specified team
-	 * 
-	 * @param isBlack The team to get pieces from
-	 * @param isCaptured Whether to collect captured or free pieces
-	 * @return The Piece[] of matching pieces
-	 */
-	protected Piece[] getCaptures(boolean isBlack, boolean isCaptured)
-	{
 		Piece[] pows = null;
 		List<Piece> team = (isBlack) ? getBlackTeam() : getWhiteTeam();
 		int count = 0;
@@ -225,7 +206,7 @@ public class Game implements Serializable
 			for (int i = 0; i < team.size(); i++)
 			{
 				piece = team.get(i);
-				if (piece.isCaptured() == isCaptured)
+				if (piece.isCaptured())
 					pows[count++] = piece;
 			}
 		}
@@ -235,11 +216,11 @@ public class Game implements Serializable
 	/**
 	 * Get the Pieces of the specified team guarding the specified Square
 	 * 
-	 * @param sq The Square being guarded
+	 * @param square The Square being guarded
 	 * @param isBlack The team guarding the Square
 	 * @return The Pieces guarding the Square
 	 */
-	public Piece[] getGuards(Square sq, boolean isBlack)
+	public Piece[] getGuards(Square square, boolean isBlack)
 	{
 		Iterator<Piece> team = (isBlack) ? getBlackTeam().iterator() : getWhiteTeam().iterator();
 		List<Piece> attackers = Lists.newArrayList();
@@ -251,7 +232,7 @@ public class Game implements Serializable
 		while (team.hasNext())
 		{
 			piece = team.next();
-			if (piece.isGuarding(sq))
+			if (piece.isGuarding(square))
 				attackers.add(piece);
 		}
 
@@ -301,18 +282,7 @@ public class Game implements Serializable
 	 */
 	public Piece getOtherObjectivePiece(boolean isBlack)
 	{
-		return isBlack ? mWhiteObjectivePiece : mBlackObjectivePiece;
-	}
-
-	/**
-	 * Get the rules for the specified team
-	 * 
-	 * @param isBlack The team to get the rules for
-	 * @return The rules for the specified team
-	 */
-	public Rules getRules(boolean isBlack)
-	{
-		return isBlack ? getBlackRules() : getWhiteRules();
+		return isBlack ? mWhiteRules.objectivePiece(false) : mBlackRules.objectivePiece(true);
 	}
 
 	/**
@@ -333,7 +303,7 @@ public class Game implements Serializable
 	 * @param attackerIsBlack The team of the attacker
 	 * @return The pieces threatening the specified piece
 	 */
-	public Piece[] getThreats(Square threatened, boolean attackerIsBlack)
+	private Piece[] getThreats(Square threatened, boolean attackerIsBlack)
 	{
 		Iterator<Piece> team = (attackerIsBlack) ? getBlackTeam().iterator() : getWhiteTeam().iterator();
 		List<Piece> attackers = Lists.newArrayList();
@@ -385,7 +355,7 @@ public class Game implements Serializable
 	 * 
 	 * @return If king-type unit is threatened.
 	 */
-	public boolean isCheck()
+	private boolean isCheck()
 	{
 		boolean check = false;
 
@@ -432,13 +402,13 @@ public class Game implements Serializable
 	/**
 	 * Check if the given square is guarded by the given team
 	 * 
-	 * @param sq The square to assess
+	 * @param square The square to assess
 	 * @param isBlack The team to assess
 	 * @return If the square is guarded by the given team
 	 */
-	public boolean isGuarded(Square sq, boolean isBlack)
+	public boolean isGuarded(Square square, boolean isBlack)
 	{
-		return (getGuards(sq, isBlack) != null);
+		return (getGuards(square, isBlack) != null);
 	}
 
 	public boolean isStaleLegalDests()
@@ -493,7 +463,7 @@ public class Game implements Serializable
 	 */
 	public void nextTurn()
 	{
-		// We only need to track turns once, so always use the whiteRules
+		// we only need to track turns once, so always use the whiteRules
 		setBlackMove(getWhiteRules().nextTurn());
 	}
 
@@ -505,15 +475,14 @@ public class Game implements Serializable
 	 */
 	public void playMove(Move move) throws Exception
 	{
-		Move m = move;
-		m.execute();
+		move.execute();
 
-		if (getHistory().contains(m))
+		if (getHistory().contains(move))
 			return;
 
-		getHistory().add(m);
-		getBlackRules().checkEndOfGame(mBlackObjectivePiece);
-		getWhiteRules().checkEndOfGame(mWhiteObjectivePiece);
+		getHistory().add(move);
+		getBlackRules().checkEndOfGame(mBlackRules.objectivePiece(true));
+		getWhiteRules().checkEndOfGame(mWhiteRules.objectivePiece(false));
 	}
 
 	/**
@@ -530,7 +499,7 @@ public class Game implements Serializable
 	 * @param dirName The directory in which to save the game
 	 * @param fileName The name for the game file
 	 * @param ACN Whether the game should be saved in ACN
-	 * @param inProgress 
+	 * @param inProgress
 	 */
 	public void saveGame(String fileName, boolean ACN, boolean inProgress)
 	{
@@ -557,6 +526,7 @@ public class Game implements Serializable
 		}
 		catch (Exception e)
 		{
+			e.printStackTrace();
 		}
 	}
 
@@ -565,36 +535,9 @@ public class Game implements Serializable
 		mIsBlackMove = isBlackMove;
 	}
 
-	public void setBlackRules(Rules blackRules)
-	{
-		mBlackRules = blackRules;
-	}
-
-	/**
-	 * Sets the List of Pieces for the black team.
-	 * 
-	 * @param blackTeam List of black team pieces.
-	 */
-	public void setBlackTeam(List<Piece> blackTeam)
-	{
-		mBlackTeam = blackTeam;
-		mBlackObjectivePiece = getBlackRules().objectivePiece(true);
-	}
-
 	public void setLastMove(Move lastMove)
 	{
 		mLastMove = lastMove;
-	}
-
-	/**
-	 * Set the Result for the Game
-	 * 
-	 * @param result The Result to set.
-	 */
-	public void setResult(Result result)
-	{
-		Move m = getLastMove();
-		m.setResult(result);
 	}
 
 	/**
@@ -617,61 +560,46 @@ public class Game implements Serializable
 		mBlackTimer = blackTimer;
 	}
 
-	public void setWhiteRules(Rules whiteRules)
-	{
-		mWhiteRules = whiteRules;
-	}
-
-	/**
-	 * Sets the ArrayList of Pieces for the white team.
-	 * 
-	 * @param whiteTeam ArrayList of white team pieces.
-	 */
-	public void setWhiteTeam(List<Piece> whiteTeam)
-	{
-		mWhiteTeam = whiteTeam;
-		mWhiteObjectivePiece = getWhiteRules().objectivePiece(false);
-	}
-
 	/**
 	 * Undo the afterMove events
 	 * 
-	 * @param m The Move to undo
+	 * @param move The Move to undo
 	 */
-	public void undoAfterMove(Move m)
+	public void undoAfterMove(Move move)
 	{
 		if (isBlackMove())
-			getBlackRules().undoAfterMove(m);
+			getBlackRules().undoAfterMove(move);
 		else
-			getWhiteRules().undoAfterMove(m);
+			getWhiteRules().undoAfterMove(move);
 	}
 
 	/**
-	 * @param m A fake move
+	 * @param fakeMove A fake move
 	 * @return An actual move
 	 * @throws Exception If the move is not legal.
 	 */
-	public Move fakeToRealMove(FakeMove m) throws Exception
+	public Move fakeToRealMove(FakeMove fakeMove) throws Exception
 	{
-		Board to = mBoards[m.mBoardIndex];
+		Board to = mBoards[fakeMove.mBoardIndex];
 		Board from = ((mIsBlackMove) ? mBlackRules : mWhiteRules).getBoard(to);
-		return new Move(from, from.getSquare(m.mOriginRow, m.mOriginColumn), to.getSquare(m.mDestinationRow, m.mDestinationColumn),
-				m.mPromotionPieceName);
+		return new Move(from, from.getSquare(fakeMove.mOriginRow, fakeMove.mOriginColumn), to.getSquare(fakeMove.mDestinationRow,
+				fakeMove.mDestinationColumn), fakeMove.mPromotionPieceName);
 	}
 
 	/**
-	 * @param m An actual move
+	 * @param move An actual move
 	 * @return A fake move.
 	 */
-	public FakeMove moveToFakeMove(Move m)
+	public FakeMove moveToFakeMove(Move move)
 	{
-		int boardNum = (m.board == mBoards[0]) ? 0 : 1;
+		int boardNum = (move.board == mBoards[0]) ? 0 : 1;
 		String promoName = null;
 
 		if (mHistory.get(mHistory.size() - 1).getPromoPiece() != null)
 			promoName = mHistory.get(mHistory.size() - 1).getPromoPiece().getName();
 
-		return new FakeMove(boardNum, m.origin.getRow(), m.origin.getCol(), m.getDest().getRow(), m.getDest().getCol(), promoName);
+		return new FakeMove(boardNum, move.origin.getRow(), move.origin.getCol(), move.getDest().getRow(), move.getDest().getCol(),
+				promoName);
 	}
 
 	public Map<String, List<String>> getWhitePromotionMap()
@@ -682,12 +610,6 @@ public class Game implements Serializable
 	public Map<String, List<String>> getBlackPromotionMap()
 	{
 		return mBlackPromotionMap;
-	}
-
-	public void setPromotionMaps(Map<String, List<String>> whitePromotionMap, Map<String, List<String>> blackPromotionMap)
-	{
-		mWhitePromotionMap = whitePromotionMap;
-		mBlackPromotionMap = blackPromotionMap;
 	}
 
 	public void setIsPlayback(boolean isPlayback)
@@ -702,21 +624,22 @@ public class Game implements Serializable
 
 	private static final long serialVersionUID = 7291801823624891384L;
 
-	private Board[] mBoards;
-	private Rules mWhiteRules;
-	private Rules mBlackRules;
-	private String mGameType;
+	private final Board[] mBoards;
+	private final Rules mWhiteRules;
+	private final Rules mBlackRules;
+	private final String mGameType;
+	private final List<Piece> mWhiteTeam;
+	private final List<Piece> mBlackTeam;
+	private final Map<String, List<String>> mWhitePromotionMap;
+	private final Map<String, List<String>> mBlackPromotionMap;
+
 	private ChessTimer mWhiteTimer;
 	private ChessTimer mBlackTimer;
+
 	private boolean mIsBlackMove;
 	private boolean mIsPlayback;
-	private List<Piece> mWhiteTeam;
-	private List<Piece> mBlackTeam;
-	private Piece mWhiteObjectivePiece;
-	private Piece mBlackObjectivePiece;
-	private boolean mStaleLegalDests = true;
+	private boolean mStaleLegalDests;
+
 	private List<Move> mHistory;
-	private Move mLastMove = null;
-	private Map<String, List<String>> mWhitePromotionMap;
-	private Map<String, List<String>> mBlackPromotionMap;
+	private Move mLastMove;
 }

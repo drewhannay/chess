@@ -16,12 +16,6 @@ import utility.FileUtility;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-/**
- * Builder.java Builder class to create Game Types
- * 
- * @author Drew Hannay, Daniel Opdyke & Alisa Maas CSCI 335, Wheaton College,
- * Spring 2011 Phase 2 April 7, 2011
- */
 public class GameBuilder implements Serializable
 {
 	public static final int BLACK = 1;
@@ -38,6 +32,9 @@ public class GameBuilder implements Serializable
 		mName = name;
 		mWhiteTeam = Lists.newArrayList();
 		mBlackTeam = Lists.newArrayList();
+
+		mWhitePromotionMap = Maps.newHashMap();
+		mBlackPromotionMap = Maps.newHashMap();
 	}
 
 	/**
@@ -54,8 +51,12 @@ public class GameBuilder implements Serializable
 	{
 		mName = name;
 		mBoards = boards;
+
 		mWhiteTeam = whiteTeam;
 		mBlackTeam = blackTeam;
+		mWhitePromotionMap = Maps.newHashMap();
+		mBlackPromotionMap = Maps.newHashMap();
+
 		setWhiteRules(whiteRules);
 		setBlackRules(blackRules);
 	}
@@ -267,10 +268,8 @@ public class GameBuilder implements Serializable
 				{
 					ObjectInputStream in = new ObjectInputStream(new FileInputStream(FileUtility.getVariantsFile(name)));
 					GameBuilder b = (GameBuilder) in.readObject();
-					Game toReturn = new Game(name, b.mBoards, b.getWhiteRules(), b.getBlackRules(), b.mWhitePromotionMap,
-							b.mBlackPromotionMap);
-					toReturn.setWhiteTeam(b.mWhiteTeam);
-					toReturn.setBlackTeam(b.mBlackTeam);
+					Game toReturn = new Game(name, b.mBoards, b.mWhiteTeam, b.mBlackTeam, b.getWhiteRules(), b.getBlackRules(),
+							b.mWhitePromotionMap, b.mBlackPromotionMap);
 					in.close();
 
 					return toReturn;
@@ -335,11 +334,6 @@ public class GameBuilder implements Serializable
 
 	public void addToPromotionMap(String key, List<String> value, int colorCode)
 	{
-		if (mWhitePromotionMap == null)
-			mWhitePromotionMap = Maps.newHashMap();
-		if (mBlackPromotionMap == null)
-			mBlackPromotionMap = Maps.newHashMap();
-
 		if (colorCode == WHITE || colorCode == BOTH)
 			mWhitePromotionMap.put(key, value);
 		if (colorCode == BLACK || colorCode == BOTH)
@@ -348,12 +342,14 @@ public class GameBuilder implements Serializable
 
 	public void setWhitePromotionMap(Map<String, List<String>> promotionMap)
 	{
-		mWhitePromotionMap = promotionMap;
+		mWhitePromotionMap.clear();
+		mWhitePromotionMap.putAll(promotionMap);
 	}
 
 	public void setBlackPromotionMap(Map<String, List<String>> promotionMap)
 	{
-		mBlackPromotionMap = promotionMap;
+		mBlackPromotionMap.clear();
+		mBlackPromotionMap.putAll(promotionMap);
 	}
 
 	public Map<String, List<String>> getWhitePromotionMap()
@@ -371,9 +367,9 @@ public class GameBuilder implements Serializable
 		return mWhiteRules;
 	}
 
-	public void setWhiteRules(Rules mWhiteRules)
+	public void setWhiteRules(Rules whiteRules)
 	{
-		this.mWhiteRules = mWhiteRules;
+		mWhiteRules = whiteRules;
 	}
 
 	public Rules getBlackRules()
@@ -381,9 +377,9 @@ public class GameBuilder implements Serializable
 		return mBlackRules;
 	}
 
-	public void setBlackRules(Rules mBlackRules)
+	public void setBlackRules(Rules blackRules)
 	{
-		this.mBlackRules = mBlackRules;
+		mBlackRules = blackRules;
 	}
 
 	public String getName()
@@ -396,19 +392,32 @@ public class GameBuilder implements Serializable
 		return mWhiteTeam;
 	}
 
+	public void setWhiteTeam(List<Piece> whiteTeam)
+	{
+		mWhiteTeam.clear();
+		mWhiteTeam.addAll(whiteTeam);
+	}
+
 	public List<Piece> getBlackTeam()
 	{
 		return mBlackTeam;
 	}
 
+	public void setBlackTeam(List<Piece> blackTeam)
+	{
+		mBlackTeam.clear();
+		mBlackTeam.addAll(blackTeam);
+	}
+
 	private static final long serialVersionUID = 2099226533521671457L;
+
+	private final List<Piece> mWhiteTeam;
+	private final List<Piece> mBlackTeam;
+	private final Map<String, List<String>> mWhitePromotionMap;
+	private final Map<String, List<String>> mBlackPromotionMap;
 
 	private String mName;
 	private Board[] mBoards;
-	public List<Piece> mWhiteTeam;
-	public List<Piece> mBlackTeam;
 	private Rules mWhiteRules;
 	private Rules mBlackRules;
-	private Map<String, List<String>> mWhitePromotionMap;
-	private Map<String, List<String>> mBlackPromotionMap;
 }

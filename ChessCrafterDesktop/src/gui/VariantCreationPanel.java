@@ -78,6 +78,8 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 		Game gameToEdit = null;
 		if (variantName != null)
 		{
+			// FIXME: we shouldn't be constructing an actual Game object here;
+			// we should be able to get everything we need from the GameBuilder
 			gameToEdit = GameBuilder.newGame(variantName);
 
 			mWhiteTeam = gameToEdit.getWhiteTeam();
@@ -114,8 +116,8 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 			mBlackPromotionMap = Maps.newHashMap();
 			mBoardPanels = new JPanel[] { new JPanel(), new JPanel() };
 
-			mBuilder.mBlackTeam = mBlackTeam;
-			mBuilder.mWhiteTeam = mWhiteTeam;
+			mBuilder.setBlackTeam(mBlackTeam);
+			mBuilder.setWhiteTeam(mWhiteTeam);
 		}
 
 		mDisplayBoard = new Board(2, 1, false);
@@ -277,12 +279,12 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 					}
 				}
 
-				mBuilder.mWhiteTeam = mWhiteTeam;
+				mBuilder.setWhiteTeam(mWhiteTeam);
 
 				if (mWhiteRules.getObjectiveName() == null)
 					mWhiteRules.setObjectivePiece(new ObjectivePiece(ObjectivePieceTypes.CLASSIC));
 
-				mBuilder.mBlackTeam = mBlackTeam;
+				mBuilder.setBlackTeam(mBlackTeam);
 
 				if (mBlackRules.getObjectiveName() == null)
 					mBlackRules.setObjectivePiece(new ObjectivePiece(ObjectivePieceTypes.CLASSIC));
