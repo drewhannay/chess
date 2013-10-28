@@ -1,6 +1,5 @@
 package gui;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -43,10 +42,6 @@ public class PlayNetGamePanel extends PlayGamePanel implements PlayNetGameScreen
 
 		Driver.getInstance().setFileMenuVisibility(false);
 
-		mInCheckLabel = new JLabel(Messages.getString("PlayNetGamePanel.youreInCheck")); //$NON-NLS-1$
-		mInCheckLabel.setHorizontalTextPosition(SwingConstants.CENTER);
-		mInCheckLabel.setForeground(Color.RED);
-
 		int twoBoardGridBagOffset = 0;
 		Driver.getInstance().setMenu(createMenuBar());
 
@@ -57,14 +52,6 @@ public class PlayNetGamePanel extends PlayGamePanel implements PlayNetGameScreen
 
 		final Board[] boards = getGame().getBoards();
 		setBorder(BorderFactory.createLoweredBevelBorder());
-
-		mInCheckLabel.setHorizontalTextPosition(SwingConstants.CENTER);
-		mInCheckLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		constraints.fill = GridBagConstraints.NONE;
-		constraints.gridy = 0;
-		constraints.gridx = 9;
-		mInCheckLabel.setVisible(false);
-		add(mInCheckLabel, constraints);
 
 		if (boards.length == 1)
 		{

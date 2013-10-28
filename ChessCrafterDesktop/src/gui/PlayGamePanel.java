@@ -91,6 +91,48 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 		boardRefresh(game.getBoards());
 	}
 
+	protected void resetTurnLabels(JLabel resetLabel, boolean isBlackTeam, boolean inCheck)
+	{
+		remove(resetLabel);
+		GridBagConstraints constraints = new GridBagConstraints();
+	
+		if(isBlackTeam)
+		{
+			constraints.gridy = 0;
+			resetLabel.setForeground(getGame().isBlackMove() ? Color.white : Color.black);
+			resetLabel.setBackground(getGame().isBlackMove() ? SquareJLabel.HIGHLIGHT_COLOR : null);
+			if(inCheck)
+				resetLabel.setText(Messages.getString("PlayGamePanel.blackTeam") + " " + Messages.getString("PlayGamePanel.inCheck")); //$NON-NLS-2$
+			else
+				resetLabel.setText(Messages.getString("PlayGamePanel.blackTeam")); //$NON-NLS-1$
+		}
+		else
+		{
+			//change spacing if there is a timer
+			constraints.gridy = ChessTimer.isNoTimer(mWhiteTimer) ? 9 : 10;
+			if(inCheck)
+				resetLabel.setText(Messages.getString("PlayGamePanel.whiteTeam") + " " + Messages.getString("PlayGamePanel.inCheck")); //$NON-NLS-2$
+			else
+				resetLabel.setText(Messages.getString("PlayGamePanel.whiteTeam")); //$NON-NLS-1$
+			resetLabel.setForeground(!getGame().isBlackMove() ? Color.white : Color.black);
+			resetLabel.setBackground(!getGame().isBlackMove() ? SquareJLabel.HIGHLIGHT_COLOR : null);
+		}
+		if(inCheck)
+		{
+			resetLabel.setForeground(Color.white);
+			resetLabel.setBackground(Color.red);
+			constraints.ipadx = 50;
+		}
+		else
+		{
+			constraints.ipadx = 100;
+		}
+		constraints.gridwidth = 3;
+		constraints.insets = new Insets(10, 0, 10, 0);
+		constraints.gridx = 11 + twoBoardsGridBagOffset;
+		add(resetLabel, constraints);
+	}
+	
 	@Override
 	public void boardRefresh(Board[] boards)
 	{
@@ -98,22 +140,6 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 
 		Piece objectivePiece = getGame().isBlackMove() ? getGame().getBlackRules().objectivePiece(true) : getGame().getWhiteRules()
 				.objectivePiece(false);
-
-		if (objectivePiece != null && objectivePiece.isInCheck())
-		{
-			mInCheckLabel.setVisible(true);
-			if (getGame().getBlackRules().objectivePiece(true).isInCheck())
-				mInCheckLabel.setBorder(BorderFactory.createTitledBorder(Messages.getString("PlayGamePanel.blackTeam"))); //$NON-NLS-1$
-			else
-				mInCheckLabel.setBorder(BorderFactory.createTitledBorder(Messages.getString("PlayGamePanel.whiteTeam"))); //$NON-NLS-1$
-
-			for (Piece piece : getGame().getThreats(objectivePiece))
-				piece.getSquare().setIsThreatSquare(true);
-		}
-		else
-		{
-			mInCheckLabel.setVisible(false);
-		}
 
 		int index = 0;
 		Piece[] blackCapturedPieces = getGame().getCapturedPieces(true);
@@ -144,11 +170,31 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 				mBlackCapturesJail.getSquare(i, j).setJailStateChanged();
 			}
 		}
+		
+		if (objectivePiece != null && objectivePiece.isInCheck())
+		{
+			//mInCheckLabel.setVisible(true);
+			if (getGame().getBlackRules().objectivePiece(true).isInCheck())
+			{
+				mBlackLabel.setBackground(Color.red);
+				resetTurnLabels(mBlackLabel, true, true);
+				resetTurnLabels(mWhiteLabel, false, false);
+			}
+			else
+			{
+				mWhiteLabel.setBackground(Color.red);
+				resetTurnLabels(mWhiteLabel, false, true);
+				resetTurnLabels(mBlackLabel, true, false);
+			}
 
-		mWhiteLabel.setBackground(getGame().isBlackMove() ? null : SquareJLabel.HIGHLIGHT_COLOR);
-		mWhiteLabel.setForeground(getGame().isBlackMove() ? Color.black : Color.white);
-		mBlackLabel.setBackground(getGame().isBlackMove() ? SquareJLabel.HIGHLIGHT_COLOR : null);
-		mBlackLabel.setForeground(getGame().isBlackMove() ? Color.white : Color.black);
+			for (Piece piece : getGame().getThreats(objectivePiece))
+				piece.getSquare().setIsThreatSquare(true);
+		}
+		else
+		{
+			resetTurnLabels(mWhiteLabel, false, false);
+			resetTurnLabels(mBlackLabel, true, false);
+		}
 	}
 
 	private static void refreshSquares(Board[] boards)
@@ -350,10 +396,6 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 
 	private void initComponents() throws Exception
 	{
-		mInCheckLabel = GuiUtility.createJLabel(Messages.getString("PlayGamePanel.youreInCheck")); //$NON-NLS-1$
-		mInCheckLabel.setHorizontalTextPosition(SwingConstants.CENTER);
-		mInCheckLabel.setForeground(Color.RED);
-
 		JButton undoButton = new JButton(Messages.getString("PlayGamePanel.undo")); //$NON-NLS-1$
 		undoButton.addActionListener(new ActionListener()
 		{
@@ -378,7 +420,7 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 			}
 		});
 
-		int twoBoardsGridBagOffset = 0;
+		twoBoardsGridBagOffset = 0;
 		if (mOptionsMenu == null || !mOptionsMenu.isVisible())
 			Driver.getInstance().setMenu(createMenuBar());
 
@@ -390,21 +432,12 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 		final Board[] boards = getGame().getBoards();
 		setBorder(BorderFactory.createLoweredBevelBorder());
 
-		mInCheckLabel.setHorizontalTextPosition(SwingConstants.CENTER);
-		mInCheckLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		constraints.fill = GridBagConstraints.NONE;
-		constraints.gridy = 0;
-		constraints.gridx = 9;
-		mInCheckLabel.setVisible(false);
-		add(mInCheckLabel, constraints);
-
 		if (boards.length == 1)
 		{
 			constraints.gridheight = 12;
 			constraints.gridy = 0;
 			constraints.fill = GridBagConstraints.HORIZONTAL;
 			constraints.gridwidth = 10;
-			constraints.gridheight = 10;
 			constraints.insets = new Insets(10, 0, 0, 0);
 			constraints.gridx = 0;
 
@@ -477,28 +510,6 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 		mBlackCapturePanel.setPreferredSize(new Dimension((mBlackCapturesJail.getMaxCol() + 1) * 25,
 				(mBlackCapturesJail.getMaxRow() + 1) * 25));
 
-		// add the Black Name
-		constraints.fill = GridBagConstraints.NONE;
-		constraints.anchor = GridBagConstraints.BASELINE;
-		constraints.gridwidth = 3;
-		constraints.gridheight = 1;
-		constraints.insets = new Insets(10, 0, 10, 0);
-		constraints.ipadx = 100;
-		constraints.gridx = 11 + twoBoardsGridBagOffset;
-		constraints.gridy = 0;
-		add(mBlackLabel, constraints);
-
-		// add the Black Jail
-		constraints.fill = GridBagConstraints.NONE;
-		constraints.anchor = GridBagConstraints.BASELINE;
-		constraints.gridwidth = 3;
-		constraints.gridheight = 3;
-		constraints.ipadx = 0;
-		constraints.insets = new Insets(0, 25, 10, 25);
-		constraints.gridx = 11 + twoBoardsGridBagOffset;
-		constraints.gridy = 1;
-		add(mBlackCapturePanel, constraints);
-
 		// add the Black timer
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.anchor = GridBagConstraints.BASELINE;
@@ -506,8 +517,19 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 		constraints.gridheight = 1;
 		constraints.ipadx = 100;
 		constraints.gridx = 11 + twoBoardsGridBagOffset;
-		constraints.gridy = 4;
+		constraints.gridy = 1;
+		constraints.insets = new Insets(0, 25, 10, 25);
 		add(new ChessTimerLabel(mBlackTimer), constraints);
+		
+		// add the Black Jail
+		constraints.fill = GridBagConstraints.NONE;
+		constraints.anchor = GridBagConstraints.BASELINE;
+		constraints.gridwidth = 3;
+		constraints.gridheight = 3;
+		constraints.ipadx = 0;
+		constraints.gridx = 11 + twoBoardsGridBagOffset;
+		constraints.gridy = 2;
+		add(mBlackCapturePanel, constraints);
 
 		// adds the undo button
 		constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -519,16 +541,6 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 		constraints.gridy = 5;
 		add(undoButton, constraints);
 
-		// adds the White timer
-		constraints.fill = GridBagConstraints.HORIZONTAL;
-		constraints.anchor = GridBagConstraints.BASELINE;
-		constraints.gridwidth = 3;
-		constraints.gridheight = 1;
-		constraints.ipadx = 100;
-		constraints.gridx = 11 + twoBoardsGridBagOffset;
-		constraints.gridy = 6;
-		add(new ChessTimerLabel(mWhiteTimer), constraints);
-
 		// adds the White Jail
 		constraints.fill = GridBagConstraints.NONE;
 		constraints.anchor = GridBagConstraints.BASELINE;
@@ -536,42 +548,20 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 		constraints.gridheight = 3;
 		constraints.ipadx = 0;
 		constraints.gridx = 11 + twoBoardsGridBagOffset;
-
-		// change spacing and location if there is a timer or not.
-		if (ChessTimer.isNoTimer(mWhiteTimer))
-		{
-			constraints.gridy = 6;
-			constraints.insets = new Insets(10, 25, 0, 25);
-		}
-		else
-		{
-			constraints.gridy = 7;
-			constraints.insets = new Insets(0, 25, 0, 25);
-		}
+		constraints.gridy = 6;
 		add(mWhiteCapturePanel, constraints);
-
-		// add the White Name
-		constraints.fill = GridBagConstraints.NONE;
+		
+		// adds the White timer
+		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.anchor = GridBagConstraints.BASELINE;
 		constraints.gridwidth = 3;
-		constraints.weightx = 0.0;
-		constraints.weighty = 0.0;
-		constraints.insets = new Insets(10, 0, 10, 0);
-
-		// change spacing if there is a timer
-		if (ChessTimer.isNoTimer(mWhiteTimer))
-		{
-			constraints.gridheight = 1;
-			constraints.gridy = 9;
-		}
-		else
-		{
-			constraints.gridheight = 2;
-			constraints.gridy = 11;
-		}
+		constraints.gridheight = 1;
 		constraints.ipadx = 100;
 		constraints.gridx = 11 + twoBoardsGridBagOffset;
-		add(mWhiteLabel, constraints);
+		constraints.gridy = 9;
+		constraints.insets = new Insets(0, 0, 0, 0);
+		add(new ChessTimerLabel(mWhiteTimer), constraints);
+		resetTimers();
 	}
 
 	@Override
@@ -773,10 +763,10 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 	private static final long serialVersionUID = -2507232401817253688L;
 
 	protected static boolean mNextMoveMustPlacePiece;
+	protected int twoBoardsGridBagOffset;
 	protected static Game mGame;
 	protected static ChessTimer mWhiteTimer;
 	protected static ChessTimer mBlackTimer;
-	protected static JLabel mInCheckLabel;
 	protected static JLabel mWhiteLabel;
 	protected static JLabel mBlackLabel;
 	protected static JPanel mWhiteCapturePanel;
