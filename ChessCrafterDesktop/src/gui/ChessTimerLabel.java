@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -27,7 +28,8 @@ public final class ChessTimerLabel extends JLabel
 		mTimer.setInitialDelay(0);
 
 		setHorizontalAlignment(SwingConstants.CENTER);
-		setOpaque(true);
+		setOpaque(false);
+		setForeground(Color.white);
 	}
 
 	private final ActionListener mTimerActionListener = new ActionListener()
