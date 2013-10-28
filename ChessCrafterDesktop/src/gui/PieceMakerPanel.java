@@ -106,9 +106,13 @@ public class PieceMakerPanel extends ChessPanel
 		if (builder != null)
 		{
 			List<BidirectionalMovement> bidirectionalMovements = builder.getPieceMovements().getBidirectionalMovements();
-			mBidirectionalMovementComboBox = new JComboBox(bidirectionalMovements.toArray());
+			mBidirectionalMovementComboBox = new JComboBox();
+			
 			for (BidirectionalMovement movement : bidirectionalMovements)
+			{
+				mBidirectionalMovementComboBox.addItem(movement.toString());
 				mTempBidirectionalMovements.add(movement.toString());
+			}
 
 			mBidirectionalMovementComboBox.setSelectedIndex(0);
 		}
@@ -307,8 +311,25 @@ public class PieceMakerPanel extends ChessPanel
 				mBidirectionalMovementComboBox.setEnabled(true);
 				mRemoveKnightMoveButton.setEnabled(true);
 				String toAdd = mKnightOneField.getText() + " x " + mKnightTwoField.getText(); //$NON-NLS-1$
-				mTempBidirectionalMovements.add(toAdd);
-				mBidirectionalMovementComboBox.addItem(toAdd);
+				String toAddInverse = mKnightTwoField.getText() + " x " + mKnightOneField.getText(); //$NON-NLS-1$
+
+				boolean alreadyInList = false;
+				for (int i = 0; i < mBidirectionalMovementComboBox.getItemCount(); i++)
+				{
+					if (mBidirectionalMovementComboBox.getItemAt(i).equals(toAdd)
+							|| mBidirectionalMovementComboBox.getItemAt(i).equals(toAddInverse))
+					{
+						alreadyInList = true;
+						break;
+					}
+				}
+
+				if (!alreadyInList)
+				{
+					mTempBidirectionalMovements.add(toAdd);
+					mBidirectionalMovementComboBox.addItem(toAdd);
+				}
+
 				mKnightOneField.setText(""); //$NON-NLS-1$
 				mKnightTwoField.setText(""); //$NON-NLS-1$
 				mAddKnightMoveButton.setEnabled(false);
