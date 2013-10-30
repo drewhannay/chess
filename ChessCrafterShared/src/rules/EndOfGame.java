@@ -70,6 +70,11 @@ public enum EndOfGame
 	{
 		return mPieceName;
 	}
+	
+	public int getMaxNumberOfChecks()
+	{
+		return mMaxNumberOfChecks;
+	}
 
 	private void classicCheckEndOfGame(Piece objectivePiece)
 	{
