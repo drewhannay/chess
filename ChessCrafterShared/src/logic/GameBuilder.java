@@ -324,6 +324,7 @@ public class GameBuilder implements Serializable
 		}
 		catch (Exception e)
 		{
+			e.printStackTrace();
 		}
 	}
 
