@@ -1,7 +1,7 @@
 package rules;
 
-import logic.Board;
-import logic.Game;
+import models.Board;
+import models.Game;
 
 public enum GetBoard
 {

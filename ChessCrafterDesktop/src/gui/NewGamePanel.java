@@ -30,9 +30,9 @@ import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 
-import logic.Game;
 import logic.GameBuilder;
 import logic.Result;
+import models.Game;
 import net.NetworkPlayManager;
 import timer.ChessTimer;
 import timer.TimerTypes;

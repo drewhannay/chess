@@ -36,7 +36,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.WindowConstants;
 
-import logic.Game;
+import models.Game;
 import timer.ChessTimer;
 import utility.AppConstants;
 import utility.ChessCrafter;

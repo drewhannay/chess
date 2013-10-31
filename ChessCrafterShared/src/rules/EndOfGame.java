@@ -3,10 +3,10 @@ package rules;
 import java.util.List;
 
 import utility.GuiUtility;
-import logic.Game;
 import logic.Move;
-import logic.Piece;
 import logic.Result;
+import models.Game;
+import models.Piece;
 
 public enum EndOfGame
 {
@@ -69,6 +69,11 @@ public enum EndOfGame
 	public String getCaptureAllPieceName()
 	{
 		return mPieceName;
+	}
+	
+	public int getMaxNumberOfChecks()
+	{
+		return mMaxNumberOfChecks;
 	}
 
 	private void classicCheckEndOfGame(Piece objectivePiece)

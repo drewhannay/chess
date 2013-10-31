@@ -1,14 +1,20 @@
-package rules;
+package models;
 
 import java.io.Serializable;
 import java.util.EnumSet;
 import java.util.List;
 
-import logic.Board;
-import logic.Game;
 import logic.Move;
-import logic.Piece;
-import logic.Square;
+import rules.AdjustTeamLegalDestinations;
+import rules.AfterMove;
+import rules.CropLegalDestinations;
+import rules.EndOfGame;
+import rules.GetBoard;
+import rules.GetPromotionSquares;
+import rules.Messages;
+import rules.NextTurn;
+import rules.ObjectivePiece;
+import rules.Promote;
 import rules.NextTurn.NextTurnOption;
 import rules.ObjectivePiece.ObjectivePieceTypes;
 
@@ -16,7 +22,7 @@ public class Rules implements Serializable
 {
 	public Rules(boolean isBlack)
 	{
-		// Initialize everything to classic to ensure nothing can be null.
+		// initialize everything to classic to ensure nothing can be null
 		mNextTurn = new NextTurn(NextTurnOption.CLASSIC, 1, 1, 0);
 
 		mEndOfGame = EndOfGame.CLASSIC.init(3, Messages.getString("queen"), isBlack); //$NON-NLS-1$

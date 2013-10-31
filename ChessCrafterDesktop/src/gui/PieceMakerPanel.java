@@ -37,10 +37,10 @@ import javax.swing.filechooser.FileFilter;
 
 import logic.BidirectionalMovement;
 import logic.GameBuilder;
-import logic.Piece;
 import logic.PieceBuilder;
 import logic.PieceMovements;
 import logic.PieceMovements.MovementDirection;
+import models.Piece;
 import utility.FileUtility;
 import utility.GuiUtility;
 import utility.ImageUtility;

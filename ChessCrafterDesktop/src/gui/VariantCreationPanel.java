@@ -40,16 +40,16 @@ import javax.swing.WindowConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import logic.Board;
-import logic.Game;
 import logic.GameBuilder;
-import logic.Piece;
 import logic.PieceBuilder;
-import logic.Square;
+import models.Board;
+import models.Game;
+import models.Piece;
+import models.Rules;
+import models.Square;
 import rules.EndOfGame;
 import rules.ObjectivePiece;
 import rules.ObjectivePiece.ObjectivePieceTypes;
-import rules.Rules;
 import utility.FileUtility;
 import utility.GuiUtility;
 import utility.PieceIconUtility;
@@ -322,19 +322,6 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 			}
 		});
 
-		JButton objectiveSetupButton = new JButton(Messages.getString("VariantCreationPanel.setUpObjectives")); //$NON-NLS-1$
-		objectiveSetupButton.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent event)
-			{
-				mOptionsFrame.dispose();
-				mOptionsFrame = new JFrame();
-
-				new ObjectiveMakerPanel(VariantCreationPanel.this, mOptionsFrame);
-			}
-		});
-
 		JButton ruleSetupButton = new JButton(Messages.getString("VariantCreationPanel.setUpGameRules")); //$NON-NLS-1$
 		ruleSetupButton.addActionListener(new ActionListener()
 		{
@@ -395,17 +382,14 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 		mainPanelConstraints.gridy = 2;
 		mPieceListPanel.add(boardSetupButton, mainPanelConstraints);
 
-		mainPanelConstraints.gridx = 0;
-		mainPanelConstraints.gridy = 3;
-		mPieceListPanel.add(objectiveSetupButton, mainPanelConstraints);
-
-		mainPanelConstraints.gridx = 1;
-		mainPanelConstraints.gridy = 3;
-		mPieceListPanel.add(ruleSetupButton, mainPanelConstraints);
-
 		mainPanelConstraints.gridx = 1;
 		mainPanelConstraints.gridy = 2;
 		mPieceListPanel.add(playerSetupButton, mainPanelConstraints);
+
+		mainPanelConstraints.gridx = 0;
+		mainPanelConstraints.gridy = 3;
+		mainPanelConstraints.gridwidth = 2;
+		mPieceListPanel.add(ruleSetupButton, mainPanelConstraints);
 
 		JPanel optionsPanel = new JPanel();
 		optionsPanel.setOpaque(false);
@@ -414,6 +398,7 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 		mainPanelConstraints.fill = GridBagConstraints.CENTER;
 		mainPanelConstraints.gridx = 0;
 		mainPanelConstraints.gridy = 1;
+		mainPanelConstraints.gridwidth = 1;
 		optionsPanel.add(submitButton, mainPanelConstraints);
 
 		mainPanelConstraints.fill = GridBagConstraints.HORIZONTAL;
@@ -573,6 +558,11 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 	public GameBuilder getBuilder()
 	{
 		return mBuilder;
+	}
+
+	public void setBuilder(GameBuilder builder)
+	{
+		mBuilder = builder;
 	}
 
 	public void setWhiteRules(Rules whiteRules)
@@ -1033,7 +1023,7 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 	private JPanel mPieceListPanel;
 	private Map<String, List<String>> mWhitePromotionMap;
 	private Map<String, List<String>> mBlackPromotionMap;
-	private GameBuilder mBuilder;
+	public GameBuilder mBuilder;
 	private List<Piece> mWhiteTeam;
 	private List<Piece> mBlackTeam;
 	private JButton mChangePromotionButton;

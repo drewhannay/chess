@@ -18,10 +18,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import logic.Board;
-import logic.Game;
 import logic.Result;
-import logic.Square;
+import models.Board;
+import models.Game;
+import models.Square;
 import timer.ChessTimer;
 import utility.GuiUtility;
 import ai.FakeMove;

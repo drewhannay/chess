@@ -15,9 +15,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import models.Rules;
+
 import rules.NextTurn;
 import rules.NextTurn.NextTurnOption;
-import rules.Rules;
 import utility.GuiUtility;
 
 public class CustomPlayerPanel extends ChessPanel

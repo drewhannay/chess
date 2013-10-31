@@ -3,18 +3,19 @@ package gui;
 import java.awt.Color;
 import java.awt.Image;
 import java.io.IOException;
+import java.io.Serializable;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
-import logic.Piece;
-import logic.Square;
-import logic.Square.SquareStateListener;
+import models.Piece;
+import models.Square;
+import models.Square.SquareStateListener;
 import utility.GuiUtility;
 import utility.PieceIconUtility;
 
-public class SquareJLabel extends JLabel
+public class SquareJLabel extends JLabel implements Serializable
 {
 	public static final Color HIGHLIGHT_COLOR = new Color(20, 129, 191);
 

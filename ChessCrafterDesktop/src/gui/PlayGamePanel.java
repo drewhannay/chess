@@ -32,12 +32,12 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
-import logic.Board;
-import logic.Game;
 import logic.Move;
-import logic.Piece;
 import logic.Result;
-import logic.Square;
+import models.Board;
+import models.Game;
+import models.Piece;
+import models.Square;
 import timer.ChessTimer;
 import utility.AppConstants;
 import utility.FileUtility;

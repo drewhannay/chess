@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,9 +20,10 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
-import logic.Board;
 import logic.GameBuilder;
 import logic.PieceBuilder;
+import models.Board;
+import models.Rules;
 import rules.AdjustTeamLegalDestinations;
 import rules.AfterMove;
 import rules.CropLegalDestinations;
@@ -31,12 +31,11 @@ import rules.EndOfGame;
 import rules.GetBoard;
 import rules.ObjectivePiece;
 import rules.ObjectivePiece.ObjectivePieceTypes;
-import rules.Rules;
 import utility.GuiUtility;
 
 public class RuleMakerPanel extends ChessPanel
 {
-	public RuleMakerPanel(VariantCreationPanel customSetupMenu, JFrame optionsFrame)
+	public RuleMakerPanel(VariantCreationPanel variantCreationPanel, JFrame optionsFrame)
 	{
 		mFrame = optionsFrame;
 		mFrame.setVisible(true);
@@ -44,13 +43,13 @@ public class RuleMakerPanel extends ChessPanel
 		mFrame.setVisible(true);
 		mFrame.setSize(600, 500);
 		mFrame.setLocationRelativeTo(Driver.getInstance());
-		mBuilder = customSetupMenu.getBuilder();
-		mWhiteRules = customSetupMenu.mWhiteRules;
-		mBlackRules = customSetupMenu.mBlackRules;
-		initGUIComponents(customSetupMenu);
+		mBuilder = variantCreationPanel.getBuilder();
+		mWhiteRules = variantCreationPanel.mWhiteRules;
+		mBlackRules = variantCreationPanel.mBlackRules;
+		initGUIComponents(variantCreationPanel);
 	}
 
-	private void initGUIComponents(final VariantCreationPanel customSetupMenu)
+	private void initGUIComponents(final VariantCreationPanel variantCreationPanel)
 	{
 		revalidate();
 		repaint();
@@ -61,175 +60,14 @@ public class RuleMakerPanel extends ChessPanel
 
 		final Board[] boards = mBuilder.getBoards();
 
-		// capture mandatory check boxes
-		final JPanel whiteLegalDestinationPanel = new JPanel();
-		whiteLegalDestinationPanel.setLayout(new GridLayout(2, 1));
-		whiteLegalDestinationPanel.setOpaque(false);
-		final JCheckBox whiteCaptureMandatoryCheckBox = new JCheckBox(Messages.getString("RuleMakerPanel.captureMandatory")); //$NON-NLS-1$
-		whiteCaptureMandatoryCheckBox.setToolTipText(Messages.getString("RuleMakerPanel.capturingMustBe")); //$NON-NLS-1$
-		whiteCaptureMandatoryCheckBox.setSelected(customSetupMenu.mWhiteRules.getCaptureMandatory());
-		whiteCaptureMandatoryCheckBox.setOpaque(false);
-		whiteCaptureMandatoryCheckBox.setForeground(Color.white);
-		whiteLegalDestinationPanel.add(whiteCaptureMandatoryCheckBox);
-
-		final JPanel blackLegalDestinationPanel = new JPanel();
-		blackLegalDestinationPanel.setLayout(new GridLayout(2, 1));
-		blackLegalDestinationPanel.setOpaque(false);
-		final JCheckBox blackCaptureMandatoryCheckBox = new JCheckBox(Messages.getString("RuleMakerPanel.captureMandatory")); //$NON-NLS-1$
-		blackCaptureMandatoryCheckBox.setToolTipText(Messages.getString("RuleMakerPanel.capturingMustBe")); //$NON-NLS-1$
-		blackCaptureMandatoryCheckBox.setSelected(customSetupMenu.mBlackRules.getCaptureMandatory());
-		blackCaptureMandatoryCheckBox.setOpaque(false);
-		blackCaptureMandatoryCheckBox.setForeground(Color.white);
-		blackLegalDestinationPanel.add(blackCaptureMandatoryCheckBox);
-
-		// can't move objective check boxes
-		final JCheckBox whiteNoMoveObjectiveCheckBox = new JCheckBox(Messages.getString("RuleMakerPanel.cantMoveObj")); //$NON-NLS-1$
-		whiteNoMoveObjectiveCheckBox.setToolTipText(Messages.getString("RuleMakerPanel.movingObjIllegal")); //$NON-NLS-1$
-		whiteNoMoveObjectiveCheckBox.setOpaque(false);
-		whiteNoMoveObjectiveCheckBox.setForeground(Color.white);
-		if (mWhiteRules.getEndOfGame() == EndOfGame.CLASSIC || mWhiteRules.getEndOfGame() == EndOfGame.CHECK_N_TIMES)
-		{
-			whiteNoMoveObjectiveCheckBox.setSelected(customSetupMenu.mWhiteRules.getObjectiveIsStationary());
-			whiteLegalDestinationPanel.add(whiteNoMoveObjectiveCheckBox);
-		}
-
-		final JCheckBox blackNoMoveObjectiveCheckBox = new JCheckBox(Messages.getString("RuleMakerPanel.cantMoveObj")); //$NON-NLS-1$
-		blackNoMoveObjectiveCheckBox.setToolTipText(Messages.getString("RuleMakerPanel.movingObjIllegal")); //$NON-NLS-1$
-		blackNoMoveObjectiveCheckBox.setOpaque(false);
-		blackNoMoveObjectiveCheckBox.setForeground(Color.white);
-		if (mBlackRules.getEndOfGame() == EndOfGame.CLASSIC || mBlackRules.getEndOfGame() == EndOfGame.CHECK_N_TIMES)
-		{
-			blackNoMoveObjectiveCheckBox.setSelected(customSetupMenu.mBlackRules.getObjectiveIsStationary());
-			blackLegalDestinationPanel.add(blackNoMoveObjectiveCheckBox);
-		}
-
-		final JPanel whiteAfterCapturePanel = new JPanel();
-		whiteAfterCapturePanel.setLayout(new GridLayout(4, 1));
-		whiteAfterCapturePanel.setOpaque(false);
-
-		final ButtonGroup whiteAfterOptions = new ButtonGroup();
-		final JRadioButton whiteChangeColorRadioButton = new JRadioButton(Messages.getString("RuleMakerPanel.captererChangesColor")); //$NON-NLS-1$
-		whiteChangeColorRadioButton.setToolTipText(Messages.getString("RuleMakerPanel.capturingPieceChanges")); //$NON-NLS-1$
-		whiteChangeColorRadioButton.setOpaque(false);
-		whiteChangeColorRadioButton.setForeground(Color.white);
-
-		if (mWhiteRules.getEndOfGame() != EndOfGame.CLASSIC)
-		{
-			whiteAfterOptions.add(whiteChangeColorRadioButton);
-			whiteAfterCapturePanel.add(whiteChangeColorRadioButton);
-		}
-
-		final JRadioButton whitePieceReturnRadioButton = new JRadioButton(Messages.getString("RuleMakerPanel.capturedReturns")); //$NON-NLS-1$
-		whitePieceReturnRadioButton.setToolTipText(Messages.getString("RuleMakerPanel.capturedReturnToTheirStart")); //$NON-NLS-1$
-		whitePieceReturnRadioButton.setSelected(mWhiteRules.getCapturedReturnToStart());
-		whitePieceReturnRadioButton.setOpaque(false);
-		whitePieceReturnRadioButton.setForeground(Color.white);
-		whiteAfterOptions.add(whitePieceReturnRadioButton);
-		whiteAfterCapturePanel.add(whitePieceReturnRadioButton);
-
-		final JRadioButton whiteDropPiecesRadioButton = new JRadioButton(Messages.getString("RuleMakerPanel.capturedPiecesDrop")); //$NON-NLS-1$
-		whiteDropPiecesRadioButton.setOpaque(false);
-		whiteDropPiecesRadioButton.setForeground(Color.white);
-		if (mWhiteRules.getEndOfGame() != EndOfGame.CAPTURE_ALL_OF_TYPE || mWhiteRules.getEndOfGame() != EndOfGame.LOSE_ALL_PIECES)
-		{
-			whiteDropPiecesRadioButton.setToolTipText(Messages.getString("RuleMakerPanel.capturedArePlaced")); //$NON-NLS-1$
-			whiteDropPiecesRadioButton.setSelected(mWhiteRules.getPiecesDrop());
-			whiteAfterOptions.add(whiteDropPiecesRadioButton);
-			whiteAfterCapturePanel.add(whiteDropPiecesRadioButton);
-		}
-
-		final JRadioButton whiteCapturedColorAndDropRadioButton = new JRadioButton(
-				Messages.getString("RuleMakerPanel.capturedChangesAnd")); //$NON-NLS-1$
-		whiteCapturedColorAndDropRadioButton.setToolTipText(Messages.getString("RuleMakerPanel.capturedChangesTeams")); //$NON-NLS-1$
-		whiteCapturedColorAndDropRadioButton.setSelected(mWhiteRules.getPiecesDropAndSwitch());
-		whiteCapturedColorAndDropRadioButton.setOpaque(false);
-		whiteCapturedColorAndDropRadioButton.setForeground(Color.white);
-		whiteAfterOptions.add(whiteCapturedColorAndDropRadioButton);
-		whiteAfterCapturePanel.add(whiteCapturedColorAndDropRadioButton);
-
-		final JRadioButton whiteNoAfterMoveRadioButton = new JRadioButton(Messages.getString("RuleMakerPanel.doNothing")); //$NON-NLS-1$
-		whiteNoAfterMoveRadioButton.setSelected(mWhiteRules.getNoAfterMovesSelected());
-		whiteNoAfterMoveRadioButton.setOpaque(false);
-		whiteNoAfterMoveRadioButton.setForeground(Color.white);
-		whiteAfterOptions.add(whiteNoAfterMoveRadioButton);
-		whiteAfterCapturePanel.add(whiteNoAfterMoveRadioButton);
-
-		final JPanel blackAfterPanel = new JPanel();
-		blackAfterPanel.setOpaque(false);
-		final ButtonGroup blackAfterOptions = new ButtonGroup();
-
-		blackAfterPanel.setLayout(new GridLayout(4, 1));
-		final JRadioButton blackChangeColorRadioButton = new JRadioButton(Messages.getString("RuleMakerPanel.capturerChanges")); //$NON-NLS-1$
-		blackChangeColorRadioButton.setToolTipText(Messages.getString("RuleMakerPanel.capturingPieceChanges")); //$NON-NLS-1$
-		blackChangeColorRadioButton.setOpaque(false);
-		blackChangeColorRadioButton.setForeground(Color.white);
-
-		if (mBlackRules.getEndOfGame() != EndOfGame.CLASSIC)
-		{
-			blackAfterOptions.add(blackChangeColorRadioButton);
-			blackAfterPanel.add(blackChangeColorRadioButton);
-		}
-
-		final JRadioButton blackPieceReturnRadioButton = new JRadioButton(Messages.getString("RuleMakerPanel.capturedReturns")); //$NON-NLS-1$
-		blackPieceReturnRadioButton.setToolTipText(Messages.getString("RuleMakerPanel.capturedReturnToTheirStart")); //$NON-NLS-1$
-		blackPieceReturnRadioButton.setSelected(mBlackRules.getCapturedReturnToStart());
-		blackPieceReturnRadioButton.setOpaque(false);
-		blackPieceReturnRadioButton.setForeground(Color.white);
-		blackAfterPanel.add(blackPieceReturnRadioButton);
-		blackAfterOptions.add(blackPieceReturnRadioButton);
-
-		final JRadioButton blackDropPiecesRadioButton = new JRadioButton(Messages.getString("RuleMakerPanel.capturedPiecesDrop")); //$NON-NLS-1$
-		blackDropPiecesRadioButton.setToolTipText(Messages.getString("RuleMakerPanel.capturedArePlaced")); //$NON-NLS-1$
-		blackDropPiecesRadioButton.setOpaque(false);
-		blackDropPiecesRadioButton.setForeground(Color.white);
-		if (mBlackRules.getEndOfGame() != EndOfGame.CAPTURE_ALL_OF_TYPE || mBlackRules.getEndOfGame() != EndOfGame.LOSE_ALL_PIECES)
-		{
-			blackDropPiecesRadioButton.setSelected(mBlackRules.getPiecesDrop());
-			blackAfterPanel.add(blackDropPiecesRadioButton);
-			blackAfterOptions.add(blackDropPiecesRadioButton);
-		}
-
-		final JRadioButton blackCapturedColorAndDropRadioButton = new JRadioButton(
-				Messages.getString("RuleMakerPanel.capturedChangesAnd")); //$NON-NLS-1$
-		blackCapturedColorAndDropRadioButton.setToolTipText(Messages.getString("RuleMakerPanel.capturedChangesTeams")); //$NON-NLS-1$
-		blackCapturedColorAndDropRadioButton.setSelected(mBlackRules.getPiecesDropAndSwitch());
-		blackCapturedColorAndDropRadioButton.setOpaque(false);
-		blackCapturedColorAndDropRadioButton.setForeground(Color.white);
-		blackAfterPanel.add(blackCapturedColorAndDropRadioButton);
-		blackAfterOptions.add(blackCapturedColorAndDropRadioButton);
-
-		final JRadioButton blackNoAfterMoveRadioButton = new JRadioButton(Messages.getString("RuleMakerPanel.doNothing")); //$NON-NLS-1$
-		blackNoAfterMoveRadioButton.setSelected(mBlackRules.getNoAfterMovesSelected());
-		blackNoAfterMoveRadioButton.setOpaque(false);
-		blackNoAfterMoveRadioButton.setForeground(Color.white);
-		blackAfterOptions.add(blackNoAfterMoveRadioButton);
-		blackAfterPanel.add(blackNoAfterMoveRadioButton);
-
-		final JPanel specialRulesPanel = new JPanel();
-		specialRulesPanel.setLayout(new GridLayout(2, 1));
-		specialRulesPanel.setOpaque(false);
-
-		final JCheckBox atomicChessCheckBox = new JCheckBox(Messages.getString("RuleMakerPanel.atomicChess")); //$NON-NLS-1$
-		atomicChessCheckBox.setToolTipText(Messages.getString("RuleMakerPanel.captureRemovesBoth")); //$NON-NLS-1$
-		atomicChessCheckBox.setEnabled(mWhiteRules.isAtomic() || mWhiteRules.getNoAfterMovesSelected());
-		atomicChessCheckBox.setSelected(mWhiteRules.isAtomic());
-		atomicChessCheckBox.setOpaque(false);
-		atomicChessCheckBox.setForeground(Color.white);
-		specialRulesPanel.add(atomicChessCheckBox);
-
-		final JCheckBox switchBoardsCheckBox = new JCheckBox(Messages.getString("RuleMakerPanel.moveToOtherBoard")); //$NON-NLS-1$
-		switchBoardsCheckBox.setToolTipText(Messages.getString("RuleMakerPanel.eachPiecesMoves")); //$NON-NLS-1$
-		switchBoardsCheckBox.setEnabled(mWhiteRules.switchBoards());
-		switchBoardsCheckBox.setOpaque(false);
-		switchBoardsCheckBox.setForeground(Color.white);
-		specialRulesPanel.add(switchBoardsCheckBox);
-
 		final JPanel whiteExtrasPanel = new JPanel();
 		whiteExtrasPanel.setLayout(new GridBagLayout());
 		whiteExtrasPanel.setOpaque(false);
-		final JTextField whiteNumberOfChecksField = new JTextField(2);
+		final JTextField whiteNumberOfChecksField = new JTextField(5);
+		whiteNumberOfChecksField.setText(variantCreationPanel.mBlackRules.getEndOfGame().getMaxNumberOfChecks() + "");
+		whiteNumberOfChecksField.setEnabled(false);
 		Object[] allPieces = PieceBuilder.getSet().toArray();
-		final JComboBox whitePieceList = new JComboBox(allPieces);
+		final JComboBox whitePiecesList = new JComboBox(allPieces);
 
 		int whiteObjectiveIndex = 0;
 		int blackObjectiveIndex = 0;
@@ -244,93 +82,555 @@ public class RuleMakerPanel extends ChessPanel
 		JLabel whiteNumberOfChecksLabel = GuiUtility.createJLabel(Messages.getString("RuleMakerPanel.howManyTimesForCheck")); //$NON-NLS-1$
 		JLabel whiteObjectivePieceLabel = GuiUtility.createJLabel(Messages.getString("RuleMakerPanel.whichIsObjective")); //$NON-NLS-1$
 
-		whiteNumberOfChecksField.setVisible(false);
-		whitePieceList.setVisible(false);
-
-		if (mWhiteRules.getEndOfGame() == EndOfGame.CLASSIC || mWhiteRules.getEndOfGame() == EndOfGame.CAPTURE_ALL_OF_TYPE)
-		{
-			if (mWhiteRules.getEndOfGame() == EndOfGame.CAPTURE_ALL_OF_TYPE)
-				whiteObjectivePieceLabel.setText(Messages.getString("RuleMakerPanel.whichPieceTypeCaptured")); //$NON-NLS-1$
-
-			whitePieceList.setVisible(true);
-			whitePieceList.setSelectedIndex(whiteObjectiveIndex);
-			constraints.gridx = 0;
-			constraints.gridy = 1;
-			constraints.insets = new Insets(1, 1, 1, 1);
-			whiteExtrasPanel.add(whiteObjectivePieceLabel, constraints);
-			constraints.gridx = 1;
-			constraints.gridy = 1;
-			whiteExtrasPanel.add(whitePieceList, constraints);
-		}
-
-		if (mWhiteRules.getEndOfGame() == EndOfGame.CHECK_N_TIMES)
-		{
-			whiteNumberOfChecksField.setVisible(true);
-			whitePieceList.setVisible(true);
-			whitePieceList.setSelectedIndex(whiteObjectiveIndex);
-			constraints.gridx = 0;
-			constraints.gridy = 0;
-			whiteExtrasPanel.add(whiteNumberOfChecksLabel, constraints);
-			constraints.gridx = 1;
-			constraints.gridy = 0;
-			whiteExtrasPanel.add(whiteNumberOfChecksField, constraints);
-			constraints.gridx = 0;
-			constraints.gridy = 1;
-			constraints.insets = new Insets(1, 1, 1, 1);
-			whiteExtrasPanel.add(whiteObjectivePieceLabel, constraints);
-			constraints.gridx = 1;
-			constraints.gridy = 1;
-			whiteExtrasPanel.add(whitePieceList, constraints);
-		}
+		whitePiecesList.setSelectedIndex(whiteObjectiveIndex);
+		constraints.gridx = 0;
+		constraints.gridy = 0;
+		constraints.insets = new Insets(0, 0, 0, 10);
+		whiteExtrasPanel.add(whiteObjectivePieceLabel, constraints);
+		constraints.gridx = 1;
+		constraints.gridy = 0;
+		constraints.insets = new Insets(0, 0, 5, 0);
+		whiteExtrasPanel.add(whitePiecesList, constraints);
+		constraints.gridx = 0;
+		constraints.gridy = 1;
+		constraints.insets = new Insets(0, 0, 0, 10);
+		whiteExtrasPanel.add(whiteNumberOfChecksLabel, constraints);
+		constraints.gridx = 1;
+		constraints.gridy = 1;
+		constraints.insets = new Insets(0, 0, 10, 0);
+		whiteExtrasPanel.add(whiteNumberOfChecksField, constraints);
 
 		final JPanel blackExtrasPanel = new JPanel();
 		blackExtrasPanel.setLayout(new GridBagLayout());
 		blackExtrasPanel.setOpaque(false);
 
-		final JTextField blackNumberOfChecksField = new JTextField(2);
+		final JTextField blackNumberOfChecksField = new JTextField(5);
+		blackNumberOfChecksField.setText(variantCreationPanel.mBlackRules.getEndOfGame().getMaxNumberOfChecks() + "");
+		blackNumberOfChecksField.setEnabled(false);
 		final JComboBox blackPiecesList = new JComboBox(allPieces);
 
 		JLabel blackNumberOfChecksLabel = GuiUtility.createJLabel(Messages.getString("RuleMakerPanel.howManyTimesForCheck")); //$NON-NLS-1$
 		JLabel blackObjectivePieceLabel = GuiUtility.createJLabel(Messages.getString("RuleMakerPanel.whichIsObjective")); //$NON-NLS-1$
 
-		blackNumberOfChecksField.setVisible(false);
-		blackPiecesList.setVisible(false);
+		blackPiecesList.setSelectedIndex(blackObjectiveIndex);
+		constraints.gridx = 0;
+		constraints.gridy = 0;
+		constraints.insets = new Insets(0, 0, 0, 10);
+		blackExtrasPanel.add(blackObjectivePieceLabel, constraints);
+		constraints.gridx = 1;
+		constraints.gridy = 0;
+		constraints.insets = new Insets(0, 0, 5, 0);
+		blackExtrasPanel.add(blackPiecesList, constraints);
+		constraints.gridx = 0;
+		constraints.gridy = 1;
+		constraints.insets = new Insets(0, 0, 0, 10);
+		blackExtrasPanel.add(blackNumberOfChecksLabel, constraints);
+		constraints.gridx = 1;
+		constraints.gridy = 1;
+		constraints.insets = new Insets(0, 0, 10, 0);
+		blackExtrasPanel.add(blackNumberOfChecksField, constraints);
 
-		if (mBlackRules.getEndOfGame() == EndOfGame.CLASSIC || mBlackRules.getEndOfGame() == EndOfGame.CAPTURE_ALL_OF_TYPE)
+		// capture mandatory check boxes
+		final JPanel whiteLegalDestinationPanel = new JPanel();
+		whiteLegalDestinationPanel.setLayout(new GridBagLayout());
+		whiteLegalDestinationPanel.setOpaque(false);
+		final JCheckBox whiteCaptureMandatoryCheckBox = new JCheckBox(Messages.getString("RuleMakerPanel.captureMandatory")); //$NON-NLS-1$
+		whiteCaptureMandatoryCheckBox.setToolTipText(Messages.getString("RuleMakerPanel.capturingMustBe")); //$NON-NLS-1$
+		whiteCaptureMandatoryCheckBox.setSelected(variantCreationPanel.mWhiteRules.getCaptureMandatory());
+		whiteCaptureMandatoryCheckBox.setOpaque(false);
+		whiteCaptureMandatoryCheckBox.setForeground(Color.white);
+		constraints.gridy = 0;
+		constraints.anchor = GridBagConstraints.CENTER;
+		constraints.insets = new Insets(10, 0, 5, 0);
+		whiteLegalDestinationPanel
+				.add(GuiUtility.createJLabel(Messages.getString("RuleMakerPanel.legalDestinationHTML")), constraints); //$NON-NLS-1
+		constraints.anchor = GridBagConstraints.WEST;
+		constraints.gridy = 1;
+		constraints.insets = new Insets(0, 0, 0, 0);
+		whiteLegalDestinationPanel.add(whiteCaptureMandatoryCheckBox, constraints);
+
+		final JPanel blackLegalDestinationPanel = new JPanel();
+		blackLegalDestinationPanel.setLayout(new GridBagLayout());
+		blackLegalDestinationPanel.setOpaque(false);
+		final JCheckBox blackCaptureMandatoryCheckBox = new JCheckBox(Messages.getString("RuleMakerPanel.captureMandatory")); //$NON-NLS-1$
+		blackCaptureMandatoryCheckBox.setToolTipText(Messages.getString("RuleMakerPanel.capturingMustBe")); //$NON-NLS-1$
+		blackCaptureMandatoryCheckBox.setSelected(variantCreationPanel.mBlackRules.getCaptureMandatory());
+		blackCaptureMandatoryCheckBox.setOpaque(false);
+		blackCaptureMandatoryCheckBox.setForeground(Color.white);
+		constraints.gridy = 0;
+		constraints.anchor = GridBagConstraints.CENTER;
+		constraints.insets = new Insets(10, 0, 5, 0);
+		blackLegalDestinationPanel
+				.add(GuiUtility.createJLabel(Messages.getString("RuleMakerPanel.legalDestinationHTML")), constraints); //$NON-NLS-1
+		constraints.anchor = GridBagConstraints.WEST;
+		constraints.gridy = 1;
+		constraints.insets = new Insets(0, 0, 0, 0);
+		blackLegalDestinationPanel.add(blackCaptureMandatoryCheckBox, constraints);
+
+		// can't move objective check boxes
+		final JCheckBox whiteNoMoveObjectiveCheckBox = new JCheckBox(Messages.getString("RuleMakerPanel.cantMoveObj")); //$NON-NLS-1$
+		whiteNoMoveObjectiveCheckBox.setToolTipText(Messages.getString("RuleMakerPanel.movingObjIllegal")); //$NON-NLS-1$
+		whiteNoMoveObjectiveCheckBox.setOpaque(false);
+		whiteNoMoveObjectiveCheckBox.setForeground(Color.white);
+		constraints.gridy = 2;
+		whiteLegalDestinationPanel.add(whiteNoMoveObjectiveCheckBox, constraints);
+
+		final JCheckBox blackNoMoveObjectiveCheckBox = new JCheckBox(Messages.getString("RuleMakerPanel.cantMoveObj")); //$NON-NLS-1$
+		blackNoMoveObjectiveCheckBox.setToolTipText(Messages.getString("RuleMakerPanel.movingObjIllegal")); //$NON-NLS-1$
+		blackNoMoveObjectiveCheckBox.setOpaque(false);
+		blackNoMoveObjectiveCheckBox.setForeground(Color.white);
+		constraints.gridy = 2;
+		blackLegalDestinationPanel.add(blackNoMoveObjectiveCheckBox, constraints);
+
+		final JPanel whiteAfterCapturePanel = new JPanel();
+		whiteAfterCapturePanel.setLayout(new GridBagLayout());
+		whiteAfterCapturePanel.setOpaque(false);
+		constraints.gridy = 0;
+		constraints.anchor = GridBagConstraints.CENTER;
+		constraints.insets = new Insets(10, 0, 10, 0);
+		whiteAfterCapturePanel.add(GuiUtility.createJLabel(Messages.getString("RuleMakerPanel.afterCapturingHTML")), constraints); //$NON-NLS-1$
+		constraints.anchor = GridBagConstraints.WEST;
+		constraints.insets = new Insets(0, 0, 0, 0);
+
+		final ButtonGroup whiteAfterOptions = new ButtonGroup();
+		final JRadioButton whiteChangeColorRadioButton = new JRadioButton(Messages.getString("RuleMakerPanel.captererChangesColor")); //$NON-NLS-1$
+		whiteChangeColorRadioButton.setToolTipText(Messages.getString("RuleMakerPanel.capturingPieceChanges")); //$NON-NLS-1$
+		whiteChangeColorRadioButton.setOpaque(false);
+		whiteChangeColorRadioButton.setForeground(Color.white);
+		whiteAfterOptions.add(whiteChangeColorRadioButton);
+		constraints.gridy = 1;
+		whiteAfterCapturePanel.add(whiteChangeColorRadioButton, constraints);
+
+		final JRadioButton whitePieceReturnRadioButton = new JRadioButton(Messages.getString("RuleMakerPanel.capturedReturns")); //$NON-NLS-1$
+		whitePieceReturnRadioButton.setToolTipText(Messages.getString("RuleMakerPanel.capturedReturnToTheirStart")); //$NON-NLS-1$
+		whitePieceReturnRadioButton.setSelected(mWhiteRules.getCapturedReturnToStart());
+		whitePieceReturnRadioButton.setOpaque(false);
+		whitePieceReturnRadioButton.setForeground(Color.white);
+		whiteAfterOptions.add(whitePieceReturnRadioButton);
+		constraints.gridy = 2;
+		whiteAfterCapturePanel.add(whitePieceReturnRadioButton, constraints);
+
+		final JRadioButton whiteDropPiecesRadioButton = new JRadioButton(Messages.getString("RuleMakerPanel.capturedPiecesDrop")); //$NON-NLS-1$
+		whiteDropPiecesRadioButton.setOpaque(false);
+		whiteDropPiecesRadioButton.setForeground(Color.white);
+		whiteDropPiecesRadioButton.setToolTipText(Messages.getString("RuleMakerPanel.capturedArePlaced")); //$NON-NLS-1$
+		whiteDropPiecesRadioButton.setSelected(mWhiteRules.getPiecesDrop());
+		whiteAfterOptions.add(whiteDropPiecesRadioButton);
+		constraints.gridy = 3;
+		whiteAfterCapturePanel.add(whiteDropPiecesRadioButton, constraints);
+
+		final JRadioButton whiteCapturedColorAndDropRadioButton = new JRadioButton(
+				Messages.getString("RuleMakerPanel.capturedChangesAnd")); //$NON-NLS-1$
+		whiteCapturedColorAndDropRadioButton.setToolTipText(Messages.getString("RuleMakerPanel.capturedChangesTeams")); //$NON-NLS-1$
+		whiteCapturedColorAndDropRadioButton.setSelected(mWhiteRules.getPiecesDropAndSwitch());
+		whiteCapturedColorAndDropRadioButton.setOpaque(false);
+		whiteCapturedColorAndDropRadioButton.setForeground(Color.white);
+		whiteAfterOptions.add(whiteCapturedColorAndDropRadioButton);
+		constraints.gridy = 4;
+		whiteAfterCapturePanel.add(whiteCapturedColorAndDropRadioButton, constraints);
+
+		final JRadioButton whiteNoAfterMoveRadioButton = new JRadioButton(Messages.getString("RuleMakerPanel.doNothing")); //$NON-NLS-1$
+		whiteNoAfterMoveRadioButton.setSelected(mWhiteRules.getNoAfterMovesSelected());
+		whiteNoAfterMoveRadioButton.setOpaque(false);
+		whiteNoAfterMoveRadioButton.setForeground(Color.white);
+		whiteAfterOptions.add(whiteNoAfterMoveRadioButton);
+		constraints.gridy = 5;
+		whiteAfterCapturePanel.add(whiteNoAfterMoveRadioButton, constraints);
+
+		final JPanel blackAfterPanel = new JPanel();
+		blackAfterPanel.setOpaque(false);
+		blackAfterPanel.setLayout(new GridBagLayout());
+		constraints.gridy = 0;
+		constraints.anchor = GridBagConstraints.CENTER;
+		constraints.insets = new Insets(10, 0, 10, 0);
+		blackAfterPanel.add(GuiUtility.createJLabel(Messages.getString("RuleMakerPanel.afterCapturingHTML")), constraints); //$NON-NLS-1$
+		constraints.insets = new Insets(0, 0, 0, 0);
+		constraints.anchor = GridBagConstraints.WEST;
+
+		final ButtonGroup blackAfterOptions = new ButtonGroup();
+
+		final JRadioButton blackChangeColorRadioButton = new JRadioButton(Messages.getString("RuleMakerPanel.capturerChanges")); //$NON-NLS-1$
+		blackChangeColorRadioButton.setToolTipText(Messages.getString("RuleMakerPanel.capturingPieceChanges")); //$NON-NLS-1$
+		blackChangeColorRadioButton.setOpaque(false);
+		blackChangeColorRadioButton.setForeground(Color.white);
+		blackAfterOptions.add(blackChangeColorRadioButton);
+		constraints.gridy = 1;
+		blackAfterPanel.add(blackChangeColorRadioButton, constraints);
+
+		final JRadioButton blackPieceReturnRadioButton = new JRadioButton(Messages.getString("RuleMakerPanel.capturedReturns")); //$NON-NLS-1$
+		blackPieceReturnRadioButton.setToolTipText(Messages.getString("RuleMakerPanel.capturedReturnToTheirStart")); //$NON-NLS-1$
+		blackPieceReturnRadioButton.setSelected(mBlackRules.getCapturedReturnToStart());
+		blackPieceReturnRadioButton.setOpaque(false);
+		blackPieceReturnRadioButton.setForeground(Color.white);
+		constraints.gridy = 2;
+		blackAfterPanel.add(blackPieceReturnRadioButton, constraints);
+		blackAfterOptions.add(blackPieceReturnRadioButton);
+
+		final JRadioButton blackDropPiecesRadioButton = new JRadioButton(Messages.getString("RuleMakerPanel.capturedPiecesDrop")); //$NON-NLS-1$
+		blackDropPiecesRadioButton.setToolTipText(Messages.getString("RuleMakerPanel.capturedArePlaced")); //$NON-NLS-1$
+		blackDropPiecesRadioButton.setOpaque(false);
+		blackDropPiecesRadioButton.setForeground(Color.white);
+		blackDropPiecesRadioButton.setSelected(mBlackRules.getPiecesDrop());
+		constraints.gridy = 3;
+		blackAfterPanel.add(blackDropPiecesRadioButton, constraints);
+		blackAfterOptions.add(blackDropPiecesRadioButton);
+
+		final JRadioButton blackCapturedColorAndDropRadioButton = new JRadioButton(
+				Messages.getString("RuleMakerPanel.capturedChangesAnd")); //$NON-NLS-1$
+		blackCapturedColorAndDropRadioButton.setToolTipText(Messages.getString("RuleMakerPanel.capturedChangesTeams")); //$NON-NLS-1$
+		blackCapturedColorAndDropRadioButton.setSelected(mBlackRules.getPiecesDropAndSwitch());
+		blackCapturedColorAndDropRadioButton.setOpaque(false);
+		blackCapturedColorAndDropRadioButton.setForeground(Color.white);
+		constraints.gridy = 4;
+		blackAfterPanel.add(blackCapturedColorAndDropRadioButton, constraints);
+		blackAfterOptions.add(blackCapturedColorAndDropRadioButton);
+
+		final JRadioButton blackNoAfterMoveRadioButton = new JRadioButton(Messages.getString("RuleMakerPanel.doNothing")); //$NON-NLS-1$
+		blackNoAfterMoveRadioButton.setSelected(mBlackRules.getNoAfterMovesSelected());
+		blackNoAfterMoveRadioButton.setOpaque(false);
+		blackNoAfterMoveRadioButton.setForeground(Color.white);
+		blackAfterOptions.add(blackNoAfterMoveRadioButton);
+		constraints.gridy = 5;
+		blackAfterPanel.add(blackNoAfterMoveRadioButton, constraints);
+
+		final JPanel specialRulesPanel = new JPanel();
+		specialRulesPanel.setLayout(new GridBagLayout());
+		specialRulesPanel.setOpaque(false);
+		specialRulesPanel.setBorder(GuiUtility.createBorder(Messages.getString("RuleMakerPanel.specialRules"))); //$NON-NLS-1$
+
+		final JCheckBox atomicChessCheckBox = new JCheckBox(Messages.getString("RuleMakerPanel.atomicChess")); //$NON-NLS-1$
+		atomicChessCheckBox.setToolTipText(Messages.getString("RuleMakerPanel.captureRemovesBoth")); //$NON-NLS-1$
+		atomicChessCheckBox.setEnabled(mWhiteRules.isAtomic() || mWhiteRules.getNoAfterMovesSelected());
+		atomicChessCheckBox.setSelected(mWhiteRules.isAtomic());
+		atomicChessCheckBox.setOpaque(false);
+		atomicChessCheckBox.setForeground(Color.white);
+		constraints.gridy = 0;
+		specialRulesPanel.add(atomicChessCheckBox, constraints);
+
+		final JCheckBox switchBoardsCheckBox = new JCheckBox(Messages.getString("RuleMakerPanel.moveToOtherBoard")); //$NON-NLS-1$
+		switchBoardsCheckBox.setToolTipText(Messages.getString("RuleMakerPanel.eachPiecesMoves")); //$NON-NLS-1$
+		switchBoardsCheckBox.setEnabled(mWhiteRules.switchBoards());
+		switchBoardsCheckBox.setOpaque(false);
+		switchBoardsCheckBox.setForeground(Color.white);
+		constraints.gridy = 1;
+		specialRulesPanel.add(switchBoardsCheckBox, constraints);
+
+		final JPanel objectiveWhitePanel = new JPanel();
+		objectiveWhitePanel.setLayout(new GridBagLayout());
+		objectiveWhitePanel.setOpaque(false);
+		constraints.gridx = 0;
+		constraints.gridy = 0;
+		constraints.anchor = GridBagConstraints.CENTER;
+		constraints.insets = new Insets(0, 0, 5, 0);
+		objectiveWhitePanel.add(GuiUtility.createJLabel(Messages.getString("RuleMakerPanel.possibleObjectives")), constraints); //$NON-NLS-1$
+		constraints.insets = new Insets(0, 0, 0, 0);
+		constraints.anchor = GridBagConstraints.WEST;
+
+		final JRadioButton whiteProtectObjectiveButton = new JRadioButton(Messages.getString("RuleMakerPanel.protectObjective"), false); //$NON-NLS-1$
+		whiteProtectObjectiveButton.setToolTipText(Messages.getString("RuleMakerPanel.pressForProtectObjective")); //$NON-NLS-1$
+		whiteProtectObjectiveButton.setOpaque(false);
+		whiteProtectObjectiveButton.setForeground(Color.white);
+		constraints.gridy = 1;
+		objectiveWhitePanel.add(whiteProtectObjectiveButton, constraints);
+		if (variantCreationPanel.mWhiteRules.getEndOfGame() == EndOfGame.CLASSIC)
 		{
-			if (mBlackRules.getEndOfGame() == EndOfGame.CAPTURE_ALL_OF_TYPE)
-				blackObjectivePieceLabel.setText(Messages.getString("RuleMakerPanel.whichPieceTypeCaptured")); //$NON-NLS-1$
-
-			blackPiecesList.setVisible(true);
-			blackPiecesList.setSelectedIndex(blackObjectiveIndex);
-			constraints.gridx = 0;
-			constraints.gridy = 1;
-			constraints.insets = new Insets(1, 1, 1, 1);
-			blackExtrasPanel.add(blackObjectivePieceLabel, constraints);
-			constraints.gridx = 1;
-			constraints.gridy = 1;
-			blackExtrasPanel.add(blackPiecesList, constraints);
+			whiteDropPiecesRadioButton.setEnabled(true);
+			whiteChangeColorRadioButton.setEnabled(false);
+			whiteNoMoveObjectiveCheckBox.setEnabled(true);
+			whitePiecesList.setEnabled(true);
+			whiteNumberOfChecksField.setEnabled(false);
+			whiteProtectObjectiveButton.setSelected(true);
 		}
-
-		if (mBlackRules.getEndOfGame() == EndOfGame.CHECK_N_TIMES)
+		whiteProtectObjectiveButton.addActionListener(new ActionListener()
 		{
-			blackNumberOfChecksField.setVisible(true);
-			blackPiecesList.setVisible(true);
-			blackPiecesList.setSelectedIndex(blackObjectiveIndex);
-			constraints.gridx = 0;
-			constraints.gridy = 0;
-			blackExtrasPanel.add(blackNumberOfChecksLabel, constraints);
-			constraints.gridx = 1;
-			constraints.gridy = 0;
-			blackExtrasPanel.add(blackNumberOfChecksField, constraints);
-			constraints.gridx = 0;
-			constraints.gridy = 1;
-			constraints.insets = new Insets(1, 1, 1, 1);
-			blackExtrasPanel.add(blackObjectivePieceLabel, constraints);
-			constraints.gridx = 1;
-			constraints.gridy = 1;
-			blackExtrasPanel.add(blackPiecesList, constraints);
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				whiteDropPiecesRadioButton.setEnabled(true);
+				whiteChangeColorRadioButton.setEnabled(false);
+				whiteNoMoveObjectiveCheckBox.setEnabled(true);
+				whitePiecesList.setEnabled(true);
+				whiteNumberOfChecksField.setEnabled(false);
+			}
+		});
+
+		final JRadioButton whiteCaptureAllButton = new JRadioButton(Messages.getString("RuleMakerPanel.captureAll"), false); //$NON-NLS-1$
+		GuiUtility.requestFocus(whiteCaptureAllButton);
+		whiteCaptureAllButton.setOpaque(false);
+		whiteCaptureAllButton.setForeground(Color.white);
+		whiteCaptureAllButton.setToolTipText(Messages.getString("RuleMakerPanel.pressForCaptureAll")); //$NON-NLS-1$
+		constraints.gridy = 2;
+		objectiveWhitePanel.add(whiteCaptureAllButton, constraints);
+		if (variantCreationPanel.mWhiteRules.getEndOfGame() == EndOfGame.CAPTURE_ALL_PIECES)
+		{
+			whiteDropPiecesRadioButton.setEnabled(true);
+			whiteChangeColorRadioButton.setEnabled(true);
+			whiteNoMoveObjectiveCheckBox.setEnabled(false);
+			whitePiecesList.setEnabled(false);
+			whiteNumberOfChecksField.setEnabled(false);
+			whiteCaptureAllButton.setSelected(true);
 		}
+		whiteCaptureAllButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				whiteDropPiecesRadioButton.setEnabled(true);
+				whiteChangeColorRadioButton.setEnabled(true);
+				whiteNoMoveObjectiveCheckBox.setEnabled(false);
+				whitePiecesList.setEnabled(false);
+				whiteNumberOfChecksField.setEnabled(false);
+			}
+		});
+
+		final JRadioButton whiteCaptureAllTypeButton = new JRadioButton(Messages.getString("RuleMakerPanel.captureAllOfType"), false); //$NON-NLS-1$
+		whiteCaptureAllTypeButton.setToolTipText(Messages.getString("RuleMakerPanel.pressForCaptureAllOfType")); //$NON-NLS-1$
+		whiteCaptureAllTypeButton.setOpaque(false);
+		whiteCaptureAllTypeButton.setForeground(Color.white);
+		constraints.gridy = 3;
+		objectiveWhitePanel.add(whiteCaptureAllTypeButton, constraints);
+		if (variantCreationPanel.mWhiteRules.getEndOfGame() == EndOfGame.CAPTURE_ALL_OF_TYPE)
+		{
+			whiteDropPiecesRadioButton.setEnabled(false);
+			whiteChangeColorRadioButton.setEnabled(true);
+			whiteNoMoveObjectiveCheckBox.setEnabled(false);
+			whitePiecesList.setEnabled(true);
+			whiteNumberOfChecksField.setEnabled(false);
+			whiteCaptureAllTypeButton.setSelected(true);
+		}
+		whiteCaptureAllTypeButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				whiteDropPiecesRadioButton.setEnabled(false);
+				whiteChangeColorRadioButton.setEnabled(true);
+				whiteNoMoveObjectiveCheckBox.setEnabled(false);
+				whitePiecesList.setEnabled(true);
+				whiteNumberOfChecksField.setEnabled(false);
+			}
+		});
+
+		final JRadioButton whiteLoseAllButton = new JRadioButton(Messages.getString("RuleMakerPanel.loseAllPieces"), false); //$NON-NLS-1$
+		whiteLoseAllButton.setToolTipText(Messages.getString("RuleMakerPanel.pressForLoseAllPieces")); //$NON-NLS-1$
+		whiteLoseAllButton.setOpaque(false);
+		whiteLoseAllButton.setForeground(Color.white);
+		constraints.gridy = 4;
+		objectiveWhitePanel.add(whiteLoseAllButton, constraints);
+		if (variantCreationPanel.mWhiteRules.getEndOfGame() == EndOfGame.LOSE_ALL_PIECES)
+		{
+			whiteDropPiecesRadioButton.setEnabled(false);
+			whiteChangeColorRadioButton.setEnabled(true);
+			whiteNoMoveObjectiveCheckBox.setEnabled(false);
+			whitePiecesList.setEnabled(false);
+			whiteNumberOfChecksField.setEnabled(false);
+			whiteLoseAllButton.setSelected(true);
+		}
+		whiteLoseAllButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				whiteDropPiecesRadioButton.setEnabled(false);
+				whiteChangeColorRadioButton.setEnabled(true);
+				whiteNoMoveObjectiveCheckBox.setEnabled(false);
+				whitePiecesList.setEnabled(false);
+				whiteNumberOfChecksField.setEnabled(false);
+			}
+		});
+
+		final JRadioButton whiteCheckTimesButton = new JRadioButton(Messages.getString("RuleMakerPanel.checkNumTimes"), false); //$NON-NLS-1$
+		whiteCheckTimesButton.setToolTipText(Messages.getString("RuleMakerPanel.pressForCheckNumTimes")); //$NON-NLS-1$
+		whiteCheckTimesButton.setOpaque(false);
+		whiteCheckTimesButton.setForeground(Color.white);
+		constraints.gridy = 5;
+		objectiveWhitePanel.add(whiteCheckTimesButton, constraints);
+		if (variantCreationPanel.mWhiteRules.getEndOfGame() == EndOfGame.CHECK_N_TIMES)
+		{
+			whiteDropPiecesRadioButton.setEnabled(true);
+			whiteChangeColorRadioButton.setEnabled(true);
+			whiteNoMoveObjectiveCheckBox.setEnabled(true);
+			whitePiecesList.setEnabled(true);
+			whiteNumberOfChecksField.setEnabled(true);
+			whiteCheckTimesButton.setSelected(true);
+		}
+		whiteCheckTimesButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				whiteDropPiecesRadioButton.setEnabled(true);
+				whiteChangeColorRadioButton.setEnabled(true);
+				whiteNoMoveObjectiveCheckBox.setEnabled(true);
+				whitePiecesList.setEnabled(true);
+				whiteNumberOfChecksField.setEnabled(true);
+			}
+		});
+
+		final ButtonGroup whiteButtonGroup = new ButtonGroup();
+		whiteButtonGroup.add(whiteCaptureAllButton);
+		whiteButtonGroup.add(whiteCaptureAllTypeButton);
+		whiteButtonGroup.add(whiteProtectObjectiveButton);
+		whiteButtonGroup.add(whiteLoseAllButton);
+		whiteButtonGroup.add(whiteCheckTimesButton);
+
+		final JPanel objectiveBlackPanel = new JPanel();
+		objectiveBlackPanel.setLayout(new GridBagLayout());
+		objectiveBlackPanel.setOpaque(false);
+		constraints.gridy = 0;
+		constraints.gridx = 0;
+		constraints.anchor = GridBagConstraints.CENTER;
+		constraints.insets = new Insets(0, 0, 5, 0);
+		objectiveBlackPanel.add(GuiUtility.createJLabel(Messages.getString("RuleMakerPanel.possibleObjectives")), constraints); //$NON-NLS-1$
+		constraints.anchor = GridBagConstraints.WEST;
+		constraints.insets = new Insets(0, 0, 0, 0);
+
+		final JRadioButton blackProtectObjectiveButton = new JRadioButton(Messages.getString("RuleMakerPanel.protectObjective"), false); //$NON-NLS-1$
+		blackProtectObjectiveButton.setToolTipText(Messages.getString("RuleMakerPanel.pressForProtect")); //$NON-NLS-1$
+		blackProtectObjectiveButton.setOpaque(false);
+		blackProtectObjectiveButton.setForeground(Color.white);
+		constraints.gridy = 1;
+		objectiveBlackPanel.add(blackProtectObjectiveButton, constraints);
+		if (variantCreationPanel.mBlackRules.getEndOfGame() == EndOfGame.CLASSIC)
+		{
+			blackDropPiecesRadioButton.setEnabled(true);
+			blackChangeColorRadioButton.setEnabled(false);
+			blackNoMoveObjectiveCheckBox.setEnabled(true);
+			blackPiecesList.setEnabled(true);
+			blackNumberOfChecksField.setEnabled(false);
+			blackProtectObjectiveButton.setSelected(true);
+		}
+		blackProtectObjectiveButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				blackDropPiecesRadioButton.setEnabled(true);
+				blackChangeColorRadioButton.setEnabled(false);
+				blackNoMoveObjectiveCheckBox.setEnabled(true);
+				blackPiecesList.setEnabled(true);
+				blackNumberOfChecksField.setEnabled(false);
+			}
+		});
+
+		final JRadioButton blackCaptureAllButton = new JRadioButton(Messages.getString("RuleMakerPanel.captureAll"), false); //$NON-NLS-1$
+		blackCaptureAllButton.setToolTipText(Messages.getString("RuleMakerPanel.pressForCaptureAll")); //$NON-NLS-1$
+		blackCaptureAllButton.setOpaque(false);
+		blackCaptureAllButton.setForeground(Color.white);
+		constraints.gridy = 2;
+		objectiveBlackPanel.add(blackCaptureAllButton, constraints);
+		if (variantCreationPanel.mBlackRules.getEndOfGame() == EndOfGame.CAPTURE_ALL_PIECES)
+		{
+			blackDropPiecesRadioButton.setEnabled(true);
+			blackChangeColorRadioButton.setEnabled(true);
+			blackNoMoveObjectiveCheckBox.setEnabled(false);
+			blackPiecesList.setEnabled(false);
+			blackNumberOfChecksField.setEnabled(false);
+			blackCaptureAllButton.setSelected(true);
+		}
+		blackCaptureAllButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				blackDropPiecesRadioButton.setEnabled(true);
+				blackChangeColorRadioButton.setEnabled(true);
+				blackNoMoveObjectiveCheckBox.setEnabled(false);
+				blackPiecesList.setEnabled(false);
+				blackNumberOfChecksField.setEnabled(false);
+			}
+		});
+
+		final JRadioButton blackCaptureAllTypeButton = new JRadioButton(Messages.getString("RuleMakerPanel.captureAllOfType"), false); //$NON-NLS-1$
+		blackCaptureAllTypeButton.setToolTipText(Messages.getString("RuleMakerPanel.pressForCaptureAllOfType")); //$NON-NLS-1$
+		blackCaptureAllTypeButton.setOpaque(false);
+		blackCaptureAllTypeButton.setForeground(Color.white);
+		constraints.gridy = 3;
+		objectiveBlackPanel.add(blackCaptureAllTypeButton, constraints);
+		if (variantCreationPanel.mBlackRules.getEndOfGame() == EndOfGame.CAPTURE_ALL_OF_TYPE)
+		{
+			blackDropPiecesRadioButton.setEnabled(false);
+			blackChangeColorRadioButton.setEnabled(true);
+			blackNoMoveObjectiveCheckBox.setEnabled(false);
+			blackPiecesList.setEnabled(true);
+			blackNumberOfChecksField.setEnabled(false);
+			blackCaptureAllTypeButton.setSelected(true);
+		}
+		blackCaptureAllTypeButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				blackDropPiecesRadioButton.setEnabled(false);
+				blackChangeColorRadioButton.setEnabled(true);
+				blackNoMoveObjectiveCheckBox.setEnabled(false);
+				blackPiecesList.setEnabled(true);
+				blackNumberOfChecksField.setEnabled(false);
+			}
+		});
+
+		final JRadioButton blackLoseAllButton = new JRadioButton(Messages.getString("RuleMakerPanel.loseAllPieces"), false); //$NON-NLS-1$
+		blackLoseAllButton.setToolTipText(Messages.getString("RuleMakerPanel.pressForLoseAllPieces")); //$NON-NLS-1$
+		blackLoseAllButton.setOpaque(false);
+		blackLoseAllButton.setForeground(Color.white);
+		constraints.gridy = 4;
+		objectiveBlackPanel.add(blackLoseAllButton, constraints);
+		if (variantCreationPanel.mBlackRules.getEndOfGame() == EndOfGame.LOSE_ALL_PIECES)
+		{
+			blackDropPiecesRadioButton.setEnabled(false);
+			blackChangeColorRadioButton.setEnabled(true);
+			blackNoMoveObjectiveCheckBox.setEnabled(false);
+			blackPiecesList.setEnabled(false);
+			blackNumberOfChecksField.setEnabled(false);
+			blackLoseAllButton.setSelected(true);
+		}
+		blackLoseAllButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				blackDropPiecesRadioButton.setEnabled(false);
+				blackChangeColorRadioButton.setEnabled(true);
+				blackNoMoveObjectiveCheckBox.setEnabled(false);
+				blackPiecesList.setEnabled(false);
+				blackNumberOfChecksField.setEnabled(false);
+			}
+		});
+
+		final JRadioButton blackCheckTimesButton = new JRadioButton(Messages.getString("RuleMakerPanel.checkNumTimes"), false); //$NON-NLS-1$
+		blackCheckTimesButton.setToolTipText(Messages.getString("RuleMakerPanel.pressForCheckNumTimes")); //$NON-NLS-1$
+		blackCheckTimesButton.setOpaque(false);
+		blackCheckTimesButton.setForeground(Color.white);
+		constraints.gridy = 5;
+		objectiveBlackPanel.add(blackCheckTimesButton, constraints);
+		if (variantCreationPanel.mBlackRules.getEndOfGame() == EndOfGame.CHECK_N_TIMES)
+		{
+			blackDropPiecesRadioButton.setEnabled(true);
+			blackChangeColorRadioButton.setEnabled(true);
+			blackNoMoveObjectiveCheckBox.setEnabled(true);
+			blackPiecesList.setEnabled(true);
+			blackNumberOfChecksField.setEnabled(true);
+			blackCheckTimesButton.setSelected(true);
+		}
+		blackCheckTimesButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				blackDropPiecesRadioButton.setEnabled(true);
+				blackChangeColorRadioButton.setEnabled(true);
+				blackNoMoveObjectiveCheckBox.setEnabled(true);
+				blackPiecesList.setEnabled(true);
+				blackNumberOfChecksField.setEnabled(true);
+			}
+		});
+
+		final ButtonGroup blackButtonGroup = new ButtonGroup();
+		blackButtonGroup.add(blackCaptureAllButton);
+		blackButtonGroup.add(blackCaptureAllTypeButton);
+		blackButtonGroup.add(blackProtectObjectiveButton);
+		blackButtonGroup.add(blackLoseAllButton);
+		blackButtonGroup.add(blackCheckTimesButton);
 
 		final JButton cancelButton = new JButton(Messages.getString("RuleMakerPanel.cancel")); //$NON-NLS-1$
 		cancelButton.setToolTipText(Messages.getString("RuleMakerPanel.pressToReturnToVariant")); //$NON-NLS-1$
@@ -358,6 +658,122 @@ public class RuleMakerPanel extends ChessPanel
 
 				mBlackRules.addCropLegalDests(blackNoMoveObjectiveCheckBox.isSelected() ? CropLegalDestinations.STATIONARY_OBJECTIVE
 						: CropLegalDestinations.CLASSIC);
+
+				if (whiteProtectObjectiveButton.isSelected() || blackProtectObjectiveButton.isSelected())
+				{
+					if (!(whiteProtectObjectiveButton.isSelected() && blackProtectObjectiveButton.isSelected()))
+					{
+						if (JOptionPane.showConfirmDialog(
+								Driver.getInstance(),
+								Messages.getString("RuleMakerPanel.usingProtectNotRecommended") //$NON-NLS-1$
+										+ Messages.getString("RuleMakerPanel.continueAnyway"), Messages.getString("RuleMakerPanel.continueQ"), JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) //$NON-NLS-1$ //$NON-NLS-2$
+							return;
+					}
+				}
+
+				else if ((whiteCaptureAllButton.isSelected() && blackLoseAllButton.isSelected())
+						|| (blackCaptureAllButton.isSelected() && whiteLoseAllButton.isSelected()))
+				{
+					JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("RuleMakerPanel.captureAllAndLoseAll") //$NON-NLS-1$
+							+ Messages.getString("RuleMakerPanel.chooseAnotherCombo")); //$NON-NLS-1$
+					return;
+				}
+
+				else if (whiteCheckTimesButton.isSelected() || blackCheckTimesButton.isSelected())
+				{
+					if (!(whiteCheckTimesButton.isSelected() && blackCheckTimesButton.isSelected()))
+					{
+						if (JOptionPane.showConfirmDialog(
+								Driver.getInstance(),
+								Messages.getString("RuleMakerPanel.checkNumTimesCombo") //$NON-NLS-1$
+										+ Messages.getString("RuleMakerPanel.continueAnyways"), Messages.getString("RuleMakerPanel.continueQ"), JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) //$NON-NLS-1$ //$NON-NLS-2$
+							return;
+					}
+				}
+
+				if (whiteCaptureAllButton.isSelected())
+				{
+					mWhiteRules.addEndOfGame(EndOfGame.CAPTURE_ALL_PIECES.init(0, Messages.getString("RuleMakerPanel.empty"), false)); //$NON-NLS-1$
+				}
+				if (whiteCaptureAllTypeButton.isSelected())
+				{
+					mWhiteRules.addEndOfGame(EndOfGame.CAPTURE_ALL_OF_TYPE
+							.init(0, whitePiecesList.getSelectedItem().toString(), false));
+				}
+				if (whiteProtectObjectiveButton.isSelected())
+				{
+					mWhiteRules.addEndOfGame(EndOfGame.CLASSIC.init(0, whitePiecesList.getSelectedItem().toString(), false));
+				}
+				if (whiteLoseAllButton.isSelected())
+				{
+					mWhiteRules.addEndOfGame(EndOfGame.LOSE_ALL_PIECES.init(0, Messages.getString("RuleMakerPanel.empty"), false)); //$NON-NLS-1$
+				}
+				if (whiteCheckTimesButton.isSelected())
+				{
+					String whiteNumberOfChecks = whiteNumberOfChecksField.getText();
+					try
+					{
+						int answer = Integer.parseInt(whiteNumberOfChecks);
+						if (answer < 1)
+						{
+							JOptionPane.showMessageDialog(Driver.getInstance(),
+									Messages.getString("RuleMakerPanel.enterGreaterThanOne"), //$NON-NLS-1$
+									Messages.getString("RuleMakerPanel.numberOfChecks"), //$NON-NLS-1$
+									JOptionPane.PLAIN_MESSAGE);
+							return;
+						}
+						mWhiteRules.addEndOfGame(EndOfGame.CHECK_N_TIMES.init(answer,
+								Messages.getString("RuleMakerPanel.empty"), false)); //$NON-NLS-1$
+					}
+					catch (Exception e)
+					{
+						JOptionPane.showMessageDialog(Driver.getInstance(),
+								Messages.getString("RuleMakerPanel.enterIntoNumberOfChecks"), //$NON-NLS-1$
+								Messages.getString("RuleMakerPanel.numberOfChecks"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$
+						return;
+					}
+				}
+
+				if (blackCaptureAllButton.isSelected())
+				{
+					mBlackRules.addEndOfGame(EndOfGame.CAPTURE_ALL_PIECES.init(0, Messages.getString("RuleMakerPanel.empty"), true)); //$NON-NLS-1$
+				}
+				if (blackCaptureAllTypeButton.isSelected())
+				{
+					mBlackRules.addEndOfGame(EndOfGame.CAPTURE_ALL_OF_TYPE.init(0, blackPiecesList.getSelectedItem().toString(), true));
+				}
+				if (blackProtectObjectiveButton.isSelected())
+				{
+					mBlackRules.addEndOfGame(EndOfGame.CLASSIC.init(0, blackPiecesList.getSelectedItem().toString(), true));
+				}
+				if (blackLoseAllButton.isSelected())
+				{
+					mBlackRules.addEndOfGame(EndOfGame.LOSE_ALL_PIECES.init(0, Messages.getString("RuleMakerPanel.empty"), true)); //$NON-NLS-1$
+				}
+				if (blackCheckTimesButton.isSelected())
+				{
+					String blackNumberOfChecks = blackNumberOfChecksField.getText();
+					try
+					{
+						int answer = Integer.parseInt(blackNumberOfChecks);
+						if (answer < 1)
+						{
+							JOptionPane.showMessageDialog(Driver.getInstance(),
+									Messages.getString("RuleMakerPanel.enterGreaterThanOne"), //$NON-NLS-1$
+									Messages.getString("RuleMakerPanel.numberOfChecks"), //$NON-NLS-1$
+									JOptionPane.PLAIN_MESSAGE);
+							return;
+						}
+						mBlackRules.addEndOfGame(EndOfGame.CHECK_N_TIMES.init(answer, Messages.getString("RuleMakerPanel.empty"), true)); //$NON-NLS-1$
+					}
+					catch (Exception ne)
+					{
+						JOptionPane.showMessageDialog(Driver.getInstance(),
+								Messages.getString("RuleMakerPanel.enterIntoNumberOfChecks"), //$NON-NLS-1$
+								Messages.getString("RuleMakerPanel.numberOfChecks"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$
+						return;
+					}
+				}
 
 				if (whitePieceReturnRadioButton.isSelected())
 					mWhiteRules.addAfterMove(AfterMove.CAPTURED_PIECE_TO_ORIGIN);
@@ -401,91 +817,26 @@ public class RuleMakerPanel extends ChessPanel
 					mWhiteRules.addAfterMove(AfterMove.ATOMIC_CAPTURE);
 					mBlackRules.addAfterMove(AfterMove.ATOMIC_CAPTURE);
 				}
-
-				if (whiteNumberOfChecksField.isVisible())
+				if (mWhiteRules.getEndOfGame() == EndOfGame.CLASSIC || mWhiteRules.getEndOfGame() == EndOfGame.CAPTURE_ALL_OF_TYPE
+						|| mWhiteRules.getEndOfGame() == EndOfGame.CHECK_N_TIMES)
 				{
-					String whiteNumberOfChecks = whiteNumberOfChecksField.getText();
-					try
-					{
-						int answer = Integer.parseInt(whiteNumberOfChecks);
-						if (answer < 1)
-						{
-							JOptionPane.showMessageDialog(Driver.getInstance(),
-									Messages.getString("RuleMakerPanel.enterGreaterThanOne"), //$NON-NLS-1$
-									Messages.getString("RuleMakerPanel.numberOfChecks"), //$NON-NLS-1$
-									JOptionPane.PLAIN_MESSAGE);
-							return;
-						}
-						mWhiteRules.addEndOfGame(EndOfGame.CHECK_N_TIMES.init(answer, "", false)); //$NON-NLS-1$
-					}
-					catch (Exception e)
-					{
-						JOptionPane.showMessageDialog(Driver.getInstance(),
-								Messages.getString("RuleMakerPanel.enterIntoNumberOfChecks"), //$NON-NLS-1$
-								Messages.getString("RuleMakerPanel.numberOfChecks"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$
-						return;
-					}
+					mWhiteRules.setObjectivePiece(new ObjectivePiece(ObjectivePieceTypes.CUSTOM_OBJECTIVE, whitePiecesList
+							.getSelectedItem().toString()));
+					// mBuilder.addToPromotionMap(mWhiteRules.getObjectiveName(),
+					// null, GameBuilder.WHITE);
 				}
-				else if (whitePieceList.isVisible())
+				if (mBlackRules.getEndOfGame() == EndOfGame.CLASSIC || mBlackRules.getEndOfGame() == EndOfGame.CAPTURE_ALL_OF_TYPE
+						|| mBlackRules.getEndOfGame() == EndOfGame.CHECK_N_TIMES)
 				{
-					if (mWhiteRules.getEndOfGame() == EndOfGame.CLASSIC)
-					{
-						mWhiteRules.addEndOfGame(EndOfGame.CLASSIC.init(0, "", //$NON-NLS-1$
-								false));
-						mWhiteRules.setObjectivePiece(new ObjectivePiece(ObjectivePieceTypes.CUSTOM_OBJECTIVE, whitePieceList
-								.getSelectedItem().toString()));
-					}
-					else
-					{
-						mWhiteRules.addEndOfGame(EndOfGame.CAPTURE_ALL_OF_TYPE.init(0, whitePieceList.getSelectedItem().toString(),
-								false));
-					}
-					mBuilder.addToPromotionMap(mWhiteRules.getObjectiveName(), null, GameBuilder.WHITE);
-				}
-				if (blackNumberOfChecksField.isVisible())
-				{
-					String blackNumberOfChecks = blackNumberOfChecksField.getText();
-					try
-					{
-						int answer = Integer.parseInt(blackNumberOfChecks);
-						if (answer < 1)
-						{
-							JOptionPane.showMessageDialog(Driver.getInstance(),
-									Messages.getString("RuleMakerPanel.enterGreaterThanOne"), //$NON-NLS-1$
-									Messages.getString("RuleMakerPanel.numberOfChecks"), //$NON-NLS-1$
-									JOptionPane.PLAIN_MESSAGE);
-							return;
-						}
-						mBlackRules.addEndOfGame(EndOfGame.CHECK_N_TIMES.init(answer, "", true)); //$NON-NLS-1$
-					}
-					catch (Exception ne)
-					{
-						JOptionPane.showMessageDialog(Driver.getInstance(),
-								Messages.getString("RuleMakerPanel.enterIntoNumberOfChecks"), //$NON-NLS-1$
-								Messages.getString("RuleMakerPanel.numberOfChecks"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$
-						return;
-					}
-				}
-				else if (blackPiecesList.isVisible())
-				{
-					blackPiecesList.getSelectedItem();
-					if (mBlackRules.getEndOfGame() == EndOfGame.CLASSIC)
-					{
-						mBlackRules.addEndOfGame(EndOfGame.CLASSIC.init(0, "", //$NON-NLS-1$
-								true));
-						mBlackRules.setObjectivePiece(new ObjectivePiece(ObjectivePieceTypes.CUSTOM_OBJECTIVE, blackPiecesList
-								.getSelectedItem().toString()));
-					}
-					else
-					{
-						mBlackRules.addEndOfGame(EndOfGame.CAPTURE_ALL_OF_TYPE.init(0, blackPiecesList.getSelectedItem().toString(),
-								true));
-					}
-					mBuilder.addToPromotionMap(mBlackRules.getObjectiveName(), null, GameBuilder.BLACK);
+					mBlackRules.setObjectivePiece(new ObjectivePiece(ObjectivePieceTypes.CUSTOM_OBJECTIVE, blackPiecesList
+							.getSelectedItem().toString()));
+					// mBuilder.addToPromotionMap(mBlackRules.getObjectiveName(),
+					// null, GameBuilder.BLACK);
 				}
 
-				customSetupMenu.mWhiteRules = mWhiteRules;
-				customSetupMenu.mBlackRules = mBlackRules;
+				variantCreationPanel.mWhiteRules = mWhiteRules;
+				variantCreationPanel.mBlackRules = mBlackRules;
+				variantCreationPanel.setBuilder(mBuilder);
 				RuleMakerPanel.this.removeAll();
 				mFrame.setVisible(false);
 			}
@@ -496,85 +847,38 @@ public class RuleMakerPanel extends ChessPanel
 		whiteTeamPanel.setLayout(new GridBagLayout());
 		whiteTeamPanel.setOpaque(false);
 
-		JPanel whiteLegalDestinationsPanel = new JPanel();
-		whiteLegalDestinationsPanel.setOpaque(false);
-		whiteLegalDestinationsPanel.setLayout(new GridBagLayout());
-		constraints.gridx = 0;
-		constraints.gridy = 1;
-		whiteLegalDestinationsPanel.add(
-				GuiUtility.createJLabel(Messages.getString("RuleMakerPanel.legalDestinationHTML")), constraints); //$NON-NLS-1$
-		constraints.gridx = 0;
-		constraints.gridy = 2;
-		whiteLegalDestinationsPanel.add(whiteLegalDestinationPanel, constraints);
-
 		constraints.gridx = 0;
 		constraints.gridy = 0;
-		whiteTeamPanel.add(whiteLegalDestinationsPanel, constraints);
+		constraints.anchor = GridBagConstraints.CENTER;
+		whiteTeamPanel.add(objectiveWhitePanel, constraints);
 
-		constraints.insets = new Insets(1, 3, 3, 3);
-		constraints.gridx = 0;
 		constraints.gridy = 1;
 		whiteTeamPanel.add(whiteExtrasPanel, constraints);
 
-		JPanel whiteCapturePanel = new JPanel();
-		whiteCapturePanel.setLayout(new GridBagLayout());
-		whiteCapturePanel.setOpaque(false);
-		constraints.gridheight = 1;
-		constraints.gridx = 0;
-		constraints.gridy = 1;
-		whiteCapturePanel.add(GuiUtility.createJLabel(Messages.getString("RuleMakerPanel.afterCapturingHTML")), //$NON-NLS-1$
-				constraints);
-		constraints.gridx = 0;
 		constraints.gridy = 2;
-		whiteCapturePanel.add(whiteAfterCapturePanel, constraints);
+		whiteTeamPanel.add(whiteLegalDestinationPanel, constraints);
 
-		constraints.gridx = 0;
-		constraints.gridy = 2;
-		whiteTeamPanel.add(whiteCapturePanel, constraints);
+		constraints.gridy = 3;
+		whiteTeamPanel.add(whiteAfterCapturePanel, constraints);
 
 		JPanel blackTeamPanel = new JPanel();
 		blackTeamPanel.setBorder(GuiUtility.createBorder(Messages.getString("RuleMakerPanel.blackTeam"))); //$NON-NLS-1$
 		blackTeamPanel.setLayout(new GridBagLayout());
 		blackTeamPanel.setOpaque(false);
 
-		JPanel blackLegalDestinationsPanel = new JPanel();
-		blackLegalDestinationsPanel.setLayout(new GridBagLayout());
-		blackLegalDestinationsPanel.setOpaque(false);
-		constraints.gridx = 0;
-		constraints.gridy = 1;
-		blackLegalDestinationsPanel.add(
-				GuiUtility.createJLabel(Messages.getString("RuleMakerPanel.legalDestinationHTML")), constraints); //$NON-NLS-1$
-		constraints.gridx = 0;
-		constraints.gridy = 2;
-		blackLegalDestinationsPanel.add(blackLegalDestinationPanel, constraints);
-
-		constraints.gridx = 0;
 		constraints.gridy = 0;
-		blackTeamPanel.add(blackLegalDestinationsPanel, constraints);
+		blackTeamPanel.add(objectiveBlackPanel, constraints);
 
-		JPanel blackCapturePanel = new JPanel();
-		blackCapturePanel.setLayout(new GridBagLayout());
-		blackCapturePanel.setOpaque(false);
-		constraints.gridheight = 1;
-		constraints.gridx = 0;
-		constraints.gridy = 1;
-		blackCapturePanel.add(GuiUtility.createJLabel(Messages.getString("RuleMakerPanel.afterCapturingHTML")), //$NON-NLS-1$
-				constraints);
-		constraints.gridx = 0;
-		constraints.gridy = 2;
-		blackCapturePanel.add(blackAfterPanel, constraints);
-
-		constraints.insets = new Insets(1, 3, 3, 3);
-		constraints.gridx = 0;
 		constraints.gridy = 1;
 		blackTeamPanel.add(blackExtrasPanel, constraints);
 
-		constraints.gridx = 0;
 		constraints.gridy = 2;
-		blackTeamPanel.add(blackCapturePanel, constraints);
+		blackTeamPanel.add(blackLegalDestinationPanel, constraints);
+
+		constraints.gridy = 3;
+		blackTeamPanel.add(blackAfterPanel, constraints);
 
 		constraints.insets = new Insets(5, 5, 5, 5);
-		constraints.gridx = 0;
 		constraints.gridy = 0;
 		add(whiteTeamPanel, constraints);
 
@@ -583,22 +887,11 @@ public class RuleMakerPanel extends ChessPanel
 		constraints.gridy = 0;
 		add(blackTeamPanel, constraints);
 
-		JPanel specialRules = new JPanel();
-		specialRules.setBorder(GuiUtility.createBorder(Messages.getString("RuleMakerPanel.specialRules"))); //$NON-NLS-1$
-		specialRules.setLayout(new GridBagLayout());
-		specialRules.setOpaque(false);
-
-		constraints.gridx = 0;
-		constraints.gridy = 1;
-		specialRules.add(specialRulesPanel, constraints);
-		constraints.gridx = 0;
-		constraints.gridy = 2;
-
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 0;
 		constraints.gridy = 1;
 		constraints.gridwidth = 2;
-		add(specialRules, constraints);
+		add(specialRulesPanel, constraints);
 
 		JPanel buttonsPanel = new JPanel();
 		buttonsPanel.setLayout(new FlowLayout());
@@ -607,7 +900,6 @@ public class RuleMakerPanel extends ChessPanel
 		buttonsPanel.add(cancelButton);
 
 		constraints.fill = GridBagConstraints.HORIZONTAL;
-		constraints.gridx = 0;
 		constraints.gridy = 2;
 		constraints.gridwidth = 2;
 		add(buttonsPanel, constraints);

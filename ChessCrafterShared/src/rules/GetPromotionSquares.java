@@ -2,8 +2,8 @@ package rules;
 
 import java.util.List;
 
-import logic.Piece;
-import logic.Square;
+import models.Piece;
+import models.Square;
 
 import com.google.common.collect.Lists;
 
