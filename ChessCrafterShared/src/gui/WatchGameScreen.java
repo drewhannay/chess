@@ -2,9 +2,9 @@ package gui;
 
 import javax.swing.JMenu;
 
-import logic.Board;
-import logic.Piece;
 import logic.Result;
+import models.Board;
+import models.Piece;
 
 public interface WatchGameScreen
 {

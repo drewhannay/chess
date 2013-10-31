@@ -3,11 +3,12 @@ package rules;
 import java.util.List;
 import javax.swing.JOptionPane;
 import utility.GuiUtility;
-import logic.Board;
-import logic.Game;
 import logic.Move;
-import logic.Piece;
-import logic.Square;
+import models.Board;
+import models.Game;
+import models.Piece;
+import models.Square;
+
 import com.google.common.collect.Lists;
 
 public enum AfterMove

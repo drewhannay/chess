@@ -1,4 +1,4 @@
-package logic;
+package models;
 
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
@@ -7,7 +7,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import rules.Rules;
+import logic.AlgebraicConverter;
+import logic.Messages;
+import logic.Move;
+
 import timer.ChessTimer;
 import timer.TimerTypes;
 import utility.FileUtility;

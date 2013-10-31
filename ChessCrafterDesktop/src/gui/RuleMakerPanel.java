@@ -20,9 +20,10 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
-import logic.Board;
 import logic.GameBuilder;
 import logic.PieceBuilder;
+import models.Board;
+import models.Rules;
 import rules.AdjustTeamLegalDestinations;
 import rules.AfterMove;
 import rules.CropLegalDestinations;
@@ -30,7 +31,6 @@ import rules.EndOfGame;
 import rules.GetBoard;
 import rules.ObjectivePiece;
 import rules.ObjectivePiece.ObjectivePieceTypes;
-import rules.Rules;
 import utility.GuiUtility;
 
 public class RuleMakerPanel extends ChessPanel

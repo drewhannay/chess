@@ -1,10 +1,13 @@
-package logic;
+package models;
 
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import logic.BidirectionalMovement;
+import logic.Messages;
+import logic.PieceMovements;
 import logic.PieceMovements.MovementDirection;
 
 import com.google.common.base.Preconditions;
@@ -582,7 +585,7 @@ public class Piece implements Serializable
 	 * @param king The King piece
 	 * @param threat The Piece threatening the King piece
 	 */
-	protected void genLegalDestsSaveKing(Piece king, Piece threat)
+	public void genLegalDestsSaveKing(Piece king, Piece threat)
 	{
 		if ((isBlack() ? mBoard.getGame().getBlackRules() : mBoard.getGame().getWhiteRules()).objectivePiece(isBlack()) == this)
 			return;

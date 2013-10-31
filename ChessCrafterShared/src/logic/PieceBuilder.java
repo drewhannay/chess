@@ -10,6 +10,9 @@ import java.util.Map;
 import java.util.Set;
 
 import logic.PieceMovements.MovementDirection;
+import models.Board;
+import models.Piece;
+import models.Square;
 import utility.FileUtility;
 
 import com.google.common.collect.Maps;

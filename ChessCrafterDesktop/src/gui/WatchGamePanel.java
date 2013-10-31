@@ -20,12 +20,12 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import logic.AlgebraicConverter;
-import logic.Board;
-import logic.Game;
 import logic.GameBuilder;
 import logic.Move;
-import logic.Piece;
 import logic.Result;
+import models.Board;
+import models.Game;
+import models.Piece;
 import timer.ChessTimer;
 import timer.TimerTypes;
 

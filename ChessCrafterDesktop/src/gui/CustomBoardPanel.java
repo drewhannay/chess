@@ -18,7 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
-import logic.Board;
+import models.Board;
 import utility.GuiUtility;
 
 public class CustomBoardPanel extends ChessPanel

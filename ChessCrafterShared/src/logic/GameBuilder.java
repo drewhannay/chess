@@ -10,7 +10,11 @@ import java.util.List;
 import java.util.Map;
 
 import logic.PieceMovements.MovementDirection;
-import rules.Rules;
+import models.Board;
+import models.Game;
+import models.Piece;
+import models.Rules;
+import models.Square;
 import utility.FileUtility;
 
 import com.google.common.collect.Lists;

@@ -2,8 +2,8 @@ package rules;
 
 import java.io.Serializable;
 
-import logic.Game;
-import logic.Piece;
+import models.Game;
+import models.Piece;
 
 public class ObjectivePiece implements Serializable
 {

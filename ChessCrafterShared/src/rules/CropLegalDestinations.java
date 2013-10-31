@@ -2,7 +2,7 @@ package rules;
 
 import java.util.List;
 
-import logic.Piece;
+import models.Piece;
 
 public enum CropLegalDestinations
 {

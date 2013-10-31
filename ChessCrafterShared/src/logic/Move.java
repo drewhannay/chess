@@ -3,6 +3,10 @@ package logic;
 import java.io.Serializable;
 import java.util.List;
 
+import models.Board;
+import models.Piece;
+import models.Square;
+
 import timer.ChessTimer;
 import utility.GuiUtility;
 
@@ -35,11 +39,11 @@ public class Move implements Serializable
 	/**
 	 * The Board on which this Move is to be performed
 	 */
-	protected Board board;
+	public Board board;
 	/**
 	 * The Square the Move originates on
 	 */
-	protected Square origin;
+	public Square origin;
 	/**
 	 * The Square the Move is going to
 	 */

@@ -13,8 +13,8 @@ import java.net.SocketException;
 
 import javax.swing.JOptionPane;
 
-import logic.Game;
 import logic.Result;
+import models.Game;
 import utility.GuiUtility;
 import ai.FakeMove;
 

@@ -4,7 +4,8 @@ import gui.PlayGameScreen;
 import gui.PlayNetGameScreen;
 import gui.WatchGameScreen;
 import java.io.File;
-import logic.Game;
+
+import models.Game;
 
 public interface ChessCrafter
 {

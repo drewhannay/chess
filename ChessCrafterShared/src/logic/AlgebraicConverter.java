@@ -10,6 +10,10 @@ import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import models.Board;
+import models.Game;
+import models.Square;
+
 import utility.FileUtility;
 
 import com.google.common.collect.Maps;

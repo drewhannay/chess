@@ -4,9 +4,9 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
-import logic.Game;
-import logic.Piece;
 import logic.PieceBuilder;
+import models.Game;
+import models.Piece;
 
 public enum Promote
 {

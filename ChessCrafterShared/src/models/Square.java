@@ -1,6 +1,7 @@
-package logic;
+package models;
 
 import java.io.Serializable;
+
 
 public class Square implements Serializable
 {
@@ -87,9 +88,8 @@ public class Square implements Serializable
 		Piece oldPiece = mPiece;
 		mPiece = p;
 		if (mPiece != null)
-		{
 			mPiece.setSquare(this);
-		}
+
 		return oldPiece;
 	}
 

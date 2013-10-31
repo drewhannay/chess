@@ -1,7 +1,10 @@
-package logic;
+package models;
 
 import java.io.Serializable;
 import java.util.List;
+
+import logic.Messages;
+import logic.Move;
 
 public class Board implements Serializable
 {
@@ -120,7 +123,7 @@ public class Board implements Serializable
 	 * @param p The Piece type which is trying to move to the Square
 	 * @return An array indicating uniqueness for Row and Column
 	 */
-	protected boolean[] isDestUniqueForClass(Square dest, Piece p)
+	public boolean[] isDestUniqueForClass(Square dest, Piece p)
 	{
 		boolean[] unique = { true, true }; // Row, Column
 		List<Piece> movingTeam = (getGame().isBlackMove()) ? getGame().getBlackTeam() : getGame().getWhiteTeam();
@@ -226,8 +229,9 @@ public class Board implements Serializable
 
 	private static final long serialVersionUID = -3660560968400318452L;
 
+	// TODO: this shouldn't be public
+	public Square mSquares[][];
 	private Game mGame;
-	protected Square mSquares[][];
 	private int mMaxRow;
 	private int mMaxColumn;
 	private int mEnpassantColumn = NO_ENPASSANT;
