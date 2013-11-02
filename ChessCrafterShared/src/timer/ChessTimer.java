@@ -9,7 +9,7 @@ import com.google.common.base.Preconditions;
 
 public abstract class ChessTimer implements Serializable
 {
-	public interface ChessTimerListener
+	public interface ChessTimerListener extends Serializable
 	{
 		public void onDisplayUpdated(String displayText);
 
