@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.Set;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
@@ -61,9 +60,9 @@ public final class PieceMovements implements Serializable
 		return mMovements.containsKey(direction) ? mMovements.get(direction) : 0;
 	}
 
-	public ImmutableList<BidirectionalMovement> getBidirectionalMovements()
+	public Set<BidirectionalMovement> getBidirectionalMovements()
 	{
-		return ImmutableList.copyOf(mBidirectionalMovements);
+		return mBidirectionalMovements;
 	}
 
 	private static final long serialVersionUID = -7877544580471563255L;

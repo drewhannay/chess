@@ -20,7 +20,6 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import logic.AlgebraicConverter;
-import logic.GameBuilder;
 import logic.Move;
 import logic.Result;
 import models.Board;
@@ -39,22 +38,17 @@ public class WatchGamePanel extends ChessPanel implements WatchGameScreen
 		Game game = null;
 		try
 		{
-			game = AlgebraicConverter.convert(GameBuilder.newGame(Messages.getString("PlayGamePanel.classic")), saveFile); //$NON-NLS-1$
+			ObjectInputStream in = new ObjectInputStream(new FileInputStream(saveFile));
+			game = (Game) in.readObject();
+			game.setIsPlayback(true);
+			game.setBlackMove(false);
+			if (game.isClassicChess())
+				game = AlgebraicConverter.convert(game, saveFile);
+			in.close();
 		}
-		catch (Exception e1)
+		catch (Exception e)
 		{
-			try
-			{
-				ObjectInputStream in = new ObjectInputStream(new FileInputStream(saveFile));
-				game = (Game) in.readObject();
-				game.setIsPlayback(true);
-				game.setBlackMove(false);
-				in.close();
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-			}
+			e.printStackTrace();
 		}
 
 		if (game != null)
@@ -90,8 +84,8 @@ public class WatchGamePanel extends ChessPanel implements WatchGameScreen
 	{
 		refreshSquares(boards);
 
-		Piece objectivePiece = getGame().isBlackMove() ? getGame().getBlackRules().objectivePiece(true) : getGame().getWhiteRules()
-				.objectivePiece(false);
+		Piece objectivePiece = getGame().isBlackMove() ? getGame().getWhiteRules().objectivePiece(false) : getGame().getBlackRules()
+				.objectivePiece(true);
 
 		if (objectivePiece != null && objectivePiece.isInCheck())
 		{
@@ -173,6 +167,7 @@ public class WatchGamePanel extends ChessPanel implements WatchGameScreen
 			(!isBlackTurn ? mWhiteTimer : mBlackTimer).startTimer();
 			(isBlackTurn ? mWhiteTimer : mBlackTimer).stopTimer();
 		}
+		getGame().setBlackMove(isBlackTurn);
 	}
 
 	private JPanel createGrid(Board board, boolean isJail)

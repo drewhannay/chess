@@ -7,7 +7,7 @@ public class Square implements Serializable
 {
 	// TODO: future refactorings will hopefully render this interface
 	// unnecessary
-	public interface SquareStateListener
+	public interface SquareStateListener extends Serializable
 	{
 		public void onSetIsThreatSquare();
 

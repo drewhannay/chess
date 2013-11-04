@@ -175,6 +175,7 @@ public class SquareJLabel extends JLabel implements Serializable
 		{
 			refreshJail();
 		};
+		private static final long serialVersionUID = -35632434497853748L;
 	};
 
 	static
