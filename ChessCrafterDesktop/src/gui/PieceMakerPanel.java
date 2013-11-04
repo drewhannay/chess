@@ -18,11 +18,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.URL;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.Set;
 
 import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -45,8 +45,6 @@ import utility.FileUtility;
 import utility.GuiUtility;
 import utility.ImageUtility;
 
-import com.google.common.collect.Lists;
-
 public class PieceMakerPanel extends ChessPanel
 {
 	public interface PieceListChangedListener
@@ -66,11 +64,14 @@ public class PieceMakerPanel extends ChessPanel
 		mSouthWestField = new JTextField(4);
 		mWestField = new JTextField(4);
 		mNorthWestField = new JTextField(4);
-		mKnightOneField = new JTextField(4);
-		mKnightTwoField = new JTextField(4);
+		mRowMovementField = new JTextField(4);
+		mColMovementField = new JTextField(4);
 		mBidirectionalMovementComboBox = new JComboBox();
-		mAddKnightMoveButton = new JButton(Messages.getString("PieceMakerPanel.add")); //$NON-NLS-1$
-		mRemoveKnightMoveButton = new JButton(Messages.getString("PieceMakerPanel.remove")); //$NON-NLS-1$
+		mDefaultComboBoxModel = new DefaultComboBoxModel();
+		mBidirectionalMovementComboBox.setModel(mDefaultComboBoxModel);
+		mDefaultComboBoxModel.addListDataListener(mBidirectionalMovementComboBox);
+		mAddBidirectionalMoveButton = new JButton(Messages.getString("PieceMakerPanel.add")); //$NON-NLS-1$
+		mRemoveBidirectionalMoveButton = new JButton(Messages.getString("PieceMakerPanel.remove")); //$NON-NLS-1$
 		new PieceMakerPanel(null, menuPanel);
 	}
 
@@ -93,28 +94,31 @@ public class PieceMakerPanel extends ChessPanel
 		mSouthWestField = new JTextField(4);
 		mWestField = new JTextField(4);
 		mNorthWestField = new JTextField(4);
-		mKnightOneField = new JTextField(4);
-		mKnightTwoField = new JTextField(4);
-		mAddKnightMoveButton = new JButton(Messages.getString("PieceMakerPanel.add")); //$NON-NLS-1$
-		mRemoveKnightMoveButton = new JButton(Messages.getString("PieceMakerPanel.remove")); //$NON-NLS-1$
+		mRowMovementField = new JTextField(4);
+		mColMovementField = new JTextField(4);
+		mAddBidirectionalMoveButton = new JButton(Messages.getString("PieceMakerPanel.add")); //$NON-NLS-1$
+		mRemoveBidirectionalMoveButton = new JButton(Messages.getString("PieceMakerPanel.remove")); //$NON-NLS-1$
 		PieceBuilder.initPieceTypes();
 		PieceBuilder builder = null;
 		if (pieceName != null)
 			builder = PieceBuilder.loadFromDisk(pieceName);
 
-		mTempBidirectionalMovements = Lists.newArrayList();
+		mBidirectionalMovementComboBox = new JComboBox();
+		mDefaultComboBoxModel = new DefaultComboBoxModel();
+		mBidirectionalMovementComboBox.setModel(mDefaultComboBoxModel);
+		mDefaultComboBoxModel.addListDataListener(mBidirectionalMovementComboBox);
 		if (builder != null)
 		{
-			List<BidirectionalMovement> bidirectionalMovements = builder.getPieceMovements().getBidirectionalMovements();
-			mBidirectionalMovementComboBox = new JComboBox(bidirectionalMovements.toArray());
+			Set<BidirectionalMovement> bidirectionalMovements = builder.getPieceMovements().getBidirectionalMovements();
+			
 			for (BidirectionalMovement movement : bidirectionalMovements)
-				mTempBidirectionalMovements.add(movement.toString());
-
+			{
+				mDefaultComboBoxModel.addElement(movement);
+			}
 			mBidirectionalMovementComboBox.setSelectedIndex(0);
 		}
 		else
 		{
-			mBidirectionalMovementComboBox = new JComboBox();
 			mBidirectionalMovementComboBox.setEnabled(false);
 		}
 
@@ -293,42 +297,41 @@ public class PieceMakerPanel extends ChessPanel
 		final JTextField distanceField = new JTextField(3);
 		distanceField.setToolTipText(Messages.getString("PieceMakerPanel.greatestSpaces")); //$NON-NLS-1$
 
-		mKnightOneField.setToolTipText(Messages.getString("PieceMakerPanel.enterKnightLike")); //$NON-NLS-1$
-		mKnightTwoField.setToolTipText(Messages.getString("PieceMakerPanel.enterOtherDirection")); //$NON-NLS-1$
-		mKnightOneField.addKeyListener(getKnightFieldKeyListener());
-		mKnightTwoField.addKeyListener(getKnightFieldKeyListener());
+		mRowMovementField.setToolTipText(Messages.getString("PieceMakerPanel.enterKnightLike")); //$NON-NLS-1$
+		mColMovementField.setToolTipText(Messages.getString("PieceMakerPanel.enterOtherDirection")); //$NON-NLS-1$
+		mRowMovementField.addKeyListener(getBidirectionalFieldKeyListener());
+		mColMovementField.addKeyListener(getBidirectionalFieldKeyListener());
 
-		mAddKnightMoveButton.setEnabled(false);
-		mAddKnightMoveButton.addActionListener(new ActionListener()
+		mAddBidirectionalMoveButton.setEnabled(false);
+		mAddBidirectionalMoveButton.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
 				mBidirectionalMovementComboBox.setEnabled(true);
-				mRemoveKnightMoveButton.setEnabled(true);
-				String toAdd = mKnightOneField.getText() + " x " + mKnightTwoField.getText(); //$NON-NLS-1$
-				mTempBidirectionalMovements.add(toAdd);
-				mBidirectionalMovementComboBox.addItem(toAdd);
-				mKnightOneField.setText(""); //$NON-NLS-1$
-				mKnightTwoField.setText(""); //$NON-NLS-1$
-				mAddKnightMoveButton.setEnabled(false);
+				mRemoveBidirectionalMoveButton.setEnabled(true);
+				BidirectionalMovement toAdd = new BidirectionalMovement(Integer.parseInt(mRowMovementField.getText()), Integer.parseInt(mColMovementField.getText()));
+				
+				if (mDefaultComboBoxModel.getIndexOf(toAdd) == -1)
+				{
+					mDefaultComboBoxModel.addElement(toAdd);
+				}
+
+				mRowMovementField.setText(""); //$NON-NLS-1$
+				mColMovementField.setText(""); //$NON-NLS-1$
+				mAddBidirectionalMoveButton.setEnabled(false);
 			}
 		});
 
-		mRemoveKnightMoveButton.setEnabled(mBidirectionalMovementComboBox.getItemCount() != 0);
-		mRemoveKnightMoveButton.addActionListener(new ActionListener()
+		mRemoveBidirectionalMoveButton.setEnabled(mDefaultComboBoxModel.getSize() != 0);
+		mRemoveBidirectionalMoveButton.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				mTempBidirectionalMovements.remove(mBidirectionalMovementComboBox.getSelectedItem().toString());
-				mBidirectionalMovementComboBox.removeAllItems();
-				for (String kMovement : mTempBidirectionalMovements)
-				{
-					mBidirectionalMovementComboBox.addItem(kMovement);
-				}
-				mBidirectionalMovementComboBox.setEnabled(mBidirectionalMovementComboBox.getItemCount() != 0);
-				mRemoveKnightMoveButton.setEnabled(mBidirectionalMovementComboBox.getItemCount() != 0);
+				mDefaultComboBoxModel.removeElement(mDefaultComboBoxModel.getSelectedItem());
+				mBidirectionalMovementComboBox.setEnabled(mDefaultComboBoxModel.getSize() != 0);
+				mRemoveBidirectionalMoveButton.setEnabled(mDefaultComboBoxModel.getSize() != 0);
 			}
 		});
 
@@ -336,10 +339,10 @@ public class PieceMakerPanel extends ChessPanel
 		if (builder != null)
 			mLeaperCheckBox.setSelected(builder.canJump());
 
-		final JPanel knightMovementPanel = new JPanel();
-		knightMovementPanel.setOpaque(false);
-		knightMovementPanel.setToolTipText(Messages.getString("PieceMakerPanel.useForKnight")); //$NON-NLS-1$
-		knightMovementPanel.setLayout(new GridBagLayout());
+		final JPanel bidirectionalMovementPanel = new JPanel();
+		bidirectionalMovementPanel.setOpaque(false);
+		bidirectionalMovementPanel.setToolTipText(Messages.getString("PieceMakerPanel.useForKnight")); //$NON-NLS-1$
+		bidirectionalMovementPanel.setLayout(new GridBagLayout());
 
 		constraints.anchor = GridBagConstraints.CENTER;
 		constraints.insets = new Insets(1, 1, 1, 1);
@@ -347,7 +350,7 @@ public class PieceMakerPanel extends ChessPanel
 		constraints.gridy = 0;
 		constraints.gridheight = 1;
 		constraints.gridwidth = 1;
-		knightMovementPanel.add(mBidirectionalMovementComboBox, constraints);
+		bidirectionalMovementPanel.add(mBidirectionalMovementComboBox, constraints);
 
 		final JPanel inputPanel = new JPanel();
 		inputPanel.setOpaque(false);
@@ -358,7 +361,7 @@ public class PieceMakerPanel extends ChessPanel
 		constraints.gridy = 0;
 		constraints.gridheight = 1;
 		constraints.gridwidth = 1;
-		inputPanel.add(mKnightOneField, constraints);
+		inputPanel.add(mRowMovementField, constraints);
 
 		constraints.anchor = GridBagConstraints.CENTER;
 		constraints.gridx = 1;
@@ -372,14 +375,14 @@ public class PieceMakerPanel extends ChessPanel
 		constraints.gridy = 0;
 		constraints.gridheight = 1;
 		constraints.gridwidth = 1;
-		inputPanel.add(mKnightTwoField, constraints);
+		inputPanel.add(mColMovementField, constraints);
 
 		constraints.anchor = GridBagConstraints.CENTER;
 		constraints.gridx = 1;
 		constraints.gridy = 0;
 		constraints.gridheight = 1;
 		constraints.gridwidth = 1;
-		knightMovementPanel.add(inputPanel, constraints);
+		bidirectionalMovementPanel.add(inputPanel, constraints);
 
 		constraints.anchor = GridBagConstraints.CENTER;
 		constraints.gridx = 0;
@@ -387,14 +390,14 @@ public class PieceMakerPanel extends ChessPanel
 		constraints.gridheight = 1;
 		constraints.gridwidth = 1;
 		constraints.insets = new Insets(10, 0, 10, 0);
-		knightMovementPanel.add(mRemoveKnightMoveButton, constraints);
+		bidirectionalMovementPanel.add(mRemoveBidirectionalMoveButton, constraints);
 
 		constraints.anchor = GridBagConstraints.CENTER;
 		constraints.gridx = 1;
 		constraints.gridy = 1;
 		constraints.gridheight = 1;
 		constraints.gridwidth = 1;
-		knightMovementPanel.add(mAddKnightMoveButton, constraints);
+		bidirectionalMovementPanel.add(mAddBidirectionalMoveButton, constraints);
 
 		JPanel movementPanel = new JPanel();
 		movementPanel.setOpaque(false);
@@ -422,7 +425,7 @@ public class PieceMakerPanel extends ChessPanel
 		movementPanel.add(GuiUtility.createJLabel(Messages.getString("PieceMakerPanel.knightLikeMovementHTML")), constraints); //$NON-NLS-1$
 		constraints.gridx = 0;
 		constraints.gridy = 7;
-		movementPanel.add(knightMovementPanel, constraints);
+		movementPanel.add(bidirectionalMovementPanel, constraints);
 
 		constraints.gridx = 0;
 		constraints.gridy = 5;
@@ -459,18 +462,11 @@ public class PieceMakerPanel extends ChessPanel
 					mBuilder.addMovement(MovementDirection.SOUTHWEST, Integer.parseInt(mSouthWestField.getText()));
 				}
 
-				if (mBidirectionalMovementComboBox.getItemCount() != 0)
+				if (mDefaultComboBoxModel.getSize() != 0)
 				{
-					mBuilder.clearBidirectionalMovements();
 					for (int i = 0; i < mBidirectionalMovementComboBox.getItemCount(); i++)
 					{
-						String line = mBidirectionalMovementComboBox.getItemAt(i).toString();
-						StringTokenizer tokenizer = new StringTokenizer(line);
-
-						int k1 = Integer.parseInt(tokenizer.nextToken());
-						tokenizer.nextToken();
-						int k2 = Integer.parseInt(tokenizer.nextToken());
-						mBuilder.addBidirectionalMovement(new BidirectionalMovement(k1, k2));
+						mBuilder.addBidirectionalMovement((BidirectionalMovement) mBidirectionalMovementComboBox.getItemAt(i));
 					}
 				}
 
@@ -605,7 +601,7 @@ public class PieceMakerPanel extends ChessPanel
 		}
 	}
 
-	private KeyListener getKnightFieldKeyListener()
+	private KeyListener getBidirectionalFieldKeyListener()
 	{
 		return new KeyListener()
 		{
@@ -617,7 +613,7 @@ public class PieceMakerPanel extends ChessPanel
 			@Override
 			public void keyReleased(KeyEvent arg0)
 			{
-				mAddKnightMoveButton.setEnabled(isIntegerDistance(mKnightOneField) && isIntegerDistance(mKnightTwoField));
+				mAddBidirectionalMoveButton.setEnabled(isIntegerDistance(mRowMovementField) && isIntegerDistance(mColMovementField));
 			}
 
 			@Override
@@ -732,15 +728,15 @@ public class PieceMakerPanel extends ChessPanel
 	private final JTextField mSouthWestField;
 	private final JTextField mWestField;
 	private final JTextField mNorthWestField;
-	private final JTextField mKnightOneField;
-	private final JTextField mKnightTwoField;
+	private final JTextField mRowMovementField;
+	private final JTextField mColMovementField;
 	private final JComboBox mBidirectionalMovementComboBox;
-	private final JButton mAddKnightMoveButton;
-	private final JButton mRemoveKnightMoveButton;
+	private final JButton mAddBidirectionalMoveButton;
+	private final JButton mRemoveBidirectionalMoveButton;
+	private final DefaultComboBoxModel mDefaultComboBoxModel;
 	private PieceBuilder mBuilder;
 	private PieceMenuPanel mPieceMenuPanel;
 	private BufferedImage mLightImage;
 	private BufferedImage mDarkImage;
 	private JFrame mFrame;
-	private List<String> mTempBidirectionalMovements;
 }
