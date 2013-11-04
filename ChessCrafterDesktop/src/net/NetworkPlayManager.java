@@ -146,7 +146,7 @@ public final class NetworkPlayManager
 										}
 									});
 									clientThread.start();
-									Driver.getInstance().setPanel(new NetLoadingPanel());
+									Driver.getInstance().pushPanel(new NetLoadingPanel());
 								}
 								catch (Exception e)
 								{

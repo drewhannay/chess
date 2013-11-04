@@ -45,6 +45,8 @@ public final class ChessTimerLabel extends JLabel
 
 	private final ChessTimerListener mChessTimerListener = new ChessTimerListener()
 	{
+		private static final long serialVersionUID = -7951621916525061474L;
+
 		@Override
 		public void onDisplayUpdated(String displayText)
 		{

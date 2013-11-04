@@ -13,7 +13,6 @@ import java.net.URI;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
 import utility.AppConstants;
@@ -21,17 +20,16 @@ import utility.GuiUtility;
 
 public class AboutFrame extends JFrame
 {
-	public AboutFrame(JPanel mainPanel)
+	public AboutFrame()
 	{
-		initGUIComponents(mainPanel);
+		initGUIComponents();
 	}
 
-	private void initGUIComponents(JPanel mainPanel)
+	private void initGUIComponents()
 	{
 		setTitle(Messages.getString("AboutFrame.about") + AppConstants.APP_NAME); //$NON-NLS-1$
 		setSize(350, 450);
 		setResizable(false);
-		setLocationRelativeTo(this);
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		GridBagConstraints constraints = new GridBagConstraints();
 
@@ -96,6 +94,7 @@ public class AboutFrame extends JFrame
 		add(mAboutPanel);
 
 		setVisible(true);
+		Driver.centerFrame(this);
 	}
 
 	private static final long serialVersionUID = 7316549497827793096L;

@@ -61,7 +61,7 @@ public class NetworkClient
 		PlayNetGameScreen png = GuiUtility.getChessCrafter().getNetGameScreen(g, false, true);
 		PlayGameScreen pgs = GuiUtility.getChessCrafter().getPlayGameScreen(g);
 		pgs.resetTimers();
-		GuiUtility.getChessCrafter().setPanel(png);
+		GuiUtility.getChessCrafter().pushPanel(png);
 
 		try
 		{

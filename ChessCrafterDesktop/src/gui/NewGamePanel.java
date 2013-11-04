@@ -7,8 +7,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
@@ -18,12 +16,10 @@ import java.util.Locale;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.WindowConstants;
 import javax.tools.JavaCompiler;
 import javax.tools.JavaCompiler.CompilationTask;
 import javax.tools.JavaFileObject;
@@ -73,15 +69,12 @@ public class NewGamePanel extends ChessPanel
 			@Override
 			public void actionPerformed(ActionEvent event)
 			{
-				if (mPopupFrame == null)
-				{
-					createNewGamePopup();
-				}
+				Driver.getInstance().pushPanel(createNewGamePanel());
 			}
 		});
 		constraints.gridy = 1;
 		constraints.ipadx = 7;
-		constraints.insets = new Insets(5, 5, 0, 5);
+		constraints.insets = new Insets(5, 5, 5, 5);
 		buttonPanel.add(humanPlayButton, constraints);
 
 		if (NetworkPlayManager.getInstance().networkPlayIsAvailable())
@@ -127,31 +120,10 @@ public class NewGamePanel extends ChessPanel
 		add(backButton, constraints);
 	}
 
-	private void initPopup()
-	{
-		mPopupFrame = new JFrame(Messages.getString("NewGamePanel.newGame")); //$NON-NLS-1$
-		mPopupFrame.setSize(325, 225);
-		mPopupFrame.setResizable(false);
-		Driver.centerFrame();
-		mPopupFrame.setLocationRelativeTo(Driver.getInstance());
-		mPopupFrame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-		mPopupFrame.addWindowListener(new WindowAdapter()
-		{
-			@Override
-			public void windowClosing(WindowEvent e)
-			{
-				mPopupFrame.setVisible(false);
-				mPopupFrame.dispose();
-				mPopupFrame = null;
-			}
-		});
-		mPopupPanel = new ChessPanel();
-		mPopupPanel.setLayout(new GridBagLayout());
-	}
-
-	private void createNewGamePopup()
-	{
-		initPopup();
+	private ChessPanel createNewGamePanel()
+	{		
+		mPanel = new ChessPanel();
+		mPanel.setLayout(new GridBagLayout());
 
 		GridBagConstraints constraints = new GridBagConstraints();
 
@@ -164,19 +136,21 @@ public class NewGamePanel extends ChessPanel
 		{
 			JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("NewGamePanel.errorCouldntLoadVariantFiles")); //$NON-NLS-1$
 			e1.printStackTrace();
-			return;
+			return null;
 		}
 
 		// variant type selector
 		constraints.gridx = 0;
 		constraints.gridy = 0;
+		constraints.insets = new Insets(3, 10, 3, 10);
 		constraints.anchor = GridBagConstraints.WEST;
-		mPopupPanel.add(GuiUtility.createJLabel(Messages.getString("NewGamePanel.type")), constraints); //$NON-NLS-1$
+		mPanel.add(GuiUtility.createJLabel(Messages.getString("NewGamePanel.type")), constraints); //$NON-NLS-1$
 
 		constraints.gridx = 1;
 		constraints.gridy = 0;
+		constraints.insets = new Insets(3, 10, 3, 10);
 		constraints.fill = GridBagConstraints.HORIZONTAL;
-		mPopupPanel.add(dropdown, constraints);
+		mPanel.add(dropdown, constraints);
 
 		// total time and increment fields
 		final JLabel totalTimeLabel = GuiUtility.createJLabel(Messages.getString("NewGamePanel.totalTime")); //$NON-NLS-1$
@@ -219,31 +193,37 @@ public class NewGamePanel extends ChessPanel
 		// add the combo box to the frame
 		constraints.gridx = 0;
 		constraints.gridy = 1;
-		mPopupPanel.add(GuiUtility.createJLabel(Messages.getString("NewGamePanel.timer")), constraints); //$NON-NLS-1$
+		constraints.insets = new Insets(3, 10, 3, 10);
+		mPanel.add(GuiUtility.createJLabel(Messages.getString("NewGamePanel.timer")), constraints); //$NON-NLS-1$
 
 		constraints.gridx = 1;
 		constraints.gridy = 1;
 		constraints.fill = GridBagConstraints.HORIZONTAL;
-		mPopupPanel.add(timerComboBox, constraints);
+		constraints.insets = new Insets(3, 10, 3, 10);
+		mPanel.add(timerComboBox, constraints);
 
 		// add the total time field to the frame
 		constraints.gridx = 0;
 		constraints.gridy = 2;
-		mPopupPanel.add(totalTimeLabel, constraints);
+		constraints.insets = new Insets(3, 10, 3, 10);
+		mPanel.add(totalTimeLabel, constraints);
 
 		constraints.gridx = 1;
 		constraints.gridy = 2;
-		mPopupPanel.add(totalTimeField, constraints);
+		constraints.insets = new Insets(3, 10, 3, 10);
+		mPanel.add(totalTimeField, constraints);
 
 		// add the increment field to the frame
 		constraints.gridx = 0;
 		constraints.gridy = 3;
+		constraints.insets = new Insets(3, 10, 3, 10);
 		constraints.anchor = GridBagConstraints.CENTER;
-		mPopupPanel.add(incrementLabel, constraints);
+		mPanel.add(incrementLabel, constraints);
 
 		constraints.gridx = 1;
 		constraints.gridy = 3;
-		mPopupPanel.add(incrementField, constraints);
+		constraints.insets = new Insets(3, 10, 3, 10);
+		mPanel.add(incrementField, constraints);
 
 		// set up the done button
 		final JButton doneButton = new JButton(Messages.getString("NewGamePanel.start")); //$NON-NLS-1$
@@ -273,9 +253,7 @@ public class NewGamePanel extends ChessPanel
 
 				gameToPlay.setTimers(whiteTimer, blackTimer);
 				PlayGamePanel gamePanel = new PlayGamePanel(gameToPlay);
-				Driver.getInstance().setPanel(gamePanel);
-				mPopupFrame.dispose();
-				mPopupFrame = null;
+				Driver.getInstance().pushPanel(gamePanel);
 			}
 		});
 
@@ -286,8 +264,7 @@ public class NewGamePanel extends ChessPanel
 			@Override
 			public void actionPerformed(ActionEvent event)
 			{
-				mPopupFrame.dispose();
-				mPopupFrame = null;
+				Driver.getInstance().popPanel();
 			}
 		});
 
@@ -301,11 +278,11 @@ public class NewGamePanel extends ChessPanel
 		constraints.gridx = 0;
 		constraints.gridy = 4;
 		constraints.gridwidth = 2;
+		constraints.insets = new Insets(3, 10, 3, 10);
 		constraints.fill = GridBagConstraints.HORIZONTAL;
-		mPopupPanel.add(buttonPanel, constraints);
+		mPanel.add(buttonPanel, constraints);
 
-		mPopupFrame.add(mPopupPanel);
-		mPopupFrame.setVisible(true);
+		return mPanel;
 	}
 
 	private void createAIPopup()
@@ -313,21 +290,19 @@ public class NewGamePanel extends ChessPanel
 		if (!validAIFilesExist())
 			return;
 
-		initPopup();
-
 		GridBagConstraints constraints = new GridBagConstraints();
 
 		// add the variant type selector to the frame
 		constraints.gridx = 0;
 		constraints.gridy = 0;
-		mPopupPanel.add(GuiUtility.createJLabel(Messages.getString("NewGamePanel.type")), constraints); //$NON-NLS-1$
+		mPanel.add(GuiUtility.createJLabel(Messages.getString("NewGamePanel.type")), constraints); //$NON-NLS-1$
 
 		constraints.gridx = 1;
 		constraints.gridy = 0;
 		constraints.insets = new Insets(3, 0, 3, 0);
 		try
 		{
-			mPopupPanel.add(new JComboBox(GameBuilder.getVariantFileArray()), constraints);
+			mPanel.add(new JComboBox(GameBuilder.getVariantFileArray()), constraints);
 		}
 		catch (IOException e1)
 		{
@@ -338,13 +313,13 @@ public class NewGamePanel extends ChessPanel
 		// add the AI selector to the frame
 		constraints.gridx = 0;
 		constraints.gridy = 1;
-		mPopupPanel.add(GuiUtility.createJLabel(Messages.getString("NewGamePanel.ai")), constraints); //$NON-NLS-1$
+		mPanel.add(GuiUtility.createJLabel(Messages.getString("NewGamePanel.ai")), constraints); //$NON-NLS-1$
 
 		final JComboBox aiComboBox = new JComboBox(AIManager.getInstance().getAIFiles());
 		constraints.gridx = 1;
 		constraints.gridy = 1;
 		constraints.fill = GridBagConstraints.HORIZONTAL;
-		mPopupPanel.add(aiComboBox, constraints);
+		mPanel.add(aiComboBox, constraints);
 
 		// add a button to the frame for installing a new AI
 		JButton addAIFileButton = new JButton(Messages.getString("NewGamePanel.installNewAI")); //$NON-NLS-1$
@@ -442,15 +417,12 @@ public class NewGamePanel extends ChessPanel
 
 					PlayNetGamePanel playNetGame = new PlayNetGamePanel(gameToPlay, false, false);
 					playNetGame.setIsAIGame(true);
-					Driver.getInstance().setPanel(playNetGame);
+					Driver.getInstance().pushPanel(playNetGame);
 				}
 				catch (Exception e)
 				{
 					e.printStackTrace();
 				}
-
-				mPopupFrame.dispose();
-				mPopupFrame = null;
 			}
 		});
 
@@ -460,8 +432,7 @@ public class NewGamePanel extends ChessPanel
 			@Override
 			public void actionPerformed(ActionEvent event)
 			{
-				mPopupFrame.dispose();
-				mPopupFrame = null;
+				Driver.getInstance().popPanel();
 			}
 		});
 
@@ -474,16 +445,14 @@ public class NewGamePanel extends ChessPanel
 		constraints.gridx = 0;
 		constraints.gridy = 2;
 		constraints.gridwidth = 2;
-		constraints.insets = new Insets(5, 0, 5, 0);
-		mPopupPanel.add(addAIFileButton, constraints);
+		constraints.insets = new Insets(3, 0, 3, 0);
+		mPanel.add(addAIFileButton, constraints);
 
 		constraints.gridx = 0;
 		constraints.gridy = 3;
-		mPopupPanel.add(buttonPanel, constraints);
+		mPanel.add(buttonPanel, constraints);
 
-		mPopupFrame.add(mPopupPanel);
-
-		mPopupFrame.setVisible(true);
+		Driver.getInstance().pushPanel(mPanel);
 	}
 
 	public boolean validAIFilesExist()
@@ -509,6 +478,5 @@ public class NewGamePanel extends ChessPanel
 
 	private static final long serialVersionUID = -6371389704966320508L;
 
-	private JFrame mPopupFrame;
-	private ChessPanel mPopupPanel;
+	private ChessPanel mPanel;
 }

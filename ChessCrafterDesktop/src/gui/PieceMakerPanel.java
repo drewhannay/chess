@@ -52,7 +52,7 @@ public class PieceMakerPanel extends ChessPanel
 		public void onPieceListChanged();
 	}
 
-	public PieceMakerPanel(PieceMenuPanel menuPanel)
+	public PieceMakerPanel(PieceMenuPanel menuPanel, JFrame frame)
 	{
 		mLeaperCheckBox = new JCheckBox(Messages.getString("PieceMakerPanel.canJump"), false); //$NON-NLS-1$
 		mPieceNameField = new JTextField(15);
@@ -75,13 +75,10 @@ public class PieceMakerPanel extends ChessPanel
 		new PieceMakerPanel(null, menuPanel);
 	}
 
-	public PieceMakerPanel(String pieceName, PieceMenuPanel menuPanel)
+	public PieceMakerPanel(String pieceName, PieceMenuPanel menuPanel, JFrame frame)
 	{
+		mFrame = frame;
 		mPieceMenuPanel = menuPanel;
-		mFrame = new JFrame(Messages.getString("PieceMakerPanel.pieceEditor")); //$NON-NLS-1$
-		mFrame.add(this);
-		mFrame.setSize(400, 600);
-		mFrame.setLocationRelativeTo(menuPanel);
 		mLeaperCheckBox = new JCheckBox(Messages.getString("PieceMakerPanel.canJump"), false); //$NON-NLS-1$
 		mLeaperCheckBox.setOpaque(false);
 		mLeaperCheckBox.setForeground(Color.white);
@@ -112,10 +109,12 @@ public class PieceMakerPanel extends ChessPanel
 			Set<BidirectionalMovement> bidirectionalMovements = builder.getPieceMovements().getBidirectionalMovements();
 			
 			for (BidirectionalMovement movement : bidirectionalMovements)
-			{
-				mDefaultComboBoxModel.addElement(movement);
-			}
-			mBidirectionalMovementComboBox.setSelectedIndex(0);
+				mTempBidirectionalMovements.add(movement.toString());
+
+			if (mBidirectionalMovementComboBox.getItemCount() != 0)
+				mBidirectionalMovementComboBox.setSelectedIndex(0);
+			else
+				mBidirectionalMovementComboBox.setEnabled(false);
 		}
 		else
 		{
@@ -490,9 +489,17 @@ public class PieceMakerPanel extends ChessPanel
 
 				refreshVariants();
 
-				mFrame.dispose();
 				mPieceMenuPanel.refreshList();
-				PieceMakerPanel.this.removeAll();
+				
+				if (mFrame instanceof Driver)
+					Driver.getInstance().popPanel();
+				else
+				{
+					mFrame.remove(PieceMakerPanel.this);
+					mFrame.add(mPieceMenuPanel);
+					mFrame.pack();
+					Driver.centerFrame(mFrame);
+				}
 			}
 		});
 
@@ -505,8 +512,15 @@ public class PieceMakerPanel extends ChessPanel
 			{
 				if (mPieceNameField.getText().trim().isEmpty())
 				{
-					mFrame.dispose();
-					PieceMakerPanel.this.removeAll();
+					if (mFrame instanceof Driver)
+						Driver.getInstance().popPanel();
+					else
+					{
+						mFrame.remove(PieceMakerPanel.this);
+						mFrame.add(mPieceMenuPanel);
+						mFrame.pack();
+						Driver.centerFrame(mFrame);
+					}
 				}
 				else
 				{
@@ -515,8 +529,10 @@ public class PieceMakerPanel extends ChessPanel
 							JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE))
 					{
 					case JOptionPane.YES_OPTION:
-						mFrame.dispose();
-						PieceMakerPanel.this.removeAll();
+						mFrame.remove(PieceMakerPanel.this);
+						mFrame.add(mPieceMenuPanel);
+						mFrame.pack();
+						Driver.centerFrame(mFrame);
 						break;
 					case JOptionPane.NO_OPTION:
 						break;
@@ -538,8 +554,8 @@ public class PieceMakerPanel extends ChessPanel
 		constraints.gridy = 7;
 		add(savePieceButton, constraints);
 
-		mFrame.setVisible(true);
 		mFrame.pack();
+		mFrame.setVisible(true);
 	}
 
 	/**

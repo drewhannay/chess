@@ -1,6 +1,7 @@
 package gui;
 
 import gui.PieceMakerPanel.PieceListChangedListener;
+import gui.PieceMenuPanel.PieceMenuManager;
 import gui.PreferenceUtility.PieceToolTipPreferenceChangedListener;
 
 import java.awt.Color;
@@ -63,7 +64,7 @@ import dragNdrop.DropEvent;
 import dragNdrop.GlassPane;
 import dragNdrop.MotionAdapter;
 
-public class VariantCreationPanel extends ChessPanel implements PieceListChangedListener
+public class VariantCreationPanel extends ChessPanel implements PieceMenuManager, PieceListChangedListener
 {
 	public VariantCreationPanel(String variantName)
 	{
@@ -355,7 +356,11 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 			{
 				mOptionsFrame.dispose();
 				mOptionsFrame = new JFrame();
-				(new PieceMenuPanel(mOptionsFrame)).setPieceListChangedListener(VariantCreationPanel.this);
+				mOptionsFrame.setLayout(new FlowLayout());
+				mOptionsFrame.add(new PieceMenuPanel(VariantCreationPanel.this));
+				mOptionsFrame.pack();
+				mOptionsFrame.setVisible(true);
+				Driver.centerFrame(mOptionsFrame);
 			}
 		});
 
@@ -970,6 +975,8 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 		setupPiecesList();
 		drawBoards(mGameBoards);
 		updateDisplaySquares();
+		mOptionsFrame.pack();
+		Driver.centerFrame(mOptionsFrame);
 	}
 
 	private void updateDisplaySquares()
@@ -1033,4 +1040,31 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 	private MotionAdapter m_motionAdapter;
 	private Board mDisplayBoard;
 	private Board[] mGameBoards;
+	
+	@Override
+	public void onPieceMenuClosed()
+	{
+		mOptionsFrame.dispose();
+	}
+	
+	@Override
+	public void openPieceMakerPanel(String pieceName, PieceMenuPanel panel)
+	{
+		mOptionsFrame.remove(panel);
+		mOptionsFrame.add(new PieceMakerPanel(pieceName, panel, mOptionsFrame));
+		mOptionsFrame.pack();
+		Driver.centerFrame(mOptionsFrame);
+	}
+
+	@Override
+	public void openPieceMakerPanel(PieceMenuPanel panel)
+	{
+		openPieceMakerPanel(null, panel);
+	}
+	
+	@Override
+	public String getReturnButtonText()
+	{
+		return Messages.getString("PieceMenuPanel.returnToVariant"); //$NON-NLS-1$
+	}
 }

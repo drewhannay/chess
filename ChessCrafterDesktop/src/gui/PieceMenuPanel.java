@@ -1,36 +1,50 @@
 package gui;
 
-import gui.PieceMakerPanel.PieceListChangedListener;
-
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
-import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-
 import utility.FileUtility;
+import utility.GuiUtility;
 
 public class PieceMenuPanel extends ChessPanel
 {
-
-	public PieceMenuPanel()
+	public interface PieceMenuManager
 	{
-		mPieceListModel = new DefaultListModel();
-		initGuiComponents();
+		public void onPieceMenuClosed();
+
+		public void openPieceMakerPanel(String pieceName, PieceMenuPanel panel);
+
+		public void openPieceMakerPanel(PieceMenuPanel panel);
+
+		public String getReturnButtonText();
+
+		public void onPieceListChanged();
 	}
 
-	public PieceMenuPanel(JFrame frame)
+	public PieceMenuPanel(PieceMenuManager manager)
 	{
-		mFrame = frame;
+		mEditDeletePanel = new JPanel();
+		mNoCustomPiecesLabel = GuiUtility.createJLabel(Messages.getString("PieceMenuPanel.noCustomPieces")); //$NON-NLS-1$
+		mNoCustomLabelConstraints = new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.CENTER,
+				new Insets(50, 20, 50, 20), 5, 5);
+
+		mEditPanelConstraints = new GridBagConstraints();
+		mEditPanelConstraints.insets = new Insets(0, 0, 0, 0);
+		mEditPanelConstraints.gridheight = 3;
+		mEditPanelConstraints.ipadx = 7;
+		mEditPanelConstraints.gridy = 2;
+		
+		mManager = manager;
 		mPieceListModel = new DefaultListModel();
 		initGuiComponents();
 	}
@@ -40,51 +54,44 @@ public class PieceMenuPanel extends ChessPanel
 		setLayout(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
 
-		constraints.gridy = 0;
-		constraints.ipadx = 0;
-		constraints.insets = new Insets(5, 10, 0, 10);
-		constraints.anchor = GridBagConstraints.CENTER;
-
 		JButton createNewPieceButton = new JButton(Messages.getString("PieceMenuPanel.createNew")); //$NON-NLS-1$
 		createNewPieceButton.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent event)
 			{
-				new PieceMakerPanel(PieceMenuPanel.this);
+				mManager.openPieceMakerPanel(PieceMenuPanel.this);
 			}
 		});
+
+		constraints.gridy = 0;
+		constraints.ipadx = 0;
+		constraints.gridheight = 1;
+		constraints.insets = new Insets(5, 10, 0, 10);
+		constraints.anchor = GridBagConstraints.CENTER;
 		add(createNewPieceButton, constraints);
 
-		final JPanel editDeletePanel = new JPanel();
-		editDeletePanel.setSize(500, 500);
-		editDeletePanel.setOpaque(false);
+		mEditDeletePanel.setOpaque(false);
 
-		editDeletePanel.setLayout(new GridBagLayout());
-
-		constraints.gridy = 1;
-		constraints.ipadx = 7;
-		constraints.insets = new Insets(5, 5, 0, 5);
-		constraints.fill = GridBagConstraints.HORIZONTAL;
+		mEditDeletePanel.setLayout(new GridBagLayout());
 
 		JScrollPane scrollPane = new JScrollPane();
 		final JList pieceList = new JList();
-		scrollPane.setSize(500, 500);
-		pieceList.setSize(500, 500);
 		scrollPane.setViewportView(pieceList);
 		refreshList();
 		pieceList.setModel(mPieceListModel);
 		pieceList.doLayout();
 
-		editDeletePanel.add(scrollPane, constraints);
-		editDeletePanel.setVisible(mPieceListModel.size() != 0);
+		constraints.gridy = 1;
+		constraints.ipadx = 7;
+		constraints.insets = new Insets(5, 5, 0, 5);
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		mEditDeletePanel.add(scrollPane, constraints);
 
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new GridBagLayout());
 		buttonPanel.setOpaque(false);
 
-		constraints.gridy = 2;
-		constraints.ipadx = 7;
 		final JButton editButton = new JButton(Messages.getString("PieceMenuPanel.edit")); //$NON-NLS-1$
 		editButton.setEnabled(false);
 		editButton.addActionListener(new ActionListener()
@@ -92,9 +99,12 @@ public class PieceMenuPanel extends ChessPanel
 			@Override
 			public void actionPerformed(ActionEvent event)
 			{
-				new PieceMakerPanel(mPieceListModel.get(pieceList.getSelectedIndex()).toString(), PieceMenuPanel.this);
+				mManager.openPieceMakerPanel(mPieceListModel.get(pieceList.getSelectedIndex()).toString(), PieceMenuPanel.this);
 			}
 		});
+
+		constraints.gridy = 2;
+		constraints.ipadx = 7;
 		buttonPanel.add(editButton, constraints);
 
 		final JButton deleteButton = new JButton(Messages.getString("PieceMenuPanel.delete")); //$NON-NLS-1$
@@ -113,23 +123,19 @@ public class PieceMenuPanel extends ChessPanel
 						mPieceListModel.removeElementAt(selectedIndices[i]);
 					}
 				}
-
-				if (mPieceListModel.size() == 0)
-				{
-					editButton.setEnabled(false);
-					deleteButton.setEnabled(false);
-					editDeletePanel.setVisible(false);
-				}
+				refreshList();
 			}
 		});
 		constraints.ipadx = 8;
 		buttonPanel.add(deleteButton, constraints);
 
 		constraints.gridy = 2;
-		editDeletePanel.add(buttonPanel, constraints);
+		mEditDeletePanel.add(buttonPanel, constraints);
 
-		constraints.gridy = 1;
-		add(editDeletePanel, constraints);
+		if (mPieceListModel.size() == 0)
+			add(mNoCustomPiecesLabel, mNoCustomLabelConstraints);
+		else
+			add(mEditDeletePanel, mEditPanelConstraints);
 
 		pieceList.addListSelectionListener(new ListSelectionListener()
 		{
@@ -142,62 +148,22 @@ public class PieceMenuPanel extends ChessPanel
 			}
 		});
 
-		if (mFrame == null)
+		JButton doneButton = new JButton(mManager.getReturnButtonText());
+		doneButton.addActionListener(new ActionListener()
 		{
-			JButton backButton = new JButton(Messages.getString("PieceMenuPanel.returnToMenu")); //$NON-NLS-1$
-			backButton.setToolTipText(Messages.getString("PieceMenuPanel.returnToMenu")); //$NON-NLS-1$
-			backButton.addActionListener(new ActionListener()
+			@Override
+			public void actionPerformed(ActionEvent arg0)
 			{
-				@Override
-				public void actionPerformed(ActionEvent event)
-				{
-					Driver.getInstance().revertToMainPanel();
-				}
-			});
+				mManager.onPieceMenuClosed();
+			}
+		});
 
-			constraints.gridy = 2;
-			constraints.insets = new Insets(15, 5, 10, 5);
-			add(backButton, constraints);
-		}
-		else
-		{
-			JButton doneButton = new JButton(Messages.getString("PieceMenuPanel.done")); //$NON-NLS-1$
-			doneButton.setToolTipText(Messages.getString("PieceMenuPanel.returnToVariant")); //$NON-NLS-1$
-			doneButton.addActionListener(new ActionListener()
-			{
-
-				@Override
-				public void actionPerformed(ActionEvent arg0)
-				{
-					mFrame.dispose();
-				}
-			});
-
-			constraints.gridy = 2;
-			constraints.insets = new Insets(15, 5, 10, 5);
-			add(doneButton, constraints);
-		}
-
-		if (mFrame != null)
-		{
-			mFrame.setTitle(Messages.getString("PieceMenuPanel.pieceMenu")); //$NON-NLS-1$
-			mFrame.setSize(225, 300);
-			mFrame.add(this);
-			mFrame.setLocationRelativeTo(Driver.getInstance());
-			mFrame.setVisible(true);
-		}
-	}
-
-	private static final long serialVersionUID = -6371389704966320508L;
-
-	private DefaultListModel mPieceListModel;
-	private JFrame mFrame;
-
-	private PieceListChangedListener mListener;
-
-	public void setPieceListChangedListener(PieceListChangedListener listener)
-	{
-		mListener = listener;
+		constraints.gridx = 0;
+		constraints.gridy = 5;
+		constraints.gridheight = 1;
+		constraints.gridwidth = 1;
+		constraints.insets = new Insets(15, 5, 10, 5);
+		add(doneButton, constraints);
 	}
 
 	public void refreshList()
@@ -210,7 +176,25 @@ public class PieceMenuPanel extends ChessPanel
 			mPieceListModel.addElement(pieceArray[i]);
 		}
 
-		if (mListener != null)
-			mListener.onPieceListChanged();
+		if (mPieceListModel.size() == 0)
+		{
+			remove(mEditDeletePanel);
+			add(mNoCustomPiecesLabel, mNoCustomLabelConstraints);
+		}
+		else
+		{
+			remove(mNoCustomPiecesLabel);
+			add(mEditDeletePanel, mEditPanelConstraints);
+		}
+		mManager.onPieceListChanged();
 	}
+
+	private static final long serialVersionUID = -6371389704966320508L;
+
+	private DefaultListModel mPieceListModel;
+	private PieceMenuManager mManager;
+	private final JLabel mNoCustomPiecesLabel;
+	final JPanel mEditDeletePanel;
+	private final GridBagConstraints mNoCustomLabelConstraints;
+	private final GridBagConstraints mEditPanelConstraints;
 }

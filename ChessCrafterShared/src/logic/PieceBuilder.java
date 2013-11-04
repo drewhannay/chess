@@ -227,6 +227,12 @@ public class PieceBuilder implements Serializable
 		mPieceMovements.addBidirectionalMovement(movement);
 	}
 
+	public static void removePieceType(String pieceName)
+	{
+		if (mPieceTypes != null && mPieceTypes.containsKey(pieceName))
+			mPieceTypes.remove(pieceName);
+	}
+	
 	private static final long serialVersionUID = -1351201562740885961L;
 
 	private static Map<String, PieceBuilder> mPieceTypes;

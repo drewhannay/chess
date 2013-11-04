@@ -6,8 +6,13 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.URL;
+import java.util.List;
 
 import javax.imageio.ImageIO;
+
+import logic.PieceBuilder;
+
+import com.google.common.collect.Lists;
 
 public final class FileUtility
 {
@@ -47,19 +52,11 @@ public final class FileUtility
 		return file.list();
 	}
 
-	public static String[] getVariantsFileArrayNoClassic()
+	public static List<String> getVariantsFileArrayNoClassic()
 	{
-		String[] variants = getVariantsFileArray();
-		for (int i = 0; i < variants.length; i++)
-		{
-			if (variants[i].contentEquals(Messages.getString("classic"))) //$NON-NLS-1$
-			{
-				variants[i] = variants[variants.length - 1];
-				variants[variants.length - 1] = null;
-				break;
-			}
-		}
-		return variants;
+		List<String> varList = Lists.newArrayList(getVariantsFileArray());
+		varList.remove(Messages.getString("classic")); //$NON-NLS-1$
+		return varList;
 	}
 
 	public static File getVariantsFile(String variantName)
@@ -178,10 +175,16 @@ public final class FileUtility
 	{
 		File pieceFile = getPieceFile(pieceName);
 		pieceFile.delete();
+		PieceBuilder.removePieceType(pieceName);
 		new File((getImagePath("l_" + pieceName + ".png"))).delete(); //$NON-NLS-1$ //$NON-NLS-2$
 		new File((getImagePath("d_" + pieceName + ".png"))).delete(); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
+	public static void deleteVariant(String name)
+	{
+		getVariantsFile(name).delete();
+	}
+	
 	private static final String HIDDEN_DIR;
 	private static final String AI = "AI"; //$NON-NLS-1$
 	private static final String IMAGES = "images"; //$NON-NLS-1$
