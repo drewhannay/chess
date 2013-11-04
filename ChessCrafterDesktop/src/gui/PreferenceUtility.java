@@ -1,6 +1,5 @@
 package gui;
 
-import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -40,11 +39,10 @@ public final class PreferenceUtility
 		public void onPieceToolTipPreferenceChanged();
 	}
 
-	public static void createPreferencePopup(Component relativeComponent)
+	public static void createPreferencePopup()
 	{
 		final JFrame popupFrame = new JFrame(Messages.getString("PreferenceUtility.preferences")); //$NON-NLS-1$
 		popupFrame.setSize(370, 120);
-		popupFrame.setLocationRelativeTo(relativeComponent);
 		popupFrame.setLayout(new GridBagLayout());
 		popupFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		GridBagConstraints constraints = new GridBagConstraints();
@@ -168,6 +166,7 @@ public final class PreferenceUtility
 		constraints.anchor = GridBagConstraints.CENTER;
 
 		popupFrame.pack();
+		Driver.centerFrame(popupFrame);
 		popupFrame.setVisible(true);
 	}
 

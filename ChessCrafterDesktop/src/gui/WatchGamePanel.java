@@ -29,7 +29,7 @@ import models.Piece;
 import timer.ChessTimer;
 import timer.TimerTypes;
 
-public class WatchGamePanel extends JPanel implements WatchGameScreen
+public class WatchGamePanel extends ChessPanel implements WatchGameScreen
 {
 	public WatchGamePanel(File saveFile)
 	{

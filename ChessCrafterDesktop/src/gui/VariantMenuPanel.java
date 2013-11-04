@@ -5,11 +5,11 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
+import java.util.List;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
-import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -17,11 +17,25 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import utility.FileUtility;
+import utility.GuiUtility;
 
 public class VariantMenuPanel extends ChessPanel
 {
 	public VariantMenuPanel()
 	{
+		mNoCustomPiecesLabel = GuiUtility.createJLabel(Messages.getString("VariantMenuPanel.noVariants")); //$NON-NLS-1$
+		mNoCustomLabelConstraints = new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.CENTER,
+				new Insets(50, 20, 50, 20), 5, 5);
+
+		mEditPanelConstraints = new GridBagConstraints();
+		mEditPanelConstraints.insets = new Insets(0, 0, 0, 0);
+		mEditPanelConstraints.gridheight = 3;
+		mEditPanelConstraints.ipadx = 7;
+		mEditPanelConstraints.gridy = 1;
+
+		mEditDeletePanel = new JPanel();
+		mVariantListModel = new DefaultListModel();
+		
 		initGuiComponents();
 	}
 
@@ -41,17 +55,13 @@ public class VariantMenuPanel extends ChessPanel
 			@Override
 			public void actionPerformed(ActionEvent event)
 			{
-				if (mPopupFrame == null)
-				{
-					Driver.getInstance().setPanel(new VariantCreationPanel(null));
-				}
+				Driver.getInstance().pushPanel(new VariantCreationPanel(null));
 			}
 		});
 		add(createNewVariantButton, constraints);
 
-		final JPanel editDeletePanel = new JPanel();
-		editDeletePanel.setLayout(new GridBagLayout());
-		editDeletePanel.setOpaque(false);
+		mEditDeletePanel.setLayout(new GridBagLayout());
+		mEditDeletePanel.setOpaque(false);
 
 		constraints.gridy = 1;
 		constraints.ipadx = 7;
@@ -60,18 +70,10 @@ public class VariantMenuPanel extends ChessPanel
 
 		final JList variantList = new JList();
 		JScrollPane scrollPane = new JScrollPane();
-		DefaultListModel variantListModel = new DefaultListModel();
-		String[] variantArray = FileUtility.getVariantsFileArrayNoClassic();
-		for (int i = 0; i < variantArray.length; i++)
-		{
-			variantListModel.addElement(variantArray[i]);
-		}
-		variantList.setModel(variantListModel);
+		variantList.setModel(mVariantListModel);
 		scrollPane.setViewportView(variantList);
-		scrollPane.setSize(500, 500);
-		variantList.setSize(500, 500);
 
-		editDeletePanel.add(scrollPane, constraints);
+		mEditDeletePanel.add(scrollPane, constraints);
 
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new GridBagLayout());
@@ -87,12 +89,9 @@ public class VariantMenuPanel extends ChessPanel
 			@Override
 			public void actionPerformed(ActionEvent event)
 			{
-				if (mPopupFrame == null)
-				{
-					Driver.getInstance().setPanel(
-							new VariantCreationPanel(((DefaultListModel) variantList.getModel()).get(variantList.getSelectedIndex())
-									.toString()));
-				}
+				Driver.getInstance().pushPanel(
+						new VariantCreationPanel(((DefaultListModel) variantList.getModel()).get(variantList.getSelectedIndex())
+								.toString()));
 			}
 		});
 		buttonPanel.add(editButton, constraints);
@@ -104,35 +103,22 @@ public class VariantMenuPanel extends ChessPanel
 			@Override
 			public void actionPerformed(ActionEvent event)
 			{
-				DefaultListModel dlm = (DefaultListModel) variantList.getModel();
-
 				if (variantList.getSelectedIndices().length > 0)
 				{
 					int[] selectedIndices = variantList.getSelectedIndices();
 					for (int i = selectedIndices.length - 1; i >= 0; i--)
 					{
-						File variantFile = FileUtility.getVariantsFile(dlm.get(selectedIndices[i]).toString());
-						dlm.removeElementAt(selectedIndices[i]);
-						variantFile.delete();
+						FileUtility.deleteVariant(mVariantListModel.get(selectedIndices[i]).toString());
+						mVariantListModel.removeElementAt(selectedIndices[i]);
 					}
 				}
-
-				if (dlm.size() == 1)
-				{
-					editButton.setEnabled(false);
-					deleteButton.setEnabled(false);
-					editDeletePanel.setVisible(false);
-				}
+				refreshList();
 			}
 		});
 		constraints.ipadx = 8;
 		buttonPanel.add(deleteButton, constraints);
 
-		constraints.gridy = 2;
-		editDeletePanel.add(buttonPanel, constraints);
-
-		constraints.gridy = 1;
-		add(editDeletePanel, constraints);
+		mEditDeletePanel.add(buttonPanel, constraints);
 
 		variantList.addListSelectionListener(new ListSelectionListener()
 		{
@@ -155,13 +141,44 @@ public class VariantMenuPanel extends ChessPanel
 			}
 		});
 
-		constraints.gridy = 2;
+		constraints.gridx = 0;
+		constraints.gridy = 4;
 		constraints.insets = new Insets(10, 5, 10, 5);
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		add(backButton, constraints);
+		refreshList();
 	}
 
-	private static final long serialVersionUID = -6371389704966320508L;
+	private void refreshList()
+	{
+		mVariantListModel.clear();
 
-	private JFrame mPopupFrame;
+		List<String> variants = FileUtility.getVariantsFileArrayNoClassic();
+		for (String variant: variants)
+		{
+			mVariantListModel.addElement(variant);
+		}
+
+		if (mVariantListModel.size() == 0)
+		{
+			remove(mEditDeletePanel);
+			add(mNoCustomPiecesLabel, mNoCustomLabelConstraints);
+		}
+		else
+		{
+			remove(mNoCustomPiecesLabel);
+			add(mEditDeletePanel, mEditPanelConstraints);
+		}
+		
+		Driver.getInstance().pack();
+		Driver.centerFrame(Driver.getInstance());
+	}
+	
+	private static final long serialVersionUID = -6371389704966320508L;
+	
+	private DefaultListModel mVariantListModel;
+	private final JPanel mEditDeletePanel;
+	private final JLabel mNoCustomPiecesLabel;
+	private final GridBagConstraints mNoCustomLabelConstraints;
+	private final GridBagConstraints mEditPanelConstraints;
 }

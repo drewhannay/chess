@@ -32,8 +32,10 @@ public final class ChessTimerLabel extends JLabel
 		setForeground(Color.white);
 	}
 
-	private final ActionListener mTimerActionListener = new ActionListener()
+	private final ActionListener mTimerActionListener = new SerializableActionListener()
 	{
+		private static final long serialVersionUID = -4617402008587786344L;
+
 		@Override
 		public void actionPerformed(ActionEvent event)
 		{
@@ -43,6 +45,8 @@ public final class ChessTimerLabel extends JLabel
 
 	private final ChessTimerListener mChessTimerListener = new ChessTimerListener()
 	{
+		private static final long serialVersionUID = -7951621916525061474L;
+
 		@Override
 		public void onDisplayUpdated(String displayText)
 		{

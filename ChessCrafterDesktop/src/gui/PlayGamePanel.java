@@ -102,7 +102,7 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 			resetLabel.setForeground(getGame().isBlackMove() ? Color.white : Color.black);
 			resetLabel.setBackground(getGame().isBlackMove() ? SquareJLabel.HIGHLIGHT_COLOR : null);
 			if(inCheck)
-				resetLabel.setText(Messages.getString("PlayGamePanel.blackTeam") + " " + Messages.getString("PlayGamePanel.inCheck")); //$NON-NLS-2$
+				resetLabel.setText(Messages.getString("PlayGamePanel.blackTeam") + " " + Messages.getString("PlayGamePanel.inCheck"));  //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
 			else
 				resetLabel.setText(Messages.getString("PlayGamePanel.blackTeam")); //$NON-NLS-1$
 		}
@@ -111,7 +111,7 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 			//change spacing if there is a timer
 			constraints.gridy = ChessTimer.isNoTimer(mWhiteTimer) ? 9 : 10;
 			if(inCheck)
-				resetLabel.setText(Messages.getString("PlayGamePanel.whiteTeam") + " " + Messages.getString("PlayGamePanel.inCheck")); //$NON-NLS-2$
+				resetLabel.setText(Messages.getString("PlayGamePanel.whiteTeam") + " " + Messages.getString("PlayGamePanel.inCheck"));  //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
 			else
 				resetLabel.setText(Messages.getString("PlayGamePanel.whiteTeam")); //$NON-NLS-1$
 			resetLabel.setForeground(!getGame().isBlackMove() ? Color.white : Color.black);

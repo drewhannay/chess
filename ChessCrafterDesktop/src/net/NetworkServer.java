@@ -67,7 +67,7 @@ public class NetworkServer
 		if (fromServer != null)
 			out.writeObject(fromServer);
 		GuiUtility.getChessCrafter().getPlayGameScreen(g).resetTimers();
-		Driver.getInstance().setPanel(png);
+		Driver.getInstance().pushPanel(png);
 		try
 		{
 			while (g.isBlackMove() == false)
