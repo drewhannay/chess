@@ -1,3 +1,4 @@
+
 package timer;
 
 import utility.RunnableOfT;
@@ -35,8 +36,6 @@ class SimpleDelayTimer extends ChessTimer
 		if (mListener != null)
 			mListener.onTimerStop();
 	}
-
-	private static final long serialVersionUID = 5421690863308194342L;
 
 	private long mDelayTime;
 }

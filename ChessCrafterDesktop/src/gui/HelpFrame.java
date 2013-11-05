@@ -1,14 +1,13 @@
+
 package gui;
 
 import java.awt.BorderLayout;
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.WindowConstants;
-
 import utility.AppConstants;
 import utility.GuiUtility;
 
@@ -36,28 +35,28 @@ public class HelpFrame extends JFrame
 		gamePlayHelpScrollPane.setOpaque(false);
 		gamePlayHelpScrollPane.setViewportView(gamePlayHelpPanel);
 		gamePlayHelpScrollPane.getViewport().setOpaque(false);
-		
+
 		JPanel variantMakingHelpPanel = new JPanel();
 		variantMakingHelpPanel.setOpaque(false);
 		JScrollPane variantMakingHelpScrollPane = new JScrollPane();
 		variantMakingHelpScrollPane.setOpaque(false);
 		variantMakingHelpScrollPane.setViewportView(variantMakingHelpPanel);
 		variantMakingHelpScrollPane.getViewport().setOpaque(false);
-		
+
 		JPanel generalHelpPanel = new JPanel();
 		generalHelpPanel.setOpaque(false);
 		JScrollPane generalHelpScrollPane = new JScrollPane();
 		generalHelpScrollPane.setOpaque(false);
 		generalHelpScrollPane.setViewportView(generalHelpPanel);
 		generalHelpScrollPane.getViewport().setOpaque(false);
-		
+
 		JPanel pieceMakingHelpPanel = new JPanel();
 		pieceMakingHelpPanel.setOpaque(false);
 		JScrollPane pieceMakingHelpScrollPane = new JScrollPane();
 		pieceMakingHelpScrollPane.setOpaque(false);
 		pieceMakingHelpScrollPane.setViewportView(pieceMakingHelpPanel);
 		pieceMakingHelpScrollPane.getViewport().setOpaque(false);
-		
+
 		JTabbedPane helpTypesTabbedPane = new JTabbedPane();
 		helpTypesTabbedPane.setOpaque(false);
 		helpTypesTabbedPane
@@ -84,7 +83,6 @@ public class HelpFrame extends JFrame
 		JLabel pieceMakingHelpText = GuiUtility.createJLabel(Messages.getString("HelpFrame.pieceOptionsText")); //$NON-NLS-1$
 		pieceMakingHelpPanel.add(pieceMakingHelpText);
 
-		
 		add(mHelpPanel);
 
 		pack();

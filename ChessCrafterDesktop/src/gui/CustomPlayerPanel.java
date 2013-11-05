@@ -1,3 +1,4 @@
+
 package gui;
 
 import java.awt.FlowLayout;
@@ -6,7 +7,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -14,11 +14,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-
-import models.Rules;
-
-import rules.NextTurn;
-import rules.NextTurn.NextTurnOption;
 import utility.GuiUtility;
 
 public class CustomPlayerPanel extends ChessPanel
@@ -120,7 +115,7 @@ public class CustomPlayerPanel extends ChessPanel
 
 	}
 
-	private boolean formIsComplete(Rules whiteRules, Rules blackRules)
+	private boolean formIsComplete(RulesController whiteRules, RulesController blackRules)
 	{
 		mWhiteRules = whiteRules;
 		mBlackRules = blackRules;
@@ -181,8 +176,8 @@ public class CustomPlayerPanel extends ChessPanel
 
 	private static final long serialVersionUID = -5035641594159934814L;
 
-	private Rules mWhiteRules;
-	private Rules mBlackRules;
+	private RulesController mWhiteRules;
+	private RulesController mBlackRules;
 	private JTextField mPlayerOneTurnsField;
 	private JTextField mPlayerTwoTurnsField;
 	private JLabel mIncrementTurnsLabel;

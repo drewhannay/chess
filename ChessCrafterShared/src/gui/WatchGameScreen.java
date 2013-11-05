@@ -1,10 +1,10 @@
+
 package gui;
 
 import javax.swing.JMenu;
-
 import logic.Result;
 import models.Board;
-import models.Piece;
+import controllers.ComputedPieceData;
 
 public interface WatchGameScreen
 {
@@ -20,7 +20,7 @@ public interface WatchGameScreen
 
 	public void boardRefresh(Board[] boards);
 
-	public void setPieceToPlace(Piece piece);
+	public void setPieceToPlace(ComputedPieceData piece);
 
 	public void endOfGame(Result result);
 

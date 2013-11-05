@@ -1,10 +1,9 @@
+
 package utility;
 
 import java.io.IOException;
 import java.util.Map;
-
 import javax.swing.ImageIcon;
-
 import com.google.common.collect.Maps;
 
 public final class PieceIconUtility

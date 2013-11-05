@@ -1,8 +1,7 @@
-package gui;
 
+package gui;
 import gui.PieceMakerPanel.PieceListChangedListener;
 import gui.PreferenceUtility.PieceToolTipPreferenceChangedListener;
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -21,7 +20,6 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
@@ -39,31 +37,26 @@ import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-
 import logic.GameBuilder;
 import logic.PieceBuilder;
 import models.Board;
-import models.Game;
+import models.ChessCoordinates;
 import models.Piece;
-import models.Rules;
-import models.Square;
-import rules.EndOfGame;
-import rules.ObjectivePiece;
-import rules.ObjectivePiece.ObjectivePieceTypes;
+import models.PieceType;
+import rules.Rules;
 import utility.FileUtility;
 import utility.GuiUtility;
 import utility.PieceIconUtility;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-
+import controllers.GameController;
+import controllers.SquareController;
 import dragNdrop.AbstractDropManager;
 import dragNdrop.DropAdapter;
 import dragNdrop.DropEvent;
 import dragNdrop.GlassPane;
 import dragNdrop.MotionAdapter;
-
-public class VariantCreationPanel extends ChessPanel implements PieceListChangedListener
+lic class VariantCreationPanel extends ChessPanel implements PieceListChangedListener
 {
 	public VariantCreationPanel(String variantName)
 	{
@@ -75,7 +68,7 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 		mPieceListPanel = new JPanel();
 		mPieceListPanel.setOpaque(false);
 
-		Game gameToEdit = null;
+		GameController gameToEdit = null;
 		if (variantName != null)
 		{
 			// FIXME: we shouldn't be constructing an actual Game object here;
@@ -109,8 +102,8 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 			mWhiteTeam = Lists.newArrayList();
 			mBlackTeam = Lists.newArrayList();
 
-			mWhiteRules = new Rules(false);
-			mBlackRules = new Rules(true);
+			mWhiteRules = new Rules();
+			mBlackRules = new Rules();
 
 			mWhitePromotionMap = Maps.newHashMap();
 			mBlackPromotionMap = Maps.newHashMap();
@@ -131,7 +124,7 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 		initGUIComponents(gameToEdit, variantName);
 	}
 
-	private void initGUIComponents(final Game game, String variantName)
+	private void initGUIComponents(final GameController game, String variantName)
 	{
 		setLayout(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
@@ -168,8 +161,8 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 			mWhiteRules.addEndOfGame(EndOfGame.CLASSIC.init(0, Messages.getString("VariantCreationPanel.empty"), false)); //$NON-NLS-1$
 			mBlackRules.addEndOfGame(EndOfGame.CLASSIC.init(0, Messages.getString("VariantCreationPanel.empty"), true)); //$NON-NLS-1$
 
-			mWhiteRules.setObjectivePiece(new ObjectivePiece(ObjectivePieceTypes.CLASSIC));
-			mBlackRules.setObjectivePiece(new ObjectivePiece(ObjectivePieceTypes.CLASSIC));
+			mWhiteRules.setObjectivePiece(new ObjectivePieceType(ObjectivePieceTypes.CLASSIC));
+			mBlackRules.setObjectivePiece(new ObjectivePieceType(ObjectivePieceTypes.CLASSIC));
 		}
 
 		constraints.gridx = 1;
@@ -197,9 +190,7 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 		{
 			variantNameField.setText(variantName);
 			for (int i = 0; i < game.getBoards().length; i++)
-			{
 				temp[i] = game.getBoards()[i];
-			}
 		}
 
 		drawBoards(temp);
@@ -239,16 +230,16 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 
 				mBuilder.setName(variantNameField.getText());
 
-				for (Piece piece : mWhiteTeam)
+				for (PieceController piece : mWhiteTeam)
 					piece.setPromotesTo(mWhitePromotionMap.get(piece.getName()));
-				for (Piece piece : mBlackTeam)
+				for (PieceController piece : mBlackTeam)
 					piece.setPromotesTo(mBlackPromotionMap.get(piece.getName()));
 
 				int numberOfObjectives = 0;
 
 				if (mWhiteRules.getObjectiveName() != null && !mWhiteRules.getObjectiveName().isEmpty())
 				{
-					for (Piece piece : mWhiteTeam)
+					for (PieceController piece : mWhiteTeam)
 					{
 						if (piece.getName().equals(mWhiteRules.getObjectiveName()))
 							numberOfObjectives++;
@@ -265,7 +256,7 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 				numberOfObjectives = 0;
 				if (mBlackRules.getObjectiveName() != null && !mBlackRules.getObjectiveName().isEmpty())
 				{
-					for (Piece piece : mBlackTeam)
+					for (PieceController piece : mBlackTeam)
 					{
 						if (piece.getName().equals(mBlackRules.getObjectiveName()))
 							numberOfObjectives++;
@@ -282,12 +273,12 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 				mBuilder.setWhiteTeam(mWhiteTeam);
 
 				if (mWhiteRules.getObjectiveName() == null)
-					mWhiteRules.setObjectivePiece(new ObjectivePiece(ObjectivePieceTypes.CLASSIC));
+					mWhiteRules.setObjectivePiece(new ObjectivePieceType(ObjectivePieceTypes.CLASSIC));
 
 				mBuilder.setBlackTeam(mBlackTeam);
 
 				if (mBlackRules.getObjectiveName() == null)
-					mBlackRules.setObjectivePiece(new ObjectivePiece(ObjectivePieceTypes.CLASSIC));
+					mBlackRules.setObjectivePiece(new ObjectivePieceType(ObjectivePieceTypes.CLASSIC));
 
 				mBuilder.writeFile(mWhiteRules, mBlackRules);
 
@@ -437,21 +428,22 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 
 		GridBagConstraints constraints = new GridBagConstraints();
 
-		List<SquareJLabel> squareLabelList = Lists.newArrayListWithExpectedSize(boards[0].getMaxRow() * boards[0].getMaxCol() * 2);
+		List<SquareJLabel> squareLabelList = Lists.newArrayListWithExpectedSize(boards[0].getRowCount() * boards[0].getColumnCount()
+				* 2);
 		for (int boardIndex = 0, gridxConstraint = 1; boardIndex < boards.length; boardIndex++, gridxConstraint += 2)
 		{
 			// create a JPanel to hold the grid and set the layout to the number
 			// of squares in the board
 			mBoardPanels[boardIndex] = new JPanel();
-			mBoardPanels[boardIndex].setLayout(new GridLayout(boards[boardIndex].numRows(), boards[boardIndex].numCols()));
+			mBoardPanels[boardIndex].setLayout(new GridLayout(boards[boardIndex].getRowCount(), boards[boardIndex].getColumnCount()));
 
-			int numberOfRows = boards[boardIndex].numRows();
-			int numberOfColumns = boards[boardIndex].numCols();
+			int numberOfRows = boards[boardIndex].getRowCount();
+			int numberOfColumns = boards[boardIndex].getColumnCount();
 			for (int row = numberOfRows; row > 0; row--)
 			{
 				for (int column = 1; column <= numberOfColumns; column++)
 				{
-					Square square = boards[boardIndex].getSquare(row, column);
+					SquareController square = boards[boardIndex].getSquare(row, column);
 					SquareJLabel squareLabel = new SquareJLabel(square);
 					if (square.isOccupied())
 					{
@@ -461,18 +453,12 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 								continue;
 
 							Piece platonicIdeal = null;
-							try
-							{
-								platonicIdeal = PieceBuilder.makePiece(mPieceTypeList.getModel().getElementAt(i).toString(), square
-										.getPiece().isBlack(), square, boards[boardIndex]);
-							}
-							catch (IOException e)
-							{
-								e.printStackTrace();
-							}
+							ChessCoordinates coordinates = new ChessCoordinates(row, column, boardIndex);
+							platonicIdeal = PieceBuilder.makePiece(mPieceTypeList.getModel().getElementAt(i).toString(), square
+									.getPiece().isBlack(), coordinates);
+
 							if (!square.getPiece().equals(platonicIdeal))
 								square.setPiece(platonicIdeal);
-
 						}
 						squareLabel.addMouseListener(new PieceNormalBoardListener(squareLabel));
 						squareLabel.addMouseMotionListener(m_motionAdapter);
@@ -488,11 +474,11 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 			}
 
 			mBoardPanels[boardIndex].setBorder(BorderFactory.createEtchedBorder(Color.BLACK, Color.GRAY));
-			mBoardPanels[boardIndex].setLayout(new GridLayout(boards[boardIndex].numRows(), boards[boardIndex].numCols()));
+			mBoardPanels[boardIndex].setLayout(new GridLayout(boards[boardIndex].getRowCount(), boards[boardIndex].getColumnCount()));
 			// set the size of the grid to the number of rows and columns,
 			// scaled by 48, the size of the images
-			mBoardPanels[boardIndex].setPreferredSize(new Dimension(boards[boardIndex].numCols() * 48,
-					boards[boardIndex].numRows() * 48));
+			mBoardPanels[boardIndex].setPreferredSize(new Dimension(boards[boardIndex].getColumnCount() * 48, boards[boardIndex]
+					.getRowCount() * 48));
 
 			constraints.insets = new Insets(3, 5, 3, 10);
 			constraints.gridx = gridxConstraint;
@@ -565,12 +551,12 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 		mBuilder = builder;
 	}
 
-	public void setWhiteRules(Rules whiteRules)
+	public void setWhiteRules(RulesController whiteRules)
 	{
 		mWhiteRules = whiteRules;
 	}
 
-	public void setBlackRules(Rules blackRules)
+	public void setBlackRules(RulesController blackRules)
 	{
 		mBlackRules = blackRules;
 	}
@@ -589,7 +575,7 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 		{
 			if (mSquareLabel.getSquare().isOccupied())
 			{
-				Piece toRemove = mSquareLabel.getSquare().setPiece(null);
+				PieceController toRemove = mSquareLabel.getSquare().setPiece(null);
 				(toRemove.isBlack() ? mBlackTeam : mWhiteTeam).remove(toRemove);
 
 				mSquareLabel.refresh();
@@ -646,8 +632,9 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 			constraints.insets = new Insets(5, 5, 5, 5);
 			popupPanel.add(colorChooserButton, constraints);
 
-			final JCheckBox uninhabitableButton = new JCheckBox(
-					"<html><font color=#FFFFFF>" + Messages.getString("VariantCreationPanel.uninhabited") + "</font></html>", !mSquareLabel.getSquare().isHabitable()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			final JCheckBox uninhabitableButton =
+					new JCheckBox(
+							"<html><font color=#FFFFFF>" + Messages.getString("VariantCreationPanel.uninhabited") + "</font></html>", !mSquareLabel.getSquare().isHabitable()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			uninhabitableButton.setOpaque(false);
 
 			constraints.gridy = 1;
@@ -734,7 +721,7 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 			mGlassPane.setPoint(point);
 
 			BufferedImage image = null;
-			Piece piece = mSquareLabel.getSquare().getPiece();
+			PieceController piece = mSquareLabel.getSquare().getPiece();
 			ImageIcon imageIcon = PieceIconUtility.getPieceIcon(piece.getName(), piece.isBlack());
 			int width = imageIcon.getIconWidth();
 			int height = imageIcon.getIconHeight();
@@ -811,7 +798,7 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 
 			FileUtility.getPieceFile(pieceName);
 
-			Piece piece = mSquareLabel.getSquare().getPiece();
+			PieceController piece = mSquareLabel.getSquare().getPiece();
 			ImageIcon imageIcon = PieceIconUtility.getPieceIcon(piece.getName(), piece.isBlack());
 			int width = imageIcon.getIconWidth();
 			int height = imageIcon.getIconHeight();
@@ -877,7 +864,7 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 			SquareJLabel originSquareLabel = (SquareJLabel) event.getOriginComponent();
 			SquareJLabel destinationSquareLabel = (SquareJLabel) isInTarget(event.getDropLocation());
 
-			Piece originPiece = originSquareLabel.getSquare().getPiece();
+			PieceController originPiece = originSquareLabel.getSquare().getPiece();
 
 			if (originPiece == null)
 				return;
@@ -903,14 +890,14 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 
 			if (destinationSquareLabel != null && destinationSquareLabel.getSquare().isHabitable())
 			{
-				Piece oldPiece = destinationSquareLabel.getSquare().getPiece();
+				PieceController oldPiece = destinationSquareLabel.getSquare().getPiece();
 				if (oldPiece != null)
 					(oldPiece.isBlack() ? mBlackTeam : mWhiteTeam).remove(oldPiece);
 
 				int boardNumber = event.getDropLocation().getX() < mBoardPanels[0].getLocationOnScreen().getX()
 						+ mBoardPanels[0].getWidth() ? 0 : 1;
 
-				Piece piece = null;
+				PieceController piece = null;
 				try
 				{
 					piece = PieceBuilder.makePiece(originPiece.getName(), originPiece.isBlack(), destinationSquareLabel.getSquare(),
@@ -974,8 +961,8 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 
 	private void updateDisplaySquares()
 	{
-		Piece whitePieceBeingDisplayed = null;
-		Piece blackPieceBeingDisplayed = null;
+		PieceController whitePieceBeingDisplayed = null;
+		PieceController blackPieceBeingDisplayed = null;
 
 		try
 		{
@@ -1021,8 +1008,8 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 
 	private JPanel[] mBoardPanels;
 	private JPanel mPieceListPanel;
-	private Map<String, List<String>> mWhitePromotionMap;
-	private Map<String, List<String>> mBlackPromotionMap;
+	private Map<PieceType, List<PieceType>> mWhitePromotionMap;
+	private Map<PieceType, List<PieceType>> mBlackPromotionMap;
 	public GameBuilder mBuilder;
 	private List<Piece> mWhiteTeam;
 	private List<Piece> mBlackTeam;

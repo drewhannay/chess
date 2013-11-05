@@ -1,13 +1,11 @@
+
 package timer;
 
-import java.io.Serializable;
 import java.text.NumberFormat;
-
 import utility.RunnableOfT;
-
 import com.google.common.base.Preconditions;
 
-public abstract class ChessTimer implements Serializable
+public abstract class ChessTimer
 {
 	public interface ChessTimerListener
 	{
@@ -164,8 +162,6 @@ public abstract class ChessTimer implements Serializable
 			timeElapsed();
 		}
 	}
-
-	private static final long serialVersionUID = -1195203886987180343L;
 
 	protected long mCurrentTime;
 	protected long mClockLastUpdatedTime;

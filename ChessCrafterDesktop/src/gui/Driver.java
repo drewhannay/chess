@@ -1,3 +1,4 @@
+
 package gui;
 
 import java.awt.BorderLayout;
@@ -20,7 +21,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -35,13 +35,12 @@ import javax.swing.JScrollPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.WindowConstants;
-
-import models.Game;
 import timer.ChessTimer;
 import utility.AppConstants;
 import utility.ChessCrafter;
 import utility.FileUtility;
 import utility.GuiUtility;
+import controllers.GameController;
 
 public final class Driver extends JFrame implements ChessCrafter
 {
@@ -469,7 +468,7 @@ public final class Driver extends JFrame implements ChessCrafter
 				poppedFrame.setResizable(false);
 				poppedFrame.setLocationRelativeTo(Driver.this);
 				GridBagConstraints constraints = new GridBagConstraints();
-				
+
 				final ChessPanel popupPanel = new ChessPanel();
 				popupPanel.setLayout(new GridBagLayout());
 
@@ -486,7 +485,7 @@ public final class Driver extends JFrame implements ChessCrafter
 					{
 						FileInputStream fileInputStream;
 						ObjectInputStream objectInputStream;
-						Game gameToPlay;
+						GameController gameToPlay;
 						try
 						{
 							if (gamesInProgressList.getSelectedValue() == null)
@@ -499,7 +498,7 @@ public final class Driver extends JFrame implements ChessCrafter
 							fileInputStream = new FileInputStream(FileUtility.getGamesInProgressFile(gamesInProgressList
 									.getSelectedValue().toString()));
 							objectInputStream = new ObjectInputStream(fileInputStream);
-							gameToPlay = (Game) objectInputStream.readObject();
+							gameToPlay = (GameController) objectInputStream.readObject();
 
 							gameToPlay.getWhiteRules().setGame(gameToPlay);
 							gameToPlay.getBlackRules().setGame(gameToPlay);
@@ -585,7 +584,7 @@ public final class Driver extends JFrame implements ChessCrafter
 				constraints.gridy = 2;
 				constraints.anchor = GridBagConstraints.WEST;
 				popupPanel.add(cancelButton, constraints);
-				
+
 				poppedFrame.add(popupPanel);
 				poppedFrame.setVisible(true);
 				poppedFrame.pack();
@@ -779,7 +778,7 @@ public final class Driver extends JFrame implements ChessCrafter
 	}
 
 	@Override
-	public PlayGameScreen getPlayGameScreen(Game game)
+	public PlayGameScreen getPlayGameScreen(GameController game)
 	{
 		if (m_playGameScreen == null)
 			m_playGameScreen = new PlayGamePanel(game);
@@ -792,37 +791,6 @@ public final class Driver extends JFrame implements ChessCrafter
 		if (m_watchGameScreen == null)
 			m_watchGameScreen = new WatchGamePanel(acnFile);
 		return m_watchGameScreen;
-	}
-
-	@Override
-	public PlayNetGameScreen getNetGameScreen()
-	{
-		if (m_playNetGameScreen == null)
-			try
-			{
-				m_playNetGameScreen = new PlayNetGamePanel(null, false, false);
-			}
-			catch (Exception e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		return m_playNetGameScreen;
-	}
-
-	@Override
-	public PlayNetGameScreen getNetGameScreen(Game g, boolean isPlayback, boolean isBlack)
-	{
-		try
-		{
-			m_playNetGameScreen = new PlayNetGamePanel(g, isPlayback, isBlack);
-		}
-		catch (Exception e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return m_playNetGameScreen;
 	}
 
 	@Override
@@ -848,5 +816,4 @@ public final class Driver extends JFrame implements ChessCrafter
 	private WindowListener mWindowListener;
 	private PlayGamePanel m_playGameScreen;
 	private WatchGamePanel m_watchGameScreen;
-	private PlayNetGamePanel m_playNetGameScreen;
 }

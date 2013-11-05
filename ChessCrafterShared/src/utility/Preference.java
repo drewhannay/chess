@@ -1,66 +1,62 @@
+
 package utility;
 
-import java.io.Serializable;
-
-public class Preference implements Serializable
+public class Preference
 {
-
 	public Preference()
 	{
-		m_shouldHighlightMoves = true;
+		mShouldHighlightMoves = true;
 		s_defaultSaveLocation = FileUtility.getDefaultCompletedLocation();
-		m_saveLocation = s_defaultSaveLocation;
+		mSaveLocation = s_defaultSaveLocation;
 	}
 
 	public boolean isPathSet()
 	{
-		return !m_pathSet;
+		return !mPathSet;
 	}
 
 	public boolean isHighlightSet()
 	{
-		return !m_highlightSet;
+		return !mHighlightSet;
 	}
 
 	public String getSaveLocation()
 	{
-		return m_saveLocation;
+		return mSaveLocation;
 	}
 
 	public void setSaveLocation(String saveLocation)
 	{
-		m_pathSet = true;
-		m_saveLocation = saveLocation;
+		mPathSet = true;
+		mSaveLocation = saveLocation;
 	}
 
 	public boolean isHighlightMoves()
 	{
-		return m_shouldHighlightMoves;
+		return mShouldHighlightMoves;
 	}
 
 	public void setHighlightMoves(boolean highlightMoves)
 	{
-		m_highlightSet = true;
-		m_shouldHighlightMoves = highlightMoves;
+		mHighlightSet = true;
+		mShouldHighlightMoves = highlightMoves;
 	}
 
 	public boolean showPieceToolTips()
 	{
-		return m_showPieceToolTips;
+		return mShowPieceToolTips;
 	}
 
-	public void setShowPieceToolTips(boolean m_showPieceToolTips)
+	public void setShowPieceToolTips(boolean showPieceToolTips)
 	{
-		this.m_showPieceToolTips = m_showPieceToolTips;
+		mShowPieceToolTips = showPieceToolTips;
 	}
 
 	private static String s_defaultSaveLocation;
 
-	private boolean m_pathSet;
-	private boolean m_highlightSet;
-	private String m_saveLocation;
-	private boolean m_shouldHighlightMoves;
-	private boolean m_showPieceToolTips;
-
-	private static final long serialVersionUID = 6126269552471996685L;
+	private boolean mPathSet;
+	private boolean mHighlightSet;
+	private String mSaveLocation;
+	private boolean mShouldHighlightMoves;
+	private boolean mShowPieceToolTips;
 }

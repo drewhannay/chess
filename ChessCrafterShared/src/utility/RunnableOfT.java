@@ -1,3 +1,4 @@
+
 package utility;
 
 public interface RunnableOfT<T>

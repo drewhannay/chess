@@ -1,195 +1,104 @@
+
 package logic;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
-
-import logic.PieceMovements.MovementDirection;
-import models.Board;
-import models.Piece;
-import models.Square;
-import utility.FileUtility;
-
+import models.BidirectionalMovement;
+import models.PawnPieceType;
+import models.PieceMovements;
+import models.PieceMovements.MovementDirection;
+import models.PieceType;
+import utility.GsonUtility;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
-public class PieceBuilder implements Serializable
+public class PieceBuilder
 {
-	/**
-	 * Static Initializer Read in the saved HashMap from a file. If that fails,
-	 * build a new HashMap with Classic chess pieces and save that to a file.
-	 */
-	static
-	{
-		initPieceTypes();
-	}
-
-	/**
-	 * Initialize types...
-	 */
-	public static void initPieceTypes()
-	{
-		mPieceTypes = Maps.newHashMap();
-		mPieceTypes.put(Messages.getString("pawn"), new PieceBuilder(Messages.getString("pawn"))); //$NON-NLS-1$ //$NON-NLS-2$
-		mPieceTypes.put(Messages.getString("rook"), new PieceBuilder(Messages.getString("rook"))); //$NON-NLS-1$ //$NON-NLS-2$
-		mPieceTypes.put(Messages.getString("bishop"), new PieceBuilder(Messages.getString("bishop"))); //$NON-NLS-1$ //$NON-NLS-2$
-		mPieceTypes.put(Messages.getString("knight"), new PieceBuilder(Messages.getString("knight"))); //$NON-NLS-1$ //$NON-NLS-2$
-		mPieceTypes.put(Messages.getString("queen"), new PieceBuilder(Messages.getString("queen"))); //$NON-NLS-1$ //$NON-NLS-2$
-		mPieceTypes.put(Messages.getString("king"), new PieceBuilder(Messages.getString("king"))); //$NON-NLS-1$ //$NON-NLS-2$
-	}
-
-	/**
-	 * Constructor. Generic Constructor, initializing movement HashMap.
-	 */
 	public PieceBuilder()
 	{
-		// TODO: are both of these constructors necessary?
-		mPieceMovements = new PieceMovements();
+		mMovements = Maps.newHashMap();
+		mBidirectionalMovements = Sets.newHashSet();
 	}
 
-	/**
-	 * Constructor. Initializes name and movement HashMap based on given
-	 * parameter.
-	 * 
-	 * @param name Name of desired Piece.
-	 */
-	public PieceBuilder(String name)
+	public static PieceType parsePieceType(String json)
 	{
-		/*
-		 * Changes made here. PieceBuilders need to check if they already have
-		 * an instantiation before making another copy of movements.
-		 */
-		mName = name;
-		if (!PieceBuilder.isPieceType(name))
-			mPieceMovements = new PieceMovements();
-		else
-			mPieceMovements = mPieceTypes.get(name).getPieceMovements();
+		return GsonUtility.getGson().fromJson(json, PieceType.class);
 	}
 
-	/**
-	 * Get the Set of the names of Piece types
-	 * 
-	 * @return The Set of names of Piece types
-	 */
-	public static Set<String> getSet()
+	public static PieceType getBishopPieceType()
 	{
-		return mPieceTypes.keySet();
+		Map<MovementDirection, Integer> movements = Maps.newHashMap();
+		movements.put(MovementDirection.NORTHEAST, PieceMovements.UNLIMITED);
+		movements.put(MovementDirection.NORTHEAST, PieceMovements.UNLIMITED);
+		movements.put(MovementDirection.SOUTHEAST, PieceMovements.UNLIMITED);
+		movements.put(MovementDirection.NORTHWEST, PieceMovements.UNLIMITED);
+		movements.put(MovementDirection.SOUTHWEST, PieceMovements.UNLIMITED);
+
+		return new PieceType("Bishop", new PieceMovements(movements, Collections.<BidirectionalMovement> emptySet()), false);
 	}
 
-	/**
-	 * Check if there is a Piece type of a given name
-	 * 
-	 * @param name The Piece type being searched for
-	 * @return Whether or not there is a Piece type with the given name
-	 */
-	public static boolean isPieceType(String name)
+	public static PieceType getKingPieceType()
 	{
-		return mPieceTypes.containsKey(name);
+		Map<MovementDirection, Integer> movements = Maps.newHashMap();
+		movements.put(MovementDirection.NORTH, 1);
+		movements.put(MovementDirection.SOUTH, 1);
+		movements.put(MovementDirection.EAST, 1);
+		movements.put(MovementDirection.WEST, 1);
+		movements.put(MovementDirection.NORTHEAST, 1);
+		movements.put(MovementDirection.SOUTHEAST, 1);
+		movements.put(MovementDirection.NORTHWEST, 1);
+		movements.put(MovementDirection.SOUTHWEST, 1);
+
+		return new PieceType("King", new PieceMovements(movements, Collections.<BidirectionalMovement> emptySet()), false);
 	}
 
-	/**
-	 * Make a new instance of a Piece type
-	 * 
-	 * @param name The name of the Piece to make
-	 * @param isBlack The team for the Piece
-	 * @param origin The Square the Piece occupies
-	 * @param board The Board the Piece occupies
-	 * @return The new Piece
-	 * @throws IOException
-	 */
-	public static Piece makePiece(String name, boolean isBlack, Square origin, Board board) throws IOException
+	public static PieceType getKnightPieceType()
 	{
-		PieceBuilder loadedBuilder = loadFromDisk(name);
-		if (loadedBuilder == null)
-		{
-			loadedBuilder = new PieceBuilder(name);
-		}
-		if (!mPieceTypes.containsKey(name))
-			mPieceTypes.put(name, loadedBuilder);
-		return mPieceTypes.get(name).makePiece(isBlack, origin, board);
+		Set<BidirectionalMovement> bidirectionalMovements = Sets.newHashSet(new BidirectionalMovement(1, 2));
+
+		return new PieceType("Knight",
+				new PieceMovements(Collections.<MovementDirection, Integer> emptyMap(), bidirectionalMovements), true);
 	}
 
-	/**
-	 * Save the given PieceBuilder in the HashMap
-	 * 
-	 * @param p The PieceBuilder to save
-	 */
-	public static void savePieceType(PieceBuilder p)
+	public static PieceType getPawnPieceType()
 	{
-		mPieceTypes.put(p.mName, p);
+		return new PawnPieceType(new PieceMovements(Collections.<MovementDirection, Integer> emptyMap(),
+				Collections.<BidirectionalMovement> emptySet()), false);
 	}
 
-	public static void writeToDisk(PieceBuilder p)
+	public static PieceType getQueenPieceType()
 	{
-		try
-		{
-			FileOutputStream f_out = new FileOutputStream(FileUtility.getPieceFile(p.mName));
-			ObjectOutputStream out = new ObjectOutputStream(f_out);
-			out.writeObject(p);
-			out.close();
-			f_out.close();
-		}
-		catch (Exception e)
-		{
-		}
+		Map<MovementDirection, Integer> movements = Maps.newHashMap();
+		movements.put(MovementDirection.NORTH, -1);
+		movements.put(MovementDirection.SOUTH, -1);
+		movements.put(MovementDirection.WEST, -1);
+		movements.put(MovementDirection.EAST, -1);
+		movements.put(MovementDirection.NORTHEAST, -1);
+		movements.put(MovementDirection.SOUTHEAST, -1);
+		movements.put(MovementDirection.NORTHWEST, -1);
+		movements.put(MovementDirection.SOUTHWEST, -1);
+
+		return new PieceType("Queen", new PieceMovements(movements, Collections.<BidirectionalMovement> emptySet()), false);
 	}
 
-	public static PieceBuilder loadFromDisk(String pieceName)
+	public static PieceType getRookPieceType()
 	{
-		PieceBuilder toReturn;
+		Map<MovementDirection, Integer> movements = Maps.newHashMap();
+		movements.put(MovementDirection.NORTH, -1);
+		movements.put(MovementDirection.SOUTH, -1);
+		movements.put(MovementDirection.WEST, -1);
+		movements.put(MovementDirection.EAST, -1);
 
-		if (mPieceTypes.containsKey(pieceName))
-			return mPieceTypes.get(pieceName);
-
-		try
-		{
-			ObjectInputStream in = new ObjectInputStream(new FileInputStream(FileUtility.getPieceFile(pieceName)));
-			toReturn = (PieceBuilder) in.readObject();
-			in.close();
-			return toReturn;
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			return null;
-		}
+		return new PieceType("Rook", new PieceMovements(movements, Collections.<BidirectionalMovement> emptySet()), false);
 	}
 
 	public void addMovement(MovementDirection direction, int distance)
 	{
-		mPieceMovements.addMovement(direction, distance);
-	}
+		Preconditions.checkState(distance >= 0 || distance == PieceMovements.UNLIMITED);
 
-	/**
-	 * Make a new instance of a Piece type
-	 * 
-	 * @param isBlack The team of the Piece
-	 * @param origin The Square this Piece is on
-	 * @param board the Board this Piece is on
-	 * @return The created Piece object
-	 * @throws IOException
-	 */
-	private Piece makePiece(boolean isBlack, Square origin, Board board) throws IOException
-	{
-		// TODO is it worth using reflection to get rid of that if/else?
-		if (mName.equals(Messages.getString("bishop"))) //$NON-NLS-1$
-			return GameBuilder.createBishop(isBlack, origin, board);
-		if (mName.equals(Messages.getString("king"))) //$NON-NLS-1$
-			return GameBuilder.createKing(isBlack, origin, board);
-		if (mName.equals(Messages.getString("knight"))) //$NON-NLS-1$
-			return GameBuilder.createKnight(isBlack, origin, board);
-		if (mName.equals(Messages.getString("pawn"))) //$NON-NLS-1$
-			return GameBuilder.createPawn(isBlack, origin, board);
-		if (mName.equals(Messages.getString("queen"))) //$NON-NLS-1$
-			return GameBuilder.createQueen(isBlack, origin, board);
-		if (mName.equals(Messages.getString("rook"))) //$NON-NLS-1$
-			return GameBuilder.createRook(isBlack, origin, board);
-		else
-			return new Piece(mName, isBlack, origin, board, mPieceMovements, mCanJump);
+		mMovements.put(direction, distance);
 	}
 
 	public void setName(String name)
@@ -202,36 +111,24 @@ public class PieceBuilder implements Serializable
 		return mName;
 	}
 
-	public PieceMovements getPieceMovements()
+	public boolean isLeaper()
 	{
-		return mPieceMovements;
-	}
-
-	public boolean canJump()
-	{
-		return mCanJump;
+		return mIsLeaper;
 	}
 
 	public void setCanJump(boolean mCanJump)
 	{
-		this.mCanJump = mCanJump;
-	}
-
-	public void clearBidirectionalMovements()
-	{
-		mPieceMovements.clearBidirectionalMovements();
+		this.mIsLeaper = mCanJump;
 	}
 
 	public void addBidirectionalMovement(BidirectionalMovement movement)
 	{
-		mPieceMovements.addBidirectionalMovement(movement);
+		mBidirectionalMovements.add(movement);
 	}
 
-	private static final long serialVersionUID = -1351201562740885961L;
+	private final Map<MovementDirection, Integer> mMovements;
+	private final Set<BidirectionalMovement> mBidirectionalMovements;
 
-	private static Map<String, PieceBuilder> mPieceTypes;
-
-	private boolean mCanJump;
 	private String mName;
-	private PieceMovements mPieceMovements;
+	private boolean mIsLeaper;
 }

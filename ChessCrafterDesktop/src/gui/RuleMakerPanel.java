@@ -1,3 +1,4 @@
+
 package gui;
 
 import java.awt.Color;
@@ -7,7 +8,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -19,18 +19,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
-
 import logic.GameBuilder;
 import logic.PieceBuilder;
 import models.Board;
-import models.Rules;
-import rules.AdjustTeamLegalDestinations;
-import rules.AfterMove;
-import rules.CropLegalDestinations;
-import rules.EndOfGame;
-import rules.GetBoard;
-import rules.ObjectivePiece;
-import rules.ObjectivePiece.ObjectivePieceTypes;
 import utility.GuiUtility;
 
 public class RuleMakerPanel extends ChessPanel
@@ -666,7 +657,8 @@ public class RuleMakerPanel extends ChessPanel
 						if (JOptionPane.showConfirmDialog(
 								Driver.getInstance(),
 								Messages.getString("RuleMakerPanel.usingProtectNotRecommended") //$NON-NLS-1$
-										+ Messages.getString("RuleMakerPanel.continueAnyway"), Messages.getString("RuleMakerPanel.continueQ"), JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) //$NON-NLS-1$ //$NON-NLS-2$
+										+
+										Messages.getString("RuleMakerPanel.continueAnyway"), Messages.getString("RuleMakerPanel.continueQ"), JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) //$NON-NLS-1$ //$NON-NLS-2$
 							return;
 					}
 				}
@@ -675,7 +667,8 @@ public class RuleMakerPanel extends ChessPanel
 						|| (blackCaptureAllButton.isSelected() && whiteLoseAllButton.isSelected()))
 				{
 					JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("RuleMakerPanel.captureAllAndLoseAll") //$NON-NLS-1$
-							+ Messages.getString("RuleMakerPanel.chooseAnotherCombo")); //$NON-NLS-1$
+							+
+							Messages.getString("RuleMakerPanel.chooseAnotherCombo")); //$NON-NLS-1$
 					return;
 				}
 
@@ -686,7 +679,8 @@ public class RuleMakerPanel extends ChessPanel
 						if (JOptionPane.showConfirmDialog(
 								Driver.getInstance(),
 								Messages.getString("RuleMakerPanel.checkNumTimesCombo") //$NON-NLS-1$
-										+ Messages.getString("RuleMakerPanel.continueAnyways"), Messages.getString("RuleMakerPanel.continueQ"), JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) //$NON-NLS-1$ //$NON-NLS-2$
+										+
+										Messages.getString("RuleMakerPanel.continueAnyways"), Messages.getString("RuleMakerPanel.continueQ"), JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) //$NON-NLS-1$ //$NON-NLS-2$
 							return;
 					}
 				}
@@ -820,7 +814,7 @@ public class RuleMakerPanel extends ChessPanel
 				if (mWhiteRules.getEndOfGame() == EndOfGame.CLASSIC || mWhiteRules.getEndOfGame() == EndOfGame.CAPTURE_ALL_OF_TYPE
 						|| mWhiteRules.getEndOfGame() == EndOfGame.CHECK_N_TIMES)
 				{
-					mWhiteRules.setObjectivePiece(new ObjectivePiece(ObjectivePieceTypes.CUSTOM_OBJECTIVE, whitePiecesList
+					mWhiteRules.setObjectivePiece(new ObjectivePieceType(ObjectivePieceTypes.CUSTOM_OBJECTIVE, whitePiecesList
 							.getSelectedItem().toString()));
 					// mBuilder.addToPromotionMap(mWhiteRules.getObjectiveName(),
 					// null, GameBuilder.WHITE);
@@ -828,7 +822,7 @@ public class RuleMakerPanel extends ChessPanel
 				if (mBlackRules.getEndOfGame() == EndOfGame.CLASSIC || mBlackRules.getEndOfGame() == EndOfGame.CAPTURE_ALL_OF_TYPE
 						|| mBlackRules.getEndOfGame() == EndOfGame.CHECK_N_TIMES)
 				{
-					mBlackRules.setObjectivePiece(new ObjectivePiece(ObjectivePieceTypes.CUSTOM_OBJECTIVE, blackPiecesList
+					mBlackRules.setObjectivePiece(new ObjectivePieceType(ObjectivePieceTypes.CUSTOM_OBJECTIVE, blackPiecesList
 							.getSelectedItem().toString()));
 					// mBuilder.addToPromotionMap(mBlackRules.getObjectiveName(),
 					// null, GameBuilder.BLACK);
@@ -960,7 +954,7 @@ public class RuleMakerPanel extends ChessPanel
 	static boolean mNeedsObjectivePiece = false;
 
 	private GameBuilder mBuilder;
-	private Rules mWhiteRules = new Rules(false);
-	private Rules mBlackRules = new Rules(true);
+	private RulesController mWhiteRules = new RulesController(false);
+	private RulesController mBlackRules = new RulesController(true);
 	private JFrame mFrame;
 }

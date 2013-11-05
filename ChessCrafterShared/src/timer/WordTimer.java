@@ -1,3 +1,4 @@
+
 package timer;
 
 class WordTimer extends ChessTimer
@@ -31,6 +32,4 @@ class WordTimer extends ChessTimer
 	{
 		mClockDirection = -1;
 	}
-
-	private static final long serialVersionUID = -3488243754798571897L;
 }

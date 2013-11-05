@@ -1,31 +1,28 @@
+
 package gui;
 
 import java.awt.Color;
 import java.awt.Image;
 import java.io.IOException;
-import java.io.Serializable;
-
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-
-import models.Piece;
-import models.Square;
-import models.Square.SquareStateListener;
 import utility.GuiUtility;
 import utility.PieceIconUtility;
+import controllers.SquareController;
+import controllers.SquareController.SquareStateListener;
 
-public class SquareJLabel extends JLabel implements Serializable
+public class SquareJLabel extends JLabel
 {
 	public static final Color HIGHLIGHT_COLOR = new Color(20, 129, 191);
 
-	public SquareJLabel(Square square)
+	public SquareJLabel(SquareController square)
 	{
 		mSquare = square;
 		mSquare.setSquareStateListener(mSquareStateListener);
 	}
 
-	public Square getSquare()
+	public SquareController getSquare()
 	{
 		return mSquare;
 	}
@@ -38,7 +35,8 @@ public class SquareJLabel extends JLabel implements Serializable
 	/**
 	 * Sets the color of a square temporarily
 	 * 
-	 * @param c the color to set the background
+	 * @param c
+	 *            the color to set the background
 	 */
 	public void setColor(Color c)
 	{
@@ -48,7 +46,8 @@ public class SquareJLabel extends JLabel implements Serializable
 	/**
 	 * Sets the background Color of the Square permanently
 	 * 
-	 * @param c New Color
+	 * @param c
+	 *            New Color
 	 */
 	public void setBackgroundColor(Color c)
 	{
@@ -79,7 +78,7 @@ public class SquareJLabel extends JLabel implements Serializable
 			return;
 		}
 
-		Piece piece = mSquare.getPiece();
+		PieceController piece = mSquare.getPiece();
 		if (piece != null)
 		{
 			ImageIcon pieceIcon = PieceIconUtility.getPieceIcon(piece.getName(), piece.isBlack());
@@ -114,7 +113,7 @@ public class SquareJLabel extends JLabel implements Serializable
 	{
 		setOpaque(true);
 
-		Piece piece = mSquare.getPiece();
+		PieceController piece = mSquare.getPiece();
 		if (piece != null)
 		{
 			ImageIcon pieceIcon = PieceIconUtility.getPieceIcon(piece.getName(), piece.isBlack());
@@ -190,10 +189,8 @@ public class SquareJLabel extends JLabel implements Serializable
 		}
 	}
 
-	private static final long serialVersionUID = 1265563160736919298L;
-
 	private static ImageIcon s_uninhabitableIcon;
 
-	private Square mSquare;
+	private SquareController mSquare;
 	private Color mBackgroundColor;
 }

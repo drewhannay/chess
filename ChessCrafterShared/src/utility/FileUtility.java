@@ -1,3 +1,4 @@
+
 package utility;
 
 import java.awt.image.BufferedImage;
@@ -6,7 +7,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.URL;
-
 import javax.imageio.ImageIO;
 
 public final class FileUtility

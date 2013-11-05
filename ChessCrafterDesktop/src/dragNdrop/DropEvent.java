@@ -1,7 +1,7 @@
+
 package dragNdrop;
 
 import java.awt.Point;
-
 import javax.swing.JComponent;
 
 public class DropEvent

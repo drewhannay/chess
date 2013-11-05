@@ -1,3 +1,4 @@
+
 package gui;
 
 import java.awt.Color;
@@ -20,7 +21,6 @@ import java.io.ObjectOutputStream;
 import java.net.URL;
 import java.util.List;
 import java.util.StringTokenizer;
-
 import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -34,17 +34,15 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileFilter;
-
-import logic.BidirectionalMovement;
 import logic.GameBuilder;
 import logic.PieceBuilder;
-import logic.PieceMovements;
-import logic.PieceMovements.MovementDirection;
+import models.BidirectionalMovement;
 import models.Piece;
+import models.PieceMovements;
+import models.PieceMovements.MovementDirection;
 import utility.FileUtility;
 import utility.GuiUtility;
 import utility.ImageUtility;
-
 import com.google.common.collect.Lists;
 
 public class PieceMakerPanel extends ChessPanel
@@ -564,12 +562,12 @@ public class PieceMakerPanel extends ChessPanel
 				for (Piece piece : builder.getWhiteTeam())
 				{
 					if (piece.getName().equals(mPieceNameField.getText()))
-						piece = PieceBuilder.makePiece(piece.getName(), false, piece.getOriginalSquare(), piece.getBoard());
+						piece = PieceBuilder.makePiece(Piece.getId(), false, piece.getOriginalCoordinates());
 				}
 				for (Piece piece : builder.getBlackTeam())
 				{
 					if (piece.getName().equals(mPieceNameField.getText()))
-						piece = PieceBuilder.makePiece(piece.getName(), true, piece.getOriginalSquare(), piece.getBoard());
+						piece = PieceBuilder.makePiece(Piece.getId(), true, piece.getOriginalCoordinates());
 				}
 
 				in.close();
@@ -638,8 +636,9 @@ public class PieceMakerPanel extends ChessPanel
 		@Override
 		public void actionPerformed(ActionEvent event)
 		{
-			Object[] options = new String[] {
-					Messages.getString("PieceMakerPanel.browseComputer"), Messages.getString("PieceMakerPanel.imageFromInternet"), Messages.getString("PieceMakerPanel.cancel") }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			Object[] options =
+					new String[] {
+							Messages.getString("PieceMakerPanel.browseComputer"), Messages.getString("PieceMakerPanel.imageFromInternet"), Messages.getString("PieceMakerPanel.cancel") }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 			switch (JOptionPane.showOptionDialog(PieceMakerPanel.this,
 					Messages.getString("PieceMakerPanel.whereFrom"), Messages.getString("PieceMakerPanel.chooseImage"), //$NON-NLS-1$ //$NON-NLS-2$

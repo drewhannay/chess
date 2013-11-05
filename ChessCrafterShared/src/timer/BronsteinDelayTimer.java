@@ -1,3 +1,4 @@
+
 package timer;
 
 import utility.RunnableOfT;
@@ -48,8 +49,6 @@ class BronsteinDelayTimer extends ChessTimer
 		if (mListener != null)
 			mListener.onTimerStop();
 	}
-
-	private static final long serialVersionUID = 5421690863308194342L;
 
 	private long mIncrementAmount;
 	private boolean mIsFirstRun = true;

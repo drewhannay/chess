@@ -1,3 +1,4 @@
+
 package dragNdrop;
 
 import java.awt.AlphaComposite;
@@ -5,11 +6,9 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
-import java.io.Serializable;
-
 import javax.swing.JPanel;
 
-public class GlassPane extends JPanel implements Serializable
+public class GlassPane extends JPanel
 {
 	public GlassPane()
 	{
@@ -39,7 +38,7 @@ public class GlassPane extends JPanel implements Serializable
 				(int) (mLocation.getY() - (mDraggedImage.getHeight(this) / 2)), null);
 	}
 
-	private static final long serialVersionUID = 214303662751768477L;
+	private static final long serialVersionUID = 7051921385804401315L;
 
 	private final AlphaComposite mAlphaComposite;
 

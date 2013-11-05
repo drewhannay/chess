@@ -1,35 +1,41 @@
+
 package logic;
 
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
-
-import logic.PieceMovements.MovementDirection;
 import models.Board;
+import models.ChessCoordinates;
 import models.Game;
 import models.Piece;
-import models.Rules;
-import models.Square;
+import models.PieceType;
+import models.Team;
+import models.turnkeeper.ClassicTurnKeeper;
+import rules.Rules;
 import utility.FileUtility;
-
+import utility.GsonUtility;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-public class GameBuilder implements Serializable
+public class GameBuilder
 {
 	public static final int BLACK = 1;
 	public static final int WHITE = 2;
 	public static final int BOTH = 3;
 
+	// TODO: remove this eventually
+	public static void main(String[] args)
+	{
+		buildClassic();
+	}
+
 	/**
 	 * Constructor
 	 * 
-	 * @param name The name of this Game type
+	 * @param name
+	 *            The name of this Game type
 	 */
 	public GameBuilder(String name)
 	{
@@ -41,16 +47,6 @@ public class GameBuilder implements Serializable
 		mBlackPromotionMap = Maps.newHashMap();
 	}
 
-	/**
-	 * Constructor
-	 * 
-	 * @param name The name of this Game type
-	 * @param boards The Board[] for this Game type
-	 * @param whiteTeam The List of white pieces
-	 * @param blackTeam The List of black pieces
-	 * @param blackRules The rules for the black team
-	 * @param whiteRules The rules for the white team
-	 */
 	public GameBuilder(String name, Board[] boards, List<Piece> whiteTeam, List<Piece> blackTeam, Rules whiteRules, Rules blackRules)
 	{
 		mName = name;
@@ -61,180 +57,52 @@ public class GameBuilder implements Serializable
 		mWhitePromotionMap = Maps.newHashMap();
 		mBlackPromotionMap = Maps.newHashMap();
 
-		setWhiteRules(whiteRules);
-		setBlackRules(blackRules);
+		mWhiteRules = whiteRules;
+		mBlackRules = blackRules;
 	}
 
-	/**
-	 * Build the classic game of chess for the user.
-	 * 
-	 * @throws IOException
-	 */
-	private static void buildClassic() throws IOException
+	private static void buildClassic()
 	{
-		GameBuilder classic = new GameBuilder(Messages.getString("classic"));// Name is Classic chess //$NON-NLS-1$
-		classic.setBoards(new Board[] { new Board(8, 8, false) });
-		Board b = classic.mBoards[0];
+		long pieceId = 0;
+
+		List<Piece> whitePieces = Lists.newArrayList();
+		List<Piece> blackPieces = Lists.newArrayList();
 		for (int i = 1; i < 9; i++)
 		{
-			classic.mWhiteTeam.add(createPawn(false, b.getSquare(2, i), b));
-			classic.mBlackTeam.add(createPawn(true, b.getSquare(7, i), b));
+			whitePieces.add(new Piece(pieceId++, PieceBuilder.getPawnPieceType(), new ChessCoordinates(2, i, 0)));
+			blackPieces.add(new Piece(pieceId++, PieceBuilder.getPawnPieceType(), new ChessCoordinates(7, i, 0)));
 		}
-		classic.mWhiteTeam.add(createRook(false, b.getSquare(1, 1), b));
-		classic.mWhiteTeam.add(createKnight(false, b.getSquare(1, 2), b));
-		classic.mWhiteTeam.add(createBishop(false, b.getSquare(1, 3), b));
-		classic.mWhiteTeam.add(createQueen(false, b.getSquare(1, 4), b));
-		classic.mWhiteTeam.add(createKing(false, b.getSquare(1, 5), b));
-		classic.mWhiteTeam.add(createBishop(false, b.getSquare(1, 6), b));
-		classic.mWhiteTeam.add(createKnight(false, b.getSquare(1, 7), b));
-		classic.mWhiteTeam.add(createRook(false, b.getSquare(1, 8), b));
 
-		classic.mBlackTeam.add(createRook(true, b.getSquare(8, 1), b));
-		classic.mBlackTeam.add(createKnight(true, b.getSquare(8, 2), b));
-		classic.mBlackTeam.add(createBishop(true, b.getSquare(8, 3), b));
-		classic.mBlackTeam.add(createQueen(true, b.getSquare(8, 4), b));
-		classic.mBlackTeam.add(createKing(true, b.getSquare(8, 5), b));
-		classic.mBlackTeam.add(createBishop(true, b.getSquare(8, 6), b));
-		classic.mBlackTeam.add(createKnight(true, b.getSquare(8, 7), b));
-		classic.mBlackTeam.add(createRook(true, b.getSquare(8, 8), b));
+		whitePieces.add(new Piece(pieceId++, PieceBuilder.getRookPieceType(), new ChessCoordinates(1, 1, 0)));
+		whitePieces.add(new Piece(pieceId++, PieceBuilder.getKnightPieceType(), new ChessCoordinates(1, 2, 0)));
+		whitePieces.add(new Piece(pieceId++, PieceBuilder.getBishopPieceType(), new ChessCoordinates(1, 3, 0)));
+		whitePieces.add(new Piece(pieceId++, PieceBuilder.getQueenPieceType(), new ChessCoordinates(1, 4, 0)));
+		whitePieces.add(new Piece(pieceId++, PieceBuilder.getKingPieceType(), new ChessCoordinates(1, 5, 0)));
+		whitePieces.add(new Piece(pieceId++, PieceBuilder.getBishopPieceType(), new ChessCoordinates(1, 6, 0)));
+		whitePieces.add(new Piece(pieceId++, PieceBuilder.getKnightPieceType(), new ChessCoordinates(1, 7, 0)));
+		whitePieces.add(new Piece(pieceId++, PieceBuilder.getRookPieceType(), new ChessCoordinates(1, 8, 0)));
 
-		classic.writeFile(new Rules(false), new Rules(true));
-	}
+		blackPieces.add(new Piece(pieceId++, PieceBuilder.getRookPieceType(), new ChessCoordinates(8, 1, 0)));
+		blackPieces.add(new Piece(pieceId++, PieceBuilder.getKnightPieceType(), new ChessCoordinates(8, 2, 0)));
+		blackPieces.add(new Piece(pieceId++, PieceBuilder.getBishopPieceType(), new ChessCoordinates(8, 3, 0)));
+		blackPieces.add(new Piece(pieceId++, PieceBuilder.getQueenPieceType(), new ChessCoordinates(8, 4, 0)));
+		blackPieces.add(new Piece(pieceId++, PieceBuilder.getKingPieceType(), new ChessCoordinates(8, 5, 0)));
+		blackPieces.add(new Piece(pieceId++, PieceBuilder.getBishopPieceType(), new ChessCoordinates(8, 6, 0)));
+		blackPieces.add(new Piece(pieceId++, PieceBuilder.getKnightPieceType(), new ChessCoordinates(8, 7, 0)));
+		blackPieces.add(new Piece(pieceId++, PieceBuilder.getRookPieceType(), new ChessCoordinates(8, 8, 0)));
 
-	/**
-	 * Create a piece that represents a bishop, without requiring a concrete
-	 * bishop class.
-	 * 
-	 * @param isBlack Is this piece black?
-	 * @param square What square does this piece start on?
-	 * @param board The board the piece is on
-	 * @return The constructed bishop.
-	 * @throws IOException
-	 */
-	public static Piece createBishop(boolean isBlack, Square square, Board board) throws IOException
-	{
-		PieceMovements movements = new PieceMovements();
-		movements.addMovement(MovementDirection.NORTHEAST, PieceMovements.UNLIMITED);
-		movements.addMovement(MovementDirection.NORTHEAST, PieceMovements.UNLIMITED);
-		movements.addMovement(MovementDirection.SOUTHEAST, PieceMovements.UNLIMITED);
-		movements.addMovement(MovementDirection.NORTHWEST, PieceMovements.UNLIMITED);
-		movements.addMovement(MovementDirection.SOUTHWEST, PieceMovements.UNLIMITED);
+		Rules whiteRules = new Rules();
+		Rules blackRules = new Rules();
 
-		return new Piece(Messages.getString("bishop"), isBlack, square, board, movements, false); //$NON-NLS-1$
-	}
+		Team[] teams = new Team[2];
+		teams[0] = new Team(whiteRules, whitePieces);
+		teams[1] = new Team(blackRules, blackPieces);
 
-	/**
-	 * Create a piece that represents a king, without requiring a concrete king
-	 * class.
-	 * 
-	 * @param isBlack Is this piece black?
-	 * @param square What square does this piece start on?
-	 * @param board The board the piece is on
-	 * @return The constructed king.
-	 * @throws IOException
-	 */
-	public static Piece createKing(boolean isBlack, Square square, Board board) throws IOException
-	{
-		PieceMovements movements = new PieceMovements();
-		movements.addMovement(MovementDirection.NORTH, 1);
-		movements.addMovement(MovementDirection.SOUTH, 1);
-		movements.addMovement(MovementDirection.EAST, 1);
-		movements.addMovement(MovementDirection.WEST, 1);
-		movements.addMovement(MovementDirection.NORTHEAST, 1);
-		movements.addMovement(MovementDirection.SOUTHEAST, 1);
-		movements.addMovement(MovementDirection.NORTHWEST, 1);
-		movements.addMovement(MovementDirection.SOUTHWEST, 1);
+		Board[] boards = new Board[] { new Board(8, 8, false) };
 
-		return new Piece(Messages.getString("king"), isBlack, square, board, movements, false); //$NON-NLS-1$
-	}
-
-	/**
-	 * Create a piece that represents a knight, without requiring a concrete
-	 * knight class.
-	 * 
-	 * @param isBlack Is this piece black?
-	 * @param square What square does this piece start on?
-	 * @param board The board the piece is on
-	 * @return The constructed knight.
-	 * @throws IOException
-	 */
-	public static Piece createKnight(boolean isBlack, Square square, Board board) throws IOException
-	{
-		PieceMovements movements = new PieceMovements();
-		movements.addBidirectionalMovement(new BidirectionalMovement(1, 2));
-
-		return new Piece(Messages.getString("knight"), isBlack, square, board, movements, true);
-	}
-
-	/**
-	 * Create a piece that represents a pawn, without requiring a concrete pawn
-	 * class.
-	 * 
-	 * @param isBlack Is this piece black?
-	 * @param square What square does this piece start on?
-	 * @param board The board the piece is on
-	 * @return The constructed pawn.
-	 * @throws IOException
-	 */
-	public static Piece createPawn(boolean isBlack, Square square, Board board) throws IOException
-	{
-		PieceMovements movements = new PieceMovements();
-		Piece pawn = new Piece(Messages.getString("pawn"), isBlack, square, board, movements, false); //$NON-NLS-1$
-
-		List<String> promotesTo = Lists.newArrayList();
-		promotesTo.add(Messages.getString("queen")); //$NON-NLS-1$
-		promotesTo.add(Messages.getString("bishop")); //$NON-NLS-1$
-		promotesTo.add(Messages.getString("knight")); //$NON-NLS-1$
-		promotesTo.add(Messages.getString("rook")); //$NON-NLS-1$
-		pawn.setPromotesTo(promotesTo);
-
-		return pawn;
-	}
-
-	/**
-	 * Create a piece that represents a queen, without requiring a concrete
-	 * queen class.
-	 * 
-	 * @param isBlack Is this piece black?
-	 * @param square What square does this piece start on?
-	 * @param board The board the piece is on
-	 * @return The constructed queen.
-	 * @throws IOException
-	 */
-	public static Piece createQueen(boolean isBlack, Square square, Board board) throws IOException
-	{
-		PieceMovements movements = new PieceMovements();
-		movements.addMovement(MovementDirection.NORTH, -1);
-		movements.addMovement(MovementDirection.SOUTH, -1);
-		movements.addMovement(MovementDirection.WEST, -1);
-		movements.addMovement(MovementDirection.EAST, -1);
-		movements.addMovement(MovementDirection.NORTHEAST, -1);
-		movements.addMovement(MovementDirection.SOUTHEAST, -1);
-		movements.addMovement(MovementDirection.NORTHWEST, -1);
-		movements.addMovement(MovementDirection.SOUTHWEST, -1);
-
-		return new Piece(Messages.getString("queen"), isBlack, square, board, movements, false); //$NON-NLS-1$
-	}
-
-	/**
-	 * Create a piece that represents a rook, without requiring a concrete rook
-	 * class.
-	 * 
-	 * @param isBlack Is this piece black?
-	 * @param square What square does this piece start on?
-	 * @param board The board the piece is on
-	 * @return The constructed rook.
-	 * @throws IOException
-	 */
-	public static Piece createRook(boolean isBlack, Square square, Board board) throws IOException
-	{
-		PieceMovements movements = new PieceMovements();
-		movements.addMovement(MovementDirection.NORTH, -1);
-		movements.addMovement(MovementDirection.SOUTH, -1);
-		movements.addMovement(MovementDirection.WEST, -1);
-		movements.addMovement(MovementDirection.EAST, -1);
-
-		return new Piece(Messages.getString("rook"), isBlack, square, board, movements, false); //$NON-NLS-1$
+		Game game = new Game("Classic", boards, teams, new ClassicTurnKeeper());
+		String json = GsonUtility.getGson().toJson(game);
+		System.out.println(json);
 	}
 
 	/**
@@ -255,54 +123,11 @@ public class GameBuilder implements Serializable
 		return getVariantFileArray();
 	}
 
-	/**
-	 * Make a new instance of a Game type
-	 * 
-	 * @param name The name of the Game type to return
-	 * @return The created Game object
-	 */
-	public static Game newGame(String name)
-	{
-		String[] vars = FileUtility.getVariantsFileArray();
-		for (String s : vars)
-		{
-			if (s.equals(name))
-			{
-				try
-				{
-					ObjectInputStream in = new ObjectInputStream(new FileInputStream(FileUtility.getVariantsFile(name)));
-					GameBuilder b = (GameBuilder) in.readObject();
-					Game toReturn = new Game(name, b.mBoards, b.mWhiteTeam, b.mBlackTeam, b.getWhiteRules(), b.getBlackRules(),
-							b.mWhitePromotionMap, b.mBlackPromotionMap);
-					in.close();
-
-					return toReturn;
-				}
-				catch (Exception e)
-				{
-					e.printStackTrace();
-					return null;
-				}
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * Getter method for the Board[]
-	 * 
-	 * @return The Board[] of this type
-	 */
 	public Board[] getBoards()
 	{
 		return mBoards;
 	}
 
-	/**
-	 * Setter method for the Board[]
-	 * 
-	 * @param boards The Board[] to set
-	 */
 	public void setBoards(Board[] boards)
 	{
 		mBoards = boards;
@@ -311,8 +136,10 @@ public class GameBuilder implements Serializable
 	/**
 	 * Write the gameTypes array to disk
 	 * 
-	 * @param blackRules Rules for the black team
-	 * @param whiteRules Rules for the white team
+	 * @param blackRules
+	 *            Rules for the black team
+	 * @param whiteRules
+	 *            Rules for the white team
 	 */
 	public void writeFile(Rules whiteRules, Rules blackRules)
 	{
@@ -337,7 +164,7 @@ public class GameBuilder implements Serializable
 		mName = name;
 	}
 
-	public void addToPromotionMap(String key, List<String> value, int colorCode)
+	public void addToPromotionMap(PieceType key, List<PieceType> value, int colorCode)
 	{
 		if (colorCode == WHITE || colorCode == BOTH)
 			mWhitePromotionMap.put(key, value);
@@ -345,24 +172,24 @@ public class GameBuilder implements Serializable
 			mBlackPromotionMap.put(key, value);
 	}
 
-	public void setWhitePromotionMap(Map<String, List<String>> promotionMap)
+	public void setWhitePromotionMap(Map<PieceType, List<PieceType>> promotionMap)
 	{
 		mWhitePromotionMap.clear();
 		mWhitePromotionMap.putAll(promotionMap);
 	}
 
-	public void setBlackPromotionMap(Map<String, List<String>> promotionMap)
+	public void setBlackPromotionMap(Map<PieceType, List<PieceType>> promotionMap)
 	{
 		mBlackPromotionMap.clear();
 		mBlackPromotionMap.putAll(promotionMap);
 	}
 
-	public Map<String, List<String>> getWhitePromotionMap()
+	public Map<PieceType, List<PieceType>> getWhitePromotionMap()
 	{
 		return mWhitePromotionMap;
 	}
 
-	public Map<String, List<String>> getBlackPromotionMap()
+	public Map<PieceType, List<PieceType>> getBlackPromotionMap()
 	{
 		return mBlackPromotionMap;
 	}
@@ -414,12 +241,10 @@ public class GameBuilder implements Serializable
 		mBlackTeam.addAll(blackTeam);
 	}
 
-	private static final long serialVersionUID = 2099226533521671457L;
-
 	private final List<Piece> mWhiteTeam;
 	private final List<Piece> mBlackTeam;
-	private final Map<String, List<String>> mWhitePromotionMap;
-	private final Map<String, List<String>> mBlackPromotionMap;
+	private final Map<PieceType, List<PieceType>> mWhitePromotionMap;
+	private final Map<PieceType, List<PieceType>> mBlackPromotionMap;
 
 	private String mName;
 	private Board[] mBoards;

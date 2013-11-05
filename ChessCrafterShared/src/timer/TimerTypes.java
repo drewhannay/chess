@@ -1,10 +1,17 @@
+
 package timer;
 
 import com.google.common.base.Preconditions;
 
 public enum TimerTypes
 {
-	NO_TIMER, BRONSTEIN_DELAY, FISCHER, FISCHER_AFTER, HOUR_GLASS, SIMPLE_DELAY, WORD;
+	NO_TIMER,
+	BRONSTEIN_DELAY,
+	FISCHER,
+	FISCHER_AFTER,
+	HOUR_GLASS,
+	SIMPLE_DELAY,
+	WORD;
 
 	@Override
 	public String toString()

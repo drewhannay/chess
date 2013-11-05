@@ -1,3 +1,4 @@
+
 package timer;
 
 import utility.RunnableOfT;
@@ -39,6 +40,4 @@ class HourGlassTimer extends ChessTimer
 		if (mListener != null)
 			mListener.onTimerStart();
 	}
-
-	private static final long serialVersionUID = 1345233312932413270L;
 }

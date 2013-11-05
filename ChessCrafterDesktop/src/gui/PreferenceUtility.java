@@ -1,3 +1,4 @@
+
 package gui;
 
 import java.awt.Component;
@@ -12,7 +13,6 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.List;
-
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -22,11 +22,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
-
 import utility.FileUtility;
 import utility.GuiUtility;
 import utility.Preference;
-
 import com.google.common.collect.Lists;
 
 public final class PreferenceUtility
@@ -252,6 +250,6 @@ public final class PreferenceUtility
 		if (mToolTipListeners != null)
 			mToolTipListeners.clear();
 	}
-	
+
 	private static List<PieceToolTipPreferenceChangedListener> mToolTipListeners;
 }

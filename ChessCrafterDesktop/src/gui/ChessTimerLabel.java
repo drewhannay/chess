@@ -1,16 +1,14 @@
+
 package gui;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
-
 import timer.ChessTimer;
 import timer.ChessTimer.ChessTimerListener;
-
 import com.google.common.base.Preconditions;
 
 public final class ChessTimerLabel extends JLabel

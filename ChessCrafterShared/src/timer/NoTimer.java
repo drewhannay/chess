@@ -1,3 +1,4 @@
+
 package timer;
 
 class NoTimer extends ChessTimer
@@ -26,6 +27,4 @@ class NoTimer extends ChessTimer
 	public void reset()
 	{
 	}
-
-	private static final long serialVersionUID = -5680712751187652015L;
 }

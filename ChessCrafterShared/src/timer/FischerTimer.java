@@ -1,3 +1,4 @@
+
 package timer;
 
 import utility.RunnableOfT;
@@ -51,8 +52,6 @@ class FischerTimer extends ChessTimer
 		if (mListener != null)
 			mListener.onTimerStop();
 	}
-
-	private static final long serialVersionUID = 6129683219865263879L;
 
 	private long mIncrementAmount;
 	private boolean mIsFisherAfterTimer;

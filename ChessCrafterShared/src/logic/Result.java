@@ -1,10 +1,12 @@
+
 package logic;
 
-import java.io.Serializable;
-
-public enum Result implements Serializable
+public enum Result
 {
-	UNDECIDED, DRAW, WHITE_WIN, BLACK_WIN;
+	UNDECIDED,
+	DRAW,
+	WHITE_WIN,
+	BLACK_WIN;
 
 	public String winText()
 	{
@@ -55,8 +57,6 @@ public enum Result implements Serializable
 		}
 		return acnResult;
 	}
-
-	private static final long serialVersionUID = -6844368741916902616L;
 
 	private String mGuiText;
 }

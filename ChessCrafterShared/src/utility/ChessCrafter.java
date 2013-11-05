@@ -1,20 +1,14 @@
+
 package utility;
 
 import gui.PlayGameScreen;
-import gui.PlayNetGameScreen;
 import gui.WatchGameScreen;
 import java.io.File;
-
-import models.Game;
+import controllers.GameController;
 
 public interface ChessCrafter
 {
-
-	public PlayGameScreen getPlayGameScreen(Game game);
-
-	public PlayNetGameScreen getNetGameScreen();
-
-	public PlayNetGameScreen getNetGameScreen(Game g, boolean isPlayback, boolean isBlack);
+	public PlayGameScreen getPlayGameScreen(GameController game);
 
 	public void setFileMenuVisibility(boolean visibility);
 

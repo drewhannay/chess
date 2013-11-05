@@ -1,9 +1,8 @@
-package dragNdrop;
 
+package dragNdrop;
 import java.awt.event.MouseAdapter;
 import java.util.Iterator;
 import java.util.List;
-
 import com.google.common.collect.Lists;
 
 public class DropAdapter extends MouseAdapter

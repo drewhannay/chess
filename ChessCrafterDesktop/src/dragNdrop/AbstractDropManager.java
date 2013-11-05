@@ -1,14 +1,11 @@
-package dragNdrop;
 
+package dragNdrop;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.List;
-
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
-
 import com.google.common.collect.ImmutableList;
-
 public abstract class AbstractDropManager implements DropListener
 {
 	public AbstractDropManager()

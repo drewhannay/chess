@@ -1,3 +1,4 @@
+
 package gui;
 
 import java.awt.Color;
@@ -6,7 +7,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -17,7 +17,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
-
 import models.Board;
 import utility.GuiUtility;
 
@@ -80,11 +79,11 @@ public class CustomBoardPanel extends ChessPanel
 		mDimensionsLabel = GuiUtility.createJLabel(Messages.getString("CustomBoardPanel.dimensions")); //$NON-NLS-1$
 		mNumberOfRowsLabel = GuiUtility.createJLabel(Messages.getString("CustomBoardPanel.rows")); //$NON-NLS-1$
 		mNumberOfRowsTextField = new JTextField(5);
-		mNumberOfRowsTextField.setText(board[0].numRows() + Messages.getString("CustomBoardPanel.empty")); //$NON-NLS-1$
+		mNumberOfRowsTextField.setText(board[0].getRowCount() + Messages.getString("CustomBoardPanel.empty")); //$NON-NLS-1$
 		mNumberOfRowsTextField.setToolTipText(Messages.getString("CustomBoardPanel.enterRowAmount")); //$NON-NLS-1$
 		mNumberOfColumnsLabel = GuiUtility.createJLabel(Messages.getString("CustomBoardPanel.columns")); //$NON-NLS-1$
 		mNumberOfColumnsTextField = new JTextField(5);
-		mNumberOfColumnsTextField.setText(board[0].numCols() + Messages.getString("CustomBoardPanel.empty")); //$NON-NLS-1$
+		mNumberOfColumnsTextField.setText(board[0].getColumnCount() + Messages.getString("CustomBoardPanel.empty")); //$NON-NLS-1$
 		mNumberOfColumnsTextField.setToolTipText(Messages.getString("CustomBoardPanel.amountOfColumns")); //$NON-NLS-1$
 
 		JPanel rowCol = new JPanel();
@@ -109,9 +108,10 @@ public class CustomBoardPanel extends ChessPanel
 
 		// Create JLabel and JCheckBox
 		mWrapAroundLabel = GuiUtility.createJLabel(Messages.getString("CustomBoardPanel.shouldWrap") //$NON-NLS-1$
-				+ Messages.getString("CustomBoardPanel.aroundHorizontally")); //$NON-NLS-1$
+				+
+				Messages.getString("CustomBoardPanel.aroundHorizontally")); //$NON-NLS-1$
 		mWrapAroundCheckBox = new JCheckBox(Messages.getString("CustomBoardPanel.yes")); //$NON-NLS-1$
-		mWrapAroundCheckBox.setSelected(variant.getBuilder().getBoards()[0].isWrapAround());
+		mWrapAroundCheckBox.setSelected(variant.getBuilder().getBoards()[0].isWrapAroundBoard());
 		mWrapAroundCheckBox.setToolTipText(Messages.getString("CustomBoardPanel.pressToHaveWrapAround")); //$NON-NLS-1$
 		mWrapAroundCheckBox.setOpaque(false);
 		mWrapAroundCheckBox.setForeground(Color.white);
@@ -122,7 +122,7 @@ public class CustomBoardPanel extends ChessPanel
 		mSubmitButton.addActionListener(new ActionListener()
 		{
 			@Override
-			public void actionPerformed(ActionEvent arg0)
+			public void actionPerformed(ActionEvent event)
 			{
 				if (formIsValid())
 				{
@@ -134,15 +134,19 @@ public class CustomBoardPanel extends ChessPanel
 						Board[] boards = (mOneBoardButton.isSelected()) ? new Board[1] : new Board[2];
 						for (int i = 0; i < boards.length; i++)
 						{
+							Board oldBoard = variant.getBuilder().getBoards()[i];
 							// initialize each board with the given rows and
-							// columns
-							// and wraparound boolean.
+							// columns and wraparound boolean.
 							if (changeCode == WRAP_ONLY)
-								boards[i] = variant.getBuilder().getBoards()[i].makeCopyWithWrapSelection(mWrapAroundCheckBox
+							{
+								boards[i] = new Board(oldBoard.getRowCount(), oldBoard.getColumnCount(), mWrapAroundCheckBox
 										.isSelected());
+							}
 							else
+							{
 								boards[i] = new Board(Integer.parseInt(mNumberOfRowsTextField.getText()), Integer
 										.parseInt(mNumberOfColumnsTextField.getText()), mWrapAroundCheckBox.isSelected());
+							}
 						}
 
 						variant.drawBoards(boards);
@@ -157,16 +161,16 @@ public class CustomBoardPanel extends ChessPanel
 				Board[] oldBoards = variant.getBuilder().getBoards();
 				int change = NO_CHANGES;
 
-				if (oldBoards[0].isWrapAround() != mWrapAroundCheckBox.isSelected())
+				if (oldBoards[0].isWrapAroundBoard() != mWrapAroundCheckBox.isSelected())
 					change = WRAP_ONLY;
 
 				if (mTwoBoardsButton.isSelected() && oldBoards.length != 2)
 					change = SHAPE_CHANGE;
 				else if (!mTwoBoardsButton.isSelected() && oldBoards.length != 1)
 					change = SHAPE_CHANGE;
-				else if (oldBoards[0].numCols() != Integer.parseInt(mNumberOfColumnsTextField.getText()))
+				else if (oldBoards[0].getColumnCount() != Integer.parseInt(mNumberOfColumnsTextField.getText()))
 					change = SHAPE_CHANGE;
-				else if (oldBoards[0].numRows() != Integer.parseInt(mNumberOfRowsTextField.getText()))
+				else if (oldBoards[0].getRowCount() != Integer.parseInt(mNumberOfRowsTextField.getText()))
 					change = SHAPE_CHANGE;
 
 				return change;
