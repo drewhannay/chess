@@ -95,13 +95,14 @@ public class PieceMakerPanel extends ChessPanel
 		mKnightTwoField = new JTextField(4);
 		mAddKnightMoveButton = new JButton(Messages.getString("PieceMakerPanel.add")); //$NON-NLS-1$
 		mRemoveKnightMoveButton = new JButton(Messages.getString("PieceMakerPanel.remove")); //$NON-NLS-1$
-		PieceBuilder.initPieceTypes();
+
 		PieceBuilder builder = null;
-		if (pieceName != null)
-			builder = PieceBuilder.loadFromDisk(pieceName);
+		//TODO Fix editing pieces
+		//if (pieceName != null)
+		//	builder = PieceBuilder.loadFromDisk(pieceName);
 
 		mTempBidirectionalMovements = Lists.newArrayList();
-		if (builder != null)
+		/*if (builder != null)
 		{
 			List<BidirectionalMovement> bidirectionalMovements = builder.getPieceMovements().getBidirectionalMovements();
 			mBidirectionalMovementComboBox = new JComboBox(bidirectionalMovements.toArray());
@@ -111,10 +112,10 @@ public class PieceMakerPanel extends ChessPanel
 			mBidirectionalMovementComboBox.setSelectedIndex(0);
 		}
 		else
-		{
+		{*/
 			mBidirectionalMovementComboBox = new JComboBox();
 			mBidirectionalMovementComboBox.setEnabled(false);
-		}
+		//}
 
 		initGUIComponents(builder);
 	}
@@ -223,8 +224,9 @@ public class PieceMakerPanel extends ChessPanel
 		constraints.gridy = 2;
 		pieceCreationPanel.add(darkIconPanel, constraints);
 
-		PieceMovements movements = builder == null ? null : builder.getPieceMovements();
-
+		//PieceMovements movements = builder == null ? null : builder.getPieceMovements();
+		PieceMovements movements = null;
+		
 		mNorthField.setToolTipText(Messages.getString("PieceMakerPanel.north")); //$NON-NLS-1$
 		mNorthField.setText(builder == null ? "0" : "" + movements.getDistance(MovementDirection.NORTH)); //$NON-NLS-1$ //$NON-NLS-2$
 		mNorthEastField.setToolTipText(Messages.getString("PieceMakerPanel.northEast")); //$NON-NLS-1$
@@ -332,7 +334,7 @@ public class PieceMakerPanel extends ChessPanel
 
 		mLeaperCheckBox.setToolTipText(Messages.getString("PieceMakerPanel.pressForJump")); //$NON-NLS-1$
 		if (builder != null)
-			mLeaperCheckBox.setSelected(builder.canJump());
+			mLeaperCheckBox.setSelected(builder.isLeaper());
 
 		final JPanel knightMovementPanel = new JPanel();
 		knightMovementPanel.setOpaque(false);
@@ -434,7 +436,8 @@ public class PieceMakerPanel extends ChessPanel
 			public void actionPerformed(ActionEvent event)
 			{
 				String pieceName = mPieceNameField.getText().trim();
-				if (pieceName.isEmpty() || PieceBuilder.isPieceType(mPieceNameField.getText()))
+				//TODO fix this when checking for an existing piece
+				if (pieceName.isEmpty() || PieceBuilder.parsePieceType(mPieceNameField.getText()) != null)
 				{
 					JOptionPane.showMessageDialog(
 							PieceMakerPanel.this,
@@ -487,10 +490,11 @@ public class PieceMakerPanel extends ChessPanel
 
 				mBuilder.setName(pieceName);
 				mBuilder.setCanJump(mLeaperCheckBox.isSelected());
-				PieceBuilder.savePieceType(mBuilder);
-				PieceBuilder.writeToDisk(mBuilder);
+				//TODO Write new piece to disk
+				//PieceBuilder.savePieceType(mBuilder);
+				//PieceBuilder.writeToDisk(mBuilder);
 
-				refreshVariants();
+				//refreshVariants();
 
 				mFrame.dispose();
 				mPieceMenuPanel.refreshList();
@@ -545,9 +549,11 @@ public class PieceMakerPanel extends ChessPanel
 	}
 
 	/**
+	 * TODO Do we still need to do this if the Variants are loading the pieces separately now?
 	 * Once a piece has been changed, we need to update any variants that use
 	 * this piece to use the new version.
 	 */
+	/*
 	private void refreshVariants()
 	{
 		String[] vars = FileUtility.getVariantsFileArray();
@@ -582,6 +588,7 @@ public class PieceMakerPanel extends ChessPanel
 			}
 		}
 	}
+	*/
 
 	private boolean isIntegerDistance(JTextField textField)
 	{

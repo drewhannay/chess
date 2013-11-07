@@ -15,7 +15,7 @@ import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import utility.FileUtility;
-ublic class PieceMenuPanel extends ChessPanel
+public class PieceMenuPanel extends ChessPanel
 {
 
 	public PieceMenuPanel()
