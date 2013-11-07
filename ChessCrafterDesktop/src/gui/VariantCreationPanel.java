@@ -1,7 +1,6 @@
 package gui;
 
 import gui.PieceMakerPanel.PieceListChangedListener;
-import gui.PieceMenuPanel.PieceMenuManager;
 import gui.PreferenceUtility.PieceToolTipPreferenceChangedListener;
 
 import java.awt.Color;
@@ -24,22 +23,19 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
-import javax.swing.DefaultListModel;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JColorChooser;
 import javax.swing.JFrame;
-import javax.swing.JList;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 import logic.GameBuilder;
 import logic.PieceBuilder;
@@ -64,10 +60,12 @@ import dragNdrop.DropEvent;
 import dragNdrop.GlassPane;
 import dragNdrop.MotionAdapter;
 
-public class VariantCreationPanel extends ChessPanel implements PieceMenuManager, PieceListChangedListener
+public class VariantCreationPanel extends ChessPanel implements PieceListChangedListener
 {
 	public VariantCreationPanel(String variantName)
 	{
+		mScrollPane = new JScrollPane();
+		mVariantNameField = new JTextField(25);
 		mDropManager = new DropManager();
 		mGlobalGlassPane = new GlassPane();
 		mGlobalGlassPane.setOpaque(false);
@@ -75,6 +73,8 @@ public class VariantCreationPanel extends ChessPanel implements PieceMenuManager
 		m_motionAdapter = new MotionAdapter(mGlobalGlassPane);
 		mPieceListPanel = new JPanel();
 		mPieceListPanel.setOpaque(false);
+		mPieceListBoardPanel = new JPanel();
+		mPieceListBoardPanel.setOpaque(false);
 
 		Game gameToEdit = null;
 		if (variantName != null)
@@ -121,48 +121,21 @@ public class VariantCreationPanel extends ChessPanel implements PieceMenuManager
 			mBuilder.setWhiteTeam(mWhiteTeam);
 		}
 
-		mDisplayBoard = new Board(2, 1, false);
-		mPieceDisplaySquares[WHITE_INDEX] = new SquareJLabel(mDisplayBoard.getSquare(1, 1));
-		mPieceDisplaySquares[BLACK_INDEX] = new SquareJLabel(mDisplayBoard.getSquare(2, 1));
-
 		mOptionsFrame = new JFrame();
 		mOptionsFrame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-		mScrollPane.setPreferredSize(new Dimension(200, 200));
 
 		initGUIComponents(gameToEdit, variantName);
 	}
 
 	private void initGUIComponents(final Game game, String variantName)
 	{
+
+		setupPiecesList();
+
 		setLayout(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
 
 		setBorder(BorderFactory.createLoweredBevelBorder());
-
-		final JPanel showPiecePanel = new JPanel();
-		showPiecePanel.setLayout(new GridLayout(2, 1));
-		showPiecePanel.setPreferredSize(new Dimension(50, 100));
-		showPiecePanel.setOpaque(false);
-
-		for (SquareJLabel squareLabel : mPieceDisplaySquares)
-			showPiecePanel.add(squareLabel);
-
-		constraints.gridx = 5;
-		constraints.gridy = 1;
-		constraints.gridwidth = 1;
-		constraints.insets = new Insets(0, 10, 100, 0);
-		add(showPiecePanel, constraints);
-
-		setupPiecesList();
-
-		for (SquareJLabel squareLabel : mPieceDisplaySquares)
-		{
-			squareLabel.addMouseListener(new PieceDisplayBoardListener(squareLabel));
-			squareLabel.addMouseMotionListener(m_motionAdapter);
-		}
-
-		mPieceDisplaySquares[WHITE_INDEX].setBackgroundColor(Color.LIGHT_GRAY);
-		mPieceDisplaySquares[BLACK_INDEX].setBackgroundColor(Color.getHSBColor(30, 70, 70));
 
 		if (game == null)
 		{
@@ -175,28 +148,28 @@ public class VariantCreationPanel extends ChessPanel implements PieceMenuManager
 
 		constraints.gridx = 1;
 		constraints.gridy = 0;
+		constraints.gridwidth = 1;
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.insets = new Insets(10, 10, 10, 5);
 		constraints.anchor = GridBagConstraints.CENTER;
 		add(GuiUtility.createJLabel(Messages.getString("VariantCreationPanel.variantName")), constraints); //$NON-NLS-1$
 
-		final JTextField variantNameField = new JTextField(25);
 		constraints.gridx = 2;
 		constraints.gridy = 0;
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.insets = new Insets(0, 0, 0, 0);
-		add(variantNameField, constraints);
+		add(mVariantNameField, constraints);
 
 		Board[] temp = new Board[game == null ? 1 : game.getBoards().length];
 
 		if (game == null)
 		{
-			GuiUtility.requestFocus(variantNameField);
+			GuiUtility.requestFocus(mVariantNameField);
 			temp[0] = new Board(8, 8, false);
 		}
 		else
 		{
-			variantNameField.setText(variantName);
+			mVariantNameField.setText(variantName);
 			for (int i = 0; i < game.getBoards().length; i++)
 			{
 				temp[i] = game.getBoards()[i];
@@ -221,94 +194,7 @@ public class VariantCreationPanel extends ChessPanel implements PieceMenuManager
 		// Create button and add ActionListener
 		JButton submitButton = new JButton(Messages.getString("VariantCreationPanel.saveAndQuit")); //$NON-NLS-1$
 		// submitButton.setToolTipText("Save a finished variant");
-		submitButton.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent event)
-			{
-				if (variantNameField.getText().trim().isEmpty())
-				{
-					JOptionPane.showMessageDialog(
-							VariantCreationPanel.this,
-							Messages.getString("VariantCreationPanel.enterAName"), Messages.getString("VariantCreationPanel.enterName"), //$NON-NLS-1$ //$NON-NLS-2$
-							JOptionPane.PLAIN_MESSAGE);
-					return;
-				}
-
-				mWhiteRules.setGame(game);
-				mBlackRules.setGame(game);
-
-				mBuilder.setName(variantNameField.getText());
-
-				for (Piece piece : mWhiteTeam)
-					piece.setPromotesTo(mWhitePromotionMap.get(piece.getName()));
-				for (Piece piece : mBlackTeam)
-					piece.setPromotesTo(mBlackPromotionMap.get(piece.getName()));
-
-				int numberOfObjectives = 0;
-
-				if (mWhiteRules.getObjectiveName() != null && !mWhiteRules.getObjectiveName().isEmpty())
-				{
-					for (Piece piece : mWhiteTeam)
-					{
-						if (piece.getName().equals(mWhiteRules.getObjectiveName()))
-							numberOfObjectives++;
-					}
-					if (numberOfObjectives != 1)
-					{
-						JOptionPane.showMessageDialog(Driver.getInstance(),
-								Messages.getString("VariantCreationPanel.placeOneWhiteObjective"), //$NON-NLS-1$
-								Messages.getString("VariantCreationPanel.objectiveMissing"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$
-						return;
-					}
-				}
-
-				numberOfObjectives = 0;
-				if (mBlackRules.getObjectiveName() != null && !mBlackRules.getObjectiveName().isEmpty())
-				{
-					for (Piece piece : mBlackTeam)
-					{
-						if (piece.getName().equals(mBlackRules.getObjectiveName()))
-							numberOfObjectives++;
-					}
-					if (numberOfObjectives != 1)
-					{
-						JOptionPane.showMessageDialog(Driver.getInstance(),
-								Messages.getString("VariantCreationPanel.placeOneBlackObjective"), //$NON-NLS-1$
-								Messages.getString("VariantCreationPanel.objectiveMissing"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$
-						return;
-					}
-				}
-
-				mBuilder.setWhiteTeam(mWhiteTeam);
-
-				if (mWhiteRules.getObjectiveName() == null)
-					mWhiteRules.setObjectivePiece(new ObjectivePiece(ObjectivePieceTypes.CLASSIC));
-
-				mBuilder.setBlackTeam(mBlackTeam);
-
-				if (mBlackRules.getObjectiveName() == null)
-					mBlackRules.setObjectivePiece(new ObjectivePiece(ObjectivePieceTypes.CLASSIC));
-
-				mBuilder.writeFile(mWhiteRules, mBlackRules);
-
-				PreferenceUtility.clearTooltipListeners();
-				Driver.getInstance().revertToMainPanel();
-			}
-		});
-
-		mChangePromotionButton = new JButton(Messages.getString("VariantCreationPanel.promoteThisPiece")); //$NON-NLS-1$
-		mChangePromotionButton.setToolTipText(Messages.getString("VariantCreationPanel.pressToSetUpPromotion")); //$NON-NLS-1$
-		mChangePromotionButton.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent event)
-			{
-				mOptionsFrame.dispose();
-				mOptionsFrame = new JFrame(Messages.getString("VariantCreationPanel.piecePromotion")); //$NON-NLS-1$
-				new PiecePromotionPanel((String) mPieceTypeList.getSelectedValue(), VariantCreationPanel.this, mOptionsFrame);
-			}
-		});
+		submitButton.addActionListener(submitButtonActionListener);
 
 		JButton boardSetupButton = new JButton(Messages.getString("VariantCreationPanel.customizeGameBoard")); //$NON-NLS-1$
 		boardSetupButton.addActionListener(new ActionListener()
@@ -348,19 +234,13 @@ public class VariantCreationPanel extends ChessPanel implements PieceMenuManager
 			}
 		});
 
-		JButton pieceSetupButton = new JButton(Messages.getString("VariantCreationPanel.pieceEditor")); //$NON-NLS-1$
+		JButton pieceSetupButton = new JButton(Messages.getString("VariantCreationPanel.newPiece")); //$NON-NLS-1$
 		pieceSetupButton.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent event)
 			{
-				mOptionsFrame.dispose();
-				mOptionsFrame = new JFrame();
-				mOptionsFrame.setLayout(new FlowLayout());
-				mOptionsFrame.add(new PieceMenuPanel(VariantCreationPanel.this));
-				mOptionsFrame.pack();
-				mOptionsFrame.setVisible(true);
-				Driver.centerFrame(mOptionsFrame);
+				openPieceMakerPanel(null);
 			}
 		});
 
@@ -370,19 +250,15 @@ public class VariantCreationPanel extends ChessPanel implements PieceMenuManager
 		mainPanelConstraints.gridx = 0;
 		mainPanelConstraints.gridy = 0;
 		mainPanelConstraints.gridwidth = 2;
+		mainPanelConstraints.insets = new Insets(5, 3, 3, 3);
+		mScrollPane.setPreferredSize(new Dimension(270, 350));
+		mScrollPane.setHorizontalScrollBar(null);
+		mScrollPane.setMaximumSize(new Dimension(270, 350));
 		mPieceListPanel.add(mScrollPane, mainPanelConstraints);
 
 		mainPanelConstraints.fill = GridBagConstraints.HORIZONTAL;
-		mainPanelConstraints.gridx = 0;
-		mainPanelConstraints.gridy = 1;
 		mainPanelConstraints.gridwidth = 1;
 		mainPanelConstraints.insets = new Insets(5, 3, 3, 3);
-		mPieceListPanel.add(mChangePromotionButton, mainPanelConstraints);
-
-		mainPanelConstraints.gridx = 1;
-		mainPanelConstraints.gridy = 1;
-		mPieceListPanel.add(pieceSetupButton, mainPanelConstraints);
-
 		mainPanelConstraints.gridx = 0;
 		mainPanelConstraints.gridy = 2;
 		mPieceListPanel.add(boardSetupButton, mainPanelConstraints);
@@ -393,8 +269,11 @@ public class VariantCreationPanel extends ChessPanel implements PieceMenuManager
 
 		mainPanelConstraints.gridx = 0;
 		mainPanelConstraints.gridy = 3;
-		mainPanelConstraints.gridwidth = 2;
 		mPieceListPanel.add(ruleSetupButton, mainPanelConstraints);
+
+		mainPanelConstraints.gridx = 1;
+		mainPanelConstraints.gridy = 3;
+		mPieceListPanel.add(pieceSetupButton, mainPanelConstraints);
 
 		JPanel optionsPanel = new JPanel();
 		optionsPanel.setOpaque(false);
@@ -460,16 +339,19 @@ public class VariantCreationPanel extends ChessPanel implements PieceMenuManager
 					SquareJLabel squareLabel = new SquareJLabel(square);
 					if (square.isOccupied())
 					{
-						for (int i = 0; i < mPieceTypeList.getModel().getSize(); i++)
+						boolean isValidPieceType = false;
+						for (int i = 0; i < mAllPieceNames.length; i++)
 						{
-							if (!mPieceTypeList.getModel().getElementAt(i).toString().equals(square.getPiece().getName()))
+							if (!mAllPieceNames[i].equals(square.getPiece().getName()))
 								continue;
+
+							isValidPieceType = true;
 
 							Piece platonicIdeal = null;
 							try
 							{
-								platonicIdeal = PieceBuilder.makePiece(mPieceTypeList.getModel().getElementAt(i).toString(), square
-										.getPiece().isBlack(), square, boards[boardIndex]);
+								platonicIdeal = PieceBuilder.makePiece(mAllPieceNames[i], square.getPiece().isBlack(), square,
+										boards[boardIndex]);
 							}
 							catch (IOException e)
 							{
@@ -479,6 +361,11 @@ public class VariantCreationPanel extends ChessPanel implements PieceMenuManager
 								square.setPiece(platonicIdeal);
 
 						}
+						if (!isValidPieceType)
+						{
+							square.setPiece(null);
+						}
+
 						squareLabel.addMouseListener(new PieceNormalBoardListener(squareLabel));
 						squareLabel.addMouseMotionListener(m_motionAdapter);
 					}
@@ -519,45 +406,134 @@ public class VariantCreationPanel extends ChessPanel implements PieceMenuManager
 
 	public void setupPiecesList()
 	{
-		// create a List with a vertical ScrollBar
-		final DefaultListModel list = new DefaultListModel();
+		mAllPieceNames = PieceBuilder.getSortedArrayWithCustomPieces();
 
-		Object[] standardPieces = PieceBuilder.getSet().toArray();
-		for (int i = 0; i < standardPieces.length; i++)
-			if (!list.contains(standardPieces[i]))
-				list.addElement(standardPieces[i]);
+		JPanel pieceListBoardPanel = new JPanel(new GridBagLayout());
 
-		String[] customPieces = FileUtility.getCustomPieceArray();
-		for (int i = 0; i < customPieces.length; i++)
-			if (!list.contains(customPieces[i]))
-				list.addElement(customPieces[i]);
+		GridBagConstraints outerConstraints = new GridBagConstraints();
+		outerConstraints.anchor = GridBagConstraints.CENTER;
 
-		mPieceTypeList = new JList(list);
+		mDisplayBoard = new Board(mAllPieceNames.length, 2, false);
 
-		mPieceTypeList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-		mPieceTypeList.setLayoutOrientation(JList.VERTICAL);
-		mPieceTypeList.setVisibleRowCount(-1);
-		mPieceTypeList.setSelectedIndex(0);
-
-		updateDisplaySquares();
-
-		ListSelectionModel selectList = mPieceTypeList.getSelectionModel();
-
-		mScrollPane.getViewport().add(mPieceTypeList, null);
-
-		selectList.addListSelectionListener(new ListSelectionListener()
+		Icon editIcon = null;
+		Icon deleteIcon = null;
+		Icon promoteIcon = null;
+		try
 		{
-			@Override
-			public void valueChanged(ListSelectionEvent event)
+			editIcon = GuiUtility.createImageIcon(14, 14, "/edit_icon.png"); //$NON-NLS-1$
+			deleteIcon = GuiUtility.createImageIcon(14, 14, "/delete_icon.png"); //$NON-NLS-1$
+			promoteIcon = GuiUtility.createImageIcon(14, 14, "/promote_icon.png"); //$NON-NLS-1$
+		}
+		catch (IOException e1)
+		{
+			e1.printStackTrace();
+		}
+		int rowIndex = 0;
+		boolean gray = true;
+		for (String pieceName : mAllPieceNames)
+		{
+			Square whiteSquare = mDisplayBoard.getSquare(rowIndex + 1, 1);
+			Square blackSquare = mDisplayBoard.getSquare(rowIndex + 1, 2);
+
+			SquareJLabel whiteSquareLabel = new SquareJLabel(whiteSquare);
+			SquareJLabel blackSquareLabel = new SquareJLabel(blackSquare);
+
+			try
 			{
-				updateDisplaySquares();
+				whiteSquare.setPiece(PieceBuilder.makePiece(pieceName, false, whiteSquare, mDisplayBoard));
+				blackSquare.setPiece(PieceBuilder.makePiece(pieceName, true, blackSquare, mDisplayBoard));
 			}
-		});
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
 
-		mPieceListPanel.revalidate();
-		mPieceListPanel.repaint();
+			whiteSquareLabel.setBackgroundColor(gray ? Color.LIGHT_GRAY : Color.getHSBColor(30, 70, 70));
+			blackSquareLabel.setBackgroundColor(!gray ? Color.LIGHT_GRAY : Color.getHSBColor(30, 70, 70));
+			gray = !gray;
 
-		Driver.getInstance().pack();
+			whiteSquareLabel.setMaximumSize(new Dimension(48, 48));
+			blackSquareLabel.setMaximumSize(new Dimension(48, 48));
+
+			whiteSquareLabel.addMouseListener(new PieceDisplayBoardListener(whiteSquareLabel));
+			blackSquareLabel.addMouseListener(new PieceDisplayBoardListener(blackSquareLabel));
+
+			whiteSquareLabel.addMouseMotionListener(m_motionAdapter);
+			blackSquareLabel.addMouseMotionListener(m_motionAdapter);
+
+			JPanel namePanel = new JPanel(new GridBagLayout());
+			namePanel.setMaximumSize(new Dimension(150, 50));
+
+			GridBagConstraints constraints = new GridBagConstraints();
+
+			constraints.anchor = GridBagConstraints.CENTER;
+			constraints.gridy = 0;
+			constraints.gridx = 0;
+			constraints.gridwidth = 1;
+			constraints.gridheight = 1;
+			constraints.insets = new Insets(0, 5, 0, 5);
+			JLabel nameLabel = new JLabel(pieceName);
+			nameLabel.setHorizontalAlignment(JLabel.CENTER);
+			namePanel.add(nameLabel, constraints);
+
+			JPanel editDeletePanel = new JPanel(new GridBagLayout());
+
+			constraints.gridx = 0;
+			constraints.gridy = 1;
+			constraints.gridheight = 1;
+			constraints.gridwidth = 1;
+			constraints.insets = new Insets(0, 0, 0, 0);
+			JButton promoteButton = new JButton(promoteIcon);
+			promoteButton.setToolTipText(Messages.getString("VariantCreationPanel.setupPromotions")); //$NON-NLS-1$
+			promoteButton.addActionListener(new PromotePieceActionListener(pieceName));
+			editDeletePanel.add(promoteButton, constraints);
+
+			if (!PieceBuilder.isClassicPieceType(pieceName))
+			{
+				constraints.gridx = 1;
+				JButton editButton = new JButton(editIcon);
+				editButton.setToolTipText(Messages.getString("VariantCreationPanel.editPiece")); //$NON-NLS-1$
+				editButton.addActionListener(new EditPieceActionListener(pieceName));
+				editDeletePanel.add(editButton, constraints);
+
+				constraints.gridx = 2;
+				constraints.gridy = 1;
+				constraints.gridheight = 1;
+				constraints.gridwidth = 1;
+				JButton deleteButton = new JButton(deleteIcon);
+				deleteButton.setToolTipText(Messages.getString("VariantCreationPanel.deletePiece")); //$NON-NLS-1$
+				deleteButton.addActionListener(new DeletePieceActionListener(pieceName));
+				editDeletePanel.add(deleteButton, constraints);
+			}
+			constraints.gridx = 0;
+			constraints.gridy = 1;
+			namePanel.add(editDeletePanel, constraints);
+
+			outerConstraints.gridheight = 1;
+			outerConstraints.gridwidth = 1;
+			outerConstraints.gridx = 0;
+			outerConstraints.gridy = rowIndex;
+			outerConstraints.weightx = 0.5;
+			pieceListBoardPanel.add(namePanel, outerConstraints);
+
+			JPanel squareHolder = new JPanel(new GridLayout(1, 2));
+			squareHolder.add(whiteSquareLabel);
+			squareHolder.add(blackSquareLabel);
+
+			outerConstraints.gridx = 1;
+			outerConstraints.gridy = rowIndex;
+			outerConstraints.gridheight = 1;
+			outerConstraints.gridwidth = 1;
+			pieceListBoardPanel.add(squareHolder, outerConstraints);
+
+			whiteSquareLabel.refresh();
+			blackSquareLabel.refresh();
+			rowIndex++;
+		}
+
+		int oldScrollValue = mScrollPane.getVerticalScrollBar().getValue();
+		mScrollPane.setViewportView(pieceListBoardPanel);
+		mScrollPane.getVerticalScrollBar().setValue(oldScrollValue);
 	}
 
 	public GameBuilder getBuilder()
@@ -578,6 +554,66 @@ public class VariantCreationPanel extends ChessPanel implements PieceMenuManager
 	public void setBlackRules(Rules blackRules)
 	{
 		mBlackRules = blackRules;
+	}
+
+	private class EditPieceActionListener implements ActionListener
+	{
+		public EditPieceActionListener(String pieceName)
+		{
+			mPieceName = pieceName;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			openPieceMakerPanel(mPieceName);
+		}
+
+		private String mPieceName;
+	}
+
+	private class DeletePieceActionListener implements ActionListener
+	{
+		public DeletePieceActionListener(String pieceName)
+		{
+			mPieceName = pieceName;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			switch (JOptionPane.showConfirmDialog(Driver.getInstance(), Messages
+					.getString("VariantCreationPanel.sureAboutDeletingPiece"), Messages.getString("VariantCreationPanel.warning"), //$NON-NLS-1$ //$NON-NLS-2$
+					JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE))
+			{
+			case JOptionPane.YES_OPTION:
+				FileUtility.deletePiece(mPieceName);
+				setupPiecesList();
+				drawBoards(mGameBoards);
+			case JOptionPane.NO_OPTION:
+			default:
+				return;
+			}
+		}
+
+		private String mPieceName;
+	}
+
+	private class PromotePieceActionListener implements ActionListener
+	{
+		public PromotePieceActionListener(String name)
+		{
+			mPieceName = name;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent arg0)
+		{
+			openPiecePromotePanel(mPieceName);
+		}
+
+		private String mPieceName;
+
 	}
 
 	private final class SquareSetupMouseListener extends MouseAdapter
@@ -712,6 +748,78 @@ public class VariantCreationPanel extends ChessPanel implements PieceMenuManager
 		return mBlackPromotionMap;
 	}
 
+	private ActionListener submitButtonActionListener = new ActionListener()
+	{
+		@Override
+		public void actionPerformed(ActionEvent event)
+		{
+			if (mVariantNameField.getText().trim().isEmpty())
+			{
+				JOptionPane.showMessageDialog(VariantCreationPanel.this,
+						Messages.getString("VariantCreationPanel.enterAName"), Messages.getString("VariantCreationPanel.enterName"), //$NON-NLS-1$ //$NON-NLS-2$
+						JOptionPane.PLAIN_MESSAGE);
+				return;
+			}
+
+			mBuilder.setName(mVariantNameField.getText());
+
+			for (Piece piece : mWhiteTeam)
+				piece.setPromotesTo(mWhitePromotionMap.get(piece.getName()));
+			for (Piece piece : mBlackTeam)
+				piece.setPromotesTo(mBlackPromotionMap.get(piece.getName()));
+
+			int numberOfObjectives = 0;
+
+			if (mWhiteRules.getObjectiveName() != null && !mWhiteRules.getObjectiveName().isEmpty())
+			{
+				for (Piece piece : mWhiteTeam)
+				{
+					if (piece.getName().equals(mWhiteRules.getObjectiveName()))
+						numberOfObjectives++;
+				}
+				if (numberOfObjectives != 1)
+				{
+					JOptionPane.showMessageDialog(Driver.getInstance(),
+							Messages.getString("VariantCreationPanel.placeOneWhiteObjective"), //$NON-NLS-1$
+							Messages.getString("VariantCreationPanel.objectiveMissing"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$
+					return;
+				}
+			}
+
+			numberOfObjectives = 0;
+			if (mBlackRules.getObjectiveName() != null && !mBlackRules.getObjectiveName().isEmpty())
+			{
+				for (Piece piece : mBlackTeam)
+				{
+					if (piece.getName().equals(mBlackRules.getObjectiveName()))
+						numberOfObjectives++;
+				}
+				if (numberOfObjectives != 1)
+				{
+					JOptionPane.showMessageDialog(Driver.getInstance(),
+							Messages.getString("VariantCreationPanel.placeOneBlackObjective"), //$NON-NLS-1$
+							Messages.getString("VariantCreationPanel.objectiveMissing"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$
+					return;
+				}
+			}
+
+			mBuilder.setWhiteTeam(mWhiteTeam);
+
+			if (mWhiteRules.getObjectiveName() == null)
+				mWhiteRules.setObjectivePiece(new ObjectivePiece(ObjectivePieceTypes.CLASSIC));
+
+			mBuilder.setBlackTeam(mBlackTeam);
+
+			if (mBlackRules.getObjectiveName() == null)
+				mBlackRules.setObjectivePiece(new ObjectivePiece(ObjectivePieceTypes.CLASSIC));
+
+			mBuilder.writeFile(mWhiteRules, mBlackRules);
+
+			PreferenceUtility.clearTooltipListeners();
+			Driver.getInstance().revertToMainPanel();
+		}
+	};
+
 	private final class PieceDisplayBoardListener extends DropAdapter implements MouseListener, PieceToolTipPreferenceChangedListener
 	{
 		public PieceDisplayBoardListener(SquareJLabel squareLabel)
@@ -720,11 +828,6 @@ public class VariantCreationPanel extends ChessPanel implements PieceMenuManager
 			mSquareLabel = squareLabel;
 			addDropListener(mDropManager);
 			PreferenceUtility.addPieceToolTipListener(this);
-		}
-
-		public void onPieceSelectionChanged()
-		{
-			mSquareLabel.refresh();
 		}
 
 		@Override
@@ -841,12 +944,6 @@ public class VariantCreationPanel extends ChessPanel implements PieceMenuManager
 			fireDropEvent(new DropEvent(point, mSquareLabel), false);
 		}
 
-		public void onPieceSelectionChanged()
-		{
-			if (mSquareLabel.getSquare().getPiece() != null)
-				mSquareLabel.setToolTipText(mSquareLabel.getSquare().getPiece().getToolTipText());
-		}
-
 		@Override
 		public void mouseExited(MouseEvent event)
 		{
@@ -894,6 +991,7 @@ public class VariantCreationPanel extends ChessPanel implements PieceMenuManager
 				// drag piece off board to remove it
 				if (destinationSquareLabel == null)
 				{
+					originPiece = null;
 					originSquareLabel.getSquare().setPiece(null);
 
 					for (MouseListener listener : originSquareLabel.getMouseListeners())
@@ -958,14 +1056,14 @@ public class VariantCreationPanel extends ChessPanel implements PieceMenuManager
 				destinationSquareLabel.refresh();
 
 			}
-			else
-			{
-				JOptionPane
-						.showMessageDialog(
-								Driver.getInstance(),
-								Messages.getString("VariantCreationPanel.squareIsUninhabitable"), Messages.getString("VariantCreationPanel.warning"), //$NON-NLS-1$ //$NON-NLS-2$
-								JOptionPane.PLAIN_MESSAGE);
-			}
+			// else
+			// {
+			// JOptionPane
+			// .showMessageDialog(
+			// Driver.getInstance(),
+			//                                                                Messages.getString("VariantCreationPanel.squareIsUninhabitable"), Messages.getString("VariantCreationPanel.warning"), //$NON-NLS-1$ //$NON-NLS-2$
+			// JOptionPane.PLAIN_MESSAGE);
+			// }
 		}
 	};
 
@@ -974,97 +1072,45 @@ public class VariantCreationPanel extends ChessPanel implements PieceMenuManager
 	{
 		setupPiecesList();
 		drawBoards(mGameBoards);
-		updateDisplaySquares();
-		mOptionsFrame.pack();
+	}
+
+	private void openPieceMakerPanel(String pieceName)
+	{
+		mOptionsFrame.dispose();
+		mOptionsFrame = new JFrame();
+		PieceMakerPanel pieceMakerPanel = new PieceMakerPanel(pieceName, mOptionsFrame);
+		pieceMakerPanel.addPieceListListener(this);
 		Driver.centerFrame(mOptionsFrame);
 	}
 
-	private void updateDisplaySquares()
+	private void openPiecePromotePanel(String pieceName)
 	{
-		Piece whitePieceBeingDisplayed = null;
-		Piece blackPieceBeingDisplayed = null;
-
-		try
-		{
-			whitePieceBeingDisplayed = PieceBuilder.makePiece(mPieceTypeList.getSelectedValue().toString(), false,
-					mPieceDisplaySquares[WHITE_INDEX].getSquare(), mDisplayBoard);
-			blackPieceBeingDisplayed = PieceBuilder.makePiece(mPieceTypeList.getSelectedValue().toString(), true,
-					mPieceDisplaySquares[BLACK_INDEX].getSquare(), mDisplayBoard);
-		}
-		catch (IOException e)
-		{
-			JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("VariantCreationPanel.errorCouldNotLoadPiece")); //$NON-NLS-1$
-			e.printStackTrace();
-			return;
-		}
-
-		mPieceDisplaySquares[WHITE_INDEX].getSquare().setPiece(whitePieceBeingDisplayed);
-		mPieceDisplaySquares[BLACK_INDEX].getSquare().setPiece(blackPieceBeingDisplayed);
-
-		for (SquareJLabel squareLabel : mPieceDisplaySquares)
-		{
-			squareLabel.resetColor();
-			squareLabel.refresh();
-			for (MouseListener listener : squareLabel.getMouseListeners())
-			{
-				if (listener instanceof PieceDisplayBoardListener)
-					((PieceDisplayBoardListener) listener).onPieceSelectionChanged();
-				else if (listener instanceof PieceNormalBoardListener)
-					((PieceNormalBoardListener) listener).onPieceSelectionChanged();
-			}
-		}
+		mOptionsFrame.dispose();
+		mOptionsFrame = new JFrame();
+		new PiecePromotionPanel(pieceName, VariantCreationPanel.this, mOptionsFrame);
+		Driver.centerFrame(mOptionsFrame);
 	}
 
 	private static final long serialVersionUID = 7830479492072657640L;
-	private static final int WHITE_INDEX = 0;
-	private static final int BLACK_INDEX = 1;
 
 	private final GlassPane mGlobalGlassPane;
 	private final DropManager mDropManager;
-	private final SquareJLabel[] mPieceDisplaySquares = new SquareJLabel[2];
 
 	public Rules mWhiteRules;
 	public Rules mBlackRules;
-
 	private JPanel[] mBoardPanels;
 	private JPanel mPieceListPanel;
+	private JPanel mPieceListBoardPanel;
 	private Map<String, List<String>> mWhitePromotionMap;
 	private Map<String, List<String>> mBlackPromotionMap;
 	public GameBuilder mBuilder;
 	private List<Piece> mWhiteTeam;
 	private List<Piece> mBlackTeam;
-	private JButton mChangePromotionButton;
-	private JList mPieceTypeList;
 	private JFrame mOptionsFrame;
-	private JScrollPane mScrollPane = new JScrollPane();
+	private JScrollPane mScrollPane;
 	private MotionAdapter m_motionAdapter;
 	private Board mDisplayBoard;
 	private Board[] mGameBoards;
-	
-	@Override
-	public void onPieceMenuClosed()
-	{
-		mOptionsFrame.dispose();
-	}
-	
-	@Override
-	public void openPieceMakerPanel(String pieceName, PieceMenuPanel panel)
-	{
-		mOptionsFrame.remove(panel);
-		mOptionsFrame.add(new PieceMakerPanel(pieceName, panel, mOptionsFrame));
-		mOptionsFrame.pack();
-		Driver.centerFrame(mOptionsFrame);
-	}
-
-	@Override
-	public void openPieceMakerPanel(PieceMenuPanel panel)
-	{
-		openPieceMakerPanel(null, panel);
-	}
-	
-	@Override
-	public String getReturnButtonText()
-	{
-		return Messages.getString("PieceMenuPanel.returnToVariant"); //$NON-NLS-1$
-	}
+	private final JTextField mVariantNameField;
+	private String[] mAllPieceNames;
 }

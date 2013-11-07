@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.URL;
+import java.util.List;
 import java.util.Set;
 
 import javax.imageio.ImageIO;
@@ -34,6 +35,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileFilter;
+
+import com.google.common.collect.Lists;
 
 import logic.BidirectionalMovement;
 import logic.GameBuilder;
@@ -52,33 +55,10 @@ public class PieceMakerPanel extends ChessPanel
 		public void onPieceListChanged();
 	}
 
-	public PieceMakerPanel(PieceMenuPanel menuPanel, JFrame frame)
+	public PieceMakerPanel(String pieceName, JFrame frame)
 	{
-		mLeaperCheckBox = new JCheckBox(Messages.getString("PieceMakerPanel.canJump"), false); //$NON-NLS-1$
-		mPieceNameField = new JTextField(15);
-		mNorthField = new JTextField(4);
-		mNorthEastField = new JTextField(4);
-		mEastField = new JTextField(4);
-		mSouthEastField = new JTextField(4);
-		mSouthField = new JTextField(4);
-		mSouthWestField = new JTextField(4);
-		mWestField = new JTextField(4);
-		mNorthWestField = new JTextField(4);
-		mRowMovementField = new JTextField(4);
-		mColMovementField = new JTextField(4);
-		mBidirectionalMovementComboBox = new JComboBox();
-		mDefaultComboBoxModel = new DefaultComboBoxModel();
-		mBidirectionalMovementComboBox.setModel(mDefaultComboBoxModel);
-		mDefaultComboBoxModel.addListDataListener(mBidirectionalMovementComboBox);
-		mAddBidirectionalMoveButton = new JButton(Messages.getString("PieceMakerPanel.add")); //$NON-NLS-1$
-		mRemoveBidirectionalMoveButton = new JButton(Messages.getString("PieceMakerPanel.remove")); //$NON-NLS-1$
-		new PieceMakerPanel(null, menuPanel);
-	}
-
-	public PieceMakerPanel(String pieceName, PieceMenuPanel menuPanel, JFrame frame)
-	{
+		mPieceChangedListeners = Lists.newArrayList();
 		mFrame = frame;
-		mPieceMenuPanel = menuPanel;
 		mLeaperCheckBox = new JCheckBox(Messages.getString("PieceMakerPanel.canJump"), false); //$NON-NLS-1$
 		mLeaperCheckBox.setOpaque(false);
 		mLeaperCheckBox.setForeground(Color.white);
@@ -95,11 +75,11 @@ public class PieceMakerPanel extends ChessPanel
 		mColMovementField = new JTextField(4);
 		mAddBidirectionalMoveButton = new JButton(Messages.getString("PieceMakerPanel.add")); //$NON-NLS-1$
 		mRemoveBidirectionalMoveButton = new JButton(Messages.getString("PieceMakerPanel.remove")); //$NON-NLS-1$
-		PieceBuilder.initPieceTypes();
 		PieceBuilder builder = null;
 		if (pieceName != null)
+		{
 			builder = PieceBuilder.loadFromDisk(pieceName);
-
+		}
 		mBidirectionalMovementComboBox = new JComboBox();
 		mDefaultComboBoxModel = new DefaultComboBoxModel();
 		mBidirectionalMovementComboBox.setModel(mDefaultComboBoxModel);
@@ -107,9 +87,9 @@ public class PieceMakerPanel extends ChessPanel
 		if (builder != null)
 		{
 			Set<BidirectionalMovement> bidirectionalMovements = builder.getPieceMovements().getBidirectionalMovements();
-			
+
 			for (BidirectionalMovement movement : bidirectionalMovements)
-				mTempBidirectionalMovements.add(movement.toString());
+				mBidirectionalMovementComboBox.addItem(movement);
 
 			if (mBidirectionalMovementComboBox.getItemCount() != 0)
 				mBidirectionalMovementComboBox.setSelectedIndex(0);
@@ -131,7 +111,7 @@ public class PieceMakerPanel extends ChessPanel
 		else
 			mBuilder = builder;
 
-		setSize(550, 875);
+		mFrame.setSize(550, 875);
 		setLayout(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
 
@@ -309,8 +289,9 @@ public class PieceMakerPanel extends ChessPanel
 			{
 				mBidirectionalMovementComboBox.setEnabled(true);
 				mRemoveBidirectionalMoveButton.setEnabled(true);
-				BidirectionalMovement toAdd = new BidirectionalMovement(Integer.parseInt(mRowMovementField.getText()), Integer.parseInt(mColMovementField.getText()));
-				
+				BidirectionalMovement toAdd = new BidirectionalMovement(Integer.parseInt(mRowMovementField.getText()), Integer
+						.parseInt(mColMovementField.getText()));
+
 				if (mDefaultComboBoxModel.getIndexOf(toAdd) == -1)
 				{
 					mDefaultComboBoxModel.addElement(toAdd);
@@ -438,7 +419,9 @@ public class PieceMakerPanel extends ChessPanel
 			public void actionPerformed(ActionEvent event)
 			{
 				String pieceName = mPieceNameField.getText().trim();
-				if (pieceName.isEmpty() || PieceBuilder.isPieceType(mPieceNameField.getText()))
+				String builderName = mBuilder == null? null : mBuilder.getName();
+				
+				if (pieceName.isEmpty() || (PieceBuilder.isPieceType(pieceName) && !pieceName.equals(builderName)))
 				{
 					JOptionPane.showMessageDialog(
 							PieceMakerPanel.this,
@@ -485,21 +468,11 @@ public class PieceMakerPanel extends ChessPanel
 				mBuilder.setName(pieceName);
 				mBuilder.setCanJump(mLeaperCheckBox.isSelected());
 				PieceBuilder.savePieceType(mBuilder);
-				PieceBuilder.writeToDisk(mBuilder);
-
 				refreshVariants();
 
-				mPieceMenuPanel.refreshList();
-				
-				if (mFrame instanceof Driver)
-					Driver.getInstance().popPanel();
-				else
-				{
-					mFrame.remove(PieceMakerPanel.this);
-					mFrame.add(mPieceMenuPanel);
-					mFrame.pack();
-					Driver.centerFrame(mFrame);
-				}
+				for (PieceListChangedListener listener : mPieceChangedListeners)
+					listener.onPieceListChanged();
+				mFrame.dispose();
 			}
 		});
 
@@ -512,15 +485,7 @@ public class PieceMakerPanel extends ChessPanel
 			{
 				if (mPieceNameField.getText().trim().isEmpty())
 				{
-					if (mFrame instanceof Driver)
-						Driver.getInstance().popPanel();
-					else
-					{
-						mFrame.remove(PieceMakerPanel.this);
-						mFrame.add(mPieceMenuPanel);
-						mFrame.pack();
-						Driver.centerFrame(mFrame);
-					}
+					mFrame.dispose();
 				}
 				else
 				{
@@ -529,10 +494,7 @@ public class PieceMakerPanel extends ChessPanel
 							JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE))
 					{
 					case JOptionPane.YES_OPTION:
-						mFrame.remove(PieceMakerPanel.this);
-						mFrame.add(mPieceMenuPanel);
-						mFrame.pack();
-						Driver.centerFrame(mFrame);
+						mFrame.dispose();
 						break;
 					case JOptionPane.NO_OPTION:
 						break;
@@ -554,6 +516,7 @@ public class PieceMakerPanel extends ChessPanel
 		constraints.gridy = 7;
 		add(savePieceButton, constraints);
 
+		mFrame.add(this);
 		mFrame.pack();
 		mFrame.setVisible(true);
 	}
@@ -732,6 +695,16 @@ public class PieceMakerPanel extends ChessPanel
 		private JLabel m_imageLabel;
 	}
 
+	public void addPieceListListener(PieceListChangedListener listener)
+	{
+		mPieceChangedListeners.add(listener);
+	}
+	
+	public void clearPieceListeners()
+	{
+		mPieceChangedListeners.clear();
+	}
+	
 	private static final long serialVersionUID = -6530771731937840358L;
 
 	private final JTextField mPieceNameField;
@@ -751,8 +724,8 @@ public class PieceMakerPanel extends ChessPanel
 	private final JButton mRemoveBidirectionalMoveButton;
 	private final DefaultComboBoxModel mDefaultComboBoxModel;
 	private PieceBuilder mBuilder;
-	private PieceMenuPanel mPieceMenuPanel;
 	private BufferedImage mLightImage;
 	private BufferedImage mDarkImage;
 	private JFrame mFrame;
+	private List<PieceListChangedListener> mPieceChangedListeners;
 }
