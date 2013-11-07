@@ -125,6 +125,11 @@ public class PieceBuilder
 	{
 		mBidirectionalMovements.add(movement);
 	}
+	
+	public void clearBidirectionalMovements()
+	{
+		mBidirectionalMovements.clear();
+	}
 
 	private final Map<MovementDirection, Integer> mMovements;
 	private final Set<BidirectionalMovement> mBidirectionalMovements;

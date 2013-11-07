@@ -500,9 +500,6 @@ public final class Driver extends JFrame implements ChessCrafter
 							objectInputStream = new ObjectInputStream(fileInputStream);
 							gameToPlay = (GameController) objectInputStream.readObject();
 
-							gameToPlay.getWhiteRules().setGame(gameToPlay);
-							gameToPlay.getBlackRules().setGame(gameToPlay);
-
 							// set the help menu info to be specific for game
 							// play
 							if (mOptionsMenu != null)
