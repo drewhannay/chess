@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Map;
 import java.util.Set;
 
@@ -40,6 +42,12 @@ public class PieceBuilder implements Serializable
 		mPieceTypes.put(Messages.getString("knight"), new PieceBuilder(Messages.getString("knight"))); //$NON-NLS-1$ //$NON-NLS-2$
 		mPieceTypes.put(Messages.getString("queen"), new PieceBuilder(Messages.getString("queen"))); //$NON-NLS-1$ //$NON-NLS-2$
 		mPieceTypes.put(Messages.getString("king"), new PieceBuilder(Messages.getString("king"))); //$NON-NLS-1$ //$NON-NLS-2$
+
+		for (String pieceName : FileUtility.getCustomPieceArray())
+		{
+			mPieceTypes.put(pieceName, new PieceBuilder(pieceName));
+		}
+	
 	}
 
 	/**
@@ -79,6 +87,46 @@ public class PieceBuilder implements Serializable
 	{
 		return mPieceTypes.keySet();
 	}
+	
+	public static String[] getSortedArrayWithCustomPieces()
+	{
+		Set<String> pieceNames = PieceBuilder.getSet();
+
+		String[] pieceNameArray = pieceNames.toArray(new String[pieceNames.size()]);
+		Arrays.sort(pieceNameArray, new Comparator<String>()
+		{
+			@Override
+			public int compare(String name1, String name2)
+			{
+				boolean firstIsStandard = PieceBuilder.isClassicPieceType(name1);
+				boolean secondIsStandard = PieceBuilder.isClassicPieceType(name2);
+
+				if (firstIsStandard)
+				{
+					if (secondIsStandard)
+					{
+						return name1.compareToIgnoreCase(name2);
+					}
+					else
+					{
+						return -1;
+					}
+				}
+				else
+				{
+					if (secondIsStandard)
+					{
+						return 1;
+					}
+					else
+					{
+						return name1.compareToIgnoreCase(name2);
+					}
+				}
+			}
+		});
+		return pieceNameArray;
+	}
 
 	/**
 	 * Check if there is a Piece type of a given name
@@ -89,6 +137,16 @@ public class PieceBuilder implements Serializable
 	public static boolean isPieceType(String name)
 	{
 		return mPieceTypes.containsKey(name);
+	}
+	
+	public static boolean isClassicPieceType(String name)
+	{
+		return (name.equals(Messages.getString("bishop")) || //$NON-NLS-1$
+				name.equals(Messages.getString("king")) ||  //$NON-NLS-1$
+				name.equals(Messages.getString("knight")) || //$NON-NLS-1$
+				name.equals(Messages.getString("pawn")) || //$NON-NLS-1$
+				name.equals(Messages.getString("queen")) || //$NON-NLS-1$
+				name.equals(Messages.getString("rook"))); //$NON-NLS-1$
 	}
 
 	/**
@@ -113,17 +171,13 @@ public class PieceBuilder implements Serializable
 		return mPieceTypes.get(name).makePiece(isBlack, origin, board);
 	}
 
-	/**
-	 * Save the given PieceBuilder in the HashMap
-	 * 
-	 * @param p The PieceBuilder to save
-	 */
 	public static void savePieceType(PieceBuilder p)
 	{
+		writeToDisk(p);
 		mPieceTypes.put(p.mName, p);
 	}
-
-	public static void writeToDisk(PieceBuilder p)
+	
+	private static void writeToDisk(PieceBuilder p)
 	{
 		try
 		{
