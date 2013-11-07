@@ -64,7 +64,7 @@ public class RuleMakerPanel extends ChessPanel
 		whiteExtrasPanel.setLayout(new GridBagLayout());
 		whiteExtrasPanel.setOpaque(false);
 		final JTextField whiteNumberOfChecksField = new JTextField(5);
-		whiteNumberOfChecksField.setText(variantCreationPanel.mBlackRules.getEndOfGame().getMaxNumberOfChecks() + "");
+		whiteNumberOfChecksField.setText(variantCreationPanel.mBlackRules.getEndOfGame().getMaxNumberOfChecks() + ""); //$NON-NLS-1$
 		whiteNumberOfChecksField.setEnabled(false);
 		Object[] allPieces = PieceBuilder.getSet().toArray();
 		final JComboBox whitePiecesList = new JComboBox(allPieces);
@@ -105,7 +105,7 @@ public class RuleMakerPanel extends ChessPanel
 		blackExtrasPanel.setOpaque(false);
 
 		final JTextField blackNumberOfChecksField = new JTextField(5);
-		blackNumberOfChecksField.setText(variantCreationPanel.mBlackRules.getEndOfGame().getMaxNumberOfChecks() + "");
+		blackNumberOfChecksField.setText(variantCreationPanel.mBlackRules.getEndOfGame().getMaxNumberOfChecks() + ""); //$NON-NLS-1$
 		blackNumberOfChecksField.setEnabled(false);
 		final JComboBox blackPiecesList = new JComboBox(allPieces);
 
@@ -143,7 +143,7 @@ public class RuleMakerPanel extends ChessPanel
 		constraints.anchor = GridBagConstraints.CENTER;
 		constraints.insets = new Insets(10, 0, 5, 0);
 		whiteLegalDestinationPanel
-				.add(GuiUtility.createJLabel(Messages.getString("RuleMakerPanel.legalDestinationHTML")), constraints); //$NON-NLS-1
+				.add(GuiUtility.createJLabel(Messages.getString("RuleMakerPanel.legalDestinationHTML")), constraints); //$NON-NLS-1$
 		constraints.anchor = GridBagConstraints.WEST;
 		constraints.gridy = 1;
 		constraints.insets = new Insets(0, 0, 0, 0);
@@ -161,7 +161,7 @@ public class RuleMakerPanel extends ChessPanel
 		constraints.anchor = GridBagConstraints.CENTER;
 		constraints.insets = new Insets(10, 0, 5, 0);
 		blackLegalDestinationPanel
-				.add(GuiUtility.createJLabel(Messages.getString("RuleMakerPanel.legalDestinationHTML")), constraints); //$NON-NLS-1
+				.add(GuiUtility.createJLabel(Messages.getString("RuleMakerPanel.legalDestinationHTML")), constraints); //$NON-NLS-1$
 		constraints.anchor = GridBagConstraints.WEST;
 		constraints.gridy = 1;
 		constraints.insets = new Insets(0, 0, 0, 0);

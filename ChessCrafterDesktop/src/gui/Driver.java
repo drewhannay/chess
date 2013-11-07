@@ -1,7 +1,5 @@
 package gui;
 
-import gui.PieceMenuPanel.PieceMenuManager;
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -45,7 +43,7 @@ import utility.ChessCrafter;
 import utility.FileUtility;
 import utility.GuiUtility;
 
-public final class Driver extends JFrame implements ChessCrafter, PieceMenuManager
+public final class Driver extends JFrame implements ChessCrafter
 {
 	public static void main(String[] args)
 	{
@@ -257,7 +255,7 @@ public final class Driver extends JFrame implements ChessCrafter, PieceMenuManag
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				pushPanel(new PieceMenuPanel(Driver.this));
+//				pushPanel(new PieceMenuPanel(Driver.this));
 			}
 		});
 
@@ -836,37 +834,6 @@ public final class Driver extends JFrame implements ChessCrafter, PieceMenuManag
 			e.printStackTrace();
 		}
 		return m_playNetGameScreen;
-	}
-
-	@Override
-	public void onPieceMenuClosed()
-	{
-		revertToMainPanel();
-	}
-	
-	@Override
-	public void openPieceMakerPanel(String pieceName, PieceMenuPanel panel)
-	{
-		pushPanel(new PieceMakerPanel(pieceName, panel, this));
-	}
-
-	@Override
-	public void openPieceMakerPanel(PieceMenuPanel panel)
-	{
-		openPieceMakerPanel(null, panel);
-	}
-	
-	@Override
-	public String getReturnButtonText()
-	{
-		return Messages.getString("PieceMenuPanel.returnToMenu"); //$NON-NLS-1$
-	}
-	
-	@Override
-	public void onPieceListChanged()
-	{
-		pack();
-		centerFrame(sInstance);
 	}
 	
 	private static Double s_screenWidth;

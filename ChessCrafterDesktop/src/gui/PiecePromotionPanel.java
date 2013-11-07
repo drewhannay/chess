@@ -20,7 +20,6 @@ import javax.swing.event.ListSelectionListener;
 
 import logic.GameBuilder;
 import logic.PieceBuilder;
-import utility.FileUtility;
 import utility.GuiUtility;
 
 import com.google.common.collect.Lists;
@@ -57,28 +56,26 @@ public class PiecePromotionPanel extends ChessPanel
 		List<String> whitePromotions = mCustomSetupMenu.getWhitePromotionMap().get(mPieceBeingPromotedName);
 		List<String> blackPromotions = mCustomSetupMenu.getBlackPromotionMap().get(mPieceBeingPromotedName);
 
-		List<String> customPieces = Lists.newArrayList(FileUtility.getCustomPieceArray());
-		List<Object> allPieces = Lists.newArrayList(PieceBuilder.getSet().toArray());
-		allPieces.addAll(customPieces);
+		String[] pieces = PieceBuilder.getSortedArrayWithCustomPieces();
 
-		for (int i = 0; i < allPieces.size(); i++)
+		for (int i = 0; i < pieces.length; i++)
 		{
-			if (!allPieces.get(i).equals(mPieceBeingPromotedName))
+			if (!pieces[i].equals(mPieceBeingPromotedName))
 			{
 				if (!mCustomSetupMenu.mWhiteRules.getObjectiveName().equals(mPieceBeingPromotedName))
 				{
-					if (whitePromotions != null && whitePromotions.contains(allPieces.get(i)))
-						whiteCanPromoteList.addElement(allPieces.get(i));
+					if (whitePromotions != null && whitePromotions.contains(pieces[i]))
+						whiteCanPromoteList.addElement(pieces[i]);
 					else
-						whiteCantPromoteList.addElement(allPieces.get(i));
+						whiteCantPromoteList.addElement(pieces[i]);
 				}
 
 				if (!mCustomSetupMenu.mBlackRules.getObjectiveName().equals(mPieceBeingPromotedName))
 				{
-					if (blackPromotions != null && blackPromotions.contains(allPieces.get(i)))
-						blackCanPromoteList.addElement(allPieces.get(i));
+					if (blackPromotions != null && blackPromotions.contains(pieces[i]))
+						blackCanPromoteList.addElement(pieces[i]);
 					else
-						blackCantPromoteList.addElement(allPieces.get(i));
+						blackCantPromoteList.addElement(pieces[i]);
 				}
 			}
 		}
