@@ -189,6 +189,8 @@ public class SquareJLabel extends JLabel
 		}
 	}
 
+	private static final long serialVersionUID = -5060622037769752836L;
+
 	private static ImageIcon s_uninhabitableIcon;
 
 	private SquareController mSquare;

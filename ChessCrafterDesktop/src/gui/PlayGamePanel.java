@@ -70,8 +70,6 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 		mWhiteTimer.restart();
 		mBlackTimer.restart();
 		turn(game.isBlackMove());
-		mHistory = null;
-		mHistoryIndex = -3;
 		try
 		{
 			initComponents();
@@ -206,16 +204,13 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 	@Override
 	public void endOfGame(Result result)
 	{
-		PlayNetGamePanel.mIsRunning = false;
 		if (mGame.getHistory().size() != 0)
 		{
-			PlayNetGamePanel.mNetMove = mGame.moveToFakeMove(mGame.getHistory().get(mGame.getHistory().size() - 1));
 		}
 		else if (result != Result.DRAW)
 		{
 			JOptionPane.showMessageDialog(null, Messages.getString("PlayGamePanel.noMovesMade"), //$NON-NLS-1$
 					Messages.getString("PlayGamePanel.timeRanOut"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$
-			PlayNetGamePanel.mIsRunning = false;
 			PreferenceUtility.clearTooltipListeners();
 			Driver.getInstance().revertToMainPanel();
 			Driver.getInstance().setFileMenuVisibility(true);
@@ -477,16 +472,10 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 		mBlackLabel.setVisible(true);
 
 		int jailBoardSize;
-		if (getGame().getWhiteTeam().size() <= 4 && getGame().getBlackTeam().size() <= 4)
-		{
-			jailBoardSize = 4;
-		}
-		else
-		{
-			double size = getGame().getWhiteTeam().size() > getGame().getBlackTeam().size() ? Math.sqrt(getGame().getWhiteTeam()
-					.size()) : Math.sqrt(getGame().getBlackTeam().size());
-			jailBoardSize = (int) Math.ceil(size);
-		}
+		double size = getGame().getWhiteTeam().size() > getGame().getBlackTeam().size() ? Math.sqrt(getGame().getWhiteTeam()
+				.size()) : Math.sqrt(getGame().getBlackTeam().size());
+		// the jail should always be at least 4x4
+		jailBoardSize = Math.max((int) Math.ceil(size), 4);
 
 		mWhiteCapturesJail = new BoardController(jailBoardSize, jailBoardSize, false);
 		mWhiteCapturePanel = createGrid(mWhiteCapturesJail, true).first;
@@ -765,12 +754,11 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 	protected static JLabel mBlackLabel;
 	protected static JPanel mWhiteCapturePanel;
 	protected static JPanel mBlackCapturePanel;
+	// TODO: the Jails should NOT be BoardController (or Board) objects. The GUI should have a Jail class that extends JPanel (or whatever)
 	protected static BoardController mWhiteCapturesJail;
 	protected static BoardController mBlackCapturesJail;
 	protected static PieceController mPieceToPlace;
 	protected static JMenu mOptionsMenu;
-	protected static MoveController[] mHistory;
-	protected static int mHistoryIndex;
 	protected static List<SquareJLabel> mSquareLabels;
 
 	private Preference mPreference;
