@@ -38,8 +38,11 @@ import javax.swing.WindowConstants;
 import timer.ChessTimer;
 import utility.AppConstants;
 import utility.ChessCrafter;
+import utility.DesktopFileUtility;
+import utility.DesktopImageUtility;
 import utility.FileUtility;
 import utility.GuiUtility;
+import utility.ImageUtility;
 import controllers.GameController;
 
 public final class Driver extends JFrame implements ChessCrafter
@@ -59,6 +62,8 @@ public final class Driver extends JFrame implements ChessCrafter
 
 	private Driver()
 	{
+		mFileUtility = new DesktopFileUtility();
+		mImageUtility = new DesktopImageUtility();
 	}
 
 	public static Driver getInstance()
@@ -147,7 +152,7 @@ public final class Driver extends JFrame implements ChessCrafter
 
 		// make the app match the look and feel of the user's system
 		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		UIManager.put("TabbedPane.contentOpaque", false);
+		UIManager.put("TabbedPane.contentOpaque", false); //$NON-NLS-1$
 		createWindowsTrayIconIfNecessary();
 
 		// create the menu bar
@@ -285,7 +290,7 @@ public final class Driver extends JFrame implements ChessCrafter
 	{
 		try
 		{
-			BufferedImage frontPageImage = FileUtility.getFrontPageImage();
+			BufferedImage frontPageImage = mFileUtility.getFrontPageImage();
 			if (System.getProperty("os.name").startsWith("Windows")) //$NON-NLS-1$ //$NON-NLS-2$
 			{
 				final SystemTray sysTray = SystemTray.getSystemTray();
@@ -454,7 +459,7 @@ public final class Driver extends JFrame implements ChessCrafter
 			@Override
 			public void actionPerformed(ActionEvent event)
 			{
-				String[] files = FileUtility.getGamesInProgressFileArray();
+				String[] files = mFileUtility.getGamesInProgressFileArray();
 
 				if (files.length == 0)
 				{
@@ -472,7 +477,7 @@ public final class Driver extends JFrame implements ChessCrafter
 				final ChessPanel popupPanel = new ChessPanel();
 				popupPanel.setLayout(new GridBagLayout());
 
-				final JList gamesInProgressList = new JList(FileUtility.getGamesInProgressFileArray());
+				final JList gamesInProgressList = new JList(mFileUtility.getGamesInProgressFileArray());
 				final JScrollPane scrollPane = new JScrollPane(gamesInProgressList);
 				scrollPane.setPreferredSize(new Dimension(200, 200));
 				gamesInProgressList.setSelectedIndex(0);
@@ -495,7 +500,7 @@ public final class Driver extends JFrame implements ChessCrafter
 										JOptionPane.PLAIN_MESSAGE);
 								return;
 							}
-							fileInputStream = new FileInputStream(FileUtility.getGamesInProgressFile(gamesInProgressList
+							fileInputStream = new FileInputStream(mFileUtility.getGamesInProgressFile(gamesInProgressList
 									.getSelectedValue().toString()));
 							objectInputStream = new ObjectInputStream(fileInputStream);
 							gameToPlay = (GameController) objectInputStream.readObject();
@@ -530,7 +535,7 @@ public final class Driver extends JFrame implements ChessCrafter
 					{
 						if (gamesInProgressList.getSelectedValue() != null)
 						{
-							boolean didDeleteSuccessfully = FileUtility.getGamesInProgressFile(
+							boolean didDeleteSuccessfully = mFileUtility.getGamesInProgressFile(
 									gamesInProgressList.getSelectedValue().toString()).delete();
 							if (!didDeleteSuccessfully)
 							{
@@ -539,7 +544,7 @@ public final class Driver extends JFrame implements ChessCrafter
 							}
 							else
 							{
-								gamesInProgressList.setListData(FileUtility.getGamesInProgressFileArray());
+								gamesInProgressList.setListData(mFileUtility.getGamesInProgressFileArray());
 								gamesInProgressList.setSelectedIndex(0);
 								if (gamesInProgressList.getSelectedValue() == null)
 								{
@@ -611,7 +616,7 @@ public final class Driver extends JFrame implements ChessCrafter
 			{
 				try
 				{
-					String[] files = FileUtility.getCompletedGamesFileArray();
+					String[] files = mFileUtility.getCompletedGamesFileArray();
 					if (files.length == 0)
 					{
 						JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("Driver.noCompletedToDisplay"), //$NON-NLS-1$
@@ -626,7 +631,7 @@ public final class Driver extends JFrame implements ChessCrafter
 					poppedFrame.setLocationRelativeTo(Driver.this);
 					GridBagConstraints constraints = new GridBagConstraints();
 
-					final JList completedGamesList = new JList(FileUtility.getCompletedGamesFileArray());
+					final JList completedGamesList = new JList(mFileUtility.getCompletedGamesFileArray());
 					final JScrollPane scrollPane = new JScrollPane(completedGamesList);
 					scrollPane.setPreferredSize(new Dimension(200, 200));
 					completedGamesList.setSelectedIndex(0);
@@ -645,7 +650,7 @@ public final class Driver extends JFrame implements ChessCrafter
 								return;
 							}
 
-							File file = FileUtility.getCompletedGamesFile(completedGamesList.getSelectedValue().toString());
+							File file = mFileUtility.getCompletedGamesFile(completedGamesList.getSelectedValue().toString());
 							m_watchGameScreen = new WatchGamePanel(file);
 							setPanel(m_watchGameScreen);
 							mOtherPanel = m_watchGameScreen;
@@ -665,7 +670,7 @@ public final class Driver extends JFrame implements ChessCrafter
 						{
 							if (completedGamesList.getSelectedValue() != null)
 							{
-								boolean didDeleteCompletedGameSuccessfully = FileUtility.getCompletedGamesFile(
+								boolean didDeleteCompletedGameSuccessfully = mFileUtility.getCompletedGamesFile(
 										completedGamesList.getSelectedValue().toString()).delete();
 								if (!didDeleteCompletedGameSuccessfully)
 								{
@@ -676,7 +681,7 @@ public final class Driver extends JFrame implements ChessCrafter
 								else
 								{
 									completedGamesList.removeAll();
-									completedGamesList.setListData(FileUtility.getCompletedGamesFileArray());
+									completedGamesList.setListData(mFileUtility.getCompletedGamesFileArray());
 									completedGamesList.setSelectedIndex(0);
 									if (completedGamesList.getSelectedValue() == null)
 									{
@@ -796,6 +801,16 @@ public final class Driver extends JFrame implements ChessCrafter
 		setPanel((JPanel) newPanel);
 	}
 
+	public static ImageUtility getImageUtility()
+	{
+		return mImageUtility;
+	}
+	
+	public static FileUtility getFileUtility()
+	{
+		return mFileUtility;
+	}
+	
 	private static Double s_screenWidth;
 	private static Double s_screenHeight;
 
@@ -813,4 +828,6 @@ public final class Driver extends JFrame implements ChessCrafter
 	private WindowListener mWindowListener;
 	private PlayGamePanel m_playGameScreen;
 	private WatchGamePanel m_watchGameScreen;
+	private static ImageUtility mImageUtility;
+	private static FileUtility mFileUtility;
 }

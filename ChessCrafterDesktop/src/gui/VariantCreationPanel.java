@@ -56,7 +56,8 @@ import dragNdrop.DropAdapter;
 import dragNdrop.DropEvent;
 import dragNdrop.GlassPane;
 import dragNdrop.MotionAdapter;
-lic class VariantCreationPanel extends ChessPanel implements PieceListChangedListener
+
+public class VariantCreationPanel extends ChessPanel implements PieceListChangedListener
 {
 	public VariantCreationPanel(String variantName)
 	{
@@ -73,7 +74,7 @@ lic class VariantCreationPanel extends ChessPanel implements PieceListChangedLis
 		{
 			// FIXME: we shouldn't be constructing an actual Game object here;
 			// we should be able to get everything we need from the GameBuilder
-			gameToEdit = GameBuilder.newGame(variantName);
+			gameToEdit = GameController.newGame(variantName);
 
 			mWhiteTeam = gameToEdit.getWhiteTeam();
 			mBlackTeam = gameToEdit.getBlackTeam();
