@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import models.BidirectionalMovement;
-import models.PawnPieceType;
 import models.PieceMovements;
 import models.PieceMovements.MovementDirection;
 import models.PieceType;
@@ -64,7 +63,7 @@ public class PieceBuilder
 
 	public static PieceType getPawnPieceType()
 	{
-		return new PawnPieceType(new PieceMovements(Collections.<MovementDirection, Integer> emptyMap(),
+		return new PieceType(PieceType.PAWN_NAME, new PieceMovements(Collections.<MovementDirection, Integer> emptyMap(),
 				Collections.<BidirectionalMovement> emptySet()), false);
 	}
 
@@ -125,7 +124,7 @@ public class PieceBuilder
 	{
 		mBidirectionalMovements.add(movement);
 	}
-	
+
 	public void clearBidirectionalMovements()
 	{
 		mBidirectionalMovements.clear();

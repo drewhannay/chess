@@ -7,6 +7,9 @@ import com.google.common.base.Strings;
 
 public class PieceType
 {
+	// TODO: this should eventually be removed, when our variant creation is good enough to create pawns
+	public static final String PAWN_NAME = "Pawn";
+
 	public PieceType(String name, PieceMovements pieceMovements, boolean isLeaper)
 	{
 		Preconditions.checkArgument(!Strings.isNullOrEmpty(name));

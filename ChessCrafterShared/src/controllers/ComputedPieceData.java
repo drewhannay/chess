@@ -8,7 +8,6 @@ import java.util.Set;
 import models.BidirectionalMovement;
 import models.Board;
 import models.ChessCoordinates;
-import models.PawnPieceType;
 import models.Piece;
 import models.PieceMovements;
 import models.PieceMovements.MovementDirection;
@@ -41,7 +40,7 @@ public class ComputedPieceData
 
 		// special case for Pawns, to incorporate enPassant, special
 		// initial movement, and diagonal capturing
-		if (piece.getPieceType() instanceof PawnPieceType)
+		if (piece.getPieceType().getName().equals(PieceType.PAWN_NAME))
 		{
 			computePawnLegalDestinations(piece, targetBoardIndex);
 			return;
@@ -727,7 +726,7 @@ public class ComputedPieceData
 	 */
 	public ChessCoordinates[] getLineOfSight(Piece piece, int targetRow, int targetColumn, boolean inclusive)
 	{
-		if (piece.getPieceType() instanceof PawnPieceType)
+		if (piece.getPieceType().getName().equals(PieceType.PAWN_NAME))
 			return null;
 
 		ChessCoordinates[] returnSet = null;
@@ -948,7 +947,7 @@ public class ComputedPieceData
 
 	public boolean canLegallyAttack(Piece piece, ChessCoordinates threatenedCoordinates)
 	{
-		if (piece.getPieceType() instanceof PawnPieceType)
+		if (piece.getPieceType().getName().equals(PieceType.PAWN_NAME))
 		{
 			if (piece.isCaptured())
 				return false;
