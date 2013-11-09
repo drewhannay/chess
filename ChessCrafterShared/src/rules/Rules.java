@@ -14,6 +14,7 @@ import rules.legaldestinationcropper.LegalDestinationCropper;
 import rules.postmoveaction.PostMoveAction;
 import rules.promotionmethods.ClassicPromotionMethod;
 import rules.promotionmethods.PromotionMethod;
+import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -100,6 +101,30 @@ public final class Rules
 	public void undoCheckEndCondition()
 	{
 		mEndCondition.undo();
+	}
+
+	@Override
+	public boolean equals(Object other)
+	{
+		if (!(other instanceof Rules))
+			return false;
+
+		Rules otherRules = (Rules) other;
+
+		return Objects.equal(mObjectivePieceType, otherRules.mObjectivePieceType)
+				&& Objects.equal(mPromotionCoordinateList, otherRules.mPromotionCoordinateList)
+				&& Objects.equal(mDestinationBoardType, otherRules.mDestinationBoardType)
+				&& Objects.equal(mLegalDestinationCroppers, otherRules.mLegalDestinationCroppers)
+				&& Objects.equal(mPostMoveActions, otherRules.mPostMoveActions)
+				&& Objects.equal(mPromotionMethod, otherRules.mPromotionMethod)
+				&& Objects.equal(mEndCondition, otherRules.mEndCondition);
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return Objects.hashCode(mObjectivePieceType, mPromotionCoordinateList, mDestinationBoardType,
+				mLegalDestinationCroppers, mPostMoveActions, mPromotionMap, mPromotionMethod, mEndCondition);
 	}
 
 	private final PieceType mObjectivePieceType;

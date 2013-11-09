@@ -52,7 +52,15 @@ public final class Piece
 	@Override
 	public boolean equals(Object other)
 	{
-		return other instanceof Piece && ((Piece) other).mId == mId;
+		if (!(other instanceof Piece))
+			return false;
+
+		Piece otherPiece = (Piece) other;
+
+		// TODO: we shouldn't include mutable state in an equals method, but we still need to somehow check the other fields of the piece...
+		return Objects.equal(mId, otherPiece.mId)
+				&& Objects.equal(mPieceType, otherPiece.mPieceType)
+				&& Objects.equal(mOriginalCoordinates, otherPiece.mOriginalCoordinates);
 	}
 
 	@Override

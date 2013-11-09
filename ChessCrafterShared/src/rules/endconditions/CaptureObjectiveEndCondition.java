@@ -62,4 +62,16 @@ public final class CaptureObjectiveEndCondition extends EndCondition
 	public void undo()
 	{
 	}
+
+	@Override
+	public boolean equals(Object other)
+	{
+		return other instanceof CaptureObjectiveEndCondition;
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return super.hashCode();
+	}
 }

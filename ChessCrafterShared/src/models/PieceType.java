@@ -44,28 +44,26 @@ public class PieceType
 	@Override
 	public boolean equals(Object other)
 	{
-		if (other instanceof PieceType)
-		{
-			PieceType otherPieceType = (PieceType) other;
-			boolean equal = Objects.equal(mName, otherPieceType.mName);
-			if (equal)
-			{
-				// do not allow PieceTypes with the same name but different
-				// movement attributes
-				Preconditions.checkState(Objects.equal(mPieceMovements, otherPieceType.mPieceMovements));
-				Preconditions.checkState(mIsLeaper == otherPieceType.mIsLeaper);
-			}
+		if (!(other instanceof PieceType))
+			return false;
 
-			return equal;
+		PieceType otherPieceType = (PieceType) other;
+		boolean equal = Objects.equal(mName, otherPieceType.mName);
+		if (equal)
+		{
+			// do not allow PieceTypes with the same name but different
+			// movement attributes
+			Preconditions.checkState(Objects.equal(mPieceMovements, otherPieceType.mPieceMovements));
+			Preconditions.checkState(mIsLeaper == otherPieceType.mIsLeaper);
 		}
 
-		return false;
+		return equal;
 	}
 
 	@Override
 	public int hashCode()
 	{
-		return super.hashCode();
+		return Objects.hashCode(mName, mPieceMovements, mIsLeaper);
 	}
 
 	private final String mName;

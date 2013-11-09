@@ -1,6 +1,8 @@
 
 package models;
 
+import com.google.common.base.Objects;
+
 public class BidirectionalMovement
 {
 	public BidirectionalMovement(int row, int column)
@@ -28,13 +30,21 @@ public class BidirectionalMovement
 	@Override
 	public boolean equals(Object other)
 	{
-		if (other instanceof BidirectionalMovement)
-		{
-			BidirectionalMovement otherMovement = (BidirectionalMovement) other;
-			return (otherMovement.getRowDistance() == mRow && otherMovement.getColumnDistance() == mColumn)
-					|| (otherMovement.getRowDistance() == mColumn && otherMovement.getColumnDistance() == mRow);
-		}
-		return false;
+		if (!(other instanceof BidirectionalMovement))
+			return false;
+
+		BidirectionalMovement otherMovement = (BidirectionalMovement) other;
+
+		return (Objects.equal(mRow, otherMovement.mRow)
+				&& Objects.equal(mColumn, otherMovement.mColumn))
+				|| (Objects.equal(mRow, otherMovement.mColumn)
+				&& Objects.equal(mColumn, otherMovement.mRow));
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return Objects.hashCode(mRow, mColumn);
 	}
 
 	private int mRow;

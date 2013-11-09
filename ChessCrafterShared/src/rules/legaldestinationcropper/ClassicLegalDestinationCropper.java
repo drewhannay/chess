@@ -14,4 +14,16 @@ public final class ClassicLegalDestinationCropper extends LegalDestinationCroppe
 		// pieceToAdjust.adjustPinsLegalDests(movingObjective, enemyTeam);
 		// }
 	}
+
+	@Override
+	public boolean equals(Object other)
+	{
+		return other instanceof ClassicLegalDestinationCropper;
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return super.hashCode();
+	}
 }

@@ -25,4 +25,16 @@ public final class CaptureAllPiecesEndCondition extends EndCondition
 	public void undo()
 	{
 	}
+
+	@Override
+	public boolean equals(Object other)
+	{
+		return other instanceof CaptureAllPiecesEndCondition;
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return super.hashCode();
+	}
 }

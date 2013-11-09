@@ -110,4 +110,17 @@ public final class Move
 	 */
 	protected boolean[] unique = { false, false };// Row,Column
 
+	@Override
+	public boolean equals(Object other)
+	{
+		// TODO: implement this method
+		return true;
+	}
+
+	@Override
+	public int hashCode()
+	{
+		// TODO implement this method
+		return super.hashCode();
+	}
 }

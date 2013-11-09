@@ -1,6 +1,8 @@
 
 package models.turnkeeper;
 
+import com.google.common.base.Objects;
+
 public final class DifferentTurnCountTurnKeeper extends TurnKeeper
 {
 	@Override
@@ -35,5 +37,17 @@ public final class DifferentTurnCountTurnKeeper extends TurnKeeper
 		// }
 		// return mIsBlackMove;
 		return 0;
+	}
+
+	@Override
+	public boolean equals(Object other)
+	{
+		return other instanceof DifferentTurnCountTurnKeeper && Objects.equal(mCurrentTeamIndex, ((DifferentTurnCountTurnKeeper) other).mCurrentTeamIndex);
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return Objects.hashCode(mCurrentTeamIndex);
 	}
 }

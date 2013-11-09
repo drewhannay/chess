@@ -118,7 +118,19 @@ public final class ClassicPromotionMethod extends PromotionMethod
 		// TODO:
 		// return classicPromotion(pieceToUnpromote,
 		// mLastPromotedFromPieceName);
-		return super.undoPromotion(pieceToDemote);
+		return pieceToDemote;
+	}
+
+	@Override
+	public boolean equals(Object other)
+	{
+		return other instanceof ClassicPromotionMethod;
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return super.hashCode();
 	}
 
 	// private static String mLastPromotedFromPieceName;

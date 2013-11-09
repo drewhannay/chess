@@ -1,8 +1,10 @@
 
 package models;
 
+import java.util.Arrays;
 import java.util.List;
 import models.turnkeeper.TurnKeeper;
+import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 
 public final class Game
@@ -40,6 +42,27 @@ public final class Game
 	public List<Move> getHistory()
 	{
 		return mHistory;
+	}
+
+	@Override
+	public boolean equals(Object other)
+	{
+		if (!(other instanceof Game))
+			return false;
+
+		Game otherGame = (Game) other;
+
+		return Objects.equal(mGameType, otherGame.mGameType)
+				&& Arrays.equals(mTeams, otherGame.mTeams)
+				&& Arrays.equals(mBoards, otherGame.mBoards)
+				&& Objects.equal(mTurnKeeper, otherGame.mTurnKeeper)
+				&& Objects.equal(mHistory, otherGame.mHistory);
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return Objects.hashCode(mGameType, mTeams, mBoards, mTurnKeeper, mHistory);
 	}
 
 	private final String mGameType;

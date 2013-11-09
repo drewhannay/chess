@@ -41,4 +41,16 @@ public final class MustCaptureLegalDestinationCropper extends LegalDestinationCr
 		// }
 		// }
 	}
+
+	@Override
+	public boolean equals(Object other)
+	{
+		return other instanceof MustCaptureLegalDestinationCropper;
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return super.hashCode();
+	}
 }

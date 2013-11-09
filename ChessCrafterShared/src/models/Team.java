@@ -4,6 +4,7 @@ package models;
 import java.util.List;
 import rules.Rules;
 import timer.ChessTimer;
+import com.google.common.base.Objects;
 
 public final class Team
 {
@@ -31,6 +32,25 @@ public final class Team
 	public List<Piece> getPieces()
 	{
 		return mPieces;
+	}
+
+	@Override
+	public boolean equals(Object other)
+	{
+		if (!(other instanceof Team))
+			return false;
+
+		Team otherTeam = (Team) other;
+
+		return Objects.equal(mRules, otherTeam.mRules)
+				&& Objects.equal(mPieces, otherTeam.mPieces)
+				&& Objects.equal(mTimer, otherTeam.mTimer);
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return Objects.hashCode(mRules, mPieces, mTimer);
 	}
 
 	private final Rules mRules;

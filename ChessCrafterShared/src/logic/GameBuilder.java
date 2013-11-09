@@ -3,7 +3,6 @@ package logic;
 
 import java.util.List;
 import java.util.Map;
-
 import models.Board;
 import models.ChessCoordinates;
 import models.Game;
@@ -12,8 +11,6 @@ import models.PieceType;
 import models.Team;
 import models.turnkeeper.ClassicTurnKeeper;
 import rules.Rules;
-import utility.GsonUtility;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -59,7 +56,7 @@ public class GameBuilder
 		mBlackRules = blackRules;
 	}
 
-	private static void buildClassic()
+	public static Game buildClassic()
 	{
 		long pieceId = 0;
 
@@ -98,9 +95,7 @@ public class GameBuilder
 
 		Board[] boards = new Board[] { new Board(8, 8, false) };
 
-		Game game = new Game("Classic", boards, teams, new ClassicTurnKeeper());
-		String json = GsonUtility.getGson().toJson(game);
-		System.out.println(json);
+		return new Game("Classic", boards, teams, new ClassicTurnKeeper());
 	}
 
 	public Board[] getBoards()

@@ -6,16 +6,9 @@ import java.util.Set;
 import models.Piece;
 import models.PieceType;
 
-public class PromotionMethod
+public abstract class PromotionMethod
 {
-	// no promotion
-	public Piece promotePiece(Piece pieceToPromote, Map<PieceType, Set<PieceType>> promotionMap)
-	{
-		return pieceToPromote;
-	}
+	public abstract Piece promotePiece(Piece pieceToPromote, Map<PieceType, Set<PieceType>> promotionMap);
 
-	public Piece undoPromotion(Piece pieceToDemote)
-	{
-		return pieceToDemote;
-	}
+	public abstract Piece undoPromotion(Piece pieceToDemote);
 }

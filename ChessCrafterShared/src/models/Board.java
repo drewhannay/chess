@@ -1,6 +1,8 @@
 
 package models;
 
+import java.util.Arrays;
+import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 
 public final class Board
@@ -64,6 +66,21 @@ public final class Board
 	public void setEnpassantCol(int enpassantCol)
 	{
 		mEnPassantColumn = enpassantCol;
+	}
+
+	@Override
+	public boolean equals(Object other)
+	{
+		if (!(other instanceof Board))
+			return false;
+
+		Board otherBoard = (Board) other;
+
+		// TODO: need to compare the mutable state (mEnPassantColumn) as well, but how to do that?
+		return Objects.equal(mRowCount, otherBoard.mRowCount)
+				&& Objects.equal(mColumnCount, otherBoard.mColumnCount)
+				&& Objects.equal(mIsWrapAroundBoard, otherBoard.mIsWrapAroundBoard)
+				&& Arrays.deepEquals(mSquares, otherBoard.mSquares);
 	}
 
 	private final int mRowCount;

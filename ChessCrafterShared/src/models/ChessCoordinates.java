@@ -1,6 +1,8 @@
 
 package models;
 
+import com.google.common.base.Objects;
+
 public final class ChessCoordinates
 {
 	public ChessCoordinates(int row, int column, int boardIndex)
@@ -8,6 +10,25 @@ public final class ChessCoordinates
 		this.row = row;
 		this.column = column;
 		this.boardIndex = boardIndex;
+	}
+
+	@Override
+	public boolean equals(Object other)
+	{
+		if (!(other instanceof ChessCoordinates))
+			return false;
+
+		ChessCoordinates otherCoordinates = (ChessCoordinates) other;
+
+		return Objects.equal(row, otherCoordinates.row)
+				&& Objects.equal(column, otherCoordinates.column)
+				&& Objects.equal(boardIndex, otherCoordinates.boardIndex);
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return Objects.hashCode(row, column, boardIndex);
 	}
 
 	public final int row;
