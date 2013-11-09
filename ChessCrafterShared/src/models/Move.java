@@ -2,12 +2,27 @@
 package models;
 
 import logic.Result;
-import utility.ChessCrafter;
 
 public final class Move
 {
+	public Move(ChessCoordinates origin, ChessCoordinates destination)
+	{
+		this.origin = origin;
+		this.destination = destination;
+	}
+	
+	public ChessCoordinates getOrigin()
+	{
+		return origin;
+	}
+	
+	public ChessCoordinates getDestination()
+	{
+		return destination;
+	}
+	
 	private ChessCoordinates origin;
-	private ChessCrafter destination;
+	private ChessCoordinates destination;
 	private PieceType promotionType;
 
 	/**

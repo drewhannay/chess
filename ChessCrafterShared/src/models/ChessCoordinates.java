@@ -13,4 +13,21 @@ public final class ChessCoordinates
 	public final int row;
 	public final int column;
 	public final int boardIndex;
+	
+	@Override
+	public boolean equals(Object other)
+	{
+		if (!(other instanceof ChessCoordinates))
+			return false;
+		ChessCoordinates otherCoordinates = (ChessCoordinates) other;
+		
+		return otherCoordinates.boardIndex == boardIndex && otherCoordinates.row == row && otherCoordinates.column == column;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return row+" "+column+" "+boardIndex;
+	}
+	
 }

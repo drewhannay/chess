@@ -1,7 +1,10 @@
 
 package controllers;
 
+import models.ChessCoordinates;
 import models.Move;
+import models.Piece;
+import models.Team;
 
 public class MoveController
 {
@@ -10,6 +13,30 @@ public class MoveController
 	 */
 	public static boolean execute(Move move)
 	{
+		ChessCoordinates origin = move.getOrigin();
+		ChessCoordinates destination = move.getDestination();
+		
+		Piece movingPiece = null;
+		Piece capturedPiece = null;
+		for (Team team : GameController.getGame().getTeams())
+		{
+			for (Piece piece : team.getPieces())
+			{
+				if (piece.getCoordinates().equals(origin))
+					movingPiece = piece;
+				else if (piece.getCoordinates().equals(destination))
+					capturedPiece = piece;
+			}
+		}
+		
+//		if (capturedPiece != null)
+//		{
+//			capturedPiece.setIsCaptured(true);
+//			capturedPiece.setCoordinates(null);
+//		}
+		
+		movingPiece.setCoordinates(destination);
+		
 		// prevEnpassantCol = board.getEnpassantCol();
 		//
 		// if (board.getGame().isClassicChess())
@@ -171,6 +198,25 @@ public class MoveController
 	 */
 	public static boolean undo(Move move)
 	{
+		ChessCoordinates origin = move.getOrigin();
+		ChessCoordinates destination = move.getDestination();
+		
+		Piece unmovingPiece = null;
+		for (Team team : GameController.getGame().getTeams())
+		{
+			for (Piece piece : team.getPieces())
+			{
+				if (piece.getCoordinates().equals(destination))
+					unmovingPiece = piece;
+			}
+		}
+		
+		if (unmovingPiece != null)
+		{
+			unmovingPiece.setCoordinates(origin);
+		}
+		
+		
 		// board.setEnpassantCol(prevEnpassantCol);
 		//
 		// if (board.getGame().isClassicChess())

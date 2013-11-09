@@ -34,6 +34,11 @@ public final class Piece
 		return mCoordinates;
 	}
 
+	public void setCoordinates(ChessCoordinates coordinates)
+	{
+		mCoordinates = coordinates;
+	}
+	
 	public boolean isCaptured()
 	{
 		return mIsCaptured;
