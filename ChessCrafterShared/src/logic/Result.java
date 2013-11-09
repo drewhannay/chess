@@ -10,14 +10,15 @@ public enum Result
 
 	public String winText()
 	{
+		// TODO: the clients needs to manage what the win text is
 		switch (this)
 		{
 		case DRAW:
-			return Messages.getString("drawExc"); //$NON-NLS-1$
+			return null; // Messages.getString("drawExc"); //$NON-NLS-1$
 		case WHITE_WIN:
-			return Messages.getString("whiteWonExc"); //$NON-NLS-1$
+			return null; // Messages.getString("whiteWonExc"); //$NON-NLS-1$
 		case BLACK_WIN:
-			return Messages.getString("blackWonExc"); //$NON-NLS-1$
+			return null; // Messages.getString("blackWonExc"); //$NON-NLS-1$
 		default:
 			return ""; //$NON-NLS-1$
 		}
