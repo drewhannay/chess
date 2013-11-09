@@ -31,6 +31,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import logic.Result;
+import models.ChessCoordinates;
 import timer.ChessTimer;
 import utility.AppConstants;
 import utility.FileUtility;
@@ -65,11 +66,11 @@ public class PlayGamePanel extends ChessPanel
 
 		mSquareLabels = Lists.newArrayList();
 
-		PlayGamePanel.mWhiteTimer = game.getWhiteTimer();
-		PlayGamePanel.mBlackTimer = game.getBlackTimer();
-		mWhiteTimer.restart();
-		mBlackTimer.restart();
-		turn(game.isBlackMove());
+		//PlayGamePanel.mWhiteTimer = game.getWhiteTimer();
+		//PlayGamePanel.mBlackTimer = game.getBlackTimer();
+		//mWhiteTimer.restart();
+		//mBlackTimer.restart();
+		//turn(game.isBlackMove());
 		try
 		{
 			initComponents();
@@ -125,9 +126,9 @@ public class PlayGamePanel extends ChessPanel
 		add(resetLabel, constraints);
 	}
 
-	public void boardRefresh(BoardController[] boards)
+	public void boardRefresh()
 	{
-		refreshSquares(boards);
+		//refreshSquares(boards);
 
 		PieceController objectivePiece = getGame().isBlackMove() ? getGame().getBlackRules().objectivePiece(true) : getGame().getWhiteRules()
 				.objectivePiece(false);
@@ -188,7 +189,7 @@ public class PlayGamePanel extends ChessPanel
 		}
 	}
 
-	private static void refreshSquares(BoardController[] boards)
+	/*private static void refreshSquares(BoardController[] boards)
 	{
 		for (int k = 0; k < boards.length; k++)
 		{
@@ -198,7 +199,7 @@ public class PlayGamePanel extends ChessPanel
 					boards[k].getSquare(i, j).setStateChanged();
 			}
 		}
-	}
+	}*/
 
 	public void endOfGame(Result result)
 	{
@@ -280,55 +281,43 @@ public class PlayGamePanel extends ChessPanel
 		}
 	}
 
-	private Pair<JPanel, List<SquareJLabel>> createGrid(BoardController board, boolean isJail)
+	private Pair<JPanel, List<SquareJLabel>> createGrid(GameController gameToPlay, int rows, int columns, int boardIndex)
 	{
 		JPanel gridPanel = new JPanel();
 		List<SquareJLabel> squareLabels = Lists.newArrayList();
 
 		gridPanel.setOpaque(false);
-		gridPanel.setLayout(new GridLayout(board.numRows() + 1, board.numCols()));
-		gridPanel.setPreferredSize(new Dimension((board.numCols() + 1) * 48, (board.numRows() + 1) * 48));
+		gridPanel.setLayout(new GridLayout(rows + 1, columns));
+		gridPanel.setPreferredSize(new Dimension((columns + 1) * 48, (rows + 1) * 48));
 
-		int numberOfRows = board.numRows();
-		int numOfColumns = board.numCols();
-		for (int i = numberOfRows; i > 0; i--)
+		for (int i = rows; i > 0; i--)
 		{
-			if (!isJail)
-			{
 				JLabel label = GuiUtility.createJLabel("" + i); //$NON-NLS-1$
 				label.setHorizontalAlignment(SwingConstants.CENTER);
 				gridPanel.add(label);
-			}
 
-			for (int j = 1; j <= numOfColumns; j++)
+			for (int j = 1; j <= columns; j++)
 			{
-				SquareController square = board.getSquare(i, j);
-				SquareJLabel squareLabel = new SquareJLabel(square);
+				SquareJLabel squareLabel = new SquareJLabel(new ChessCoordinates(i, j, boardIndex), null);
 				squareLabels.add(squareLabel);
-				if (!isJail)
-				{
-					squareLabel.addMouseListener(new SquareListener(squareLabel, board));
+					//squareLabel.addMouseListener(new SquareListener(squareLabel, board));
 					squareLabel.addMouseMotionListener(new MotionAdapter(mGlobalGlassPane));
-				}
 
 				gridPanel.add(squareLabel);
 			}
 
 		}
-		if (!isJail)
+		for (int k = 0; k <= columns; k++)
 		{
-			for (int k = 0; k <= numOfColumns; k++)
+			if (k != 0)
 			{
-				if (k != 0)
-				{
-					JLabel label = GuiUtility.createJLabel("" + (char) (k - 1 + 'A')); //$NON-NLS-1$
-					label.setHorizontalAlignment(SwingConstants.CENTER);
-					gridPanel.add(label);
-				}
-				else
-				{
-					gridPanel.add(GuiUtility.createJLabel("")); //$NON-NLS-1$
-				}
+				JLabel label = GuiUtility.createJLabel("" + (char) (k - 1 + 'A')); //$NON-NLS-1$
+				label.setHorizontalAlignment(SwingConstants.CENTER);
+				gridPanel.add(label);
+			}
+			else
+			{
+				gridPanel.add(GuiUtility.createJLabel("")); //$NON-NLS-1$
 			}
 		}
 		return Pair.create(gridPanel, squareLabels);
@@ -745,9 +734,8 @@ public class PlayGamePanel extends ChessPanel
 	protected static JLabel mBlackLabel;
 	protected static JPanel mWhiteCapturePanel;
 	protected static JPanel mBlackCapturePanel;
-	// TODO: the Jails should NOT be BoardController (or Board) objects. The GUI should have a Jail class that extends JPanel (or whatever)
-	protected static BoardController mWhiteCapturesJail;
-	protected static BoardController mBlackCapturesJail;
+	protected static BoardPanel mWhiteCapturesJail;
+	protected static BoardPanel mBlackCapturesJail;
 	protected static PieceController mPieceToPlace;
 	protected static JMenu mOptionsMenu;
 	protected static List<SquareJLabel> mSquareLabels;

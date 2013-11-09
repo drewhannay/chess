@@ -9,22 +9,17 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import utility.GuiUtility;
 import utility.PieceIconUtility;
-import controllers.SquareController;
-import controllers.SquareController.SquareStateListener;
+import models.ChessCoordinates;
+import models.Piece;
 
 public class SquareJLabel extends JLabel
 {
 	public static final Color HIGHLIGHT_COLOR = new Color(20, 129, 191);
 
-	public SquareJLabel(SquareController square)
-	{
-		mSquare = square;
-		mSquare.setSquareStateListener(mSquareStateListener);
-	}
-
-	public SquareController getSquare()
-	{
-		return mSquare;
+	public SquareJLabel(ChessCoordinates coords, Piece piece, boolean isHabitable){
+		mChessCoordinates = coords;
+		mPiece = piece;
+		mIsHabitable = isHabitable;
 	}
 
 	public Color getColor()
@@ -61,36 +56,53 @@ public class SquareJLabel extends JLabel
 
 	public void hideIcon()
 	{
-		if (mSquare.getPiece() != null)
+		if (mPiece.getPieceType() != null)
 			setIcon(null);
+	}
+	
+	/**
+	 * Changes out the current piece located on this SquareJLabel
+	 * 
+	 * @param piece the piece replacing the current
+	 */
+	public void changePiece(Piece piece)
+	{
+		mPiece = piece;
 	}
 
 	/**
 	 * Refresh the GUI's view of this Square with the current accurate
 	 * information.
+	 * 
+	 * @param isJail provided to distinguish if this SquareJLabel is a part of a jail
 	 */
-	public void refresh()
+	public void refresh(boolean isJail)
 	{
 		setOpaque(true);
-		if (!mSquare.isHabitable())
+		if (!mIsHabitable)
 		{
 			setIcon(s_uninhabitableIcon);
 			return;
 		}
 
-		PieceController piece = mSquare.getPiece();
-		if (piece != null)
+		if (mPiece != null)
 		{
-			ImageIcon pieceIcon = PieceIconUtility.getPieceIcon(piece.getName(), piece.isBlack());
+			//TODO figure out how to determine the correct piece image
+			//ImageIcon pieceIcon = PieceIconUtility.getPieceIcon(mPiece.getPieceType().getName(), mPiece.isBlack());
+			ImageIcon pieceIcon = PieceIconUtility.getPieceIcon(mPiece.getPieceType().getName(), false);
 			if (pieceIcon == null)
-				setText(piece.getName());
-			else
-				setIcon(pieceIcon);
+				setText(mPiece.getPieceType().getName());
+			else{
+				if(isJail)
+					setIcon(new ImageIcon(pieceIcon.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH)));
+				else
+					setIcon(pieceIcon);
+			}
 
-			if (PreferenceUtility.getPreference().showPieceToolTips())
-				setToolTipText(piece.getToolTipText());
+			/*if (PreferenceUtility.getPreference().showPieceToolTips())
+				setToolTipText(mPiece.getPieceType().getToolTipText());
 			else
-				setToolTipText(null);
+				setToolTipText(null);*/
 		}
 		else
 		{
@@ -102,31 +114,6 @@ public class SquareJLabel extends JLabel
 		}
 
 		// then reset the color too
-		resetColor();
-	}
-
-	/**
-	 * Refresh the GUI's view of this Square with the current accurate
-	 * information, but only for Jails
-	 */
-	public void refreshJail()
-	{
-		setOpaque(true);
-
-		PieceController piece = mSquare.getPiece();
-		if (piece != null)
-		{
-			ImageIcon pieceIcon = PieceIconUtility.getPieceIcon(piece.getName(), piece.isBlack());
-			if (pieceIcon == null)
-				setText(piece.getName());
-			else
-				setIcon(new ImageIcon(pieceIcon.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH)));
-		}
-		else
-		{
-			setIcon(null);
-			setText(""); //$NON-NLS-1$
-		}
 		resetColor();
 	}
 
@@ -143,7 +130,7 @@ public class SquareJLabel extends JLabel
 		}
 		setBorder(null);
 		// Otherwise make our normal light/dark pattern.
-		if ((mSquare.getRow() % 2 != 0 && mSquare.getCol() % 2 != 0) || (mSquare.getRow() % 2 == 0 && mSquare.getCol() % 2 == 0))
+		if ((mChessCoordinates.row % 2 != 0 && mChessCoordinates.column % 2 != 0) || (mChessCoordinates.row % 2 == 0 && mChessCoordinates.column % 2 == 0))
 		{
 			setBackground(Color.LIGHT_GRAY);
 			setForeground(Color.getHSBColor(30, 70, 70));
@@ -154,27 +141,11 @@ public class SquareJLabel extends JLabel
 			setForeground(Color.LIGHT_GRAY);
 		}
 	}
-
-	private final SquareStateListener mSquareStateListener = new SquareStateListener()
+	
+	public void onSetIsThreatSquare()
 	{
-		@Override
-		public void onStateChanged()
-		{
-			refresh();
-		}
-
-		@Override
-		public void onSetIsThreatSquare()
-		{
-			setColor(Color.RED);
-		}
-
-		@Override
-		public void onJailStateChanged()
-		{
-			refreshJail();
-		};
-	};
+		setColor(Color.RED);
+	}
 
 	static
 	{
@@ -193,6 +164,9 @@ public class SquareJLabel extends JLabel
 
 	private static ImageIcon s_uninhabitableIcon;
 
-	private SquareController mSquare;
 	private Color mBackgroundColor;
+	
+	private ChessCoordinates mChessCoordinates;
+	private Piece mPiece;
+	private boolean mIsHabitable;
 }
