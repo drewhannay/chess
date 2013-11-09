@@ -33,22 +33,6 @@ public final class GameController
 		return sGame;
 	}
 
-	public static List<Piece> getCapturedPieces(int teamIndex)
-	{
-		verifyGameIsSet();
-
-		Team team = sGame.getTeams()[teamIndex];
-		List<Piece> capturedPieces = Lists.newArrayListWithCapacity(team.getPieces().size());
-
-		for (Piece piece : team.getPieces())
-		{
-			if (piece.isCaptured())
-				capturedPieces.add(piece);
-		}
-
-		return capturedPieces;
-	}
-
 	public static void computeLegalDestinations()
 	{
 		// Piece[] threats = null;

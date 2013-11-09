@@ -5,6 +5,7 @@ import java.util.List;
 import rules.Rules;
 import timer.ChessTimer;
 import com.google.common.base.Objects;
+import com.google.common.collect.Lists;
 
 public final class Team
 {
@@ -12,6 +13,7 @@ public final class Team
 	{
 		mRules = rules;
 		mPieces = pieces;
+		mCapturedPieces = Lists.newArrayList();
 	}
 
 	public void setTimer(ChessTimer timer)
@@ -32,6 +34,14 @@ public final class Team
 	public List<Piece> getPieces()
 	{
 		return mPieces;
+	}
+
+	/**
+	 * @return A List of Piece objects that belong to this Team but have been captured by another Team
+	 */
+	public List<Piece> getCapturedPieces()
+	{
+		return mCapturedPieces;
 	}
 
 	@Override
@@ -55,6 +65,7 @@ public final class Team
 
 	private final Rules mRules;
 	private final List<Piece> mPieces;
+	private final List<Piece> mCapturedPieces;
 
 	private ChessTimer mTimer;
 }

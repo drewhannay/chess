@@ -34,16 +34,6 @@ public final class Piece
 		return mCoordinates;
 	}
 
-	public boolean isCaptured()
-	{
-		return mIsCaptured;
-	}
-
-	public void setIsCaptured(boolean isCaptured)
-	{
-		mIsCaptured = isCaptured;
-	}
-
 	public int getMoveCount()
 	{
 		return mMoveCount;
@@ -73,7 +63,6 @@ public final class Piece
 	private final PieceType mPieceType;
 	private final ChessCoordinates mOriginalCoordinates;
 
-	private boolean mIsCaptured;
 	private int mMoveCount;
 	private ChessCoordinates mCoordinates;
 }
