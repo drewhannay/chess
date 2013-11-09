@@ -3,7 +3,6 @@ package models;
 
 import java.util.List;
 import rules.Rules;
-import timer.ChessTimer;
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 
@@ -14,16 +13,6 @@ public final class Team
 		mRules = rules;
 		mPieces = pieces;
 		mCapturedPieces = Lists.newArrayList();
-	}
-
-	public void setTimer(ChessTimer timer)
-	{
-		mTimer = timer;
-	}
-
-	public ChessTimer getTimer()
-	{
-		return mTimer;
 	}
 
 	public Rules getRules()
@@ -54,19 +43,16 @@ public final class Team
 
 		return Objects.equal(mRules, otherTeam.mRules)
 				&& Objects.equal(mPieces, otherTeam.mPieces)
-				&& Objects.equal(mTimer, otherTeam.mTimer)
 				&& Objects.equal(mCapturedPieces, otherTeam.mCapturedPieces);
 	}
 
 	@Override
 	public int hashCode()
 	{
-		return Objects.hashCode(mRules, mPieces, mTimer, mCapturedPieces);
+		return Objects.hashCode(mRules, mPieces, mCapturedPieces);
 	}
 
 	private final Rules mRules;
 	private final List<Piece> mPieces;
 	private final List<Piece> mCapturedPieces;
-
-	private ChessTimer mTimer;
 }
