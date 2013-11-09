@@ -2,12 +2,11 @@
 package models;
 
 import logic.Result;
-import utility.ChessCrafter;
 
 public final class Move
 {
 	private ChessCoordinates origin;
-	private ChessCrafter destination;
+	private ChessCoordinates destination;
 	private PieceType promotionType;
 
 	/**
