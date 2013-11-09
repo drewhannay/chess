@@ -4,6 +4,8 @@ package utility;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
+import logic.GameBuilder;
+
 public interface FileUtility
 {
 	public String[] getAIFileList();
@@ -39,6 +41,8 @@ public interface FileUtility
 	public BufferedImage getFrontPageImage();
 
 	public void deletePiece(String pieceName);
+	
+	public void writeGameBuilderFile(GameBuilder builder);
 
 	static final String AI = "AI"; //$NON-NLS-1$
 	static final String IMAGES = "images"; //$NON-NLS-1$
