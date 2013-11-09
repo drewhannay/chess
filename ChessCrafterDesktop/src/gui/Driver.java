@@ -767,7 +767,7 @@ public final class Driver extends JFrame
 		driver.setLocation((int) ((s_screenWidth / 2) - (width / 2)), (int) ((s_screenHeight / 2) - (height / 2)));
 	}
 
-	public PlayGameScreen getPlayGameScreen(GameController game)
+	public PlayGamePanel getPlayGameScreen(GameController game)
 	{
 		if (m_playGameScreen == null)
 			m_playGameScreen = new PlayGamePanel(game);

@@ -49,7 +49,7 @@ import dragNdrop.DropEvent;
 import dragNdrop.GlassPane;
 import dragNdrop.MotionAdapter;
 
-public class PlayGamePanel extends ChessPanel implements PlayGameScreen
+public class PlayGamePanel extends ChessPanel
 {
 	public PlayGamePanel(GameController game)
 	{
@@ -125,7 +125,6 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 		add(resetLabel, constraints);
 	}
 
-	@Override
 	public void boardRefresh(BoardController[] boards)
 	{
 		refreshSquares(boards);
@@ -201,7 +200,6 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 		}
 	}
 
-	@Override
 	public void endOfGame(Result result)
 	{
 		if (mGame.getHistory().size() != 0)
@@ -264,7 +262,6 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 		}
 	}
 
-	@Override
 	public void saveGame()
 	{
 		String fileName = JOptionPane.showInputDialog(Driver.getInstance(),
@@ -274,7 +271,6 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 		getGame().saveGame(fileName, false, true);
 	}
 
-	@Override
 	public void turn(boolean isBlackTurn)
 	{
 		if (mWhiteTimer != null && mBlackTimer != null)
@@ -338,7 +334,6 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 		return Pair.create(gridPanel, squareLabels);
 	}
 
-	@Override
 	public JMenu createMenuBar()
 	{
 		mOptionsMenu = new JMenu(Messages.getString("PlayGamePanel.menu")); //$NON-NLS-1$
@@ -547,19 +542,16 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 		resetTimers();
 	}
 
-	@Override
 	public void setNextMoveMustPlacePiece(boolean nextMoveMustPlacePiece)
 	{
 		mNextMoveMustPlacePiece = nextMoveMustPlacePiece;
 	}
 
-	@Override
 	public boolean getNextMoveMustPlacePiece()
 	{
 		return mNextMoveMustPlacePiece;
 	}
 
-	@Override
 	public void setPieceToPlace(PieceController piece)
 	{
 		mPieceToPlace = piece;
@@ -575,7 +567,6 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 		return mGame;
 	}
 
-	@Override
 	public void resetTimers()
 	{
 		mWhiteTimer.reset();
