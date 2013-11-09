@@ -45,7 +45,7 @@ import models.Piece;
 import models.PieceType;
 import rules.Rules;
 import utility.FileUtility;
-import utility.GuiUtility;
+import utility.DesktopGuiUtility;
 import utility.PieceIconUtility;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -171,7 +171,7 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.insets = new Insets(10, 10, 10, 5);
 		constraints.anchor = GridBagConstraints.CENTER;
-		add(GuiUtility.createJLabel(Messages.getString("VariantCreationPanel.variantName")), constraints); //$NON-NLS-1$
+		add(DesktopGuiUtility.createJLabel(Messages.getString("VariantCreationPanel.variantName")), constraints); //$NON-NLS-1$
 
 		final JTextField variantNameField = new JTextField(25);
 		constraints.gridx = 2;
@@ -184,7 +184,7 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 
 		if (game == null)
 		{
-			GuiUtility.requestFocus(variantNameField);
+			DesktopGuiUtility.requestFocus(variantNameField);
 			temp[0] = new Board(8, 8, false);
 		}
 		else
@@ -281,8 +281,10 @@ public class VariantCreationPanel extends ChessPanel implements PieceListChanged
 				if (mBlackRules.getObjectiveName() == null)
 					mBlackRules.setObjectivePiece(new ObjectivePieceType(ObjectivePieceTypes.CLASSIC));
 
-				mBuilder.writeFile(mWhiteRules, mBlackRules);
-
+				mBuilder.setBlackRules(mBlackRules);
+				mBuilder.setWhiteRules(mWhiteRules);
+				Driver.getFileUtility().writeGameBuilderFile(mBuilder);
+				
 				PreferenceUtility.clearTooltipListeners();
 				Driver.getInstance().revertToMainPanel();
 			}

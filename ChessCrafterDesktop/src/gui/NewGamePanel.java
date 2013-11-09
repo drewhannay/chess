@@ -24,7 +24,7 @@ import logic.Result;
 import models.Game;
 import timer.ChessTimer;
 import timer.TimerTypes;
-import utility.GuiUtility;
+import utility.DesktopGuiUtility;
 import utility.RunnableOfT;
 
 public class NewGamePanel extends ChessPanel
@@ -43,7 +43,7 @@ public class NewGamePanel extends ChessPanel
 		constraints.ipadx = 0;
 		constraints.insets = new Insets(5, 50, 5, 50);
 		constraints.anchor = GridBagConstraints.CENTER;
-		add(GuiUtility.createJLabel(Messages.getString("NewGamePanel.howToPlay")), constraints); //$NON-NLS-1$
+		add(DesktopGuiUtility.createJLabel(Messages.getString("NewGamePanel.howToPlay")), constraints); //$NON-NLS-1$
 
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new GridBagLayout());
@@ -128,7 +128,7 @@ public class NewGamePanel extends ChessPanel
 		constraints.gridx = 0;
 		constraints.gridy = 0;
 		constraints.anchor = GridBagConstraints.WEST;
-		mPopupPanel.add(GuiUtility.createJLabel(Messages.getString("NewGamePanel.type")), constraints); //$NON-NLS-1$
+		mPopupPanel.add(DesktopGuiUtility.createJLabel(Messages.getString("NewGamePanel.type")), constraints); //$NON-NLS-1$
 
 		constraints.gridx = 1;
 		constraints.gridy = 0;
@@ -136,13 +136,13 @@ public class NewGamePanel extends ChessPanel
 		mPopupPanel.add(dropdown, constraints);
 
 		// total time and increment fields
-		final JLabel totalTimeLabel = GuiUtility.createJLabel(Messages.getString("NewGamePanel.totalTime")); //$NON-NLS-1$
+		final JLabel totalTimeLabel = DesktopGuiUtility.createJLabel(Messages.getString("NewGamePanel.totalTime")); //$NON-NLS-1$
 		totalTimeLabel.setEnabled(false);
 		totalTimeLabel.setForeground(Color.white);
 		final JTextField totalTimeField = new JTextField("120", 3); //$NON-NLS-1$
 		totalTimeField.setEnabled(false);
 
-		final JLabel incrementLabel = GuiUtility.createJLabel(Messages.getString("NewGamePanel.increment")); //$NON-NLS-1$
+		final JLabel incrementLabel = DesktopGuiUtility.createJLabel(Messages.getString("NewGamePanel.increment")); //$NON-NLS-1$
 		incrementLabel.setEnabled(false);
 		incrementLabel.setForeground(Color.white);
 		final JTextField incrementField = new JTextField("10", 3); //$NON-NLS-1$
@@ -176,7 +176,7 @@ public class NewGamePanel extends ChessPanel
 		// add the combo box to the frame
 		constraints.gridx = 0;
 		constraints.gridy = 1;
-		mPopupPanel.add(GuiUtility.createJLabel(Messages.getString("NewGamePanel.timer")), constraints); //$NON-NLS-1$
+		mPopupPanel.add(DesktopGuiUtility.createJLabel(Messages.getString("NewGamePanel.timer")), constraints); //$NON-NLS-1$
 
 		constraints.gridx = 1;
 		constraints.gridy = 1;
@@ -222,7 +222,7 @@ public class NewGamePanel extends ChessPanel
 					{
 						Result result = isBlackTimer ? Result.WHITE_WIN : Result.BLACK_WIN;
 						result.setGuiText(Messages.getString("NewGamePanel.timeHasRunOut") + result.winText() + Messages.getString("NewGamePanel.newLine")); //$NON-NLS-1$ //$NON-NLS-2$
-						GuiUtility.getChessCrafter().getPlayGameScreen(gameToPlay).endOfGame(result);
+						DesktopGuiUtility.getChessCrafter().getPlayGameScreen(gameToPlay).endOfGame(result);
 					}
 				};
 				ChessTimer blackTimer = ChessTimer.createTimer(timerType, timeElapsedCallback, increment, startTime, true);

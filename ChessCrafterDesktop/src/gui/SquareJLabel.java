@@ -7,7 +7,7 @@ import java.io.IOException;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import utility.GuiUtility;
+import utility.DesktopGuiUtility;
 import utility.PieceIconUtility;
 import controllers.SquareController;
 import controllers.SquareController.SquareStateListener;
@@ -180,7 +180,7 @@ public class SquareJLabel extends JLabel
 	{
 		try
 		{
-			s_uninhabitableIcon = GuiUtility.createImageIcon(48, 48, "/Uninhabitable.png"); //$NON-NLS-1$
+			s_uninhabitableIcon = DesktopGuiUtility.createImageIcon(48, 48, "/Uninhabitable.png"); //$NON-NLS-1$
 		}
 
 		catch (IOException ioe)

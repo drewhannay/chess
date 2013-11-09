@@ -22,7 +22,7 @@ import javax.swing.JTextField;
 import logic.GameBuilder;
 import logic.PieceBuilder;
 import models.Board;
-import utility.GuiUtility;
+import utility.DesktopGuiUtility;
 
 public class RuleMakerPanel extends ChessPanel
 {
@@ -70,8 +70,8 @@ public class RuleMakerPanel extends ChessPanel
 				blackObjectiveIndex = i;
 		}
 
-		JLabel whiteNumberOfChecksLabel = GuiUtility.createJLabel(Messages.getString("RuleMakerPanel.howManyTimesForCheck")); //$NON-NLS-1$
-		JLabel whiteObjectivePieceLabel = GuiUtility.createJLabel(Messages.getString("RuleMakerPanel.whichIsObjective")); //$NON-NLS-1$
+		JLabel whiteNumberOfChecksLabel = DesktopGuiUtility.createJLabel(Messages.getString("RuleMakerPanel.howManyTimesForCheck")); //$NON-NLS-1$
+		JLabel whiteObjectivePieceLabel = DesktopGuiUtility.createJLabel(Messages.getString("RuleMakerPanel.whichIsObjective")); //$NON-NLS-1$
 
 		whitePiecesList.setSelectedIndex(whiteObjectiveIndex);
 		constraints.gridx = 0;
@@ -100,8 +100,8 @@ public class RuleMakerPanel extends ChessPanel
 		blackNumberOfChecksField.setEnabled(false);
 		final JComboBox blackPiecesList = new JComboBox(allPieces);
 
-		JLabel blackNumberOfChecksLabel = GuiUtility.createJLabel(Messages.getString("RuleMakerPanel.howManyTimesForCheck")); //$NON-NLS-1$
-		JLabel blackObjectivePieceLabel = GuiUtility.createJLabel(Messages.getString("RuleMakerPanel.whichIsObjective")); //$NON-NLS-1$
+		JLabel blackNumberOfChecksLabel = DesktopGuiUtility.createJLabel(Messages.getString("RuleMakerPanel.howManyTimesForCheck")); //$NON-NLS-1$
+		JLabel blackObjectivePieceLabel = DesktopGuiUtility.createJLabel(Messages.getString("RuleMakerPanel.whichIsObjective")); //$NON-NLS-1$
 
 		blackPiecesList.setSelectedIndex(blackObjectiveIndex);
 		constraints.gridx = 0;
@@ -134,7 +134,7 @@ public class RuleMakerPanel extends ChessPanel
 		constraints.anchor = GridBagConstraints.CENTER;
 		constraints.insets = new Insets(10, 0, 5, 0);
 		whiteLegalDestinationPanel
-				.add(GuiUtility.createJLabel(Messages.getString("RuleMakerPanel.legalDestinationHTML")), constraints); //$NON-NLS-1
+				.add(DesktopGuiUtility.createJLabel(Messages.getString("RuleMakerPanel.legalDestinationHTML")), constraints); //$NON-NLS-1
 		constraints.anchor = GridBagConstraints.WEST;
 		constraints.gridy = 1;
 		constraints.insets = new Insets(0, 0, 0, 0);
@@ -152,7 +152,7 @@ public class RuleMakerPanel extends ChessPanel
 		constraints.anchor = GridBagConstraints.CENTER;
 		constraints.insets = new Insets(10, 0, 5, 0);
 		blackLegalDestinationPanel
-				.add(GuiUtility.createJLabel(Messages.getString("RuleMakerPanel.legalDestinationHTML")), constraints); //$NON-NLS-1
+				.add(DesktopGuiUtility.createJLabel(Messages.getString("RuleMakerPanel.legalDestinationHTML")), constraints); //$NON-NLS-1
 		constraints.anchor = GridBagConstraints.WEST;
 		constraints.gridy = 1;
 		constraints.insets = new Insets(0, 0, 0, 0);
@@ -179,7 +179,7 @@ public class RuleMakerPanel extends ChessPanel
 		constraints.gridy = 0;
 		constraints.anchor = GridBagConstraints.CENTER;
 		constraints.insets = new Insets(10, 0, 10, 0);
-		whiteAfterCapturePanel.add(GuiUtility.createJLabel(Messages.getString("RuleMakerPanel.afterCapturingHTML")), constraints); //$NON-NLS-1$
+		whiteAfterCapturePanel.add(DesktopGuiUtility.createJLabel(Messages.getString("RuleMakerPanel.afterCapturingHTML")), constraints); //$NON-NLS-1$
 		constraints.anchor = GridBagConstraints.WEST;
 		constraints.insets = new Insets(0, 0, 0, 0);
 
@@ -234,7 +234,7 @@ public class RuleMakerPanel extends ChessPanel
 		constraints.gridy = 0;
 		constraints.anchor = GridBagConstraints.CENTER;
 		constraints.insets = new Insets(10, 0, 10, 0);
-		blackAfterPanel.add(GuiUtility.createJLabel(Messages.getString("RuleMakerPanel.afterCapturingHTML")), constraints); //$NON-NLS-1$
+		blackAfterPanel.add(DesktopGuiUtility.createJLabel(Messages.getString("RuleMakerPanel.afterCapturingHTML")), constraints); //$NON-NLS-1$
 		constraints.insets = new Insets(0, 0, 0, 0);
 		constraints.anchor = GridBagConstraints.WEST;
 
@@ -287,7 +287,7 @@ public class RuleMakerPanel extends ChessPanel
 		final JPanel specialRulesPanel = new JPanel();
 		specialRulesPanel.setLayout(new GridBagLayout());
 		specialRulesPanel.setOpaque(false);
-		specialRulesPanel.setBorder(GuiUtility.createBorder(Messages.getString("RuleMakerPanel.specialRules"))); //$NON-NLS-1$
+		specialRulesPanel.setBorder(DesktopGuiUtility.createBorder(Messages.getString("RuleMakerPanel.specialRules"))); //$NON-NLS-1$
 
 		final JCheckBox atomicChessCheckBox = new JCheckBox(Messages.getString("RuleMakerPanel.atomicChess")); //$NON-NLS-1$
 		atomicChessCheckBox.setToolTipText(Messages.getString("RuleMakerPanel.captureRemovesBoth")); //$NON-NLS-1$
@@ -313,7 +313,7 @@ public class RuleMakerPanel extends ChessPanel
 		constraints.gridy = 0;
 		constraints.anchor = GridBagConstraints.CENTER;
 		constraints.insets = new Insets(0, 0, 5, 0);
-		objectiveWhitePanel.add(GuiUtility.createJLabel(Messages.getString("RuleMakerPanel.possibleObjectives")), constraints); //$NON-NLS-1$
+		objectiveWhitePanel.add(DesktopGuiUtility.createJLabel(Messages.getString("RuleMakerPanel.possibleObjectives")), constraints); //$NON-NLS-1$
 		constraints.insets = new Insets(0, 0, 0, 0);
 		constraints.anchor = GridBagConstraints.WEST;
 
@@ -346,7 +346,7 @@ public class RuleMakerPanel extends ChessPanel
 		});
 
 		final JRadioButton whiteCaptureAllButton = new JRadioButton(Messages.getString("RuleMakerPanel.captureAll"), false); //$NON-NLS-1$
-		GuiUtility.requestFocus(whiteCaptureAllButton);
+		DesktopGuiUtility.requestFocus(whiteCaptureAllButton);
 		whiteCaptureAllButton.setOpaque(false);
 		whiteCaptureAllButton.setForeground(Color.white);
 		whiteCaptureAllButton.setToolTipText(Messages.getString("RuleMakerPanel.pressForCaptureAll")); //$NON-NLS-1$
@@ -472,7 +472,7 @@ public class RuleMakerPanel extends ChessPanel
 		constraints.gridx = 0;
 		constraints.anchor = GridBagConstraints.CENTER;
 		constraints.insets = new Insets(0, 0, 5, 0);
-		objectiveBlackPanel.add(GuiUtility.createJLabel(Messages.getString("RuleMakerPanel.possibleObjectives")), constraints); //$NON-NLS-1$
+		objectiveBlackPanel.add(DesktopGuiUtility.createJLabel(Messages.getString("RuleMakerPanel.possibleObjectives")), constraints); //$NON-NLS-1$
 		constraints.anchor = GridBagConstraints.WEST;
 		constraints.insets = new Insets(0, 0, 0, 0);
 
@@ -625,7 +625,7 @@ public class RuleMakerPanel extends ChessPanel
 
 		final JButton cancelButton = new JButton(Messages.getString("RuleMakerPanel.cancel")); //$NON-NLS-1$
 		cancelButton.setToolTipText(Messages.getString("RuleMakerPanel.pressToReturnToVariant")); //$NON-NLS-1$
-		GuiUtility.setupVariantCancelButton(cancelButton, this, mFrame);
+		DesktopGuiUtility.setupVariantCancelButton(cancelButton, this, mFrame);
 
 		JButton saveButton = new JButton(Messages.getString("RuleMakerPanel.save")); //$NON-NLS-1$
 		saveButton.setToolTipText(Messages.getString("RuleMakerPanel.pressToSave")); //$NON-NLS-1$
@@ -837,7 +837,7 @@ public class RuleMakerPanel extends ChessPanel
 		});
 
 		JPanel whiteTeamPanel = new JPanel();
-		whiteTeamPanel.setBorder(GuiUtility.createBorder(Messages.getString("RuleMakerPanel.whiteTeam"))); //$NON-NLS-1$
+		whiteTeamPanel.setBorder(DesktopGuiUtility.createBorder(Messages.getString("RuleMakerPanel.whiteTeam"))); //$NON-NLS-1$
 		whiteTeamPanel.setLayout(new GridBagLayout());
 		whiteTeamPanel.setOpaque(false);
 
@@ -856,7 +856,7 @@ public class RuleMakerPanel extends ChessPanel
 		whiteTeamPanel.add(whiteAfterCapturePanel, constraints);
 
 		JPanel blackTeamPanel = new JPanel();
-		blackTeamPanel.setBorder(GuiUtility.createBorder(Messages.getString("RuleMakerPanel.blackTeam"))); //$NON-NLS-1$
+		blackTeamPanel.setBorder(DesktopGuiUtility.createBorder(Messages.getString("RuleMakerPanel.blackTeam"))); //$NON-NLS-1$
 		blackTeamPanel.setLayout(new GridBagLayout());
 		blackTeamPanel.setOpaque(false);
 

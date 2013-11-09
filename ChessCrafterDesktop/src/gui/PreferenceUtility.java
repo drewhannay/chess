@@ -23,7 +23,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 import utility.FileUtility;
-import utility.GuiUtility;
+import utility.DesktopGuiUtility;
 import utility.Preference;
 import com.google.common.collect.Lists;
 
@@ -60,7 +60,7 @@ public final class PreferenceUtility
 		final JButton cancelButton = new JButton(Messages.getString("PreferenceUtility.cancel")); //$NON-NLS-1$
 
 		final JButton doneButton = new JButton(Messages.getString("PreferenceUtility.done")); //$NON-NLS-1$
-		GuiUtility.setupDoneButton(doneButton, popupFrame);
+		DesktopGuiUtility.setupDoneButton(doneButton, popupFrame);
 
 		holder.add(currentSaveLocationLabel);
 		holder.add(currentSaveLocationField);
@@ -118,7 +118,7 @@ public final class PreferenceUtility
 			}
 		});
 
-		GuiUtility.setupDoneButton(cancelButton, popupFrame);
+		DesktopGuiUtility.setupDoneButton(cancelButton, popupFrame);
 
 		constraints.gridx = 0;
 		constraints.gridy = 0;

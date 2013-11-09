@@ -4,10 +4,14 @@ package utility;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.URL;
 import javax.imageio.ImageIO;
+
+import logic.GameBuilder;
 
 public final class DesktopFileUtility implements FileUtility
 {
@@ -182,6 +186,25 @@ public final class DesktopFileUtility implements FileUtility
 		new File((getImagePath("d_" + pieceName + ".png"))).delete(); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
+	public void writeGameBuilderFile(GameBuilder builder)
+	{
+		FileOutputStream f_out;
+		ObjectOutputStream out;
+		try
+		{
+			f_out = new FileOutputStream(getVariantsFile(builder.getName()));
+			out = new ObjectOutputStream(f_out);
+			out.writeObject(builder);
+			out.close();
+			f_out.close();
+		}
+		catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	private static final String HIDDEN_DIR;
 	private static final String SLASH;
 }

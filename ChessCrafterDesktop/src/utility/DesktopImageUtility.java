@@ -30,12 +30,12 @@ public final class DesktopImageUtility implements ImageUtility
 	public ImageIcon getLightImage(String pieceName) throws IOException
 	{
 		boolean isBuiltInFile = PIECE_NAMES.contains(pieceName);
-		return GuiUtility.createImageIcon(48, 48, (isBuiltInFile ? "/" : "") + LIGHT_PREFIX + pieceName + PNG, isBuiltInFile); //$NON-NLS-1$ //$NON-NLS-2$
+		return DesktopGuiUtility.createImageIcon(48, 48, (isBuiltInFile ? "/" : "") + LIGHT_PREFIX + pieceName + PNG, isBuiltInFile); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	public ImageIcon getDarkImage(String pieceName) throws IOException
 	{
 		boolean isBuiltInFile = PIECE_NAMES.contains(pieceName);
-		return GuiUtility.createImageIcon(48, 48, (isBuiltInFile ? "/" : "") + DARK_PREFIX + pieceName + PNG, isBuiltInFile); //$NON-NLS-1$ //$NON-NLS-2$
+		return DesktopGuiUtility.createImageIcon(48, 48, (isBuiltInFile ? "/" : "") + DARK_PREFIX + pieceName + PNG, isBuiltInFile); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 }

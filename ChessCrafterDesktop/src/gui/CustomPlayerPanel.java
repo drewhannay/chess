@@ -14,7 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import utility.GuiUtility;
+import utility.DesktopGuiUtility;
 
 public class CustomPlayerPanel extends ChessPanel
 {
@@ -37,23 +37,23 @@ public class CustomPlayerPanel extends ChessPanel
 		GridBagConstraints constraints = new GridBagConstraints();
 		setBorder(BorderFactory.createLoweredBevelBorder());
 
-		JLabel playerOneTurnsLabel = GuiUtility.createJLabel(Messages.getString("CustomPlayerPanel.howManyWhite")); //$NON-NLS-1$
-		JLabel playerTwoTurnsLabel = GuiUtility.createJLabel(Messages.getString("CustomPlayerPanel.howManyBlack")); //$NON-NLS-1$
+		JLabel playerOneTurnsLabel = DesktopGuiUtility.createJLabel(Messages.getString("CustomPlayerPanel.howManyWhite")); //$NON-NLS-1$
+		JLabel playerTwoTurnsLabel = DesktopGuiUtility.createJLabel(Messages.getString("CustomPlayerPanel.howManyBlack")); //$NON-NLS-1$
 		mPlayerOneTurnsField = new JTextField(4);
-		GuiUtility.requestFocus(mPlayerOneTurnsField);
+		DesktopGuiUtility.requestFocus(mPlayerOneTurnsField);
 		mPlayerOneTurnsField.setText(Integer.toString(mWhiteRules.getNextTurn().getWhiteMoves()));
 		mPlayerOneTurnsField.setToolTipText(Messages.getString("CustomPlayerPanel.amountForFirstPlayer")); //$NON-NLS-1$
 		mPlayerTwoTurnsField = new JTextField(4);
 		mPlayerTwoTurnsField.setText(Integer.toString(mWhiteRules.getNextTurn().getBlackMoves()));
 		mPlayerTwoTurnsField.setToolTipText(Messages.getString("CustomPlayerPanel.amountForSecondPlayer")); //$NON-NLS-1$
-		mIncrementTurnsLabel = GuiUtility.createJLabel(Messages.getString("CustomPlayerPanel.increaseByHowMany")); //$NON-NLS-1$
+		mIncrementTurnsLabel = DesktopGuiUtility.createJLabel(Messages.getString("CustomPlayerPanel.increaseByHowMany")); //$NON-NLS-1$
 		mIncrementTurnsField = new JTextField(4);
 		mIncrementTurnsField.setText(Integer.toString(mWhiteRules.getNextTurn().getIncrement()));
 		mIncrementTurnsField.setToolTipText(Messages.getString("CustomPlayerPanel.amountOfIncrease")); //$NON-NLS-1$
 
 		JButton cancelButton = new JButton(Messages.getString("CustomPlayerPanel.cancel")); //$NON-NLS-1$
 		cancelButton.setToolTipText(Messages.getString("CustomPlayerPanel.pressToReturn")); //$NON-NLS-1$
-		GuiUtility.setupVariantCancelButton(cancelButton, this, mFrame);
+		DesktopGuiUtility.setupVariantCancelButton(cancelButton, this, mFrame);
 
 		JButton submitButton = new JButton(Messages.getString("CustomPlayerPanel.save")); //$NON-NLS-1$
 		submitButton.setToolTipText(Messages.getString("CustomPlayerPanel.pressToSave")); //$NON-NLS-1$
