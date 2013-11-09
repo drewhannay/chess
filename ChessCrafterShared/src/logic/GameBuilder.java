@@ -1,8 +1,10 @@
 
 package logic;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import models.Board;
 import models.ChessCoordinates;
 import models.Game;
@@ -11,8 +13,14 @@ import models.PieceType;
 import models.Team;
 import models.turnkeeper.ClassicTurnKeeper;
 import rules.Rules;
+import rules.endconditions.CaptureObjectiveEndCondition;
+import rules.legaldestinationcropper.ClassicLegalDestinationCropper;
+import rules.legaldestinationcropper.LegalDestinationCropper;
+import rules.postmoveaction.PostMoveAction;
+import rules.promotionmethods.ClassicPromotionMethod;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 public class GameBuilder
 {
@@ -86,8 +94,42 @@ public class GameBuilder
 		blackPieces.add(new Piece(pieceId++, PieceBuilder.getKnightPieceType(), new ChessCoordinates(8, 7, 0)));
 		blackPieces.add(new Piece(pieceId++, PieceBuilder.getRookPieceType(), new ChessCoordinates(8, 8, 0)));
 
-		Rules whiteRules = new Rules();
-		Rules blackRules = new Rules();
+		List<ChessCoordinates> whitePromotionCoordinateList = Lists.newArrayList();
+		List<ChessCoordinates> blackPromotionCoordinateList = Lists.newArrayList();
+		for (int i = 1; i < 9; i++)
+		{
+			whitePromotionCoordinateList.add(new ChessCoordinates(1, i, 0));
+			blackPromotionCoordinateList.add(new ChessCoordinates(8, i, 0));
+		}
+
+		Map<PieceType, Set<PieceType>> promotionMap = Maps.newHashMap();
+		promotionMap.put(PieceBuilder.getPawnPieceType(), Sets.newHashSet(
+				PieceBuilder.getRookPieceType(),
+				PieceBuilder.getKnightPieceType(),
+				PieceBuilder.getBishopPieceType(),
+				PieceBuilder.getQueenPieceType()
+				));
+
+		Rules whiteRules = new Rules(
+				PieceBuilder.getKingPieceType(),
+				whitePromotionCoordinateList,
+				Rules.DESTINATION_SAME_BOARD,
+				Lists.<LegalDestinationCropper> newArrayList(new ClassicLegalDestinationCropper()),
+				promotionMap,
+				new ClassicPromotionMethod(),
+				Collections.<PostMoveAction> emptyList(),
+				new CaptureObjectiveEndCondition()
+				);
+		Rules blackRules = new Rules(
+				PieceBuilder.getKingPieceType(),
+				blackPromotionCoordinateList,
+				Rules.DESTINATION_SAME_BOARD,
+				Lists.<LegalDestinationCropper> newArrayList(new ClassicLegalDestinationCropper()),
+				promotionMap,
+				new ClassicPromotionMethod(),
+				Collections.<PostMoveAction> emptyList(),
+				new CaptureObjectiveEndCondition()
+				);
 
 		Team[] teams = new Team[2];
 		teams[0] = new Team(whiteRules, whitePieces);

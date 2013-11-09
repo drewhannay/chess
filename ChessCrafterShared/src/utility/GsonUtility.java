@@ -2,14 +2,17 @@
 package utility;
 
 import java.lang.reflect.Type;
+import java.util.Map;
 import models.turnkeeper.TurnKeeper;
 import rules.endconditions.EndCondition;
 import rules.legaldestinationcropper.LegalDestinationCropper;
 import rules.postmoveaction.PostMoveAction;
 import rules.promotionmethods.PromotionMethod;
 import timer.ChessTimer;
+import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -29,6 +32,7 @@ public final class GsonUtility
 		builder.registerTypeAdapter(PostMoveAction.class, new InterfaceAdapter<PostMoveAction>());
 		builder.registerTypeAdapter(PromotionMethod.class, new InterfaceAdapter<PromotionMethod>());
 		builder.registerTypeAdapter(ChessTimer.class, new InterfaceAdapter<ChessTimer>());
+		builder.registerTypeAdapter(Map.class, new MapAdapter());
 
 		return builder.create();
 	}
@@ -80,4 +84,53 @@ public final class GsonUtility
 			return elem;
 		}
 	}
+
+	private static class MapAdapter implements JsonSerializer<Map<?, ?>>, JsonDeserializer<Map<?, ?>>
+	{
+		@Override
+		public JsonElement serialize(Map<?, ?> m, Type typeOfT, JsonSerializationContext context)
+		{
+			JsonArray rv = new JsonArray();
+			for (Object k : m.keySet())
+			{
+				JsonObject kv = new JsonObject();
+				kv.add("k", context.serialize(k));
+				kv.addProperty("ktype", k.getClass().getName());
+				kv.add("v", context.serialize(m.get(k)));
+				kv.addProperty("vtype", m.get(k).getClass().getName());
+				rv.add(kv);
+			}
+			return rv;
+		}
+
+		@Override
+		public Map<?, ?> deserialize(JsonElement _json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException
+		{
+			JsonArray json = (JsonArray) _json;
+			Map<Object, Object> rv = Maps.newHashMap();
+			for (int i = 0; i < json.size(); i++)
+			{
+				JsonObject o = (JsonObject) json.get(i);
+				String ktype = o.getAsJsonPrimitive("ktype").getAsString();
+				String vtype = o.getAsJsonPrimitive("vtype").getAsString();
+				Class<?> kklass = null;
+				Class<?> vklass = null;
+				try
+				{
+					kklass = Class.forName(ktype);
+					vklass = Class.forName(vtype);
+				}
+				catch (ClassNotFoundException e)
+				{
+					e.printStackTrace();
+					throw new JsonParseException(e.getMessage());
+				}
+				Object k = context.deserialize(o.get("k"), kklass);
+				Object v = context.deserialize(o.get("v"), vklass);
+				rv.put(k, v);
+			}
+			return rv;
+		}
+	}
+
 }
