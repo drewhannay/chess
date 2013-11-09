@@ -1,5 +1,7 @@
 
 package utility;
+import gui.Driver;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Image;
@@ -8,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -20,12 +23,13 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
+
 import logic.Messages;
 import models.BidirectionalMovement;
 import models.Piece;
 import models.PieceMovements;
 import models.PieceMovements.MovementDirection;
-public final class GuiUtility
+public final class DesktopGuiUtility
 {
 	public static void setChessCrafter(ChessCrafter chessCrafter)
 	{
@@ -104,7 +108,7 @@ public final class GuiUtility
 
 	public static BufferedImage createBufferedImage(int width, int height, String name) throws IOException
 	{
-		BufferedImage bufferedImage = ImageIO.read(new File(FileUtility.getImagePath(name)));
+		BufferedImage bufferedImage = ImageIO.read(new File(Driver.getFileUtility().getImagePath(name)));
 		return bufferedImage;
 	}
 
@@ -113,9 +117,9 @@ public final class GuiUtility
 	{
 		BufferedImage bufferedImage;
 		if (isBuiltInFile)
-			bufferedImage = ImageIO.read(GuiUtility.class.getResource(imageLocation));
+			bufferedImage = ImageIO.read(DesktopGuiUtility.class.getResource(imageLocation));
 		else
-			bufferedImage = ImageIO.read(new File(FileUtility.getImagePath(imageLocation)));
+			bufferedImage = ImageIO.read(new File(Driver.getFileUtility().getImagePath(imageLocation)));
 
 		ImageIcon imageIcon = new ImageIcon(bufferedImage);
 		imageIcon.setImage(imageIcon.getImage().getScaledInstance(imageWidth, imageHeight, Image.SCALE_SMOOTH));
@@ -130,7 +134,7 @@ public final class GuiUtility
 
 		if (returnVal == JFileChooser.APPROVE_OPTION)
 		{
-			if (!file.renameTo(FileUtility.getAIFile(file.getName())))
+			if (!file.renameTo(Driver.getFileUtility().getAIFile(file.getName())))
 			{
 				JOptionPane.showMessageDialog(parent, Messages.getString("fileNotInstalledSuccessfully"), Messages.getString("error"), //$NON-NLS-1$ //$NON-NLS-2$
 						JOptionPane.PLAIN_MESSAGE);

@@ -16,7 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 import utility.AppConstants;
-import utility.GuiUtility;
+import utility.DesktopGuiUtility;
 
 public class AboutFrame extends JFrame
 {
@@ -41,8 +41,8 @@ public class AboutFrame extends JFrame
 		JLabel piecePicture = null;
 		try
 		{
-			frontPageImage = new JLabel(GuiUtility.createImageIcon(250, 250, "/chess_logo.png")); //$NON-NLS-1$
-			piecePicture = new JLabel(GuiUtility.createImageIcon(48, 48, "/d_King.png")); //$NON-NLS-1$
+			frontPageImage = new JLabel(DesktopGuiUtility.createImageIcon(250, 250, "/chess_logo.png")); //$NON-NLS-1$
+			piecePicture = new JLabel(DesktopGuiUtility.createImageIcon(48, 48, "/d_King.png")); //$NON-NLS-1$
 		}
 		catch (IOException e1)
 		{
@@ -50,11 +50,11 @@ public class AboutFrame extends JFrame
 		}
 
 		Font font = new Font(Messages.getString("AboutFrame.verdana"), Font.BOLD, 18); //$NON-NLS-1$
-		JLabel title = GuiUtility.createJLabel(AppConstants.APP_NAME + Messages.getString("AboutFrame.newline")); //$NON-NLS-1$
+		JLabel title = DesktopGuiUtility.createJLabel(AppConstants.APP_NAME + Messages.getString("AboutFrame.newline")); //$NON-NLS-1$
 		title.setFont(font);
 
-		JLabel versionLabel = GuiUtility.createJLabel(Messages.getString("AboutFrame.version")); //$NON-NLS-1$
-		JLabel visitSiteLabel = GuiUtility.createJLabel(Messages.getString("AboutFrame.visitOurSite")); //$NON-NLS-1$
+		JLabel versionLabel = DesktopGuiUtility.createJLabel(Messages.getString("AboutFrame.version")); //$NON-NLS-1$
+		JLabel visitSiteLabel = DesktopGuiUtility.createJLabel(Messages.getString("AboutFrame.visitOurSite")); //$NON-NLS-1$
 
 		JButton siteButton = new JButton();
 		siteButton.setIcon(piecePicture.getIcon());

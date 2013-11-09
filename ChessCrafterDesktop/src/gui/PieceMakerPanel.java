@@ -41,7 +41,7 @@ import models.Piece;
 import models.PieceMovements;
 import models.PieceMovements.MovementDirection;
 import utility.FileUtility;
-import utility.GuiUtility;
+import utility.DesktopGuiUtility;
 import utility.ImageUtility;
 import com.google.common.collect.Lists;
 
@@ -139,11 +139,11 @@ public class PieceMakerPanel extends ChessPanel
 		namePanel.setOpaque(false);
 		namePanel.setLayout(new FlowLayout());
 
-		namePanel.add(GuiUtility.createJLabel(Messages.getString("PieceMakerPanel.pieceName"))); //$NON-NLS-1$
+		namePanel.add(DesktopGuiUtility.createJLabel(Messages.getString("PieceMakerPanel.pieceName"))); //$NON-NLS-1$
 		mPieceNameField.setToolTipText(Messages.getString("PieceMakerPanel.enterNameOfNewPiece")); //$NON-NLS-1$
 		if (builder != null)
 			mPieceNameField.setText(builder.getName());
-		GuiUtility.requestFocus(mPieceNameField);
+		DesktopGuiUtility.requestFocus(mPieceNameField);
 		namePanel.add(mPieceNameField);
 
 		constraints.gridx = 0;
@@ -153,7 +153,7 @@ public class PieceMakerPanel extends ChessPanel
 		ImageIcon blankSquare = null;
 		try
 		{
-			blankSquare = GuiUtility.createImageIcon(48, 48, "/WhiteSquare.png"); //$NON-NLS-1$
+			blankSquare = DesktopGuiUtility.createImageIcon(48, 48, "/WhiteSquare.png"); //$NON-NLS-1$
 		}
 		catch (IOException e4)
 		{
@@ -164,7 +164,7 @@ public class PieceMakerPanel extends ChessPanel
 		final JPanel lightIconPanel = new JPanel();
 		lightIconPanel.setLayout(new FlowLayout());
 		lightIconPanel.setOpaque(false);
-		final JLabel lightIconLabel = GuiUtility.createJLabel(""); //$NON-NLS-1$
+		final JLabel lightIconLabel = DesktopGuiUtility.createJLabel(""); //$NON-NLS-1$
 		lightIconLabel.setSize(48, 48);
 
 		try
@@ -180,8 +180,8 @@ public class PieceMakerPanel extends ChessPanel
 		{
 			try
 			{
-				mLightImage = GuiUtility.createBufferedImage(48, 48, "l_" + builder.getName() + ".png"); //$NON-NLS-1$ //$NON-NLS-2$
-				mDarkImage = GuiUtility.createBufferedImage(48, 48, "d_" + builder.getName() + ".png"); //$NON-NLS-1$ //$NON-NLS-2$
+				mLightImage = DesktopGuiUtility.createBufferedImage(48, 48, "l_" + builder.getName() + ".png"); //$NON-NLS-1$ //$NON-NLS-2$
+				mDarkImage = DesktopGuiUtility.createBufferedImage(48, 48, "d_" + builder.getName() + ".png"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 			catch (IOException e1)
 			{
@@ -202,7 +202,7 @@ public class PieceMakerPanel extends ChessPanel
 		final JPanel darkIconPanel = new JPanel();
 		darkIconPanel.setLayout(new FlowLayout());
 		darkIconPanel.setOpaque(false);
-		final JLabel darkIconLabel = GuiUtility.createJLabel(""); //$NON-NLS-1$
+		final JLabel darkIconLabel = DesktopGuiUtility.createJLabel(""); //$NON-NLS-1$
 		darkIconLabel.setSize(48, 48);
 
 		try
@@ -247,7 +247,7 @@ public class PieceMakerPanel extends ChessPanel
 		JLabel movementPictureHolder = null;
 		try
 		{
-			movementPictureHolder = GuiUtility.createJLabel(GuiUtility.createImageIcon(130, 130, "/movement_directions.png")); //$NON-NLS-1$
+			movementPictureHolder = DesktopGuiUtility.createJLabel(DesktopGuiUtility.createImageIcon(130, 130, "/movement_directions.png")); //$NON-NLS-1$
 		}
 		catch (IOException e1)
 		{
@@ -365,7 +365,7 @@ public class PieceMakerPanel extends ChessPanel
 		constraints.gridy = 0;
 		constraints.gridheight = 1;
 		constraints.gridwidth = 1;
-		inputPanel.add(GuiUtility.createJLabel(Messages.getString("PieceMakerPanel.51")), constraints); //$NON-NLS-1$
+		inputPanel.add(DesktopGuiUtility.createJLabel(Messages.getString("PieceMakerPanel.51")), constraints); //$NON-NLS-1$
 
 		constraints.anchor = GridBagConstraints.CENTER;
 		constraints.gridx = 2;
@@ -405,7 +405,7 @@ public class PieceMakerPanel extends ChessPanel
 		constraints.gridx = 0;
 		constraints.gridy = 0;
 		constraints.anchor = GridBagConstraints.CENTER;
-		movementPanel.add(GuiUtility.createJLabel(Messages.getString("PieceMakerPanel.normalMovementHTML")), constraints); //$NON-NLS-1$
+		movementPanel.add(DesktopGuiUtility.createJLabel(Messages.getString("PieceMakerPanel.normalMovementHTML")), constraints); //$NON-NLS-1$
 		constraints.insets = new Insets(5, 0, 0, 0);
 		constraints.gridx = 0;
 		constraints.gridy = 1;
@@ -419,7 +419,7 @@ public class PieceMakerPanel extends ChessPanel
 		constraints.insets = new Insets(5, 0, 5, 0);
 		constraints.gridx = 0;
 		constraints.gridy = 6;
-		movementPanel.add(GuiUtility.createJLabel(Messages.getString("PieceMakerPanel.knightLikeMovementHTML")), constraints); //$NON-NLS-1$
+		movementPanel.add(DesktopGuiUtility.createJLabel(Messages.getString("PieceMakerPanel.knightLikeMovementHTML")), constraints); //$NON-NLS-1$
 		constraints.gridx = 0;
 		constraints.gridy = 7;
 		movementPanel.add(knightMovementPanel, constraints);

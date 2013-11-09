@@ -1,9 +1,13 @@
 
 package utility;
 
+import gui.Driver;
+
 import java.io.IOException;
 import java.util.Map;
+
 import javax.swing.ImageIcon;
+
 import com.google.common.collect.Maps;
 
 public final class PieceIconUtility
@@ -15,7 +19,7 @@ public final class PieceIconUtility
 		{
 			try
 			{
-				pair = Pair.create(ImageUtility.getLightImage(pieceName), ImageUtility.getDarkImage(pieceName));
+				pair = Pair.create(Driver.getImageUtility().getLightImage(pieceName), Driver.getImageUtility().getDarkImage(pieceName));
 			}
 			catch (IOException e)
 			{

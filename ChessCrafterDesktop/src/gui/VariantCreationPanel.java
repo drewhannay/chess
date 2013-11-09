@@ -45,7 +45,7 @@ import models.Piece;
 import models.PieceType;
 import rules.Rules;
 import utility.FileUtility;
-import utility.GuiUtility;
+import utility.DesktopGuiUtility;
 import utility.PieceIconUtility;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -56,7 +56,8 @@ import dragNdrop.DropAdapter;
 import dragNdrop.DropEvent;
 import dragNdrop.GlassPane;
 import dragNdrop.MotionAdapter;
-lic class VariantCreationPanel extends ChessPanel implements PieceListChangedListener
+
+public class VariantCreationPanel extends ChessPanel implements PieceListChangedListener
 {
 	public VariantCreationPanel(String variantName)
 	{
@@ -73,7 +74,7 @@ lic class VariantCreationPanel extends ChessPanel implements PieceListChangedLis
 		{
 			// FIXME: we shouldn't be constructing an actual Game object here;
 			// we should be able to get everything we need from the GameBuilder
-			gameToEdit = GameBuilder.newGame(variantName);
+			gameToEdit = GameController.newGame(variantName);
 
 			mWhiteTeam = gameToEdit.getWhiteTeam();
 			mBlackTeam = gameToEdit.getBlackTeam();
@@ -170,7 +171,7 @@ lic class VariantCreationPanel extends ChessPanel implements PieceListChangedLis
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.insets = new Insets(10, 10, 10, 5);
 		constraints.anchor = GridBagConstraints.CENTER;
-		add(GuiUtility.createJLabel(Messages.getString("VariantCreationPanel.variantName")), constraints); //$NON-NLS-1$
+		add(DesktopGuiUtility.createJLabel(Messages.getString("VariantCreationPanel.variantName")), constraints); //$NON-NLS-1$
 
 		final JTextField variantNameField = new JTextField(25);
 		constraints.gridx = 2;
@@ -183,7 +184,7 @@ lic class VariantCreationPanel extends ChessPanel implements PieceListChangedLis
 
 		if (game == null)
 		{
-			GuiUtility.requestFocus(variantNameField);
+			DesktopGuiUtility.requestFocus(variantNameField);
 			temp[0] = new Board(8, 8, false);
 		}
 		else
@@ -280,8 +281,10 @@ lic class VariantCreationPanel extends ChessPanel implements PieceListChangedLis
 				if (mBlackRules.getObjectiveName() == null)
 					mBlackRules.setObjectivePiece(new ObjectivePieceType(ObjectivePieceTypes.CLASSIC));
 
-				mBuilder.writeFile(mWhiteRules, mBlackRules);
-
+				mBuilder.setBlackRules(mBlackRules);
+				mBuilder.setWhiteRules(mWhiteRules);
+				Driver.getFileUtility().writeGameBuilderFile(mBuilder);
+				
 				PreferenceUtility.clearTooltipListeners();
 				Driver.getInstance().revertToMainPanel();
 			}

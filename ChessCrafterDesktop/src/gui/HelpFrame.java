@@ -9,7 +9,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.WindowConstants;
 import utility.AppConstants;
-import utility.GuiUtility;
+import utility.DesktopGuiUtility;
 
 public class HelpFrame extends JFrame
 {
@@ -71,16 +71,16 @@ public class HelpFrame extends JFrame
 
 		mHelpPanel.add(helpTypesTabbedPane, BorderLayout.CENTER);
 
-		JLabel gamePlayHelpText = GuiUtility.createJLabel(Messages.getString("HelpFrame.gamePlayText")); //$NON-NLS-1$
+		JLabel gamePlayHelpText = DesktopGuiUtility.createJLabel(Messages.getString("HelpFrame.gamePlayText")); //$NON-NLS-1$
 		gamePlayHelpPanel.add(gamePlayHelpText);
 
-		JLabel generalHelpText = GuiUtility.createJLabel(Messages.getString("HelpFrame.generalHelpText")); //$NON-NLS-1$
+		JLabel generalHelpText = DesktopGuiUtility.createJLabel(Messages.getString("HelpFrame.generalHelpText")); //$NON-NLS-1$
 		generalHelpPanel.add(generalHelpText);
 
-		JLabel variantMakingHelpText = GuiUtility.createJLabel(Messages.getString("HelpFrame.variantHelpText")); //$NON-NLS-1$
+		JLabel variantMakingHelpText = DesktopGuiUtility.createJLabel(Messages.getString("HelpFrame.variantHelpText")); //$NON-NLS-1$
 		variantMakingHelpPanel.add(variantMakingHelpText);
 
-		JLabel pieceMakingHelpText = GuiUtility.createJLabel(Messages.getString("HelpFrame.pieceOptionsText")); //$NON-NLS-1$
+		JLabel pieceMakingHelpText = DesktopGuiUtility.createJLabel(Messages.getString("HelpFrame.pieceOptionsText")); //$NON-NLS-1$
 		pieceMakingHelpPanel.add(pieceMakingHelpText);
 
 		add(mHelpPanel);

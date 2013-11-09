@@ -20,7 +20,7 @@ import javax.swing.event.ListSelectionListener;
 import logic.GameBuilder;
 import logic.PieceBuilder;
 import utility.FileUtility;
-import utility.GuiUtility;
+import utility.DesktopGuiUtility;
 import com.google.common.collect.Lists;
 
 public class PiecePromotionPanel extends ChessPanel
@@ -321,7 +321,7 @@ public class PiecePromotionPanel extends ChessPanel
 
 		});
 		JButton cancelButton = new JButton(Messages.getString("PiecePromotionPanel.cancel")); //$NON-NLS-1$
-		GuiUtility.setupVariantCancelButton(cancelButton, this, mFrame);
+		DesktopGuiUtility.setupVariantCancelButton(cancelButton, this, mFrame);
 
 		JPanel optionsPanel = new JPanel();
 		optionsPanel.setOpaque(false);
@@ -346,7 +346,7 @@ public class PiecePromotionPanel extends ChessPanel
 		constraints.gridx = 0;
 		constraints.gridy = 0;
 		constraints.insets = new Insets(10, 0, 10, 0);
-		add(GuiUtility.createJLabel(Messages.getString("PiecePromotionPanel.whiteCantPromoteHTML")), constraints); //$NON-NLS-1$
+		add(DesktopGuiUtility.createJLabel(Messages.getString("PiecePromotionPanel.whiteCantPromoteHTML")), constraints); //$NON-NLS-1$
 		constraints.gridx = 0;
 		constraints.gridy = 1;
 		constraints.insets = new Insets(0, 10, 10, 0);
@@ -358,7 +358,7 @@ public class PiecePromotionPanel extends ChessPanel
 		constraints.gridx = 2;
 		constraints.gridy = 0;
 		constraints.insets = new Insets(10, 0, 10, 0);
-		add(GuiUtility.createJLabel(Messages.getString("PiecePromotionPanel.whiteCanPromoteHTML")), constraints); //$NON-NLS-1$
+		add(DesktopGuiUtility.createJLabel(Messages.getString("PiecePromotionPanel.whiteCanPromoteHTML")), constraints); //$NON-NLS-1$
 		constraints.gridx = 2;
 		constraints.gridy = 1;
 		constraints.insets = new Insets(0, 0, 10, 10);
@@ -381,7 +381,7 @@ public class PiecePromotionPanel extends ChessPanel
 		constraints.gridx = 0;
 		constraints.gridy = 2;
 		constraints.insets = new Insets(10, 0, 10, 0);
-		add(GuiUtility.createJLabel(Messages.getString("PiecePromotionPanel.blackCantPromoteHTML")), constraints); //$NON-NLS-1$
+		add(DesktopGuiUtility.createJLabel(Messages.getString("PiecePromotionPanel.blackCantPromoteHTML")), constraints); //$NON-NLS-1$
 		constraints.gridx = 0;
 		constraints.gridy = 3;
 		constraints.insets = new Insets(0, 10, 10, 0);
@@ -393,7 +393,7 @@ public class PiecePromotionPanel extends ChessPanel
 		constraints.gridx = 2;
 		constraints.gridy = 2;
 		constraints.insets = new Insets(10, 0, 10, 0);
-		add(GuiUtility.createJLabel(Messages.getString("PiecePromotionPanel.blackCanPromoteHTML")), constraints); //$NON-NLS-1$
+		add(DesktopGuiUtility.createJLabel(Messages.getString("PiecePromotionPanel.blackCanPromoteHTML")), constraints); //$NON-NLS-1$
 		constraints.gridx = 2;
 		constraints.gridy = 3;
 		constraints.insets = new Insets(0, 0, 10, 10);

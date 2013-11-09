@@ -34,7 +34,7 @@ import logic.Result;
 import timer.ChessTimer;
 import utility.AppConstants;
 import utility.FileUtility;
-import utility.GuiUtility;
+import utility.DesktopGuiUtility;
 import utility.Pair;
 import utility.PieceIconUtility;
 import utility.Preference;
@@ -299,7 +299,7 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 		{
 			if (!isJail)
 			{
-				JLabel label = GuiUtility.createJLabel("" + i); //$NON-NLS-1$
+				JLabel label = DesktopGuiUtility.createJLabel("" + i); //$NON-NLS-1$
 				label.setHorizontalAlignment(SwingConstants.CENTER);
 				gridPanel.add(label);
 			}
@@ -325,13 +325,13 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 			{
 				if (k != 0)
 				{
-					JLabel label = GuiUtility.createJLabel("" + (char) (k - 1 + 'A')); //$NON-NLS-1$
+					JLabel label = DesktopGuiUtility.createJLabel("" + (char) (k - 1 + 'A')); //$NON-NLS-1$
 					label.setHorizontalAlignment(SwingConstants.CENTER);
 					gridPanel.add(label);
 				}
 				else
 				{
-					gridPanel.add(GuiUtility.createJLabel("")); //$NON-NLS-1$
+					gridPanel.add(DesktopGuiUtility.createJLabel("")); //$NON-NLS-1$
 				}
 			}
 		}
@@ -458,11 +458,11 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 			twoBoardsGridBagOffset += 10;
 		}
 
-		mWhiteLabel = GuiUtility.createJLabel(Messages.getString("PlayGamePanel.whiteCaps")); //$NON-NLS-1$
+		mWhiteLabel = DesktopGuiUtility.createJLabel(Messages.getString("PlayGamePanel.whiteCaps")); //$NON-NLS-1$
 		mWhiteLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		mWhiteLabel.setBorder(BorderFactory.createTitledBorder("")); //$NON-NLS-1$
 
-		mBlackLabel = GuiUtility.createJLabel(Messages.getString("PlayGamePanel.blackCaps")); //$NON-NLS-1$
+		mBlackLabel = DesktopGuiUtility.createJLabel(Messages.getString("PlayGamePanel.blackCaps")); //$NON-NLS-1$
 		mBlackLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		mBlackLabel.setBorder(BorderFactory.createTitledBorder("")); //$NON-NLS-1$
 
@@ -479,7 +479,7 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 
 		mWhiteCapturesJail = new BoardController(jailBoardSize, jailBoardSize, false);
 		mWhiteCapturePanel = createGrid(mWhiteCapturesJail, true).first;
-		mWhiteCapturePanel.setBorder(GuiUtility.createBorder(Messages.getString("PlayGamePanel.capturedPieces"))); //$NON-NLS-1$
+		mWhiteCapturePanel.setBorder(DesktopGuiUtility.createBorder(Messages.getString("PlayGamePanel.capturedPieces"))); //$NON-NLS-1$
 		mWhiteCapturePanel.setLayout(new GridLayout(jailBoardSize, jailBoardSize));
 
 		mWhiteCapturePanel.setPreferredSize(new Dimension((mWhiteCapturesJail.getMaxCol() + 1) * 25,
@@ -487,7 +487,7 @@ public class PlayGamePanel extends ChessPanel implements PlayGameScreen
 
 		mBlackCapturesJail = new BoardController(jailBoardSize, jailBoardSize, false);
 		mBlackCapturePanel = createGrid(mBlackCapturesJail, true).first;
-		mBlackCapturePanel.setBorder(GuiUtility.createBorder(Messages.getString("PlayGamePanel.capturedPieces"))); //$NON-NLS-1$
+		mBlackCapturePanel.setBorder(DesktopGuiUtility.createBorder(Messages.getString("PlayGamePanel.capturedPieces"))); //$NON-NLS-1$
 		mBlackCapturePanel.setLayout(new GridLayout(jailBoardSize, jailBoardSize));
 
 		mBlackCapturePanel.setPreferredSize(new Dimension((mBlackCapturesJail.getMaxCol() + 1) * 25,
