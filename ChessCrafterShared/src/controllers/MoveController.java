@@ -1,4 +1,3 @@
-
 package controllers;
 
 import models.ChessCoordinates;
@@ -15,7 +14,7 @@ public class MoveController
 	{
 		ChessCoordinates origin = move.getOrigin();
 		ChessCoordinates destination = move.getDestination();
-		
+
 		Piece movingPiece = null;
 		Piece capturedPiece = null;
 		for (Team team : GameController.getGame().getTeams())
@@ -28,15 +27,15 @@ public class MoveController
 					capturedPiece = piece;
 			}
 		}
-		
-//		if (capturedPiece != null)
-//		{
-//			capturedPiece.setIsCaptured(true);
-//			capturedPiece.setCoordinates(null);
-//		}
-		
+
+		// if (capturedPiece != null)
+		// {
+		// capturedPiece.setIsCaptured(true);
+		// capturedPiece.setCoordinates(null);
+		// }
+
 		movingPiece.setCoordinates(destination);
-		
+
 		// prevEnpassantCol = board.getEnpassantCol();
 		//
 		// if (board.getGame().isClassicChess())
@@ -83,7 +82,8 @@ public class MoveController
 		// {
 		//			if (origin.getPiece().getName().equals(Messages.getString("pawn")) && getCaptured() == null && origin.getCol() != getDest().getCol()) //$NON-NLS-1$
 		// {
-		// setCaptured(board.getSquare(origin.getRow(), getDest().getCol()).getPiece());
+		// setCaptured(board.getSquare(origin.getRow(),
+		// getDest().getCol()).getPiece());
 		// }
 		// else
 		// {
@@ -120,7 +120,8 @@ public class MoveController
 		// rookOrigin = board.getSquare(origin.getRow(), 1); // a
 		// rookDest = board.getSquare(origin.getRow(), 4); // d
 		// rookDest.setPiece(rookOrigin.setPiece(null));
-		// rookDest.getPiece().setMoveCount(rookDest.getPiece().getMoveCount() + 1);
+		// rookDest.getPiece().setMoveCount(rookDest.getPiece().getMoveCount() +
+		// 1);
 		// castleQueenside = true;
 		// }
 		// // Short
@@ -129,7 +130,8 @@ public class MoveController
 		// rookOrigin = board.getSquare(origin.getRow(), 8); // h
 		// rookDest = board.getSquare(origin.getRow(), 6); // f
 		// rookDest.setPiece(rookOrigin.setPiece(null));
-		// rookDest.getPiece().setMoveCount(rookDest.getPiece().getMoveCount() + 1);
+		// rookDest.getPiece().setMoveCount(rookDest.getPiece().getMoveCount() +
+		// 1);
 		// castleKingside = true;
 		// }
 		// }
@@ -137,7 +139,8 @@ public class MoveController
 		//
 		// unique = board.isDestUniqueForClass(getDest(), getPiece());
 		//
-		// getDest().setPiece(origin.setPiece(null));// Otherwise, move the Piece.
+		// getDest().setPiece(origin.setPiece(null));// Otherwise, move the
+		// Piece.
 		// // Clear the list of legal destinations for the piece.
 		// ComputedPieceData p = getDest().getPiece();
 		// p.getLegalDests().clear();
@@ -145,11 +148,13 @@ public class MoveController
 		// p.setPinnedBy(null);
 		// p.setMoveCount(p.getMoveCount() + 1);
 		//
-		// List<SquareController> promoSquares = (board.isBlackTurn() ? board.getGame().getBlackRules() : board.getGame().getWhiteRules())
+		// List<SquareController> promoSquares = (board.isBlackTurn() ?
+		// board.getGame().getBlackRules() : board.getGame().getWhiteRules())
 		// .getPromotionSquares(p);
 		// if (promoSquares != null && promoSquares.contains(getDest()))
 		// {
-		// promotion = (board.isBlackTurn() ? board.getGame().getBlackRules() : board.getGame().getWhiteRules()).promote(p,
+		// promotion = (board.isBlackTurn() ? board.getGame().getBlackRules() :
+		// board.getGame().getWhiteRules()).promote(p,
 		// isVerified(), promo);
 		// }
 		//
@@ -166,8 +171,10 @@ public class MoveController
 		// }
 		// if (ChessTimer.isWordTimer(board.getGame().getWhiteTimer()))
 		// {
-		// oldWhiteDirection = board.getGame().getWhiteTimer().getClockDirection();
-		// oldBlackDirection = board.getGame().getBlackTimer().getClockDirection();
+		// oldWhiteDirection =
+		// board.getGame().getWhiteTimer().getClockDirection();
+		// oldBlackDirection =
+		// board.getGame().getBlackTimer().getClockDirection();
 		// }
 		//
 		// prev = board.getGame().getLastMove();
@@ -193,14 +200,13 @@ public class MoveController
 	/**
 	 * Undo the execution of this move
 	 * 
-	 * @throws Exception
-	 *             If the undo doesn't work properly
+	 * @throws Exception If the undo doesn't work properly
 	 */
 	public static boolean undo(Move move)
 	{
 		ChessCoordinates origin = move.getOrigin();
 		ChessCoordinates destination = move.getDestination();
-		
+
 		Piece unmovingPiece = null;
 		for (Team team : GameController.getGame().getTeams())
 		{
@@ -210,13 +216,12 @@ public class MoveController
 					unmovingPiece = piece;
 			}
 		}
-		
+
 		if (unmovingPiece != null)
 		{
 			unmovingPiece.setCoordinates(origin);
 		}
-		
-		
+
 		// board.setEnpassantCol(prevEnpassantCol);
 		//
 		// if (board.getGame().isClassicChess())
@@ -233,7 +238,8 @@ public class MoveController
 		// rookDest = board.getSquare(origin.getRow(), 4);// d
 		// rookOrigin.setPiece(rookDest.setPiece(null));
 		// rookOrigin.getPiece().setSquare(rookOrigin);
-		// rookOrigin.getPiece().setMoveCount(rookOrigin.getPiece().getMoveCount() - 1);
+		// rookOrigin.getPiece().setMoveCount(rookOrigin.getPiece().getMoveCount()
+		// - 1);
 		// }
 		// // Short
 		// else if (getDest().getCol() == 7)
@@ -242,19 +248,23 @@ public class MoveController
 		// rookDest = board.getSquare(origin.getRow(), 6);// f
 		// rookOrigin.setPiece(rookDest.setPiece(null));
 		// rookOrigin.getPiece().setSquare(rookOrigin);
-		// rookOrigin.getPiece().setMoveCount(rookOrigin.getPiece().getMoveCount() - 1);
+		// rookOrigin.getPiece().setMoveCount(rookOrigin.getPiece().getMoveCount()
+		// - 1);
 		// }
 		// }
 		// }
 		//
-		// List<SquareController> promoSquares = (board.isBlackTurn() ? board.getGame().getBlackRules() : board.getGame().getWhiteRules())
+		// List<SquareController> promoSquares = (board.isBlackTurn() ?
+		// board.getGame().getBlackRules() : board.getGame().getWhiteRules())
 		// .getPromotionSquares(getPiece());
 		// if (promoSquares != null && promoSquares.contains(getDest()))
 		// {
-		// (board.isBlackTurn() ? board.getGame().getBlackRules() : board.getGame().getWhiteRules()).undoPromote(promotion);
+		// (board.isBlackTurn() ? board.getGame().getBlackRules() :
+		// board.getGame().getWhiteRules()).undoPromote(promotion);
 		// }
 		// if (getDest().getPiece() != null)
-		// getDest().getPiece().setMoveCount(getDest().getPiece().getMoveCount() - 1);
+		// getDest().getPiece().setMoveCount(getDest().getPiece().getMoveCount()
+		// - 1);
 		//
 		// origin.setPiece(getDest().setPiece(null));
 		// getPiece().setSquare(origin);

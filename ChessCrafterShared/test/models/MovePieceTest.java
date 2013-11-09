@@ -87,6 +87,7 @@ public class MovePieceTest
 			fail("MoveController.execute() failed to update the moved piece's Coordinates properly.");
 	}
 
+	@SuppressWarnings("nls")
 	@Test
 	public final void testMovementUndoUpdatesPieceCoordinates()
 	{
@@ -133,6 +134,7 @@ public class MovePieceTest
 			fail("MoveController.undo() failed to update the moved piece's Coordinates properly.");
 	}
 
+	@SuppressWarnings("nls")
 	@Test
 	public final void testMoveExecuteThenUndoKeepsPieceCoordinates()
 	{

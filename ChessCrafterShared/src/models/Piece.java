@@ -1,4 +1,3 @@
-
 package models;
 
 import com.google.common.base.Objects;
@@ -38,7 +37,7 @@ public final class Piece
 	{
 		mCoordinates = coordinates;
 	}
-	
+
 	public boolean isCaptured()
 	{
 		return mIsCaptured;

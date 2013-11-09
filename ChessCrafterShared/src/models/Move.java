@@ -1,4 +1,3 @@
-
 package models;
 
 import logic.Result;
@@ -7,22 +6,22 @@ public final class Move
 {
 	public Move(ChessCoordinates origin, ChessCoordinates destination)
 	{
-		this.origin = origin;
-		this.destination = destination;
+		this.mOrigin = origin;
+		this.mDestination = destination;
 	}
-	
+
 	public ChessCoordinates getOrigin()
 	{
-		return origin;
+		return mOrigin;
 	}
-	
+
 	public ChessCoordinates getDestination()
 	{
-		return destination;
+		return mDestination;
 	}
-	
-	private ChessCoordinates origin;
-	private ChessCoordinates destination;
+
+	private final ChessCoordinates mOrigin;
+	private final ChessCoordinates mDestination;
 	private PieceType promotionType;
 
 	/**
