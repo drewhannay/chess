@@ -54,13 +54,14 @@ public final class Team
 
 		return Objects.equal(mRules, otherTeam.mRules)
 				&& Objects.equal(mPieces, otherTeam.mPieces)
-				&& Objects.equal(mTimer, otherTeam.mTimer);
+				&& Objects.equal(mTimer, otherTeam.mTimer)
+				&& Objects.equal(mCapturedPieces, otherTeam.mCapturedPieces);
 	}
 
 	@Override
 	public int hashCode()
 	{
-		return Objects.hashCode(mRules, mPieces, mTimer);
+		return Objects.hashCode(mRules, mPieces, mTimer, mCapturedPieces);
 	}
 
 	private final Rules mRules;
