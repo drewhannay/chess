@@ -1,11 +1,9 @@
 
 package logic;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.util.List;
 import java.util.Map;
+
 import models.Board;
 import models.ChessCoordinates;
 import models.Game;
@@ -14,8 +12,8 @@ import models.PieceType;
 import models.Team;
 import models.turnkeeper.ClassicTurnKeeper;
 import rules.Rules;
-import utility.FileUtility;
 import utility.GsonUtility;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -105,24 +103,6 @@ public class GameBuilder
 		System.out.println(json);
 	}
 
-	/**
-	 * Get the Set of names of Game types
-	 * 
-	 * @return A Set containing the names of Game types
-	 * @throws IOException
-	 */
-	public static String[] getVariantFileArray() throws IOException
-	{
-		String[] vars = FileUtility.getVariantsFileArray();
-		for (String s : vars)
-		{
-			if (s.equals(Messages.getString("classic"))) //$NON-NLS-1$
-				return vars;
-		}
-		buildClassic();
-		return getVariantFileArray();
-	}
-
 	public Board[] getBoards()
 	{
 		return mBoards;
@@ -131,32 +111,6 @@ public class GameBuilder
 	public void setBoards(Board[] boards)
 	{
 		mBoards = boards;
-	}
-
-	/**
-	 * Write the gameTypes array to disk
-	 * 
-	 * @param blackRules
-	 *            Rules for the black team
-	 * @param whiteRules
-	 *            Rules for the white team
-	 */
-	public void writeFile(Rules whiteRules, Rules blackRules)
-	{
-		setWhiteRules(whiteRules);
-		setBlackRules(blackRules);
-		try
-		{
-			FileOutputStream f_out = new FileOutputStream(FileUtility.getVariantsFile(mName));
-			ObjectOutputStream out = new ObjectOutputStream(f_out);
-			out.writeObject(this);
-			out.close();
-			f_out.close();
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
 	}
 
 	public void setName(String name)

@@ -6,7 +6,7 @@ public class Preference
 	public Preference()
 	{
 		mShouldHighlightMoves = true;
-		s_defaultSaveLocation = FileUtility.getDefaultCompletedLocation();
+		s_defaultSaveLocation = DEFAULT_LOCATION;
 		mSaveLocation = s_defaultSaveLocation;
 	}
 
@@ -54,6 +54,8 @@ public class Preference
 
 	private static String s_defaultSaveLocation;
 
+	private static final String DEFAULT_LOCATION = "default"; //$NON-NLS-1$
+	
 	private boolean mPathSet;
 	private boolean mHighlightSet;
 	private String mSaveLocation;

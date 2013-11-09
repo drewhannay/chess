@@ -280,7 +280,10 @@ lic class VariantCreationPanel extends ChessPanel implements PieceListChangedLis
 				if (mBlackRules.getObjectiveName() == null)
 					mBlackRules.setObjectivePiece(new ObjectivePieceType(ObjectivePieceTypes.CLASSIC));
 
-				mBuilder.writeFile(mWhiteRules, mBlackRules);
+				mBuilder.setBlackRules(mBlackRules);
+				mBuilder.setWhiteRules(mWhiteRules);
+				
+				FileUtility.writeGameBuilder(mBuilder);
 
 				PreferenceUtility.clearTooltipListeners();
 				Driver.getInstance().revertToMainPanel();
