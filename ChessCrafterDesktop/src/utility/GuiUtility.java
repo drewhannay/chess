@@ -21,7 +21,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
-import logic.Messages;
 import models.BidirectionalMovement;
 import models.Piece;
 import models.PieceMovements;
