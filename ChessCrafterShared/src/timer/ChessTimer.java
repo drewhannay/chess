@@ -163,6 +163,20 @@ public abstract class ChessTimer
 		}
 	}
 
+	@Override
+	public boolean equals(Object other)
+	{
+		// TODO: this shouldn't be defined here, and it's just plain incorrect
+		return true;
+	}
+
+	@Override
+	public int hashCode()
+	{
+		// TODO this shouldn't be defined here, and it's just plain incorrect
+		return super.hashCode();
+	}
+
 	protected long mCurrentTime;
 	protected long mClockLastUpdatedTime;
 	protected NumberFormat mNumberFormat;

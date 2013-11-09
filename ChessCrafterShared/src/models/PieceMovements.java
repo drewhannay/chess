@@ -3,7 +3,7 @@ package models;
 
 import java.util.Map;
 import java.util.Set;
-import com.google.common.collect.ImmutableMap;
+import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableSet;
 
 public final class PieceMovements
@@ -26,10 +26,9 @@ public final class PieceMovements
 			mDirection = direction;
 		}
 
-		@Override
-		public String toString()
+		public char getDirectionChar()
 		{
-			return String.valueOf(mDirection);
+			return mDirection;
 		}
 
 		private final char mDirection;
@@ -37,8 +36,8 @@ public final class PieceMovements
 
 	public PieceMovements(Map<MovementDirection, Integer> movements, Set<BidirectionalMovement> bidirectionalMovements)
 	{
-		mMovements = ImmutableMap.copyOf(movements);
-		mBidirectionalMovements = ImmutableSet.copyOf(bidirectionalMovements);
+		mMovements = movements;
+		mBidirectionalMovements = bidirectionalMovements;
 	}
 
 	public int getDistance(MovementDirection direction)
@@ -48,9 +47,21 @@ public final class PieceMovements
 
 	public ImmutableSet<BidirectionalMovement> getBidirectionalMovements()
 	{
-		return mBidirectionalMovements;
+		return ImmutableSet.copyOf(mBidirectionalMovements);
 	}
 
-	private final ImmutableMap<MovementDirection, Integer> mMovements;
-	private final ImmutableSet<BidirectionalMovement> mBidirectionalMovements;
+	@Override
+	public boolean equals(Object other)
+	{
+		if (!(other instanceof PieceMovements))
+			return false;
+
+		PieceMovements otherMovements = (PieceMovements) other;
+
+		return Objects.equal(mMovements, otherMovements.mMovements)
+				&& Objects.equal(mBidirectionalMovements, otherMovements.mBidirectionalMovements);
+	}
+
+	private final Map<MovementDirection, Integer> mMovements;
+	private final Set<BidirectionalMovement> mBidirectionalMovements;
 }

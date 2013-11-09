@@ -3,7 +3,8 @@ package models;
 
 import java.util.List;
 import rules.Rules;
-import timer.ChessTimer;
+import com.google.common.base.Objects;
+import com.google.common.collect.Lists;
 
 public final class Team
 {
@@ -11,16 +12,7 @@ public final class Team
 	{
 		mRules = rules;
 		mPieces = pieces;
-	}
-
-	public void setTimer(ChessTimer timer)
-	{
-		mTimer = timer;
-	}
-
-	public ChessTimer getTimer()
-	{
-		return mTimer;
+		mCapturedPieces = Lists.newArrayList();
 	}
 
 	public Rules getRules()
@@ -33,8 +25,34 @@ public final class Team
 		return mPieces;
 	}
 
+	/**
+	 * @return A List of Piece objects that belong to this Team but have been captured by another Team
+	 */
+	public List<Piece> getCapturedPieces()
+	{
+		return mCapturedPieces;
+	}
+
+	@Override
+	public boolean equals(Object other)
+	{
+		if (!(other instanceof Team))
+			return false;
+
+		Team otherTeam = (Team) other;
+
+		return Objects.equal(mRules, otherTeam.mRules)
+				&& Objects.equal(mPieces, otherTeam.mPieces)
+				&& Objects.equal(mCapturedPieces, otherTeam.mCapturedPieces);
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return Objects.hashCode(mRules, mPieces, mCapturedPieces);
+	}
+
 	private final Rules mRules;
 	private final List<Piece> mPieces;
-
-	private ChessTimer mTimer;
+	private final List<Piece> mCapturedPieces;
 }

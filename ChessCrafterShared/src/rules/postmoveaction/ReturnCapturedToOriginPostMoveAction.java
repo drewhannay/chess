@@ -52,4 +52,16 @@ public final class ReturnCapturedToOriginPostMoveAction extends PostMoveAction
 		// move.getCaptured().getSquare().setPiece(move.getRemoved());
 		// move.getDest().setPiece(restore);
 	}
+
+	@Override
+	public boolean equals(Object other)
+	{
+		return other instanceof ReturnCapturedToOriginPostMoveAction;
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return super.hashCode();
+	}
 }

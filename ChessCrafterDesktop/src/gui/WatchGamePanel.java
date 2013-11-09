@@ -1,5 +1,6 @@
 
 package gui;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -20,11 +21,14 @@ import javax.swing.SwingConstants;
 import logic.AlgebraicConverter;
 import logic.GameBuilder;
 import logic.Result;
+import models.Board;
+import models.Piece;
 import timer.ChessTimer;
 import timer.TimerTypes;
 import controllers.GameController;
 import controllers.MoveController;
-public class WatchGamePanel extends JPanel implements WatchGameScreen
+
+public class WatchGamePanel extends JPanel
 {
 	public WatchGamePanel(File saveFile)
 	{
@@ -80,8 +84,7 @@ public class WatchGamePanel extends JPanel implements WatchGameScreen
 		boardRefresh(game.getBoards());
 	}
 
-	@Override
-	public void boardRefresh(BoardController[] boards)
+	public void boardRefresh(Board[] boards)
 	{
 		refreshSquares(boards);
 
@@ -148,7 +151,7 @@ public class WatchGamePanel extends JPanel implements WatchGameScreen
 		mBlackLabel.setForeground(getGame().isBlackMove() ? Color.white : Color.black);
 	}
 
-	private static void refreshSquares(BoardController[] boards)
+	private static void refreshSquares(Board[] boards)
 	{
 		for (int k = 0; k < boards.length; k++)
 		{
@@ -160,7 +163,6 @@ public class WatchGamePanel extends JPanel implements WatchGameScreen
 		}
 	}
 
-	@Override
 	public void turn(boolean isBlackTurn)
 	{
 		if (mWhiteTimer != null && mBlackTimer != null)
@@ -170,7 +172,7 @@ public class WatchGamePanel extends JPanel implements WatchGameScreen
 		}
 	}
 
-	private JPanel createGrid(BoardController board, boolean isJail)
+	private JPanel createGrid(Board board, boolean isJail)
 	{
 		final JPanel gridPanel = new JPanel();
 
@@ -211,7 +213,6 @@ public class WatchGamePanel extends JPanel implements WatchGameScreen
 		return gridPanel;
 	}
 
-	@Override
 	public JMenu createMenuBar()
 	{
 		mOptionsMenu = new JMenu(Messages.getString("PlayGamePanel.menu")); //$NON-NLS-1$
@@ -233,7 +234,7 @@ public class WatchGamePanel extends JPanel implements WatchGameScreen
 		setLayout(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
 
-		final BoardController[] boards = getGame().getBoards();
+		final Board[] boards = getGame().getBoards();
 		setBorder(BorderFactory.createLoweredBevelBorder());
 
 		mInCheckLabel.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -354,7 +355,7 @@ public class WatchGamePanel extends JPanel implements WatchGameScreen
 			jailBoardSize = (int) Math.ceil(size);
 		}
 
-		mWhiteCapturesJail = new BoardController(jailBoardSize, jailBoardSize, false);
+		mWhiteCapturesJail = new Board(jailBoardSize, jailBoardSize, false);
 		mWhiteCapturePanel = createGrid(mWhiteCapturesJail, true);
 		mWhiteCapturePanel.setBorder(BorderFactory.createTitledBorder(Messages.getString("PlayGamePanel.capturedPieces"))); //$NON-NLS-1$
 		mWhiteCapturePanel.setLayout(new GridLayout(jailBoardSize, jailBoardSize));
@@ -362,7 +363,7 @@ public class WatchGamePanel extends JPanel implements WatchGameScreen
 		mWhiteCapturePanel.setPreferredSize(new Dimension((mWhiteCapturesJail.getMaxCol() + 1) * 25,
 				(mWhiteCapturesJail.getMaxRow() + 1) * 25));
 
-		mBlackCapturesJail = new BoardController(jailBoardSize, jailBoardSize, false);
+		mBlackCapturesJail = new Board(jailBoardSize, jailBoardSize, false);
 		mBlackCapturePanel = createGrid(mBlackCapturesJail, true);
 		mBlackCapturePanel.setBorder(BorderFactory.createTitledBorder(Messages.getString("PlayGamePanel.capturedPieces"))); //$NON-NLS-1$
 		mBlackCapturePanel.setLayout(new GridLayout(jailBoardSize, jailBoardSize));
@@ -457,19 +458,16 @@ public class WatchGamePanel extends JPanel implements WatchGameScreen
 		add(mWhiteLabel, constraints);
 	}
 
-	@Override
 	public void setNextMoveMustPlacePiece(boolean nextMoveMustPlacePiece)
 	{
 		mNextMoveMustPlacePiece = nextMoveMustPlacePiece;
 	}
 
-	@Override
 	public boolean getNextMoveMustPlacePiece()
 	{
 		return mNextMoveMustPlacePiece;
 	}
 
-	@Override
 	public void setPieceToPlace(PieceController piece)
 	{
 		mPieceToPlace = piece;
@@ -485,7 +483,6 @@ public class WatchGamePanel extends JPanel implements WatchGameScreen
 		return mGame;
 	}
 
-	@Override
 	public void resetTimers()
 	{
 		mWhiteTimer.reset();
@@ -503,19 +500,17 @@ public class WatchGamePanel extends JPanel implements WatchGameScreen
 	protected static JLabel mBlackLabel;
 	protected static JPanel mWhiteCapturePanel;
 	protected static JPanel mBlackCapturePanel;
-	protected static BoardController mWhiteCapturesJail;
-	protected static BoardController mBlackCapturesJail;
-	protected static PieceController mPieceToPlace;
+	protected static Board mWhiteCapturesJail;
+	protected static Board mBlackCapturesJail;
+	protected static Piece mPieceToPlace;
 	protected static JMenu mOptionsMenu;
 	protected static MoveController[] mHistory;
 	protected static int mHistoryIndex;
 
-	@Override
 	public void endOfGame(Result result)
 	{
 	}
 
-	@Override
 	public void saveGame()
 	{
 	}

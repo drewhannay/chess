@@ -18,4 +18,16 @@ public final class StationaryObjectiveLegalDestinationCropper extends LegalDesti
 		// return;
 		// }
 	}
+
+	@Override
+	public boolean equals(Object other)
+	{
+		return other instanceof StationaryObjectiveLegalDestinationCropper;
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return super.hashCode();
+	}
 }

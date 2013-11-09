@@ -8,12 +8,11 @@ import models.ChessCoordinates;
 import models.Move;
 import models.Piece;
 import models.PieceType;
-import rules.endconditions.CaptureObjectiveEndCondition;
 import rules.endconditions.EndCondition;
 import rules.legaldestinationcropper.LegalDestinationCropper;
 import rules.postmoveaction.PostMoveAction;
-import rules.promotionmethods.ClassicPromotionMethod;
 import rules.promotionmethods.PromotionMethod;
+import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -22,17 +21,18 @@ public final class Rules
 	public static final int DESTINATION_SAME_BOARD = 0;
 	public static final int DESTINATION_OPPOSITE_BOARD = 1;
 
-	public Rules()
+	public Rules(PieceType objectivePieceType, List<ChessCoordinates> promotionCoordinateList, int destinationBoardType,
+			List<LegalDestinationCropper> legalDestinationCroppers, Map<PieceType, Set<PieceType>> promotionMap,
+			PromotionMethod promotionMethod, List<PostMoveAction> postMoveActions, EndCondition endCondition)
 	{
-		// TODO: assign all this stuff properly
-		mObjectivePieceType = null;
-		mPromotionCoordinateList = Lists.newArrayList();
-		mDestinationBoardType = DESTINATION_SAME_BOARD;
-		mLegalDestinationCroppers = Lists.newArrayList();
-		mPromotionMap = Maps.newHashMap();
-		mPromotionMethod = new ClassicPromotionMethod();
-		mPostMoveActions = Lists.newArrayList();
-		mEndCondition = new CaptureObjectiveEndCondition();
+		mObjectivePieceType = objectivePieceType;
+		mPromotionCoordinateList = Lists.newArrayList(promotionCoordinateList);
+		mDestinationBoardType = destinationBoardType;
+		mLegalDestinationCroppers = Lists.newArrayList(legalDestinationCroppers);
+		mPromotionMap = Maps.newHashMap(promotionMap);
+		mPromotionMethod = promotionMethod;
+		mPostMoveActions = Lists.newArrayList(postMoveActions);
+		mEndCondition = endCondition;
 	}
 
 	/**
@@ -100,6 +100,30 @@ public final class Rules
 	public void undoCheckEndCondition()
 	{
 		mEndCondition.undo();
+	}
+
+	@Override
+	public boolean equals(Object other)
+	{
+		if (!(other instanceof Rules))
+			return false;
+
+		Rules otherRules = (Rules) other;
+
+		return Objects.equal(mObjectivePieceType, otherRules.mObjectivePieceType)
+				&& Objects.equal(mPromotionCoordinateList, otherRules.mPromotionCoordinateList)
+				&& Objects.equal(mDestinationBoardType, otherRules.mDestinationBoardType)
+				&& Objects.equal(mLegalDestinationCroppers, otherRules.mLegalDestinationCroppers)
+				&& Objects.equal(mPostMoveActions, otherRules.mPostMoveActions)
+				&& Objects.equal(mPromotionMethod, otherRules.mPromotionMethod)
+				&& Objects.equal(mEndCondition, otherRules.mEndCondition);
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return Objects.hashCode(mObjectivePieceType, mPromotionCoordinateList, mDestinationBoardType,
+				mLegalDestinationCroppers, mPostMoveActions, mPromotionMap, mPromotionMethod, mEndCondition);
 	}
 
 	private final PieceType mObjectivePieceType;

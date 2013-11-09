@@ -37,12 +37,11 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.WindowConstants;
 import timer.ChessTimer;
 import utility.AppConstants;
-import utility.ChessCrafter;
 import utility.FileUtility;
 import utility.GuiUtility;
 import controllers.GameController;
 
-public final class Driver extends JFrame implements ChessCrafter
+public final class Driver extends JFrame
 {
 	public static void main(String[] args)
 	{
@@ -64,21 +63,16 @@ public final class Driver extends JFrame implements ChessCrafter
 	public static Driver getInstance()
 	{
 		if (sInstance == null)
-		{
 			sInstance = new Driver();
-			GuiUtility.setChessCrafter(sInstance);
-		}
 
 		return sInstance;
 	}
 
-	@Override
 	public void setFileMenuVisibility(boolean isVisible)
 	{
 		mFileMenu.setVisible(isVisible);
 	}
 
-	@Override
 	public void setOptionsMenuVisibility(boolean isVisible)
 	{
 		mOptionsMenu.setVisible(isVisible);
@@ -112,7 +106,6 @@ public final class Driver extends JFrame implements ChessCrafter
 		centerFrame();
 	}
 
-	@Override
 	public void revertToMainPanel()
 	{
 		remove(mOtherPanel);
@@ -774,15 +767,13 @@ public final class Driver extends JFrame implements ChessCrafter
 		driver.setLocation((int) ((s_screenWidth / 2) - (width / 2)), (int) ((s_screenHeight / 2) - (height / 2)));
 	}
 
-	@Override
-	public PlayGameScreen getPlayGameScreen(GameController game)
+	public PlayGamePanel getPlayGameScreen(GameController game)
 	{
 		if (m_playGameScreen == null)
 			m_playGameScreen = new PlayGamePanel(game);
 		return m_playGameScreen;
 	}
 
-	@Override
 	public WatchGamePanel getWatchGameScreen(File acnFile)
 	{
 		if (m_watchGameScreen == null)
@@ -790,7 +781,6 @@ public final class Driver extends JFrame implements ChessCrafter
 		return m_watchGameScreen;
 	}
 
-	@Override
 	public void setPanel(Object newPanel)
 	{
 		setPanel((JPanel) newPanel);

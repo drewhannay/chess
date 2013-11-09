@@ -1,5 +1,6 @@
 
 package utility;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Image;
@@ -20,25 +21,13 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
-import logic.Messages;
 import models.BidirectionalMovement;
 import models.Piece;
 import models.PieceMovements;
 import models.PieceMovements.MovementDirection;
+
 public final class GuiUtility
 {
-	public static void setChessCrafter(ChessCrafter chessCrafter)
-	{
-		s_chessCrafter = chessCrafter;
-	}
-
-	public static ChessCrafter getChessCrafter()
-	{
-		if (s_chessCrafter == null)
-			System.out.println("ChessCrafter object is null. Please use setChessCrafter() before calling get()."); //$NON-NLS-1$
-		return s_chessCrafter;
-	}
-
 	public static void requestFocus(final JComponent component)
 	{
 		SwingUtilities.invokeLater(new Runnable()
@@ -211,6 +200,4 @@ public final class GuiUtility
 		else
 			return direction.toString();
 	}
-
-	private static ChessCrafter s_chessCrafter;
 }

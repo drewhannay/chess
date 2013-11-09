@@ -222,7 +222,7 @@ public class NewGamePanel extends ChessPanel
 					{
 						Result result = isBlackTimer ? Result.WHITE_WIN : Result.BLACK_WIN;
 						result.setGuiText(Messages.getString("NewGamePanel.timeHasRunOut") + result.winText() + Messages.getString("NewGamePanel.newLine")); //$NON-NLS-1$ //$NON-NLS-2$
-						GuiUtility.getChessCrafter().getPlayGameScreen(gameToPlay).endOfGame(result);
+						// GuiUtility.getChessCrafter().getPlayGameScreen(gameToPlay).endOfGame(result);
 					}
 				};
 				ChessTimer blackTimer = ChessTimer.createTimer(timerType, timeElapsedCallback, increment, startTime, true);

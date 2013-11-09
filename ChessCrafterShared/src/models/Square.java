@@ -7,6 +7,11 @@ public final class Square
 {
 	public Square(int row, int column)
 	{
+		this(row, column, true);
+	}
+
+	public Square(int row, int column, boolean isHabitable)
+	{
 		mRow = row;
 		mColumn = column;
 		mIsHabitable = true;
@@ -27,11 +32,6 @@ public final class Square
 		return mIsHabitable;
 	}
 
-	public void setIsHabitable(boolean isHabitable)
-	{
-		mIsHabitable = isHabitable;
-	}
-
 	@Override
 	public String toString()
 	{
@@ -45,13 +45,15 @@ public final class Square
 			return false;
 
 		Square otherSquare = (Square) other;
-		return otherSquare.mRow == mRow && otherSquare.mColumn == mColumn;
+		return Objects.equal(mRow, otherSquare.mRow)
+				&& Objects.equal(mColumn, otherSquare.mColumn)
+				&& Objects.equal(mIsHabitable, otherSquare.mIsHabitable);
 	}
 
 	@Override
 	public int hashCode()
 	{
-		return Objects.hashCode(mRow, mColumn);
+		return Objects.hashCode(mRow, mColumn, mIsHabitable);
 	}
 
 	/**
@@ -76,6 +78,5 @@ public final class Square
 
 	private final int mRow;
 	private final int mColumn;
-
-	private boolean mIsHabitable;
+	private final boolean mIsHabitable;
 }

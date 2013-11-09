@@ -24,4 +24,16 @@ public final class CaptureAllOfTypeEndCondition extends EndCondition
 	public void undo()
 	{
 	}
+
+	@Override
+	public boolean equals(Object other)
+	{
+		return other instanceof CaptureAllOfTypeEndCondition;
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return super.hashCode();
+	}
 }

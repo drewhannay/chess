@@ -426,9 +426,6 @@ public class ComputedPieceData
 		Set<ChessCoordinates> guardedCoordinates = Sets.newHashSet();
 		Set<ChessCoordinates> legalDestinations = Sets.newHashSet();
 
-		if (pawn.isCaptured())
-			return;
-
 		direction = mTeamIndex == 1 ? -1 : 1;
 
 		// take one step forward
@@ -553,9 +550,6 @@ public class ComputedPieceData
 
 	public void adjustPinsLegalDests(Piece piece, Piece pieceToProtect)
 	{
-		if (piece.isCaptured())
-			return;
-
 		Rules rules = GameController.getGame().getTeams()[mTeamIndex].getRules();
 		if (rules.getObjectivePieceType().equals(piece.getPieceType()))
 		{
@@ -684,9 +678,6 @@ public class ComputedPieceData
 	{
 		// the objective piece can't save itself
 		if (GameController.getGame().getTeams()[mTeamIndex].getRules().getObjectivePieceType().equals(piece.getPieceType()))
-			return;
-
-		if (piece.isCaptured())
 			return;
 
 		Set<ChessCoordinates> oldLegalDestinations = mLegalDestinationMap.get(piece.getId());
@@ -938,9 +929,6 @@ public class ComputedPieceData
 
 	public boolean isGuarding(Piece piece, ChessCoordinates coordinates)
 	{
-		if (piece.isCaptured())
-			return false;
-
 		Set<ChessCoordinates> guardedSquares = mGuardCoordinatesMap.get(piece.getId());
 		return guardedSquares.contains(coordinates);
 	}
@@ -949,9 +937,6 @@ public class ComputedPieceData
 	{
 		if (piece.getPieceType().getName().equals(PieceType.PAWN_NAME))
 		{
-			if (piece.isCaptured())
-				return false;
-
 			if (threatenedCoordinates.column == piece.getCoordinates().column)
 				return false;
 			else
@@ -964,9 +949,6 @@ public class ComputedPieceData
 
 	public boolean isLegalDestination(Piece piece, ChessCoordinates destination)
 	{
-		if (piece.isCaptured())
-			return false;
-
 		Set<ChessCoordinates> legalDestinations = mLegalDestinationMap.get(piece.getId());
 		return legalDestinations.contains(destination);
 	}
