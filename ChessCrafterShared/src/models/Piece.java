@@ -1,3 +1,4 @@
+
 package models;
 
 import com.google.common.base.Objects;
@@ -33,30 +34,28 @@ public final class Piece
 		return mCoordinates;
 	}
 
+	public int getMoveCount()
+	{
+		return mMoveCount;
+	}
+	
 	public void setCoordinates(ChessCoordinates coordinates)
 	{
 		mCoordinates = coordinates;
 	}
 
-	public boolean isCaptured()
-	{
-		return mIsCaptured;
-	}
-
-	public void setIsCaptured(boolean isCaptured)
-	{
-		mIsCaptured = isCaptured;
-	}
-
-	public int getMoveCount()
-	{
-		return mMoveCount;
-	}
-
 	@Override
 	public boolean equals(Object other)
 	{
-		return other instanceof Piece && ((Piece) other).mId == mId;
+		if (!(other instanceof Piece))
+			return false;
+
+		Piece otherPiece = (Piece) other;
+
+		// TODO: we shouldn't include mutable state in an equals method, but we still need to somehow check the other fields of the piece...
+		return Objects.equal(mId, otherPiece.mId)
+				&& Objects.equal(mPieceType, otherPiece.mPieceType)
+				&& Objects.equal(mOriginalCoordinates, otherPiece.mOriginalCoordinates);
 	}
 
 	@Override
@@ -69,7 +68,6 @@ public final class Piece
 	private final PieceType mPieceType;
 	private final ChessCoordinates mOriginalCoordinates;
 
-	private boolean mIsCaptured;
 	private int mMoveCount;
 	private ChessCoordinates mCoordinates;
 }

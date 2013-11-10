@@ -17,22 +17,40 @@ public class MoveController
 
 		Piece movingPiece = null;
 		Piece capturedPiece = null;
+		
+		Team movingTeam = null;
+		Team capturedTeam = null;
+		
 		for (Team team : GameController.getGame().getTeams())
 		{
 			for (Piece piece : team.getPieces())
 			{
-				if (piece.isCaptured())
+				if (team.getCapturedPieces().contains(piece))
 					continue;
 				if (piece.getCoordinates().equals(origin))
+				{
 					movingPiece = piece;
+					movingTeam = team;
+					break;
+				}
 				else if (piece.getCoordinates().equals(destination))
+				{
 					capturedPiece = piece;
+					capturedTeam = team;
+					break;
+				}
 			}
 		}
+		
+		if (movingPiece == null)
+			return false;
+		
+		if (movingTeam.equals(capturedTeam))
+			return false;
 
 		if (capturedPiece != null)
 		{
-			capturedPiece.setIsCaptured(true);
+			capturedTeam.markPieceAsCaptured(capturedPiece);
 		}
 
 		movingPiece.setCoordinates(destination);
@@ -209,26 +227,41 @@ public class MoveController
 		ChessCoordinates destination = move.getDestination();
 
 		Piece unmovingPiece = null;
-		Piece uncapturedPiece = null;
+		Team movingTeam = null;
 		for (Team team : GameController.getGame().getTeams())
 		{
 			for (Piece piece : team.getPieces())
 			{
 				if (piece.getCoordinates().equals(destination))
 				{
-					if (piece.isCaptured())
-						uncapturedPiece = piece;
-					else
 						unmovingPiece = piece;
+						movingTeam = team;
 				}
 			}
 		}
 
 		unmovingPiece.setCoordinates(origin);
 		
-		if (uncapturedPiece != null)
-			uncapturedPiece.setIsCaptured(false);
+		Piece uncapturedPiece = null;
+		Team uncapturedTeam = null;
 		
+		for (Team team : GameController.getGame().getTeams())
+		{
+			if (team.equals(movingTeam))
+				continue;
+			
+			for (Piece piece : team.getCapturedPieces())
+			{
+				if (piece.getCoordinates().equals(destination))
+				{
+					uncapturedPiece = piece;
+					uncapturedTeam = team;
+				}
+			}
+		}
+		
+		if (uncapturedPiece != null)
+			uncapturedTeam.markPieceAsNotCaptured(uncapturedPiece);
 
 		// board.setEnpassantCol(prevEnpassantCol);
 		//
