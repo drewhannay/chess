@@ -38,6 +38,11 @@ public final class Piece
 	{
 		return mMoveCount;
 	}
+	
+	public void setCoordinates(ChessCoordinates coordinates)
+	{
+		mCoordinates = coordinates;
+	}
 
 	@Override
 	public boolean equals(Object other)

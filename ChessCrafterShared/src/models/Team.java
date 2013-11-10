@@ -26,11 +26,26 @@ public final class Team
 	}
 
 	/**
-	 * @return A List of Piece objects that belong to this Team but have been captured by another Team
+	 * @return A List of Piece objects that belong to this Team but have been
+	 *         captured by another Team
 	 */
 	public List<Piece> getCapturedPieces()
 	{
 		return mCapturedPieces;
+	}
+
+	public void markPieceAsCaptured(Piece piece)
+	{
+		mPieces.remove(piece);
+		if (!mCapturedPieces.contains(piece))
+			mCapturedPieces.add(piece);
+	}
+
+	public void markPieceAsNotCaptured(Piece piece)
+	{
+		mCapturedPieces.remove(piece);
+		if (!mPieces.contains(piece))
+			mPieces.add(piece);
 	}
 
 	@Override
@@ -41,8 +56,7 @@ public final class Team
 
 		Team otherTeam = (Team) other;
 
-		return Objects.equal(mRules, otherTeam.mRules)
-				&& Objects.equal(mPieces, otherTeam.mPieces)
+		return Objects.equal(mRules, otherTeam.mRules) && Objects.equal(mPieces, otherTeam.mPieces)
 				&& Objects.equal(mCapturedPieces, otherTeam.mCapturedPieces);
 	}
 
