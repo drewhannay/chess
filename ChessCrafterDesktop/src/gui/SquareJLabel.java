@@ -1,25 +1,27 @@
-
 package gui;
 
 import java.awt.Color;
-import java.awt.Image;
 import java.io.IOException;
+
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import utility.GuiUtility;
-import utility.PieceIconUtility;
+
 import models.ChessCoordinates;
 import models.Piece;
+import utility.GuiUtility;
+import utility.PieceIconUtility;
 
 public class SquareJLabel extends JLabel
 {
 	public static final Color HIGHLIGHT_COLOR = new Color(20, 129, 191);
 
-	public SquareJLabel(ChessCoordinates coords, Piece piece, boolean isHabitable){
-		mChessCoordinates = coords;
-		mPiece = piece;
+	public SquareJLabel(ChessCoordinates coordinates, boolean isHabitable, int imageScale)
+	{
+		mChessCoordinates = coordinates;
+		mPiece = null;
 		mIsHabitable = isHabitable;
+		mImageScale = imageScale;
 	}
 
 	public Color getColor()
@@ -30,8 +32,7 @@ public class SquareJLabel extends JLabel
 	/**
 	 * Sets the color of a square temporarily
 	 * 
-	 * @param c
-	 *            the color to set the background
+	 * @param c the color to set the background
 	 */
 	public void setColor(Color c)
 	{
@@ -41,8 +42,7 @@ public class SquareJLabel extends JLabel
 	/**
 	 * Sets the background Color of the Square permanently
 	 * 
-	 * @param c
-	 *            New Color
+	 * @param c New Color
 	 */
 	public void setBackgroundColor(Color c)
 	{
@@ -59,7 +59,7 @@ public class SquareJLabel extends JLabel
 		if (mPiece.getPieceType() != null)
 			setIcon(null);
 	}
-	
+
 	/**
 	 * Changes out the current piece located on this SquareJLabel
 	 * 
@@ -68,15 +68,14 @@ public class SquareJLabel extends JLabel
 	public void changePiece(Piece piece)
 	{
 		mPiece = piece;
+		refresh();
 	}
 
 	/**
 	 * Refresh the GUI's view of this Square with the current accurate
 	 * information.
-	 * 
-	 * @param isJail provided to distinguish if this SquareJLabel is a part of a jail
 	 */
-	public void refresh(boolean isJail)
+	public void refresh()
 	{
 		setOpaque(true);
 		if (!mIsHabitable)
@@ -87,22 +86,23 @@ public class SquareJLabel extends JLabel
 
 		if (mPiece != null)
 		{
-			//TODO figure out how to determine the correct piece image
-			//ImageIcon pieceIcon = PieceIconUtility.getPieceIcon(mPiece.getPieceType().getName(), mPiece.isBlack());
-			ImageIcon pieceIcon = PieceIconUtility.getPieceIcon(mPiece.getPieceType().getName(), false);
+			// TODO figure out how to determine the correct piece image
+			// ImageIcon pieceIcon =
+			// PieceIconUtility.getPieceIcon(mPiece.getPieceType().getName(),
+			// mPiece.isBlack());
+			ImageIcon pieceIcon = PieceIconUtility.getPieceIcon(mPiece.getPieceType().getName(), mImageScale, false);
 			if (pieceIcon == null)
 				setText(mPiece.getPieceType().getName());
-			else{
-				if(isJail)
-					setIcon(new ImageIcon(pieceIcon.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH)));
-				else
-					setIcon(pieceIcon);
+			else
+			{
+				setIcon(pieceIcon);
 			}
 
-			/*if (PreferenceUtility.getPreference().showPieceToolTips())
-				setToolTipText(mPiece.getPieceType().getToolTipText());
-			else
-				setToolTipText(null);*/
+			/*
+			 * if (PreferenceUtility.getPreference().showPieceToolTips())
+			 * setToolTipText(mPiece.getPieceType().getToolTipText()); else
+			 * setToolTipText(null);
+			 */
 		}
 		else
 		{
@@ -115,6 +115,11 @@ public class SquareJLabel extends JLabel
 
 		// then reset the color too
 		resetColor();
+	}
+	
+	public Piece getPiece()
+	{
+		return mPiece;
 	}
 
 	/**
@@ -130,7 +135,8 @@ public class SquareJLabel extends JLabel
 		}
 		setBorder(null);
 		// Otherwise make our normal light/dark pattern.
-		if ((mChessCoordinates.row % 2 != 0 && mChessCoordinates.column % 2 != 0) || (mChessCoordinates.row % 2 == 0 && mChessCoordinates.column % 2 == 0))
+		if ((mChessCoordinates.row % 2 != 0 && mChessCoordinates.column % 2 != 0)
+				|| (mChessCoordinates.row % 2 == 0 && mChessCoordinates.column % 2 == 0))
 		{
 			setBackground(Color.LIGHT_GRAY);
 			setForeground(Color.getHSBColor(30, 70, 70));
@@ -141,8 +147,8 @@ public class SquareJLabel extends JLabel
 			setForeground(Color.LIGHT_GRAY);
 		}
 	}
-	
-	public void onSetIsThreatSquare()
+
+	public void setThreatSquare()
 	{
 		setColor(Color.RED);
 	}
@@ -165,8 +171,9 @@ public class SquareJLabel extends JLabel
 	private static ImageIcon s_uninhabitableIcon;
 
 	private Color mBackgroundColor;
-	
+
 	private ChessCoordinates mChessCoordinates;
 	private Piece mPiece;
 	private boolean mIsHabitable;
+	private int mImageScale;
 }
