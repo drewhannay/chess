@@ -21,6 +21,8 @@ public class MoveController
 		{
 			for (Piece piece : team.getPieces())
 			{
+				if (piece.isCaptured())
+					continue;
 				if (piece.getCoordinates().equals(origin))
 					movingPiece = piece;
 				else if (piece.getCoordinates().equals(destination))
@@ -28,11 +30,10 @@ public class MoveController
 			}
 		}
 
-		// if (capturedPiece != null)
-		// {
-		// capturedPiece.setIsCaptured(true);
-		// capturedPiece.setCoordinates(null);
-		// }
+		if (capturedPiece != null)
+		{
+			capturedPiece.setIsCaptured(true);
+		}
 
 		movingPiece.setCoordinates(destination);
 
@@ -208,19 +209,26 @@ public class MoveController
 		ChessCoordinates destination = move.getDestination();
 
 		Piece unmovingPiece = null;
+		Piece uncapturedPiece = null;
 		for (Team team : GameController.getGame().getTeams())
 		{
 			for (Piece piece : team.getPieces())
 			{
 				if (piece.getCoordinates().equals(destination))
-					unmovingPiece = piece;
+				{
+					if (piece.isCaptured())
+						uncapturedPiece = piece;
+					else
+						unmovingPiece = piece;
+				}
 			}
 		}
 
-		if (unmovingPiece != null)
-		{
-			unmovingPiece.setCoordinates(origin);
-		}
+		unmovingPiece.setCoordinates(origin);
+		
+		if (uncapturedPiece != null)
+			uncapturedPiece.setIsCaptured(false);
+		
 
 		// board.setEnpassantCol(prevEnpassantCol);
 		//
