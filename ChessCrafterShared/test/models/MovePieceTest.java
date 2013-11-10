@@ -18,15 +18,15 @@ public class MovePieceTest
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception
 	{
-		mWhitePieceList = Lists.newArrayList();
-		mBlackPieceList = Lists.newArrayList();
+		List<Piece> whitePieceList = Lists.newArrayList();
+		List<Piece> blackPieceList = Lists.newArrayList();
 		mOriginPiece = new Piece(0, PieceBuilder.getPawnPieceType(), mOrigin);
 		mDestinationPiece = new Piece(1, PieceBuilder.getPawnPieceType(), mDestination);
-		mWhitePieceList.add(mOriginPiece);
-		mBlackPieceList.add(mDestinationPiece);
-		mTeams = new Team[] { new Team(null, mWhitePieceList), new Team(null, mBlackPieceList) };
-		mBoard = new Board(8, 8, false);
-		GameController.setGame(new Game("Classic", new Board[] { mBoard }, mTeams, mTurnKeeper)); //$NON-NLS-1$
+		whitePieceList.add(mOriginPiece);
+		blackPieceList.add(mDestinationPiece);
+		Team[] teams = new Team[] { new Team(null, whitePieceList), new Team(null, blackPieceList) };
+		Board board = new Board(8, 8, false);
+		GameController.setGame(new Game("Classic", new Board[] { board }, teams, mTurnKeeper)); //$NON-NLS-1$
 		mMove = new Move(mOrigin, mDestination);
 	}
 
@@ -170,11 +170,7 @@ public class MovePieceTest
 	private final static ChessCoordinates mOrigin = new ChessCoordinates(1, 1, 0);
 	private final static ChessCoordinates mDestination = new ChessCoordinates(2, 2, 0);
 	private final static ChessCoordinates mStorageCoordinates = new ChessCoordinates(3, 3, 0);
-	private static List<Piece> mWhitePieceList;
-	private static List<Piece> mBlackPieceList;
 	private static Piece mOriginPiece;
 	private static Piece mDestinationPiece;
-	private static Board mBoard;
-	private static Team[] mTeams;
 	private static Move mMove;
 }
