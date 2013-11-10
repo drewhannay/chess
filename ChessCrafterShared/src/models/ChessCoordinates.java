@@ -1,4 +1,3 @@
-
 package models;
 
 import com.google.common.base.Objects;
@@ -20,8 +19,7 @@ public final class ChessCoordinates
 
 		ChessCoordinates otherCoordinates = (ChessCoordinates) other;
 
-		return Objects.equal(row, otherCoordinates.row)
-				&& Objects.equal(column, otherCoordinates.column)
+		return Objects.equal(row, otherCoordinates.row) && Objects.equal(column, otherCoordinates.column)
 				&& Objects.equal(boardIndex, otherCoordinates.boardIndex);
 	}
 
@@ -34,4 +32,11 @@ public final class ChessCoordinates
 	public final int row;
 	public final int column;
 	public final int boardIndex;
+
+	@Override
+	public String toString()
+	{
+		return row + " " + column + " " + boardIndex; //$NON-NLS-1$//$NON-NLS-2$
+	}
+
 }
