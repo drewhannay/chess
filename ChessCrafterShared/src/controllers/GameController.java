@@ -44,9 +44,8 @@ public final class GameController
 		for (int teamIndex = 0; teamIndex < sGame.getTeams().length; teamIndex++)
 		{
 			Team team = sGame.getTeams()[teamIndex];
-			ComputedPieceData computedPieceData = new ComputedPieceData(teamIndex);
 			for (Piece piece : team.getPieces())
-				computedPieceData.computeLegalDestinations(piece, team.getRules().getDestinationBoardIndex(piece.getCoordinates().boardIndex));
+				ComputedPieceData.getLegalDestinations(piece);
 		}
 
 		// TODO: deal with all this stuff
@@ -131,9 +130,7 @@ public final class GameController
 
 		for (Piece piece : pieces)
 		{
-			// TODO: use real ComputedPieceData
-			ComputedPieceData d = null;
-			if (d.isGuarding(piece, coordinates))
+			if (ComputedPieceData.isGuarding(piece, coordinates))
 				guards.add(piece);
 		}
 
@@ -148,13 +145,10 @@ public final class GameController
 	public int getLegalMoveCount()
 	{
 		List<Piece> movingTeam = sGame.getTeams()[sGame.getTurnKeeper().getCurrentTeamIndex()].getPieces();
-
-		// TODO: use real ComputedPieceData
-		ComputedPieceData d = null;
-
+		
 		int count = 0;
 		for (Piece piece : movingTeam)
-			count += d.getLegalDests(piece).size();
+			count += ComputedPieceData.getLegalDestinations(piece).size();
 
 		return count;
 	}
@@ -167,8 +161,7 @@ public final class GameController
 		for (Piece piece : pieces)
 		{
 			// TODO: use real ComputedPieceData
-			ComputedPieceData d = null;
-			if (d.canLegallyAttack(piece, threatened))
+			if (ComputedPieceData.canLegallyAttack(piece, threatened, attackerTeamIndex))
 				attackers.add(piece);
 		}
 
