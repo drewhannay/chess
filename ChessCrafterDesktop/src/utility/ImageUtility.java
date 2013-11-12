@@ -26,16 +26,16 @@ public final class ImageUtility
 		ImageIO.write(image, "PNG", new File(FileUtility.getImagePath(DARK_PREFIX + pieceName + PNG))); //$NON-NLS-1$
 	}
 
-	public static ImageIcon getLightImage(String pieceName) throws IOException
+	public static ImageIcon getLightImage(String pieceName, int imageScale) throws IOException
 	{
 		boolean isBuiltInFile = PIECE_NAMES.contains(pieceName);
-		return GuiUtility.createImageIcon(48, 48, (isBuiltInFile ? "/" : "") + LIGHT_PREFIX + pieceName + PNG, isBuiltInFile); //$NON-NLS-1$ //$NON-NLS-2$
+		return GuiUtility.createImageIcon(imageScale, imageScale, (isBuiltInFile ? "/" : "") + LIGHT_PREFIX + pieceName + PNG, isBuiltInFile); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
-	public static ImageIcon getDarkImage(String pieceName) throws IOException
+	public static ImageIcon getDarkImage(String pieceName, int imageScale) throws IOException
 	{
 		boolean isBuiltInFile = PIECE_NAMES.contains(pieceName);
-		return GuiUtility.createImageIcon(48, 48, (isBuiltInFile ? "/" : "") + DARK_PREFIX + pieceName + PNG, isBuiltInFile); //$NON-NLS-1$ //$NON-NLS-2$
+		return GuiUtility.createImageIcon(imageScale, imageScale, (isBuiltInFile ? "/" : "") + DARK_PREFIX + pieceName + PNG, isBuiltInFile); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	private static final String LIGHT_PREFIX = "l_"; //$NON-NLS-1$

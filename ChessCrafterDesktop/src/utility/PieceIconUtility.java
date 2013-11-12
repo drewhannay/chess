@@ -8,14 +8,14 @@ import com.google.common.collect.Maps;
 
 public final class PieceIconUtility
 {
-	public static ImageIcon getPieceIcon(String pieceName, boolean isDarkPiece)
+	public static ImageIcon getPieceIcon(String pieceName, int imageScale, boolean isDarkPiece)
 	{
 		Pair<ImageIcon, ImageIcon> pair = IMAGE_MAP.get(pieceName);
 		if (pair == null)
 		{
 			try
 			{
-				pair = Pair.create(ImageUtility.getLightImage(pieceName), ImageUtility.getDarkImage(pieceName));
+				pair = Pair.create(ImageUtility.getLightImage(pieceName, imageScale), ImageUtility.getDarkImage(pieceName, imageScale));
 			}
 			catch (IOException e)
 			{
