@@ -1,11 +1,11 @@
 
 package models;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 import java.util.Iterator;
 import java.util.List;
 import logic.PieceBuilder;
-import models.turnkeeper.TurnKeeper;
+import models.turnkeeper.ClassicTurnKeeper;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -37,7 +37,7 @@ public class MovePieceTest
 
 		Team[] teams = new Team[] { mMyTeam, mOtherTeam };
 		Board board = new Board(8, 8, false);
-		GameController.setGame(new Game("Classic", new Board[] { board }, teams, mTurnKeeper)); //$NON-NLS-1$
+		GameController.setGame(new Game("Classic", new Board[] { board }, teams, new ClassicTurnKeeper()));
 	}
 
 	@AfterClass
@@ -67,7 +67,6 @@ public class MovePieceTest
 			iterator.next().setCoordinates(mStorageCoordinates);
 	}
 
-	@SuppressWarnings("nls")
 	@Test
 	public final void testMovementUpdatesPieceCoordinates()
 	{
@@ -80,7 +79,6 @@ public class MovePieceTest
 			fail("MoveController.execute() failed to update the moved piece's Coordinates properly.");
 	}
 
-	@SuppressWarnings("nls")
 	@Test
 	public final void testMovementUndoUpdatesPieceCoordinates()
 	{
@@ -94,7 +92,6 @@ public class MovePieceTest
 			fail("MoveController.undo() failed to update the unmoved piece's Coordinates properly.");
 	}
 
-	@SuppressWarnings("nls")
 	@Test
 	public final void testMoveExecuteThenUndoKeepsPieceCoordinates()
 	{
@@ -113,7 +110,6 @@ public class MovePieceTest
 			fail("MoveController.execute() followed by .undo() failed to restore the Piece's Coordinates.");
 	}
 
-	@SuppressWarnings("nls")
 	@Test
 	public final void testCapture()
 	{
@@ -131,7 +127,6 @@ public class MovePieceTest
 			fail("Captured piece still in uncaptured list");
 	}
 
-	@SuppressWarnings("nls")
 	@Test
 	public final void testUndoCapture()
 	{
@@ -152,7 +147,6 @@ public class MovePieceTest
 			fail("Uncaptured piece failed to restore Coordinates properly");
 	}
 
-	@SuppressWarnings("nls")
 	@Test
 	public final void testExecuteThenUndoCapture()
 	{
@@ -173,7 +167,6 @@ public class MovePieceTest
 			fail("Captured piece failed to restore Coordinates properly");
 	}
 
-	@SuppressWarnings("nls")
 	@Test
 	public final void testCaptureSameTeam()
 	{
@@ -191,7 +184,6 @@ public class MovePieceTest
 			fail("Same-team capture changed capturee's Coordinates");
 	}
 
-	@SuppressWarnings("nls")
 	@Test
 	public final void testMovingThroughPieceWithNonLeaper()
 	{
@@ -298,23 +290,6 @@ public class MovePieceTest
 		if (!MoveController.execute(new Move(mOrigin, new ChessCoordinates(2, 3, 0))))
 			fail("MoveController.execute() returned false for a knight jumping over a barrier.");
 	}
-
-	private final static TurnKeeper mTurnKeeper = new TurnKeeper()
-	{
-		@Override
-		public int undo()
-		{
-			return index-- % 2;
-		}
-
-		@Override
-		public int getTeamIndexForNextTurn()
-		{
-			return index++ % 2;
-		}
-
-		int index = 0;
-	};
 
 	private final static ChessCoordinates mOrigin = new ChessCoordinates(1, 1, 0);
 	private final static ChessCoordinates mStorageCoordinates = new ChessCoordinates(8, 8, 0);
