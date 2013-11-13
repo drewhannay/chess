@@ -19,6 +19,7 @@ public final class GameController
 	public static void setGame(Game game)
 	{
 		sGame = game;
+		computeLegalDestinations();
 	}
 
 	private static void verifyGameIsSet()
@@ -32,7 +33,7 @@ public final class GameController
 
 		return sGame;
 	}
-
+	
 	public static void computeLegalDestinations()
 	{
 		// Piece[] threats = null;
@@ -41,12 +42,12 @@ public final class GameController
 		// List<Piece> movingTeam = null;
 		// List<Piece> otherTeam = null;
 
-		for (int teamIndex = 0; teamIndex < sGame.getTeams().length; teamIndex++)
-		{
-			Team team = sGame.getTeams()[teamIndex];
-			ComputedPieceData computedPieceData = new ComputedPieceData(teamIndex);
+			Team team = sGame.getTeams()[sGame.getTurnKeeper().getCurrentTeamIndex()];
+			mData = new ComputedPieceData(sGame.getTurnKeeper().getCurrentTeamIndex());
 			for (Piece piece : team.getPieces())
-				computedPieceData.computeLegalDestinations(piece, team.getRules().getDestinationBoardIndex(piece.getCoordinates().boardIndex));
+			{
+				int boardIndex = team.getRules() == null ? piece.getCoordinates().boardIndex : team.getRules().getDestinationBoardIndex(piece.getCoordinates().boardIndex);
+				mData.computeLegalDestinations(piece, boardIndex);
 		}
 
 		// TODO: deal with all this stuff
@@ -132,8 +133,7 @@ public final class GameController
 		for (Piece piece : pieces)
 		{
 			// TODO: use real ComputedPieceData
-			ComputedPieceData d = null;
-			if (d.isGuarding(piece, coordinates))
+			if (mData.isGuarding(piece, coordinates))
 				guards.add(piece);
 		}
 
@@ -149,12 +149,9 @@ public final class GameController
 	{
 		List<Piece> movingTeam = sGame.getTeams()[sGame.getTurnKeeper().getCurrentTeamIndex()].getPieces();
 
-		// TODO: use real ComputedPieceData
-		ComputedPieceData d = null;
-
 		int count = 0;
 		for (Piece piece : movingTeam)
-			count += d.getLegalDests(piece).size();
+			count += mData.getLegalDests(piece).size();
 
 		return count;
 	}
@@ -166,9 +163,7 @@ public final class GameController
 
 		for (Piece piece : pieces)
 		{
-			// TODO: use real ComputedPieceData
-			ComputedPieceData d = null;
-			if (d.canLegallyAttack(piece, threatened))
+			if (mData.canLegallyAttack(piece, threatened))
 				attackers.add(piece);
 		}
 
@@ -183,6 +178,11 @@ public final class GameController
 	public static boolean isThreatened(ChessCoordinates coordinates, int teamIndex)
 	{
 		return getThreats(coordinates, teamIndex) != null;
+	}
+	
+	public static boolean isLegalMove(Piece piece, ChessCoordinates destination)
+	{
+		return mData.getLegalDests(piece).contains(destination);
 	}
 
 	/**
@@ -206,7 +206,10 @@ public final class GameController
 		// TODO: probably need to stop somehow when we hit a valid end condition
 		for (Team team : sGame.getTeams())
 			team.getRules().checkEndCondition();
+		
+		computeLegalDestinations();
 	}
 
 	private static Game sGame;
+	private static ComputedPieceData mData;
 }

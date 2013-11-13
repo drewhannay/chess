@@ -12,7 +12,7 @@ public final class Team
 	{
 		mRules = rules;
 		mPieces = pieces;
-		mCapturedPieces = Lists.newArrayList();
+		mCapturedPieces = Lists.newCopyOnWriteArrayList();
 	}
 
 	public Rules getRules()
@@ -36,16 +36,22 @@ public final class Team
 
 	public void markPieceAsCaptured(Piece piece)
 	{
+		synchronized(this)
+		{
 		mPieces.remove(piece);
 		if (!mCapturedPieces.contains(piece))
 			mCapturedPieces.add(piece);
+		}
 	}
 
 	public void markPieceAsNotCaptured(Piece piece)
 	{
+		synchronized(this)
+		{
 		mCapturedPieces.remove(piece);
 		if (!mPieces.contains(piece))
 			mPieces.add(piece);
+		}
 	}
 
 	@Override

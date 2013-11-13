@@ -2,6 +2,7 @@
 package models;
 
 import static org.junit.Assert.*;
+import java.util.Iterator;
 import java.util.List;
 import logic.PieceBuilder;
 import models.turnkeeper.TurnKeeper;
@@ -19,13 +20,17 @@ public class MovePieceTest
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception
 	{
+		mPieceIndex = 0;
 
-		mOriginPiece = new Piece(0, PieceBuilder.getPawnPieceType(), mOrigin);
-		mSameTeamDestinationPiece = new Piece(1, PieceBuilder.getPawnPieceType(), mSameTeamDestination);
-		mOppositeTeamDestinationPiece = new Piece(1, PieceBuilder.getPawnPieceType(), mOppositeTeamDestination);
+		mMovingPiece = new Piece(mPieceIndex++, PieceBuilder.getRookPieceType(), mOrigin);
+		mSameTeamPiece = new Piece(mPieceIndex++, PieceBuilder.getRookPieceType(), mStorageCoordinates);
+		mOppositeTeamPiece = new Piece(mPieceIndex++, PieceBuilder.getRookPieceType(), mStorageCoordinates);
 
-		final List<Piece> whitePieceList = Lists.newArrayList(mOriginPiece, mSameTeamDestinationPiece);
-		final List<Piece> blackPieceList = Lists.newArrayList(mOppositeTeamDestinationPiece);
+		final List<Piece> whitePieceList = Lists.newCopyOnWriteArrayList();
+		whitePieceList.add(mMovingPiece);
+		whitePieceList.add(mSameTeamPiece);
+		final List<Piece> blackPieceList = Lists.newCopyOnWriteArrayList();
+		blackPieceList.add(mOppositeTeamPiece);
 
 		mMyTeam = new Team(null, whitePieceList);
 		mOtherTeam = new Team(null, blackPieceList);
@@ -33,7 +38,6 @@ public class MovePieceTest
 		Team[] teams = new Team[] { mMyTeam, mOtherTeam };
 		Board board = new Board(8, 8, false);
 		GameController.setGame(new Game("Classic", new Board[] { board }, teams, mTurnKeeper)); //$NON-NLS-1$
-		mMove = new Move(mOrigin, mOppositeTeamDestination);
 	}
 
 	@AfterClass
@@ -44,31 +48,35 @@ public class MovePieceTest
 	@Before
 	public void setUp() throws Exception
 	{
-		mOriginPiece.setCoordinates(mOrigin);
-		mOppositeTeamDestinationPiece.setCoordinates(mOppositeTeamDestination);
-		mOtherTeam.markPieceAsNotCaptured(mOppositeTeamDestinationPiece);
-		mSameTeamDestinationPiece.setCoordinates(mSameTeamDestination);
-		mMyTeam.markPieceAsNotCaptured(mSameTeamDestinationPiece);
+		mMovingPiece.setCoordinates(mOrigin);
 	}
 
 	@After
 	public void tearDown() throws Exception
 	{
+		for (Iterator<Piece> iterator = mMyTeam.getCapturedPieces().iterator(); iterator.hasNext();)
+			mMyTeam.markPieceAsNotCaptured(iterator.next());
+
+		for (Iterator<Piece> iterator = mMyTeam.getPieces().iterator(); iterator.hasNext();)
+			iterator.next().setCoordinates(mStorageCoordinates);
+
+		for (Iterator<Piece> iterator = mOtherTeam.getCapturedPieces().iterator(); iterator.hasNext();)
+			mOtherTeam.markPieceAsNotCaptured(iterator.next());
+
+		for (Iterator<Piece> iterator = mOtherTeam.getPieces().iterator(); iterator.hasNext();)
+			iterator.next().setCoordinates(mStorageCoordinates);
 	}
 
 	@SuppressWarnings("nls")
 	@Test
 	public final void testMovementUpdatesPieceCoordinates()
 	{
-		// place the destination piece out of the way for this test
-		mOppositeTeamDestinationPiece.setCoordinates(mStorageCoordinates);
+		ChessCoordinates destination = new ChessCoordinates(1, 2, 0);
 
-		if (!mOriginPiece.getCoordinates().equals(mOrigin))
-			fail("Test failed to set up piece properly.");
+		if (!MoveController.execute(new Move(mOrigin, destination)))
+			fail("MoveController.execute() returned false for a valid move");
 
-		MoveController.execute(mMove);
-
-		if (!mOriginPiece.getCoordinates().equals(mOppositeTeamDestination))
+		if (!mMovingPiece.getCoordinates().equals(destination))
 			fail("MoveController.execute() failed to update the moved piece's Coordinates properly.");
 	}
 
@@ -76,30 +84,32 @@ public class MovePieceTest
 	@Test
 	public final void testMovementUndoUpdatesPieceCoordinates()
 	{
-		mOppositeTeamDestinationPiece.setCoordinates(mStorageCoordinates);
-		mOriginPiece.setCoordinates(mOppositeTeamDestination);
+		ChessCoordinates destination = new ChessCoordinates(1, 2, 0);
+		mMovingPiece.setCoordinates(destination);
 
-		if (!mOriginPiece.getCoordinates().equals(mOppositeTeamDestination))
-			fail("Test failed to set up piece properly.");
+		if (!MoveController.undo(new Move(mOrigin, destination)))
+			fail("MoveController.undo() returned false for a valid move");
 
-		MoveController.undo(mMove);
-
-		if (!mOriginPiece.getCoordinates().equals(mOrigin))
-			fail("MoveController.undo() failed to update the moved piece's Coordinates properly.");
+		if (!mMovingPiece.getCoordinates().equals(mOrigin))
+			fail("MoveController.undo() failed to update the unmoved piece's Coordinates properly.");
 	}
 
 	@SuppressWarnings("nls")
 	@Test
 	public final void testMoveExecuteThenUndoKeepsPieceCoordinates()
 	{
-		mOppositeTeamDestinationPiece.setCoordinates(mStorageCoordinates);
-		if (!mOriginPiece.getCoordinates().equals(mOrigin))
+		mOppositeTeamPiece.setCoordinates(mStorageCoordinates);
+		if (!mMovingPiece.getCoordinates().equals(mOrigin))
 			fail("Test failed to set up piece properly.");
 
-		MoveController.execute(mMove);
-		MoveController.undo(mMove);
+		Move move = new Move(mOrigin, new ChessCoordinates(1, 6, 0));
 
-		if (!mOriginPiece.getCoordinates().equals(mOrigin))
+		if (!MoveController.execute(move))
+			fail("MoveController.execute() returned false for a valid move");
+		if (!MoveController.undo(move))
+			fail("MoveController.undo() returned false for a valid move");
+
+		if (!mMovingPiece.getCoordinates().equals(mOrigin))
 			fail("MoveController.execute() followed by .undo() failed to restore the Piece's Coordinates.");
 	}
 
@@ -107,18 +117,17 @@ public class MovePieceTest
 	@Test
 	public final void testCapture()
 	{
-		if (!mOriginPiece.getCoordinates().equals(mOrigin))
-			fail("Test failed to set up capturing piece properly.");
-		if (!mOppositeTeamDestinationPiece.getCoordinates().equals(mOppositeTeamDestination))
-			fail("Test failed to set up captured piece properly.");
+		ChessCoordinates destinationWithOppositePiece = new ChessCoordinates(1, 3, 0);
+		mOppositeTeamPiece.setCoordinates(destinationWithOppositePiece);
 
-		MoveController.execute(mMove);
+		if (!MoveController.execute(new Move(mOrigin, destinationWithOppositePiece)))
+			fail("MoveController.execute() returned false for a valid move");
 
-		if (!mOriginPiece.getCoordinates().equals(mOppositeTeamDestination))
+		if (!mMovingPiece.getCoordinates().equals(destinationWithOppositePiece))
 			fail("Capturing piece failed to change Coordinates");
-		if (!mOtherTeam.getCapturedPieces().contains(mOppositeTeamDestinationPiece))
+		if (!mOtherTeam.getCapturedPieces().contains(mOppositeTeamPiece))
 			fail("Captured piece not in captured list");
-		if (mOtherTeam.getPieces().contains(mOppositeTeamDestinationPiece))
+		if (mOtherTeam.getPieces().contains(mOppositeTeamPiece))
 			fail("Captured piece still in uncaptured list");
 	}
 
@@ -126,23 +135,20 @@ public class MovePieceTest
 	@Test
 	public final void testUndoCapture()
 	{
-		mOtherTeam.markPieceAsCaptured(mOppositeTeamDestinationPiece);
-		mOriginPiece.setCoordinates(mOppositeTeamDestination);
+		ChessCoordinates destinationWithOppositePiece = new ChessCoordinates(1, 3, 0);
 
-		if (!mOriginPiece.getCoordinates().equals(mOppositeTeamDestination))
-			fail("Test failed to set up uncapturing piece coordinates properly.");
-		if (!mOppositeTeamDestinationPiece.getCoordinates().equals(mOppositeTeamDestination))
-			fail("Test failed to set up uncaptured piece coordinates properly.");
-		if (!mOtherTeam.getCapturedPieces().contains(mOppositeTeamDestinationPiece))
-			fail("Test failed to set up uncaptured piece captured state properly.");
+		mOtherTeam.markPieceAsCaptured(mOppositeTeamPiece);
+		mMovingPiece.setCoordinates(destinationWithOppositePiece);
+		mOppositeTeamPiece.setCoordinates(destinationWithOppositePiece);
 
-		MoveController.undo(mMove);
+		if (!MoveController.undo(new Move(mOrigin, destinationWithOppositePiece)))
+			fail("MoveController.undo() returned false for a valid move");
 
-		if (!mOriginPiece.getCoordinates().equals(mOrigin))
+		if (!mMovingPiece.getCoordinates().equals(mOrigin))
 			fail("Uncapturing piece failed to change Coordinates");
-		if (mOtherTeam.getCapturedPieces().contains(mOppositeTeamDestinationPiece))
+		if (mOtherTeam.getCapturedPieces().contains(mOppositeTeamPiece))
 			fail("Uncaptured piece still marked as captured");
-		if (!mOppositeTeamDestinationPiece.getCoordinates().equals(mOppositeTeamDestination))
+		if (!mOppositeTeamPiece.getCoordinates().equals(destinationWithOppositePiece))
 			fail("Uncaptured piece failed to restore Coordinates properly");
 	}
 
@@ -150,54 +156,171 @@ public class MovePieceTest
 	@Test
 	public final void testExecuteThenUndoCapture()
 	{
-		MoveController.execute(mMove);
-		MoveController.undo(mMove);
+		ChessCoordinates destination = new ChessCoordinates(1, 5, 0);
+		mOppositeTeamPiece.setCoordinates(destination);
+		Move move = new Move(mOrigin, destination);
 
-		if (!mOriginPiece.getCoordinates().equals(mOrigin))
+		if (!MoveController.execute(move))
+			fail("MoveController.execute() returned false for a valid move");
+		if (!MoveController.undo(move))
+			fail("MoveController.undo() returned false for a valid move");
+
+		if (!mMovingPiece.getCoordinates().equals(mOrigin))
 			fail("Capturing piece failed to restore Coordinates properly");
-		if (mOtherTeam.getCapturedPieces().contains(mOppositeTeamDestinationPiece))
+		if (mOtherTeam.getCapturedPieces().contains(mOppositeTeamPiece))
 			fail("Uncaptured piece still marked as captured");
-		if (!mOppositeTeamDestinationPiece.getCoordinates().equals(mOppositeTeamDestination))
+		if (!mOppositeTeamPiece.getCoordinates().equals(destination))
 			fail("Captured piece failed to restore Coordinates properly");
 	}
 
-	// @SuppressWarnings("nls")
-	// @Test
-	// public final void testCaptureSameTeam()
-	// {
-	// MoveController.execute(new Move(mOrigin, mSameTeamDestination));
-	//
-	// if (!mOriginPiece.getCoordinates().equals(mOrigin))
-	// fail("Same-team capture changed capturer's Coordinates");
-	// if (mMyTeam.getCapturedPieces().contains(mSameTeamDestinationPiece))
-	// fail("Same-team capture changed capturee's isCaptured() state");
-	// if (!mSameTeamDestinationPiece.getCoordinates().equals(mSameTeamDestination))
-	// fail("Same-team capture changed capturee's Coordinates");
-	// }
+	@SuppressWarnings("nls")
+	@Test
+	public final void testCaptureSameTeam()
+	{
+		ChessCoordinates destination = new ChessCoordinates(1, 5, 0);
+		mSameTeamPiece.setCoordinates(destination);
+
+		if (MoveController.execute(new Move(mOrigin, destination)))
+			fail("MoveController.execute() returned true for a same-team capture");
+
+		if (!mMovingPiece.getCoordinates().equals(mOrigin))
+			fail("Same-team capture changed capturer's Coordinates");
+		if (mMyTeam.getCapturedPieces().contains(mSameTeamPiece))
+			fail("Same-team capture changed capturee's isCaptured() state");
+		if (!mSameTeamPiece.getCoordinates().equals(destination))
+			fail("Same-team capture changed capturee's Coordinates");
+	}
+
+	@SuppressWarnings("nls")
+	@Test
+	public final void testMovingThroughPieceWithNonLeaper()
+	{
+		mOppositeTeamPiece.setCoordinates(new ChessCoordinates(1, 2, 0));
+		mSameTeamPiece.setCoordinates(new ChessCoordinates(2, 1, 0));
+
+		GameController.computeLegalDestinations();
+		
+		if (MoveController.execute(new Move(mOrigin, new ChessCoordinates(1, 3, 0))))
+			fail("MoveController.execute() returned true for a rook moving through an opposite-team piece");
+
+		if (MoveController.execute(new Move(mOrigin, new ChessCoordinates(3, 1, 0))))
+			fail("MoveController.execute() returned true for a rook moving through a same-team piece");
+
+		mMovingPiece.setCoordinates(mStorageCoordinates);
+		ChessCoordinates obstacleCoordinates = new ChessCoordinates(2, 2, 0);
+
+		// place a bishop on the origin to test moving through pieces
+		Piece bishop = new Piece(mPieceIndex++, PieceBuilder.getBishopPieceType(), mOrigin);
+		mMyTeam.getPieces().add(bishop);
+		mSameTeamPiece.setCoordinates(obstacleCoordinates);
+
+		GameController.computeLegalDestinations();
+		
+		ChessCoordinates bishopDestination = new ChessCoordinates(3, 3, 0);
+		Move attemptedBishopJump = new Move(mOrigin, bishopDestination);
+		if (MoveController.execute(attemptedBishopJump))
+			fail("MoveController.execute() returned true for a bishop moving through a same-team piece");
+
+		mSameTeamPiece.setCoordinates(mStorageCoordinates);
+		mOppositeTeamPiece.setCoordinates(obstacleCoordinates);
+
+		GameController.computeLegalDestinations();
+		
+		if (MoveController.execute(attemptedBishopJump))
+			fail("MoveController.execute() returned true for a bishop moving through an opposite-team piece");
+
+		bishop.setCoordinates(mStorageCoordinates);
+
+		// place a bishop on the origin to test moving through pieces
+		Piece queen = new Piece(mPieceIndex++, PieceBuilder.getQueenPieceType(), mOrigin);
+		mMyTeam.getPieces().add(queen);
+		mSameTeamPiece.setCoordinates(obstacleCoordinates);
+		
+		GameController.computeLegalDestinations();
+
+		Move attemptedQueenJump = new Move(mOrigin, new ChessCoordinates(3, 3, 0));
+		if (MoveController.execute(attemptedQueenJump))
+			fail("MoveController.execute() returned true for a queen moving diagonally through a same-team piece");
+
+		mSameTeamPiece.setCoordinates(mStorageCoordinates);
+		mOppositeTeamPiece.setCoordinates(obstacleCoordinates);
+
+		GameController.computeLegalDestinations();
+		
+		if (MoveController.execute(attemptedQueenJump))
+			fail("MoveController.execute() returned true for a queen moving diagonally through an opposite-team piece");
+
+		obstacleCoordinates = new ChessCoordinates(1, 2, 0);
+
+		attemptedQueenJump = new Move(mOrigin, new ChessCoordinates(1, 5, 0));
+		mOppositeTeamPiece.setCoordinates(mStorageCoordinates);
+		mSameTeamPiece.setCoordinates(obstacleCoordinates);
+
+		GameController.computeLegalDestinations();
+		
+		if (MoveController.execute(attemptedQueenJump))
+			fail("MoveController.execute() returned true for a queen moving horizontally through a same-team piece");
+
+		mOppositeTeamPiece.setCoordinates(obstacleCoordinates);
+		mSameTeamPiece.setCoordinates(mStorageCoordinates);
+
+		GameController.computeLegalDestinations();
+		
+		if (MoveController.execute(attemptedQueenJump))
+			fail("MoveController.execute() returned true for a queen moving horizontally through an opposite-team piece");
+
+		obstacleCoordinates = new ChessCoordinates(2, 1, 0);
+		attemptedQueenJump = new Move(mOrigin, new ChessCoordinates(5, 1, 0));
+		mSameTeamPiece.setCoordinates(obstacleCoordinates);
+
+		GameController.computeLegalDestinations();
+		
+		if (MoveController.execute(attemptedQueenJump))
+			fail("MoveController.execute() returned true for a queen moving vertically through a same-team piece");
+
+		mSameTeamPiece.setCoordinates(mStorageCoordinates);
+		mOppositeTeamPiece.setCoordinates(obstacleCoordinates);
+
+		GameController.computeLegalDestinations();
+		
+		if (MoveController.execute(attemptedQueenJump))
+			fail("MoveController.execute() returned true for a queen moving vertically through an opposite-team piece");
+
+		queen.setCoordinates(mStorageCoordinates);
+
+		mMyTeam.getPieces().add(new Piece(mPieceIndex++, PieceBuilder.getKnightPieceType(), mOrigin));
+		mOppositeTeamPiece.setCoordinates(new ChessCoordinates(1, 2, 0));
+		mOtherTeam.getPieces().add(new Piece(mPieceIndex++, PieceBuilder.getRookPieceType(), new ChessCoordinates(2, 1, 0)));
+		mOtherTeam.getPieces().add(new Piece(mPieceIndex++, PieceBuilder.getRookPieceType(), new ChessCoordinates(2, 2, 0)));
+
+		GameController.computeLegalDestinations();
+		
+		if (!MoveController.execute(new Move(mOrigin, new ChessCoordinates(2, 3, 0))))
+			fail("MoveController.execute() returned false for a knight jumping over a barrier.");
+	}
 
 	private final static TurnKeeper mTurnKeeper = new TurnKeeper()
 	{
 		@Override
 		public int undo()
 		{
-			return 0;
+			return index-- %2;
 		}
 
 		@Override
 		public int getTeamIndexForNextTurn()
 		{
-			return 0;
+			return index++ %2;
 		}
+		int index = 0;
 	};
 
 	private final static ChessCoordinates mOrigin = new ChessCoordinates(1, 1, 0);
-	private final static ChessCoordinates mOppositeTeamDestination = new ChessCoordinates(2, 2, 0);
-	private final static ChessCoordinates mSameTeamDestination = new ChessCoordinates(3, 3, 0);
-	private final static ChessCoordinates mStorageCoordinates = new ChessCoordinates(4, 4, 0);
-	private static Piece mOriginPiece;
-	private static Piece mSameTeamDestinationPiece;
-	private static Piece mOppositeTeamDestinationPiece;
-	private static Move mMove;
+	private final static ChessCoordinates mStorageCoordinates = new ChessCoordinates(8, 8, 0);
+	private static Piece mMovingPiece;
+	private static Piece mSameTeamPiece;
+	private static Piece mOppositeTeamPiece;
 	private static Team mMyTeam;
 	private static Team mOtherTeam;
+	private static int mPieceIndex;
 }

@@ -23,8 +23,8 @@ public class ComputedPieceData
 	public ComputedPieceData(int teamIndex)
 	{
 		mTeamIndex = teamIndex;
-		mGuardCoordinatesMap = Maps.newHashMap();
-		mLegalDestinationMap = Maps.newHashMap();
+		mGuardCoordinatesMap = Maps.newConcurrentMap();
+		mLegalDestinationMap = Maps.newConcurrentMap();
 		mPinMap = Maps.newHashMap();
 		mOccupiedSquares = Lists.newArrayList();
 	}
@@ -61,11 +61,11 @@ public class ComputedPieceData
 
 		// east
 		distance = pieceType.getPieceMovements().getDistance(MovementDirection.EAST);
-		int northMax = distance + pieceColumn;
-		if ((northMax > board.getColumnCount() || distance == PieceMovements.UNLIMITED) && !wraparound)
-			northMax = board.getColumnCount();
+		int eastMax = distance + pieceColumn;
+		if ((eastMax > board.getColumnCount() || distance == PieceMovements.UNLIMITED) && !wraparound)
+			eastMax = board.getColumnCount();
 
-		for (int c = pieceColumn + 1; (distance == PieceMovements.UNLIMITED && wraparound) ? true : c <= northMax; c++)
+		for (int c = pieceColumn + 1; (distance == PieceMovements.UNLIMITED && wraparound) ? true : c <= eastMax; c++)
 		{
 			int j = c;
 			if (wraparound && j > board.getColumnCount())
@@ -94,11 +94,11 @@ public class ComputedPieceData
 
 		// west
 		distance = pieceType.getPieceMovements().getDistance(MovementDirection.WEST);
-		int southMax = pieceColumn - distance;
-		if ((southMax < 1 || distance == PieceMovements.UNLIMITED) && !wraparound)
-			southMax = 1;
+		int westMax = pieceColumn - distance;
+		if ((westMax < 1 || distance == PieceMovements.UNLIMITED) && !wraparound)
+			westMax = 1;
 
-		for (int c = pieceColumn - 1; (distance == PieceMovements.UNLIMITED && wraparound) ? true : c >= southMax; c--)
+		for (int c = pieceColumn - 1; (distance == PieceMovements.UNLIMITED && wraparound) ? true : c >= westMax; c--)
 		{
 			int j = c;
 			if (wraparound && j < 1)
@@ -124,11 +124,11 @@ public class ComputedPieceData
 
 		// north
 		distance = pieceType.getPieceMovements().getDistance(MovementDirection.NORTH);
-		int eastMax = distance + pieceRow;
-		if (eastMax >= board.getRowCount() || distance == PieceMovements.UNLIMITED)
-			eastMax = board.getRowCount();
+		int northMax = distance + pieceRow;
+		if (northMax >= board.getRowCount() || distance == PieceMovements.UNLIMITED)
+			northMax = board.getRowCount();
 
-		for (int r = pieceRow + 1; r <= eastMax; r++)
+		for (int r = pieceRow + 1; r <= northMax; r++)
 		{
 			int j = r;
 
@@ -152,11 +152,11 @@ public class ComputedPieceData
 
 		// south
 		distance = pieceType.getPieceMovements().getDistance(MovementDirection.SOUTH);
-		int westMax = pieceRow - distance;
-		if (westMax < 1 || distance == PieceMovements.UNLIMITED)
-			westMax = 1;
+		int southMax = pieceRow - distance;
+		if (southMax < 1 || distance == PieceMovements.UNLIMITED)
+			southMax = 1;
 
-		for (int r = pieceRow - 1; (r >= westMax); r--)
+		for (int r = pieceRow - 1; (r >= southMax); r--)
 		{
 			int j = r;
 
@@ -180,14 +180,14 @@ public class ComputedPieceData
 
 		// northeast
 		distance = pieceType.getPieceMovements().getDistance(MovementDirection.NORTHEAST);
-		int neMax = ((pieceRow >= pieceColumn) ? pieceRow : piece.getCoordinates().column) + distance;
+		int northeastMax = ((pieceRow >= pieceColumn) ? pieceRow : piece.getCoordinates().column) + distance;
 
-		if (neMax >= board.getColumnCount() || distance == PieceMovements.UNLIMITED)
-			neMax = board.getColumnCount();
-		if (neMax >= board.getRowCount() || distance == PieceMovements.UNLIMITED)
-			neMax = board.getRowCount();
+		if (northeastMax >= board.getColumnCount() || distance == PieceMovements.UNLIMITED)
+			northeastMax = board.getColumnCount();
+		if (northeastMax >= board.getRowCount() || distance == PieceMovements.UNLIMITED)
+			northeastMax = board.getRowCount();
 
-		for (int r = pieceRow + 1, c = pieceColumn + 1; r <= neMax && c <= neMax; r++, c++)
+		for (int r = pieceRow + 1, c = pieceColumn + 1; r <= northeastMax && c <= northeastMax; r++, c++)
 		{
 			destination = new ChessCoordinates(r, c, targetBoardIndex);
 
@@ -209,17 +209,17 @@ public class ComputedPieceData
 
 		// southeast
 		distance = pieceType.getPieceMovements().getDistance(MovementDirection.SOUTHEAST);
-		int eastMaximum = pieceColumn + distance;
+		eastMax = pieceColumn + distance;
 
-		if (eastMaximum >= board.getColumnCount() || distance == PieceMovements.UNLIMITED)
-			eastMaximum = board.getColumnCount();
+		if (eastMax >= board.getColumnCount() || distance == PieceMovements.UNLIMITED)
+			eastMax = board.getColumnCount();
 
 		int southMin = pieceRow - distance;
 
 		if (southMin <= 1 || distance == PieceMovements.UNLIMITED)
 			southMin = 1;
 
-		for (int r = pieceRow - 1, c = pieceColumn + 1; r >= southMin && c <= eastMaximum; r--, c++)
+		for (int r = pieceRow - 1, c = pieceColumn + 1; r >= southMin && c <= eastMax; r--, c++)
 		{
 			destination = new ChessCoordinates(r, c, targetBoardIndex);
 
@@ -548,7 +548,7 @@ public class ComputedPieceData
 		return false;
 	}
 
-	public void adjustPinsLegalDests(Piece piece, Piece pieceToProtect)
+	private void adjustPinsLegalDests(Piece piece, Piece pieceToProtect)
 	{
 		Rules rules = GameController.getGame().getTeams()[mTeamIndex].getRules();
 		if (rules.getObjectivePieceType().equals(piece.getPieceType()))
@@ -740,8 +740,11 @@ public class ComputedPieceData
 			{
 				for (r = (originRow + 1); r <= targetRow; r++)
 				{
+					ChessCoordinates indexCoordinates = new ChessCoordinates(r, originColumn, originBoardIndex);
+					if (mOccupiedSquares.contains(indexCoordinates) && !inclusive)
+						break;
 					if (r != targetRow || inclusive)
-						returnTemp.add(i++, new ChessCoordinates(r, originColumn, originBoardIndex));
+						returnTemp.add(i++, indexCoordinates);
 				}
 			}
 			// South
@@ -751,8 +754,11 @@ public class ComputedPieceData
 				{
 					for (r = (originRow - 1); r >= targetRow; r--)
 					{
+						ChessCoordinates indexCoordinates = new ChessCoordinates(r, originColumn, originBoardIndex);
+						if (mOccupiedSquares.contains(indexCoordinates) && !inclusive)
+							break;
 						if (r != targetRow || inclusive)
-							returnTemp.add(i++, new ChessCoordinates(r, originColumn, originBoardIndex));
+							returnTemp.add(i++, indexCoordinates);
 					}
 				}
 			}
@@ -766,8 +772,11 @@ public class ComputedPieceData
 			{
 				for (c = (originColumn + 1); c <= targetColumn; c++)
 				{
+					ChessCoordinates indexCoordinates = new ChessCoordinates(originRow, c, originBoardIndex);
+					if (mOccupiedSquares.contains(indexCoordinates) && !inclusive)
+						break;
 					if (c != targetColumn || inclusive)
-						returnTemp.add(i++, new ChessCoordinates(originRow, c, originBoardIndex));
+						returnTemp.add(i++, indexCoordinates);
 				}
 			}
 			// West
@@ -777,8 +786,11 @@ public class ComputedPieceData
 				{
 					for (c = (originColumn - 1); c >= targetColumn; c--)
 					{
+						ChessCoordinates indexCoordinates = new ChessCoordinates(originRow, c, originBoardIndex);
+						if (mOccupiedSquares.contains(indexCoordinates) && !inclusive)
+							break;
 						if (c != targetColumn || inclusive)
-							returnTemp.add(i++, new ChessCoordinates(originRow, c, originBoardIndex));
+							returnTemp.add(i++, indexCoordinates);
 					}
 				}
 			}
@@ -792,8 +804,11 @@ public class ComputedPieceData
 			{
 				for (c = (originColumn + 1), r = (originRow + 1); r <= targetRow; c++, r++)
 				{
+					ChessCoordinates indexCoordinates = new ChessCoordinates(r, c, originBoardIndex);
+					if (mOccupiedSquares.contains(indexCoordinates) && !inclusive)
+						break;
 					if (r != targetRow || inclusive)
-						returnTemp.add(i++, new ChessCoordinates(r, c, originBoardIndex));
+						returnTemp.add(i++, indexCoordinates);
 				}
 			}
 			// Southwest
@@ -803,8 +818,11 @@ public class ComputedPieceData
 				{
 					for (c = (originColumn - 1), r = (originRow - 1); r >= targetRow; c--, r--)
 					{
+						ChessCoordinates indexCoordinates = new ChessCoordinates(r, c, originBoardIndex);
+						if (mOccupiedSquares.contains(indexCoordinates) && !inclusive)
+							break;
 						if (r != targetRow || inclusive)
-							returnTemp.add(i++, new ChessCoordinates(r, c, originBoardIndex));
+							returnTemp.add(i++, indexCoordinates);
 					}
 				}
 			}
@@ -817,8 +835,11 @@ public class ComputedPieceData
 			{
 				for (c = (originColumn - 1), r = (originRow + 1); r <= targetRow; c--, r++)
 				{
+					ChessCoordinates indexCoordinates = new ChessCoordinates(r, c, originBoardIndex);
+					if (mOccupiedSquares.contains(indexCoordinates) && !inclusive)
+						break;
 					if (r != targetRow || inclusive)
-						returnTemp.add(i++, new ChessCoordinates(r, c, originBoardIndex));
+						returnTemp.add(i++, indexCoordinates);
 				}
 			}
 			// Southeast
@@ -828,8 +849,11 @@ public class ComputedPieceData
 				{
 					for (c = (originColumn + 1), r = (originRow - 1); r >= targetRow; c++, r--)
 					{
+						ChessCoordinates indexCoordinates = new ChessCoordinates(r, c, originBoardIndex);
+						if (mOccupiedSquares.contains(indexCoordinates) && !inclusive)
+							break;
 						if (r != targetRow || inclusive)
-							returnTemp.add(i++, new ChessCoordinates(r, c, originBoardIndex));
+							returnTemp.add(i++, indexCoordinates);
 					}
 				}
 			}
@@ -949,8 +973,7 @@ public class ComputedPieceData
 
 	public boolean isLegalDestination(Piece piece, ChessCoordinates destination)
 	{
-		Set<ChessCoordinates> legalDestinations = mLegalDestinationMap.get(piece.getId());
-		return legalDestinations.contains(destination);
+		return mLegalDestinationMap.get(piece.getId()).contains(destination);
 	}
 
 	/**

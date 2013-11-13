@@ -31,13 +31,11 @@ public class MoveController
 				{
 					movingPiece = piece;
 					movingTeam = team;
-					break;
 				}
 				else if (piece.getCoordinates().equals(destination))
 				{
 					capturedPiece = piece;
 					capturedTeam = team;
-					break;
 				}
 			}
 		}
@@ -48,6 +46,15 @@ public class MoveController
 		if (movingTeam.equals(capturedTeam))
 			return false;
 
+		if (!GameController.isLegalMove(movingPiece, destination))
+			return false;
+		
+		
+		/**
+		 * All code past this point changes Piece state data. If a move is invalid, it would be
+		 * best to return false before here.
+		 */
+		
 		if (capturedPiece != null)
 		{
 			capturedTeam.markPieceAsCaptured(capturedPiece);
