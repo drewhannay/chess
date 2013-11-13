@@ -33,7 +33,7 @@ public final class GameController
 
 		return sGame;
 	}
-	
+
 	public static void computeLegalDestinations()
 	{
 		// Piece[] threats = null;
@@ -42,12 +42,13 @@ public final class GameController
 		// List<Piece> movingTeam = null;
 		// List<Piece> otherTeam = null;
 
-			Team team = sGame.getTeams()[sGame.getTurnKeeper().getCurrentTeamIndex()];
-			mData = new ComputedPieceData(sGame.getTurnKeeper().getCurrentTeamIndex());
-			for (Piece piece : team.getPieces())
-			{
-				int boardIndex = team.getRules() == null ? piece.getCoordinates().boardIndex : team.getRules().getDestinationBoardIndex(piece.getCoordinates().boardIndex);
-				mData.computeLegalDestinations(piece, boardIndex);
+		Team team = sGame.getTeams()[sGame.getTurnKeeper().getCurrentTeamIndex()];
+		mData = new ComputedPieceData(sGame.getTurnKeeper().getCurrentTeamIndex());
+		for (Piece piece : team.getPieces())
+		{
+			int boardIndex =
+					team.getRules() == null ? piece.getCoordinates().boardIndex : team.getRules().getDestinationBoardIndex(piece.getCoordinates().boardIndex);
+			mData.computeLegalDestinations(piece, boardIndex);
 		}
 
 		// TODO: deal with all this stuff
@@ -179,7 +180,7 @@ public final class GameController
 	{
 		return getThreats(coordinates, teamIndex) != null;
 	}
-	
+
 	public static boolean isLegalMove(Piece piece, ChessCoordinates destination)
 	{
 		return mData.getLegalDests(piece).contains(destination);
@@ -206,7 +207,7 @@ public final class GameController
 		// TODO: probably need to stop somehow when we hit a valid end condition
 		for (Team team : sGame.getTeams())
 			team.getRules().checkEndCondition();
-		
+
 		computeLegalDestinations();
 	}
 

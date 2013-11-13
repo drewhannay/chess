@@ -36,21 +36,21 @@ public final class Team
 
 	public void markPieceAsCaptured(Piece piece)
 	{
-		synchronized(this)
+		synchronized (this)
 		{
-		mPieces.remove(piece);
-		if (!mCapturedPieces.contains(piece))
-			mCapturedPieces.add(piece);
+			mPieces.remove(piece);
+			if (!mCapturedPieces.contains(piece))
+				mCapturedPieces.add(piece);
 		}
 	}
 
 	public void markPieceAsNotCaptured(Piece piece)
 	{
-		synchronized(this)
+		synchronized (this)
 		{
-		mCapturedPieces.remove(piece);
-		if (!mPieces.contains(piece))
-			mPieces.add(piece);
+			mCapturedPieces.remove(piece);
+			if (!mPieces.contains(piece))
+				mPieces.add(piece);
 		}
 	}
 

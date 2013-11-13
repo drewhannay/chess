@@ -199,7 +199,7 @@ public class MovePieceTest
 		mSameTeamPiece.setCoordinates(new ChessCoordinates(2, 1, 0));
 
 		GameController.computeLegalDestinations();
-		
+
 		if (MoveController.execute(new Move(mOrigin, new ChessCoordinates(1, 3, 0))))
 			fail("MoveController.execute() returned true for a rook moving through an opposite-team piece");
 
@@ -215,7 +215,7 @@ public class MovePieceTest
 		mSameTeamPiece.setCoordinates(obstacleCoordinates);
 
 		GameController.computeLegalDestinations();
-		
+
 		ChessCoordinates bishopDestination = new ChessCoordinates(3, 3, 0);
 		Move attemptedBishopJump = new Move(mOrigin, bishopDestination);
 		if (MoveController.execute(attemptedBishopJump))
@@ -225,7 +225,7 @@ public class MovePieceTest
 		mOppositeTeamPiece.setCoordinates(obstacleCoordinates);
 
 		GameController.computeLegalDestinations();
-		
+
 		if (MoveController.execute(attemptedBishopJump))
 			fail("MoveController.execute() returned true for a bishop moving through an opposite-team piece");
 
@@ -235,7 +235,7 @@ public class MovePieceTest
 		Piece queen = new Piece(mPieceIndex++, PieceBuilder.getQueenPieceType(), mOrigin);
 		mMyTeam.getPieces().add(queen);
 		mSameTeamPiece.setCoordinates(obstacleCoordinates);
-		
+
 		GameController.computeLegalDestinations();
 
 		Move attemptedQueenJump = new Move(mOrigin, new ChessCoordinates(3, 3, 0));
@@ -246,7 +246,7 @@ public class MovePieceTest
 		mOppositeTeamPiece.setCoordinates(obstacleCoordinates);
 
 		GameController.computeLegalDestinations();
-		
+
 		if (MoveController.execute(attemptedQueenJump))
 			fail("MoveController.execute() returned true for a queen moving diagonally through an opposite-team piece");
 
@@ -257,7 +257,7 @@ public class MovePieceTest
 		mSameTeamPiece.setCoordinates(obstacleCoordinates);
 
 		GameController.computeLegalDestinations();
-		
+
 		if (MoveController.execute(attemptedQueenJump))
 			fail("MoveController.execute() returned true for a queen moving horizontally through a same-team piece");
 
@@ -265,7 +265,7 @@ public class MovePieceTest
 		mSameTeamPiece.setCoordinates(mStorageCoordinates);
 
 		GameController.computeLegalDestinations();
-		
+
 		if (MoveController.execute(attemptedQueenJump))
 			fail("MoveController.execute() returned true for a queen moving horizontally through an opposite-team piece");
 
@@ -274,7 +274,7 @@ public class MovePieceTest
 		mSameTeamPiece.setCoordinates(obstacleCoordinates);
 
 		GameController.computeLegalDestinations();
-		
+
 		if (MoveController.execute(attemptedQueenJump))
 			fail("MoveController.execute() returned true for a queen moving vertically through a same-team piece");
 
@@ -282,7 +282,7 @@ public class MovePieceTest
 		mOppositeTeamPiece.setCoordinates(obstacleCoordinates);
 
 		GameController.computeLegalDestinations();
-		
+
 		if (MoveController.execute(attemptedQueenJump))
 			fail("MoveController.execute() returned true for a queen moving vertically through an opposite-team piece");
 
@@ -294,7 +294,7 @@ public class MovePieceTest
 		mOtherTeam.getPieces().add(new Piece(mPieceIndex++, PieceBuilder.getRookPieceType(), new ChessCoordinates(2, 2, 0)));
 
 		GameController.computeLegalDestinations();
-		
+
 		if (!MoveController.execute(new Move(mOrigin, new ChessCoordinates(2, 3, 0))))
 			fail("MoveController.execute() returned false for a knight jumping over a barrier.");
 	}
@@ -304,14 +304,15 @@ public class MovePieceTest
 		@Override
 		public int undo()
 		{
-			return index-- %2;
+			return index-- % 2;
 		}
 
 		@Override
 		public int getTeamIndexForNextTurn()
 		{
-			return index++ %2;
+			return index++ % 2;
 		}
+
 		int index = 0;
 	};
 
