@@ -1,3 +1,4 @@
+
 package controllers;
 
 import models.ChessCoordinates;
@@ -17,10 +18,10 @@ public class MoveController
 
 		Piece movingPiece = null;
 		Piece capturedPiece = null;
-		
+
 		Team movingTeam = null;
 		Team capturedTeam = null;
-		
+
 		for (Team team : GameController.getGame().getTeams())
 		{
 			for (Piece piece : team.getPieces())
@@ -31,22 +32,28 @@ public class MoveController
 				{
 					movingPiece = piece;
 					movingTeam = team;
-					break;
 				}
 				else if (piece.getCoordinates().equals(destination))
 				{
 					capturedPiece = piece;
 					capturedTeam = team;
-					break;
 				}
 			}
 		}
-		
+
 		if (movingPiece == null)
 			return false;
-		
+
 		if (movingTeam.equals(capturedTeam))
 			return false;
+
+		if (!GameController.isLegalMove(movingPiece, destination))
+			return false;
+
+		/**
+		 * All code past this point changes Piece state data. If a move is invalid, it would be
+		 * best to return false before here.
+		 */
 
 		if (capturedPiece != null)
 		{
@@ -219,7 +226,8 @@ public class MoveController
 	/**
 	 * Undo the execution of this move
 	 * 
-	 * @throws Exception If the undo doesn't work properly
+	 * @throws Exception
+	 *             If the undo doesn't work properly
 	 */
 	public static boolean undo(Move move)
 	{
@@ -234,22 +242,22 @@ public class MoveController
 			{
 				if (piece.getCoordinates().equals(destination))
 				{
-						unmovingPiece = piece;
-						movingTeam = team;
+					unmovingPiece = piece;
+					movingTeam = team;
 				}
 			}
 		}
 
 		unmovingPiece.setCoordinates(origin);
-		
+
 		Piece uncapturedPiece = null;
 		Team uncapturedTeam = null;
-		
+
 		for (Team team : GameController.getGame().getTeams())
 		{
 			if (team.equals(movingTeam))
 				continue;
-			
+
 			for (Piece piece : team.getCapturedPieces())
 			{
 				if (piece.getCoordinates().equals(destination))
@@ -259,7 +267,7 @@ public class MoveController
 				}
 			}
 		}
-		
+
 		if (uncapturedPiece != null)
 			uncapturedTeam.markPieceAsNotCaptured(uncapturedPiece);
 
