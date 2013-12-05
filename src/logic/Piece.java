@@ -247,26 +247,7 @@ public class Piece implements Serializable
 			}
 
 			// Take an opposing piece
-			if (board.isRowValid(row = (mCurrentSquare.getRow() + dir)))
-			{
-				col = mCurrentSquare.getCol();
-
-				// if valid row
-				// and the square is occupied (by the other team)
-				// or it's not my move (so I'm threatening the square)
-				if (board.isColValid((col + 1))
-						&& ((board.getSquare(row, col + 1).isOccupied() && isBlack() != board.getSquare(row, col + 1).getPiece()
-								.isBlack())))
-				{
-					addLegalDest(board.getSquare(row, col + 1));
-				}
-				if (board.isColValid((col - 1))
-						&& ((board.getSquare(row, col - 1).isOccupied() && isBlack() != board.getSquare(row, col - 1).getPiece()
-								.isBlack())))
-				{
-					addLegalDest(board.getSquare(row, col - 1));
-				}
-			}
+			takeOpposingPiece(board, dir);
 
 			// two step
 			if (getMoveCount() == 0 && board.isRowValid((mCurrentSquare.getRow() + (2 * dir))))
@@ -298,11 +279,64 @@ public class Piece implements Serializable
 		}
 
 		boolean done = false;
-		Square dest;
+		
 		boolean wraparound = board.isWrapAround();
+		
+		//Checks the movement validity for each direction on the chess board
+		eastMovementValidity(board, done, wraparound);
+		westMovementValidity(board, wraparound);
+		northMovementValidity(board);
+		southMovementValidity(board);
+		northEastMovementValidity(board);
+		southEastMovementValidity(board);
+		northWestMovmeentValidy(board);
+		southWestMovementValidity(board);
+
+		/*
+		 * Knight / Leaper Movements
+		 * 
+		 * 
+		 * Store of Knight Movements are as followed:
+		 * 
+		 * A Piece can move x File by y Rank squares at a time.
+		 * 
+		 * IE: A knight can move 1 by 2 or 2 by 1, but not 1 by 1 or 2 by 2
+		 */
+		movementCheckValid(board, wraparound);
+		return getLegalDests().size();
+	}
+
+	private void takeOpposingPiece(Board board, int dir) {
+		int row;
+		int col;
+		if (board.isRowValid(row = (mCurrentSquare.getRow() + dir)))
+		{
+			col = mCurrentSquare.getCol();
+
+			// if valid row
+			// and the square is occupied (by the other team)
+			// or it's not my move (so I'm threatening the square)
+			if (board.isColValid((col + 1))
+					&& ((board.getSquare(row, col + 1).isOccupied() && isBlack() != board.getSquare(row, col + 1).getPiece()
+							.isBlack())))
+			{
+				addLegalDest(board.getSquare(row, col + 1));
+			}
+			if (board.isColValid((col - 1))
+					&& ((board.getSquare(row, col - 1).isOccupied() && isBlack() != board.getSquare(row, col - 1).getPiece()
+							.isBlack())))
+			{
+				addLegalDest(board.getSquare(row, col - 1));
+			}
+		}
+	}
+
+	private void eastMovementValidity(Board board, boolean done,
+			boolean wraparound) {
 		/*
 		 * East
 		 */
+		Square dest;
 		if (mMovements.containsKey('E'))
 		{
 			int northMax = mMovements.get('E') + mCurrentSquare.getCol();
@@ -329,10 +363,15 @@ public class Piece implements Serializable
 						.equals(board.getGame().getOtherObjectivePiece(isBlack())))));
 			}
 		}
-		done = false;
+	}
+
+	private void westMovementValidity(Board board, boolean wraparound) {
+		boolean done;
+		Square dest;
 		/*
 		 * West
 		 */
+		done = false;
 		if (mMovements.containsKey('W'))
 		{
 			int southMax = mCurrentSquare.getCol() - mMovements.get('W');
@@ -356,10 +395,15 @@ public class Piece implements Serializable
 						.equals(board.getGame().getOtherObjectivePiece(isBlack())))));
 			}
 		}
-		done = false;
+	}
+
+	private void northMovementValidity(Board board) {
+		boolean done;
+		Square dest;
 		/*
 		 * North
 		 */
+		done = false;
 		if (mMovements.containsKey('N'))
 		{
 			int eastMax = mMovements.get('N') + mCurrentSquare.getRow();
@@ -376,10 +420,15 @@ public class Piece implements Serializable
 						.equals(board.getGame().getOtherObjectivePiece(isBlack())))));
 			}
 		}
-		done = false;
+	}
+
+	private void southMovementValidity(Board board) {
+		boolean done;
+		Square dest;
 		/*
 		 * South
 		 */
+		done = false;
 		if (mMovements.containsKey('S'))
 		{
 			int westMax = mCurrentSquare.getRow() - mMovements.get('S');
@@ -396,6 +445,11 @@ public class Piece implements Serializable
 						.equals(board.getGame().getOtherObjectivePiece(isBlack())))));
 			}
 		}
+	}
+
+	private void northEastMovementValidity(Board board) {
+		boolean done;
+		Square dest;
 		/*
 		 * NorthEast
 		 */
@@ -418,7 +472,65 @@ public class Piece implements Serializable
 						.equals(board.getGame().getOtherObjectivePiece(isBlack())))));
 			}
 		}
+	}
 
+	private void northWestMovmeentValidy(Board board) {
+		boolean done;
+		Square dest;
+		/*
+		 * NorthWest
+		 */
+		done = false;
+		if (mMovements.containsKey('L'))
+		{
+			int westMin = mCurrentSquare.getCol() - mMovements.get('L');
+			if (westMin <= 1 || mMovements.get('L') == -1)
+				westMin = 1;
+
+			int NorthMax = mCurrentSquare.getRow() + mMovements.get('L');
+			if (NorthMax >= board.getMaxRow() || mMovements.get('L') == -1)
+				NorthMax = board.getMaxRow();
+
+			for (int r = mCurrentSquare.getRow() + 1, c = mCurrentSquare.getCol() - 1; r <= NorthMax && c >= westMin && !done; r++, c--)
+			{
+				dest = board.getSquare(r, c);
+				done = !addLegalDest(dest);
+				done = mIsLeaper ? false : (done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece()
+						.equals(board.getGame().getOtherObjectivePiece(isBlack())))));
+			}
+		}
+	}
+
+	private void southWestMovementValidity(Board board) {
+		boolean done;
+		Square dest;
+		/*
+		 * SouthWest
+		 */
+		done = false;
+		if (mMovements.containsKey('l'))
+		{
+			int westMin = mCurrentSquare.getCol() - mMovements.get('l');
+			if (westMin <= 1 || mMovements.get('l') == -1)
+				westMin = 1;
+
+			int southMin = mCurrentSquare.getRow() - mMovements.get('l');
+			if (southMin <= 1 || mMovements.get('l') == -1)
+				southMin = 1;
+
+			for (int r = mCurrentSquare.getRow() - 1, c = mCurrentSquare.getCol() - 1; r >= southMin && c >= westMin && !done; r--, c--)
+			{
+				dest = board.getSquare(r, c);
+				done = !addLegalDest(dest);
+				done = mIsLeaper ? false : (done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece()
+						.equals(board.getGame().getOtherObjectivePiece(isBlack())))));
+			}
+		}
+	}
+
+	private void southEastMovementValidity(Board board) {
+		boolean done;
+		Square dest;
 		/*
 		 * SouthEast
 		 */
@@ -443,61 +555,9 @@ public class Piece implements Serializable
 						.equals(board.getGame().getOtherObjectivePiece(isBlack())))));
 			}
 		}
-		/*
-		 * NorthWest
-		 */
-		done = false;
-		if (mMovements.containsKey('L'))
-		{
-			int westMin = mCurrentSquare.getCol() - mMovements.get('L');
-			if (westMin <= 1 || mMovements.get('L') == -1)
-				westMin = 1;
+	}
 
-			int NorthMax = mCurrentSquare.getRow() + mMovements.get('L');
-			if (NorthMax >= board.getMaxRow() || mMovements.get('L') == -1)
-				NorthMax = board.getMaxRow();
-
-			for (int r = mCurrentSquare.getRow() + 1, c = mCurrentSquare.getCol() - 1; r <= NorthMax && c >= westMin && !done; r++, c--)
-			{
-				dest = board.getSquare(r, c);
-				done = !addLegalDest(dest);
-				done = mIsLeaper ? false : (done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece()
-						.equals(board.getGame().getOtherObjectivePiece(isBlack())))));
-			}
-		}
-		/*
-		 * SouthWest
-		 */
-		done = false;
-		if (mMovements.containsKey('l'))
-		{
-			int westMin = mCurrentSquare.getCol() - mMovements.get('l');
-			if (westMin <= 1 || mMovements.get('l') == -1)
-				westMin = 1;
-
-			int southMin = mCurrentSquare.getRow() - mMovements.get('l');
-			if (southMin <= 1 || mMovements.get('l') == -1)
-				southMin = 1;
-
-			for (int r = mCurrentSquare.getRow() - 1, c = mCurrentSquare.getCol() - 1; r >= southMin && c >= westMin && !done; r--, c--)
-			{
-				dest = board.getSquare(r, c);
-				done = !addLegalDest(dest);
-				done = mIsLeaper ? false : (done || (dest.isOccupied() && !(board.isBlackTurn() != isBlack() && dest.getPiece()
-						.equals(board.getGame().getOtherObjectivePiece(isBlack())))));
-			}
-		}
-
-		/*
-		 * Knight / Leaper Movements
-		 * 
-		 * 
-		 * Store of Knight Movements are as followed:
-		 * 
-		 * A Piece can move x File by y Rank squares at a time.
-		 * 
-		 * IE: A knight can move 1 by 2 or 2 by 1, but not 1 by 1 or 2 by 2
-		 */
+	private void movementCheckValid(Board board, boolean wraparound) {
 		if (mMovements.containsKey('x'))
 		{
 			int f, r;
@@ -598,7 +658,6 @@ public class Piece implements Serializable
 			if (board.isRowValid(f) && board.isColValid(r))
 				addLegalDest(board.getSquare(f, r));
 		}
-		return getLegalDests().size();
 	}
 
 	/**
