@@ -58,14 +58,17 @@ public class Square extends JLabel implements Serializable
 			setIcon(null);
 	}
 
+	public void refresh(){
+		
+	}
 	/**
 	 * Refresh the GUI's view of this Square with the current accurate
 	 * information.
 	 */
-	public void refresh()
+	public void refresh(boolean isJail)
 	{
 		setOpaque(true);
-		if (!mIsHabitable)
+		if (!mIsHabitable && !isJail)
 		{
 			setIcon(s_uninhabitableIcon);
 			return;
@@ -77,41 +80,21 @@ public class Square extends JLabel implements Serializable
 			// ...and it has no Icon
 			if (mPiece.getIcon() == null)
 				setText(mPiece.getName());// Use it's name
-			else
+			else if(!isJail){
 				setIcon(mPiece.getIcon());// Otherwise, use it's Icon
+			}else{
+				setIcon(new ImageIcon(mPiece.getIcon().getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH)));// Otherwise, use it's Icon
+			}
+				
 		}
 		else
 		{// If there's no Piece, clear the Icon and Text of the Square.
-			setIcon(null);
-			setText("");
+				setIcon(null);
+				setText("");
 		}
 		resetColor();// Then reset the color too.
 	}
 	
-	/**
-	 * Refresh the GUI's view of this Square with the current accurate
-	 * information, but only for Jails
-	 */
-	public void refreshJail()
-	{
-		setOpaque(true);
-		// if there's a Piece here...
-		if (mPiece != null)
-		{
-			// ...and it has no Icon
-			if (mPiece.getIcon() == null)
-				setText(mPiece.getName());// Use it's name
-			else
-				setIcon(new ImageIcon(mPiece.getIcon().getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH)));// Otherwise, use it's Icon
-		}
-		else
-		{// If there's no Piece, clear the Icon and Text of the Square.
-			setIcon(null);
-			setText("");
-		}
-		resetColor();// Then reset the color too.
-	}
-
 	/**
 	 * Reset temporary changes to the Color of the Square
 	 */

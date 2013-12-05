@@ -160,7 +160,7 @@ public class PlayGamePanel extends JPanel
 					mWhiteCapturesJail.getSquare(i, j).setPiece(blackCapturedPieces[index]);
 					index++;
 				}
-				mWhiteCapturesJail.getSquare(i, j).refreshJail();
+				mWhiteCapturesJail.getSquare(i, j).refresh(true);
 			}
 		}
 		
@@ -175,7 +175,7 @@ public class PlayGamePanel extends JPanel
 					mBlackCapturesJail.getSquare(i, j).setPiece(whiteCapturedPieces[index]);
 					index++;
 				}
-				mBlackCapturesJail.getSquare(i, j).refreshJail();
+				mBlackCapturesJail.getSquare(i, j).refresh(true);
 			}
 		}
 
@@ -192,7 +192,7 @@ public class PlayGamePanel extends JPanel
 			for (int i = 1; i <= boards[k].getMaxRow(); i++)
 			{
 				for (int j = 1; j <= boards[k].getMaxCol(); j++)
-					boards[k].getSquare(i, j).refresh();
+					boards[k].getSquare(i, j).refresh(false);
 			}
 		}
 	}

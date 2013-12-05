@@ -447,7 +447,7 @@ public class CustomSetupPanel extends JPanel
 					}
 					squareList.add(square);
 					mBoardPanels[boardIndex].add(square);
-					square.refresh();
+					square.refresh(false);
 				}
 			}
 
@@ -507,7 +507,7 @@ public class CustomSetupPanel extends JPanel
 		mPieceDisplaySquares[BLACK_INDEX].setPiece(blackPieceBeingDisplayed);
 
 		for (Square square : mPieceDisplaySquares)
-			square.refresh();
+			square.refresh(false);
 
 		ListSelectionModel selectList = mPieceTypeList.getSelectionModel();
 
@@ -583,7 +583,7 @@ public class CustomSetupPanel extends JPanel
 				Piece toRemove = m_square.setPiece(null);
 				(toRemove.isBlack() ? mBlackTeam : mWhiteTeam).remove(toRemove);
 
-				m_square.refresh();
+				m_square.refresh(false);
 			}
 			else
 			{
@@ -813,7 +813,7 @@ public class CustomSetupPanel extends JPanel
 					originSquare.addMouseListener(new SquareSetupMouseListener(
 							originSquare, originPiece.getBoard()));
 
-					originSquare.refresh();
+					originSquare.refresh(false);
 					return;
 				}
 			}
