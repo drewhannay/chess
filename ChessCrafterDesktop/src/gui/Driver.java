@@ -8,7 +8,6 @@ import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.SystemTray;
-import java.awt.Toolkit;
 import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -35,10 +34,13 @@ import javax.swing.JScrollPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.WindowConstants;
+import logic.GameBuilder;
+import models.Game;
 import timer.ChessTimer;
 import utility.AppConstants;
 import utility.FileUtility;
 import utility.GuiUtility;
+import utility.PreferenceUtility;
 import controllers.GameController;
 
 public final class Driver extends JFrame
@@ -140,7 +142,7 @@ public final class Driver extends JFrame
 
 		// make the app match the look and feel of the user's system
 		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		UIManager.put("TabbedPane.contentOpaque", false);
+		UIManager.put("TabbedPane.contentOpaque", false); //$NON-NLS-1$
 		createWindowsTrayIconIfNecessary();
 
 		// create the menu bar
@@ -204,6 +206,8 @@ public final class Driver extends JFrame
 		add(mMainPanel, BorderLayout.CENTER);
 		pack();
 		setVisible(true);
+		GameController.setGame(GameBuilder.buildClassic());		
+		setPanel(new PlayGamePanel());
 	}
 
 	private JButton pieceMenuButton()
@@ -478,7 +482,7 @@ public final class Driver extends JFrame
 					{
 						FileInputStream fileInputStream;
 						ObjectInputStream objectInputStream;
-						GameController gameToPlay;
+						Game gameToPlay;
 						try
 						{
 							if (gamesInProgressList.getSelectedValue() == null)
@@ -491,14 +495,15 @@ public final class Driver extends JFrame
 							fileInputStream = new FileInputStream(FileUtility.getGamesInProgressFile(gamesInProgressList
 									.getSelectedValue().toString()));
 							objectInputStream = new ObjectInputStream(fileInputStream);
-							gameToPlay = (GameController) objectInputStream.readObject();
-
+							gameToPlay = (Game) objectInputStream.readObject();
+							GameController.setGame(gameToPlay);
+							
 							// set the help menu info to be specific for game
 							// play
 							if (mOptionsMenu != null)
 								mOptionsMenu.setVisible(true);
 
-							m_playGameScreen = new PlayGamePanel(gameToPlay);
+							m_playGameScreen = new PlayGamePanel();
 							setPanel(m_playGameScreen);
 							poppedFrame.dispose();
 						}
@@ -755,22 +760,23 @@ public final class Driver extends JFrame
 
 	public static void centerFrame()
 	{
-		Driver driver = getInstance();
-		int width = driver.getWidth();
-		int height = driver.getHeight();
-		if (s_screenWidth == null)
-		{
-			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-			s_screenWidth = screenSize.getWidth();
-			s_screenHeight = screenSize.getHeight();
-		}
-		driver.setLocation((int) ((s_screenWidth / 2) - (width / 2)), (int) ((s_screenHeight / 2) - (height / 2)));
+//		Driver driver = getInstance();
+//		int width = driver.getWidth();
+//		int height = driver.getHeight();
+//		if (s_screenWidth == null)
+//		{
+//			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+//			s_screenWidth = screenSize.getWidth();
+//			s_screenHeight = screenSize.getHeight();
+//		}
+//		driver.setLocation((int) ((s_screenWidth / 2) - (width / 2)), (int) ((s_screenHeight / 2) - (height / 2)));
+		getInstance().setLocationRelativeTo(null);
 	}
 
-	public PlayGamePanel getPlayGameScreen(GameController game)
+	public PlayGamePanel getPlayGameScreen()
 	{
 		if (m_playGameScreen == null)
-			m_playGameScreen = new PlayGamePanel(game);
+			m_playGameScreen = new PlayGamePanel();
 		return m_playGameScreen;
 	}
 

@@ -1,12 +1,14 @@
+
 package dragNdrop;
 
+import gui.PlayGamePanel;
 import gui.SquareJLabel;
-
 import java.util.List;
-
 import javax.swing.JComponent;
-
+import models.ChessCoordinates;
+import models.Move;
 import com.google.common.collect.ImmutableList;
+import controllers.GameController;
 
 public class DropManager extends AbstractDropManager
 {
@@ -26,16 +28,17 @@ public class DropManager extends AbstractDropManager
 		if (destinationSquareLabel == null)
 			return;
 
+		ChessCoordinates originCoordinates = originSquareLabel.getCoordinates();
+		ChessCoordinates destinationCoordinates = destinationSquareLabel.getCoordinates();
+		
 		try
 		{
-			// getGame().playMove(new MoveController(m_board,
-			// originSquareLabel.getSquare(),
-			// destinationSquareLabel.getSquare()));
-			// sInstance.boardRefresh(getGame().getBoards());
+			GameController.playMove(new Move(originCoordinates, destinationCoordinates));
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
+		PlayGamePanel.boardRefresh();
 	}
 }

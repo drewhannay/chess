@@ -1,24 +1,20 @@
+
 package gui;
 
-import gui.PreferenceUtility.PieceToolTipPreferenceChangedListener;
-
 import java.awt.Component;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.util.List;
-
-import javax.swing.JComponent;
+import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
-
-import utility.Preference;
-
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
-
-import controllers.SquareController;
-import dragNdrop.AbstractDropManager;
+import models.Piece;
+import utility.PieceIconUtility;
+import utility.PreferenceUtility;
+import utility.PreferenceUtility.PieceToolTipPreferenceChangedListener;
+import controllers.GameController;
 import dragNdrop.DropAdapter;
 import dragNdrop.DropEvent;
 import dragNdrop.DropManager;
@@ -26,12 +22,10 @@ import dragNdrop.GlassPane;
 
 public class SquareListener extends DropAdapter implements MouseListener, PieceToolTipPreferenceChangedListener
 {
-	public SquareListener(SquareJLabel squareLabel, DropManager dropManager)
+	public SquareListener(SquareJLabel squareLabel, DropManager dropManager, GlassPane glassPane)
 	{
-		super(mGlobalGlassPane);
+		super(glassPane);
 		mSquareLabel = squareLabel;
-		mSquareLabel.refresh();
-		// mBoard = board;
 		mDropManager = dropManager;
 		addDropListener(mDropManager);
 		PreferenceUtility.addPieceToolTipListener(this);
@@ -74,34 +68,16 @@ public class SquareListener extends DropAdapter implements MouseListener, PieceT
 		// return;
 		// }
 
-		/*if (mSquareLabel.getPiece() == null || mSquareLabel.getPiece().isBlack() != getGame().isBlackMove())
-		{
-			return;
-		}*/
+		/*
+		 * if (mSquareLabel.getPiece() == null || mSquareLabel.getPiece().isBlack() != getGame().isBlackMove())
+		 * {
+		 * return;
+		 * }
+		 */
 
-		List<SquareController> destinations = mSquareLabel.getSquare().getPiece().getLegalDests();
-		List<SquareJLabel> destinationLabels = Lists.newArrayList();
-		if (destinations.size() > 0)
-		{
-			mPreference = PreferenceUtility.getPreference();
-			if (mPreference.isHighlightMoves())
-			{
-				for (SquareJLabel squareLabel : mSquareLabels)
-				{
-					if (destinations.contains(squareLabel.getSquare()))
-					{
-						squareLabel.setColor(SquareJLabel.HIGHLIGHT_COLOR);
-						destinationLabels.add(squareLabel);
-					}
-				}
-			}
-		}
+		List<SquareJLabel> destinationLabels = PlayGamePanel.highlightLegalDestinations(mSquareLabel.getCoordinates());
+
 		mDropManager.setComponentList(destinationLabels);
-		// mDropManager.setBoard(mBoard);
-
-		// if (mSquareLabel.getSquare().getPiece() == null)
-		// return;
-		// else
 		mSquareLabel.hideIcon();
 
 		Driver.getInstance().setGlassPane(mGlassPane);
@@ -116,17 +92,18 @@ public class SquareListener extends DropAdapter implements MouseListener, PieceT
 		mGlassPane.setPoint(point);
 
 		BufferedImage image = null;
-		/*
-		 * PieceController piece = mSquareLabel.getSquare().getPiece();
-		 * ImageIcon imageIcon = PieceIconUtility.getPieceIcon(piece.getName(),
-		 * piece.isBlack()); int width = imageIcon.getIconWidth(); int height =
-		 * imageIcon.getIconHeight(); image = new BufferedImage(width, height,
-		 * BufferedImage.TYPE_INT_ARGB); Graphics2D graphics2D = (Graphics2D)
-		 * image.getGraphics(); imageIcon.paintIcon(null, graphics2D, 0, 0);
-		 * graphics2D.dispose();
-		 * 
-		 * mGlassPane.setImage(image);
-		 */
+
+		Piece piece = mSquareLabel.getPiece();
+		ImageIcon imageIcon = PieceIconUtility.getPieceIcon(piece.getPieceType().getName(), 48, piece.getTeamId(GameController.getGame()));
+		int width = imageIcon.getIconWidth();
+		int height = imageIcon.getIconHeight();
+		image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D graphics2D = (Graphics2D) image.getGraphics();
+		imageIcon.paintIcon(null, graphics2D, 0, 0);
+		graphics2D.dispose();
+
+		mGlassPane.setImage(image);
+
 		mGlassPane.repaint();
 	}
 
@@ -142,15 +119,12 @@ public class SquareListener extends DropAdapter implements MouseListener, PieceT
 		fireDropEvent(new DropEvent(point, mSquareLabel), false);
 	}
 
-	private SquareJLabel mSquareLabel;
-
 	@Override
 	public void onPieceToolTipPreferenceChanged()
 	{
 		mSquareLabel.refresh();
 	}
 
-	private static GlassPane mGlobalGlassPane;
-	private Preference mPreference;
+	private SquareJLabel mSquareLabel;
 	private final DropManager mDropManager;
 }

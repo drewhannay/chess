@@ -1,17 +1,24 @@
 
-package gui;
+package utility;
 
+import gui.Driver;
+import gui.Messages;
 import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -22,9 +29,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
-import utility.FileUtility;
-import utility.GuiUtility;
-import utility.Preference;
+import models.Preference;
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 public final class PreferenceUtility
@@ -171,25 +177,47 @@ public final class PreferenceUtility
 
 	public static Preference getPreference()
 	{
-		ObjectInputStream in;
+		StringBuilder jsonString = new StringBuilder();
+
+		FileInputStream fileInputStream = null;
+		DataInputStream dataInputStream = null;
+		BufferedReader bufferedReader = null;
 		try
 		{
-			in = new ObjectInputStream(new FileInputStream(FileUtility.getPreferencesFile()));
-			Preference toReturn = (Preference) in.readObject();
-			in.close();
-			return toReturn;
+			fileInputStream = new FileInputStream(FileUtility.getPreferencesFile());
+			dataInputStream = new DataInputStream(fileInputStream);
+			bufferedReader = new BufferedReader(new InputStreamReader(dataInputStream));
+			String line;
+			while ((line = bufferedReader.readLine()) != null)
+				jsonString.append(line);
+
+			bufferedReader.close();
+			dataInputStream.close();
+			fileInputStream.close();
 		}
-		catch (Exception e)
+		catch (IOException e)
 		{
-			return createDefaultPreference();
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		
+		if (!Strings.isNullOrEmpty(jsonString.toString()))
+			return (Preference) GsonUtility.loadObjectFromJSonString(jsonString.toString(), Preference.class);
+		else
+			return createDefaultPreference();
 	}
 
 	public static Preference createDefaultPreference()
 	{
+		Preference defaultPref = new Preference();
+		savePreference(defaultPref);
+		return defaultPref;
+	}
+
+	public static void savePreference(Preference preference)
+	{	
 		File preferencesFile = FileUtility.getPreferencesFile();
 		FileOutputStream f_out;
-		Preference preference = null;
 		try
 		{
 			if (!preferencesFile.exists())
@@ -197,9 +225,12 @@ public final class PreferenceUtility
 				preferencesFile.createNewFile();
 			}
 			f_out = new FileOutputStream(preferencesFile);
-			ObjectOutputStream out = new ObjectOutputStream(f_out);
-			preference = new Preference();
-			out.writeObject(preference);
+			DataOutputStream out = new DataOutputStream(f_out);
+			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out));
+			
+			writer.write(preference.getJsonString());
+
+			writer.close();
 			out.close();
 			f_out.close();
 		}
@@ -207,34 +238,6 @@ public final class PreferenceUtility
 		{
 			e1.printStackTrace();
 		}
-		return preference;
-	}
-
-	public static void savePreference(Preference preference)
-	{
-		if (preference.equals(getPreference()))
-			return;
-
-		File preferencesFile = FileUtility.getPreferencesFile();
-		FileOutputStream f_out;
-		try
-		{
-			f_out = new FileOutputStream(preferencesFile);
-			ObjectOutputStream out = new ObjectOutputStream(f_out);
-			out.writeObject(preference);
-			out.close();
-			f_out.close();
-		}
-		catch (Exception e1)
-		{
-			e1.printStackTrace();
-		}
-
-		if (mToolTipListeners != null)
-			for (PieceToolTipPreferenceChangedListener listener : mToolTipListeners)
-			{
-				listener.onPieceToolTipPreferenceChanged();
-			}
 	}
 
 	public static void addPieceToolTipListener(PieceToolTipPreferenceChangedListener listener)

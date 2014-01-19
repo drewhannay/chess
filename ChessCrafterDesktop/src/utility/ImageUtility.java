@@ -44,5 +44,5 @@ public final class ImageUtility
 	private static final List<String> PIECE_NAMES =
 			Lists
 					.newArrayList(
-							Messages.getString("pawn"), Messages.getString("rook"), Messages.getString("bishop"), Messages.getString("knight"), Messages.getString("queen"), Messages.getString("king")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
+							Messages.getString("Utility.pawn"), Messages.getString("Utility.rook"), Messages.getString("Utility.bishop"), Messages.getString("Utility.knight"), Messages.getString("Utility.queen"), Messages.getString("Utility.king")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
 }
