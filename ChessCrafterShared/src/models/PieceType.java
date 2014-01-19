@@ -65,6 +65,12 @@ public class PieceType
 	{
 		return Objects.hashCode(mName, mPieceMovements, mIsLeaper);
 	}
+	
+	@Override
+	public String toString()
+	{
+		return mName;
+	}
 
 	private final String mName;
 	private final PieceMovements mPieceMovements;

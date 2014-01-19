@@ -83,6 +83,23 @@ public final class Board
 				&& Arrays.deepEquals(mSquares, otherBoard.mSquares);
 	}
 
+	/**
+	 * Debugging method to print the state of the Board
+	 * @param game The Game state
+	 * @param boardIndex The index of the Board
+	 */
+	public void printBoard(Game game, int boardIndex)
+	{
+		for (int i = mSquares.length - 1; i >=0; i--)
+		{
+			for (Square square : mSquares[i])
+			{
+				System.out.print(square.printSquareState(game, boardIndex)+"\t"); //$NON-NLS-1$
+			}
+			System.out.println();
+		}
+	}
+	
 	private final int mRowCount;
 	private final int mColumnCount;
 	private final boolean mIsWrapAroundBoard;

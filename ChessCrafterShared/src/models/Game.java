@@ -17,8 +17,8 @@ public final class Game
 		mBoards = boards;
 		mTeams = teams;
 		mTurnKeeper = turnKeeper;
-
 		mHistory = Lists.newArrayList();
+		mJailBoards = new Board[teams.length];
 	}
 
 	/**
@@ -47,6 +47,11 @@ public final class Game
 	{
 		return mBoards;
 	}
+	
+	public Board[] getJailBoards()
+	{
+		return mJailBoards;
+	}
 
 	public Team[] getTeams()
 	{
@@ -68,6 +73,19 @@ public final class Game
 		return mHistory;
 	}
 
+	public Piece getPieceOnSquare(ChessCoordinates coordinates)
+	{
+		for (Team team : mTeams)
+		{
+			for (Piece piece : team.getPieces())
+			{
+				if (piece.getCoordinates().equals(coordinates))
+					return piece;
+			}
+		}
+		return null;
+	}
+	
 	@Override
 	public boolean equals(Object other)
 	{
@@ -89,9 +107,22 @@ public final class Game
 		return Objects.hashCode(mGameType, mTeams, mBoards, mTurnKeeper, mHistory);
 	}
 
+	/**
+	 * Debugging method to print out the state of the Boards
+	 */
+	public void printBoards()
+	{
+		for (int i = 0; i < mBoards.length; i++)
+		{
+			mBoards[i].printBoard(this, i);
+			System.out.println("--------------------");
+		}
+	}
+	
 	private final String mGameType;
 	private final Team[] mTeams;
 	private final Board[] mBoards;
+	private final Board[] mJailBoards;
 	private final TurnKeeper mTurnKeeper;
 	private final List<Move> mHistory;
 

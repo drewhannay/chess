@@ -5,6 +5,7 @@ import java.util.List;
 import rules.Rules;
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
+import controllers.GameController;
 
 public final class Team
 {
@@ -24,6 +25,13 @@ public final class Team
 	{
 		return mPieces;
 	}
+	
+	public int getTotalTeamSize()
+	{
+		int capturedSize = mCapturedPieces == null ? 0 : mCapturedPieces.size();
+		int uncapturedSize = mPieces == null ? 0 : mPieces.size();
+		return capturedSize + uncapturedSize;
+	}
 
 	/**
 	 * @return A List of Piece objects that belong to this Team but have been
@@ -33,6 +41,33 @@ public final class Team
 	{
 		return mCapturedPieces;
 	}
+	
+	public List<Piece> getNonCapturedObjectivePieces()
+	{
+		List<Piece> objectivePieces = Lists.newArrayList();
+		PieceType objectiveType = mRules.getObjectivePieceType();
+		
+		for(Piece piece : mPieces)
+		{
+			if (piece.getPieceType().equals(objectiveType))
+				objectivePieces.add(piece);
+		}
+		
+		return objectivePieces;
+	}
+	
+	public boolean objectivePieceIsInCheck(int teamIndex)
+	{
+		GameController.computeLegalDestinations();
+		
+		for (Piece piece : getNonCapturedObjectivePieces())
+		{
+			if (GameController.isThreatened(piece.getCoordinates(), teamIndex))
+				return true;
+		}
+		return false;
+	}
+	
 
 	public void markPieceAsCaptured(Piece piece)
 	{
