@@ -75,6 +75,21 @@ public final class Square
 
 		return toReturn;
 	}
+	
+	/**
+	 * Debugging method to assist in printing Game state.
+	 * @param game The Game state
+	 * @param boardIndex The index of the Board that this Square is on
+	 * @return
+	 */
+	public String printSquareState(Game game, int boardIndex)
+	{
+		ChessCoordinates coordinates = new ChessCoordinates(mRow, mColumn, boardIndex);
+		if (game.getPieceOnSquare(coordinates) != null)
+			return game.getPieceOnSquare(new ChessCoordinates(mRow, mColumn, boardIndex)).getPieceType().toString().charAt(0)+"";
+		else
+			return "___";
+	}
 
 	private final int mRow;
 	private final int mColumn;

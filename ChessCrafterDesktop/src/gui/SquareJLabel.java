@@ -1,27 +1,34 @@
+
 package gui;
 
 import java.awt.Color;
 import java.io.IOException;
-
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-
 import models.ChessCoordinates;
 import models.Piece;
 import utility.GuiUtility;
 import utility.PieceIconUtility;
+import controllers.GameController;
 
 public class SquareJLabel extends JLabel
 {
 	public static final Color HIGHLIGHT_COLOR = new Color(20, 129, 191);
+	public static final Color THREAT_COLOR = new Color(120, 20, 20);
 
 	public SquareJLabel(ChessCoordinates coordinates, boolean isHabitable, int imageScale)
 	{
 		mChessCoordinates = coordinates;
-		mPiece = null;
+		mPiece = GameController.getGame().getPieceOnSquare(coordinates);
 		mIsHabitable = isHabitable;
 		mImageScale = imageScale;
+		setOpaque(true);
+	}
+
+	public ChessCoordinates getCoordinates()
+	{
+		return mChessCoordinates;
 	}
 
 	public Color getColor()
@@ -30,28 +37,18 @@ public class SquareJLabel extends JLabel
 	}
 
 	/**
-	 * Sets the color of a square temporarily
+	 * Sets the background Color of the Square PERMANENTLY.
+	 * NOTE: Do not use this method for temporarily highlighting a square.
+	 * Use highlight() for that.
 	 * 
-	 * @param c the color to set the background
-	 */
-	public void setColor(Color c)
-	{
-		setBackground(c);
-	}
-
-	/**
-	 * Sets the background Color of the Square permanently
-	 * 
-	 * @param c New Color
+	 * @param c
+	 *            New Color
 	 */
 	public void setBackgroundColor(Color c)
 	{
+		mBackgroundColor = c;
 		setBackground(c);
 		setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-		// if the Color is the highlight color then change is only temporary,
-		// don't store it
-		if (c != HIGHLIGHT_COLOR)
-			mBackgroundColor = c;
 	}
 
 	public void hideIcon()
@@ -61,23 +58,13 @@ public class SquareJLabel extends JLabel
 	}
 
 	/**
-	 * Changes out the current piece located on this SquareJLabel
-	 * 
-	 * @param piece the piece replacing the current
-	 */
-	public void changePiece(Piece piece)
-	{
-		mPiece = piece;
-		refresh();
-	}
-
-	/**
 	 * Refresh the GUI's view of this Square with the current accurate
 	 * information.
 	 */
 	public void refresh()
 	{
-		setOpaque(true);
+		mPiece = GameController.getGame().getPieceOnSquare(mChessCoordinates);
+		
 		if (!mIsHabitable)
 		{
 			setIcon(s_uninhabitableIcon);
@@ -90,7 +77,7 @@ public class SquareJLabel extends JLabel
 			// ImageIcon pieceIcon =
 			// PieceIconUtility.getPieceIcon(mPiece.getPieceType().getName(),
 			// mPiece.isBlack());
-			ImageIcon pieceIcon = PieceIconUtility.getPieceIcon(mPiece.getPieceType().getName(), mImageScale, false);
+			ImageIcon pieceIcon = PieceIconUtility.getPieceIcon(mPiece.getPieceType().getName(), mImageScale, mPiece.getTeamId(GameController.getGame()));
 			if (pieceIcon == null)
 				setText(mPiece.getPieceType().getName());
 			else
@@ -113,7 +100,6 @@ public class SquareJLabel extends JLabel
 			setToolTipText(null);
 		}
 
-		// then reset the color too
 		resetColor();
 	}
 	
@@ -148,9 +134,20 @@ public class SquareJLabel extends JLabel
 		}
 	}
 
-	public void setThreatSquare()
+	public void highlightAsThreat()
 	{
-		setColor(Color.RED);
+		setBackground(THREAT_COLOR);
+	}
+
+	public void highlight()
+	{
+		setBackground(HIGHLIGHT_COLOR);
+	}
+	
+	@Override
+	public String toString()
+	{
+		return getCoordinates().toString();
 	}
 
 	static
@@ -172,7 +169,7 @@ public class SquareJLabel extends JLabel
 
 	private Color mBackgroundColor;
 
-	private ChessCoordinates mChessCoordinates;
+	private final ChessCoordinates mChessCoordinates;
 	private Piece mPiece;
 	private boolean mIsHabitable;
 	private int mImageScale;

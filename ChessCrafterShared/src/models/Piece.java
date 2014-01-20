@@ -5,6 +5,8 @@ import com.google.common.base.Objects;
 
 public final class Piece
 {
+	public static final int TEAMLESS_PIECE = -1;
+	
 	public Piece(long id, PieceType pieceType, ChessCoordinates coordinates)
 	{
 		mId = id;
@@ -44,6 +46,17 @@ public final class Piece
 		mCoordinates = coordinates;
 	}
 
+	public int getTeamId(Game game)
+	{
+		for (int teamIndex = 0; teamIndex < game.getTeams().length; teamIndex++)
+		{
+			if (game.getTeams()[teamIndex].getCapturedPieces().contains(this) || game.getTeams()[teamIndex].getPieces().contains(this))
+				return teamIndex;
+		}
+		
+		return TEAMLESS_PIECE;
+	}
+	
 	@Override
 	public boolean equals(Object other)
 	{
@@ -62,6 +75,12 @@ public final class Piece
 	public int hashCode()
 	{
 		return Objects.hashCode(mId, mPieceType, mOriginalCoordinates);
+	}
+	
+	@Override
+	public String toString()
+	{
+		return getPieceType().toString();
 	}
 
 	private final long mId;

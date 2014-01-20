@@ -1,5 +1,8 @@
 
-package utility;
+package models;
+
+import utility.GsonUtility;
+import com.google.common.base.Objects;
 
 public class Preference
 {
@@ -52,6 +55,35 @@ public class Preference
 		mShowPieceToolTips = showPieceToolTips;
 	}
 
+	@Override
+	public boolean equals(Object other)
+	{
+		if (!(other instanceof Preference))
+			return false;
+
+		Preference otherPreference = (Preference) other;
+
+		return Objects.equal(mSaveLocation, otherPreference.mSaveLocation)
+				&& Objects.equal(mShouldHighlightMoves, otherPreference.mShouldHighlightMoves)
+				&& Objects.equal(mShowPieceToolTips, otherPreference.mShowPieceToolTips);
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return Objects.hashCode(mSaveLocation, mShouldHighlightMoves, mShowPieceToolTips);
+	}
+	
+	public static Preference loadPreference(String jsonString)
+	{
+		return GsonUtility.getGson().fromJson(jsonString, Preference.class);
+	}
+	
+	public String getJsonString()
+	{
+		return GsonUtility.getGson().toJson(this);
+	}
+	
 	private static String s_defaultSaveLocation;
 
 	private static final String DEFAULT_LOCATION = "default"; //$NON-NLS-1$

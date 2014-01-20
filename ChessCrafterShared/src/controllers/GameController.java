@@ -3,6 +3,7 @@ package controllers;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import models.ChessCoordinates;
 import models.Game;
 import models.Move;
@@ -37,6 +38,14 @@ public final class GameController
 		return sGame;
 	}
 
+	public static Set<ChessCoordinates> getLegalDestinations(Piece piece)
+	{
+		computeLegalDestinations();
+		int teamId = piece.getTeamId(sGame);
+		return mDataMap.get(teamId).getLegalDests(piece);
+	}
+	
+	
 	public static void computeLegalDestinations()
 	{
 		// Piece[] threats = null;
@@ -154,7 +163,7 @@ public final class GameController
 	 * 
 	 * @return The number of legal moves this turn.
 	 */
-	public int getLegalMoveCount()
+	public static int getLegalMoveCount()
 	{
 		int teamIndex = sGame.getTurnKeeper().getCurrentTeamIndex();
 		List<Piece> movingTeam = sGame.getTeams()[teamIndex].getPieces();
@@ -210,8 +219,8 @@ public final class GameController
 		MoveController.execute(move);
 
 		// TODO: seems odd that this check would be necessary
-		if (sGame.getHistory().contains(move))
-			return;
+//		if (sGame.getHistory().contains(move))
+//			return;
 
 		sGame.getHistory().add(move);
 
@@ -219,6 +228,9 @@ public final class GameController
 		for (Team team : sGame.getTeams())
 			team.getRules().checkEndCondition();
 
+		// TODO: We're just using this for it's side effect of changing the team index. Do we ever need to store it?
+		sGame.getTurnKeeper().getTeamIndexForNextTurn();
+		
 		computeLegalDestinations();
 	}
 

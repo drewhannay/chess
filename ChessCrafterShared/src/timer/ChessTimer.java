@@ -45,6 +45,11 @@ public abstract class ChessTimer
 		return timer instanceof WordTimer;
 	}
 
+	public static ChessTimer createNoTimer()
+	{
+		return new NoTimer();
+	}
+
 	public static ChessTimer createTimer(TimerTypes timerType, RunnableOfT<Boolean> timeElapsedCallback, long incrementAmount,
 			long startTime, boolean isBlackTeamTimer)
 	{

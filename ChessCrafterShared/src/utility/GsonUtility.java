@@ -3,6 +3,7 @@ package utility;
 
 import java.lang.reflect.Type;
 import java.util.Map;
+import models.Preference;
 import models.turnkeeper.TurnKeeper;
 import rules.endconditions.EndCondition;
 import rules.legaldestinationcropper.LegalDestinationCropper;
@@ -37,6 +38,11 @@ public final class GsonUtility
 		return builder.create();
 	}
 
+	public static <T> Object loadObjectFromJSonString(String jsonString, Class<T> clazz)
+	{
+		return getGson().fromJson(jsonString, clazz);	
+	}
+	
 	private static class InterfaceAdapter<T> implements JsonSerializer<T>, JsonDeserializer<T>
 	{
 		@Override

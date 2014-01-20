@@ -137,4 +137,10 @@ public final class Move
 		// TODO implement this method
 		return super.hashCode();
 	}
+	
+	@Override
+	public String toString()
+	{
+		return getOrigin().toString() + " to " + getDestination().toString();
+	}
 }

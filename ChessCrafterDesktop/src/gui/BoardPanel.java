@@ -1,15 +1,18 @@
+
 package gui;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
-
+import java.util.List;
+import java.util.Set;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-
 import models.ChessCoordinates;
-import models.Piece;
 import utility.GuiUtility;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+import controllers.GameController;
 import dragNdrop.DropManager;
 import dragNdrop.GlassPane;
 import dragNdrop.MotionAdapter;
@@ -20,45 +23,37 @@ public class BoardPanel extends JPanel
 	/**
 	 * Constructor for a normal game board
 	 * 
-	 * @param rows total rows in the board
-	 * @param columns total columns in the board
-	 * @param boardIndex keeps track of which board this is if > 1
+	 * @param rows
+	 *            total rows in the board
+	 * @param columns
+	 *            total columns in the board
+	 * @param boardIndex
+	 *            keeps track of which board this is if > 1
 	 */
-	public BoardPanel(int rows, int columns, int boardIndex, GlassPane globalGlassPane, DropManager dropManager)
+	public BoardPanel(int rows, int columns, int boardIndex, GlassPane globalGlassPane, DropManager dropManager, boolean isJail)
 	{
 		setOpaque(false);
 		setLayout(new GridLayout(rows + 1, columns));
 		setPreferredSize(new Dimension((columns + 1) * 48, (rows + 1) * 48));
-		mBoardIndex = boardIndex;
 		mSquareLabels = new SquareJLabel[rows][columns];
 		mGlassPane = globalGlassPane;
 		mDropManager = dropManager;
-		createGrid(rows, columns);
-	}
-
-	/**
-	 * Constructor for Jail boards
-	 * 
-	 * @param rows total rows in jail
-	 * @param columns total columns in jail
-	 */
-	public BoardPanel(int rows, int columns)
-	{
-		setOpaque(false);
-		setLayout(new GridLayout(rows + 1, columns));
-		setPreferredSize(new Dimension((columns + 1) * 25, (rows + 1) * 25));
-		mSquareLabels = new SquareJLabel[rows][columns];
-		mBoardIndex = 0;
-		createJailGrid(rows, columns);
+		mBoardIndex = boardIndex;
+		if (isJail)
+			createJailGrid(rows, columns);
+		else
+			createGrid(rows, columns);
 	}
 
 	/**
 	 * Creates the grid for the a game BoardPanel
 	 * 
-	 * @param rows the total rows of the board
-	 * @param columns the total columns of the board
+	 * @param rows
+	 *            the total rows of the board
+	 * @param columns
+	 *            the total columns of the board
 	 */
-	public void createGrid(int rows, int columns)
+	private void createGrid(int rows, int columns)
 	{
 		for (int i = rows; i > 0; i--)
 		{
@@ -69,9 +64,10 @@ public class BoardPanel extends JPanel
 			{
 				SquareJLabel square = new SquareJLabel(new ChessCoordinates(i, k, mBoardIndex), true, 48);
 				square.addMouseMotionListener(new MotionAdapter(mGlassPane));
-				square.addMouseListener(new SquareListener(square, mDropManager));
+				square.addMouseListener(new SquareListener(square, mDropManager, mGlassPane));
 				add(square);
-				mSquareLabels[i][k] = square;
+				mSquareLabels[i - 1][k - 1] = square;
+				square.refresh();
 			}
 		}
 		for (int j = 0; j <= columns; j++)
@@ -89,34 +85,53 @@ public class BoardPanel extends JPanel
 		}
 	}
 
+	public void refreshSquares()
+	{
+		for (SquareJLabel[] labelArray : mSquareLabels)
+			for (SquareJLabel label : labelArray)
+				label.refresh();
+	}
+
 	/**
 	 * Creates the grid for the a jail BoardPanel
 	 * 
-	 * @param rows the total rows of the board
-	 * @param columns the total columns of the board
+	 * @param rows
+	 *            the total rows of the board
+	 * @param columns
+	 *            the total columns of the board
 	 */
-	public void createJailGrid(int rows, int columns)
+	private void createJailGrid(int rows, int columns)
 	{
-		for (int i = 0; i < rows; i++)
+		for (int i = 1; i <= rows; i++)
 		{
-			for (int k = 0; k <= columns; k++)
+			for (int k = 1; k <= columns; k++)
 			{
-				SquareJLabel square = new SquareJLabel(new ChessCoordinates(i, k, mBoardIndex), true, 25);
+				SquareJLabel square = new SquareJLabel(new ChessCoordinates(i, k, mBoardIndex + GameController.getGame().getBoards().length), true, 25);
 				add(square);
-				mSquareLabels[i][k] = square;
+				mSquareLabels[i - 1][k - 1] = square;
 			}
 		}
 	}
 
-	/**
-	 * Call to update the the SquareJLabel within this BoardPanel
-	 * 
-	 * @param coordinates coordinates of the SquareJLabel
-	 * @param piece the piece that needs to be placed or null for an empty piece
-	 */
-	public void updateSquareLabel(ChessCoordinates coordinates, Piece piece)
+	public List<SquareJLabel> highlightSquares(Set<ChessCoordinates> coordinates)
 	{
-		mSquareLabels[coordinates.row][coordinates.column].changePiece(piece);
+		List<SquareJLabel> toHighlight = Lists.newArrayList();
+		for (ChessCoordinates coordinate : coordinates)
+		{
+			SquareJLabel label = mSquareLabels[coordinate.row - 1][coordinate.column - 1];
+			label.highlight();
+			toHighlight.add(label);
+		}
+		return toHighlight;
+	}
+	
+	public Set<SquareJLabel> getSquareLabels()
+	{
+		Set<SquareJLabel> labels = Sets.newConcurrentHashSet();
+		for (SquareJLabel[] labelArray : mSquareLabels)
+			for (SquareJLabel label : labelArray)
+				labels.add(label);
+		return labels;
 	}
 
 	private static final long serialVersionUID = 9042633590279303353L;
