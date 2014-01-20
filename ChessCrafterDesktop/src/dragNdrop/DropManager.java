@@ -26,8 +26,11 @@ public class DropManager extends AbstractDropManager
 		setComponentList(dummyList);
 
 		if (destinationSquareLabel == null)
+		{
+			PlayGamePanel.boardRefresh();
 			return;
-
+		}
+			
 		ChessCoordinates originCoordinates = originSquareLabel.getCoordinates();
 		ChessCoordinates destinationCoordinates = destinationSquareLabel.getCoordinates();
 		

@@ -10,6 +10,7 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
+import models.Game;
 import models.Piece;
 import utility.PieceIconUtility;
 import utility.PreferenceUtility;
@@ -75,6 +76,10 @@ public class SquareListener extends DropAdapter implements MouseListener, PieceT
 		 * }
 		 */
 
+		Game game = GameController.getGame();
+		if (game.getPieceOnSquare(mSquareLabel.getCoordinates()) == null || game.getPieceOnSquare(mSquareLabel.getCoordinates()).getTeamId(game) != game.getTurnKeeper().getCurrentTeamIndex())
+			return;
+		
 		List<SquareJLabel> destinationLabels = PlayGamePanel.highlightLegalDestinations(mSquareLabel.getCoordinates());
 
 		mDropManager.setComponentList(destinationLabels);
