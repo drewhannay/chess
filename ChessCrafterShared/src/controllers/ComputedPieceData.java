@@ -2,12 +2,14 @@
 package controllers;
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import models.BidirectionalMovement;
 import models.Board;
 import models.ChessCoordinates;
+import models.Game;
 import models.Piece;
 import models.PieceMovements;
 import models.PieceMovements.MovementDirection;
@@ -408,6 +410,18 @@ public class ComputedPieceData
 				legalDestinations.add(new ChessCoordinates(f, r, targetBoardIndex));
 		}
 
+		// Remove any destinations occupied by the piece's team
+		Game game = GameController.getGame();
+		int teamId = piece.getTeamId(game);
+		ChessCoordinates[] copyOfLegalDestinations = new ChessCoordinates[legalDestinations.size()];
+		copyOfLegalDestinations = legalDestinations.toArray(copyOfLegalDestinations);
+		for (int i = 0; i < copyOfLegalDestinations.length; i++)
+		{
+			Piece pieceOnDestination = game.getPieceOnSquare(copyOfLegalDestinations[i]);
+			if (pieceOnDestination != null && pieceOnDestination.getTeamId(game) == teamId)
+				legalDestinations.remove(copyOfLegalDestinations[i]);
+		}
+		
 		mLegalDestinationMap.put(piece.getId(), legalDestinations);
 		mGuardCoordinatesMap.put(piece.getId(), guardedCoordinates);
 	}

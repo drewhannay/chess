@@ -19,7 +19,6 @@ public class MoveController
 		Piece movingPiece = null;
 		Piece capturedPiece = null;
 
-		Team movingTeam = null;
 		Team capturedTeam = null;
 
 		for (Team team : GameController.getGame().getTeams())
@@ -28,11 +27,9 @@ public class MoveController
 			{
 				if (team.getCapturedPieces().contains(piece))
 					continue;
+
 				if (piece.getCoordinates().equals(origin))
-				{
 					movingPiece = piece;
-					movingTeam = team;
-				}
 				else if (piece.getCoordinates().equals(destination))
 				{
 					capturedPiece = piece;
@@ -42,9 +39,6 @@ public class MoveController
 		}
 
 		if (movingPiece == null)
-			return false;
-
-		if (movingTeam.equals(capturedTeam))
 			return false;
 
 		if (!GameController.isLegalMove(movingPiece, destination))

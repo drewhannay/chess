@@ -173,6 +173,8 @@ public class MovePieceTest
 		ChessCoordinates destination = new ChessCoordinates(1, 5, 0);
 		mSameTeamPiece.setCoordinates(destination);
 
+		GameController.computeLegalDestinations();
+		
 		if (MoveController.execute(new Move(mOrigin, destination)))
 			fail("MoveController.execute() returned true for a same-team capture");
 
