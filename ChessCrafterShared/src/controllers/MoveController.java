@@ -15,7 +15,7 @@ public class MoveController
 	{
 		ChessCoordinates origin = move.getOrigin();
 		ChessCoordinates destination = move.getDestination();
-					
+
 		Piece movingPiece = null;
 		Piece capturedPiece = null;
 
@@ -27,7 +27,7 @@ public class MoveController
 			{
 				if (team.getCapturedPieces().contains(piece))
 					continue;
-				
+
 				if (piece.getCoordinates().equals(origin))
 					movingPiece = piece;
 				else if (piece.getCoordinates().equals(destination))
