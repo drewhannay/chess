@@ -72,7 +72,7 @@ public class PieceMakerPanel extends ChessPanel
 		mDefaultComboBoxModel.addListDataListener(mBidirectionalMovementComboBox);
 		mAddBidirectionalMoveButton = new JButton(Messages.getString("PieceMakerPanel.add")); //$NON-NLS-1$
 		mRemoveBidirectionalMoveButton = new JButton(Messages.getString("PieceMakerPanel.remove")); //$NON-NLS-1$
-		new PieceMakerPanel(null, menuPanel);
+		new PieceMakerPanel(null, menuPanel, frame);
 	}
 
 	public PieceMakerPanel(String pieceName, PieceMenuPanel menuPanel, JFrame frame)
@@ -109,7 +109,7 @@ public class PieceMakerPanel extends ChessPanel
 			Set<BidirectionalMovement> bidirectionalMovements = builder.getPieceMovements().getBidirectionalMovements();
 			
 			for (BidirectionalMovement movement : bidirectionalMovements)
-				mTempBidirectionalMovements.add(movement.toString());
+				mBidirectionalMovementComboBox.addItem(movement);
 
 			if (mBidirectionalMovementComboBox.getItemCount() != 0)
 				mBidirectionalMovementComboBox.setSelectedIndex(0);
