@@ -1,9 +1,9 @@
+
 package gui;
 
 import gui.PieceMakerPanel.PieceListChangedListener;
 import gui.PieceMenuPanel.PieceMenuManager;
 import gui.PreferenceUtility.PieceToolTipPreferenceChangedListener;
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -22,7 +22,6 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
@@ -40,7 +39,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-
 import logic.GameBuilder;
 import logic.PieceBuilder;
 import models.Board;
@@ -54,10 +52,8 @@ import rules.ObjectivePiece.ObjectivePieceTypes;
 import utility.FileUtility;
 import utility.GuiUtility;
 import utility.PieceIconUtility;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-
 import dragNdrop.AbstractDropManager;
 import dragNdrop.DropAdapter;
 import dragNdrop.DropEvent;
@@ -651,8 +647,9 @@ public class VariantCreationPanel extends ChessPanel implements PieceMenuManager
 			constraints.insets = new Insets(5, 5, 5, 5);
 			popupPanel.add(colorChooserButton, constraints);
 
-			final JCheckBox uninhabitableButton = new JCheckBox(
-					"<html><font color=#FFFFFF>" + Messages.getString("VariantCreationPanel.uninhabited") + "</font></html>", !mSquareLabel.getSquare().isHabitable()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			final JCheckBox uninhabitableButton =
+					new JCheckBox(
+							"<html><font color=#FFFFFF>" + Messages.getString("VariantCreationPanel.uninhabited") + "</font></html>", !mSquareLabel.getSquare().isHabitable()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			uninhabitableButton.setOpaque(false);
 
 			constraints.gridy = 1;
@@ -958,7 +955,7 @@ public class VariantCreationPanel extends ChessPanel implements PieceMenuManager
 				destinationSquareLabel.refresh();
 
 			}
-			else
+			else if (destinationSquareLabel != null)
 			{
 				JOptionPane
 						.showMessageDialog(
@@ -1040,13 +1037,13 @@ public class VariantCreationPanel extends ChessPanel implements PieceMenuManager
 	private MotionAdapter m_motionAdapter;
 	private Board mDisplayBoard;
 	private Board[] mGameBoards;
-	
+
 	@Override
 	public void onPieceMenuClosed()
 	{
 		mOptionsFrame.dispose();
 	}
-	
+
 	@Override
 	public void openPieceMakerPanel(String pieceName, PieceMenuPanel panel)
 	{
@@ -1061,7 +1058,7 @@ public class VariantCreationPanel extends ChessPanel implements PieceMenuManager
 	{
 		openPieceMakerPanel(null, panel);
 	}
-	
+
 	@Override
 	public String getReturnButtonText()
 	{

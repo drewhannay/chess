@@ -8,7 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-
+import java.nio.file.Files;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -21,6 +21,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public final class GuiUtility
 {
@@ -119,19 +120,21 @@ public final class GuiUtility
 	public static boolean tryAIFileInstall(Component parent)
 	{
 		JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setFileFilter(new FileNameExtensionFilter("AIPlugin Implementation (*.java)", "java"));
 		int returnVal = fileChooser.showOpenDialog(parent);
 		File file = fileChooser.getSelectedFile();
 
 		if (returnVal == JFileChooser.APPROVE_OPTION)
-		{
-			if (!file.renameTo(FileUtility.getAIFile(file.getName())))
+		{	
+			try
+			{
+				Files.copy( file.toPath(), FileUtility.getAIFile(file.getName()).toPath() );
+				return true;
+			}
+			catch( IOException iex )			
 			{
 				JOptionPane.showMessageDialog(parent, Messages.getString("fileNotInstalledSuccessfully"), Messages.getString("error"), //$NON-NLS-1$ //$NON-NLS-2$
 						JOptionPane.PLAIN_MESSAGE);
-			}
-			else
-			{
-				return true;
 			}
 		}
 
