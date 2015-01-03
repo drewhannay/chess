@@ -1,3 +1,4 @@
+
 package gui;
 
 import java.awt.Color;
@@ -13,7 +14,6 @@ import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
-
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -25,7 +25,6 @@ import javax.tools.JavaCompiler.CompilationTask;
 import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
-
 import logic.GameBuilder;
 import logic.Result;
 import models.Game;
@@ -38,7 +37,6 @@ import utility.RunnableOfT;
 import ai.AIAdapter;
 import ai.AIManager;
 import ai.AIPlugin;
-
 import com.google.common.collect.Lists;
 
 public class NewGamePanel extends ChessPanel
@@ -69,7 +67,7 @@ public class NewGamePanel extends ChessPanel
 			@Override
 			public void actionPerformed(ActionEvent event)
 			{
-				Driver.getInstance().pushPanel(createNewGamePanel());
+				Driver.getInstance().pushPanel(createHumanGamePanel());
 			}
 		});
 		constraints.gridy = 1;
@@ -94,7 +92,8 @@ public class NewGamePanel extends ChessPanel
 			@Override
 			public void actionPerformed(ActionEvent event)
 			{
-				createAIPopup();
+				if (validAIFilesExist())
+					Driver.getInstance().pushPanel(createAIGamePanel());
 			}
 		});
 		constraints.gridy = 3;
@@ -120,8 +119,8 @@ public class NewGamePanel extends ChessPanel
 		add(backButton, constraints);
 	}
 
-	private ChessPanel createNewGamePanel()
-	{		
+	private ChessPanel createHumanGamePanel()
+	{
 		mPanel = new ChessPanel();
 		mPanel.setLayout(new GridBagLayout());
 
@@ -285,10 +284,10 @@ public class NewGamePanel extends ChessPanel
 		return mPanel;
 	}
 
-	private void createAIPopup()
+	private ChessPanel createAIGamePanel()
 	{
-		if (!validAIFilesExist())
-			return;
+		mPanel = new ChessPanel();
+		mPanel.setLayout(new GridBagLayout());
 
 		GridBagConstraints constraints = new GridBagConstraints();
 
@@ -380,7 +379,8 @@ public class NewGamePanel extends ChessPanel
 					JOptionPane.showMessageDialog(
 							Driver.getInstance(),
 							Messages.getString("NewGamePanel.compilationFailed") //$NON-NLS-1$
-									+ Messages.getString("NewGamePanel.makeSureClassImplementsAIPlugin") //$NON-NLS-1$
+									+
+									Messages.getString("NewGamePanel.makeSureClassImplementsAIPlugin") //$NON-NLS-1$
 									+ Messages.getString("NewGamePanel.makeSureClassIncludes") + "import ai.*;\n" //$NON-NLS-1$ //$NON-NLS-2$
 									+ "import ai.AIAdapter.*;\n", Messages.getString("NewGamePanel.compilationFailure"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
 					return;
@@ -452,7 +452,7 @@ public class NewGamePanel extends ChessPanel
 		constraints.gridy = 3;
 		mPanel.add(buttonPanel, constraints);
 
-		Driver.getInstance().pushPanel(mPanel);
+		return mPanel;
 	}
 
 	public boolean validAIFilesExist()
