@@ -9,7 +9,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -22,6 +21,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public final class GuiUtility
 {
@@ -120,6 +120,7 @@ public final class GuiUtility
 	public static boolean tryAIFileInstall(Component parent)
 	{
 		JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setFileFilter(new FileNameExtensionFilter("AIPlugin Implementation (*.java)", "java", "java"));
 		int returnVal = fileChooser.showOpenDialog(parent);
 		File file = fileChooser.getSelectedFile();
 
