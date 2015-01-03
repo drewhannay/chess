@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -123,15 +124,16 @@ public final class GuiUtility
 		File file = fileChooser.getSelectedFile();
 
 		if (returnVal == JFileChooser.APPROVE_OPTION)
-		{
-			if (!file.renameTo(FileUtility.getAIFile(file.getName())))
+		{	
+			try
+			{
+				Files.copy( file.toPath(), FileUtility.getAIFile(file.getName()).toPath() );
+				return true;
+			}
+			catch( IOException iex )			
 			{
 				JOptionPane.showMessageDialog(parent, Messages.getString("fileNotInstalledSuccessfully"), Messages.getString("error"), //$NON-NLS-1$ //$NON-NLS-2$
 						JOptionPane.PLAIN_MESSAGE);
-			}
-			else
-			{
-				return true;
 			}
 		}
 
