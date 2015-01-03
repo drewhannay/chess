@@ -120,7 +120,7 @@ public final class GuiUtility
 	public static boolean tryAIFileInstall(Component parent)
 	{
 		JFileChooser fileChooser = new JFileChooser();
-		fileChooser.setFileFilter(new FileNameExtensionFilter("AIPlugin Implementation (*.java)", "java", "java"));
+		fileChooser.setFileFilter(new FileNameExtensionFilter("AIPlugin Implementation (*.java)", "java"));
 		int returnVal = fileChooser.showOpenDialog(parent);
 		File file = fileChooser.getSelectedFile();
 
