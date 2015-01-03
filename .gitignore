@@ -1,3 +1,4 @@
+*.swp
 *.class
 bin/
 classes/
@@ -23,3 +24,7 @@ variants/
 *.war
 *.ear
 /*.DS_Store
+
+# IntelliJ IDEA
+*.iml
+.idea
