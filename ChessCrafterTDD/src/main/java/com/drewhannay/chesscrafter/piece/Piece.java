@@ -8,10 +8,10 @@ import java.util.List;
 
 public abstract class Piece {
 
-    private final boolean mIsFirstPlayerPiece;
+    private final int mTeamId;
 
-    public Piece(boolean isFirstPlayerPiece) {
-        mIsFirstPlayerPiece = isFirstPlayerPiece;
+    public Piece(int teamId) {
+        mTeamId = teamId;
     }
 
     public abstract List<BoardCoordinate> getMovesFrom(BoardCoordinate startingLocation, int boardSize);
@@ -20,8 +20,8 @@ public abstract class Piece {
         return getMovesFrom(startingLocation, Board.DEFAULT_BOARD_SIZE);
     }
 
-    public boolean isFirstPlayerPiece() {
-        return mIsFirstPlayerPiece;
+    public int getTeamId() {
+        return mTeamId;
     }
 
     protected static List<BoardCoordinate> getAllRadialMovesFrom(BoardCoordinate startingLocation, int distance) {

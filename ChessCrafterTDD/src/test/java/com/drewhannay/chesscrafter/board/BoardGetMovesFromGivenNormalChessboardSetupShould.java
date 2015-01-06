@@ -17,30 +17,30 @@ public class BoardGetMovesFromGivenNormalChessboardSetupShould {
     public void setup() {
         mTarget = new Board();
 
-        setupStandardPawns(mTarget, 2, true);
-        setStandardPieces(mTarget, 1, true);
+        setupStandardPawns(mTarget, 2, Board.FIRST_TEAM_ID);
+        setStandardPieces(mTarget, 1, Board.FIRST_TEAM_ID);
 
-        setupStandardPawns(mTarget, 7, false);
-        setStandardPieces(mTarget, 8, false);
+        setupStandardPawns(mTarget, 7, Board.SECOND_TEAM_ID);
+        setStandardPieces(mTarget, 8, Board.SECOND_TEAM_ID);
     }
 
-    public static void setupStandardPawns(Board target, int row, boolean isFirstPlayerPiece) {
+    public static void setupStandardPawns(Board target, int row, int teamId) {
         for (int x = 1; x <= Board.DEFAULT_BOARD_SIZE; x++)
-            target.addPiece(new Pawn(isFirstPlayerPiece), BoardCoordinate.at(x, row));
+            target.addPiece(new Pawn(teamId), BoardCoordinate.at(x, row));
     }
 
-    public static void setStandardPieces(Board target, int row, boolean isFirstPlayerPiece) {
-        target.addPiece(new Rook(isFirstPlayerPiece), BoardCoordinate.at(1, row));
-        target.addPiece(new Rook(isFirstPlayerPiece), BoardCoordinate.at(8, row));
+    public static void setStandardPieces(Board target, int row, int teamId) {
+        target.addPiece(new Rook(teamId), BoardCoordinate.at(1, row));
+        target.addPiece(new Rook(teamId), BoardCoordinate.at(8, row));
 
-        target.addPiece(new Knight(isFirstPlayerPiece), BoardCoordinate.at(2, row));
-        target.addPiece(new Knight(isFirstPlayerPiece), BoardCoordinate.at(7, row));
+        target.addPiece(new Knight(teamId), BoardCoordinate.at(2, row));
+        target.addPiece(new Knight(teamId), BoardCoordinate.at(7, row));
 
-        target.addPiece(new Bishop(isFirstPlayerPiece), BoardCoordinate.at(3, row));
-        target.addPiece(new Bishop(isFirstPlayerPiece), BoardCoordinate.at(6, row));
+        target.addPiece(new Bishop(teamId), BoardCoordinate.at(3, row));
+        target.addPiece(new Bishop(teamId), BoardCoordinate.at(6, row));
 
-        target.addPiece(new Queen(isFirstPlayerPiece), BoardCoordinate.at(4, row));
-        target.addPiece(new King(isFirstPlayerPiece), BoardCoordinate.at(5, row));
+        target.addPiece(new Queen(teamId), BoardCoordinate.at(4, row));
+        target.addPiece(new King(teamId), BoardCoordinate.at(5, row));
     }
 
     @Test

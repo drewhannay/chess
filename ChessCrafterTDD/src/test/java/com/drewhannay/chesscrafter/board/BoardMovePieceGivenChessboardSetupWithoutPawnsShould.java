@@ -18,8 +18,8 @@ public class BoardMovePieceGivenChessboardSetupWithoutPawnsShould {
         mOriginCoordinate = BoardCoordinate.at(1, 1);
         mDestinationCoordinate = BoardCoordinate.at(1, 2);
 
-        BoardGetMovesFromGivenNormalChessboardSetupShould.setStandardPieces(mTarget, 1, true);
-        BoardGetMovesFromGivenNormalChessboardSetupShould.setStandardPieces(mTarget, 8, false);
+        BoardGetMovesFromGivenNormalChessboardSetupShould.setStandardPieces(mTarget, 1, Board.FIRST_TEAM_ID);
+        BoardGetMovesFromGivenNormalChessboardSetupShould.setStandardPieces(mTarget, 8, Board.SECOND_TEAM_ID);
     }
 
     @Test

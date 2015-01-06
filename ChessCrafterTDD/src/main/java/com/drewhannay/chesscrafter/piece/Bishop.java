@@ -1,5 +1,6 @@
 package com.drewhannay.chesscrafter.piece;
 
+import com.drewhannay.chesscrafter.board.Board;
 import com.drewhannay.chesscrafter.board.BoardCoordinate;
 
 import java.util.ArrayList;
@@ -8,11 +9,11 @@ import java.util.List;
 public class Bishop extends Piece {
 
     public Bishop() {
-        this(true);
+        this(Board.FIRST_TEAM_ID);
     }
 
-    public Bishop(boolean isFirstPlayerPiece) {
-        super(isFirstPlayerPiece);
+    public Bishop(int teamId) {
+        super(teamId);
     }
 
     @Override

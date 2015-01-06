@@ -7,6 +7,9 @@ import java.util.List;
 
 public class Board {
 
+    public static final int FIRST_TEAM_ID = 1;
+    public static final int SECOND_TEAM_ID = 2;
+
     public static final int DEFAULT_BOARD_SIZE = 8;
 
     private final int mBoardSize;
@@ -57,7 +60,7 @@ public class Board {
 
     public boolean doesFriendlyPieceExistAt(BoardCoordinate origin, BoardCoordinate destination) {
         Piece piece = getPiece(destination);
-        return piece != null && piece.isFirstPlayerPiece() == getPiece(origin).isFirstPlayerPiece();
+        return piece != null && piece.getTeamId() == getPiece(origin).getTeamId();
     }
 
     public Piece getPiece(BoardCoordinate coordinateToRetrieve) {

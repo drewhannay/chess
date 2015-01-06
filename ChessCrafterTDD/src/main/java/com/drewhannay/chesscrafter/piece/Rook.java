@@ -1,5 +1,6 @@
 package com.drewhannay.chesscrafter.piece;
 
+import com.drewhannay.chesscrafter.board.Board;
 import com.drewhannay.chesscrafter.board.BoardCoordinate;
 
 import java.util.ArrayList;
@@ -8,11 +9,11 @@ import java.util.List;
 public class Rook extends Piece {
 
     public Rook() {
-        this(true);
+        this(Board.FIRST_TEAM_ID);
     }
 
-    public Rook(boolean isFirstPlayerPiece) {
-        super(isFirstPlayerPiece);
+    public Rook(int teamId) {
+        super(teamId);
     }
 
     @Override

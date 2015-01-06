@@ -1,5 +1,6 @@
 package com.drewhannay.chesscrafter.piece;
 
+import com.drewhannay.chesscrafter.board.Board;
 import com.drewhannay.chesscrafter.board.BoardCoordinate;
 
 import java.util.ArrayList;
@@ -10,11 +11,11 @@ public class Pawn extends Piece {
     private boolean mHasMoved;
 
     public Pawn() {
-        this(true);
+        this(Board.FIRST_TEAM_ID);
     }
 
-    public Pawn(boolean isFirstPlayerPiece) {
-        super(isFirstPlayerPiece);
+    public Pawn(int teamId) {
+        super(teamId);
     }
 
     public void setHasMoved(boolean hasMoved) {

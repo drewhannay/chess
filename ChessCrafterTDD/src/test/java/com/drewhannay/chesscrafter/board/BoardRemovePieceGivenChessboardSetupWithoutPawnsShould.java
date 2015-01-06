@@ -13,8 +13,8 @@ public class BoardRemovePieceGivenChessboardSetupWithoutPawnsShould {
     public void setup() {
         mTarget = new Board();
 
-        BoardGetMovesFromGivenNormalChessboardSetupShould.setStandardPieces(mTarget, 1, true);
-        BoardGetMovesFromGivenNormalChessboardSetupShould.setStandardPieces(mTarget, 8, false);
+        BoardGetMovesFromGivenNormalChessboardSetupShould.setStandardPieces(mTarget, 1, Board.FIRST_TEAM_ID);
+        BoardGetMovesFromGivenNormalChessboardSetupShould.setStandardPieces(mTarget, 8, Board.SECOND_TEAM_ID);
     }
 
     @Test

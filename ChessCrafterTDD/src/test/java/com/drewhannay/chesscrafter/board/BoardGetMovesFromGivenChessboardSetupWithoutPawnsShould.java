@@ -16,8 +16,8 @@ public class BoardGetMovesFromGivenChessboardSetupWithoutPawnsShould {
     @Before
     public void setup() {
         mTarget = new Board();
-        BoardGetMovesFromGivenNormalChessboardSetupShould.setStandardPieces(mTarget, 1, true);
-        BoardGetMovesFromGivenNormalChessboardSetupShould.setStandardPieces(mTarget, 8, false);
+        BoardGetMovesFromGivenNormalChessboardSetupShould.setStandardPieces(mTarget, 1, Board.FIRST_TEAM_ID);
+        BoardGetMovesFromGivenNormalChessboardSetupShould.setStandardPieces(mTarget, 8, Board.SECOND_TEAM_ID);
     }
 
     @Test
@@ -69,8 +69,8 @@ public class BoardGetMovesFromGivenChessboardSetupWithoutPawnsShould {
 
     @Test
     public void returnEmptyForBishopAt3_8WhenBlocked() {
-        mTarget.addPiece(new Pawn(false), BoardCoordinate.at(2, 7));
-        mTarget.addPiece(new Pawn(false), BoardCoordinate.at(4, 7));
+        mTarget.addPiece(new Pawn(Board.SECOND_TEAM_ID), BoardCoordinate.at(2, 7));
+        mTarget.addPiece(new Pawn(Board.SECOND_TEAM_ID), BoardCoordinate.at(4, 7));
 
         List<BoardCoordinate> moves = mTarget.getMovesFrom(BoardCoordinate.at(3, 8));
 
@@ -86,7 +86,7 @@ public class BoardGetMovesFromGivenChessboardSetupWithoutPawnsShould {
 
     @Test
     public void notAllowRookAt1_1ToCaptureRookAt1_8WhenAPawnIsInFrontOfIt() {
-        mTarget.addPiece(new Pawn(false), BoardCoordinate.at(1, 7));
+        mTarget.addPiece(new Pawn(Board.SECOND_TEAM_ID), BoardCoordinate.at(1, 7));
 
         List<BoardCoordinate> moves = mTarget.getMovesFrom(BoardCoordinate.at(1, 1));
 

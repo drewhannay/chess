@@ -1,5 +1,6 @@
 package com.drewhannay.chesscrafter.piece;
 
+import com.drewhannay.chesscrafter.board.Board;
 import com.drewhannay.chesscrafter.board.BoardCoordinate;
 
 import java.util.ArrayList;
@@ -8,11 +9,11 @@ import java.util.List;
 public class Knight extends Piece {
 
     public Knight() {
-        this(true);
+        this(Board.FIRST_TEAM_ID);
     }
 
-    public Knight(boolean isFirstPlayerPiece) {
-        super(isFirstPlayerPiece);
+    public Knight(int teamId) {
+        super(teamId);
     }
 
     @Override
