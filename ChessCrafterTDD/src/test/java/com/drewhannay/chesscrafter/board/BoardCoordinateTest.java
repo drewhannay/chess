@@ -1,5 +1,6 @@
 package com.drewhannay.chesscrafter.board;
 
+import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;
@@ -25,6 +26,13 @@ public class BoardCoordinateTest {
         public void returnsFalseForYLessThanZero() {
             BoardCoordinate coordinate = BoardCoordinate.at(1, -23);
             assertFalse(coordinate.isCoordinateValidForBoardSize(Board.DEFAULT_BOARD_SIZE));
+        }
+    }
+
+    public static class EqualsAndHashcode {
+        @Test
+        public void satisfiesEqualsContract() {
+            EqualsVerifier.forClass(BoardCoordinate.class).verify();
         }
     }
 }
