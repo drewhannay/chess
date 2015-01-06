@@ -1,1 +1,1 @@
-include "ChessCrafterShared", "ChessCrafterDesktop"
+include "ChessCrafterTDD"

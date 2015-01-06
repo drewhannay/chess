@@ -1,0 +1,51 @@
+apply plugin: 'java'
+
+sourceCompatibility = 1.7
+version = '1.0'
+
+sourceSets {
+	acceptance {
+		compileClasspath += sourceSets.main.runtimeClasspath
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+configurations {
+	cucumberRuntime {
+		extendsFrom testRuntime
+	}
+}
+
+dependencies {
+	testCompile 'junit:junit:4.12'
+
+	compile 'junit:junit:4.12'
+	compile 'info.cukes:cucumber-java:1.2.0'
+	compile 'info.cukes:cucumber-junit:1.2.0'
+}
+
+test {
+	testLogging {
+		// show that tests are run in the command-line output
+		events 'started', 'passed'
+	}
+}
+
+jar {
+    from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+}
+
+task testAcceptance(type: Test) {
+	dependsOn assemble, compileAcceptanceJava
+	testClassesDir = sourceSets.acceptance.output.classesDir
+	doLast {
+		javaexec {
+			main = "cucumber.api.cli.Main"
+			classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.acceptance.output
+			args = ['--plugin', 'pretty', '--glue', 'com.drewhannay.chesscrafter', 'src/acceptance/resources']
+		}
+	}
+}
