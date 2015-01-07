@@ -6,6 +6,7 @@ version = '1.0'
 sourceSets {
 	acceptance {
 		compileClasspath += sourceSets.main.runtimeClasspath
+		compileClasspath += sourceSets.test.runtimeClasspath
 	}
 }
 
@@ -23,9 +24,9 @@ dependencies {
 	testCompile 'junit:junit:4.12'
 	testCompile 'nl.jqno.equalsverifier:equalsverifier:1.5.1'
 
-	compile 'junit:junit:4.12'
-	compile 'info.cukes:cucumber-java:1.2.0'
-	compile 'info.cukes:cucumber-junit:1.2.0'
+	testCompile 'junit:junit:4.12'
+	testCompile 'info.cukes:cucumber-java:1.2.0'
+	testCompile 'info.cukes:cucumber-junit:1.2.0'
 }
 
 test {
