@@ -46,6 +46,11 @@ public final class BoardCoordinate {
         return Objects.hash(x, y);
     }
 
+    @Override
+    public String toString() {
+        return "BoardCoordinate{x=" + x + ", y=" + y + "}";
+    }
+
     private static boolean isDimensionValidForBoardSize(int dimensionValue, int boardSize) {
         return dimensionValue > 0 && dimensionValue <= boardSize;
     }

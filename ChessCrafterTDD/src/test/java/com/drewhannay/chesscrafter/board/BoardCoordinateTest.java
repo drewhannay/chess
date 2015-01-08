@@ -3,6 +3,7 @@ package com.drewhannay.chesscrafter.board;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 public class BoardCoordinateTest {
@@ -33,6 +34,13 @@ public class BoardCoordinateTest {
         @Test
         public void satisfiesEqualsContract() {
             EqualsVerifier.forClass(BoardCoordinate.class).verify();
+        }
+    }
+
+    public static class ToString {
+        @Test
+        public void printsFriendlyMessage() {
+            assertEquals("BoardCoordinate{x=1, y=2}", BoardCoordinate.at(1, 2).toString());
         }
     }
 }
