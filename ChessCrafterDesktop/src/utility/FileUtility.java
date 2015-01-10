@@ -105,8 +105,8 @@ public final class FileUtility
 		{
 			FileInputStream fileInputStream = new FileInputStream(getPreferencesFile());
 			ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-			Preference preference = (Preference) objectInputStream.readObject();
-			path = preference.getSaveLocation();
+			//Preference preference = (Preference) objectInputStream.readObject();
+			//path = preference.getSaveLocation();
 			objectInputStream.close();
 			fileInputStream.close();
 		}

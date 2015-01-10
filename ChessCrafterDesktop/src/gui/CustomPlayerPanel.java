@@ -17,7 +17,7 @@ import javax.swing.JTextField;
 import utility.GuiUtility;
 
 public class CustomPlayerPanel extends ChessPanel
-{
+{/*
 	public CustomPlayerPanel(VariantCreationPanel customSetupMenu, JFrame optionsFrame)
 	{
 		mWhiteRules = customSetupMenu.mWhiteRules;
@@ -182,5 +182,5 @@ public class CustomPlayerPanel extends ChessPanel
 	private JTextField mPlayerTwoTurnsField;
 	private JLabel mIncrementTurnsLabel;
 	private JTextField mIncrementTurnsField;
-	private JFrame mFrame;
+	private JFrame mFrame;*/
 }

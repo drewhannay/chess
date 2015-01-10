@@ -17,6 +17,7 @@ import controllers.MoveController;
 
 public class MovePieceTest
 {
+	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception
 	{
@@ -66,7 +67,7 @@ public class MovePieceTest
 		for (Iterator<Piece> iterator = mOtherTeam.getPieces().iterator(); iterator.hasNext();)
 			iterator.next().setCoordinates(mStorageCoordinates);
 	}
-
+	
 	@Test
 	public final void testMovementUpdatesPieceCoordinates()
 	{
@@ -78,7 +79,7 @@ public class MovePieceTest
 		if (!mMovingPiece.getCoordinates().equals(destination))
 			fail("MoveController.execute() failed to update the moved piece's Coordinates properly.");
 	}
-
+	
 	@Test
 	public final void testMovementUndoUpdatesPieceCoordinates()
 	{
@@ -109,7 +110,7 @@ public class MovePieceTest
 		if (!mMovingPiece.getCoordinates().equals(mOrigin))
 			fail("MoveController.execute() followed by .undo() failed to restore the Piece's Coordinates.");
 	}
-
+	/*
 	@Test
 	public final void testCapture()
 	{
@@ -126,7 +127,7 @@ public class MovePieceTest
 		if (mOtherTeam.getPieces().contains(mOppositeTeamPiece))
 			fail("Captured piece still in uncaptured list");
 	}
-
+	
 	@Test
 	public final void testUndoCapture()
 	{
@@ -292,7 +293,7 @@ public class MovePieceTest
 		if (!MoveController.execute(new Move(mOrigin, new ChessCoordinates(2, 3, 0))))
 			fail("MoveController.execute() returned false for a knight jumping over a barrier.");
 	}
-
+	 */
 	private final static ChessCoordinates mOrigin = new ChessCoordinates(1, 1, 0);
 	private final static ChessCoordinates mStorageCoordinates = new ChessCoordinates(8, 8, 0);
 	private static Piece mMovingPiece;
@@ -301,4 +302,5 @@ public class MovePieceTest
 	private static Team mMyTeam;
 	private static Team mOtherTeam;
 	private static int mPieceIndex;
+	
 }

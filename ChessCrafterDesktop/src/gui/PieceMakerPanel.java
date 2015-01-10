@@ -169,7 +169,7 @@ public class PieceMakerPanel extends ChessPanel
 
 		try
 		{
-			lightIconLabel.setIcon(builder == null ? blankSquare : ImageUtility.getLightImage(builder.getName()));
+			lightIconLabel.setIcon(builder == null ? blankSquare : ImageUtility.getLightImage(builder.getName(), 24));
 		}
 		catch (IOException e3)
 		{
@@ -207,7 +207,7 @@ public class PieceMakerPanel extends ChessPanel
 
 		try
 		{
-			darkIconLabel.setIcon(builder == null ? blankSquare : ImageUtility.getDarkImage(builder.getName()));
+			darkIconLabel.setIcon(builder == null ? blankSquare : ImageUtility.getDarkImage(builder.getName(), 24));
 		}
 		catch (IOException e2)
 		{

@@ -30,6 +30,7 @@ import controllers.MoveController;
 
 public class WatchGamePanel extends JPanel
 {
+	/*
 	public WatchGamePanel(File saveFile)
 	{
 		if (saveFile == null)
@@ -514,4 +515,5 @@ public class WatchGamePanel extends JPanel
 	public void saveGame()
 	{
 	}
+	*/
 }

@@ -1,7 +1,7 @@
 
 package gui;
 import gui.PieceMakerPanel.PieceListChangedListener;
-import gui.PreferenceUtility.PieceToolTipPreferenceChangedListener;
+//import gui.PreferenceUtility.PieceToolTipPreferenceChangedListener;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -56,11 +56,12 @@ import dragNdrop.DropAdapter;
 import dragNdrop.DropEvent;
 import dragNdrop.GlassPane;
 import dragNdrop.MotionAdapter;
-lic class VariantCreationPanel extends ChessPanel implements PieceListChangedListener
+
+public class VariantCreationPanel extends ChessPanel implements PieceListChangedListener
 {
 	public VariantCreationPanel(String variantName)
 	{
-		mDropManager = new DropManager();
+		//mDropManager = new DropManager();
 		mGlobalGlassPane = new GlassPane();
 		mGlobalGlassPane.setOpaque(false);
 		Driver.getInstance().setGlassPane(mGlobalGlassPane);
@@ -73,27 +74,27 @@ lic class VariantCreationPanel extends ChessPanel implements PieceListChangedLis
 		{
 			// FIXME: we shouldn't be constructing an actual Game object here;
 			// we should be able to get everything we need from the GameBuilder
-			gameToEdit = GameBuilder.newGame(variantName);
+			//gameToEdit = GameBuilder.newGame(variantName);
 
-			mWhiteTeam = gameToEdit.getWhiteTeam();
-			mBlackTeam = gameToEdit.getBlackTeam();
+			//mWhiteTeam = gameToEdit.getWhiteTeam();
+		//	mBlackTeam = gameToEdit.getBlackTeam();
 
-			mWhiteRules = gameToEdit.getWhiteRules();
-			mBlackRules = gameToEdit.getBlackRules();
-			mWhitePromotionMap = gameToEdit.getWhitePromotionMap();
+			//mWhiteRules = gameToEdit.getWhiteRules();
+			//mBlackRules = gameToEdit.getBlackRules();
+			//mWhitePromotionMap = gameToEdit.getWhitePromotionMap();
 			if (mWhitePromotionMap == null)
 				mWhitePromotionMap = Maps.newHashMap();
 
-			mBlackPromotionMap = gameToEdit.getBlackPromotionMap();
+			//mBlackPromotionMap = gameToEdit.getBlackPromotionMap();
 			if (mBlackPromotionMap == null)
 				mBlackPromotionMap = Maps.newHashMap();
 
-			mBoardPanels = new JPanel[gameToEdit.getBoards().length];
+			//mBoardPanels = new JPanel[gameToEdit.getBoards().length];
 
 			for (int i = 0; i < mBoardPanels.length; i++)
 				mBoardPanels[i] = new JPanel();
 
-			mBuilder = new GameBuilder(variantName, gameToEdit.getBoards(), mWhiteTeam, mBlackTeam, mWhiteRules, mBlackRules);
+			//mBuilder = new GameBuilder(variantName, gameToEdit.getBoards(), mWhiteTeam, mBlackTeam, mWhiteRules, mBlackRules);
 		}
 		else
 		{
@@ -102,8 +103,8 @@ lic class VariantCreationPanel extends ChessPanel implements PieceListChangedLis
 			mWhiteTeam = Lists.newArrayList();
 			mBlackTeam = Lists.newArrayList();
 
-			mWhiteRules = new Rules();
-			mBlackRules = new Rules();
+			//mWhiteRules = new Rules();
+			//mBlackRules = new Rules();
 
 			mWhitePromotionMap = Maps.newHashMap();
 			mBlackPromotionMap = Maps.newHashMap();
@@ -114,15 +115,16 @@ lic class VariantCreationPanel extends ChessPanel implements PieceListChangedLis
 		}
 
 		mDisplayBoard = new Board(2, 1, false);
-		mPieceDisplaySquares[WHITE_INDEX] = new SquareJLabel(mDisplayBoard.getSquare(1, 1));
-		mPieceDisplaySquares[BLACK_INDEX] = new SquareJLabel(mDisplayBoard.getSquare(2, 1));
+		//mPieceDisplaySquares[WHITE_INDEX] = new SquareJLabel(mDisplayBoard.getSquare(1, 1));
+		//mPieceDisplaySquares[BLACK_INDEX] = new SquareJLabel(mDisplayBoard.getSquare(2, 1));
 
 		mOptionsFrame = new JFrame();
 		mOptionsFrame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		mScrollPane.setPreferredSize(new Dimension(200, 200));
 
-		initGUIComponents(gameToEdit, variantName);
+		//initGUIComponents(gameToEdit, variantName);
 	}
+	/*
 
 	private void initGUIComponents(final GameController game, String variantName)
 	{
@@ -997,13 +999,14 @@ lic class VariantCreationPanel extends ChessPanel implements PieceListChangedLis
 			}
 		}
 	}
+	*/
 
 	private static final long serialVersionUID = 7830479492072657640L;
 	private static final int WHITE_INDEX = 0;
 	private static final int BLACK_INDEX = 1;
 
 	private final GlassPane mGlobalGlassPane;
-	private final DropManager mDropManager;
+	//private final DropManager mDropManager;
 	private final SquareJLabel[] mPieceDisplaySquares = new SquareJLabel[2];
 
 	public Rules mWhiteRules;
@@ -1023,4 +1026,12 @@ lic class VariantCreationPanel extends ChessPanel implements PieceListChangedLis
 	private MotionAdapter m_motionAdapter;
 	private Board mDisplayBoard;
 	private Board[] mGameBoards;
+	
+
+	@Override
+	public void onPieceListChanged()
+	{
+		// TODO Auto-generated method stub
+		
+	}
 }
