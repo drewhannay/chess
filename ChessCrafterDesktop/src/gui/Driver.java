@@ -34,7 +34,6 @@ import javax.swing.JScrollPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.WindowConstants;
-import logic.GameBuilder;
 import models.Game;
 import timer.ChessTimer;
 import utility.AppConstants;
@@ -206,8 +205,8 @@ public final class Driver extends JFrame
 		add(mMainPanel, BorderLayout.CENTER);
 		pack();
 		setVisible(true);
-		GameController.setGame(GameBuilder.buildClassic());		
-		setPanel(new PlayGamePanel());
+		//GameController.setGame(GameBuilder.buildClassic());		
+		//setPanel(new PlayGamePanel());
 	}
 
 	private JButton pieceMenuButton()
