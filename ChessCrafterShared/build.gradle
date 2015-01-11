@@ -4,18 +4,18 @@ sourceCompatibility = 1.7
 version = '1.0'
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	compile group: 'com.google.guava', name: 'guava', version: '15.0'
-	compile 'com.google.code.gson:gson:2.2.4'
-	testCompile 'junit:junit:4.10'
+    compile 'com.google.guava:guava:18.0'
+    compile 'com.google.code.gson:gson:2.3.1'
+    testCompile 'junit:junit:4.12'
 }
 
 test {
     testLogging {
-    	// show that events are run in the command-line output
+        // show that events are run in the command-line output
         events 'started', 'passed'
     }
 }

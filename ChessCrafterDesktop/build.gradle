@@ -21,7 +21,7 @@ repositories {
 
 dependencies {
 	compile project(':ChessCrafterShared')
-	compile group: 'com.google.guava', name: 'guava', version: '15.0'
+	compile 'com.google.guava:guava:18.0'
 }
 
 jar {
