@@ -26,7 +26,7 @@ public final class GsonUtility {
         return builder.create();
     }
 
-    public static <T> Object loadObjectFromJSonString(String jsonString, Class<T> clazz) {
+    public static <T> Object fromJson(String jsonString, Class<T> clazz) {
         return getGson().fromJson(jsonString, clazz);
     }
 
