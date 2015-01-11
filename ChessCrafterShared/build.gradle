@@ -15,6 +15,7 @@ dependencies {
     compile 'org.jetbrains:annotations:13.0'
 
     testCompile 'junit:junit:4.12'
+    testCompile 'nl.jqno.equalsverifier:equalsverifier:1.5.1'
 }
 
 test {

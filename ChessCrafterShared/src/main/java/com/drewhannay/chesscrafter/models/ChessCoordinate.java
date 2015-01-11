@@ -1,6 +1,6 @@
 package com.drewhannay.chesscrafter.models;
 
-import com.google.common.base.Objects;
+import java.util.Objects;
 
 public final class ChessCoordinate {
     public final int row;
@@ -24,18 +24,18 @@ public final class ChessCoordinate {
 
         ChessCoordinate otherCoordinates = (ChessCoordinate) other;
 
-        return Objects.equal(row, otherCoordinates.row) && Objects.equal(column, otherCoordinates.column)
-                && Objects.equal(boardIndex, otherCoordinates.boardIndex);
+        return row == otherCoordinates.row &&
+                column == otherCoordinates.column &&
+                boardIndex == otherCoordinates.boardIndex;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(row, column, boardIndex);
+        return Objects.hash(row, column, boardIndex);
     }
 
     @Override
     public String toString() {
-        return row + " " + column + " " + boardIndex; //$NON-NLS-1$//$NON-NLS-2$
+        return "ChessCoordinate{row=" + row + ", column=" + column + ", boardIndex=" + boardIndex + "}";
     }
-
 }
