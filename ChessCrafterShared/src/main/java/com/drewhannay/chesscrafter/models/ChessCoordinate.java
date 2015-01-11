@@ -3,10 +3,18 @@ package com.drewhannay.chesscrafter.models;
 import com.google.common.base.Objects;
 
 public final class ChessCoordinate {
-    public ChessCoordinate(int row, int column, int boardIndex) {
+    public final int row;
+    public final int column;
+    public final int boardIndex;
+
+    private ChessCoordinate(int row, int column, int boardIndex) {
         this.row = row;
         this.column = column;
         this.boardIndex = boardIndex;
+    }
+
+    public static ChessCoordinate at(int row, int column, int boardIndex) {
+        return new ChessCoordinate(row, column, boardIndex);
     }
 
     @Override
@@ -24,10 +32,6 @@ public final class ChessCoordinate {
     public int hashCode() {
         return Objects.hashCode(row, column, boardIndex);
     }
-
-    public final int row;
-    public final int column;
-    public final int boardIndex;
 
     @Override
     public String toString() {

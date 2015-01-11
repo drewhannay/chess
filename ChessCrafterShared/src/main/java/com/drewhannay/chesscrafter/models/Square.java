@@ -72,9 +72,9 @@ public final class Square {
      * @return
      */
     public String printSquareState(Game game, int boardIndex) {
-        ChessCoordinate coordinates = new ChessCoordinate(mRow, mColumn, boardIndex);
+        ChessCoordinate coordinates = ChessCoordinate.at(mRow, mColumn, boardIndex);
         if (game.getPieceOnSquare(coordinates) != null)
-            return game.getPieceOnSquare(new ChessCoordinate(mRow, mColumn, boardIndex)).getPieceType().toString().charAt(0) + "";
+            return game.getPieceOnSquare(ChessCoordinate.at(mRow, mColumn, boardIndex)).getPieceType().toString().charAt(0) + "";
         else
             return "___";
     }

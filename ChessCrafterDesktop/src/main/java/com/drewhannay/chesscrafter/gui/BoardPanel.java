@@ -49,7 +49,7 @@ public class BoardPanel extends JPanel {
             label.setHorizontalAlignment(SwingConstants.CENTER);
             add(label);
             for (int k = 1; k <= columns; k++) {
-                SquareJLabel square = new SquareJLabel(new ChessCoordinate(i, k, mBoardIndex), true, 48);
+                SquareJLabel square = new SquareJLabel(ChessCoordinate.at(i, k, mBoardIndex), true, 48);
                 square.addMouseMotionListener(new MotionAdapter(mGlassPane));
                 square.addMouseListener(new SquareListener(square, mDropManager, mGlassPane));
                 add(square);
@@ -83,7 +83,7 @@ public class BoardPanel extends JPanel {
     private void createJailGrid(int rows, int columns) {
         for (int i = 1; i <= rows; i++) {
             for (int k = 1; k <= columns; k++) {
-                SquareJLabel square = new SquareJLabel(new ChessCoordinate(i, k, mBoardIndex + GameController.getGame().getBoards().length), true, 25);
+                SquareJLabel square = new SquareJLabel(ChessCoordinate.at(i, k, mBoardIndex + GameController.getGame().getBoards().length), true, 25);
                 add(square);
                 mSquareLabels[i - 1][k - 1] = square;
             }

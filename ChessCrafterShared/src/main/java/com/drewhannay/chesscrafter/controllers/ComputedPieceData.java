@@ -66,7 +66,7 @@ public class ComputedPieceData {
             if (j == 0)
                 break;
 
-            destination = new ChessCoordinate(pieceRow, j, targetBoardIndex);
+            destination = ChessCoordinate.at(pieceRow, j, targetBoardIndex);
 
             boolean shouldBreak = sameRowAndColumn(destination, piece.getCoordinates());
             if (!shouldBreak && board.getSquare(destination.row, destination.column).isHabitable())
@@ -94,7 +94,7 @@ public class ComputedPieceData {
             if (wraparound && j < 1)
                 j = board.getColumnCount() + j;
 
-            destination = new ChessCoordinate(pieceRow, j, targetBoardIndex);
+            destination = ChessCoordinate.at(pieceRow, j, targetBoardIndex);
 
             boolean shouldBreak = sameRowAndColumn(destination, piece.getCoordinates());
             if (!shouldBreak && board.getSquare(destination.row, destination.column).isHabitable())
@@ -120,7 +120,7 @@ public class ComputedPieceData {
         for (int r = pieceRow + 1; r <= northMax; r++) {
             int j = r;
 
-            destination = new ChessCoordinate(j, pieceColumn, targetBoardIndex);
+            destination = ChessCoordinate.at(j, pieceColumn, targetBoardIndex);
 
             boolean shouldBreak = sameRowAndColumn(destination, piece.getCoordinates());
             if (!shouldBreak && board.getSquare(destination.row, destination.column).isHabitable())
@@ -146,7 +146,7 @@ public class ComputedPieceData {
         for (int r = pieceRow - 1; (r >= southMax); r--) {
             int j = r;
 
-            destination = new ChessCoordinate(j, pieceColumn, targetBoardIndex);
+            destination = ChessCoordinate.at(j, pieceColumn, targetBoardIndex);
 
             boolean shouldBreak = sameRowAndColumn(destination, piece.getCoordinates());
             if (!shouldBreak && board.getSquare(destination.row, destination.column).isHabitable())
@@ -173,7 +173,7 @@ public class ComputedPieceData {
             northeastMax = board.getRowCount();
 
         for (int r = pieceRow + 1, c = pieceColumn + 1; r <= northeastMax && c <= northeastMax; r++, c++) {
-            destination = new ChessCoordinate(r, c, targetBoardIndex);
+            destination = ChessCoordinate.at(r, c, targetBoardIndex);
 
             boolean shouldBreak = sameRowAndColumn(destination, piece.getCoordinates());
             if (!shouldBreak && board.getSquare(destination.row, destination.column).isHabitable())
@@ -203,7 +203,7 @@ public class ComputedPieceData {
             southMin = 1;
 
         for (int r = pieceRow - 1, c = pieceColumn + 1; r >= southMin && c <= eastMax; r--, c++) {
-            destination = new ChessCoordinate(r, c, targetBoardIndex);
+            destination = ChessCoordinate.at(r, c, targetBoardIndex);
 
             boolean shouldBreak = sameRowAndColumn(destination, piece.getCoordinates());
             if (!shouldBreak && board.getSquare(destination.row, destination.column).isHabitable())
@@ -231,7 +231,7 @@ public class ComputedPieceData {
             northMax = board.getRowCount();
 
         for (int r = pieceRow + 1, c = pieceColumn - 1; r <= northMax && c >= westMin; r++, c--) {
-            destination = new ChessCoordinate(r, c, targetBoardIndex);
+            destination = ChessCoordinate.at(r, c, targetBoardIndex);
 
             boolean shouldBreak = sameRowAndColumn(destination, piece.getCoordinates());
             if (!shouldBreak && board.getSquare(destination.row, destination.column).isHabitable())
@@ -259,7 +259,7 @@ public class ComputedPieceData {
             southMin = 1;
 
         for (int r = pieceRow - 1, c = pieceColumn - 1; r >= southMin && c >= westMin; r--, c--) {
-            destination = new ChessCoordinate(r, c, targetBoardIndex);
+            destination = ChessCoordinate.at(r, c, targetBoardIndex);
 
             boolean shouldBreak = sameRowAndColumn(destination, piece.getCoordinates());
             if (!shouldBreak && board.getSquare(destination.row, destination.column).isHabitable())
@@ -296,7 +296,7 @@ public class ComputedPieceData {
             }
 
             if (board.isRowValid(f) && board.isColumnValid(r))
-                legalDestinations.add(new ChessCoordinate(f, r, targetBoardIndex));
+                legalDestinations.add(ChessCoordinate.at(f, r, targetBoardIndex));
 
             // two o'clock
             f = (pieceRow + rank);
@@ -307,7 +307,7 @@ public class ComputedPieceData {
             }
 
             if (board.isRowValid(f) && board.isColumnValid(r))
-                legalDestinations.add(new ChessCoordinate(f, r, targetBoardIndex));
+                legalDestinations.add(ChessCoordinate.at(f, r, targetBoardIndex));
 
             // four o'clock
             f = (pieceRow + file);
@@ -318,7 +318,7 @@ public class ComputedPieceData {
             }
 
             if (board.isRowValid(f) && board.isColumnValid(r))
-                legalDestinations.add(new ChessCoordinate(f, r, targetBoardIndex));
+                legalDestinations.add(ChessCoordinate.at(f, r, targetBoardIndex));
 
             // five o'clock
             f = (pieceRow + rank);
@@ -329,7 +329,7 @@ public class ComputedPieceData {
             }
 
             if (board.isRowValid(f) && board.isColumnValid(r))
-                legalDestinations.add(new ChessCoordinate(f, r, targetBoardIndex));
+                legalDestinations.add(ChessCoordinate.at(f, r, targetBoardIndex));
 
             // seven o'clock
             f = (pieceRow - file);
@@ -340,7 +340,7 @@ public class ComputedPieceData {
             }
 
             if (board.isRowValid(f) && board.isColumnValid(r))
-                legalDestinations.add(new ChessCoordinate(f, r, targetBoardIndex));
+                legalDestinations.add(ChessCoordinate.at(f, r, targetBoardIndex));
 
             // eight o'clock
             f = (pieceRow - rank);
@@ -351,7 +351,7 @@ public class ComputedPieceData {
             }
 
             if (board.isRowValid(f) && board.isColumnValid(r))
-                legalDestinations.add(new ChessCoordinate(f, r, targetBoardIndex));
+                legalDestinations.add(ChessCoordinate.at(f, r, targetBoardIndex));
 
             // ten o'clock
             f = (pieceRow - file);
@@ -362,7 +362,7 @@ public class ComputedPieceData {
             }
 
             if (board.isRowValid(f) && board.isColumnValid(r))
-                legalDestinations.add(new ChessCoordinate(f, r, targetBoardIndex));
+                legalDestinations.add(ChessCoordinate.at(f, r, targetBoardIndex));
 
             // eleven o'clock
             f = (pieceRow - rank);
@@ -373,7 +373,7 @@ public class ComputedPieceData {
             }
 
             if (board.isRowValid(f) && board.isColumnValid(r))
-                legalDestinations.add(new ChessCoordinate(f, r, targetBoardIndex));
+                legalDestinations.add(ChessCoordinate.at(f, r, targetBoardIndex));
         }
 
         // Remove any destinations occupied by the piece's team
@@ -408,7 +408,7 @@ public class ComputedPieceData {
 
         // take one step forward
         if (board.isRowValid(pawnRow + direction)) {
-            destination = new ChessCoordinate(pawnRow + direction, pawnColumn, targetBoardIndex);
+            destination = ChessCoordinate.at(pawnRow + direction, pawnColumn, targetBoardIndex);
             if (!mOccupiedSquares.contains(destination) && board.getSquare(pawnRow + direction, pawnColumn).isHabitable())
                 legalDestinations.add(destination);
             else if (isGuardingSquare(destination))
@@ -420,7 +420,7 @@ public class ComputedPieceData {
             col = pawnColumn;
 
             if (board.isColumnValid(col + 1)) {
-                destination = new ChessCoordinate(row, col + 1, targetBoardIndex);
+                destination = ChessCoordinate.at(row, col + 1, targetBoardIndex);
 
                 // order is important here: if we're not guarding the square,
                 // but it's occupied, it must be occupied by the other team
@@ -432,7 +432,7 @@ public class ComputedPieceData {
                     legalDestinations.add(destination);
             }
             if (board.isColumnValid(col - 1)) {
-                destination = new ChessCoordinate(row, col + 1, targetBoardIndex);
+                destination = ChessCoordinate.at(row, col + 1, targetBoardIndex);
 
                 // order is important here: if we're not guarding the square,
                 // but it's occupied, it must be occupied by the other team
@@ -447,10 +447,10 @@ public class ComputedPieceData {
 
         // two step
         if (pawn.getMoveCount() == 0 && board.isRowValid(pawnRow + (2 * direction))) {
-            destination = new ChessCoordinate(pawnRow + (2 * direction), pawnColumn, targetBoardIndex);
+            destination = ChessCoordinate.at(pawnRow + (2 * direction), pawnColumn, targetBoardIndex);
 
             if (!mOccupiedSquares.contains(destination)
-                    && !mOccupiedSquares.contains(new ChessCoordinate(pawnRow + direction, pawnColumn, targetBoardIndex))
+                    && !mOccupiedSquares.contains(ChessCoordinate.at(pawnRow + direction, pawnColumn, targetBoardIndex))
                     && board.getSquare(destination.row, destination.column).isHabitable()) {
                 legalDestinations.add(destination);
             }
@@ -681,7 +681,7 @@ public class ComputedPieceData {
             // North
             if (originRow < targetRow && canAttack(piece, targetRow, targetColumn, MovementDirection.NORTH)) {
                 for (r = (originRow + 1); r <= targetRow; r++) {
-                    ChessCoordinate indexCoordinates = new ChessCoordinate(r, originColumn, originBoardIndex);
+                    ChessCoordinate indexCoordinates = ChessCoordinate.at(r, originColumn, originBoardIndex);
                     if (mOccupiedSquares.contains(indexCoordinates) && !inclusive)
                         break;
                     if (r != targetRow || inclusive)
@@ -692,7 +692,7 @@ public class ComputedPieceData {
             else {
                 if (canAttack(piece, targetRow, targetColumn, MovementDirection.SOUTH)) {
                     for (r = (originRow - 1); r >= targetRow; r--) {
-                        ChessCoordinate indexCoordinates = new ChessCoordinate(r, originColumn, originBoardIndex);
+                        ChessCoordinate indexCoordinates = ChessCoordinate.at(r, originColumn, originBoardIndex);
                         if (mOccupiedSquares.contains(indexCoordinates) && !inclusive)
                             break;
                         if (r != targetRow || inclusive)
@@ -707,7 +707,7 @@ public class ComputedPieceData {
             // East
             if (originColumn < targetColumn && canAttack(piece, targetRow, targetColumn, MovementDirection.EAST)) {
                 for (c = (originColumn + 1); c <= targetColumn; c++) {
-                    ChessCoordinate indexCoordinates = new ChessCoordinate(originRow, c, originBoardIndex);
+                    ChessCoordinate indexCoordinates = ChessCoordinate.at(originRow, c, originBoardIndex);
                     if (mOccupiedSquares.contains(indexCoordinates) && !inclusive)
                         break;
                     if (c != targetColumn || inclusive)
@@ -718,7 +718,7 @@ public class ComputedPieceData {
             else {
                 if (canAttack(piece, targetRow, targetColumn, MovementDirection.WEST)) {
                     for (c = (originColumn - 1); c >= targetColumn; c--) {
-                        ChessCoordinate indexCoordinates = new ChessCoordinate(originRow, c, originBoardIndex);
+                        ChessCoordinate indexCoordinates = ChessCoordinate.at(originRow, c, originBoardIndex);
                         if (mOccupiedSquares.contains(indexCoordinates) && !inclusive)
                             break;
                         if (c != targetColumn || inclusive)
@@ -733,7 +733,7 @@ public class ComputedPieceData {
             // Northeast
             if (originRow < targetRow && canAttack(piece, targetRow, targetColumn, MovementDirection.NORTHEAST)) {
                 for (c = (originColumn + 1), r = (originRow + 1); r <= targetRow; c++, r++) {
-                    ChessCoordinate indexCoordinates = new ChessCoordinate(r, c, originBoardIndex);
+                    ChessCoordinate indexCoordinates = ChessCoordinate.at(r, c, originBoardIndex);
                     if (mOccupiedSquares.contains(indexCoordinates) && !inclusive)
                         break;
                     if (r != targetRow || inclusive)
@@ -744,7 +744,7 @@ public class ComputedPieceData {
             else {
                 if (canAttack(piece, targetRow, targetColumn, MovementDirection.SOUTHWEST)) {
                     for (c = (originColumn - 1), r = (originRow - 1); r >= targetRow; c--, r--) {
-                        ChessCoordinate indexCoordinates = new ChessCoordinate(r, c, originBoardIndex);
+                        ChessCoordinate indexCoordinates = ChessCoordinate.at(r, c, originBoardIndex);
                         if (mOccupiedSquares.contains(indexCoordinates) && !inclusive)
                             break;
                         if (r != targetRow || inclusive)
@@ -758,7 +758,7 @@ public class ComputedPieceData {
             // Northwest
             if ((originRow - targetRow) < 0 && canAttack(piece, targetRow, targetColumn, MovementDirection.NORTHWEST)) {
                 for (c = (originColumn - 1), r = (originRow + 1); r <= targetRow; c--, r++) {
-                    ChessCoordinate indexCoordinates = new ChessCoordinate(r, c, originBoardIndex);
+                    ChessCoordinate indexCoordinates = ChessCoordinate.at(r, c, originBoardIndex);
                     if (mOccupiedSquares.contains(indexCoordinates) && !inclusive)
                         break;
                     if (r != targetRow || inclusive)
@@ -769,7 +769,7 @@ public class ComputedPieceData {
             else {
                 if (canAttack(piece, targetRow, targetColumn, MovementDirection.SOUTHEAST)) {
                     for (c = (originColumn + 1), r = (originRow - 1); r >= targetRow; c++, r--) {
-                        ChessCoordinate indexCoordinates = new ChessCoordinate(r, c, originBoardIndex);
+                        ChessCoordinate indexCoordinates = ChessCoordinate.at(r, c, originBoardIndex);
                         if (mOccupiedSquares.contains(indexCoordinates) && !inclusive)
                             break;
                         if (r != targetRow || inclusive)
