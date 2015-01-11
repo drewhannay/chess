@@ -23,7 +23,7 @@ variants/
 # Package Files #
 *.war
 *.ear
-/*.DS_Store
+*.DS_Store
 
 # IntelliJ IDEA
 *.iml
