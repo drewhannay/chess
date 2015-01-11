@@ -30,26 +30,30 @@ _Of course, there may be alternate ways to do many of these steps, but these are
  * Enter <code>upstream</code> as the name (no caps!) and https://github.com/drewhannay/chess as the URL, then press "Add".
  * Now close the Remote Manager and open the Branch Manager by clicking the "Branch" menu item, and then "Branch Manager". You should see an "upstream/master" remote branch with no local branch. Click on that item and click add, giving it the name "upstream-master", then click "Add Branch".
  * You can now close the Branch Manager and celebrate, knowing that you have finished setting up your repository!
- 
-### Running the Code
-* Download and set up [Eclipse](http://www.eclipse.org/downloads/packages/eclipse-classic-372/indigosr2)
+
+### Building the Code
+Chess Crafter uses the [Gradle build system](http://www.gradle.org/) to build the project. Gradle lets us use the same build script in both development builds and release builds.
+To build the code, just run ```gradlew build``` from the root directory of the repository and this will run all the tests and produce a ```build``` directory for each module
+
+### Setting up an IDE
+#### IntelliJ IDEA (Recommended)
+IntelliJ provides Gradle project support out of the box, which is why it's our recommended IDE. To get set up:
+* Download and set up the [IntelliJ IDEA Community Edition](https://www.jetbrains.com/idea/)
+* Click "Import Project" and choose the root directory of your git repository
+* Choose "Import project from external model" and select "Gradle"
+* On the next screen, choose "Use customizable gradle wrapper" and click "Finish"
+* IntelliJ will do some work to set up the Gradle project and then you're done!
+
+#### Eclipse
+Eclipse doesn't support Gradle by default, so we need to do a little extra work to get things ready.
+* From the command line, navigate to the root directory of the repository and run ```gradlew eclipse```
+ * This will generate the various ```.project``` and ```.classpath``` files needed to import the code into Eclipse
+ * If you decide to stop using Eclipse, you can run ```gradlew cleanEclipse``` to remove the generated files
+* Download and set up [Eclipse](http://www.eclipse.org/downloads/packages/eclipse-ide-java-developers/lunasr1)
 * In Eclipse, click File -> Import -> General -> Existing Projects into Workspace
 * Choose the location of your local source code and you should see two projects appear in the "Projects" window.
 * Select both projects, "ChessCrafterShared" and "ChessCrafterDesktop" and click "Finish"
-* For each of the projects you just added:
- * Right-click on the project folder in Eclipse and click Import
- * Choose General -> Preferences as the Import Source
- * Choose chessProject.epf from your newly downloaded local code as the input preference file, and make sure "Import All" is checked, then click Finish. This will make sure your Eclipse code clean up tools follow the code guidelines for our project.
- * You will now need to enable the settings you just imported. Right click on the project again and click "Properties". Under the "Java Code Style" item on the left, you'll see a "Clean Up" item and a "Formatter" item. Go to each of those and check the "Enable Project Specific Settings" box and ensure that the Chess profiles are selected as the Active Profiles.
-* If you have errors in the project at this point, make sure your Eclipse is set to use the 1.6 Java Compiler (Preferences->Java->Compiler)
-
-### Building in Release Mode
-Chess Crafter uses the [Gradle build system](http://www.gradle.org/) for compiling our app for distribution. This lets us create an executable jar file (for Windows & Linux) and a .dmg/.app file (for Mac OS X) with one simple command. After making changes to the code, you should compile the app using our gradle script and test to make sure everything works in release mode.
-* FOR WINDOWS USERS: You may have to add in an environment path variable to your JDK if you installed a JRE first. To do that go to Control Panel -> System -> Advanced System Settings -> Advanced Tab -> Environment Variables -> create a new variable called JAVA_HOME and point it to the top level folder of the JDK (e.g G:/JDK/)
-* Using your favorite terminal/shell program, navigate to the root directory of the repository
-* Execute the following command: ```gradlew build``` (note: you may need to use ```./gradlew build```).
- * Alternatively, on a Mac, you should use ```gradlew createDmg``` to create a .dmg file as well as the executable jar
-* That's it! It's really that simple. You should now see a ```build``` directory in the ```ChessCrafterDesktop``` directory that contains several folders holding the various outputs of the build.
+* Note: you cannot build the code from Eclipse at this point; Eclipse does not support Gradle builds. You may able to get some support using the [Gradle Eclipse Plugin](https://www.gradle.org/tooling) but we haven't tested this. We recommend building your code from the command line with Gradle manually.
 
 ### The Issue System
 This project uses the github Issues system to track all work being done on the app.  To get started, visit the [Issues Tab](https://github.com/drewhannay/chess/issues) and browse the list of things that need to be done.  Find one that looks interesting and isn't yet being worked on and claim it for yourself by leaving a comment saying you're working on it.  If you find a bug in the app or have a feature or enhancement idea, add an issue for it. <b>Every single commit</b> that gets added to the project should have an associated issue number (as specified below...)
