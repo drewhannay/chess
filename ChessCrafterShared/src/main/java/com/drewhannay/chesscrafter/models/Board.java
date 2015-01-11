@@ -1,109 +1,95 @@
+package com.drewhannay.chesscrafter.models;
 
-package models;
-
-import java.util.Arrays;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 
-public final class Board
-{
-	public static final int NO_ENPASSANT = 0;
+import java.util.Arrays;
 
-	public Board(int rowCount, int columnCount, boolean wrapsAround)
-	{
-		mRowCount = rowCount;
-		mColumnCount = columnCount;
-		mIsWrapAroundBoard = wrapsAround;
+public final class Board {
+    public static final int NO_ENPASSANT = 0;
 
-		mSquares = new Square[rowCount][columnCount];
+    public Board(int rowCount, int columnCount, boolean wrapsAround) {
+        mRowCount = rowCount;
+        mColumnCount = columnCount;
+        mIsWrapAroundBoard = wrapsAround;
 
-		for (int row = 0, column = 0; row < rowCount; row++)
-		{
-			// add one to the row and column to ignore counting from zero
-			for (column = 0; column < columnCount; column++)
-				mSquares[row][column] = new Square((row + 1), (column + 1));
-		}
-	}
+        mSquares = new Square[rowCount][columnCount];
 
-	public int getRowCount()
-	{
-		return mRowCount;
-	}
+        for (int row = 0, column = 0; row < rowCount; row++) {
+            // add one to the row and column to ignore counting from zero
+            for (column = 0; column < columnCount; column++)
+                mSquares[row][column] = new Square((row + 1), (column + 1));
+        }
+    }
 
-	public int getColumnCount()
-	{
-		return mColumnCount;
-	}
+    public int getRowCount() {
+        return mRowCount;
+    }
 
-	public boolean isWrapAroundBoard()
-	{
-		return mIsWrapAroundBoard;
-	}
+    public int getColumnCount() {
+        return mColumnCount;
+    }
 
-	public Square getSquare(int row, int column)
-	{
-		Preconditions.checkArgument(isRowValid(row) && isColumnValid(column));
+    public boolean isWrapAroundBoard() {
+        return mIsWrapAroundBoard;
+    }
 
-		// use x-1 and y-1 so we can maintain the illusion of counting from 1
-		return mSquares[row - 1][column - 1];
-	}
+    public Square getSquare(int row, int column) {
+        Preconditions.checkArgument(isRowValid(row) && isColumnValid(column));
 
-	public boolean isRowValid(int row)
-	{
-		return row <= getRowCount() && row > 0;
-	}
+        // use x-1 and y-1 so we can maintain the illusion of counting from 1
+        return mSquares[row - 1][column - 1];
+    }
 
-	public boolean isColumnValid(int column)
-	{
-		return column <= getColumnCount() && column > 0;
-	}
+    public boolean isRowValid(int row) {
+        return row <= getRowCount() && row > 0;
+    }
 
-	public int getEnpassantCol()
-	{
-		return mEnPassantColumn;
-	}
+    public boolean isColumnValid(int column) {
+        return column <= getColumnCount() && column > 0;
+    }
 
-	public void setEnpassantCol(int enpassantCol)
-	{
-		mEnPassantColumn = enpassantCol;
-	}
+    public int getEnpassantCol() {
+        return mEnPassantColumn;
+    }
 
-	@Override
-	public boolean equals(Object other)
-	{
-		if (!(other instanceof Board))
-			return false;
+    public void setEnpassantCol(int enpassantCol) {
+        mEnPassantColumn = enpassantCol;
+    }
 
-		Board otherBoard = (Board) other;
+    @Override
+    public boolean equals(Object other) {
+        if (!(other instanceof Board))
+            return false;
 
-		// TODO: need to compare the mutable state (mEnPassantColumn) as well, but how to do that?
-		return Objects.equal(mRowCount, otherBoard.mRowCount)
-				&& Objects.equal(mColumnCount, otherBoard.mColumnCount)
-				&& Objects.equal(mIsWrapAroundBoard, otherBoard.mIsWrapAroundBoard)
-				&& Arrays.deepEquals(mSquares, otherBoard.mSquares);
-	}
+        Board otherBoard = (Board) other;
 
-	/**
-	 * Debugging method to print the state of the Board
-	 * @param game The Game state
-	 * @param boardIndex The index of the Board
-	 */
-	public void printBoard(Game game, int boardIndex)
-	{
-		for (int i = mSquares.length - 1; i >=0; i--)
-		{
-			for (Square square : mSquares[i])
-			{
-				System.out.print(square.printSquareState(game, boardIndex)+"\t"); //$NON-NLS-1$
-			}
-			System.out.println();
-		}
-	}
-	
-	private final int mRowCount;
-	private final int mColumnCount;
-	private final boolean mIsWrapAroundBoard;
-	private final Square mSquares[][];
+        // TODO: need to compare the mutable state (mEnPassantColumn) as well, but how to do that?
+        return Objects.equal(mRowCount, otherBoard.mRowCount)
+                && Objects.equal(mColumnCount, otherBoard.mColumnCount)
+                && Objects.equal(mIsWrapAroundBoard, otherBoard.mIsWrapAroundBoard)
+                && Arrays.deepEquals(mSquares, otherBoard.mSquares);
+    }
 
-	private int mEnPassantColumn;
+    /**
+     * Debugging method to print the state of the Board
+     *
+     * @param game       The Game state
+     * @param boardIndex The index of the Board
+     */
+    public void printBoard(Game game, int boardIndex) {
+        for (int i = mSquares.length - 1; i >= 0; i--) {
+            for (Square square : mSquares[i]) {
+                System.out.print(square.printSquareState(game, boardIndex) + "\t"); //$NON-NLS-1$
+            }
+            System.out.println();
+        }
+    }
+
+    private final int mRowCount;
+    private final int mColumnCount;
+    private final boolean mIsWrapAroundBoard;
+    private final Square mSquares[][];
+
+    private int mEnPassantColumn;
 }

@@ -1,16 +1,13 @@
+package com.drewhannay.chesscrafter.models.turnkeeper;
 
-package models.turnkeeper;
+public abstract class TurnKeeper {
+    public abstract int getTeamIndexForNextTurn();
 
-public abstract class TurnKeeper
-{
-	public abstract int getTeamIndexForNextTurn();
+    public abstract int undo();
 
-	public abstract int undo();
+    public int getCurrentTeamIndex() {
+        return mCurrentTeamIndex;
+    }
 
-	public int getCurrentTeamIndex()
-	{
-		return mCurrentTeamIndex;
-	}
-
-	protected int mCurrentTeamIndex;
+    protected int mCurrentTeamIndex;
 }

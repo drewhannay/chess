@@ -25,14 +25,14 @@ dependencies {
 }
 
 jar {
-	manifest.attributes("Main-Class": "gui.Driver", "provider": "gradle")
+	manifest.attributes("Main-Class": "com.drewhannay.chesscrafter.gui.Driver", "provider": "gradle")
     from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
 }
 
 apply plugin: 'macAppBundle'
 
 macAppBundle {
-    mainClassName = "gui.Driver"
+    mainClassName = "com.drewhannay.chesscrafter.gui.Driver"
 	appName = "Chess Crafter"
 	icon = "chess.icns"
 }

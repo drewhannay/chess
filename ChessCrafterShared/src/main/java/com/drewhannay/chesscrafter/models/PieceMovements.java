@@ -1,67 +1,59 @@
+package com.drewhannay.chesscrafter.models;
 
-package models;
-
-import java.util.Map;
-import java.util.Set;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableSet;
 
-public final class PieceMovements
-{
-	public static final int UNLIMITED = -1;
+import java.util.Map;
+import java.util.Set;
 
-	public static enum MovementDirection
-	{
-		NORTH('n'),
-		SOUTH('s'),
-		EAST('e'),
-		WEST('w'),
-		NORTHWEST('f'),
-		NORTHEAST('g'),
-		SOUTHWEST('a'),
-		SOUTHEAST('d');
+public final class PieceMovements {
+    public static final int UNLIMITED = -1;
 
-		private MovementDirection(char direction)
-		{
-			mDirection = direction;
-		}
+    public static enum MovementDirection {
+        NORTH('n'),
+        SOUTH('s'),
+        EAST('e'),
+        WEST('w'),
+        NORTHWEST('f'),
+        NORTHEAST('g'),
+        SOUTHWEST('a'),
+        SOUTHEAST('d');
 
-		public char getDirectionChar()
-		{
-			return mDirection;
-		}
+        private MovementDirection(char direction) {
+            mDirection = direction;
+        }
 
-		private final char mDirection;
-	}
+        public char getDirectionChar() {
+            return mDirection;
+        }
 
-	public PieceMovements(Map<MovementDirection, Integer> movements, Set<BidirectionalMovement> bidirectionalMovements)
-	{
-		mMovements = movements;
-		mBidirectionalMovements = bidirectionalMovements;
-	}
+        private final char mDirection;
+    }
 
-	public int getDistance(MovementDirection direction)
-	{
-		return mMovements.containsKey(direction) ? mMovements.get(direction) : 0;
-	}
+    public PieceMovements(Map<MovementDirection, Integer> movements, Set<BidirectionalMovement> bidirectionalMovements) {
+        mMovements = movements;
+        mBidirectionalMovements = bidirectionalMovements;
+    }
 
-	public ImmutableSet<BidirectionalMovement> getBidirectionalMovements()
-	{
-		return ImmutableSet.copyOf(mBidirectionalMovements);
-	}
+    public int getDistance(MovementDirection direction) {
+        return mMovements.containsKey(direction) ? mMovements.get(direction) : 0;
+    }
 
-	@Override
-	public boolean equals(Object other)
-	{
-		if (!(other instanceof PieceMovements))
-			return false;
+    public ImmutableSet<BidirectionalMovement> getBidirectionalMovements() {
+        return ImmutableSet.copyOf(mBidirectionalMovements);
+    }
 
-		PieceMovements otherMovements = (PieceMovements) other;
+    @Override
+    public boolean equals(Object other) {
+        if (!(other instanceof PieceMovements))
+            return false;
 
-		return Objects.equal(mMovements, otherMovements.mMovements)
-				&& Objects.equal(mBidirectionalMovements, otherMovements.mBidirectionalMovements);
-	}
+        PieceMovements otherMovements = (PieceMovements) other;
 
-	private final Map<MovementDirection, Integer> mMovements;
-	private final Set<BidirectionalMovement> mBidirectionalMovements;
+        return Objects.equal(mMovements, otherMovements.mMovements)
+                && Objects.equal(mBidirectionalMovements, otherMovements.mBidirectionalMovements);
+    }
+
+    private final Map<MovementDirection, Integer> mMovements;
+    private final Set<BidirectionalMovement> mBidirectionalMovements;
 }

@@ -1,7 +1,5 @@
+package com.drewhannay.chesscrafter.rules.legaldestinationcropper;
 
-package rules.legaldestinationcropper;
-
-public abstract class LegalDestinationCropper
-{
-	public abstract void cropLegalDestinations();
+public abstract class LegalDestinationCropper {
+    public abstract void cropLegalDestinations();
 }

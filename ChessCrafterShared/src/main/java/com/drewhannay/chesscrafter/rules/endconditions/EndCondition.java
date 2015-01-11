@@ -1,9 +1,7 @@
+package com.drewhannay.chesscrafter.rules.endconditions;
 
-package rules.endconditions;
+public abstract class EndCondition {
+    public abstract void checkEndCondition();
 
-public abstract class EndCondition
-{
-	public abstract void checkEndCondition();
-
-	public abstract void undo();
+    public abstract void undo();
 }

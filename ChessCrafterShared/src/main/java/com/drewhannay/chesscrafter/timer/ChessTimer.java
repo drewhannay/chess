@@ -1,198 +1,175 @@
+package com.drewhannay.chesscrafter.timer;
 
-package timer;
-
-import java.text.NumberFormat;
-import utility.RunnableOfT;
+import com.drewhannay.chesscrafter.utility.RunnableOfT;
 import com.google.common.base.Preconditions;
 
-public abstract class ChessTimer
-{
-	public interface ChessTimerListener
-	{
-		public void onDisplayUpdated(String displayText);
+import java.text.NumberFormat;
 
-		public void onTimerStart();
+public abstract class ChessTimer {
+    public interface ChessTimerListener {
+        public void onDisplayUpdated(String displayText);
 
-		public void onTimerStop();
+        public void onTimerStart();
 
-		public void setInitialDelay(int initialDelay);
+        public void onTimerStop();
 
-		public void onTimerRestart();
-	}
+        public void setInitialDelay(int initialDelay);
 
-	public void init(RunnableOfT<Boolean> timeElapsedCallback)
-	{
-		mNumberFormat = NumberFormat.getNumberInstance();
-		mNumberFormat.setMinimumIntegerDigits(2);
-		mTimeElapsedCallback = timeElapsedCallback;
-		mIsStopped = false;
-	}
+        public void onTimerRestart();
+    }
 
-	public void setChessTimerListener(ChessTimerListener listener)
-	{
-		mListener = listener;
-	}
+    public void init(RunnableOfT<Boolean> timeElapsedCallback) {
+        mNumberFormat = NumberFormat.getNumberInstance();
+        mNumberFormat.setMinimumIntegerDigits(2);
+        mTimeElapsedCallback = timeElapsedCallback;
+        mIsStopped = false;
+    }
 
-	// FIXME: this is a terrible method...
-	public static boolean isNoTimer(ChessTimer timer)
-	{
-		return timer instanceof NoTimer;
-	}
+    public void setChessTimerListener(ChessTimerListener listener) {
+        mListener = listener;
+    }
 
-	// FIXME: this is a terrible method...
-	public static boolean isWordTimer(ChessTimer timer)
-	{
-		return timer instanceof WordTimer;
-	}
+    // FIXME: this is a terrible method...
+    public static boolean isNoTimer(ChessTimer timer) {
+        return timer instanceof NoTimer;
+    }
 
-	public static ChessTimer createNoTimer()
-	{
-		return new NoTimer();
-	}
+    // FIXME: this is a terrible method...
+    public static boolean isWordTimer(ChessTimer timer) {
+        return timer instanceof WordTimer;
+    }
 
-	public static ChessTimer createTimer(TimerTypes timerType, RunnableOfT<Boolean> timeElapsedCallback, long incrementAmount,
-			long startTime, boolean isBlackTeamTimer)
-	{
-		switch (timerType)
-		{
-		case NO_TIMER:
-			return new NoTimer();
-		case BRONSTEIN_DELAY:
-			return new BronsteinDelayTimer(timeElapsedCallback, incrementAmount, startTime, isBlackTeamTimer);
-		case FISCHER:
-			return new FischerTimer(timeElapsedCallback, incrementAmount, startTime, false, isBlackTeamTimer);
-		case FISCHER_AFTER:
-			return new FischerTimer(timeElapsedCallback, incrementAmount, startTime, true, isBlackTeamTimer);
-		case HOUR_GLASS:
-			// time is halved since it is actually the time the player may not
-			// exceed
-			return new HourGlassTimer(timeElapsedCallback, startTime / 2, isBlackTeamTimer);
-		case SIMPLE_DELAY:
-			return new SimpleDelayTimer(timeElapsedCallback, incrementAmount, startTime, isBlackTeamTimer);
-		case WORD:
-			return new WordTimer(startTime);
-		default:
-			Preconditions.checkArgument(false);
-			return null;
-		}
-	}
+    public static ChessTimer createNoTimer() {
+        return new NoTimer();
+    }
 
-	public static void stopTimers()
-	{
-		mIsStopped = true;
-	}
+    public static ChessTimer createTimer(TimerTypes timerType, RunnableOfT<Boolean> timeElapsedCallback, long incrementAmount,
+                                         long startTime, boolean isBlackTeamTimer) {
+        switch (timerType) {
+            case NO_TIMER:
+                return new NoTimer();
+            case BRONSTEIN_DELAY:
+                return new BronsteinDelayTimer(timeElapsedCallback, incrementAmount, startTime, isBlackTeamTimer);
+            case FISCHER:
+                return new FischerTimer(timeElapsedCallback, incrementAmount, startTime, false, isBlackTeamTimer);
+            case FISCHER_AFTER:
+                return new FischerTimer(timeElapsedCallback, incrementAmount, startTime, true, isBlackTeamTimer);
+            case HOUR_GLASS:
+                // time is halved since it is actually the time the player may not
+                // exceed
+                return new HourGlassTimer(timeElapsedCallback, startTime / 2, isBlackTeamTimer);
+            case SIMPLE_DELAY:
+                return new SimpleDelayTimer(timeElapsedCallback, incrementAmount, startTime, isBlackTeamTimer);
+            case WORD:
+                return new WordTimer(startTime);
+            default:
+                Preconditions.checkArgument(false);
+                return null;
+        }
+    }
 
-	public int getClockDirection()
-	{
-		return mClockDirection;
-	}
+    public static void stopTimers() {
+        mIsStopped = true;
+    }
 
-	public long getStartTime()
-	{
-		return mInitialStartTime;
-	}
+    public int getClockDirection() {
+        return mClockDirection;
+    }
 
-	public long getRawTime()
-	{
-		return mCurrentTime;
-	}
+    public long getStartTime() {
+        return mInitialStartTime;
+    }
 
-	/**
-	 * Reset the timer to the original settings
-	 */
-	public void reset()
-	{
-		mClockLastUpdatedTime = System.currentTimeMillis();
-		mCurrentTime = mInitialStartTime;
-		updateDisplay();
-	}
+    public long getRawTime() {
+        return mCurrentTime;
+    }
 
-	/**
-	 * Restart the timer after resuming a saved game.
-	 */
-	public void restart()
-	{
-		if (mListener != null)
-			mListener.onTimerRestart();
-		mClockLastUpdatedTime = System.currentTimeMillis();
-	}
+    /**
+     * Reset the timer to the original settings
+     */
+    public void reset() {
+        mClockLastUpdatedTime = System.currentTimeMillis();
+        mCurrentTime = mInitialStartTime;
+        updateDisplay();
+    }
 
-	public void setClockDirection(int newDirection)
-	{
-		mClockDirection = newDirection;
-	}
+    /**
+     * Restart the timer after resuming a saved game.
+     */
+    public void restart() {
+        if (mListener != null)
+            mListener.onTimerRestart();
+        mClockLastUpdatedTime = System.currentTimeMillis();
+    }
 
-	public void setClockTime(long newTime)
-	{
-		mCurrentTime = newTime == -1 ? mInitialStartTime : newTime;
-		mTimeWasRecentlyReset = true;
-	}
+    public void setClockDirection(int newDirection) {
+        mClockDirection = newDirection;
+    }
 
-	public abstract void startTimer();
+    public void setClockTime(long newTime) {
+        mCurrentTime = newTime == -1 ? mInitialStartTime : newTime;
+        mTimeWasRecentlyReset = true;
+    }
 
-	public abstract void stopTimer();
+    public abstract void startTimer();
 
-	public void timeElapsed()
-	{
-		mTimeElapsedCallback.run(mIsBlackTeamTimer);
-		if (mListener != null)
-			mListener.onTimerStop();
-	}
+    public abstract void stopTimer();
 
-	public void updateDisplay()
-	{
-		if (mIsStopped)
-		{
-			if (mListener != null)
-				mListener.onTimerStop();
-			return;
-		}
-		long now = System.currentTimeMillis();
-		long elapsed = now - mClockLastUpdatedTime;
+    public void timeElapsed() {
+        mTimeElapsedCallback.run(mIsBlackTeamTimer);
+        if (mListener != null)
+            mListener.onTimerStop();
+    }
 
-		if (!mIsDelayedTimer)
-			mCurrentTime -= elapsed * mClockDirection;
-		else
-			mIsDelayedTimer = false;
+    public void updateDisplay() {
+        if (mIsStopped) {
+            if (mListener != null)
+                mListener.onTimerStop();
+            return;
+        }
+        long now = System.currentTimeMillis();
+        long elapsed = now - mClockLastUpdatedTime;
 
-		mClockLastUpdatedTime = now;
+        if (!mIsDelayedTimer)
+            mCurrentTime -= elapsed * mClockDirection;
+        else
+            mIsDelayedTimer = false;
 
-		int minutes = (int) (mCurrentTime / 60000);
-		int seconds = (int) ((mCurrentTime % 60000) / 1000);
-		if (mListener != null)
-			mListener.onDisplayUpdated(mNumberFormat.format(minutes) + ":" + mNumberFormat.format(seconds)); //$NON-NLS-1$
-		if (mCurrentTime <= 0)
-		{
-			mCurrentTime = Math.abs(mCurrentTime);
-			timeElapsed();
-		}
-	}
+        mClockLastUpdatedTime = now;
 
-	@Override
-	public boolean equals(Object other)
-	{
-		// TODO: this shouldn't be defined here, and it's just plain incorrect
-		return true;
-	}
+        int minutes = (int) (mCurrentTime / 60000);
+        int seconds = (int) ((mCurrentTime % 60000) / 1000);
+        if (mListener != null)
+            mListener.onDisplayUpdated(mNumberFormat.format(minutes) + ":" + mNumberFormat.format(seconds)); //$NON-NLS-1$
+        if (mCurrentTime <= 0) {
+            mCurrentTime = Math.abs(mCurrentTime);
+            timeElapsed();
+        }
+    }
 
-	@Override
-	public int hashCode()
-	{
-		// TODO this shouldn't be defined here, and it's just plain incorrect
-		return super.hashCode();
-	}
+    @Override
+    public boolean equals(Object other) {
+        // TODO: this shouldn't be defined here, and it's just plain incorrect
+        return true;
+    }
 
-	protected long mCurrentTime;
-	protected long mClockLastUpdatedTime;
-	protected NumberFormat mNumberFormat;
-	protected boolean mIsDelayedTimer;
-	protected boolean mIsBlackTeamTimer;
-	protected boolean mTimeWasRecentlyReset;
-	protected long mInitialStartTime;
-	// should be 1 or -1 to account for timer counting up instead. -1 to count
-	// up since it gets subtracted
-	protected int mClockDirection = 1;
-	protected static boolean mIsStopped;
-	protected RunnableOfT<Boolean> mTimeElapsedCallback;
-	protected ChessTimerListener mListener;
+    @Override
+    public int hashCode() {
+        // TODO this shouldn't be defined here, and it's just plain incorrect
+        return super.hashCode();
+    }
+
+    protected long mCurrentTime;
+    protected long mClockLastUpdatedTime;
+    protected NumberFormat mNumberFormat;
+    protected boolean mIsDelayedTimer;
+    protected boolean mIsBlackTeamTimer;
+    protected boolean mTimeWasRecentlyReset;
+    protected long mInitialStartTime;
+    // should be 1 or -1 to account for timer counting up instead. -1 to count
+    // up since it gets subtracted
+    protected int mClockDirection = 1;
+    protected static boolean mIsStopped;
+    protected RunnableOfT<Boolean> mTimeElapsedCallback;
+    protected ChessTimerListener mListener;
 }

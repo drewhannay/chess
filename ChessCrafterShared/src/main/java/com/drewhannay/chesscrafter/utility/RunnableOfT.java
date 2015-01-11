@@ -1,7 +1,5 @@
+package com.drewhannay.chesscrafter.utility;
 
-package utility;
-
-public interface RunnableOfT<T>
-{
-	void run(T t);
+public interface RunnableOfT<T> {
+    void run(T t);
 }

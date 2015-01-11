@@ -1,41 +1,36 @@
+package com.drewhannay.chesscrafter.timer;
 
-package timer;
+import com.drewhannay.chesscrafter.utility.RunnableOfT;
 
-import utility.RunnableOfT;
+class SimpleDelayTimer extends ChessTimer {
+    public SimpleDelayTimer(RunnableOfT<Boolean> timeElapsedCallback, long delayTime, long startTime, boolean isBlackTeamTimer) {
+        mDelayTime = delayTime;
+        mIsBlackTeamTimer = isBlackTeamTimer;
+        mCurrentTime = startTime;
+        mInitialStartTime = startTime;
+        mClockLastUpdatedTime = System.currentTimeMillis();
+        init(timeElapsedCallback);
+    }
 
-class SimpleDelayTimer extends ChessTimer
-{
-	public SimpleDelayTimer(RunnableOfT<Boolean> timeElapsedCallback, long delayTime, long startTime, boolean isBlackTeamTimer)
-	{
-		mDelayTime = delayTime;
-		mIsBlackTeamTimer = isBlackTeamTimer;
-		mCurrentTime = startTime;
-		mInitialStartTime = startTime;
-		mClockLastUpdatedTime = System.currentTimeMillis();
-		init(timeElapsedCallback);
-	}
+    @Override
+    public void startTimer() {
+        mIsDelayedTimer = false;
+        mClockLastUpdatedTime = System.currentTimeMillis();
+        updateDisplay();
+        if (mListener != null)
+            mListener.setInitialDelay((int) mDelayTime);
+        mIsDelayedTimer = true;
+        if (mListener != null)
+            mListener.onTimerStart();
+    }
 
-	@Override
-	public void startTimer()
-	{
-		mIsDelayedTimer = false;
-		mClockLastUpdatedTime = System.currentTimeMillis();
-		updateDisplay();
-		if (mListener != null)
-			mListener.setInitialDelay((int) mDelayTime);
-		mIsDelayedTimer = true;
-		if (mListener != null)
-			mListener.onTimerStart();
-	}
+    @Override
+    public void stopTimer() {
+        mClockLastUpdatedTime = System.currentTimeMillis();
+        updateDisplay();
+        if (mListener != null)
+            mListener.onTimerStop();
+    }
 
-	@Override
-	public void stopTimer()
-	{
-		mClockLastUpdatedTime = System.currentTimeMillis();
-		updateDisplay();
-		if (mListener != null)
-			mListener.onTimerStop();
-	}
-
-	private long mDelayTime;
+    private long mDelayTime;
 }

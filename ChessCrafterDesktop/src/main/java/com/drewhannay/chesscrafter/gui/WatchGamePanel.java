@@ -1,37 +1,10 @@
+package com.drewhannay.chesscrafter.gui;
 
-package gui;
+import javax.swing.*;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.ObjectInputStream;
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
-import logic.AlgebraicConverter;
-import logic.GameBuilder;
-import logic.Result;
-import models.Board;
-import models.Piece;
-import timer.ChessTimer;
-import timer.TimerTypes;
-import controllers.GameController;
-import controllers.MoveController;
-
-public class WatchGamePanel extends JPanel
-{
-	/*
-	public WatchGamePanel(File saveFile)
+public class WatchGamePanel extends JPanel {
+    /*
+    public WatchGamePanel(File saveFile)
 	{
 		if (saveFile == null)
 			return;

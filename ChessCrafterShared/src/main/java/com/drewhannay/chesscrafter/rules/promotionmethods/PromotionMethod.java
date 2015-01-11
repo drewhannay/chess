@@ -1,14 +1,13 @@
+package com.drewhannay.chesscrafter.rules.promotionmethods;
 
-package rules.promotionmethods;
+import com.drewhannay.chesscrafter.models.Piece;
+import com.drewhannay.chesscrafter.models.PieceType;
 
 import java.util.Map;
 import java.util.Set;
-import models.Piece;
-import models.PieceType;
 
-public abstract class PromotionMethod
-{
-	public abstract Piece promotePiece(Piece pieceToPromote, Map<PieceType, Set<PieceType>> promotionMap);
+public abstract class PromotionMethod {
+    public abstract Piece promotePiece(Piece pieceToPromote, Map<PieceType, Set<PieceType>> promotionMap);
 
-	public abstract Piece undoPromotion(Piece pieceToDemote);
+    public abstract Piece undoPromotion(Piece pieceToDemote);
 }

@@ -1,5 +1,5 @@
 
-package models;
+package com.drewhannay.chesscrafter.models;
 
 import com.google.common.base.Objects;
 

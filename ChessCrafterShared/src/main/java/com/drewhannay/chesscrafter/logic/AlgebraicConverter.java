@@ -1,5 +1,5 @@
 
-package logic;
+package com.drewhannay.chesscrafter.logic;
 
 /**
  * AlgebraicConverter.java Class to convert Move objects to Algebraic Chess

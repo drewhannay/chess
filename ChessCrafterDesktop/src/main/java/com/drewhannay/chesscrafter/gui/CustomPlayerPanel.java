@@ -1,24 +1,7 @@
+package com.drewhannay.chesscrafter.gui;
 
-package gui;
-
-import java.awt.FlowLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import utility.GuiUtility;
-
-public class CustomPlayerPanel extends ChessPanel
-{/*
-	public CustomPlayerPanel(VariantCreationPanel customSetupMenu, JFrame optionsFrame)
+public class CustomPlayerPanel extends ChessPanel {/*
+    public CustomPlayerPanel(VariantCreationPanel customSetupMenu, JFrame optionsFrame)
 	{
 		mWhiteRules = customSetupMenu.mWhiteRules;
 		mBlackRules = customSetupMenu.mBlackRules;

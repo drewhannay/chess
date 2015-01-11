@@ -1,7 +1,5 @@
+package com.drewhannay.chesscrafter.dragNdrop;
 
-package dragNdrop;
-
-public interface DropListener
-{
-	public void dropped(DropEvent event, boolean fromDisplayBoard);
+public interface DropListener {
+    public void dropped(DropEvent event, boolean fromDisplayBoard);
 }

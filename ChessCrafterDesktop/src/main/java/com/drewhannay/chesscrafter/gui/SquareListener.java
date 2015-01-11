@@ -1,135 +1,123 @@
+package com.drewhannay.chesscrafter.gui;
 
-package gui;
+import com.drewhannay.chesscrafter.controllers.GameController;
+import com.drewhannay.chesscrafter.dragNdrop.DropAdapter;
+import com.drewhannay.chesscrafter.dragNdrop.DropEvent;
+import com.drewhannay.chesscrafter.dragNdrop.DropManager;
+import com.drewhannay.chesscrafter.dragNdrop.GlassPane;
+import com.drewhannay.chesscrafter.models.Game;
+import com.drewhannay.chesscrafter.models.Piece;
+import com.drewhannay.chesscrafter.utility.PieceIconUtility;
+import com.drewhannay.chesscrafter.utility.PreferenceUtility;
 
-import java.awt.Component;
-import java.awt.Graphics2D;
-import java.awt.Point;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.util.List;
-import javax.swing.ImageIcon;
-import javax.swing.SwingUtilities;
-import models.Game;
-import models.Piece;
-import utility.PieceIconUtility;
-import utility.PreferenceUtility;
-import utility.PreferenceUtility.PieceToolTipPreferenceChangedListener;
-import controllers.GameController;
-import dragNdrop.DropAdapter;
-import dragNdrop.DropEvent;
-import dragNdrop.DropManager;
-import dragNdrop.GlassPane;
 
-public class SquareListener extends DropAdapter implements MouseListener, PieceToolTipPreferenceChangedListener
-{
-	public SquareListener(SquareJLabel squareLabel, DropManager dropManager, GlassPane glassPane)
-	{
-		super(glassPane);
-		mSquareLabel = squareLabel;
-		mDropManager = dropManager;
-		addDropListener(mDropManager);
-		PreferenceUtility.addPieceToolTipListener(this);
-	}
+public class SquareListener extends DropAdapter implements MouseListener, PreferenceUtility.PieceToolTipPreferenceChangedListener {
+    public SquareListener(SquareJLabel squareLabel, DropManager dropManager, GlassPane glassPane) {
+        super(glassPane);
+        mSquareLabel = squareLabel;
+        mDropManager = dropManager;
+        addDropListener(mDropManager);
+        PreferenceUtility.addPieceToolTipListener(this);
+    }
 
-	@Override
-	public void mouseClicked(MouseEvent event)
-	{
-	}
+    @Override
+    public void mouseClicked(MouseEvent event) {
+    }
 
-	@Override
-	public void mouseEntered(MouseEvent event)
-	{
-	}
+    @Override
+    public void mouseEntered(MouseEvent event) {
+    }
 
-	@Override
-	public void mouseExited(MouseEvent event)
-	{
-	}
+    @Override
+    public void mouseExited(MouseEvent event) {
+    }
 
-	@Override
-	public void mousePressed(MouseEvent event)
-	{
-		// TODO: dropping from a jail currently doesn't work
-		// if (m_nextMoveMustPlacePiece)
-		// {
-		// m_nextMoveMustPlacePiece = false;
-		// getGame().nextTurn();
-		// if (!m_clickedSquare.isOccupied() &&
-		// m_clickedSquare.isHabitable() && m_pieceToPlace != null)
-		// {
-		// m_pieceToPlace.setSquare(m_clickedSquare);
-		// m_clickedSquare.setPiece(m_pieceToPlace);
-		// m_pieceToPlace = null;
-		// m_nextMoveMustPlacePiece = false;
-		// boardRefresh(getGame().getBoards());
-		// getGame().genLegalDests();
-		// }
-		//
-		// return;
-		// }
+    @Override
+    public void mousePressed(MouseEvent event) {
+        // TODO: dropping from a jail currently doesn't work
+        // if (m_nextMoveMustPlacePiece)
+        // {
+        // m_nextMoveMustPlacePiece = false;
+        // getGame().nextTurn();
+        // if (!m_clickedSquare.isOccupied() &&
+        // m_clickedSquare.isHabitable() && m_pieceToPlace != null)
+        // {
+        // m_pieceToPlace.setSquare(m_clickedSquare);
+        // m_clickedSquare.setPiece(m_pieceToPlace);
+        // m_pieceToPlace = null;
+        // m_nextMoveMustPlacePiece = false;
+        // boardRefresh(getGame().getBoards());
+        // getGame().genLegalDests();
+        // }
+        //
+        // return;
+        // }
 
 		/*
-		 * if (mSquareLabel.getPiece() == null || mSquareLabel.getPiece().isBlack() != getGame().isBlackMove())
+         * if (mSquareLabel.getPiece() == null || mSquareLabel.getPiece().isBlack() != getGame().isBlackMove())
 		 * {
 		 * return;
 		 * }
 		 */
 
-		Game game = GameController.getGame();
-		if (game.getPieceOnSquare(mSquareLabel.getCoordinates()) == null || game.getPieceOnSquare(mSquareLabel.getCoordinates()).getTeamId(game) != game.getTurnKeeper().getCurrentTeamIndex())
-			return;
-		
-		List<SquareJLabel> destinationLabels = PlayGamePanel.highlightLegalDestinations(mSquareLabel.getCoordinates());
+        Game game = GameController.getGame();
+        if (game.getPieceOnSquare(mSquareLabel.getCoordinates()) == null || game.getPieceOnSquare(mSquareLabel.getCoordinates()).getTeamId(game) != game.getTurnKeeper().getCurrentTeamIndex())
+            return;
 
-		mDropManager.setComponentList(destinationLabels);
-		mSquareLabel.hideIcon();
+        List<SquareJLabel> destinationLabels = PlayGamePanel.highlightLegalDestinations(mSquareLabel.getCoordinates());
 
-		Driver.getInstance().setGlassPane(mGlassPane);
-		Component component = event.getComponent();
+        mDropManager.setComponentList(destinationLabels);
+        mSquareLabel.hideIcon();
 
-		mGlassPane.setVisible(true);
+        Driver.getInstance().setGlassPane(mGlassPane);
+        Component component = event.getComponent();
 
-		Point point = (Point) event.getPoint().clone();
-		SwingUtilities.convertPointToScreen(point, component);
-		SwingUtilities.convertPointFromScreen(point, mGlassPane);
+        mGlassPane.setVisible(true);
 
-		mGlassPane.setPoint(point);
+        Point point = (Point) event.getPoint().clone();
+        SwingUtilities.convertPointToScreen(point, component);
+        SwingUtilities.convertPointFromScreen(point, mGlassPane);
 
-		BufferedImage image = null;
+        mGlassPane.setPoint(point);
 
-		Piece piece = mSquareLabel.getPiece();
-		ImageIcon imageIcon = PieceIconUtility.getPieceIcon(piece.getPieceType().getName(), 48, piece.getTeamId(GameController.getGame()));
-		int width = imageIcon.getIconWidth();
-		int height = imageIcon.getIconHeight();
-		image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D graphics2D = (Graphics2D) image.getGraphics();
-		imageIcon.paintIcon(null, graphics2D, 0, 0);
-		graphics2D.dispose();
+        BufferedImage image = null;
 
-		mGlassPane.setImage(image);
+        Piece piece = mSquareLabel.getPiece();
+        ImageIcon imageIcon = PieceIconUtility.getPieceIcon(piece.getPieceType().getName(), 48, piece.getTeamId(GameController.getGame()));
+        int width = imageIcon.getIconWidth();
+        int height = imageIcon.getIconHeight();
+        image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D graphics2D = (Graphics2D) image.getGraphics();
+        imageIcon.paintIcon(null, graphics2D, 0, 0);
+        graphics2D.dispose();
 
-		mGlassPane.repaint();
-	}
+        mGlassPane.setImage(image);
 
-	@Override
-	public void mouseReleased(MouseEvent event)
-	{
-		Point point = (Point) event.getPoint().clone();
-		SwingUtilities.convertPointToScreen(point, event.getComponent());
+        mGlassPane.repaint();
+    }
 
-		mGlassPane.setImage(null);
-		mGlassPane.setVisible(false);
+    @Override
+    public void mouseReleased(MouseEvent event) {
+        Point point = (Point) event.getPoint().clone();
+        SwingUtilities.convertPointToScreen(point, event.getComponent());
 
-		fireDropEvent(new DropEvent(point, mSquareLabel), false);
-	}
+        mGlassPane.setImage(null);
+        mGlassPane.setVisible(false);
 
-	@Override
-	public void onPieceToolTipPreferenceChanged()
-	{
-		mSquareLabel.refresh();
-	}
+        fireDropEvent(new DropEvent(point, mSquareLabel), false);
+    }
 
-	private SquareJLabel mSquareLabel;
-	private final DropManager mDropManager;
+    @Override
+    public void onPieceToolTipPreferenceChanged() {
+        mSquareLabel.refresh();
+    }
+
+    private SquareJLabel mSquareLabel;
+    private final DropManager mDropManager;
 }
