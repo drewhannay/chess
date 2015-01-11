@@ -3,23 +3,6 @@ apply plugin: 'java'
 sourceCompatibility = 1.6
 version = '1.0'
 
-sourceSets {
-	main {
-		java {
-			srcDirs = ['src']
-		}
-		resources {
-			srcDirs = ['images', 'resources']
-		}
-	}
-
-	test {
-		java {
-			srcDirs = ['test']
-		}
-	}
-}
-
 repositories {
 	mavenCentral()
 }
@@ -32,24 +15,11 @@ dependencies {
 
 test {
     testLogging {
+    	// show that events are run in the command-line output
         events 'started', 'passed'
     }
-	include '**/*Suite.class'
 }
 
 jar {
     from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
-}
-
-import java.awt.Desktop
-
-gradle.taskGraph.afterTask { task, taskState ->
-    if (task instanceof Test) {
-        if (Desktop.isDesktopSupported()) {
-			File file = new File(task.getReports().getHtml().getDestination(), 'index.html')
-			if (file.exists()) {
-            	Desktop.getDesktop().browse( file.toURI() )
-			}
-        }
-    }
 }
