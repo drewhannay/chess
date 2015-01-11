@@ -3,15 +3,18 @@ apply plugin: 'java'
 sourceCompatibility = 1.7
 version = '1.0'
 
-sourceSets.main {
-	java {
-		srcDirs = ['src']
+// configuration for the build itself
+buildscript {
+	repositories {
+		mavenCentral()
 	}
-	resources {
-		srcDir 'resources'
+
+	dependencies {
+		classpath 'edu.sc.seis.gradle:macappbundle:1.0.9'
 	}
 }
 
+// configuration for the project
 repositories {
 	mavenCentral()
 }
@@ -32,14 +35,4 @@ macAppBundle {
     mainClassName = "gui.Driver"
 	appName = "Chess Crafter"
 	icon = "chess.icns"
-}
-
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath 'edu.sc.seis.gradle:macappbundle:1.0.9'
-    }
 }
