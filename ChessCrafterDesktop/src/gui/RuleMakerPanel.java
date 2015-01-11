@@ -26,6 +26,7 @@ import utility.GuiUtility;
 
 public class RuleMakerPanel extends ChessPanel
 {
+	/*
 	public RuleMakerPanel(VariantCreationPanel variantCreationPanel, JFrame optionsFrame)
 	{
 		mFrame = optionsFrame;
@@ -957,4 +958,5 @@ public class RuleMakerPanel extends ChessPanel
 	private RulesController mWhiteRules = new RulesController(false);
 	private RulesController mBlackRules = new RulesController(true);
 	private JFrame mFrame;
+	*/
 }

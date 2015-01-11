@@ -34,7 +34,6 @@ import javax.swing.JScrollPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.WindowConstants;
-import logic.GameBuilder;
 import models.Game;
 import timer.ChessTimer;
 import utility.AppConstants;
@@ -206,8 +205,8 @@ public final class Driver extends JFrame
 		add(mMainPanel, BorderLayout.CENTER);
 		pack();
 		setVisible(true);
-		GameController.setGame(GameBuilder.buildClassic());		
-		setPanel(new PlayGamePanel());
+		//GameController.setGame(GameBuilder.buildClassic());		
+		//setPanel(new PlayGamePanel());
 	}
 
 	private JButton pieceMenuButton()
@@ -643,8 +642,8 @@ public final class Driver extends JFrame
 								return;
 							}
 
-							File file = FileUtility.getCompletedGamesFile(completedGamesList.getSelectedValue().toString());
-							m_watchGameScreen = new WatchGamePanel(file);
+							//File file = FileUtility.getCompletedGamesFile(completedGamesList.getSelectedValue().toString());
+							//m_watchGameScreen = new WatchGamePanel(file);
 							setPanel(m_watchGameScreen);
 							mOtherPanel = m_watchGameScreen;
 							deactivateWindowListener();
@@ -782,8 +781,8 @@ public final class Driver extends JFrame
 
 	public WatchGamePanel getWatchGameScreen(File acnFile)
 	{
-		if (m_watchGameScreen == null)
-			m_watchGameScreen = new WatchGamePanel(acnFile);
+		//if (m_watchGameScreen == null)
+		//	m_watchGameScreen = new WatchGamePanel(acnFile);
 		return m_watchGameScreen;
 	}
 

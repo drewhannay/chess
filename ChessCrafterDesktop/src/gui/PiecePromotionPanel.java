@@ -29,6 +29,7 @@ public class PiecePromotionPanel extends ChessPanel
 	 * @param pieceName
 	 * @param customSetupMenu
 	 */
+	/*
 	public PiecePromotionPanel(String pieceName, VariantCreationPanel customSetupMenu, JFrame optionsFrame)
 	{
 		mPieceBeingPromotedName = pieceName;
@@ -41,7 +42,7 @@ public class PiecePromotionPanel extends ChessPanel
 		mFrame.setLocationRelativeTo(null);
 		mFrame.setVisible(true);
 	}
-
+	
 	private void initComponents()
 	{
 		setLayout(new GridBagLayout());
@@ -427,4 +428,5 @@ public class PiecePromotionPanel extends ChessPanel
 	private String mPieceBeingPromotedName;
 	private VariantCreationPanel mCustomSetupMenu;
 	private JFrame mFrame;
+	*/
 }

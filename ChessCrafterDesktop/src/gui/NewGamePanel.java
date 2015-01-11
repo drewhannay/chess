@@ -19,6 +19,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
+import controllers.GameController;
 
 import logic.GameBuilder;
 import logic.Result;
@@ -58,7 +59,9 @@ public class NewGamePanel extends ChessPanel
 			{
 				if (mPopupFrame == null)
 				{
-					createNewGamePopup();
+					//createNewGamePopup();
+					GameController.setGame(GameBuilder.buildClassic());		
+					Driver.getInstance().setPanel(new PlayGamePanel());
 				}
 			}
 		});
@@ -113,7 +116,7 @@ public class NewGamePanel extends ChessPanel
 
 		GridBagConstraints constraints = new GridBagConstraints();
 
-		final JComboBox dropdown;
+		/*final JComboBox dropdown;
 		try
 		{
 			dropdown = new JComboBox(GameBuilder.getVariantFileArray());
@@ -123,7 +126,7 @@ public class NewGamePanel extends ChessPanel
 			JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("NewGamePanel.errorCouldntLoadVariantFiles")); //$NON-NLS-1$
 			e1.printStackTrace();
 			return;
-		}
+		}*/
 
 		// variant type selector
 		constraints.gridx = 0;
@@ -134,7 +137,7 @@ public class NewGamePanel extends ChessPanel
 		constraints.gridx = 1;
 		constraints.gridy = 0;
 		constraints.fill = GridBagConstraints.HORIZONTAL;
-		mPopupPanel.add(dropdown, constraints);
+		//mPopupPanel.add(dropdown, constraints);
 
 		// total time and increment fields
 		final JLabel totalTimeLabel = GuiUtility.createJLabel(Messages.getString("NewGamePanel.totalTime")); //$NON-NLS-1$
@@ -150,7 +153,7 @@ public class NewGamePanel extends ChessPanel
 		incrementField.setEnabled(false);
 
 		// combo box for selecting a timer
-		final JComboBox timerComboBox = new JComboBox(TimerTypes.values());
+		/*final JComboBox timerComboBox = new JComboBox(TimerTypes.values());
 		timerComboBox.addActionListener(new ActionListener()
 		{
 			@Override
@@ -172,7 +175,7 @@ public class NewGamePanel extends ChessPanel
 					incrementField.setEnabled(false);
 				}
 			}
-		});
+		});*/
 
 		// add the combo box to the frame
 		constraints.gridx = 0;
@@ -182,7 +185,7 @@ public class NewGamePanel extends ChessPanel
 		constraints.gridx = 1;
 		constraints.gridy = 1;
 		constraints.fill = GridBagConstraints.HORIZONTAL;
-		mPopupPanel.add(timerComboBox, constraints);
+		//mPopupPanel.add(timerComboBox, constraints);
 
 		// add the total time field to the frame
 		constraints.gridx = 0;
@@ -204,13 +207,13 @@ public class NewGamePanel extends ChessPanel
 		mPopupPanel.add(incrementField, constraints);
 
 		// set up the done button
-		final JButton doneButton = new JButton(Messages.getString("NewGamePanel.start")); //$NON-NLS-1$
+		/*final JButton doneButton = new JButton(Messages.getString("NewGamePanel.start")); //$NON-NLS-1$
 		doneButton.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent event)
 			{
-				TimerTypes timerType = (TimerTypes) timerComboBox.getSelectedItem();
+				//TimerTypes timerType = (TimerTypes) timerComboBox.getSelectedItem();
 				long startTime = Integer.parseInt(totalTimeField.getText()) * 1000;
 				long increment = Integer.parseInt(incrementField.getText()) * 1000;
 
@@ -229,13 +232,13 @@ public class NewGamePanel extends ChessPanel
 				ChessTimer blackTimer = ChessTimer.createTimer(timerType, timeElapsedCallback, increment, startTime, true);
 				ChessTimer whiteTimer = ChessTimer.createTimer(timerType, timeElapsedCallback, increment, startTime, false);
 
-				gameToPlay.setTimers(whiteTimer, blackTimer);
+				//gameToPlay.setTimers(whiteTimer, blackTimer);
 				PlayGamePanel gamePanel = new PlayGamePanel(gameToPlay);
 				Driver.getInstance().setPanel(gamePanel);
 				mPopupFrame.dispose();
 				mPopupFrame = null;
 			}
-		});
+		});*/
 
 		// set up the cancel button
 		final JButton cancelButton = new JButton(Messages.getString("NewGamePanel.cancel")); //$NON-NLS-1$
@@ -253,7 +256,7 @@ public class NewGamePanel extends ChessPanel
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new FlowLayout());
 		buttonPanel.setOpaque(false);
-		buttonPanel.add(doneButton);
+		//buttonPanel.add(doneButton);
 		buttonPanel.add(cancelButton);
 
 		constraints.gridx = 0;

@@ -62,7 +62,7 @@ public class CustomBoardPanel extends ChessPanel
 		boards.add(mOneBoardButton);
 		boards.add(mTwoBoardsButton);
 
-		Board[] board = variant.getBuilder().getBoards();
+		Board[] board = new Board[1];//variant.getBuilder().getBoards();
 
 		if (board.length == 1)
 			mOneBoardButton.setSelected(true);
@@ -111,7 +111,7 @@ public class CustomBoardPanel extends ChessPanel
 				+
 				Messages.getString("CustomBoardPanel.aroundHorizontally")); //$NON-NLS-1$
 		mWrapAroundCheckBox = new JCheckBox(Messages.getString("CustomBoardPanel.yes")); //$NON-NLS-1$
-		mWrapAroundCheckBox.setSelected(variant.getBuilder().getBoards()[0].isWrapAroundBoard());
+		//mWrapAroundCheckBox.setSelected(variant.getBuilder().getBoards()[0].isWrapAroundBoard());
 		mWrapAroundCheckBox.setToolTipText(Messages.getString("CustomBoardPanel.pressToHaveWrapAround")); //$NON-NLS-1$
 		mWrapAroundCheckBox.setOpaque(false);
 		mWrapAroundCheckBox.setForeground(Color.white);
@@ -134,7 +134,7 @@ public class CustomBoardPanel extends ChessPanel
 						Board[] boards = (mOneBoardButton.isSelected()) ? new Board[1] : new Board[2];
 						for (int i = 0; i < boards.length; i++)
 						{
-							Board oldBoard = variant.getBuilder().getBoards()[i];
+							Board oldBoard = new Board(0, 0, false);//variant.getBuilder().getBoards()[i];
 							// initialize each board with the given rows and
 							// columns and wraparound boolean.
 							if (changeCode == WRAP_ONLY)
@@ -149,7 +149,7 @@ public class CustomBoardPanel extends ChessPanel
 							}
 						}
 
-						variant.drawBoards(boards);
+						//variant.drawBoards(boards);
 						mHolder.removeAll();
 						mFrame.setVisible(false);
 					}
@@ -158,7 +158,7 @@ public class CustomBoardPanel extends ChessPanel
 
 			private int boardsChanged()
 			{
-				Board[] oldBoards = variant.getBuilder().getBoards();
+				Board[] oldBoards = new Board[1];//variant.getBuilder().getBoards();
 				int change = NO_CHANGES;
 
 				if (oldBoards[0].isWrapAroundBoard() != mWrapAroundCheckBox.isSelected())
