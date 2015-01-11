@@ -69,7 +69,7 @@ public class ComputedPieceData {
             destination = ChessCoordinate.at(pieceRow, j, targetBoardIndex);
 
             boolean shouldBreak = sameRowAndColumn(destination, piece.getCoordinates());
-            if (!shouldBreak && board.getSquare(destination.row, destination.column).isHabitable())
+            if (!shouldBreak && board.isSquareHabitable(destination.row, destination.column))
                 legalDestinations.add(destination);
 
             if (isGuardingSquare(destination)) {
@@ -97,7 +97,7 @@ public class ComputedPieceData {
             destination = ChessCoordinate.at(pieceRow, j, targetBoardIndex);
 
             boolean shouldBreak = sameRowAndColumn(destination, piece.getCoordinates());
-            if (!shouldBreak && board.getSquare(destination.row, destination.column).isHabitable())
+            if (!shouldBreak && board.isSquareHabitable(destination.row, destination.column))
                 legalDestinations.add(destination);
 
             if (isGuardingSquare(destination)) {
@@ -123,7 +123,7 @@ public class ComputedPieceData {
             destination = ChessCoordinate.at(j, pieceColumn, targetBoardIndex);
 
             boolean shouldBreak = sameRowAndColumn(destination, piece.getCoordinates());
-            if (!shouldBreak && board.getSquare(destination.row, destination.column).isHabitable())
+            if (!shouldBreak && board.isSquareHabitable(destination.row, destination.column))
                 legalDestinations.add(destination);
 
             if (isGuardingSquare(destination)) {
@@ -149,7 +149,7 @@ public class ComputedPieceData {
             destination = ChessCoordinate.at(j, pieceColumn, targetBoardIndex);
 
             boolean shouldBreak = sameRowAndColumn(destination, piece.getCoordinates());
-            if (!shouldBreak && board.getSquare(destination.row, destination.column).isHabitable())
+            if (!shouldBreak && board.isSquareHabitable(destination.row, destination.column))
                 legalDestinations.add(destination);
 
             if (isGuardingSquare(destination)) {
@@ -176,7 +176,7 @@ public class ComputedPieceData {
             destination = ChessCoordinate.at(r, c, targetBoardIndex);
 
             boolean shouldBreak = sameRowAndColumn(destination, piece.getCoordinates());
-            if (!shouldBreak && board.getSquare(destination.row, destination.column).isHabitable())
+            if (!shouldBreak && board.isSquareHabitable(destination.row, destination.column))
                 legalDestinations.add(destination);
 
             if (isGuardingSquare(destination)) {
@@ -206,7 +206,7 @@ public class ComputedPieceData {
             destination = ChessCoordinate.at(r, c, targetBoardIndex);
 
             boolean shouldBreak = sameRowAndColumn(destination, piece.getCoordinates());
-            if (!shouldBreak && board.getSquare(destination.row, destination.column).isHabitable())
+            if (!shouldBreak && board.isSquareHabitable(destination.row, destination.column))
                 legalDestinations.add(destination);
 
             if (isGuardingSquare(destination)) {
@@ -234,7 +234,7 @@ public class ComputedPieceData {
             destination = ChessCoordinate.at(r, c, targetBoardIndex);
 
             boolean shouldBreak = sameRowAndColumn(destination, piece.getCoordinates());
-            if (!shouldBreak && board.getSquare(destination.row, destination.column).isHabitable())
+            if (!shouldBreak && board.isSquareHabitable(destination.row, destination.column))
                 legalDestinations.add(destination);
 
             if (isGuardingSquare(destination)) {
@@ -262,7 +262,7 @@ public class ComputedPieceData {
             destination = ChessCoordinate.at(r, c, targetBoardIndex);
 
             boolean shouldBreak = sameRowAndColumn(destination, piece.getCoordinates());
-            if (!shouldBreak && board.getSquare(destination.row, destination.column).isHabitable())
+            if (!shouldBreak && board.isSquareHabitable(destination.row, destination.column))
                 legalDestinations.add(destination);
 
             if (isGuardingSquare(destination)) {
@@ -409,7 +409,7 @@ public class ComputedPieceData {
         // take one step forward
         if (board.isRowValid(pawnRow + direction)) {
             destination = ChessCoordinate.at(pawnRow + direction, pawnColumn, targetBoardIndex);
-            if (!mOccupiedSquares.contains(destination) && board.getSquare(pawnRow + direction, pawnColumn).isHabitable())
+            if (!mOccupiedSquares.contains(destination) && board.isSquareHabitable(pawnRow + direction, pawnColumn))
                 legalDestinations.add(destination);
             else if (isGuardingSquare(destination))
                 guardedCoordinates.add(destination);
@@ -451,7 +451,7 @@ public class ComputedPieceData {
 
             if (!mOccupiedSquares.contains(destination)
                     && !mOccupiedSquares.contains(ChessCoordinate.at(pawnRow + direction, pawnColumn, targetBoardIndex))
-                    && board.getSquare(destination.row, destination.column).isHabitable()) {
+                    && board.isSquareHabitable(destination.row, destination.column)) {
                 legalDestinations.add(destination);
             }
         }
@@ -844,8 +844,8 @@ public class ComputedPieceData {
      * Check if the given Square can be saved from the given target by this
      * piece
      *
-     * @param toSave             The Square to save
-     * @param coordinatesToBlock The Piece to block
+     * @param blocker            The Piece to block
+     * @param coordinatesToBlock The Square to save
      * @return If the given Square can be saved
      */
     public boolean isBlockable(Piece blocker, ChessCoordinate coordinatesToBlock, Piece attacker) {
