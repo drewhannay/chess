@@ -1,6 +1,4 @@
-*.swp
 *.class
-bin/
 classes/
 build/
 jar/
@@ -23,8 +21,16 @@ variants/
 # Package Files #
 *.war
 *.ear
+
+# Misc
+*.swp
 *.DS_Store
 
 # IntelliJ IDEA
 *.iml
 .idea
+
+# Eclipse
+.project
+.classpath
+bin/
