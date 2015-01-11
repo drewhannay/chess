@@ -59,12 +59,12 @@ Eclipse doesn't support Gradle by default, so we need to do a little extra work 
 This project uses the github Issues system to track all work being done on the app.  To get started, visit the [Issues Tab](https://github.com/drewhannay/chess/issues) and browse the list of things that need to be done.  Find one that looks interesting and isn't yet being worked on and claim it for yourself by leaving a comment saying you're working on it.  If you find a bug in the app or have a feature or enhancement idea, add an issue for it. <b>Every single commit</b> that gets added to the project should have an associated issue number (as specified below...)
 
 ### Making and Committing Your Changes
-_Note: If you aren't familiar with Git, please read [this tutorial](http://git-scm.com/book/en/Git-Basics)
+_Note: If you aren't familiar with Git, please read [this tutorial](http://git-scm.com/book/en/Git-Basics)._
 
-Before editing any code, you should make a new branch for your changes (this really helps with managing pull requests and merges)
+Before editing any code, you should make a new branch for your changes (this really helps with managing pull requests and merges).
 
 * Go to SmartGit and make sure you've opened the project you made earlier with your fork.
-* Click "Branch" and then "Add Branch". Give your new branch a name (*something like "MyChanges"...it doesn't really matter what you call it*), then click "Add Branch & Switch"
+* Click "Branch" and then "Add Branch". Give your new branch a name (something like "MyChanges"...it doesn't really matter what you call it), then click "Add Branch & Switch"
 * You are now ready to code!
 
 When you are ready to commit, go back to SmartGit. Your changed files should appear in the the main section of the window.
