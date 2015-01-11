@@ -3,26 +3,32 @@ package com.drewhannay.chesscrafter.models;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Sets;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
 public final class Board {
     public static final int NO_ENPASSANT = 0;
 
-    public Board(int rowCount, int columnCount, boolean wrapsAround) {
-        mRowCount = rowCount;
-        mColumnCount = columnCount;
+    public Board(@NotNull BoardSize boardSize, boolean wrapsAround) {
+        mBoardSize = boardSize;
         mIsWrapAroundBoard = wrapsAround;
 
         mUninhabitableSquares = Sets.newHashSet();
     }
 
-    public int getRowCount() {
-        return mRowCount;
+    public BoardSize getBoardSize() {
+        return mBoardSize;
     }
 
+    @Deprecated
+    public int getRowCount() {
+        return mBoardSize.height;
+    }
+
+    @Deprecated
     public int getColumnCount() {
-        return mColumnCount;
+        return mBoardSize.width;
     }
 
     public boolean isWrapAroundBoard() {
@@ -35,10 +41,12 @@ public final class Board {
         return !mUninhabitableSquares.contains(ChessCoordinate.at(row, column, 0));
     }
 
+    @Deprecated
     public boolean isRowValid(int row) {
         return row <= getRowCount() && row > 0;
     }
 
+    @Deprecated
     public boolean isColumnValid(int column) {
         return column <= getColumnCount() && column > 0;
     }
@@ -60,8 +68,7 @@ public final class Board {
         Board otherBoard = (Board) other;
 
         // TODO: need to compare the mutable state (mEnPassantColumn) as well, but how to do that?
-        return Objects.equal(mRowCount, otherBoard.mRowCount)
-                && Objects.equal(mColumnCount, otherBoard.mColumnCount)
+        return Objects.equal(mBoardSize, otherBoard.mBoardSize)
                 && Objects.equal(mIsWrapAroundBoard, otherBoard.mIsWrapAroundBoard);
 //                && Arrays.deepEquals(mUninhabitableSquares, otherBoard.mUninhabitableSquares);
     }
@@ -81,8 +88,7 @@ public final class Board {
 //        }
     }
 
-    private final int mRowCount;
-    private final int mColumnCount;
+    private final BoardSize mBoardSize;
     private final boolean mIsWrapAroundBoard;
     private final Set<ChessCoordinate> mUninhabitableSquares;
 

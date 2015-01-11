@@ -5,7 +5,10 @@ import com.drewhannay.chesscrafter.controllers.MoveController;
 import com.drewhannay.chesscrafter.logic.PieceBuilder;
 import com.drewhannay.chesscrafter.models.turnkeeper.ClassicTurnKeeper;
 import com.google.common.collect.Lists;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import java.util.Iterator;
 import java.util.List;
@@ -32,7 +35,7 @@ public class MovePieceTest {
         mOtherTeam = new Team(null, blackPieceList);
 
         Team[] teams = new Team[]{mMyTeam, mOtherTeam};
-        Board board = new Board(8, 8, false);
+        Board board = new Board(BoardSize.withDimensions(8, 8), false);
         GameController.setGame(new Game("Classic", new Board[]{board}, teams, new ClassicTurnKeeper()));
     }
 

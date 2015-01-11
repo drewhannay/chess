@@ -124,7 +124,7 @@ public class GameBuilder {
         teams[0] = new Team(whiteRules, whitePieces);
         teams[1] = new Team(blackRules, blackPieces);
 
-        Board[] boards = new Board[]{new Board(8, 8, false)};
+        Board[] boards = new Board[]{new Board(BoardSize.withDimensions(8, 8), false)};
 
         return new Game("Classic", boards, teams, new ClassicTurnKeeper());
     }
