@@ -10,7 +10,7 @@ buildscript {
 	}
 
 	dependencies {
-		classpath 'edu.sc.seis.gradle:macappbundle:1.0.9'
+		classpath 'edu.sc.seis.gradle:macappbundle:2.0.0'
 	}
 }
 
