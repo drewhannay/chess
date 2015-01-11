@@ -2,8 +2,8 @@ package com.drewhannay.chesscrafter.models;
 
 import com.google.common.base.Objects;
 
-public final class ChessCoordinates {
-    public ChessCoordinates(int row, int column, int boardIndex) {
+public final class ChessCoordinate {
+    public ChessCoordinate(int row, int column, int boardIndex) {
         this.row = row;
         this.column = column;
         this.boardIndex = boardIndex;
@@ -11,10 +11,10 @@ public final class ChessCoordinates {
 
     @Override
     public boolean equals(Object other) {
-        if (!(other instanceof ChessCoordinates))
+        if (!(other instanceof ChessCoordinate))
             return false;
 
-        ChessCoordinates otherCoordinates = (ChessCoordinates) other;
+        ChessCoordinate otherCoordinates = (ChessCoordinate) other;
 
         return Objects.equal(row, otherCoordinates.row) && Objects.equal(column, otherCoordinates.column)
                 && Objects.equal(boardIndex, otherCoordinates.boardIndex);

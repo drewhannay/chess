@@ -1,6 +1,6 @@
 package com.drewhannay.chesscrafter.controllers;
 
-import com.drewhannay.chesscrafter.models.ChessCoordinates;
+import com.drewhannay.chesscrafter.models.ChessCoordinate;
 import com.drewhannay.chesscrafter.models.Move;
 import com.drewhannay.chesscrafter.models.Piece;
 import com.drewhannay.chesscrafter.models.Team;
@@ -10,8 +10,8 @@ public class MoveController {
      * Execute the constructed Move.
      */
     public static boolean execute(Move move) {
-        ChessCoordinates origin = move.getOrigin();
-        ChessCoordinates destination = move.getDestination();
+        ChessCoordinate origin = move.getOrigin();
+        ChessCoordinate destination = move.getDestination();
 
         Piece movingPiece = null;
         Piece capturedPiece = null;
@@ -216,8 +216,8 @@ public class MoveController {
      * @throws Exception If the undo doesn't work properly
      */
     public static boolean undo(Move move) {
-        ChessCoordinates origin = move.getOrigin();
-        ChessCoordinates destination = move.getDestination();
+        ChessCoordinate origin = move.getOrigin();
+        ChessCoordinate destination = move.getDestination();
 
         Piece unmovingPiece = null;
         Team movingTeam = null;

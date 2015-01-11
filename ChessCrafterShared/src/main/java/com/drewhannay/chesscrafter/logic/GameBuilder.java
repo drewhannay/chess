@@ -62,33 +62,33 @@ public class GameBuilder {
         List<Piece> whitePieces = Lists.newArrayList();
         List<Piece> blackPieces = Lists.newArrayList();
         for (int i = 1; i < 9; i++) {
-            whitePieces.add(new Piece(pieceId++, PieceBuilder.getPawnPieceType(), new ChessCoordinates(2, i, 0)));
-            blackPieces.add(new Piece(pieceId++, PieceBuilder.getPawnPieceType(), new ChessCoordinates(7, i, 0)));
+            whitePieces.add(new Piece(pieceId++, PieceBuilder.getPawnPieceType(), new ChessCoordinate(2, i, 0)));
+            blackPieces.add(new Piece(pieceId++, PieceBuilder.getPawnPieceType(), new ChessCoordinate(7, i, 0)));
         }
 
-        whitePieces.add(new Piece(pieceId++, PieceBuilder.getRookPieceType(), new ChessCoordinates(1, 1, 0)));
-        whitePieces.add(new Piece(pieceId++, PieceBuilder.getKnightPieceType(), new ChessCoordinates(1, 2, 0)));
-        whitePieces.add(new Piece(pieceId++, PieceBuilder.getBishopPieceType(), new ChessCoordinates(1, 3, 0)));
-        whitePieces.add(new Piece(pieceId++, PieceBuilder.getQueenPieceType(), new ChessCoordinates(1, 4, 0)));
-        whitePieces.add(new Piece(pieceId++, PieceBuilder.getKingPieceType(), new ChessCoordinates(1, 5, 0)));
-        whitePieces.add(new Piece(pieceId++, PieceBuilder.getBishopPieceType(), new ChessCoordinates(1, 6, 0)));
-        whitePieces.add(new Piece(pieceId++, PieceBuilder.getKnightPieceType(), new ChessCoordinates(1, 7, 0)));
-        whitePieces.add(new Piece(pieceId++, PieceBuilder.getRookPieceType(), new ChessCoordinates(1, 8, 0)));
+        whitePieces.add(new Piece(pieceId++, PieceBuilder.getRookPieceType(), new ChessCoordinate(1, 1, 0)));
+        whitePieces.add(new Piece(pieceId++, PieceBuilder.getKnightPieceType(), new ChessCoordinate(1, 2, 0)));
+        whitePieces.add(new Piece(pieceId++, PieceBuilder.getBishopPieceType(), new ChessCoordinate(1, 3, 0)));
+        whitePieces.add(new Piece(pieceId++, PieceBuilder.getQueenPieceType(), new ChessCoordinate(1, 4, 0)));
+        whitePieces.add(new Piece(pieceId++, PieceBuilder.getKingPieceType(), new ChessCoordinate(1, 5, 0)));
+        whitePieces.add(new Piece(pieceId++, PieceBuilder.getBishopPieceType(), new ChessCoordinate(1, 6, 0)));
+        whitePieces.add(new Piece(pieceId++, PieceBuilder.getKnightPieceType(), new ChessCoordinate(1, 7, 0)));
+        whitePieces.add(new Piece(pieceId++, PieceBuilder.getRookPieceType(), new ChessCoordinate(1, 8, 0)));
 
-        blackPieces.add(new Piece(pieceId++, PieceBuilder.getRookPieceType(), new ChessCoordinates(8, 1, 0)));
-        blackPieces.add(new Piece(pieceId++, PieceBuilder.getKnightPieceType(), new ChessCoordinates(8, 2, 0)));
-        blackPieces.add(new Piece(pieceId++, PieceBuilder.getBishopPieceType(), new ChessCoordinates(8, 3, 0)));
-        blackPieces.add(new Piece(pieceId++, PieceBuilder.getQueenPieceType(), new ChessCoordinates(8, 4, 0)));
-        blackPieces.add(new Piece(pieceId++, PieceBuilder.getKingPieceType(), new ChessCoordinates(8, 5, 0)));
-        blackPieces.add(new Piece(pieceId++, PieceBuilder.getBishopPieceType(), new ChessCoordinates(8, 6, 0)));
-        blackPieces.add(new Piece(pieceId++, PieceBuilder.getKnightPieceType(), new ChessCoordinates(8, 7, 0)));
-        blackPieces.add(new Piece(pieceId++, PieceBuilder.getRookPieceType(), new ChessCoordinates(8, 8, 0)));
+        blackPieces.add(new Piece(pieceId++, PieceBuilder.getRookPieceType(), new ChessCoordinate(8, 1, 0)));
+        blackPieces.add(new Piece(pieceId++, PieceBuilder.getKnightPieceType(), new ChessCoordinate(8, 2, 0)));
+        blackPieces.add(new Piece(pieceId++, PieceBuilder.getBishopPieceType(), new ChessCoordinate(8, 3, 0)));
+        blackPieces.add(new Piece(pieceId++, PieceBuilder.getQueenPieceType(), new ChessCoordinate(8, 4, 0)));
+        blackPieces.add(new Piece(pieceId++, PieceBuilder.getKingPieceType(), new ChessCoordinate(8, 5, 0)));
+        blackPieces.add(new Piece(pieceId++, PieceBuilder.getBishopPieceType(), new ChessCoordinate(8, 6, 0)));
+        blackPieces.add(new Piece(pieceId++, PieceBuilder.getKnightPieceType(), new ChessCoordinate(8, 7, 0)));
+        blackPieces.add(new Piece(pieceId++, PieceBuilder.getRookPieceType(), new ChessCoordinate(8, 8, 0)));
 
-        List<ChessCoordinates> whitePromotionCoordinateList = Lists.newArrayList();
-        List<ChessCoordinates> blackPromotionCoordinateList = Lists.newArrayList();
+        List<ChessCoordinate> whitePromotionCoordinateList = Lists.newArrayList();
+        List<ChessCoordinate> blackPromotionCoordinateList = Lists.newArrayList();
         for (int i = 1; i < 9; i++) {
-            whitePromotionCoordinateList.add(new ChessCoordinates(1, i, 0));
-            blackPromotionCoordinateList.add(new ChessCoordinates(8, i, 0));
+            whitePromotionCoordinateList.add(new ChessCoordinate(1, i, 0));
+            blackPromotionCoordinateList.add(new ChessCoordinate(8, i, 0));
         }
 
         Map<PieceType, Set<PieceType>> promotionMap = Maps.newHashMap();

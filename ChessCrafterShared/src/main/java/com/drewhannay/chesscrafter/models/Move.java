@@ -3,21 +3,21 @@ package com.drewhannay.chesscrafter.models;
 import com.drewhannay.chesscrafter.logic.Result;
 
 public final class Move {
-    public Move(ChessCoordinates origin, ChessCoordinates destination) {
+    public Move(ChessCoordinate origin, ChessCoordinate destination) {
         this.mOrigin = origin;
         this.mDestination = destination;
     }
 
-    public ChessCoordinates getOrigin() {
+    public ChessCoordinate getOrigin() {
         return mOrigin;
     }
 
-    public ChessCoordinates getDestination() {
+    public ChessCoordinate getDestination() {
         return mDestination;
     }
 
-    private final ChessCoordinates mOrigin;
-    private final ChessCoordinates mDestination;
+    private final ChessCoordinate mOrigin;
+    private final ChessCoordinate mDestination;
     private PieceType promotionType;
 
     /**
@@ -38,7 +38,7 @@ public final class Move {
     /**
      * The old position of the square, if placed by opponent.
      */
-    private ChessCoordinates oldPos;
+    private ChessCoordinate oldPos;
     /**
      * The pieces caught up in a potential atomic explosion.
      */

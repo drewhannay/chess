@@ -29,7 +29,7 @@ public final class GameController {
         return sGame;
     }
 
-    public static Set<ChessCoordinates> getLegalDestinations(Piece piece) {
+    public static Set<ChessCoordinate> getLegalDestinations(Piece piece) {
         computeLegalDestinations();
         int teamId = piece.getTeamId(sGame);
         return mDataMap.get(teamId).getLegalDests(piece);
@@ -128,7 +128,7 @@ public final class GameController {
      * @param guardTeamIndex The team guarding the Square
      * @return The Pieces guarding the Square
      */
-    public static List<Piece> getGuards(ChessCoordinates coordinates, int guardTeamIndex) {
+    public static List<Piece> getGuards(ChessCoordinate coordinates, int guardTeamIndex) {
         List<Piece> pieces = sGame.getTeams()[guardTeamIndex].getPieces();
         List<Piece> guards = Lists.newArrayList();
 
@@ -157,7 +157,7 @@ public final class GameController {
         return count;
     }
 
-    private static List<Piece> getThreats(ChessCoordinates threatened, int attackerTeamIndex) {
+    private static List<Piece> getThreats(ChessCoordinate threatened, int attackerTeamIndex) {
         List<Piece> pieces = sGame.getTeams()[attackerTeamIndex].getPieces();
         List<Piece> attackers = Lists.newArrayList();
 
@@ -169,15 +169,15 @@ public final class GameController {
         return attackers;
     }
 
-    public static boolean isGuarded(ChessCoordinates coordinates, int teamIndex) {
+    public static boolean isGuarded(ChessCoordinate coordinates, int teamIndex) {
         return getGuards(coordinates, teamIndex) != null;
     }
 
-    public static boolean isThreatened(ChessCoordinates coordinates, int teamIndex) {
+    public static boolean isThreatened(ChessCoordinate coordinates, int teamIndex) {
         return getThreats(coordinates, teamIndex) != null;
     }
 
-    public static boolean isLegalMove(Piece piece, ChessCoordinates destination) {
+    public static boolean isLegalMove(Piece piece, ChessCoordinate destination) {
         int teamIndex = sGame.getTurnKeeper().getCurrentTeamIndex();
 
         return mDataMap.get(teamIndex).getLegalDests(piece).contains(destination);

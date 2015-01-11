@@ -5,7 +5,7 @@ import com.google.common.base.Objects;
 public final class Piece {
     public static final int TEAMLESS_PIECE = -1;
 
-    public Piece(long id, PieceType pieceType, ChessCoordinates coordinates) {
+    public Piece(long id, PieceType pieceType, ChessCoordinate coordinates) {
         mId = id;
         mPieceType = pieceType;
         mOriginalCoordinates = coordinates;
@@ -21,11 +21,11 @@ public final class Piece {
         return mPieceType;
     }
 
-    public ChessCoordinates getOriginalCoordinates() {
+    public ChessCoordinate getOriginalCoordinates() {
         return mOriginalCoordinates;
     }
 
-    public ChessCoordinates getCoordinates() {
+    public ChessCoordinate getCoordinates() {
         return mCoordinates;
     }
 
@@ -33,7 +33,7 @@ public final class Piece {
         return mMoveCount;
     }
 
-    public void setCoordinates(ChessCoordinates coordinates) {
+    public void setCoordinates(ChessCoordinate coordinates) {
         mCoordinates = coordinates;
     }
 
@@ -71,8 +71,8 @@ public final class Piece {
 
     private final long mId;
     private final PieceType mPieceType;
-    private final ChessCoordinates mOriginalCoordinates;
+    private final ChessCoordinate mOriginalCoordinates;
 
     private int mMoveCount;
-    private ChessCoordinates mCoordinates;
+    private ChessCoordinate mCoordinates;
 }

@@ -419,10 +419,10 @@ public class PlayGamePanel extends ChessPanel {
             timer.reset();
     }
 
-    public static List<SquareJLabel> highlightLegalDestinations(ChessCoordinates coordinates) {
+    public static List<SquareJLabel> highlightLegalDestinations(ChessCoordinate coordinates) {
         Piece movingPiece = GameController.getGame().getPieceOnSquare(coordinates);
         if (movingPiece != null && PreferenceUtility.getPreference().isHighlightMoves()) {
-            Set<ChessCoordinates> legalDestinations = GameController.getLegalDestinations(movingPiece);
+            Set<ChessCoordinate> legalDestinations = GameController.getLegalDestinations(movingPiece);
             List<SquareJLabel> labels = mGameBoards[coordinates.boardIndex].highlightSquares(legalDestinations);
             mGameBoards[coordinates.boardIndex].repaint();
             return labels;
