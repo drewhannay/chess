@@ -36,10 +36,6 @@ public class MovePieceTest {
         GameController.setGame(new Game("Classic", new Board[]{board}, teams, new ClassicTurnKeeper()));
     }
 
-    @AfterClass
-    public static void tearDownAfterClass() throws Exception {
-    }
-
     @Before
     public void setUp() throws Exception {
         mMovingPiece.setCoordinates(mOrigin);
