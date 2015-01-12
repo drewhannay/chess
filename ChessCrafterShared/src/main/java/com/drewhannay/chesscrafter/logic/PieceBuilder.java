@@ -1,6 +1,7 @@
 package com.drewhannay.chesscrafter.logic;
 
 import com.drewhannay.chesscrafter.models.BidirectionalMovement;
+import com.drewhannay.chesscrafter.models.Direction;
 import com.drewhannay.chesscrafter.models.PieceMovements;
 import com.drewhannay.chesscrafter.models.PieceType;
 import com.drewhannay.chesscrafter.utility.GsonUtility;
@@ -12,7 +13,6 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
-import com.drewhannay.chesscrafter.models.Direction;
 import static com.drewhannay.chesscrafter.models.PieceMovements.UNLIMITED;
 
 public class PieceBuilder {
@@ -27,34 +27,27 @@ public class PieceBuilder {
 
     public static PieceType getBishopPieceType() {
         Map<Direction, Integer> movements = Maps.newHashMap();
-        movements.put(Direction.NORTHEAST, UNLIMITED);
-        movements.put(Direction.NORTHEAST, UNLIMITED);
-        movements.put(Direction.SOUTHEAST, UNLIMITED);
-        movements.put(Direction.NORTHWEST, UNLIMITED);
-        movements.put(Direction.SOUTHWEST, UNLIMITED);
+        for (Direction direction : Direction.DIAGONAL_DIRECTIONS) {
+            movements.put(direction, UNLIMITED);
+        }
 
-        return new PieceType("Bishop", new PieceMovements(movements, Collections.<BidirectionalMovement>emptySet()), false);
+        return new PieceType("Bishop", new PieceMovements(movements, Collections.<BidirectionalMovement>emptySet()));
     }
 
     public static PieceType getKingPieceType() {
         Map<Direction, Integer> movements = Maps.newHashMap();
-        movements.put(Direction.NORTH, 1);
-        movements.put(Direction.SOUTH, 1);
-        movements.put(Direction.EAST, 1);
-        movements.put(Direction.WEST, 1);
-        movements.put(Direction.NORTHEAST, 1);
-        movements.put(Direction.SOUTHEAST, 1);
-        movements.put(Direction.NORTHWEST, 1);
-        movements.put(Direction.SOUTHWEST, 1);
+        for (Direction direction : Direction.values()) {
+            movements.put(direction, 1);
+        }
 
-        return new PieceType("King", new PieceMovements(movements, Collections.<BidirectionalMovement>emptySet()), false);
+        return new PieceType("King", new PieceMovements(movements, Collections.<BidirectionalMovement>emptySet()));
     }
 
     public static PieceType getKnightPieceType() {
         Set<BidirectionalMovement> bidirectionalMovements = Sets.newHashSet(new BidirectionalMovement(1, 2));
 
         return new PieceType("Knight",
-                new PieceMovements(Collections.<Direction, Integer>emptyMap(), bidirectionalMovements), true);
+                new PieceMovements(Collections.<Direction, Integer>emptyMap(), bidirectionalMovements));
     }
 
     public static PieceType getPawnPieceType() {
@@ -64,26 +57,20 @@ public class PieceBuilder {
 
     public static PieceType getQueenPieceType() {
         Map<Direction, Integer> movements = Maps.newHashMap();
-        movements.put(Direction.NORTH, -1);
-        movements.put(Direction.SOUTH, -1);
-        movements.put(Direction.WEST, -1);
-        movements.put(Direction.EAST, -1);
-        movements.put(Direction.NORTHEAST, -1);
-        movements.put(Direction.SOUTHEAST, -1);
-        movements.put(Direction.NORTHWEST, -1);
-        movements.put(Direction.SOUTHWEST, -1);
+        for (Direction direction : Direction.values()) {
+            movements.put(direction, UNLIMITED);
+        }
 
-        return new PieceType("Queen", new PieceMovements(movements, Collections.<BidirectionalMovement>emptySet()), false);
+        return new PieceType("Queen", new PieceMovements(movements, Collections.<BidirectionalMovement>emptySet()));
     }
 
     public static PieceType getRookPieceType() {
         Map<Direction, Integer> movements = Maps.newHashMap();
-        movements.put(Direction.NORTH, -1);
-        movements.put(Direction.SOUTH, -1);
-        movements.put(Direction.WEST, -1);
-        movements.put(Direction.EAST, -1);
-
-        return new PieceType("Rook", new PieceMovements(movements, Collections.<BidirectionalMovement>emptySet()), false);
+        for (Direction direction : Direction.ADJACENT_DIRECTIONS) {
+            movements.put(direction, UNLIMITED);
+        }
+        
+        return new PieceType("Rook", new PieceMovements(movements, Collections.<BidirectionalMovement>emptySet()));
     }
 
     public void addMovement(Direction direction, int distance) {

@@ -2,15 +2,17 @@ package com.drewhannay.chesscrafter.models;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.EnumSet;
+
 public enum Direction {
     NORTH('n'),
     SOUTH('s'),
     EAST('e'),
     WEST('w'),
-    NORTHWEST('f'),
     NORTHEAST('g'),
-    SOUTHWEST('a'),
-    SOUTHEAST('d');
+    NORTHWEST('f'),
+    SOUTHEAST('d'),
+    SOUTHWEST('a');
 
     private final char mDirection;
 
@@ -21,6 +23,9 @@ public enum Direction {
     public char getDirectionChar() {
         return mDirection;
     }
+
+    public static final EnumSet<Direction> ADJACENT_DIRECTIONS = EnumSet.of(NORTH, SOUTH, EAST, WEST);
+    public static final EnumSet<Direction> DIAGONAL_DIRECTIONS = EnumSet.of(NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST);
 
     public ChessCoordinate getFurthestPoint(@NotNull ChessCoordinate start, @NotNull BoardSize boardSize) {
         int x = start.x;
