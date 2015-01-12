@@ -5,6 +5,7 @@ import com.drewhannay.chesscrafter.dragNdrop.GlassPane;
 import com.drewhannay.chesscrafter.dragNdrop.MotionAdapter;
 import com.drewhannay.chesscrafter.logic.GameBuilder;
 import com.drewhannay.chesscrafter.models.Board;
+import com.drewhannay.chesscrafter.models.BoardSize;
 import com.drewhannay.chesscrafter.models.Piece;
 import com.drewhannay.chesscrafter.models.PieceType;
 import com.drewhannay.chesscrafter.rules.Rules;
@@ -68,7 +69,7 @@ public class VariantCreationPanel extends ChessPanel implements PieceMakerPanel.
             mBuilder.setWhiteTeam(mWhiteTeam);
         }
 
-        mDisplayBoard = new Board(2, 1, false);
+        mDisplayBoard = new Board(BoardSize.withDimensions(2, 1), false);
         //mPieceDisplaySquares[WHITE_INDEX] = new SquareJLabel(mDisplayBoard.getSquare(1, 1));
         //mPieceDisplaySquares[BLACK_INDEX] = new SquareJLabel(mDisplayBoard.getSquare(2, 1));
 

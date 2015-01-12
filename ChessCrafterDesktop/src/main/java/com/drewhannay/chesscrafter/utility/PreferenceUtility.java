@@ -164,7 +164,7 @@ public final class PreferenceUtility {
         }
 
         if (!Strings.isNullOrEmpty(jsonString.toString()))
-            return (Preference) GsonUtility.loadObjectFromJSonString(jsonString.toString(), Preference.class);
+            return (Preference) GsonUtility.fromJson(jsonString.toString(), Preference.class);
         else
             return createDefaultPreference();
     }

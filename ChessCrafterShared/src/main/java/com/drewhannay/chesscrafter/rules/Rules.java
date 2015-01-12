@@ -1,6 +1,6 @@
 package com.drewhannay.chesscrafter.rules;
 
-import com.drewhannay.chesscrafter.models.ChessCoordinates;
+import com.drewhannay.chesscrafter.models.ChessCoordinate;
 import com.drewhannay.chesscrafter.models.Move;
 import com.drewhannay.chesscrafter.models.Piece;
 import com.drewhannay.chesscrafter.models.PieceType;
@@ -20,7 +20,7 @@ public final class Rules {
     public static final int DESTINATION_SAME_BOARD = 0;
     public static final int DESTINATION_OPPOSITE_BOARD = 1;
 
-    public Rules(PieceType objectivePieceType, List<ChessCoordinates> promotionCoordinateList, int destinationBoardType,
+    public Rules(PieceType objectivePieceType, List<ChessCoordinate> promotionCoordinateList, int destinationBoardType,
                  List<LegalDestinationCropper> legalDestinationCroppers, Map<PieceType, Set<PieceType>> promotionMap,
                  PromotionMethod promotionMethod, List<PostMoveAction> postMoveActions, EndCondition endCondition) {
         mObjectivePieceType = objectivePieceType;
@@ -44,7 +44,7 @@ public final class Rules {
         return mObjectivePieceType;
     }
 
-    public List<ChessCoordinates> getPromotionCoordinateList() {
+    public List<ChessCoordinate> getPromotionCoordinateList() {
         return mPromotionCoordinateList;
     }
 
@@ -112,7 +112,7 @@ public final class Rules {
     }
 
     private final PieceType mObjectivePieceType;
-    private final List<ChessCoordinates> mPromotionCoordinateList;
+    private final List<ChessCoordinate> mPromotionCoordinateList;
     private final int mDestinationBoardType;
     private final List<LegalDestinationCropper> mLegalDestinationCroppers;
     private final List<PostMoveAction> mPostMoveActions;

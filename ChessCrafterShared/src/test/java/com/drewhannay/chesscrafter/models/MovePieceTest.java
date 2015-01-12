@@ -5,7 +5,10 @@ import com.drewhannay.chesscrafter.controllers.MoveController;
 import com.drewhannay.chesscrafter.logic.PieceBuilder;
 import com.drewhannay.chesscrafter.models.turnkeeper.ClassicTurnKeeper;
 import com.google.common.collect.Lists;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import java.util.Iterator;
 import java.util.List;
@@ -32,12 +35,8 @@ public class MovePieceTest {
         mOtherTeam = new Team(null, blackPieceList);
 
         Team[] teams = new Team[]{mMyTeam, mOtherTeam};
-        Board board = new Board(8, 8, false);
+        Board board = new Board(BoardSize.withDimensions(8, 8), false);
         GameController.setGame(new Game("Classic", new Board[]{board}, teams, new ClassicTurnKeeper()));
-    }
-
-    @AfterClass
-    public static void tearDownAfterClass() throws Exception {
     }
 
     @Before
@@ -62,7 +61,7 @@ public class MovePieceTest {
 
     @Test
     public final void testMovementUpdatesPieceCoordinates() {
-        ChessCoordinates destination = new ChessCoordinates(1, 2, 0);
+        ChessCoordinate destination = ChessCoordinate.at(1, 2, 0);
 
         if (!MoveController.execute(new Move(mOrigin, destination)))
             fail("MoveController.execute() returned false for a valid move");
@@ -73,7 +72,7 @@ public class MovePieceTest {
 
     @Test
     public final void testMovementUndoUpdatesPieceCoordinates() {
-        ChessCoordinates destination = new ChessCoordinates(1, 2, 0);
+        ChessCoordinate destination = ChessCoordinate.at(1, 2, 0);
         mMovingPiece.setCoordinates(destination);
 
         if (!MoveController.undo(new Move(mOrigin, destination)))
@@ -89,7 +88,7 @@ public class MovePieceTest {
         if (!mMovingPiece.getCoordinates().equals(mOrigin))
             fail("Test failed to set up piece properly.");
 
-        Move move = new Move(mOrigin, new ChessCoordinates(1, 6, 0));
+        Move move = new Move(mOrigin, ChessCoordinate.at(1, 6, 0));
 
         if (!MoveController.execute(move))
             fail("MoveController.execute() returned false for a valid move");
@@ -284,8 +283,8 @@ public class MovePieceTest {
             fail("MoveController.execute() returned false for a knight jumping over a barrier.");
     }
      */
-    private final static ChessCoordinates mOrigin = new ChessCoordinates(1, 1, 0);
-    private final static ChessCoordinates mStorageCoordinates = new ChessCoordinates(8, 8, 0);
+    private final static ChessCoordinate mOrigin = ChessCoordinate.at(1, 1, 0);
+    private final static ChessCoordinate mStorageCoordinates = ChessCoordinate.at(8, 8, 0);
     private static Piece mMovingPiece;
     private static Piece mSameTeamPiece;
     private static Piece mOppositeTeamPiece;

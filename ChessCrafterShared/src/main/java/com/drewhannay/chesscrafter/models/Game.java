@@ -62,7 +62,7 @@ public final class Game {
         return mHistory;
     }
 
-    public Piece getPieceOnSquare(ChessCoordinates coordinates) {
+    public Piece getPieceOnSquare(ChessCoordinate coordinates) {
         for (Team team : mTeams) {
             for (Piece piece : team.getPieces()) {
                 if (piece.getCoordinates().equals(coordinates))
