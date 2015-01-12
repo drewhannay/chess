@@ -68,6 +68,21 @@ public final class Game {
                 if (piece.getCoordinates().equals(coordinates))
                     return piece;
             }
+            for(Piece piece : team.getCapturedPieces()){
+                if(piece.getCoordinates().equals((coordinates)))
+                    return piece;
+            }
+        }
+        return null;
+    }
+
+    public Piece getJailPiece(Piece pieceID, ChessCoordinates coordinates) {
+        for (Team team : mTeams) {
+            for (Piece piece : team.getPieces()) {
+                if (piece.getCoordinates().equals(coordinates))
+                    return piece;
+                System.out.println("Provided ID: " + pieceID.getId() + "from team: " + piece.getId());
+            }
         }
         return null;
     }
