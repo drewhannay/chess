@@ -92,7 +92,12 @@ public class PlayGamePanel extends ChessPanel {
 //	}
 
     public static void boardRefresh() {
+        updateJailSquares();
+
         for (BoardPanel panel : mGameBoards)
+            panel.refreshSquares();
+
+        for (BoardPanel panel : mJails)
             panel.refreshSquares();
 
         // refreshGameSquares();
@@ -378,6 +383,7 @@ public class PlayGamePanel extends ChessPanel {
         // TODO: This assumes a two-player game
 //		add(new ChessTimerLabel(mTimers[0]), constraints);
 //		resetTimers();
+        boardRefresh();
         Driver.getInstance().pack();
     }
 
@@ -428,6 +434,23 @@ public class PlayGamePanel extends ChessPanel {
             return labels;
         } else
             return null;
+    }
+
+    public static void updateJailSquares() {
+        Team[] teams = GameController.getGame().getTeams();
+        for(int teamCount = 0; teamCount < teams.length; teamCount++){
+            int column = 1;
+            int row = 1;
+            for (Piece piece : teams[teamCount].getCapturedPieces()) {
+                int boardIndex = teamCount + GameController.getGame().getBoards().length;
+                piece.setCoordinates(ChessCoordinate.at(row, column, boardIndex));
+                column++;
+                if(column == 5) {
+                    column = 1;
+                    row++;
+                }
+            }
+        }
     }
 
     private static final long serialVersionUID = -2507232401817253688L;

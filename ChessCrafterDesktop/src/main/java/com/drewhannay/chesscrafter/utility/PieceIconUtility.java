@@ -29,7 +29,8 @@ public final class PieceIconUtility {
 
 
     public static ImageIcon getPieceIcon(String pieceName, int imageScale, int teamId) {
-        List<ImageIcon> list = IMAGE_MAP.get(pieceName);
+        String pieceKey = pieceName + imageScale;
+        List<ImageIcon> list = IMAGE_MAP.get(pieceKey);
         if (list == null) {
             try {
                 list = Lists.newArrayList();
@@ -43,7 +44,7 @@ public final class PieceIconUtility {
             } catch (IOException e) {
                 System.out.println(e);
             }
-            IMAGE_MAP.put(pieceName, list);
+            IMAGE_MAP.put(pieceKey, list);
         }
         return list.get(teamId);
     }

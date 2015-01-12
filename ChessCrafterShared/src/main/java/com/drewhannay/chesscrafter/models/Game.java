@@ -68,6 +68,10 @@ public final class Game {
                 if (piece.getCoordinates().equals(coordinates))
                     return piece;
             }
+            for(Piece piece : team.getCapturedPieces()){
+                if(piece.getCoordinates().equals((coordinates)))
+                    return piece;
+            }
         }
         return null;
     }

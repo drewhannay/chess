@@ -61,11 +61,8 @@ public class SquareJLabel extends JLabel {
         }
 
         if (mPiece != null) {
-            // TODO figure out how to determine the correct piece image
-            // ImageIcon pieceIcon =
-            // PieceIconUtility.getPieceIcon(mPiece.getPieceType().getName(),
-            // mPiece.isBlack());
             ImageIcon pieceIcon = PieceIconUtility.getPieceIcon(mPiece.getPieceType().getName(), mImageScale, mPiece.getTeamId(GameController.getGame()));
+
             if (pieceIcon == null)
                 setText(mPiece.getPieceType().getName());
             else {
