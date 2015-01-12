@@ -5,6 +5,7 @@ import com.drewhannay.chesscrafter.timer.ChessTimer;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
@@ -16,7 +17,6 @@ public final class Game {
         mTeams = teams;
         mTurnKeeper = turnKeeper;
         mHistory = Lists.newArrayList();
-        mJailBoards = new Board[teams.length];
     }
 
     /**
@@ -26,8 +26,7 @@ public final class Game {
      * @param timers An array of ChessTimer objects to be used for this instance of the Game
      *               where the indexes correspond to indexes into the Team array
      */
-    public void startGame(ChessTimer[] timers) {
-        Preconditions.checkArgument(timers != null);
+    public void startGame(@NotNull ChessTimer[] timers) {
         for (ChessTimer timer : timers)
             Preconditions.checkArgument(timer != null);
 
@@ -40,10 +39,6 @@ public final class Game {
 
     public Board[] getBoards() {
         return mBoards;
-    }
-
-    public Board[] getJailBoards() {
-        return mJailBoards;
     }
 
     public Team[] getTeams() {
@@ -68,8 +63,8 @@ public final class Game {
                 if (piece.getCoordinates().equals(coordinates))
                     return piece;
             }
-            for(Piece piece : team.getCapturedPieces()){
-                if(piece.getCoordinates().equals((coordinates)))
+            for (Piece piece : team.getCapturedPieces()) {
+                if (piece.getCoordinates().equals((coordinates)))
                     return piece;
             }
         }
@@ -108,7 +103,6 @@ public final class Game {
     private final String mGameType;
     private final Team[] mTeams;
     private final Board[] mBoards;
-    private final Board[] mJailBoards;
     private final TurnKeeper mTurnKeeper;
     private final List<Move> mHistory;
 

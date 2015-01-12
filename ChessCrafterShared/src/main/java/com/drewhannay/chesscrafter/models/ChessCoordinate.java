@@ -3,18 +3,43 @@ package com.drewhannay.chesscrafter.models;
 import java.util.Objects;
 
 public final class ChessCoordinate {
-    public final int row;
-    public final int column;
+    public final int x;
+    public final int y;
     public final int boardIndex;
 
-    private ChessCoordinate(int row, int column, int boardIndex) {
-        this.row = row;
-        this.column = column;
+    private ChessCoordinate(int x, int y, int boardIndex) {
+        this.x = x;
+        this.y = y;
         this.boardIndex = boardIndex;
     }
 
-    public static ChessCoordinate at(int row, int column, int boardIndex) {
-        return new ChessCoordinate(row, column, boardIndex);
+    public static ChessCoordinate at(int x, int y) {
+        // TODO: keep or remove this method?
+        return ChessCoordinate.at(x, y, 0);
+    }
+
+    public static ChessCoordinate at(int x, int y, int boardIndex) {
+        return new ChessCoordinate(x, y, boardIndex);
+    }
+
+    public boolean isValid(BoardSize boardSize) {
+        return isDimensionValid(x, boardSize.width) && isDimensionValid(y, boardSize.height);
+    }
+
+    private static boolean isDimensionValid(int dimensionValue, int boardSize) {
+        return dimensionValue > 0 && dimensionValue <= boardSize;
+    }
+
+    public boolean isOnSameVerticalPathAs(ChessCoordinate other) {
+        return x == other.x;
+    }
+
+    public boolean isOnSameHorizontalPathAs(ChessCoordinate other) {
+        return y == other.y;
+    }
+
+    public boolean isOnSameDiagonalPathAs(ChessCoordinate other) {
+        return Math.abs(x - other.x) == Math.abs(y - other.y);
     }
 
     @Override
@@ -24,18 +49,18 @@ public final class ChessCoordinate {
 
         ChessCoordinate otherCoordinates = (ChessCoordinate) other;
 
-        return row == otherCoordinates.row &&
-                column == otherCoordinates.column &&
+        return x == otherCoordinates.x &&
+                y == otherCoordinates.y &&
                 boardIndex == otherCoordinates.boardIndex;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(row, column, boardIndex);
+        return Objects.hash(x, y, boardIndex);
     }
 
     @Override
     public String toString() {
-        return "ChessCoordinate{row=" + row + ", column=" + column + ", boardIndex=" + boardIndex + "}";
+        return "ChessCoordinate{x=" + x + ", y=" + y + ", boardIndex=" + boardIndex + "}";
     }
 }

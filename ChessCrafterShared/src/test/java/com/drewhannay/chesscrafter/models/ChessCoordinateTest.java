@@ -17,7 +17,7 @@ public class ChessCoordinateTest {
     public static class ToString {
         @Test
         public void printsFriendlyMessage() {
-            assertEquals("ChessCoordinate{row=1, column=2, boardIndex=1}", ChessCoordinate.at(1, 2, 1).toString());
+            assertEquals("ChessCoordinate{x=1, y=2, boardIndex=1}", ChessCoordinate.at(1, 2, 1).toString());
         }
     }
 }

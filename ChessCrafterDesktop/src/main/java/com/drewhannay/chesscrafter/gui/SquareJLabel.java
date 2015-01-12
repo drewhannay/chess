@@ -100,8 +100,8 @@ public class SquareJLabel extends JLabel {
         }
         setBorder(null);
         // Otherwise make our normal light/dark pattern.
-        if ((mChessCoordinate.row % 2 != 0 && mChessCoordinate.column % 2 != 0)
-                || (mChessCoordinate.row % 2 == 0 && mChessCoordinate.column % 2 == 0)) {
+        if ((mChessCoordinate.y % 2 != 0 && mChessCoordinate.x % 2 != 0)
+                || (mChessCoordinate.y % 2 == 0 && mChessCoordinate.x % 2 == 0)) {
             setBackground(Color.LIGHT_GRAY);
             setForeground(Color.getHSBColor(30, 70, 70));
         } else {

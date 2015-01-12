@@ -2,8 +2,17 @@ package com.drewhannay.chesscrafter.models;
 
 import com.google.common.base.Objects;
 
+import java.util.List;
+
 public final class Piece {
     public static final int TEAMLESS_PIECE = -1;
+
+    private final long mId;
+    private final PieceType mPieceType;
+    private final ChessCoordinate mOriginalCoordinates;
+
+    private int mMoveCount;
+    private ChessCoordinate mCoordinates;
 
     public Piece(long id, PieceType pieceType, ChessCoordinate coordinates) {
         mId = id;
@@ -46,6 +55,11 @@ public final class Piece {
         return TEAMLESS_PIECE;
     }
 
+    public List<ChessCoordinate> getMovesFrom(ChessCoordinate coordinate) {
+        // TODO:
+        return null;
+    }
+
     @Override
     public boolean equals(Object other) {
         if (!(other instanceof Piece))
@@ -68,11 +82,4 @@ public final class Piece {
     public String toString() {
         return getPieceType().toString();
     }
-
-    private final long mId;
-    private final PieceType mPieceType;
-    private final ChessCoordinate mOriginalCoordinates;
-
-    private int mMoveCount;
-    private ChessCoordinate mCoordinates;
 }
