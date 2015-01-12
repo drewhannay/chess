@@ -12,7 +12,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
-import static com.drewhannay.chesscrafter.models.PieceMovements.MovementDirection;
+import com.drewhannay.chesscrafter.models.Direction;
 import static com.drewhannay.chesscrafter.models.PieceMovements.UNLIMITED;
 
 public class PieceBuilder {
@@ -26,26 +26,26 @@ public class PieceBuilder {
     }
 
     public static PieceType getBishopPieceType() {
-        Map<PieceMovements.MovementDirection, Integer> movements = Maps.newHashMap();
-        movements.put(MovementDirection.NORTHEAST, UNLIMITED);
-        movements.put(MovementDirection.NORTHEAST, UNLIMITED);
-        movements.put(MovementDirection.SOUTHEAST, UNLIMITED);
-        movements.put(MovementDirection.NORTHWEST, UNLIMITED);
-        movements.put(MovementDirection.SOUTHWEST, UNLIMITED);
+        Map<Direction, Integer> movements = Maps.newHashMap();
+        movements.put(Direction.NORTHEAST, UNLIMITED);
+        movements.put(Direction.NORTHEAST, UNLIMITED);
+        movements.put(Direction.SOUTHEAST, UNLIMITED);
+        movements.put(Direction.NORTHWEST, UNLIMITED);
+        movements.put(Direction.SOUTHWEST, UNLIMITED);
 
         return new PieceType("Bishop", new PieceMovements(movements, Collections.<BidirectionalMovement>emptySet()), false);
     }
 
     public static PieceType getKingPieceType() {
-        Map<MovementDirection, Integer> movements = Maps.newHashMap();
-        movements.put(MovementDirection.NORTH, 1);
-        movements.put(MovementDirection.SOUTH, 1);
-        movements.put(MovementDirection.EAST, 1);
-        movements.put(MovementDirection.WEST, 1);
-        movements.put(MovementDirection.NORTHEAST, 1);
-        movements.put(MovementDirection.SOUTHEAST, 1);
-        movements.put(MovementDirection.NORTHWEST, 1);
-        movements.put(MovementDirection.SOUTHWEST, 1);
+        Map<Direction, Integer> movements = Maps.newHashMap();
+        movements.put(Direction.NORTH, 1);
+        movements.put(Direction.SOUTH, 1);
+        movements.put(Direction.EAST, 1);
+        movements.put(Direction.WEST, 1);
+        movements.put(Direction.NORTHEAST, 1);
+        movements.put(Direction.SOUTHEAST, 1);
+        movements.put(Direction.NORTHWEST, 1);
+        movements.put(Direction.SOUTHWEST, 1);
 
         return new PieceType("King", new PieceMovements(movements, Collections.<BidirectionalMovement>emptySet()), false);
     }
@@ -54,39 +54,39 @@ public class PieceBuilder {
         Set<BidirectionalMovement> bidirectionalMovements = Sets.newHashSet(new BidirectionalMovement(1, 2));
 
         return new PieceType("Knight",
-                new PieceMovements(Collections.<MovementDirection, Integer>emptyMap(), bidirectionalMovements), true);
+                new PieceMovements(Collections.<Direction, Integer>emptyMap(), bidirectionalMovements), true);
     }
 
     public static PieceType getPawnPieceType() {
-        return new PieceType(PieceType.PAWN_NAME, new PieceMovements(Collections.<MovementDirection, Integer>emptyMap(),
+        return new PieceType(PieceType.PAWN_NAME, new PieceMovements(Collections.<Direction, Integer>emptyMap(),
                 Collections.<BidirectionalMovement>emptySet()), false);
     }
 
     public static PieceType getQueenPieceType() {
-        Map<MovementDirection, Integer> movements = Maps.newHashMap();
-        movements.put(MovementDirection.NORTH, -1);
-        movements.put(MovementDirection.SOUTH, -1);
-        movements.put(MovementDirection.WEST, -1);
-        movements.put(MovementDirection.EAST, -1);
-        movements.put(MovementDirection.NORTHEAST, -1);
-        movements.put(MovementDirection.SOUTHEAST, -1);
-        movements.put(MovementDirection.NORTHWEST, -1);
-        movements.put(MovementDirection.SOUTHWEST, -1);
+        Map<Direction, Integer> movements = Maps.newHashMap();
+        movements.put(Direction.NORTH, -1);
+        movements.put(Direction.SOUTH, -1);
+        movements.put(Direction.WEST, -1);
+        movements.put(Direction.EAST, -1);
+        movements.put(Direction.NORTHEAST, -1);
+        movements.put(Direction.SOUTHEAST, -1);
+        movements.put(Direction.NORTHWEST, -1);
+        movements.put(Direction.SOUTHWEST, -1);
 
         return new PieceType("Queen", new PieceMovements(movements, Collections.<BidirectionalMovement>emptySet()), false);
     }
 
     public static PieceType getRookPieceType() {
-        Map<MovementDirection, Integer> movements = Maps.newHashMap();
-        movements.put(MovementDirection.NORTH, -1);
-        movements.put(MovementDirection.SOUTH, -1);
-        movements.put(MovementDirection.WEST, -1);
-        movements.put(MovementDirection.EAST, -1);
+        Map<Direction, Integer> movements = Maps.newHashMap();
+        movements.put(Direction.NORTH, -1);
+        movements.put(Direction.SOUTH, -1);
+        movements.put(Direction.WEST, -1);
+        movements.put(Direction.EAST, -1);
 
         return new PieceType("Rook", new PieceMovements(movements, Collections.<BidirectionalMovement>emptySet()), false);
     }
 
-    public void addMovement(MovementDirection direction, int distance) {
+    public void addMovement(Direction direction, int distance) {
         Preconditions.checkState(distance >= 0 || distance == UNLIMITED);
 
         mMovements.put(direction, distance);
@@ -116,7 +116,7 @@ public class PieceBuilder {
         mBidirectionalMovements.clear();
     }
 
-    private final Map<MovementDirection, Integer> mMovements;
+    private final Map<Direction, Integer> mMovements;
     private final Set<BidirectionalMovement> mBidirectionalMovements;
 
     private String mName;

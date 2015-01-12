@@ -2,19 +2,30 @@ package com.drewhannay.chesscrafter.models;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
-import com.google.common.base.Strings;
+import org.jetbrains.annotations.NotNull;
 
 public class PieceType {
     // TODO: this should eventually be removed, when our variant creation is good enough to create pawns
     public static final String PAWN_NAME = "Pawn";
 
+    private final String mName;
+    private final PieceMovements mPieceMovements;
+
+    @Deprecated
     public PieceType(String name, PieceMovements pieceMovements, boolean isLeaper) {
-        Preconditions.checkArgument(!Strings.isNullOrEmpty(name));
-        Preconditions.checkArgument(pieceMovements != null);
+        this(name, pieceMovements);
+    }
+
+    @Deprecated
+    public boolean isLeaper() {
+        return false;
+    }
+
+    public PieceType(@NotNull String name, @NotNull PieceMovements pieceMovements) {
+        Preconditions.checkArgument(!name.isEmpty());
 
         mName = name;
         mPieceMovements = pieceMovements;
-        mIsLeaper = isLeaper;
     }
 
     /**
@@ -31,10 +42,6 @@ public class PieceType {
         return mPieceMovements;
     }
 
-    public boolean isLeaper() {
-        return mIsLeaper;
-    }
-
     @Override
     public boolean equals(Object other) {
         if (!(other instanceof PieceType))
@@ -43,10 +50,8 @@ public class PieceType {
         PieceType otherPieceType = (PieceType) other;
         boolean equal = Objects.equal(mName, otherPieceType.mName);
         if (equal) {
-            // do not allow PieceTypes with the same name but different
-            // movement attributes
+            // do not allow PieceTypes with the same name but different movement attributes
             Preconditions.checkState(Objects.equal(mPieceMovements, otherPieceType.mPieceMovements));
-            Preconditions.checkState(mIsLeaper == otherPieceType.mIsLeaper);
         }
 
         return equal;
@@ -54,15 +59,11 @@ public class PieceType {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(mName, mPieceMovements, mIsLeaper);
+        return Objects.hashCode(mName, mPieceMovements);
     }
 
     @Override
     public String toString() {
         return mName;
     }
-
-    private final String mName;
-    private final PieceMovements mPieceMovements;
-    private final boolean mIsLeaper;
 }

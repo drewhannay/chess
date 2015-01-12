@@ -14,7 +14,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-import static com.drewhannay.chesscrafter.models.PieceMovements.MovementDirection;
+import com.drewhannay.chesscrafter.models.Direction;
 import static com.drewhannay.chesscrafter.models.PieceMovements.UNLIMITED;
 
 public final class GuiUtility {
@@ -114,27 +114,27 @@ public final class GuiUtility {
         builder.append("<table><tr>"); //$NON-NLS-1$
         builder.append("<td>"); //$NON-NLS-1$
         builder.append("<table border=\"1\"> <tr> <td align=\"center\">"); //$NON-NLS-1$
-        builder.append(directionToTooltip(movements.getDistance(MovementDirection.NORTHWEST)));
+        builder.append(directionToTooltip(movements.getDistance(Direction.NORTHWEST)));
         builder.append("</td><td align=\"center\">"); //$NON-NLS-1$
-        builder.append(directionToTooltip(movements.getDistance(MovementDirection.NORTH)));
+        builder.append(directionToTooltip(movements.getDistance(Direction.NORTH)));
         builder.append("</td><td align=\"center\">"); //$NON-NLS-1$
-        builder.append(directionToTooltip(movements.getDistance(MovementDirection.NORTHEAST)));
+        builder.append(directionToTooltip(movements.getDistance(Direction.NORTHEAST)));
         builder.append("</td></tr>"); //$NON-NLS-1$
 
         builder.append("<tr> <td align=\"center\">"); //$NON-NLS-1$
-        builder.append(directionToTooltip(movements.getDistance(MovementDirection.WEST)));
+        builder.append(directionToTooltip(movements.getDistance(Direction.WEST)));
         builder.append("</td><td align=\"center\">"); //$NON-NLS-1$
         builder.append(name.equals(Messages.getString("Piece.knight")) ? Messages.getString("Piece.knightChar") : name.charAt(0)); //$NON-NLS-1$ //$NON-NLS-2$
         builder.append("</td><td align=\"center\">"); //$NON-NLS-1$
-        builder.append(directionToTooltip(movements.getDistance(MovementDirection.EAST)));
+        builder.append(directionToTooltip(movements.getDistance(Direction.EAST)));
         builder.append("</td></tr>"); //$NON-NLS-1$
 
         builder.append("<tr> <td align=\"center\">"); //$NON-NLS-1$
-        builder.append(directionToTooltip(movements.getDistance(MovementDirection.SOUTHWEST)));
+        builder.append(directionToTooltip(movements.getDistance(Direction.SOUTHWEST)));
         builder.append("</td><td align=\"center\">"); //$NON-NLS-1$
-        builder.append(directionToTooltip(movements.getDistance(MovementDirection.SOUTH)));
+        builder.append(directionToTooltip(movements.getDistance(Direction.SOUTH)));
         builder.append("</td><td align=\"center\">"); //$NON-NLS-1$
-        builder.append(directionToTooltip(movements.getDistance(MovementDirection.SOUTHEAST)));
+        builder.append(directionToTooltip(movements.getDistance(Direction.SOUTHEAST)));
         builder.append("</td></tr>"); //$NON-NLS-1$
 
         builder.append("</table>"); //$NON-NLS-1$

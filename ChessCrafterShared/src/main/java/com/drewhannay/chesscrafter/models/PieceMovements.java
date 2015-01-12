@@ -1,7 +1,9 @@
 package com.drewhannay.chesscrafter.models;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 import java.util.Set;
@@ -9,33 +11,16 @@ import java.util.Set;
 public final class PieceMovements {
     public static final int UNLIMITED = -1;
 
-    public static enum MovementDirection {
-        NORTH('n'),
-        SOUTH('s'),
-        EAST('e'),
-        WEST('w'),
-        NORTHWEST('f'),
-        NORTHEAST('g'),
-        SOUTHWEST('a'),
-        SOUTHEAST('d');
+    private final ImmutableMap<Direction, Integer> mMovements;
+    private final ImmutableSet<BidirectionalMovement> mBidirectionalMovements;
 
-        private MovementDirection(char direction) {
-            mDirection = direction;
-        }
-
-        public char getDirectionChar() {
-            return mDirection;
-        }
-
-        private final char mDirection;
-    }
-
-    public PieceMovements(Map<MovementDirection, Integer> movements, Set<BidirectionalMovement> bidirectionalMovements) {
-        mMovements = movements;
+    public PieceMovements(@NotNull Map<Direction, Integer> movements,
+                          @NotNull Set<BidirectionalMovement> bidirectionalMovements) {
+        mMovements = ImmutableMap.copyOf(movements);
         mBidirectionalMovements = ImmutableSet.copyOf(bidirectionalMovements);
     }
 
-    public int getDistance(MovementDirection direction) {
+    public int getDistance(Direction direction) {
         return mMovements.containsKey(direction) ? mMovements.get(direction) : 0;
     }
 
@@ -54,6 +39,10 @@ public final class PieceMovements {
                 && Objects.equal(mBidirectionalMovements, otherMovements.mBidirectionalMovements);
     }
 
-    private final Map<MovementDirection, Integer> mMovements;
-    private final ImmutableSet<BidirectionalMovement> mBidirectionalMovements;
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(mMovements, mBidirectionalMovements);
+    }
+
+    // TODO: Needs toString method
 }

@@ -22,7 +22,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import static com.drewhannay.chesscrafter.models.PieceMovements.MovementDirection;
+import com.drewhannay.chesscrafter.models.Direction;
 
 public class PieceMakerPanel extends ChessPanel {
     public interface PieceListChangedListener {
@@ -189,21 +189,21 @@ public class PieceMakerPanel extends ChessPanel {
         PieceMovements movements = null;
 
         mNorthField.setToolTipText(Messages.getString("PieceMakerPanel.north")); //$NON-NLS-1$
-        mNorthField.setText(builder == null ? "0" : "" + movements.getDistance(MovementDirection.NORTH)); //$NON-NLS-1$ //$NON-NLS-2$
+        mNorthField.setText(builder == null ? "0" : "" + movements.getDistance(Direction.NORTH)); //$NON-NLS-1$ //$NON-NLS-2$
         mNorthEastField.setToolTipText(Messages.getString("PieceMakerPanel.northEast")); //$NON-NLS-1$
-        mNorthEastField.setText(builder == null ? "0" : "" + movements.getDistance(MovementDirection.NORTHEAST)); //$NON-NLS-1$ //$NON-NLS-2$
+        mNorthEastField.setText(builder == null ? "0" : "" + movements.getDistance(Direction.NORTHEAST)); //$NON-NLS-1$ //$NON-NLS-2$
         mNorthWestField.setToolTipText(Messages.getString("PieceMakerPanel.northwest")); //$NON-NLS-1$
-        mNorthWestField.setText(builder == null ? "0" : "" + movements.getDistance(MovementDirection.NORTHWEST)); //$NON-NLS-1$ //$NON-NLS-2$
+        mNorthWestField.setText(builder == null ? "0" : "" + movements.getDistance(Direction.NORTHWEST)); //$NON-NLS-1$ //$NON-NLS-2$
         mEastField.setToolTipText(Messages.getString("PieceMakerPanel.east")); //$NON-NLS-1$
-        mEastField.setText(builder == null ? "0" : "" + movements.getDistance(MovementDirection.EAST)); //$NON-NLS-1$ //$NON-NLS-2$
+        mEastField.setText(builder == null ? "0" : "" + movements.getDistance(Direction.EAST)); //$NON-NLS-1$ //$NON-NLS-2$
         mSouthEastField.setToolTipText(Messages.getString("PieceMakerPanel.southEast")); //$NON-NLS-1$
-        mSouthEastField.setText(builder == null ? "0" : "" + movements.getDistance(MovementDirection.SOUTHEAST)); //$NON-NLS-1$ //$NON-NLS-2$
+        mSouthEastField.setText(builder == null ? "0" : "" + movements.getDistance(Direction.SOUTHEAST)); //$NON-NLS-1$ //$NON-NLS-2$
         mSouthField.setToolTipText(Messages.getString("PieceMakerPanel.south")); //$NON-NLS-1$
-        mSouthField.setText(builder == null ? "0" : "" + movements.getDistance(MovementDirection.SOUTH)); //$NON-NLS-1$ //$NON-NLS-2$
+        mSouthField.setText(builder == null ? "0" : "" + movements.getDistance(Direction.SOUTH)); //$NON-NLS-1$ //$NON-NLS-2$
         mSouthWestField.setToolTipText(Messages.getString("PieceMakerPanel.southWest")); //$NON-NLS-1$
-        mSouthWestField.setText(builder == null ? "0" : "" + movements.getDistance(MovementDirection.SOUTHWEST)); //$NON-NLS-1$ //$NON-NLS-2$
+        mSouthWestField.setText(builder == null ? "0" : "" + movements.getDistance(Direction.SOUTHWEST)); //$NON-NLS-1$ //$NON-NLS-2$
         mWestField.setToolTipText(Messages.getString("PieceMakerPanel.west")); //$NON-NLS-1$
-        mWestField.setText(builder == null ? "0" : "" + movements.getDistance(MovementDirection.WEST)); //$NON-NLS-1$ //$NON-NLS-2$
+        mWestField.setText(builder == null ? "0" : "" + movements.getDistance(Direction.WEST)); //$NON-NLS-1$ //$NON-NLS-2$
 
         JLabel movementPictureHolder = null;
         try {
@@ -399,14 +399,14 @@ public class PieceMakerPanel extends ChessPanel {
                 if (isIntegerDistance(mNorthField) && isIntegerDistance(mNorthEastField) && isIntegerDistance(mNorthWestField)
                         && isIntegerDistance(mEastField) && isIntegerDistance(mWestField) && isIntegerDistance(mSouthField)
                         && isIntegerDistance(mSouthEastField) && isIntegerDistance(mSouthWestField)) {
-                    mBuilder.addMovement(MovementDirection.NORTH, Integer.parseInt(mNorthField.getText()));
-                    mBuilder.addMovement(MovementDirection.NORTHEAST, Integer.parseInt(mNorthEastField.getText()));
-                    mBuilder.addMovement(MovementDirection.NORTHWEST, Integer.parseInt(mNorthWestField.getText()));
-                    mBuilder.addMovement(MovementDirection.EAST, Integer.parseInt(mEastField.getText()));
-                    mBuilder.addMovement(MovementDirection.WEST, Integer.parseInt(mWestField.getText()));
-                    mBuilder.addMovement(MovementDirection.SOUTH, Integer.parseInt(mSouthField.getText()));
-                    mBuilder.addMovement(MovementDirection.SOUTHEAST, Integer.parseInt(mSouthEastField.getText()));
-                    mBuilder.addMovement(MovementDirection.SOUTHWEST, Integer.parseInt(mSouthWestField.getText()));
+                    mBuilder.addMovement(Direction.NORTH, Integer.parseInt(mNorthField.getText()));
+                    mBuilder.addMovement(Direction.NORTHEAST, Integer.parseInt(mNorthEastField.getText()));
+                    mBuilder.addMovement(Direction.NORTHWEST, Integer.parseInt(mNorthWestField.getText()));
+                    mBuilder.addMovement(Direction.EAST, Integer.parseInt(mEastField.getText()));
+                    mBuilder.addMovement(Direction.WEST, Integer.parseInt(mWestField.getText()));
+                    mBuilder.addMovement(Direction.SOUTH, Integer.parseInt(mSouthField.getText()));
+                    mBuilder.addMovement(Direction.SOUTHEAST, Integer.parseInt(mSouthEastField.getText()));
+                    mBuilder.addMovement(Direction.SOUTHWEST, Integer.parseInt(mSouthWestField.getText()));
                 }
 
                 if (mBidirectionalMovementComboBox.getItemCount() != 0) {

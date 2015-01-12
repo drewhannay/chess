@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static com.drewhannay.chesscrafter.models.PieceMovements.MovementDirection;
+import com.drewhannay.chesscrafter.models.Direction;
 import static com.drewhannay.chesscrafter.models.PieceMovements.UNLIMITED;
 
 public class ComputedPieceData {
@@ -53,7 +53,7 @@ public class ComputedPieceData {
         boolean wraparound = board.isWrapAroundBoard();
 
         // east
-        distance = pieceType.getPieceMovements().getDistance(MovementDirection.EAST);
+        distance = pieceType.getPieceMovements().getDistance(Direction.EAST);
         int eastMax = distance + pieceColumn;
         if ((eastMax > board.getColumnCount() || distance == UNLIMITED) && !wraparound)
             eastMax = board.getColumnCount();
@@ -84,7 +84,7 @@ public class ComputedPieceData {
         }
 
         // west
-        distance = pieceType.getPieceMovements().getDistance(MovementDirection.WEST);
+        distance = pieceType.getPieceMovements().getDistance(Direction.WEST);
         int westMax = pieceColumn - distance;
         if ((westMax < 1 || distance == UNLIMITED) && !wraparound)
             westMax = 1;
@@ -112,7 +112,7 @@ public class ComputedPieceData {
         }
 
         // north
-        distance = pieceType.getPieceMovements().getDistance(MovementDirection.NORTH);
+        distance = pieceType.getPieceMovements().getDistance(Direction.NORTH);
         int northMax = distance + pieceRow;
         if (northMax >= board.getRowCount() || distance == UNLIMITED)
             northMax = board.getRowCount();
@@ -138,7 +138,7 @@ public class ComputedPieceData {
         }
 
         // south
-        distance = pieceType.getPieceMovements().getDistance(MovementDirection.SOUTH);
+        distance = pieceType.getPieceMovements().getDistance(Direction.SOUTH);
         int southMax = pieceRow - distance;
         if (southMax < 1 || distance == UNLIMITED)
             southMax = 1;
@@ -164,7 +164,7 @@ public class ComputedPieceData {
         }
 
         // northeast
-        distance = pieceType.getPieceMovements().getDistance(MovementDirection.NORTHEAST);
+        distance = pieceType.getPieceMovements().getDistance(Direction.NORTHEAST);
         int northeastMax = ((pieceRow >= pieceColumn) ? pieceRow : piece.getCoordinates().x) + distance;
 
         if (northeastMax >= board.getColumnCount() || distance == UNLIMITED)
@@ -191,7 +191,7 @@ public class ComputedPieceData {
         }
 
         // southeast
-        distance = pieceType.getPieceMovements().getDistance(MovementDirection.SOUTHEAST);
+        distance = pieceType.getPieceMovements().getDistance(Direction.SOUTHEAST);
         eastMax = pieceColumn + distance;
 
         if (eastMax >= board.getColumnCount() || distance == UNLIMITED)
@@ -221,7 +221,7 @@ public class ComputedPieceData {
         }
 
         // northwest
-        distance = pieceType.getPieceMovements().getDistance(MovementDirection.NORTHWEST);
+        distance = pieceType.getPieceMovements().getDistance(Direction.NORTHWEST);
         int westMin = pieceColumn - distance;
         if (westMin <= 1 || distance == UNLIMITED)
             westMin = 1;
@@ -249,7 +249,7 @@ public class ComputedPieceData {
         }
 
         // southwest
-        distance = pieceType.getPieceMovements().getDistance(MovementDirection.SOUTHWEST);
+        distance = pieceType.getPieceMovements().getDistance(Direction.SOUTHWEST);
         westMin = pieceColumn - distance;
         if (westMin <= 1 || distance == UNLIMITED)
             westMin = 1;
@@ -679,7 +679,7 @@ public class ComputedPieceData {
         // Same column
         if (originColumn == targetColumn) {
             // North
-            if (originRow < targetRow && canAttack(piece, targetRow, targetColumn, MovementDirection.NORTH)) {
+            if (originRow < targetRow && canAttack(piece, targetRow, targetColumn, Direction.NORTH)) {
                 for (r = (originRow + 1); r <= targetRow; r++) {
                     ChessCoordinate indexCoordinates = ChessCoordinate.at(r, originColumn, originBoardIndex);
                     if (mOccupiedSquares.contains(indexCoordinates) && !inclusive)
@@ -690,7 +690,7 @@ public class ComputedPieceData {
             }
             // South
             else {
-                if (canAttack(piece, targetRow, targetColumn, MovementDirection.SOUTH)) {
+                if (canAttack(piece, targetRow, targetColumn, Direction.SOUTH)) {
                     for (r = (originRow - 1); r >= targetRow; r--) {
                         ChessCoordinate indexCoordinates = ChessCoordinate.at(r, originColumn, originBoardIndex);
                         if (mOccupiedSquares.contains(indexCoordinates) && !inclusive)
@@ -705,7 +705,7 @@ public class ComputedPieceData {
         // Same Row
         else if (originRow == targetRow) {
             // East
-            if (originColumn < targetColumn && canAttack(piece, targetRow, targetColumn, MovementDirection.EAST)) {
+            if (originColumn < targetColumn && canAttack(piece, targetRow, targetColumn, Direction.EAST)) {
                 for (c = (originColumn + 1); c <= targetColumn; c++) {
                     ChessCoordinate indexCoordinates = ChessCoordinate.at(originRow, c, originBoardIndex);
                     if (mOccupiedSquares.contains(indexCoordinates) && !inclusive)
@@ -716,7 +716,7 @@ public class ComputedPieceData {
             }
             // West
             else {
-                if (canAttack(piece, targetRow, targetColumn, MovementDirection.WEST)) {
+                if (canAttack(piece, targetRow, targetColumn, Direction.WEST)) {
                     for (c = (originColumn - 1); c >= targetColumn; c--) {
                         ChessCoordinate indexCoordinates = ChessCoordinate.at(originRow, c, originBoardIndex);
                         if (mOccupiedSquares.contains(indexCoordinates) && !inclusive)
@@ -731,7 +731,7 @@ public class ComputedPieceData {
         // First diagonal
         else if ((originColumn - targetColumn) == (originRow - targetRow)) {
             // Northeast
-            if (originRow < targetRow && canAttack(piece, targetRow, targetColumn, MovementDirection.NORTHEAST)) {
+            if (originRow < targetRow && canAttack(piece, targetRow, targetColumn, Direction.NORTHEAST)) {
                 for (c = (originColumn + 1), r = (originRow + 1); r <= targetRow; c++, r++) {
                     ChessCoordinate indexCoordinates = ChessCoordinate.at(r, c, originBoardIndex);
                     if (mOccupiedSquares.contains(indexCoordinates) && !inclusive)
@@ -742,7 +742,7 @@ public class ComputedPieceData {
             }
             // Southwest
             else {
-                if (canAttack(piece, targetRow, targetColumn, MovementDirection.SOUTHWEST)) {
+                if (canAttack(piece, targetRow, targetColumn, Direction.SOUTHWEST)) {
                     for (c = (originColumn - 1), r = (originRow - 1); r >= targetRow; c--, r--) {
                         ChessCoordinate indexCoordinates = ChessCoordinate.at(r, c, originBoardIndex);
                         if (mOccupiedSquares.contains(indexCoordinates) && !inclusive)
@@ -756,7 +756,7 @@ public class ComputedPieceData {
         // Second diagonal
         else if ((originColumn - targetColumn) == ((originRow - targetRow) * -1)) {
             // Northwest
-            if ((originRow - targetRow) < 0 && canAttack(piece, targetRow, targetColumn, MovementDirection.NORTHWEST)) {
+            if ((originRow - targetRow) < 0 && canAttack(piece, targetRow, targetColumn, Direction.NORTHWEST)) {
                 for (c = (originColumn - 1), r = (originRow + 1); r <= targetRow; c--, r++) {
                     ChessCoordinate indexCoordinates = ChessCoordinate.at(r, c, originBoardIndex);
                     if (mOccupiedSquares.contains(indexCoordinates) && !inclusive)
@@ -767,7 +767,7 @@ public class ComputedPieceData {
             }
             // Southeast
             else {
-                if (canAttack(piece, targetRow, targetColumn, MovementDirection.SOUTHEAST)) {
+                if (canAttack(piece, targetRow, targetColumn, Direction.SOUTHEAST)) {
                     for (c = (originColumn + 1), r = (originRow - 1); r >= targetRow; c++, r--) {
                         ChessCoordinate indexCoordinates = ChessCoordinate.at(r, c, originBoardIndex);
                         if (mOccupiedSquares.contains(indexCoordinates) && !inclusive)
@@ -799,7 +799,7 @@ public class ComputedPieceData {
      * @return true if you are allowed to take that space and/or the piece on
      * it, false otherwise
      */
-    public boolean canAttack(Piece piece, int destRow, int destCol, MovementDirection direction) {
+    public boolean canAttack(Piece piece, int destRow, int destCol, Direction direction) {
         int distance = piece.getPieceType().getPieceMovements().getDistance(direction);
         int pieceRow = piece.getCoordinates().y;
         int pieceColumn = piece.getCoordinates().x;
