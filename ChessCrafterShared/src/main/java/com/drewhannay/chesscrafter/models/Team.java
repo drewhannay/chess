@@ -23,7 +23,7 @@ public final class Team {
     }
 
     public int getTotalTeamSize() {
-        int capturedSize = mCapturedPieces == null ? 0 : mCapturedPieces.size();
+        int capturedSize = mCapturedPieces.size();
         int uncapturedSize = mPieces == null ? 0 : mPieces.size();
         return capturedSize + uncapturedSize;
     }
