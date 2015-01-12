@@ -32,7 +32,7 @@ public final class PieceMovements {
 
     public PieceMovements(Map<MovementDirection, Integer> movements, Set<BidirectionalMovement> bidirectionalMovements) {
         mMovements = movements;
-        mBidirectionalMovements = bidirectionalMovements;
+        mBidirectionalMovements = ImmutableSet.copyOf(bidirectionalMovements);
     }
 
     public int getDistance(MovementDirection direction) {
@@ -40,7 +40,7 @@ public final class PieceMovements {
     }
 
     public ImmutableSet<BidirectionalMovement> getBidirectionalMovements() {
-        return ImmutableSet.copyOf(mBidirectionalMovements);
+        return mBidirectionalMovements;
     }
 
     @Override
@@ -55,5 +55,5 @@ public final class PieceMovements {
     }
 
     private final Map<MovementDirection, Integer> mMovements;
-    private final Set<BidirectionalMovement> mBidirectionalMovements;
+    private final ImmutableSet<BidirectionalMovement> mBidirectionalMovements;
 }
