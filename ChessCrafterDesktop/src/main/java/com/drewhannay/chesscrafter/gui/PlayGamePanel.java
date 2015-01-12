@@ -443,8 +443,7 @@ public class PlayGamePanel extends ChessPanel {
             int row = 1;
             for (Piece piece : teams[teamCount].getCapturedPieces()) {
                 int boardIndex = teamCount + GameController.getGame().getBoards().length;
-                ChessCoordinates coordinate = new ChessCoordinates(row, column, boardIndex);
-                piece.setCoordinates(coordinate);
+                piece.setCoordinates(ChessCoordinate.at(row, column, boardIndex));
                 column++;
                 if(column == 5) {
                     column = 1;

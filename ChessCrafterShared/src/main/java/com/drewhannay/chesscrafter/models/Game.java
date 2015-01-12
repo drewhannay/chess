@@ -76,17 +76,6 @@ public final class Game {
         return null;
     }
 
-    public Piece getJailPiece(Piece pieceID, ChessCoordinates coordinates) {
-        for (Team team : mTeams) {
-            for (Piece piece : team.getPieces()) {
-                if (piece.getCoordinates().equals(coordinates))
-                    return piece;
-                System.out.println("Provided ID: " + pieceID.getId() + "from team: " + piece.getId());
-            }
-        }
-        return null;
-    }
-
     @Override
     public boolean equals(Object other) {
         if (!(other instanceof Game))
