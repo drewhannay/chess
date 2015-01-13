@@ -3,21 +3,23 @@ package com.drewhannay.chesscrafter.models;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 import java.util.Set;
 
+@Deprecated
 public final class PieceMovements {
-    public static final int UNLIMITED = -1;
+    @Deprecated
+    public static final int UNLIMITED = Integer.MAX_VALUE;
 
     private final ImmutableMap<Direction, Integer> mMovements;
     private final ImmutableSet<BidirectionalMovement> mBidirectionalMovements;
 
-    public PieceMovements(@NotNull Map<Direction, Integer> movements,
-                          @NotNull Set<BidirectionalMovement> bidirectionalMovements) {
-        mMovements = ImmutableMap.copyOf(movements);
-        mBidirectionalMovements = ImmutableSet.copyOf(bidirectionalMovements);
+    public PieceMovements(@Nullable Map<Direction, Integer> movements,
+                          @Nullable Set<BidirectionalMovement> bidirectionalMovements) {
+        mMovements = movements != null ? ImmutableMap.copyOf(movements) : ImmutableMap.<Direction, Integer>of();
+        mBidirectionalMovements = bidirectionalMovements != null ? ImmutableSet.copyOf(bidirectionalMovements) : ImmutableSet.<BidirectionalMovement>of();
     }
 
     public int getDistance(Direction direction) {
@@ -26,6 +28,10 @@ public final class PieceMovements {
 
     public ImmutableSet<BidirectionalMovement> getBidirectionalMovements() {
         return mBidirectionalMovements;
+    }
+
+    public ImmutableMap<Direction, Integer> getMovements() {
+        return mMovements;
     }
 
     @Override

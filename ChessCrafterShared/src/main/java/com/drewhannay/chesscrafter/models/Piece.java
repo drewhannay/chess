@@ -55,7 +55,7 @@ public final class Piece {
         return TEAMLESS_PIECE;
     }
 
-    public List<ChessCoordinate> getMovesFrom(ChessCoordinate coordinate) {
+    public List<ChessCoordinate> getMovesFrom(ChessCoordinate coordinate, BoardSize boardSize) {
         // TODO:
         return null;
     }

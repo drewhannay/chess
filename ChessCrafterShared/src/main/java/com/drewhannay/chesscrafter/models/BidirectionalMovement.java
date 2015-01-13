@@ -1,52 +1,48 @@
-
 package com.drewhannay.chesscrafter.models;
 
 import com.google.common.base.Objects;
 
-public class BidirectionalMovement
-{
-	public BidirectionalMovement(int row, int column)
-	{
-		mRow = row;
-		mColumn = column;
-	}
+public final class BidirectionalMovement {
+    public final int x;
+    public final int y;
 
-	public int getRowDistance()
-	{
-		return mRow;
-	}
+    private BidirectionalMovement(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
 
-	public int getColumnDistance()
-	{
-		return mColumn;
-	}
+    public static BidirectionalMovement with(int x, int y) {
+        return new BidirectionalMovement(x, y);
+    }
 
-	@Override
-	public String toString()
-	{
-		return mRow + " x " + mColumn; //$NON-NLS-1$
-	}
+    @Deprecated
+    public int getRowDistance() {
+        return y;
+    }
 
-	@Override
-	public boolean equals(Object other)
-	{
-		if (!(other instanceof BidirectionalMovement))
-			return false;
+    @Deprecated
+    public int getColumnDistance() {
+        return x;
+    }
 
-		BidirectionalMovement otherMovement = (BidirectionalMovement) other;
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null || obj.getClass() != this.getClass())
+            return false;
 
-		return (Objects.equal(mRow, otherMovement.mRow)
-				&& Objects.equal(mColumn, otherMovement.mColumn))
-				|| (Objects.equal(mRow, otherMovement.mColumn)
-				&& Objects.equal(mColumn, otherMovement.mRow));
-	}
+        BidirectionalMovement other = (BidirectionalMovement) obj;
 
-	@Override
-	public int hashCode()
-	{
-		return Objects.hashCode(mRow, mColumn);
-	}
+        return (Objects.equal(x, other.x) && Objects.equal(y, other.y)) ||
+                (Objects.equal(x, other.y) && Objects.equal(y, other.x));
+    }
 
-	private int mRow;
-	private int mColumn;
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(x, y);
+    }
+
+    @Override
+    public String toString() {
+        return "BidirectionalMovement{x=" + x + ", y=" + y + "}";
+    }
 }

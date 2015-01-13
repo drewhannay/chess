@@ -44,7 +44,7 @@ public class PieceBuilder {
     }
 
     public static PieceType getKnightPieceType() {
-        Set<BidirectionalMovement> bidirectionalMovements = Sets.newHashSet(new BidirectionalMovement(1, 2));
+        Set<BidirectionalMovement> bidirectionalMovements = Sets.newHashSet(BidirectionalMovement.with(2, 1));
 
         return new PieceType("Knight",
                 new PieceMovements(Collections.<Direction, Integer>emptyMap(), bidirectionalMovements));
@@ -52,7 +52,7 @@ public class PieceBuilder {
 
     public static PieceType getPawnPieceType() {
         return new PieceType(PieceType.PAWN_NAME, new PieceMovements(Collections.<Direction, Integer>emptyMap(),
-                Collections.<BidirectionalMovement>emptySet()), false);
+                Collections.<BidirectionalMovement>emptySet()));
     }
 
     public static PieceType getQueenPieceType() {
@@ -69,7 +69,7 @@ public class PieceBuilder {
         for (Direction direction : Direction.ADJACENT_DIRECTIONS) {
             movements.put(direction, UNLIMITED);
         }
-        
+
         return new PieceType("Rook", new PieceMovements(movements, Collections.<BidirectionalMovement>emptySet()));
     }
 

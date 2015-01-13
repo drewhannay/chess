@@ -418,7 +418,7 @@ public class PieceMakerPanel extends ChessPanel {
                         int k1 = Integer.parseInt(tokenizer.nextToken());
                         tokenizer.nextToken();
                         int k2 = Integer.parseInt(tokenizer.nextToken());
-                        mBuilder.addBidirectionalMovement(new BidirectionalMovement(k1, k2));
+                        mBuilder.addBidirectionalMovement(BidirectionalMovement.with(k2, k1));
                     }
                 }
 

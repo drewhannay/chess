@@ -73,7 +73,7 @@ public final class Board {
 
     public List<ChessCoordinate> getMovesFrom(ChessCoordinate originCoordinate) {
         Piece piece = getPiece(originCoordinate);
-        List<ChessCoordinate> allPossibleMoves = piece.getMovesFrom(originCoordinate);
+        List<ChessCoordinate> allPossibleMoves = piece.getMovesFrom(originCoordinate, mBoardSize);
 
         List<ChessCoordinate> validMoves = Lists.newArrayListWithCapacity(allPossibleMoves.size());
         for (ChessCoordinate move : allPossibleMoves) {
@@ -87,7 +87,7 @@ public final class Board {
 
     private boolean isBlocked(ChessCoordinate origin, ChessCoordinate destination) {
         PathMaker pathMaker = new PathMaker(origin, destination);
-        List<ChessCoordinate> spacesAlongPath = pathMaker.getPathToDestination();
+        List<ChessCoordinate> spacesAlongPath = pathMaker.getPathToDestination(PieceType.UNLIMITED);
         ChessCoordinate lastSpace = spacesAlongPath.isEmpty() ? null : spacesAlongPath.get(spacesAlongPath.size() - 1);
         for (ChessCoordinate space : spacesAlongPath) {
             if (doesFriendlyPieceExistAt(origin, space) || (doesPieceExistAt(space) && !space.equals(lastSpace))) {
