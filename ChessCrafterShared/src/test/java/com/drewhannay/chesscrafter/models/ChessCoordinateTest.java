@@ -10,7 +10,7 @@ public class ChessCoordinateTest {
     public static class EqualsAndHashCode {
         @Test
         public void satisfiesEqualsContract() {
-            EqualsVerifier.forClass(ChessCoordinate.class).verify();
+            EqualsVerifier.forClass(ChessCoordinate.class).usingGetClass().verify();
         }
     }
 
