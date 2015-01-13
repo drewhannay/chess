@@ -43,15 +43,15 @@ public final class ChessCoordinate {
     }
 
     @Override
-    public boolean equals(Object other) {
-        if (!(other instanceof ChessCoordinate))
+    public boolean equals(Object obj) {
+        if (obj == null || obj.getClass() != this.getClass())
             return false;
 
-        ChessCoordinate otherCoordinates = (ChessCoordinate) other;
+        ChessCoordinate other = (ChessCoordinate) obj;
 
-        return x == otherCoordinates.x &&
-                y == otherCoordinates.y &&
-                boardIndex == otherCoordinates.boardIndex;
+        return x == other.x &&
+                y == other.y &&
+                boardIndex == other.boardIndex;
     }
 
     @Override

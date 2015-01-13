@@ -28,6 +28,18 @@ public class PieceType_GetMovesFrom_Given_KingOnClassicBoard_Should {
     }
 
     @Test
+    public void notReturn2_1For2_1() {
+        List<ChessCoordinate> moves = mTarget.getMovesFrom(ChessCoordinate.at(2, 1), mBoardSize);
+        assertFalse(moves.contains(ChessCoordinate.at(2, 1)));
+    }
+
+    @Test
+    public void return1_1For2_1() {
+        List<ChessCoordinate> moves = mTarget.getMovesFrom(ChessCoordinate.at(2, 1), mBoardSize);
+        assertTrue(moves.contains(ChessCoordinate.at(1, 1)));
+    }
+
+    @Test
     public void return2_2For1_1() {
         List<ChessCoordinate> moves = mTarget.getMovesFrom(ChessCoordinate.at(1, 1), mBoardSize);
         assertTrue(moves.contains(ChessCoordinate.at(2, 2)));
@@ -58,5 +70,17 @@ public class PieceType_GetMovesFrom_Given_KingOnClassicBoard_Should {
     public void notReturn3_3For1_1() {
         List<ChessCoordinate> moves = mTarget.getMovesFrom(ChessCoordinate.at(1, 1), mBoardSize);
         assertFalse(moves.contains(ChessCoordinate.at(3, 3)));
+    }
+
+    @Test
+    public void return4_7For4_8() {
+        List<ChessCoordinate> moves = mTarget.getMovesFrom(ChessCoordinate.at(4, 8), mBoardSize);
+        assertTrue(moves.contains(ChessCoordinate.at(4, 7)));
+    }
+
+    @Test
+    public void notReturn4_8For4_8() {
+        List<ChessCoordinate> moves = mTarget.getMovesFrom(ChessCoordinate.at(4, 8), mBoardSize);
+        assertFalse(moves.contains(ChessCoordinate.at(4, 8)));
     }
 }

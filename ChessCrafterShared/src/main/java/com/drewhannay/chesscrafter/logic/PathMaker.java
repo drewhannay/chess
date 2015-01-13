@@ -33,8 +33,12 @@ public class PathMaker {
 
         List<ChessCoordinate> spaces = new ArrayList();
         for (int x = least + 1, steps = 1; x <= most && steps <= maxSteps; x++, steps++) {
+            if (Math.abs(mOrigin.x - x) <= maxSteps) {
             spaces.add(ChessCoordinate.at(x, mOrigin.y));
         }
+        }
+        // don't include mOrigin in the path
+        spaces.remove(mOrigin);
         return spaces;
     }
 
@@ -44,8 +48,12 @@ public class PathMaker {
 
         List<ChessCoordinate> spaces = new ArrayList();
         for (int y = least + 1, steps = 1; y <= most && steps <= maxSteps; y++, steps++) {
+            if (Math.abs(mOrigin.y - y) <= maxSteps) {
             spaces.add(ChessCoordinate.at(mOrigin.x, y));
         }
+        }
+        // don't include mOrigin in the path
+        spaces.remove(mOrigin);
         return spaces;
     }
 
