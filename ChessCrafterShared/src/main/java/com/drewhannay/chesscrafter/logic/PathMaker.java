@@ -32,9 +32,13 @@ public class PathMaker {
         int most = Math.max(mOrigin.x, mDestination.x);
 
         List<ChessCoordinate> spaces = new ArrayList<>();
-        for (int x = least + 1, steps = 1; x <= most && steps <= maxSteps; x++, steps++) {
-            spaces.add(ChessCoordinate.at(x, mOrigin.y));
+        for (int x = least; x <= most; x++) {
+            if (Math.abs(mOrigin.x - x) <= maxSteps) {
+                spaces.add(ChessCoordinate.at(x, mOrigin.y));
+            }
         }
+        // don't include mOrigin in the path
+        spaces.remove(mOrigin);
         return spaces;
     }
 
@@ -43,9 +47,13 @@ public class PathMaker {
         int most = Math.max(mOrigin.y, mDestination.y);
 
         List<ChessCoordinate> spaces = new ArrayList<>();
-        for (int y = least + 1, steps = 1; y <= most && steps <= maxSteps; y++, steps++) {
-            spaces.add(ChessCoordinate.at(mOrigin.x, y));
+        for (int y = least + 1; y <= most; y++) {
+            if (Math.abs(mOrigin.y - y) <= maxSteps) {
+                spaces.add(ChessCoordinate.at(mOrigin.x, y));
+            }
         }
+        // don't include mOrigin in the path
+        spaces.remove(mOrigin);
         return spaces;
     }
 
