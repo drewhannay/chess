@@ -13,7 +13,8 @@ import java.util.Map;
 import java.util.Set;
 
 import com.drewhannay.chesscrafter.models.Direction;
-import static com.drewhannay.chesscrafter.models.PieceMovements.UNLIMITED;
+
+import static com.drewhannay.chesscrafter.models.PieceType.*;
 
 public class ComputedPieceData {
     public ComputedPieceData(int teamIndex) {
@@ -34,7 +35,7 @@ public class ComputedPieceData {
 
         // special case for Pawns, to incorporate enPassant, special
         // initial movement, and diagonal capturing
-        if (piece.getPieceType().getName().equals(PieceType.PAWN_NAME)) {
+        if (piece.getPieceType().getName().equals(PAWN_NAME)) {
             computePawnLegalDestinations(piece, targetBoardIndex);
             return;
         }
@@ -282,7 +283,7 @@ public class ComputedPieceData {
 		 * A Piece can move x File by y Rank squares at a time.
 		 * IE: A knight can move 1 by 2 or 2 by 1, but not 1 by 1 or 2 by 2
 		 */
-        for (BidirectionalMovement movement : pieceType.getPieceMovements().getBidirectionalMovements()) {
+        for (TwoHopMovement movement : pieceType.getPieceMovements().getTwoHopMovements()) {
             int f, r;
             int rank = movement.getRowDistance();
             int file = movement.getColumnDistance();
@@ -661,7 +662,7 @@ public class ComputedPieceData {
      * @return The Squares between this Piece and the target piece
      */
     public ChessCoordinate[] getLineOfSight(Piece piece, int targetRow, int targetColumn, boolean inclusive) {
-        if (piece.getPieceType().getName().equals(PieceType.PAWN_NAME))
+        if (piece.getPieceType().getName().equals(PAWN_NAME))
             return null;
 
         ChessCoordinate[] returnSet = null;
@@ -865,7 +866,7 @@ public class ComputedPieceData {
     }
 
     public boolean canLegallyAttack(Piece piece, ChessCoordinate threatenedCoordinates) {
-        if (piece.getPieceType().getName().equals(PieceType.PAWN_NAME)) {
+        if (piece.getPieceType().getName().equals(PAWN_NAME)) {
             if (threatenedCoordinates.x == piece.getCoordinates().x)
                 return false;
             else
