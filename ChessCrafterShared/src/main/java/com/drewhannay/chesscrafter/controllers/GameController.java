@@ -4,6 +4,7 @@ import com.drewhannay.chesscrafter.models.*;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 import java.util.List;
 import java.util.Map;
@@ -15,7 +16,7 @@ public final class GameController {
 
     public static void setGame(Game game) {
         sGame = game;
-        mDataMap = Maps.newConcurrentMap();
+        //mDataMap = Maps.newConcurrentMap();
         computeLegalDestinations();
     }
 
@@ -30,9 +31,13 @@ public final class GameController {
     }
 
     public static Set<ChessCoordinate> getLegalDestinations(Piece piece) {
-        computeLegalDestinations();
-        int teamId = piece.getTeamId(sGame);
-        return mDataMap.get(teamId).getLegalDests(piece);
+        //computeLegalDestinations();
+        //int teamId = piece.getTeamId(sGame);
+        //return mDataMap.get(teamId).getLegalDests(piece);
+        int boardIndex = piece.getCoordinates().boardIndex;
+        BoardSize size = getGame().getBoards()[boardIndex].getBoardSize();
+        mLegalDestinations = Sets.newHashSet(piece.getPieceType().getMovesFrom(piece.getCoordinates(), size));
+        return mLegalDestinations;
     }
 
 
@@ -42,7 +47,7 @@ public final class GameController {
         // Piece otherObjectivePiece = null;
         // List<Piece> movingTeam = null;
         // List<Piece> otherTeam = null;
-
+        /*
         Team[] teams = sGame.getTeams();
 
         for (int teamIndex = 0; teamIndex < teams.length; teamIndex++) {
@@ -61,13 +66,11 @@ public final class GameController {
         movingTeam = (isBlackMove()) ? getBlackTeam() : getWhiteTeam();
         otherObjectivePiece = (isBlackMove()) ? mBlackRules.objectivePiece(true) : mWhiteRules.objectivePiece(false);
         otherTeam = (isBlackMove()) ? getWhiteTeam() : getBlackTeam();
-
         // Make sure the objective piece doesn't put himself in check
         if (movingObjectivePiece != null)
         (movingObjectivePiece.isBlack() ? getBlackRules() : getWhiteRules()).cropLegalDests(movingObjectivePiece, movingObjectivePiece, movingTeam);
         if (otherObjectivePiece != null)
         (otherObjectivePiece.isBlack() ? getBlackRules() : getWhiteRules()).cropLegalDests(otherObjectivePiece, otherObjectivePiece, otherTeam);
-
         if (movingObjectivePiece != null)
         {
         // Now see if any of the moves puts the objective piece in check and
@@ -80,18 +83,14 @@ public final class GameController {
         getBlackRules().cropLegalDests(movingObjectivePiece, otherTeam.get(i), movingTeam);
         }
         }
-
         (isBlackMove() ? getBlackRules() : getWhiteRules()).adjustTeamLegalDestinations(movingTeam);
-
         // if the objective piece is in check, the legal moves list must be
         // modified accordingly
         if (movingObjectivePiece != null && movingObjectivePiece.isInCheck())
         {
         if (getLastMove() != null)
         getLastMove().setCheck(true);
-
         threats = getThreats(movingObjectivePiece);
-
         switch (threats.length)
         {
         case 1:
@@ -99,7 +98,6 @@ public final class GameController {
         // the King could move
         for (int i = 0; i < movingTeam.size(); i++)
         movingTeam.get(i).computeLegalDestsToSaveObjective(movingObjectivePiece, threats[0]);
-
         break;
         case 2:
         // since there is two threats, the objective piece is the only
@@ -113,10 +111,8 @@ public final class GameController {
         p.getGuardSquares().clear();
         }
         }
-
         if (getLastMove() != null)
         getLastMove().setDoubleCheck(true);
-
         break;
         }
         }
@@ -134,11 +130,11 @@ public final class GameController {
         List<Piece> pieces = sGame.getTeams()[guardTeamIndex].getPieces();
         List<Piece> guards = Lists.newArrayList();
 
-        for (Piece piece : pieces) {
-            // TODO: use real ComputedPieceData
+        /*for (Piece piece : pieces) {
+            // TODO: use updated methods
             if (mDataMap.get(guardTeamIndex).isGuarding(piece, coordinates))
                 guards.add(piece);
-        }
+        }*/
 
         return guards;
     }
@@ -149,24 +145,27 @@ public final class GameController {
      * @return The number of legal moves this turn.
      */
     public static int getLegalMoveCount() {
-        int teamIndex = sGame.getTurnKeeper().getCurrentTeamIndex();
-        List<Piece> movingTeam = sGame.getTeams()[teamIndex].getPieces();
+        //int teamIndex = sGame.getTurnKeeper().getCurrentTeamIndex();
+        // List<Piece> movingTeam = sGame.getTeams()[teamIndex].getPieces();
 
-        int count = 0;
-        for (Piece piece : movingTeam)
-            count += mDataMap.get(teamIndex).getLegalDests(piece).size();
+        //int count = 0;
+        //for (Piece piece : movingTeam)
+        //    count += mDataMap.get(teamIndex).getLegalDests(piece).size();
 
-        return count;
+        //return count;
+
+        return mLegalDestinations.size();
     }
 
     private static List<Piece> getThreats(ChessCoordinate threatened, int attackerTeamIndex) {
         List<Piece> pieces = sGame.getTeams()[attackerTeamIndex].getPieces();
         List<Piece> attackers = Lists.newArrayList();
 
-        for (Piece piece : pieces) {
+        /*for (Piece piece : pieces) {
+            @TODO Use updated methods
             if (mDataMap.get(attackerTeamIndex).canLegallyAttack(piece, threatened))
                 attackers.add(piece);
-        }
+        }*/
 
         return attackers;
     }
@@ -180,9 +179,10 @@ public final class GameController {
     }
 
     public static boolean isLegalMove(Piece piece, ChessCoordinate destination) {
-        int teamIndex = sGame.getTurnKeeper().getCurrentTeamIndex();
+        //int teamIndex = sGame.getTurnKeeper().getCurrentTeamIndex();
 
-        return mDataMap.get(teamIndex).getLegalDests(piece).contains(destination);
+        //return mDataMap.get(teamIndex).getLegalDests(piece).contains(destination);
+        return mLegalDestinations.contains(destination);
     }
 
     /**
@@ -211,5 +211,7 @@ public final class GameController {
     }
 
     private static Game sGame;
-    private static Map<Integer, ComputedPieceData> mDataMap;
+    //private static Map<Integer, ComputedPieceData> mDataMap;
+    private static Set<ChessCoordinate> mLegalDestinations;
+
 }

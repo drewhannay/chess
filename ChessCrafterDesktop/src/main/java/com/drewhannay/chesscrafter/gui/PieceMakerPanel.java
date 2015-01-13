@@ -2,7 +2,6 @@ package com.drewhannay.chesscrafter.gui;
 
 import com.drewhannay.chesscrafter.logic.PieceBuilder;
 import com.drewhannay.chesscrafter.models.TwoHopMovement;
-import com.drewhannay.chesscrafter.models.PieceMovements;
 import com.drewhannay.chesscrafter.utility.GuiUtility;
 import com.drewhannay.chesscrafter.utility.ImageUtility;
 import com.google.common.collect.Lists;
@@ -186,9 +185,9 @@ public class PieceMakerPanel extends ChessPanel {
         pieceCreationPanel.add(darkIconPanel, constraints);
 
         //PieceMovements movements = builder == null ? null : builder.getPieceMovements();
-        PieceMovements movements = null;
+        //PieceMovements movements = null;
 
-        mNorthField.setToolTipText(Messages.getString("PieceMakerPanel.north")); //$NON-NLS-1$
+        /*mNorthField.setToolTipText(Messages.getString("PieceMakerPanel.north")); //$NON-NLS-1$
         mNorthField.setText(builder == null ? "0" : "" + movements.getDistance(Direction.NORTH)); //$NON-NLS-1$ //$NON-NLS-2$
         mNorthEastField.setToolTipText(Messages.getString("PieceMakerPanel.northEast")); //$NON-NLS-1$
         mNorthEastField.setText(builder == null ? "0" : "" + movements.getDistance(Direction.NORTHEAST)); //$NON-NLS-1$ //$NON-NLS-2$
@@ -204,6 +203,7 @@ public class PieceMakerPanel extends ChessPanel {
         mSouthWestField.setText(builder == null ? "0" : "" + movements.getDistance(Direction.SOUTHWEST)); //$NON-NLS-1$ //$NON-NLS-2$
         mWestField.setToolTipText(Messages.getString("PieceMakerPanel.west")); //$NON-NLS-1$
         mWestField.setText(builder == null ? "0" : "" + movements.getDistance(Direction.WEST)); //$NON-NLS-1$ //$NON-NLS-2$
+        */
 
         JLabel movementPictureHolder = null;
         try {
