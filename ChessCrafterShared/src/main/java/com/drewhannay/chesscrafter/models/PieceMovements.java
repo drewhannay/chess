@@ -14,20 +14,20 @@ public final class PieceMovements {
     public static final int UNLIMITED = Integer.MAX_VALUE;
 
     private final ImmutableMap<Direction, Integer> mMovements;
-    private final ImmutableSet<BidirectionalMovement> mBidirectionalMovements;
+    private final ImmutableSet<TwoHopMovement> mTwoHopMovements;
 
     public PieceMovements(@Nullable Map<Direction, Integer> movements,
-                          @Nullable Set<BidirectionalMovement> bidirectionalMovements) {
+                          @Nullable Set<TwoHopMovement> twoHopMovements) {
         mMovements = movements != null ? ImmutableMap.copyOf(movements) : ImmutableMap.<Direction, Integer>of();
-        mBidirectionalMovements = bidirectionalMovements != null ? ImmutableSet.copyOf(bidirectionalMovements) : ImmutableSet.<BidirectionalMovement>of();
+        mTwoHopMovements = twoHopMovements != null ? ImmutableSet.copyOf(twoHopMovements) : ImmutableSet.<TwoHopMovement>of();
     }
 
     public int getDistance(Direction direction) {
         return mMovements.containsKey(direction) ? mMovements.get(direction) : 0;
     }
 
-    public ImmutableSet<BidirectionalMovement> getBidirectionalMovements() {
-        return mBidirectionalMovements;
+    public ImmutableSet<TwoHopMovement> getTwoHopMovements() {
+        return mTwoHopMovements;
     }
 
     public ImmutableMap<Direction, Integer> getMovements() {
@@ -42,12 +42,12 @@ public final class PieceMovements {
         PieceMovements otherMovements = (PieceMovements) other;
 
         return Objects.equal(mMovements, otherMovements.mMovements)
-                && Objects.equal(mBidirectionalMovements, otherMovements.mBidirectionalMovements);
+                && Objects.equal(mTwoHopMovements, otherMovements.mTwoHopMovements);
     }
 
     @Override
     public int hashCode() {
-        return java.util.Objects.hash(mMovements, mBidirectionalMovements);
+        return java.util.Objects.hash(mMovements, mTwoHopMovements);
     }
 
     // TODO: Needs toString method

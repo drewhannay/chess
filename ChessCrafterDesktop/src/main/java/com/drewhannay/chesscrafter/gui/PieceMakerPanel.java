@@ -1,7 +1,7 @@
 package com.drewhannay.chesscrafter.gui;
 
 import com.drewhannay.chesscrafter.logic.PieceBuilder;
-import com.drewhannay.chesscrafter.models.BidirectionalMovement;
+import com.drewhannay.chesscrafter.models.TwoHopMovement;
 import com.drewhannay.chesscrafter.models.PieceMovements;
 import com.drewhannay.chesscrafter.utility.GuiUtility;
 import com.drewhannay.chesscrafter.utility.ImageUtility;
@@ -79,7 +79,7 @@ public class PieceMakerPanel extends ChessPanel {
         mTempBidirectionalMovements = Lists.newArrayList();
         /*if (builder != null)
         {
-			List<BidirectionalMovement> bidirectionalMovements = builder.getPieceMovements().getBidirectionalMovements();
+			List<BidirectionalMovement> bidirectionalMovements = builder.getPieceMovements().getTwoHopMovements();
 			mBidirectionalMovementComboBox = new JComboBox(bidirectionalMovements.toArray());
 			for (BidirectionalMovement movement : bidirectionalMovements)
 				mTempBidirectionalMovements.add(movement.toString());
@@ -418,7 +418,7 @@ public class PieceMakerPanel extends ChessPanel {
                         int k1 = Integer.parseInt(tokenizer.nextToken());
                         tokenizer.nextToken();
                         int k2 = Integer.parseInt(tokenizer.nextToken());
-                        mBuilder.addBidirectionalMovement(BidirectionalMovement.with(k2, k1));
+                        mBuilder.addBidirectionalMovement(TwoHopMovement.with(k2, k1));
                     }
                 }
 

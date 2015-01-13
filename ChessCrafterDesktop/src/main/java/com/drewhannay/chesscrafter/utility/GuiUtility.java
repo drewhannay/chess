@@ -1,6 +1,6 @@
 package com.drewhannay.chesscrafter.utility;
 
-import com.drewhannay.chesscrafter.models.BidirectionalMovement;
+import com.drewhannay.chesscrafter.models.TwoHopMovement;
 import com.drewhannay.chesscrafter.models.Piece;
 import com.drewhannay.chesscrafter.models.PieceMovements;
 
@@ -147,7 +147,7 @@ public final class GuiUtility {
         else
             builder.append(Messages.getString("Piece.notAbleToLeapBr")); //$NON-NLS-1$
 
-        for (BidirectionalMovement movement : movements.getBidirectionalMovements()) {
+        for (TwoHopMovement movement : movements.getTwoHopMovements()) {
             builder.append("- "); //$NON-NLS-1$
             builder.append(movement.getRowDistance());
             builder.append(" x "); //$NON-NLS-1$

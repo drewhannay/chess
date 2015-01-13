@@ -1,6 +1,6 @@
 package com.drewhannay.chesscrafter.logic;
 
-import com.drewhannay.chesscrafter.models.BidirectionalMovement;
+import com.drewhannay.chesscrafter.models.TwoHopMovement;
 import com.drewhannay.chesscrafter.models.Direction;
 import com.drewhannay.chesscrafter.models.PieceMovements;
 import com.drewhannay.chesscrafter.models.PieceType;
@@ -18,7 +18,7 @@ import static com.drewhannay.chesscrafter.models.PieceMovements.UNLIMITED;
 public class PieceBuilder {
     public PieceBuilder() {
         mMovements = Maps.newHashMap();
-        mBidirectionalMovements = Sets.newHashSet();
+        mTwoHopMovements = Sets.newHashSet();
     }
 
     public static PieceType parsePieceType(String json) {
@@ -31,7 +31,7 @@ public class PieceBuilder {
             movements.put(direction, UNLIMITED);
         }
 
-        return new PieceType("Bishop", new PieceMovements(movements, Collections.<BidirectionalMovement>emptySet()));
+        return new PieceType("Bishop", new PieceMovements(movements, Collections.<TwoHopMovement>emptySet()));
     }
 
     public static PieceType getKingPieceType() {
@@ -40,19 +40,19 @@ public class PieceBuilder {
             movements.put(direction, 1);
         }
 
-        return new PieceType("King", new PieceMovements(movements, Collections.<BidirectionalMovement>emptySet()));
+        return new PieceType("King", new PieceMovements(movements, Collections.<TwoHopMovement>emptySet()));
     }
 
     public static PieceType getKnightPieceType() {
-        Set<BidirectionalMovement> bidirectionalMovements = Sets.newHashSet(BidirectionalMovement.with(2, 1));
+        Set<TwoHopMovement> twoHopMovements = Sets.newHashSet(TwoHopMovement.with(2, 1));
 
         return new PieceType("Knight",
-                new PieceMovements(Collections.<Direction, Integer>emptyMap(), bidirectionalMovements));
+                new PieceMovements(Collections.<Direction, Integer>emptyMap(), twoHopMovements));
     }
 
     public static PieceType getPawnPieceType() {
         return new PieceType(PieceType.PAWN_NAME, new PieceMovements(Collections.<Direction, Integer>emptyMap(),
-                Collections.<BidirectionalMovement>emptySet()));
+                Collections.<TwoHopMovement>emptySet()));
     }
 
     public static PieceType getQueenPieceType() {
@@ -61,7 +61,7 @@ public class PieceBuilder {
             movements.put(direction, UNLIMITED);
         }
 
-        return new PieceType("Queen", new PieceMovements(movements, Collections.<BidirectionalMovement>emptySet()));
+        return new PieceType("Queen", new PieceMovements(movements, Collections.<TwoHopMovement>emptySet()));
     }
 
     public static PieceType getRookPieceType() {
@@ -70,7 +70,7 @@ public class PieceBuilder {
             movements.put(direction, UNLIMITED);
         }
 
-        return new PieceType("Rook", new PieceMovements(movements, Collections.<BidirectionalMovement>emptySet()));
+        return new PieceType("Rook", new PieceMovements(movements, Collections.<TwoHopMovement>emptySet()));
     }
 
     public void addMovement(Direction direction, int distance) {
@@ -95,16 +95,16 @@ public class PieceBuilder {
         this.mIsLeaper = mCanJump;
     }
 
-    public void addBidirectionalMovement(BidirectionalMovement movement) {
-        mBidirectionalMovements.add(movement);
+    public void addBidirectionalMovement(TwoHopMovement movement) {
+        mTwoHopMovements.add(movement);
     }
 
     public void clearBidirectionalMovements() {
-        mBidirectionalMovements.clear();
+        mTwoHopMovements.clear();
     }
 
     private final Map<Direction, Integer> mMovements;
-    private final Set<BidirectionalMovement> mBidirectionalMovements;
+    private final Set<TwoHopMovement> mTwoHopMovements;
 
     private String mName;
     private boolean mIsLeaper;

@@ -3,11 +3,11 @@ package com.drewhannay.chesscrafter.models;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 
-public final class BidirectionalMovement {
+public final class TwoHopMovement {
     public final int x;
     public final int y;
 
-    private BidirectionalMovement(int x, int y) {
+    private TwoHopMovement(int x, int y) {
         Preconditions.checkArgument(x > 0);
         Preconditions.checkArgument(y > 0);
         
@@ -15,8 +15,8 @@ public final class BidirectionalMovement {
         this.y = y;
     }
 
-    public static BidirectionalMovement with(int x, int y) {
-        return new BidirectionalMovement(x, y);
+    public static TwoHopMovement with(int x, int y) {
+        return new TwoHopMovement(x, y);
     }
 
     @Deprecated
@@ -34,7 +34,7 @@ public final class BidirectionalMovement {
         if (obj == null || obj.getClass() != this.getClass())
             return false;
 
-        BidirectionalMovement other = (BidirectionalMovement) obj;
+        TwoHopMovement other = (TwoHopMovement) obj;
 
         return (Objects.equal(x, other.x) && Objects.equal(y, other.y)) ||
                 (Objects.equal(x, other.y) && Objects.equal(y, other.x));
@@ -47,6 +47,6 @@ public final class BidirectionalMovement {
 
     @Override
     public String toString() {
-        return "BidirectionalMovement{x=" + x + ", y=" + y + "}";
+        return "TwoHopMovement{x=" + x + ", y=" + y + "}";
     }
 }
