@@ -6,8 +6,12 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URL;
+import java.util.Locale;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 public final class FileUtility {
+
     public static String[] getAIFileList() {
         File file = new File(HIDDEN_DIR + SLASH + AI);
         file.mkdirs();
@@ -79,24 +83,10 @@ public final class FileUtility {
     }
 
     public static File getCompletedGamesFile(String completedGameFileName) {
-        String path = HIDDEN_DIR + SLASH + COMPLETED_GAMES;
-        new File(path).mkdirs();
-        try {
-            FileInputStream fileInputStream = new FileInputStream(getPreferencesFile());
-            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-            //Preference preference = (Preference) objectInputStream.readObject();
-            //path = preference.getSaveLocation();
-            objectInputStream.close();
-            fileInputStream.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        String path = PreferenceUtility.getSaveLocationPreference();
+        if(path.equals("default"))
+            path = HIDDEN_DIR + SLASH + COMPLETED_GAMES;
         return new File(path + SLASH + completedGameFileName);
-    }
-
-    public static File getPreferencesFile() {
-        new File(HIDDEN_DIR).mkdirs();
-        return new File(HIDDEN_DIR + SLASH + PREFERENCES);
     }
 
     public static String getHiddenDir() {
@@ -168,7 +158,6 @@ public final class FileUtility {
     private static final String PIECES = "pieces"; //$NON-NLS-1$
     private static final String GAMES_IN_PROGRESS = "gamesInProgress"; //$NON-NLS-1$
     private static final String COMPLETED_GAMES = "completedGames"; //$NON-NLS-1$
-    private static final String PREFERENCES = "preferences"; //$NON-NLS-1$
 
     private static final String SLASH;
 }

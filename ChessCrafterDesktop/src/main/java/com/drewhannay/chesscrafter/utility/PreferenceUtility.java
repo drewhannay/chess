@@ -1,16 +1,14 @@
 package com.drewhannay.chesscrafter.utility;
 
 import com.drewhannay.chesscrafter.gui.Driver;
-import com.drewhannay.chesscrafter.models.Preference;
-import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.*;
 import java.util.List;
+import java.util.prefs.Preferences;
 
 public final class PreferenceUtility {
     private PreferenceUtility() {
@@ -48,10 +46,9 @@ public final class PreferenceUtility {
 
         final String defaultSaveLocation = FileUtility.getDefaultCompletedLocation();
 
-        Preference preference = getPreference();
-        currentSaveLocationField.setText(preference.getSaveLocation());
-        highlightingCheckBox.setSelected(preference.isHighlightMoves());
-        pieceToolTipCheckBox.setSelected(preference.showPieceToolTips());
+        currentSaveLocationField.setText(mPreference.get(SAVELOCATION, "default"));
+        highlightingCheckBox.setSelected(mPreference.getBoolean(HIGHLIGHTMOVES, true));
+        pieceToolTipCheckBox.setSelected(mPreference.getBoolean(PIECETOOLTIPS, false));
 
         resetButton.addActionListener(new ActionListener() {
             @Override
@@ -81,12 +78,9 @@ public final class PreferenceUtility {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-
-                Preference preference = new Preference();
-                preference.setSaveLocation(currentSaveLocationField.getText());
-                preference.setHighlightMoves(highlightingCheckBox.isSelected());
-                preference.setShowPieceToolTips(pieceToolTipCheckBox.isSelected());
-                savePreference(preference);
+                mPreference.put(SAVELOCATION, currentSaveLocationField.getText());
+                mPreference.putBoolean(HIGHLIGHTMOVES, highlightingCheckBox.isSelected());
+                mPreference.putBoolean(PIECETOOLTIPS, pieceToolTipCheckBox.isSelected());
             }
         });
 
@@ -141,59 +135,44 @@ public final class PreferenceUtility {
         popupFrame.setVisible(true);
     }
 
-    public static Preference getPreference() {
-        StringBuilder jsonString = new StringBuilder();
-
-        FileInputStream fileInputStream = null;
-        DataInputStream dataInputStream = null;
-        BufferedReader bufferedReader = null;
-        try {
-            fileInputStream = new FileInputStream(FileUtility.getPreferencesFile());
-            dataInputStream = new DataInputStream(fileInputStream);
-            bufferedReader = new BufferedReader(new InputStreamReader(dataInputStream));
-            String line;
-            while ((line = bufferedReader.readLine()) != null)
-                jsonString.append(line);
-
-            bufferedReader.close();
-            dataInputStream.close();
-            fileInputStream.close();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        if (!Strings.isNullOrEmpty(jsonString.toString()))
-            return (Preference) GsonUtility.fromJson(jsonString.toString(), Preference.class);
-        else
-            return createDefaultPreference();
+    /**
+     * Generic method to get string preference from the system
+     * @param key the String key for the preference to return
+     * @return returns the value paired with the given key
+     */
+    public static String getStringPreference(String key) {
+        return mPreference.get(key, "default");
     }
 
-    public static Preference createDefaultPreference() {
-        Preference defaultPref = new Preference();
-        savePreference(defaultPref);
-        return defaultPref;
+    /**
+     * Generic method to get a boolean preference from the system
+     * @param key the String key for the preference to return
+     * @return returns the boolean value matched with the given key
+     */
+    public static Boolean getBooleanPreference(String key) {
+        return mPreference.getBoolean(key, true);
     }
 
-    public static void savePreference(Preference preference) {
-        File preferencesFile = FileUtility.getPreferencesFile();
-        FileOutputStream f_out;
-        try {
-            if (!preferencesFile.exists()) {
-                preferencesFile.createNewFile();
-            }
-            f_out = new FileOutputStream(preferencesFile);
-            DataOutputStream out = new DataOutputStream(f_out);
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out));
-
-            writer.write(preference.getJsonString());
-
-            writer.close();
-            out.close();
-            f_out.close();
-        } catch (Exception e1) {
-            e1.printStackTrace();
-        }
+    /**
+     * Method to get the preference for if moves should be Highlighted
+     * @return returns the boolean value for move highlighting
+     */
+    public static Boolean getHighlightMovesPreference(){
+        return mPreference.getBoolean(HIGHLIGHTMOVES, true);
+    }
+    /**
+     * Method to get the preference for if Pieces should display a tooltip
+     * @return returns the boolean value for piece highlighting
+     */
+    public static Boolean getPieceToolTipPreference(){
+        return mPreference.getBoolean(PIECETOOLTIPS, true);
+    }
+    /**
+     * Method to get the preference for Save game location
+     * @return returns the string value for the save game location
+     */
+    public static String getSaveLocationPreference(){
+        return mPreference.get(SAVELOCATION, "default");
     }
 
     public static void addPieceToolTipListener(PieceToolTipPreferenceChangedListener listener) {
@@ -209,4 +188,8 @@ public final class PreferenceUtility {
     }
 
     private static List<PieceToolTipPreferenceChangedListener> mToolTipListeners;
+    private static final String SAVELOCATION = "saveLocation"; //$NON-NLS-1$
+    private static final String HIGHLIGHTMOVES = "highlightMoves"; //$NON-NLS-1$
+    private static final String PIECETOOLTIPS = "pieceToolTips"; //$NON-NLS-1$
+    private static final Preferences mPreference = Preferences.userRoot().node("ChessCrafterPreferences");
 }
