@@ -2,8 +2,9 @@ package com.drewhannay.chesscrafter.models;
 
 import com.drewhannay.chesscrafter.utility.GsonUtility;
 import com.google.common.base.Objects;
-
+@Deprecated
 public class Preference {
+    @Deprecated
     public Preference() {
         mShouldHighlightMoves = true;
         s_defaultSaveLocation = DEFAULT_LOCATION;

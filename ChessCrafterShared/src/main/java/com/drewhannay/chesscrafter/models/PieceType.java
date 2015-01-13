@@ -69,7 +69,7 @@ public class PieceType {
             return getPawnMovesFrom(startLocation, boardSize);
         }
 
-        List<ChessCoordinate> moves = new ArrayList<>();
+        List<ChessCoordinate> moves = new ArrayList();
 
         for (Direction direction : mMovements.keySet()) {
             PathMaker pathMaker = new PathMaker(startLocation, direction.getFurthestPoint(startLocation, boardSize));
@@ -77,7 +77,7 @@ public class PieceType {
         }
 
         for (BidirectionalMovement bidirectionalMovement : mBidirectionalMovements) {
-            List<ChessCoordinate> allMoves = new ArrayList<>();
+            List<ChessCoordinate> allMoves = new ArrayList();
 
             for (int quadrant = 1; quadrant <= 4; quadrant++) {
                 allMoves.addAll(getQuadrantMoves(startLocation, bidirectionalMovement, quadrant));
@@ -94,7 +94,7 @@ public class PieceType {
     }
 
     private List<ChessCoordinate> getPawnMovesFrom(@NotNull ChessCoordinate startLocation, @NotNull BoardSize boardSize) {
-        List<ChessCoordinate> moves = new ArrayList<>();
+        List<ChessCoordinate> moves = new ArrayList();
         // TODO: should only be able to move two spaces if it's the first move
         moves.add(ChessCoordinate.at(startLocation.x, startLocation.y + 1));
         moves.add(ChessCoordinate.at(startLocation.x, startLocation.y + 2));
@@ -109,7 +109,7 @@ public class PieceType {
         int xMultiplier = quadrant == 1 || quadrant == 4 ? 1 : -1;
         int yMultiplier = quadrant == 1 || quadrant == 2 ? 1 : -1;
 
-        List<ChessCoordinate> moves = new ArrayList<>(2);
+        List<ChessCoordinate> moves = new ArrayList(2);
         moves.add(ChessCoordinate.at(coordinate.x + movement.x * xMultiplier, coordinate.y + movement.y * yMultiplier));
         moves.add(ChessCoordinate.at(coordinate.x + movement.y * xMultiplier, coordinate.y + movement.x * yMultiplier));
         return moves;
