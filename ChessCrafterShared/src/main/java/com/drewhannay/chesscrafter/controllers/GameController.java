@@ -16,6 +16,8 @@ public final class GameController {
 
     public static void setGame(Game game) {
         sGame = game;
+        //mDataMap = Maps.newConcurrentMap();
+        computeLegalDestinations();
     }
 
     private static void verifyGameIsSet() {
@@ -36,6 +38,85 @@ public final class GameController {
         BoardSize size = getGame().getBoards()[boardIndex].getBoardSize();
         mLegalDestinations = Sets.newHashSet(piece.getPieceType().getMovesFrom(piece.getCoordinates(), size));
         return mLegalDestinations;
+    }
+
+
+    public static void computeLegalDestinations() {
+        // Piece[] threats = null;
+        // Piece movingObjectivePiece = null;
+        // Piece otherObjectivePiece = null;
+        // List<Piece> movingTeam = null;
+        // List<Piece> otherTeam = null;
+        /*
+        Team[] teams = sGame.getTeams();
+
+        for (int teamIndex = 0; teamIndex < teams.length; teamIndex++) {
+            mDataMap.put(teamIndex, new ComputedPieceData(teamIndex));
+            for (Piece piece : teams[teamIndex].getPieces()) {
+                int boardIndex =
+                        teams[teamIndex].getRules() == null ? piece.getCoordinates().boardIndex : teams[teamIndex].getRules().getDestinationBoardIndex(
+                                piece.getCoordinates().boardIndex);
+                mDataMap.get(teamIndex).computeLegalDestinations(piece, boardIndex);
+            }
+
+        }
+        /*
+        TODO: deal with all this stuff
+        movingObjectivePiece = (isBlackMove()) ? mBlackRules.objectivePiece(true) : mWhiteRules.objectivePiece(false);
+        movingTeam = (isBlackMove()) ? getBlackTeam() : getWhiteTeam();
+        otherObjectivePiece = (isBlackMove()) ? mBlackRules.objectivePiece(true) : mWhiteRules.objectivePiece(false);
+        otherTeam = (isBlackMove()) ? getWhiteTeam() : getBlackTeam();
+        // Make sure the objective piece doesn't put himself in check
+        if (movingObjectivePiece != null)
+        (movingObjectivePiece.isBlack() ? getBlackRules() : getWhiteRules()).cropLegalDests(movingObjectivePiece, movingObjectivePiece, movingTeam);
+        if (otherObjectivePiece != null)
+        (otherObjectivePiece.isBlack() ? getBlackRules() : getWhiteRules()).cropLegalDests(otherObjectivePiece, otherObjectivePiece, otherTeam);
+        if (movingObjectivePiece != null)
+        {
+        // Now see if any of the moves puts the objective piece in check and
+        // are therefore illegal
+        for (int i = 0; i < otherTeam.size(); i++)
+        {
+        if (otherTeam.equals(getWhiteTeam()))
+        getWhiteRules().cropLegalDests(movingObjectivePiece, otherTeam.get(i), movingTeam);
+        else
+        getBlackRules().cropLegalDests(movingObjectivePiece, otherTeam.get(i), movingTeam);
+        }
+        }
+        (isBlackMove() ? getBlackRules() : getWhiteRules()).adjustTeamLegalDestinations(movingTeam);
+        // if the objective piece is in check, the legal moves list must be
+        // modified accordingly
+        if (movingObjectivePiece != null && movingObjectivePiece.isInCheck())
+        {
+        if (getLastMove() != null)
+        getLastMove().setCheck(true);
+        threats = getThreats(movingObjectivePiece);
+        switch (threats.length)
+        {
+        case 1:
+        // there is only one threat, so another Piece could block, or
+        // the King could move
+        for (int i = 0; i < movingTeam.size(); i++)
+        movingTeam.get(i).computeLegalDestsToSaveObjective(movingObjectivePiece, threats[0]);
+        break;
+        case 2:
+        // since there is two threats, the objective piece is the only
+        // one who can get himself out of check.
+        for (int i = 0; i < movingTeam.size(); i++)
+        {
+        ComputedPieceData p = (movingTeam.get(i));
+        if (p != movingObjectivePiece)
+        {
+        p.getLegalDests().clear();
+        p.getGuardSquares().clear();
+        }
+        }
+        if (getLastMove() != null)
+        getLastMove().setDoubleCheck(true);
+        break;
+        }
+        }
+        */
     }
 
     /**
@@ -65,11 +146,13 @@ public final class GameController {
      */
     public static int getLegalMoveCount() {
         //int teamIndex = sGame.getTurnKeeper().getCurrentTeamIndex();
-       // List<Piece> movingTeam = sGame.getTeams()[teamIndex].getPieces();
+        // List<Piece> movingTeam = sGame.getTeams()[teamIndex].getPieces();
 
         //int count = 0;
         //for (Piece piece : movingTeam)
         //    count += mDataMap.get(teamIndex).getLegalDests(piece).size();
+
+        //return count;
 
         return mLegalDestinations.size();
     }
@@ -123,8 +206,12 @@ public final class GameController {
 
         // TODO: We're just using this for it's side effect of changing the team index. Do we ever need to store it?
         sGame.getTurnKeeper().getTeamIndexForNextTurn();
+
+        computeLegalDestinations();
     }
 
     private static Game sGame;
+    //private static Map<Integer, ComputedPieceData> mDataMap;
     private static Set<ChessCoordinate> mLegalDestinations;
+
 }

@@ -7,7 +7,7 @@ public final class ChessCoordinate {
     public final int y;
     public final int boardIndex;
 
-    public ChessCoordinate(int x, int y, int boardIndex) {
+    private ChessCoordinate(int x, int y, int boardIndex) {
         this.x = x;
         this.y = y;
         this.boardIndex = boardIndex;
