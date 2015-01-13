@@ -1,12 +1,16 @@
 package com.drewhannay.chesscrafter.models;
 
 import com.google.common.base.Objects;
+import com.google.common.base.Preconditions;
 
 public final class BidirectionalMovement {
     public final int x;
     public final int y;
 
     private BidirectionalMovement(int x, int y) {
+        Preconditions.checkArgument(x > 0);
+        Preconditions.checkArgument(y > 0);
+        
         this.x = x;
         this.y = y;
     }
