@@ -15,7 +15,7 @@ import java.util.Set;
 import com.drewhannay.chesscrafter.models.Direction;
 
 import static com.drewhannay.chesscrafter.models.PieceType.*;
-
+@Deprecated
 public class ComputedPieceData {
     public ComputedPieceData(int teamIndex) {
         mTeamIndex = teamIndex;

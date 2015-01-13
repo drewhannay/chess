@@ -1,8 +1,6 @@
 package com.drewhannay.chesscrafter.utility;
 
-import com.drewhannay.chesscrafter.models.TwoHopMovement;
 import com.drewhannay.chesscrafter.models.Piece;
-import com.drewhannay.chesscrafter.models.PieceMovements;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -13,9 +11,6 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-
-import com.drewhannay.chesscrafter.models.Direction;
-import static com.drewhannay.chesscrafter.models.PieceMovements.UNLIMITED;
 
 public final class GuiUtility {
     public static void requestFocus(final JComponent component) {
@@ -105,12 +100,12 @@ public final class GuiUtility {
 
     public static String getPieceToolTipText(Piece piece) {
         String name = piece.getPieceType().getName();
-        PieceMovements movements = piece.getPieceType().getPieceMovements();
+        //PieceMovements movements = piece.getPieceType().getPieceMovements();
 
         StringBuilder builder = new StringBuilder("<html><b>"); //$NON-NLS-1$
         builder.append(name);
         builder.append("</b><br/>"); //$NON-NLS-1$
-
+        /*
         builder.append("<table><tr>"); //$NON-NLS-1$
         builder.append("<td>"); //$NON-NLS-1$
         builder.append("<table border=\"1\"> <tr> <td align=\"center\">"); //$NON-NLS-1$
@@ -158,6 +153,7 @@ public final class GuiUtility {
         builder.append("</td>"); //$NON-NLS-1$
 
         builder.append("</html>"); //$NON-NLS-1$
+        */
         return builder.toString();
     }
 
@@ -167,4 +163,6 @@ public final class GuiUtility {
         else
             return direction.toString();
     }
+
+    private static final int UNLIMITED = Integer.MAX_VALUE;
 }

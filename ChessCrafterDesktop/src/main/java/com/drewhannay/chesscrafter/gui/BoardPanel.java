@@ -93,7 +93,7 @@ public class BoardPanel extends JPanel {
     public List<SquareJLabel> highlightSquares(Set<ChessCoordinate> coordinates) {
         List<SquareJLabel> toHighlight = Lists.newArrayList();
         for (ChessCoordinate coordinate : coordinates) {
-            SquareJLabel label = mSquareLabels[coordinate.y - 1][coordinate.x - 1];
+            SquareJLabel label = mSquareLabels[coordinate.x - 1][coordinate.y - 1];
             label.highlight();
             toHighlight.add(label);
         }

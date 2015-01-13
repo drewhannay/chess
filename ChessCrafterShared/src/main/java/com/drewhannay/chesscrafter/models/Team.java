@@ -49,7 +49,7 @@ public final class Team {
     }
 
     public boolean objectivePieceIsInCheck(int teamIndex) {
-        GameController.computeLegalDestinations();
+        //GameController.computeLegalDestinations();
 
         for (Piece piece : getNonCapturedObjectivePieces()) {
             if (GameController.isThreatened(piece.getCoordinates(), teamIndex))
