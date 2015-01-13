@@ -23,7 +23,7 @@ public class PieceType {
 
     private final String mName;
     private final ImmutableMap<Direction, Integer> mMovements;
-    private final ImmutableSet<BidirectionalMovement> mBidirectionalMovements;
+    private final ImmutableSet<TwoHopMovement> mTwoHopMovements;
 
     @Deprecated
     public PieceType(String name, PieceMovements pieceMovements, boolean isLeaper) {
@@ -32,7 +32,7 @@ public class PieceType {
 
     @Deprecated
     public PieceType(@NotNull String name, @NotNull PieceMovements pieceMovements) {
-        this(name, pieceMovements.getMovements(), pieceMovements.getBidirectionalMovements());
+        this(name, pieceMovements.getMovements(), pieceMovements.getTwoHopMovements());
     }
 
     @Deprecated
@@ -42,16 +42,16 @@ public class PieceType {
 
     @Deprecated
     public PieceMovements getPieceMovements() {
-        return new PieceMovements(mMovements, mBidirectionalMovements);
+        return new PieceMovements(mMovements, mTwoHopMovements);
     }
 
     public PieceType(@NotNull String name, @Nullable Map<Direction, Integer> movements,
-                     @Nullable Set<BidirectionalMovement> bidirectionalMovements) {
+                     @Nullable Set<TwoHopMovement> twoHopMovements) {
         Preconditions.checkArgument(!name.isEmpty());
 
         mName = name;
         mMovements = movements != null ? ImmutableMap.copyOf(movements) : ImmutableMap.<Direction, Integer>of();
-        mBidirectionalMovements = bidirectionalMovements != null ? ImmutableSet.copyOf(bidirectionalMovements) : ImmutableSet.<BidirectionalMovement>of();
+        mTwoHopMovements = twoHopMovements != null ? ImmutableSet.copyOf(twoHopMovements) : ImmutableSet.<TwoHopMovement>of();
     }
 
     /**
@@ -69,18 +69,18 @@ public class PieceType {
             return getPawnMovesFrom(startLocation, boardSize);
         }
 
-        List<ChessCoordinate> moves = new ArrayList();
+        List<ChessCoordinate> moves = new ArrayList<>();
 
         for (Direction direction : mMovements.keySet()) {
             PathMaker pathMaker = new PathMaker(startLocation, direction.getFurthestPoint(startLocation, boardSize));
             moves.addAll(pathMaker.getPathToDestination(mMovements.get(direction)));
         }
 
-        for (BidirectionalMovement bidirectionalMovement : mBidirectionalMovements) {
-            List<ChessCoordinate> allMoves = new ArrayList();
+        for (TwoHopMovement twoHopMovement : mTwoHopMovements) {
+            List<ChessCoordinate> allMoves = new ArrayList<>();
 
             for (int quadrant = 1; quadrant <= 4; quadrant++) {
-                allMoves.addAll(getQuadrantMoves(startLocation, bidirectionalMovement, quadrant));
+                allMoves.addAll(getQuadrantMoves(startLocation, twoHopMovement, quadrant));
             }
 
             for (ChessCoordinate move : allMoves) {
@@ -94,7 +94,7 @@ public class PieceType {
     }
 
     private List<ChessCoordinate> getPawnMovesFrom(@NotNull ChessCoordinate startLocation, @NotNull BoardSize boardSize) {
-        List<ChessCoordinate> moves = new ArrayList();
+        List<ChessCoordinate> moves = new ArrayList<>();
         // TODO: should only be able to move two spaces if it's the first move
         moves.add(ChessCoordinate.at(startLocation.x, startLocation.y + 1));
         moves.add(ChessCoordinate.at(startLocation.x, startLocation.y + 2));
@@ -104,12 +104,12 @@ public class PieceType {
 
     // TODO: should be a Set? don't want duplicate results
     private List<ChessCoordinate> getQuadrantMoves(@NotNull ChessCoordinate coordinate,
-                                                   @NotNull BidirectionalMovement movement,
+                                                   @NotNull TwoHopMovement movement,
                                                    int quadrant) {
         int xMultiplier = quadrant == 1 || quadrant == 4 ? 1 : -1;
         int yMultiplier = quadrant == 1 || quadrant == 2 ? 1 : -1;
 
-        List<ChessCoordinate> moves = new ArrayList(2);
+        List<ChessCoordinate> moves = new ArrayList<>(2);
         moves.add(ChessCoordinate.at(coordinate.x + movement.x * xMultiplier, coordinate.y + movement.y * yMultiplier));
         moves.add(ChessCoordinate.at(coordinate.x + movement.y * xMultiplier, coordinate.y + movement.x * yMultiplier));
         return moves;
@@ -125,7 +125,7 @@ public class PieceType {
         if (equal) {
             // do not allow PieceTypes with the same name but different movement attributes
             Preconditions.checkState(Objects.equal(mMovements, other.mMovements));
-            Preconditions.checkState(Objects.equal(mBidirectionalMovements, other.mBidirectionalMovements));
+            Preconditions.checkState(Objects.equal(mTwoHopMovements, other.mTwoHopMovements));
         }
 
         return equal;
@@ -133,7 +133,7 @@ public class PieceType {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(mName, mMovements, mBidirectionalMovements);
+        return Objects.hashCode(mName, mMovements, mTwoHopMovements);
     }
 
     @Override
@@ -160,9 +160,9 @@ public class PieceType {
     }
 
     public static PieceType getKnightPieceType() {
-        Set<BidirectionalMovement> bidirectionalMovements = Sets.newHashSet(BidirectionalMovement.with(2, 1));
+        Set<TwoHopMovement> twoHopMovements = Sets.newHashSet(TwoHopMovement.with(2, 1));
 
-        return new PieceType("Knight", null, bidirectionalMovements);
+        return new PieceType("Knight", null, twoHopMovements);
     }
 
     public static PieceType getPawnPieceType() {
