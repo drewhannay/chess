@@ -5,18 +5,16 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public final class Piece {
-    private final long mId;
     private final int mTeamId;
     private final PieceType mPieceType;
 
     private int mMoveCount;
-    private ChessCoordinate mCoordinates;
 
-    public Piece(long id, int teamId, PieceType pieceType, ChessCoordinate coordinates) {
-        mId = id;
+    public Piece(int teamId, PieceType pieceType) {
         mTeamId = teamId;
         mPieceType = pieceType;
-        mCoordinates = coordinates;
+
+        mMoveCount = 0;
     }
 
     @Deprecated
@@ -31,24 +29,37 @@ public final class Piece {
 
     @Deprecated
     public ChessCoordinate getCoordinates() {
-        return mCoordinates;
+        return null;
     }
 
     @Deprecated
     public void setCoordinates(ChessCoordinate coordinates) {
-        mCoordinates = coordinates;
     }
 
+    @Deprecated
+    public int getMoveCount() {
+        return mMoveCount;
+    }
+
+    @Deprecated
     public long getId() {
-        return mId;
+        return 0;
     }
 
     public int getTeamId() {
         return mTeamId;
     }
 
-    public int getMoveCount() {
-        return mMoveCount;
+    public boolean hasMoved() {
+        return mMoveCount != 0;
+    }
+
+    public void incrementMoveCount() {
+        mMoveCount++;
+    }
+
+    public void decrementMoveCount() {
+        mMoveCount--;
     }
 
     public List<ChessCoordinate> getMovesFrom(@NotNull ChessCoordinate coordinate, @NotNull BoardSize boardSize) {
