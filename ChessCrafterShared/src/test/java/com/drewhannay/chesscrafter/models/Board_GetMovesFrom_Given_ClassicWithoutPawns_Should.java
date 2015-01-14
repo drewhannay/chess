@@ -1,7 +1,6 @@
 package com.drewhannay.chesscrafter.models;
 
 import com.drewhannay.chesscrafter.logic.GameBuilder;
-import com.drewhannay.chesscrafter.utility.TestUtility;
 import org.junit.Before;
 import org.junit.Test;
 
