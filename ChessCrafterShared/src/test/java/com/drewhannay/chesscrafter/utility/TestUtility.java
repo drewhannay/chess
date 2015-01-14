@@ -1,27 +1,31 @@
 package com.drewhannay.chesscrafter.utility;
 
-import com.drewhannay.chesscrafter.models.BoardSize;
+import com.drewhannay.chesscrafter.models.Board;
 import com.drewhannay.chesscrafter.models.ChessCoordinate;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 public final class TestUtility {
-    public static void printMovesOnBoard(@NotNull List<ChessCoordinate> moves, @NotNull BoardSize boardSize) {
-        System.out.print("-----------------");
-        System.out.println();
-        for (int y = boardSize.height; y >= 1; y--) {
+    public static void printMovesOnBoard(@NotNull Board board, @NotNull List<ChessCoordinate> moves) {
+        printHorizontalBorder(board.getBoardSize().width);
+        for (int y = board.getBoardSize().height; y >= 1; y--) {
             System.out.print('|');
-            for (int x = 1; x <= boardSize.width; x++) {
-                if (moves.contains(ChessCoordinate.at(x, y))) {
-                    System.out.print("x|");
-                } else {
-                    System.out.print(" |");
-                }
+            for (int x = 1; x <= board.getBoardSize().width; x++) {
+                ChessCoordinate space = ChessCoordinate.at(x, y);
+                String piece = board.doesPieceExistAt(space) ? String.valueOf(board.getPiece(space).getName().charAt(0)) : " ";
+                String move = moves.contains(space) ? "x" : " ";
+                System.out.print(piece + move + "|");
             }
             System.out.println();
-            System.out.print("-----------------");
-            System.out.println();
+            printHorizontalBorder(board.getBoardSize().width);
         }
+    }
+
+    private static void printHorizontalBorder(int boardWidth) {
+        for (int x = 1; x <= boardWidth * 3 + 1; x++) {
+            System.out.print('-');
+        }
+        System.out.println();
     }
 }

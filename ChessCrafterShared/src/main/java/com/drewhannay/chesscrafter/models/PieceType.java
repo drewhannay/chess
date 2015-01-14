@@ -145,7 +145,7 @@ public class PieceType {
     public static PieceType getKnightPieceType() {
         Set<TwoHopMovement> twoHopMovements = Sets.newHashSet(TwoHopMovement.with(2, 1));
 
-        return new PieceType("Knight", null, twoHopMovements);
+        return new PieceType("Night", null, twoHopMovements);
     }
 
     public static PieceType getPawnPieceType() {
