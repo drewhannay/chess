@@ -46,6 +46,18 @@ public class Board_MovePiece_Given_ClassicWithoutPawns_Should {
         assertEquals(pieceThatWillBeMoved, pieceAtDestination);
     }
 
+    @Test
+    public void returnNullWhenMovingRookFrom1_1To1_2() {
+        Piece capturedPiece = mTarget.movePiece(mOriginCoordinate, mDestinationCoordinate);
+        assertNull(capturedPiece);
+    }
+
+    @Test
+    public void returnPieceWhenMovingRookFrom1_1To1_8() {
+        Piece capturedPiece = mTarget.movePiece(mOriginCoordinate, ChessCoordinate.at(1, 8));
+        assertNotNull(capturedPiece);
+    }
+
     @Test(expected = IllegalArgumentException.class)
     public void throwExceptionForOutOfBoundsOriginArgument() {
         mTarget.movePiece(ChessCoordinate.at(1, 9), mDestinationCoordinate);

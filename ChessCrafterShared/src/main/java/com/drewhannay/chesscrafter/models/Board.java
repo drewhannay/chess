@@ -36,12 +36,17 @@ public final class Board {
         setPiece(null, coordinateForRemoval);
     }
 
-    public void movePiece(@NotNull ChessCoordinate origin, @NotNull ChessCoordinate destination) {
+    @Nullable
+    public Piece movePiece(@NotNull ChessCoordinate origin, @NotNull ChessCoordinate destination) {
         verifyCoordinatesOrThrow(origin, destination);
 
+        Piece pieceToCapture = getPiece(destination);
         Piece pieceToMove = getPiece(origin);
+
         addPiece(pieceToMove, destination);
         removePiece(origin);
+
+        return pieceToCapture;
     }
 
     public boolean doesPieceExistAt(@NotNull ChessCoordinate coordinateToCheck) {
