@@ -113,7 +113,7 @@ public class PlayGamePanel extends ChessPanel {
         // for (int teamIndex = 0; teamIndex < teams.length; teamIndex++)
         // {
         // Team currentTeam = teams[teamIndex];
-        // List<Piece> capturedPieces = currentTeam.getCapturedPieces();
+        // List<Piece> capturedPieces = currentTeam.getCapturedOpposingPieces();
         // if (capturedPieces == null)
         // capturedPieces = Lists.newArrayList();
         //
@@ -425,8 +425,8 @@ public class PlayGamePanel extends ChessPanel {
             timer.reset();
     }
 
-    public static List<SquareJLabel> highlightLegalDestinations(ChessCoordinate coordinates) {
-        Piece movingPiece = GameController.getGame().getPieceOnSquare(coordinates);
+    public static List<SquareJLabel> highlightLegalDestinations(int boardIndex, ChessCoordinate coordinates) {
+        Piece movingPiece = GameController.getGame().getPiece(boardIndex, coordinates);
         if (movingPiece != null && PreferenceUtility.getHighlightMovesPreference()) {
             Set<ChessCoordinate> legalDestinations = GameController.getLegalDestinations(movingPiece);
             List<SquareJLabel> labels = mGameBoards[coordinates.boardIndex].highlightSquares(legalDestinations);
@@ -438,14 +438,14 @@ public class PlayGamePanel extends ChessPanel {
 
     public static void updateJailSquares() {
         Team[] teams = GameController.getGame().getTeams();
-        for(int teamCount = 0; teamCount < teams.length; teamCount++){
+        for (int teamCount = 0; teamCount < teams.length; teamCount++) {
             int column = 1;
             int row = 1;
-            for (Piece piece : teams[teamCount].getCapturedPieces()) {
+            for (Piece piece : teams[teamCount].getCapturedOpposingPieces()) {
                 int boardIndex = teamCount + GameController.getGame().getBoards().length;
                 piece.setCoordinates(ChessCoordinate.at(row, column, boardIndex));
                 column++;
-                if(column == 5) {
+                if (column == 5) {
                     column = 1;
                     row++;
                 }

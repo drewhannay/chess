@@ -16,7 +16,7 @@ public class SquareJLabel extends JLabel {
 
     public SquareJLabel(ChessCoordinate coordinates, boolean isHabitable, int imageScale) {
         mChessCoordinate = coordinates;
-        mPiece = GameController.getGame().getPieceOnSquare(coordinates);
+        mPiece = GameController.getGame().getPiece(coordinates.boardIndex, coordinates);
         mIsHabitable = isHabitable;
         mImageScale = imageScale;
         setOpaque(true);
@@ -53,7 +53,7 @@ public class SquareJLabel extends JLabel {
      * information.
      */
     public void refresh() {
-        mPiece = GameController.getGame().getPieceOnSquare(mChessCoordinate);
+        mPiece = GameController.getGame().getPiece(mChessCoordinate.boardIndex, mChessCoordinate);
 
         if (!mIsHabitable) {
             setIcon(s_uninhabitableIcon);

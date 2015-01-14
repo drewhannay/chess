@@ -1,53 +1,50 @@
 package com.drewhannay.chesscrafter.controllers;
 
-import com.drewhannay.chesscrafter.models.ChessCoordinate;
 import com.drewhannay.chesscrafter.models.Move;
-import com.drewhannay.chesscrafter.models.Piece;
-import com.drewhannay.chesscrafter.models.Team;
 
 public class MoveController {
     /**
      * Execute the constructed Move.
      */
     public static boolean execute(Move move) {
-        ChessCoordinate origin = move.getOrigin();
-        ChessCoordinate destination = move.getDestination();
-
-        Piece movingPiece = null;
-        Piece capturedPiece = null;
-
-        Team capturedTeam = null;
-
-        for (Team team : GameController.getGame().getTeams()) {
-            for (Piece piece : team.getPieces()) {
-                if (team.getCapturedPieces().contains(piece))
-                    continue;
-
-                if (piece.getCoordinates().equals(origin))
-                    movingPiece = piece;
-                else if (piece.getCoordinates().equals(destination)) {
-                    capturedPiece = piece;
-                    capturedTeam = team;
-                }
-            }
-        }
-
-        if (movingPiece == null)
-            return false;
-
-        if (!GameController.isLegalMove(movingPiece, destination))
-            return false;
-
-        /**
-         * All code past this point changes Piece state data. If a move is invalid, it would be
-         * best to return false before here.
-         */
-
-        if (capturedPiece != null) {
-            capturedTeam.markPieceAsCaptured(capturedPiece);
-        }
-
-        movingPiece.setCoordinates(destination);
+//        ChessCoordinate origin = move.getOrigin();
+//        ChessCoordinate destination = move.getDestination();
+//
+//        Piece movingPiece = null;
+//        Piece capturedPiece = null;
+//
+//        Team capturedTeam = null;
+//
+//        for (Team team : GameController.getGame().getTeams()) {
+//            for (Piece piece : team.getPieces()) {
+//                if (team.getCapturedOpposingPieces().contains(piece))
+//                    continue;
+//
+//                if (piece.getCoordinates().equals(origin))
+//                    movingPiece = piece;
+//                else if (piece.getCoordinates().equals(destination)) {
+//                    capturedPiece = piece;
+//                    capturedTeam = team;
+//                }
+//            }
+//        }
+//
+//        if (movingPiece == null)
+//            return false;
+//
+//        if (!GameController.isLegalMove(movingPiece, destination))
+//            return false;
+//
+//        /**
+//         * All code past this point changes Piece state data. If a move is invalid, it would be
+//         * best to return false before here.
+//         */
+//
+//        if (capturedPiece != null) {
+//            capturedTeam.markPieceAsCaptured(capturedPiece);
+//        }
+//
+//        movingPiece.setCoordinates(destination);
 
         // prevEnpassantCol = board.getEnpassantCol();
         //
@@ -216,39 +213,39 @@ public class MoveController {
      * @throws Exception If the undo doesn't work properly
      */
     public static boolean undo(Move move) {
-        ChessCoordinate origin = move.getOrigin();
-        ChessCoordinate destination = move.getDestination();
-
-        Piece unmovingPiece = null;
-        Team movingTeam = null;
-        for (Team team : GameController.getGame().getTeams()) {
-            for (Piece piece : team.getPieces()) {
-                if (piece.getCoordinates().equals(destination)) {
-                    unmovingPiece = piece;
-                    movingTeam = team;
-                }
-            }
-        }
-
-        unmovingPiece.setCoordinates(origin);
-
-        Piece uncapturedPiece = null;
-        Team uncapturedTeam = null;
-
-        for (Team team : GameController.getGame().getTeams()) {
-            if (team.equals(movingTeam))
-                continue;
-
-            for (Piece piece : team.getCapturedPieces()) {
-                if (piece.getCoordinates().equals(destination)) {
-                    uncapturedPiece = piece;
-                    uncapturedTeam = team;
-                }
-            }
-        }
-
-        if (uncapturedPiece != null)
-            uncapturedTeam.markPieceAsNotCaptured(uncapturedPiece);
+//        ChessCoordinate origin = move.getOrigin();
+//        ChessCoordinate destination = move.getDestination();
+//
+//        Piece unmovingPiece = null;
+//        Team movingTeam = null;
+//        for (Team team : GameController.getGame().getTeams()) {
+//            for (Piece piece : team.getPieces()) {
+//                if (piece.getCoordinates().equals(destination)) {
+//                    unmovingPiece = piece;
+//                    movingTeam = team;
+//                }
+//            }
+//        }
+//
+//        unmovingPiece.setCoordinates(origin);
+//
+//        Piece uncapturedPiece = null;
+//        Team uncapturedTeam = null;
+//
+//        for (Team team : GameController.getGame().getTeams()) {
+//            if (team.equals(movingTeam))
+//                continue;
+//
+//            for (Piece piece : team.getCapturedOpposingPieces()) {
+//                if (piece.getCoordinates().equals(destination)) {
+//                    uncapturedPiece = piece;
+//                    uncapturedTeam = team;
+//                }
+//            }
+//        }
+//
+//        if (uncapturedPiece != null)
+//            uncapturedTeam.markPieceAsNotCaptured(uncapturedPiece);
 
         // board.setEnpassantCol(prevEnpassantCol);
         //

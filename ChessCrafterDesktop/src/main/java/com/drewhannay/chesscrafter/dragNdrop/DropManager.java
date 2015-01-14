@@ -32,7 +32,7 @@ public class DropManager extends AbstractDropManager {
         ChessCoordinate destinationCoordinates = destinationSquareLabel.getCoordinates();
 
         try {
-            GameController.playMove(new Move(originCoordinates, destinationCoordinates));
+            GameController.playMove(Move.from(originCoordinates, destinationCoordinates));
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -196,7 +196,7 @@ public final class GameController {
 //		if (sGame.getHistory().contains(move))
 //			return;
 
-        sGame.getHistory().add(move);
+//        sGame.getHistory().add(move);
 
         // TODO: probably need to stop somehow when we hit a valid end condition
         for (Team team : sGame.getTeams())

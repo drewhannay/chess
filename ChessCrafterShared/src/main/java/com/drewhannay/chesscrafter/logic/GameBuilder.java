@@ -112,12 +112,9 @@ public class GameBuilder {
                 new CaptureObjectiveEndCondition()
         );
 
-        List<Piece> whitePieces = Lists.newArrayList();
-        List<Piece> blackPieces = Lists.newArrayList();
-
         Team[] teams = new Team[2];
-        teams[0] = new Team(whiteRules, whitePieces);
-        teams[1] = new Team(blackRules, blackPieces);
+        teams[0] = new Team(whiteRules);
+        teams[1] = new Team(blackRules);
 
         Board[] boards = new Board[]{new Board(BoardSize.withDimensions(8, 8))};
 

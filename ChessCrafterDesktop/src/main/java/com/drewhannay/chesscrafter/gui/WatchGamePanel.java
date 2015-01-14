@@ -82,7 +82,7 @@ public class WatchGamePanel extends JPanel {
 		}
 
 		int index = 0;
-		PieceController[] blackCapturedPieces = getGame().getCapturedPieces(true);
+		PieceController[] blackCapturedPieces = getGame().getCapturedOpposingPieces(true);
 		for (int i = mWhiteCapturesJail.getMaxRow(); i >= 1; i--)
 		{
 			for (int j = 1; j <= mWhiteCapturesJail.getMaxCol(); j++)
@@ -101,7 +101,7 @@ public class WatchGamePanel extends JPanel {
 		}
 
 		index = 0;
-		PieceController[] whiteCapturedPieces = getGame().getCapturedPieces(false);
+		PieceController[] whiteCapturedPieces = getGame().getCapturedOpposingPieces(false);
 		for (int i = mBlackCapturesJail.getMaxRow(); i >= 1; i--)
 		{
 			for (int j = 1; j <= mBlackCapturesJail.getMaxCol(); j++)
