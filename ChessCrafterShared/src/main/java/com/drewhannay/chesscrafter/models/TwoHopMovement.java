@@ -19,16 +19,6 @@ public final class TwoHopMovement {
         return new TwoHopMovement(x, y);
     }
 
-    @Deprecated
-    public int getRowDistance() {
-        return y;
-    }
-
-    @Deprecated
-    public int getColumnDistance() {
-        return x;
-    }
-
     @Override
     public boolean equals(Object obj) {
         if (obj == null || obj.getClass() != this.getClass())

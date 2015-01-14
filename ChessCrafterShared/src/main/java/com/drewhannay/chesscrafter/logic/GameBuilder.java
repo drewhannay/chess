@@ -84,15 +84,15 @@ public class GameBuilder {
         }
 
         Map<PieceType, Set<PieceType>> promotionMap = Maps.newHashMap();
-        promotionMap.put(PieceBuilder.getPawnPieceType(), Sets.newHashSet(
-                PieceBuilder.getRookPieceType(),
-                PieceBuilder.getKnightPieceType(),
-                PieceBuilder.getBishopPieceType(),
-                PieceBuilder.getQueenPieceType()
+        promotionMap.put(PieceType.getPawnPieceType(), Sets.newHashSet(
+                PieceType.getRookPieceType(),
+                PieceType.getKnightPieceType(),
+                PieceType.getBishopPieceType(),
+                PieceType.getQueenPieceType()
         ));
 
         Rules whiteRules = new Rules(
-                PieceBuilder.getKingPieceType(),
+                PieceType.getKingPieceType(),
                 whitePromotionCoordinateList,
                 Rules.DESTINATION_SAME_BOARD,
                 Lists.<LegalDestinationCropper>newArrayList(new ClassicLegalDestinationCropper()),
@@ -102,7 +102,7 @@ public class GameBuilder {
                 new CaptureObjectiveEndCondition()
         );
         Rules blackRules = new Rules(
-                PieceBuilder.getKingPieceType(),
+                PieceType.getKingPieceType(),
                 blackPromotionCoordinateList,
                 Rules.DESTINATION_SAME_BOARD,
                 Lists.<LegalDestinationCropper>newArrayList(new ClassicLegalDestinationCropper()),

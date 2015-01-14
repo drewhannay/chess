@@ -93,12 +93,6 @@ public final class Board {
         }
     }
 
-
-    @Deprecated
-    public boolean isSquareHabitable(ChessCoordinate coordinate) {
-        return true;
-    }
-
     @Deprecated
     public boolean isWrapAroundBoard() {
         return false;
@@ -112,15 +106,5 @@ public final class Board {
     @Deprecated
     public int getColumnCount() {
         return mBoardSize.width;
-    }
-
-    @Deprecated
-    public boolean isRowValid(int row) {
-        return row <= mBoardSize.height && row > 0;
-    }
-
-    @Deprecated
-    public boolean isColumnValid(int column) {
-        return column <= mBoardSize.width && column > 0;
     }
 }

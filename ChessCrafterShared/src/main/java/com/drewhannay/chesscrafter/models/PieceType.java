@@ -25,26 +25,6 @@ public class PieceType {
     private final ImmutableMap<Direction, Integer> mMovements;
     private final ImmutableSet<TwoHopMovement> mTwoHopMovements;
 
-    @Deprecated
-    public PieceType(String name, PieceMovements pieceMovements, boolean isLeaper) {
-        this(name, pieceMovements);
-    }
-
-    @Deprecated
-    public PieceType(@NotNull String name, @NotNull PieceMovements pieceMovements) {
-        this(name, pieceMovements.getMovements(), pieceMovements.getTwoHopMovements());
-    }
-
-    @Deprecated
-    public boolean isLeaper() {
-        return false;
-    }
-
-    @Deprecated
-    public PieceMovements getPieceMovements() {
-        return new PieceMovements(mMovements, mTwoHopMovements);
-    }
-
     public PieceType(@NotNull String name, @Nullable Map<Direction, Integer> movements,
                      @Nullable Set<TwoHopMovement> twoHopMovements) {
         Preconditions.checkArgument(!name.isEmpty());

@@ -39,16 +39,6 @@ public final class Piece {
     public void setCoordinates(ChessCoordinate coordinates) {
     }
 
-    @Deprecated
-    public int getMoveCount() {
-        return mMoveCount;
-    }
-
-    @Deprecated
-    public long getId() {
-        return 0;
-    }
-
     public int getTeamId() {
         return mTeamId;
     }
