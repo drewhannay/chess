@@ -115,15 +115,15 @@ public class CustomBoardPanel extends ChessPanel {
                         // selected.
                         Board[] boards = (mOneBoardButton.isSelected()) ? new Board[1] : new Board[2];
                         for (int i = 0; i < boards.length; i++) {
-                            Board oldBoard = new Board(BoardSize.withDimensions(0, 0), false);//variant.getBuilder().getBoards()[i];
+                            Board oldBoard = new Board(BoardSize.withDimensions(0, 0));//variant.getBuilder().getBoards()[i];
                             // initialize each board with the given rows and
                             // columns and wraparound boolean.
                             if (changeCode == WRAP_ONLY) {
-                                boards[i] = new Board(oldBoard.getBoardSize(), mWrapAroundCheckBox.isSelected());
+                                boards[i] = new Board(oldBoard.getBoardSize());//, mWrapAroundCheckBox.isSelected());
                             } else {
                                 int width = Integer.parseInt(mNumberOfColumnsTextField.getText());
                                 int height = Integer.parseInt(mNumberOfRowsTextField.getText());
-                                boards[i] = new Board(BoardSize.withDimensions(width, height), mWrapAroundCheckBox.isSelected());
+                                boards[i] = new Board(BoardSize.withDimensions(width, height));//, mWrapAroundCheckBox.isSelected());
                             }
                         }
 

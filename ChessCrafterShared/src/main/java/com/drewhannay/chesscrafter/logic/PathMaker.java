@@ -15,6 +15,10 @@ public class PathMaker {
         mDestination = destination;
     }
 
+    public List<ChessCoordinate> getPathToDestination() {
+        return getPathToDestination(Integer.MAX_VALUE);
+    }
+
     public List<ChessCoordinate> getPathToDestination(int maxSteps) {
         if (mOrigin.isOnSameHorizontalPathAs(mDestination)) {
             return getHorizontalPathSpaces(maxSteps);

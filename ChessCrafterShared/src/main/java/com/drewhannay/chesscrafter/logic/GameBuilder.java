@@ -55,36 +55,27 @@ public class GameBuilder {
         mBlackRules = blackRules;
     }
 
+    public static void setupClassicPawns(Board target, int row, int teamId) {
+        for (int x = 1; x <= BoardSize.CLASSIC_SIZE.width; x++)
+            target.addPiece(Piece.newPawn(teamId), ChessCoordinate.at(x, row));
+    }
+
+    public static void setupClassicPieces(Board target, int row, int teamId) {
+        target.addPiece(Piece.newRook(teamId), ChessCoordinate.at(1, row));
+        target.addPiece(Piece.newRook(teamId), ChessCoordinate.at(8, row));
+
+        target.addPiece(Piece.newKnight(teamId), ChessCoordinate.at(2, row));
+        target.addPiece(Piece.newKnight(teamId), ChessCoordinate.at(7, row));
+
+        target.addPiece(Piece.newBishop(teamId), ChessCoordinate.at(3, row));
+        target.addPiece(Piece.newBishop(teamId), ChessCoordinate.at(6, row));
+
+        target.addPiece(Piece.newQueen(teamId), ChessCoordinate.at(4, row));
+        target.addPiece(Piece.newKing(teamId), ChessCoordinate.at(5, row));
+    }
+
     @NotNull
     public static Game buildClassic() {
-        int whiteTeamId = 1;
-        int blackTeamId = 2;
-
-        List<Piece> whitePieces = Lists.newArrayList();
-        List<Piece> blackPieces = Lists.newArrayList();
-        for (int i = 1; i < 9; i++) {
-            whitePieces.add(new Piece(whiteTeamId, PieceBuilder.getPawnPieceType()));
-            blackPieces.add(new Piece(blackTeamId, PieceBuilder.getPawnPieceType()));
-        }
-
-        whitePieces.add(new Piece(whiteTeamId, PieceBuilder.getRookPieceType()));
-        whitePieces.add(new Piece(whiteTeamId, PieceBuilder.getKnightPieceType()));
-        whitePieces.add(new Piece(whiteTeamId, PieceBuilder.getBishopPieceType()));
-        whitePieces.add(new Piece(whiteTeamId, PieceBuilder.getQueenPieceType()));
-        whitePieces.add(new Piece(whiteTeamId, PieceBuilder.getKingPieceType()));
-        whitePieces.add(new Piece(whiteTeamId, PieceBuilder.getBishopPieceType()));
-        whitePieces.add(new Piece(whiteTeamId, PieceBuilder.getKnightPieceType()));
-        whitePieces.add(new Piece(whiteTeamId, PieceBuilder.getRookPieceType()));
-
-        blackPieces.add(new Piece(blackTeamId, PieceBuilder.getRookPieceType()));
-        blackPieces.add(new Piece(blackTeamId, PieceBuilder.getKnightPieceType()));
-        blackPieces.add(new Piece(blackTeamId, PieceBuilder.getBishopPieceType()));
-        blackPieces.add(new Piece(blackTeamId, PieceBuilder.getQueenPieceType()));
-        blackPieces.add(new Piece(blackTeamId, PieceBuilder.getKingPieceType()));
-        blackPieces.add(new Piece(blackTeamId, PieceBuilder.getBishopPieceType()));
-        blackPieces.add(new Piece(blackTeamId, PieceBuilder.getKnightPieceType()));
-        blackPieces.add(new Piece(blackTeamId, PieceBuilder.getRookPieceType()));
-
         List<ChessCoordinate> whitePromotionCoordinateList = Lists.newArrayList();
         List<ChessCoordinate> blackPromotionCoordinateList = Lists.newArrayList();
         for (int i = 1; i < 9; i++) {
@@ -121,11 +112,14 @@ public class GameBuilder {
                 new CaptureObjectiveEndCondition()
         );
 
+        List<Piece> whitePieces = Lists.newArrayList();
+        List<Piece> blackPieces = Lists.newArrayList();
+
         Team[] teams = new Team[2];
         teams[0] = new Team(whiteRules, whitePieces);
         teams[1] = new Team(blackRules, blackPieces);
 
-        Board[] boards = new Board[]{new Board(BoardSize.withDimensions(8, 8), false)};
+        Board[] boards = new Board[]{new Board(BoardSize.withDimensions(8, 8))};
 
         return new Game("Classic", boards, teams, new ClassicTurnKeeper());
     }

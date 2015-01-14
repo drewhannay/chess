@@ -5,6 +5,8 @@ import com.google.common.base.Preconditions;
 import java.util.Objects;
 
 public final class BoardSize {
+    public static final BoardSize CLASSIC_SIZE = BoardSize.withDimensions(8, 8);
+
     public final int width;
     public final int height;
 

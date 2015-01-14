@@ -3,38 +3,28 @@ package com.drewhannay.chesscrafter.models;
 import com.drewhannay.chesscrafter.logic.PathMaker;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.Set;
 
 public final class Board {
-    public static final int NO_ENPASSANT = 0;
-
     private final Piece[][] mPieces;
     private final BoardSize mBoardSize;
-    private final boolean mWrapAround;
-    private final Set<ChessCoordinate> mUninhabitableSquares;
 
-    private int mEnPassantColumn;
-
-    public Board(@NotNull BoardSize boardSize, boolean wrapAround) {
+    public Board(@NotNull BoardSize boardSize) {
         mBoardSize = boardSize;
-        mWrapAround = wrapAround;
 
         mPieces = new Piece[boardSize.width][boardSize.height];
-        mUninhabitableSquares = Sets.newHashSet();
     }
 
     public BoardSize getBoardSize() {
         return mBoardSize;
     }
 
-    // ---------------------------------
-
     public void addPiece(@NotNull Piece piece, @NotNull ChessCoordinate location) {
+        //noinspection ConstantConditions
+        Preconditions.checkArgument(piece != null);
         Preconditions.checkArgument(location.isValid(mBoardSize));
 
         setPiece(piece, location);
@@ -60,7 +50,7 @@ public final class Board {
 
     public boolean doesFriendlyPieceExistAt(ChessCoordinate origin, ChessCoordinate destination) {
         Piece piece = getPiece(destination);
-        return piece != null; // TODO: && piece.getTeamId() == getPiece(origin).getTeamId();
+        return piece != null && piece.getTeamId() == getPiece(origin).getTeamId();
     }
 
     public Piece getPiece(@NotNull ChessCoordinate coordinateToRetrieve) {
@@ -87,7 +77,7 @@ public final class Board {
 
     private boolean isBlocked(ChessCoordinate origin, ChessCoordinate destination) {
         PathMaker pathMaker = new PathMaker(origin, destination);
-        List<ChessCoordinate> spacesAlongPath = pathMaker.getPathToDestination(PieceType.UNLIMITED);
+        List<ChessCoordinate> spacesAlongPath = pathMaker.getPathToDestination();
         ChessCoordinate lastSpace = spacesAlongPath.isEmpty() ? null : spacesAlongPath.get(spacesAlongPath.size() - 1);
         for (ChessCoordinate space : spacesAlongPath) {
             if (doesFriendlyPieceExistAt(origin, space) || (doesPieceExistAt(space) && !space.equals(lastSpace))) {
@@ -103,39 +93,15 @@ public final class Board {
         }
     }
 
-    // ---------------------------------
 
-    public boolean isWrapAroundBoard() {
-        return mWrapAround;
-    }
-
+    @Deprecated
     public boolean isSquareHabitable(ChessCoordinate coordinate) {
-        Preconditions.checkArgument(coordinate.isValid(mBoardSize));
-
-        return !mUninhabitableSquares.contains(coordinate);
+        return true;
     }
 
-    public int getEnpassantCol() {
-        return mEnPassantColumn;
-    }
-
-    public void setEnpassantCol(int enpassantCol) {
-        mEnPassantColumn = enpassantCol;
-    }
-
-    /**
-     * Debugging method to print the state of the Board
-     *
-     * @param game       The Game state
-     * @param boardIndex The index of the Board
-     */
-    public void printBoard(Game game, int boardIndex) {
-//        for (int i = mUninhabitableSquares.length - 1; i >= 0; i--) {
-//            for (Square square : mUninhabitableSquares[i]) {
-//                System.out.print(square.printSquareState(game, boardIndex) + "\t"); //$NON-NLS-1$
-//            }
-//            System.out.println();
-//        }
+    @Deprecated
+    public boolean isWrapAroundBoard() {
+        return false;
     }
 
     @Deprecated
@@ -150,11 +116,11 @@ public final class Board {
 
     @Deprecated
     public boolean isRowValid(int row) {
-        return row <= getRowCount() && row > 0;
+        return row <= mBoardSize.height && row > 0;
     }
 
     @Deprecated
     public boolean isColumnValid(int column) {
-        return column <= getColumnCount() && column > 0;
+        return column <= mBoardSize.width && column > 0;
     }
 }

@@ -90,16 +90,6 @@ public final class Game {
         return Objects.hashCode(mGameType, mTeams, mBoards, mTurnKeeper, mHistory);
     }
 
-    /**
-     * Debugging method to print out the state of the Boards
-     */
-    public void printBoards() {
-        for (int i = 0; i < mBoards.length; i++) {
-            mBoards[i].printBoard(this, i);
-            System.out.println("--------------------");
-        }
-    }
-
     private final String mGameType;
     private final Team[] mTeams;
     private final Board[] mBoards;

@@ -69,7 +69,7 @@ public class VariantCreationPanel extends ChessPanel implements PieceMakerPanel.
             mBuilder.setWhiteTeam(mWhiteTeam);
         }
 
-        mDisplayBoard = new Board(BoardSize.withDimensions(2, 1), false);
+        mDisplayBoard = new Board(BoardSize.withDimensions(2, 1));
         //mPieceDisplaySquares[WHITE_INDEX] = new SquareJLabel(mDisplayBoard.getSquare(1, 1));
         //mPieceDisplaySquares[BLACK_INDEX] = new SquareJLabel(mDisplayBoard.getSquare(2, 1));
 

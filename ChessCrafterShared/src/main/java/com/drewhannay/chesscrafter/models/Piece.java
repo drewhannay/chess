@@ -5,6 +5,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public final class Piece {
+    public static final int TEAM_ONE = 1;
+    public static final int TEAM_TWO = 2;
+
     private final int mTeamId;
     private final PieceType mPieceType;
 
@@ -69,5 +72,53 @@ public final class Piece {
     @Override
     public String toString() {
         return mPieceType.toString();
+    }
+
+    public static Piece newBishop() {
+        return newBishop(TEAM_ONE);
+    }
+
+    public static Piece newBishop(int teamId) {
+        return new Piece(teamId, PieceType.getBishopPieceType());
+    }
+
+    public static Piece newKing() {
+        return newKing(TEAM_ONE);
+    }
+
+    public static Piece newKing(int teamId) {
+        return new Piece(teamId, PieceType.getKingPieceType());
+    }
+
+    public static Piece newKnight() {
+        return newKnight(TEAM_ONE);
+    }
+
+    public static Piece newKnight(int teamId) {
+        return new Piece(teamId, PieceType.getKnightPieceType());
+    }
+
+    public static Piece newPawn() {
+        return newPawn(TEAM_ONE);
+    }
+
+    public static Piece newPawn(int teamId) {
+        return new Piece(teamId, PieceType.getPawnPieceType());
+    }
+
+    public static Piece newQueen() {
+        return newQueen(TEAM_ONE);
+    }
+
+    public static Piece newQueen(int teamId) {
+        return new Piece(teamId, PieceType.getQueenPieceType());
+    }
+
+    public static Piece newRook() {
+        return newQueen(TEAM_ONE);
+    }
+
+    public static Piece newRook(int teamId) {
+        return new Piece(teamId, PieceType.getRookPieceType());
     }
 }

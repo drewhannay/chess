@@ -10,7 +10,7 @@ public final class TwoHopMovement {
     private TwoHopMovement(int x, int y) {
         Preconditions.checkArgument(x > 0);
         Preconditions.checkArgument(y > 0);
-        
+
         this.x = x;
         this.y = y;
     }
