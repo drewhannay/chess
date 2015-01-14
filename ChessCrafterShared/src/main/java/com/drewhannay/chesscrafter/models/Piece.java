@@ -21,11 +21,6 @@ public final class Piece {
     }
 
     @Deprecated
-    public int getTeamId(Game game) {
-        return mTeamId;
-    }
-
-    @Deprecated
     public PieceType getPieceType() {
         return mPieceType;
     }
@@ -37,6 +32,10 @@ public final class Piece {
 
     @Deprecated
     public void setCoordinates(ChessCoordinate coordinates) {
+    }
+
+    public String getName() {
+        return mPieceType.getName();
     }
 
     public int getTeamId() {
@@ -56,7 +55,7 @@ public final class Piece {
     }
 
     public List<ChessCoordinate> getMovesFrom(@NotNull ChessCoordinate coordinate, @NotNull BoardSize boardSize) {
-        return mPieceType.getMovesFrom(coordinate, boardSize);
+        return mPieceType.getMovesFrom(coordinate, boardSize, 0);
     }
 
     @Override

@@ -18,42 +18,42 @@ public class PieceType_GetMovesFrom_Given_BishopOnClassicBoard_Should {
     public void setup() {
         mTarget = PieceType.getBishopPieceType();
         mBoardSize = BoardSize.withDimensions(8, 8);
-        mMovesFrom1_1 = mTarget.getMovesFrom(ChessCoordinate.at(1, 1), mBoardSize);
+        mMovesFrom1_1 = mTarget.getMovesFrom(ChessCoordinate.at(1, 1), mBoardSize, 0);
     }
 
     @Test
     public void return2_2For1_1() {
-        List<ChessCoordinate> moves = mTarget.getMovesFrom(ChessCoordinate.at(1, 1), mBoardSize);
+        List<ChessCoordinate> moves = mTarget.getMovesFrom(ChessCoordinate.at(1, 1), mBoardSize, 0);
         assertTrue(moves.contains(ChessCoordinate.at(2, 2)));
     }
 
     @Test
     public void return1_1For2_2() {
-        List<ChessCoordinate> moves = mTarget.getMovesFrom(ChessCoordinate.at(2, 2), mBoardSize);
+        List<ChessCoordinate> moves = mTarget.getMovesFrom(ChessCoordinate.at(2, 2), mBoardSize, 0);
         assertTrue(moves.contains(ChessCoordinate.at(1, 1)));
     }
 
     @Test
     public void return2_1For1_2() {
-        List<ChessCoordinate> moves = mTarget.getMovesFrom(ChessCoordinate.at(1, 2), mBoardSize);
+        List<ChessCoordinate> moves = mTarget.getMovesFrom(ChessCoordinate.at(1, 2), mBoardSize, 0);
         assertTrue(moves.contains(ChessCoordinate.at(2, 1)));
     }
 
     @Test
     public void return8_8For1_1() {
-        List<ChessCoordinate> moves = mTarget.getMovesFrom(ChessCoordinate.at(1, 1), mBoardSize);
+        List<ChessCoordinate> moves = mTarget.getMovesFrom(ChessCoordinate.at(1, 1), mBoardSize, 0);
         assertTrue(moves.contains(ChessCoordinate.at(8, 8)));
     }
 
     @Test
     public void return8_1For1_8() {
-        List<ChessCoordinate> moves = mTarget.getMovesFrom(ChessCoordinate.at(1, 8), mBoardSize);
+        List<ChessCoordinate> moves = mTarget.getMovesFrom(ChessCoordinate.at(1, 8), mBoardSize, 0);
         assertTrue(moves.contains(ChessCoordinate.at(8, 1)));
     }
 
     @Test
     public void notReturn1_2For1_1() {
-        List<ChessCoordinate> moves = mTarget.getMovesFrom(ChessCoordinate.at(1, 1), mBoardSize);
+        List<ChessCoordinate> moves = mTarget.getMovesFrom(ChessCoordinate.at(1, 1), mBoardSize, 0);
         assertFalse(moves.contains(ChessCoordinate.at(1, 2)));
     }
 }

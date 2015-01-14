@@ -3,11 +3,9 @@ package com.drewhannay.chesscrafter.controllers;
 import com.drewhannay.chesscrafter.models.*;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 public final class GameController {
@@ -36,7 +34,7 @@ public final class GameController {
         //return mDataMap.get(teamId).getLegalDests(piece);
         int boardIndex = piece.getCoordinates().boardIndex;
         BoardSize size = getGame().getBoards()[boardIndex].getBoardSize();
-        mLegalDestinations = Sets.newHashSet(piece.getPieceType().getMovesFrom(piece.getCoordinates(), size));
+        mLegalDestinations = Sets.newHashSet(piece.getPieceType().getMovesFrom(piece.getCoordinates(), size, 0));
         return mLegalDestinations;
     }
 

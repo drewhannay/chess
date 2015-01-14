@@ -44,9 +44,10 @@ public class PieceType {
         return mName;
     }
 
-    public List<ChessCoordinate> getMovesFrom(@NotNull ChessCoordinate startLocation, @NotNull BoardSize boardSize) {
+    public List<ChessCoordinate> getMovesFrom(@NotNull ChessCoordinate startLocation,
+                                              @NotNull BoardSize boardSize, int moveCount) {
         if (getName().equals(PAWN_NAME)) {
-            return getPawnMovesFrom(startLocation, boardSize);
+            return getPawnMovesFrom(startLocation, boardSize, moveCount);
         }
 
         List<ChessCoordinate> moves = new ArrayList<>();
@@ -73,11 +74,13 @@ public class PieceType {
         return moves;
     }
 
-    private List<ChessCoordinate> getPawnMovesFrom(@NotNull ChessCoordinate startLocation, @NotNull BoardSize boardSize) {
+    private List<ChessCoordinate> getPawnMovesFrom(@NotNull ChessCoordinate startLocation,
+                                                   @NotNull BoardSize boardSize, int moveCount) {
         List<ChessCoordinate> moves = new ArrayList<>();
-        // TODO: should only be able to move two spaces if it's the first move
         moves.add(ChessCoordinate.at(startLocation.x, startLocation.y + 1));
-        moves.add(ChessCoordinate.at(startLocation.x, startLocation.y + 2));
+        if (moveCount == 0) {
+            moves.add(ChessCoordinate.at(startLocation.x, startLocation.y + 2));
+        }
         return moves;
     }
 

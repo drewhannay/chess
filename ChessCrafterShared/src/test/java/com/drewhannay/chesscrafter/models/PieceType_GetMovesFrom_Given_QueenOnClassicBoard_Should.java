@@ -18,7 +18,7 @@ public class PieceType_GetMovesFrom_Given_QueenOnClassicBoard_Should {
     public void setup() {
         mTarget = PieceType.getQueenPieceType();
         mBoardSize = BoardSize.withDimensions(8, 8);
-        mMovesFrom1_1 = mTarget.getMovesFrom(ChessCoordinate.at(1, 1), mBoardSize);
+        mMovesFrom1_1 = mTarget.getMovesFrom(ChessCoordinate.at(1, 1), mBoardSize, 0);
     }
 
     @Test

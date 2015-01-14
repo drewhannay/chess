@@ -18,36 +18,36 @@ public class PieceType_GetMovesFrom_Given_KnightOnClassicBoard_Should {
     public void setup() {
         mTarget = PieceType.getKnightPieceType();
         mBoardSize = BoardSize.withDimensions(8, 8);
-        mMovesFrom3_3 = mTarget.getMovesFrom(ChessCoordinate.at(3, 3), mBoardSize);
+        mMovesFrom3_3 = mTarget.getMovesFrom(ChessCoordinate.at(3, 3), mBoardSize, 0);
     }
 
     @Test
     public void returns3_2For1_1() {
-        List<ChessCoordinate> moves = mTarget.getMovesFrom(ChessCoordinate.at(1, 1), mBoardSize);
+        List<ChessCoordinate> moves = mTarget.getMovesFrom(ChessCoordinate.at(1, 1), mBoardSize, 0);
         assertTrue(moves.contains(ChessCoordinate.at(3, 2)));
     }
 
     @Test
     public void returns2_3For1_1() {
-        List<ChessCoordinate> moves = mTarget.getMovesFrom(ChessCoordinate.at(1, 1), mBoardSize);
+        List<ChessCoordinate> moves = mTarget.getMovesFrom(ChessCoordinate.at(1, 1), mBoardSize, 0);
         assertTrue(moves.contains(ChessCoordinate.at(2, 3)));
     }
 
     @Test
     public void returns4_3For2_2() {
-        List<ChessCoordinate> moves = mTarget.getMovesFrom(ChessCoordinate.at(2, 2), mBoardSize);
+        List<ChessCoordinate> moves = mTarget.getMovesFrom(ChessCoordinate.at(2, 2), mBoardSize, 0);
         assertTrue(moves.contains(ChessCoordinate.at(4, 3)));
     }
 
     @Test
     public void returns3_4For2_2() {
-        List<ChessCoordinate> moves = mTarget.getMovesFrom(ChessCoordinate.at(2, 2), mBoardSize);
+        List<ChessCoordinate> moves = mTarget.getMovesFrom(ChessCoordinate.at(2, 2), mBoardSize, 0);
         assertTrue(moves.contains(ChessCoordinate.at(3, 4)));
     }
 
     @Test
     public void returns4_1For2_2() {
-        List<ChessCoordinate> moves = mTarget.getMovesFrom(ChessCoordinate.at(2, 2), mBoardSize);
+        List<ChessCoordinate> moves = mTarget.getMovesFrom(ChessCoordinate.at(2, 2), mBoardSize, 0);
         assertTrue(moves.contains(ChessCoordinate.at(4, 1)));
     }
 
@@ -78,7 +78,7 @@ public class PieceType_GetMovesFrom_Given_KnightOnClassicBoard_Should {
 
     @Test
     public void doesNotReturnIllegalMoves() {
-        List<ChessCoordinate> moves = mTarget.getMovesFrom(ChessCoordinate.at(1, 1), mBoardSize);
+        List<ChessCoordinate> moves = mTarget.getMovesFrom(ChessCoordinate.at(1, 1), mBoardSize, 0);
         assertFalse(moves.contains(ChessCoordinate.at(-1, 0)));
     }
 }

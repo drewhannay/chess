@@ -67,7 +67,7 @@ public class SquareListener extends DropAdapter implements MouseListener, Prefer
 		 */
 
         Game game = GameController.getGame();
-        if (game.getPieceOnSquare(mSquareLabel.getCoordinates()) == null || game.getPieceOnSquare(mSquareLabel.getCoordinates()).getTeamId(game) != game.getTurnKeeper().getCurrentTeamIndex())
+        if (game.getPieceOnSquare(mSquareLabel.getCoordinates()) == null || game.getPieceOnSquare(mSquareLabel.getCoordinates()).getTeamId() != game.getTurnKeeper().getCurrentTeamIndex())
             return;
 
         List<SquareJLabel> destinationLabels = PlayGamePanel.highlightLegalDestinations(mSquareLabel.getCoordinates());
@@ -86,10 +86,10 @@ public class SquareListener extends DropAdapter implements MouseListener, Prefer
 
         mGlassPane.setPoint(point);
 
-        BufferedImage image = null;
+        BufferedImage image;
 
         Piece piece = mSquareLabel.getPiece();
-        ImageIcon imageIcon = PieceIconUtility.getPieceIcon(piece.getPieceType().getName(), 48, piece.getTeamId(GameController.getGame()));
+        ImageIcon imageIcon = PieceIconUtility.getPieceIcon(piece.getName(), 48, piece.getTeamId());
         int width = imageIcon.getIconWidth();
         int height = imageIcon.getIconHeight();
         image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);

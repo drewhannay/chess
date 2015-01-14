@@ -1,5 +1,6 @@
 package com.drewhannay.chesscrafter.utility;
 
+import com.drewhannay.chesscrafter.models.Piece;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -39,8 +40,8 @@ public final class PieceIconUtility {
 //					//TODO: basic black/white setup. Soon enough we should be able to take a grayscale image and filter it for each team
 //					list.add(ImageUtility.getImage(pieceName, colorIterator.next(), imageScale));
 //				}
-                list.add(ImageUtility.getLightImage(pieceName, imageScale));
-                list.add(ImageUtility.getDarkImage(pieceName, imageScale));
+                list.add(Piece.TEAM_ONE, ImageUtility.getLightImage(pieceName, imageScale));
+                list.add(Piece.TEAM_TWO, ImageUtility.getDarkImage(pieceName, imageScale));
             } catch (IOException e) {
                 System.out.println(e);
             }

@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import java.util.List;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class PieceType_GetMovesFrom_Given_PawnOnClassicBoard_Should {
@@ -17,16 +18,22 @@ public class PieceType_GetMovesFrom_Given_PawnOnClassicBoard_Should {
     public void setup() {
         mTarget = PieceType.getPawnPieceType();
         mBoardSize = BoardSize.withDimensions(8, 8);
-        mMovesFrom2_2 = mTarget.getMovesFrom(ChessCoordinate.at(2, 2), mBoardSize);
+        mMovesFrom2_2 = mTarget.getMovesFrom(ChessCoordinate.at(2, 2), mBoardSize, 0);
     }
 
     @Test
-    public void returns2_3AsOneResultWhenPassed2_2() {
+    public void return2_3For2_2() {
         assertTrue(mMovesFrom2_2.contains(ChessCoordinate.at(2, 3)));
     }
 
     @Test
-    public void returns2_4AsOneResultWhenPassed2_2WhenPieceHasNotMoved() {
+    public void return2_4For2_2WhenPieceHasNotMoved() {
         assertTrue(mMovesFrom2_2.contains(ChessCoordinate.at(2, 4)));
+    }
+
+    @Test
+    public void notReturn2_5For2_3WhenPieceHasMoved() {
+        List<ChessCoordinate> moves = mTarget.getMovesFrom(ChessCoordinate.at(2, 3), mBoardSize, 1);
+        assertFalse(moves.contains(ChessCoordinate.at(2, 3)));
     }
 }
