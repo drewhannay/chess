@@ -3,7 +3,7 @@ package com.drewhannay.chesscrafter.models;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.List;
+import java.util.Set;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -12,7 +12,7 @@ public class PieceType_GetMovesFrom_Given_QueenOnClassicBoard_Should {
 
     PieceType mTarget;
     BoardSize mBoardSize;
-    List<ChessCoordinate> mMovesFrom1_1;
+    Set<ChessCoordinate> mMovesFrom1_1;
 
     @Before
     public void setup() {

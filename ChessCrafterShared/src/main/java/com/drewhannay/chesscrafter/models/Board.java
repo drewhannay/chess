@@ -2,11 +2,12 @@ package com.drewhannay.chesscrafter.models;
 
 import com.drewhannay.chesscrafter.logic.PathMaker;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Set;
 
 public final class Board {
     private final Piece[][] mPieces;
@@ -66,11 +67,11 @@ public final class Board {
         mPieces[location.x - 1][location.y - 1] = piece;
     }
 
-    public List<ChessCoordinate> getMovesFrom(ChessCoordinate originCoordinate) {
+    public Set<ChessCoordinate> getMovesFrom(ChessCoordinate originCoordinate) {
         Piece piece = getPiece(originCoordinate);
-        List<ChessCoordinate> allPossibleMoves = piece.getMovesFrom(originCoordinate, mBoardSize);
+        Set<ChessCoordinate> allPossibleMoves = Sets.newHashSet(piece.getMovesFrom(originCoordinate, mBoardSize));
 
-        List<ChessCoordinate> validMoves = Lists.newArrayListWithCapacity(allPossibleMoves.size());
+        Set<ChessCoordinate> validMoves = Sets.newHashSetWithExpectedSize(allPossibleMoves.size());
         for (ChessCoordinate move : allPossibleMoves) {
             if (!isBlocked(originCoordinate, move) && !doesFriendlyPieceExistAt(originCoordinate, move)) {
                 validMoves.add(move);

@@ -3,7 +3,7 @@ package com.drewhannay.chesscrafter.models;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.List;
+import java.util.Set;
 
 import static org.junit.Assert.*;
 
@@ -11,7 +11,7 @@ public class PieceType_GetMovesFrom_Given_RookOnClassicBoard_Should {
 
     PieceType mTarget;
     BoardSize mBoardSize;
-    List<ChessCoordinate> mMovesFrom1_1;
+    Set<ChessCoordinate> mMovesFrom1_1;
 
     @Before
     public void setup() {
@@ -55,7 +55,7 @@ public class PieceType_GetMovesFrom_Given_RookOnClassicBoard_Should {
 
     @Test
     public void return7_4From7_1() {
-        List<ChessCoordinate> moves = mTarget.getMovesFrom(ChessCoordinate.at(7, 1), mBoardSize, 0);
+        Set<ChessCoordinate> moves = mTarget.getMovesFrom(ChessCoordinate.at(7, 1), mBoardSize, 0);
 
         assertTrue(moves.contains(ChessCoordinate.at(7, 4)));
     }

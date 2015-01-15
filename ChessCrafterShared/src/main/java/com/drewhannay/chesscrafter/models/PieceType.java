@@ -10,8 +10,7 @@ import com.google.common.collect.Sets;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -44,13 +43,13 @@ public class PieceType {
         return mName;
     }
 
-    public List<ChessCoordinate> getMovesFrom(@NotNull ChessCoordinate startLocation,
-                                              @NotNull BoardSize boardSize, int moveCount) {
+    public Set<ChessCoordinate> getMovesFrom(@NotNull ChessCoordinate startLocation,
+                                             @NotNull BoardSize boardSize, int moveCount) {
         if (getName().equals(PAWN_NAME)) {
             return getPawnMovesFrom(startLocation, boardSize, moveCount);
         }
 
-        List<ChessCoordinate> moves = new ArrayList<>();
+        Set<ChessCoordinate> moves = new HashSet<>();
 
         for (Direction direction : mMovements.keySet()) {
             PathMaker pathMaker = new PathMaker(startLocation, direction.getFurthestPoint(startLocation, boardSize));
@@ -58,7 +57,7 @@ public class PieceType {
         }
 
         for (TwoHopMovement twoHopMovement : mTwoHopMovements) {
-            List<ChessCoordinate> allMoves = new ArrayList<>();
+            Set<ChessCoordinate> allMoves = new HashSet<>();
 
             for (int quadrant = 1; quadrant <= 4; quadrant++) {
                 allMoves.addAll(getQuadrantMoves(startLocation, twoHopMovement, quadrant));
@@ -74,9 +73,9 @@ public class PieceType {
         return moves;
     }
 
-    private List<ChessCoordinate> getPawnMovesFrom(@NotNull ChessCoordinate startLocation,
-                                                   @NotNull BoardSize boardSize, int moveCount) {
-        List<ChessCoordinate> moves = new ArrayList<>();
+    private Set<ChessCoordinate> getPawnMovesFrom(@NotNull ChessCoordinate startLocation,
+                                                  @NotNull BoardSize boardSize, int moveCount) {
+        Set<ChessCoordinate> moves = new HashSet<>(2);
         moves.add(ChessCoordinate.at(startLocation.x, startLocation.y + 1));
         if (moveCount == 0) {
             moves.add(ChessCoordinate.at(startLocation.x, startLocation.y + 2));
@@ -85,14 +84,13 @@ public class PieceType {
     }
 
 
-    // TODO: should be a Set? don't want duplicate results
-    private List<ChessCoordinate> getQuadrantMoves(@NotNull ChessCoordinate coordinate,
-                                                   @NotNull TwoHopMovement movement,
-                                                   int quadrant) {
+    private Set<ChessCoordinate> getQuadrantMoves(@NotNull ChessCoordinate coordinate,
+                                                  @NotNull TwoHopMovement movement,
+                                                  int quadrant) {
         int xMultiplier = quadrant == 1 || quadrant == 4 ? 1 : -1;
         int yMultiplier = quadrant == 1 || quadrant == 2 ? 1 : -1;
 
-        List<ChessCoordinate> moves = new ArrayList<>(2);
+        Set<ChessCoordinate> moves = new HashSet<>(2);
         moves.add(ChessCoordinate.at(coordinate.x + movement.x * xMultiplier, coordinate.y + movement.y * yMultiplier));
         moves.add(ChessCoordinate.at(coordinate.x + movement.y * xMultiplier, coordinate.y + movement.x * yMultiplier));
         return moves;

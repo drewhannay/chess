@@ -3,7 +3,6 @@ package com.drewhannay.chesscrafter.controllers;
 import com.drewhannay.chesscrafter.models.*;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
 import java.util.List;
 import java.util.Set;
@@ -28,13 +27,11 @@ public final class GameController {
         return sGame;
     }
 
-    public static Set<ChessCoordinate> getLegalDestinations(Piece piece) {
+    public static Set<ChessCoordinate> getLegalDestinations(Board board, ChessCoordinate coordinate) {
         //computeLegalDestinations();
         //int teamId = piece.getTeamId(sGame);
         //return mDataMap.get(teamId).getLegalDests(piece);
-        int boardIndex = piece.getCoordinates().boardIndex;
-        BoardSize size = getGame().getBoards()[boardIndex].getBoardSize();
-        mLegalDestinations = Sets.newHashSet(piece.getPieceType().getMovesFrom(piece.getCoordinates(), size, 0));
+        mLegalDestinations = board.getMovesFrom(coordinate);
         return mLegalDestinations;
     }
 

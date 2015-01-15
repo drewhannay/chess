@@ -2,7 +2,7 @@ package com.drewhannay.chesscrafter.models;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
+import java.util.Set;
 
 public final class Piece {
     public static final int TEAM_ONE = 1;
@@ -54,8 +54,8 @@ public final class Piece {
         mMoveCount--;
     }
 
-    public List<ChessCoordinate> getMovesFrom(@NotNull ChessCoordinate coordinate, @NotNull BoardSize boardSize) {
-        return mPieceType.getMovesFrom(coordinate, boardSize, 0);
+    public Set<ChessCoordinate> getMovesFrom(@NotNull ChessCoordinate coordinate, @NotNull BoardSize boardSize) {
+        return mPieceType.getMovesFrom(coordinate, boardSize, mMoveCount);
     }
 
     @Override
