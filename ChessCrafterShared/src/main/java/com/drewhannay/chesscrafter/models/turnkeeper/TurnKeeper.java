@@ -14,9 +14,9 @@ public class TurnKeeper {
     private int mActiveTeamIndex;
     private int mMovesMadeCount;
 
-    private TurnKeeper(@NotNull int[] teamIds,
-                       @NotNull int[] turnCounts,
-                       @NotNull int[] turnIncrements) {
+    TurnKeeper(@NotNull int[] teamIds,
+               @NotNull int[] turnCounts,
+               @NotNull int[] turnIncrements) {
         Preconditions.checkArgument(teamIds.length > 1);
         Preconditions.checkArgument(teamIds.length == turnCounts.length);
         Preconditions.checkArgument(teamIds.length == turnIncrements.length);
