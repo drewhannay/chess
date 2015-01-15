@@ -143,7 +143,7 @@ public final class GameController {
      * @return The number of legal moves this turn.
      */
     public static int getLegalMoveCount() {
-        //int teamIndex = sGame.getTurnKeeper().getCurrentTeamIndex();
+        //int teamIndex = sGame.getTurnKeeper().getActiveTeamId();
         // List<Piece> movingTeam = sGame.getTeams()[teamIndex].getPieces();
 
         //int count = 0;
@@ -177,7 +177,7 @@ public final class GameController {
     }
 
     public static boolean isLegalMove(Piece piece, ChessCoordinate destination) {
-        //int teamIndex = sGame.getTurnKeeper().getCurrentTeamIndex();
+        //int teamIndex = sGame.getTurnKeeper().getActiveTeamId();
 
         //return mDataMap.get(teamIndex).getLegalDests(piece).contains(destination);
         return mLegalDestinations.contains(destination);
@@ -203,7 +203,7 @@ public final class GameController {
             team.getRules().checkEndCondition();
 
         // TODO: We're just using this for it's side effect of changing the team index. Do we ever need to store it?
-        sGame.getTurnKeeper().getTeamIndexForNextTurn();
+        sGame.getTurnKeeper().finishTurn();
 
         computeLegalDestinations();
     }

@@ -1,7 +1,7 @@
 package com.drewhannay.chesscrafter.logic;
 
 import com.drewhannay.chesscrafter.models.*;
-import com.drewhannay.chesscrafter.models.turnkeeper.ClassicTurnKeeper;
+import com.drewhannay.chesscrafter.models.turnkeeper.TurnKeeper;
 import com.drewhannay.chesscrafter.rules.Rules;
 import com.drewhannay.chesscrafter.rules.endconditions.CaptureObjectiveEndCondition;
 import com.drewhannay.chesscrafter.rules.legaldestinationcropper.ClassicLegalDestinationCropper;
@@ -118,7 +118,7 @@ public class GameBuilder {
 
         Board[] boards = new Board[]{new Board(BoardSize.withDimensions(8, 8))};
 
-        return new Game("Classic", boards, teams, new ClassicTurnKeeper());
+        return new Game("Classic", boards, teams, TurnKeeper.createClassic(Piece.TEAM_ONE, Piece.TEAM_TWO));
     }
 
     public Board[] getBoards() {
