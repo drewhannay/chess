@@ -4,7 +4,7 @@ import com.drewhannay.chesscrafter.models.turnkeeper.TurnKeeper;
 import com.drewhannay.chesscrafter.rules.endconditions.EndCondition;
 import com.drewhannay.chesscrafter.rules.legaldestinationcropper.LegalDestinationCropper;
 import com.drewhannay.chesscrafter.rules.postmoveaction.PostMoveAction;
-import com.drewhannay.chesscrafter.rules.promotionmethods.PromotionMethod;
+import com.drewhannay.chesscrafter.rules.promotionmethods.PiecePromoter;
 import com.drewhannay.chesscrafter.timer.ChessTimer;
 import com.google.common.collect.Maps;
 import com.google.gson.*;
@@ -19,7 +19,7 @@ public final class GsonUtility {
         builder.registerTypeAdapter(TurnKeeper.class, new InterfaceAdapter<TurnKeeper>());
         builder.registerTypeAdapter(LegalDestinationCropper.class, new InterfaceAdapter<LegalDestinationCropper>());
         builder.registerTypeAdapter(PostMoveAction.class, new InterfaceAdapter<PostMoveAction>());
-        builder.registerTypeAdapter(PromotionMethod.class, new InterfaceAdapter<PromotionMethod>());
+        builder.registerTypeAdapter(PiecePromoter.class, new InterfaceAdapter<PiecePromoter>());
         builder.registerTypeAdapter(ChessTimer.class, new InterfaceAdapter<ChessTimer>());
         builder.registerTypeAdapter(Map.class, new MapAdapter());
 
