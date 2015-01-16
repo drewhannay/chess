@@ -26,14 +26,4 @@ public final class CheckNTimesEndCondition extends EndCondition {
         // if (mMove != null && mMove.isVerified() && mMove.isCheck())
         // mNumberOfChecks--;
     }
-
-    @Override
-    public boolean equals(Object other) {
-        return other instanceof CheckNTimesEndCondition;
-    }
-
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
 }

@@ -20,14 +20,4 @@ public final class LoseAllPiecesEndCondition extends EndCondition {
     @Override
     public void undo() {
     }
-
-    @Override
-    public boolean equals(Object other) {
-        return other instanceof LoseAllPiecesEndCondition;
-    }
-
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
 }

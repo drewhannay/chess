@@ -51,14 +51,4 @@ public final class CapturerStealsCapturedPostMoveAction extends PostMoveAction {
         // GuiUtility.getChessCrafter().getPlayGameScreen(mGame).setPieceToPlace(null);
         // move.setOldPos(null);
     }
-
-    @Override
-    public boolean equals(Object other) {
-        return other instanceof CapturerStealsCapturedPostMoveAction;
-    }
-
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
 }

@@ -84,14 +84,4 @@ public final class AtomicCapturePostMoveAction extends PostMoveAction {
         // 1].getMoveCount() - 1);
         // move.setExploded(null);
     }
-
-    @Override
-    public boolean equals(Object other) {
-        return other instanceof AtomicCapturePostMoveAction;
-    }
-
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
 }

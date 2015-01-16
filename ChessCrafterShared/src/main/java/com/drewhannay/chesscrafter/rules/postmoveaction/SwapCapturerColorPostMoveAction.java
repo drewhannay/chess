@@ -28,14 +28,4 @@ public final class SwapCapturerColorPostMoveAction extends PostMoveAction {
         // mGame.getWhiteTeam()).add(toSwap);
         // toSwap.setBlack(!toSwap.isBlack());
     }
-
-    @Override
-    public boolean equals(Object other) {
-        return other instanceof SwapCapturerColorPostMoveAction;
-    }
-
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
 }
