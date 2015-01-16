@@ -38,7 +38,16 @@ public final class Board {
     }
 
     @Nullable
+    public Piece undoMovePiece(@NotNull ChessCoordinate origin, @NotNull ChessCoordinate destination) {
+        return movePieceImpl(origin, destination, false);
+    }
+
+    @Nullable
     public Piece movePiece(@NotNull ChessCoordinate origin, @NotNull ChessCoordinate destination) {
+        return movePieceImpl(origin, destination, true);
+    }
+
+    private Piece movePieceImpl(@NotNull ChessCoordinate origin, @NotNull ChessCoordinate destination, boolean incrementMoveCount) {
         verifyCoordinatesOrThrow(origin, destination);
 
         Piece pieceToCapture = getPiece(destination);
@@ -47,6 +56,12 @@ public final class Board {
         addPiece(pieceToMove, destination);
         removePiece(origin);
 
+        if (incrementMoveCount) {
+            pieceToMove.incrementMoveCount();
+        } else {
+            pieceToMove.decrementMoveCount();
+        }
+
         return pieceToCapture;
     }
 
@@ -54,7 +69,7 @@ public final class Board {
         return getPiece(coordinateToCheck) != null;
     }
 
-    public boolean doesFriendlyPieceExistAt(ChessCoordinate origin, ChessCoordinate destination) {
+    private boolean doesFriendlyPieceExistAt(ChessCoordinate origin, ChessCoordinate destination) {
         Piece piece = getPiece(destination);
         return piece != null && piece.getTeamId() == getPiece(origin).getTeamId();
     }
