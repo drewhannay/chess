@@ -78,7 +78,6 @@ public class GameBuilder {
                 PieceType.getKingPieceType(),
                 Rules.DESTINATION_SAME_BOARD,
                 Lists.<MoveFilter>newArrayList(new ClassicMoveFilter(PieceType.getKingPieceType())),
-                PiecePromoter.createClassicPiecePromoter(8),
                 Collections.<PostMoveAction>emptyList(),
                 new CaptureObjectiveEndCondition()
         );
@@ -86,14 +85,13 @@ public class GameBuilder {
                 PieceType.getKingPieceType(),
                 Rules.DESTINATION_SAME_BOARD,
                 Lists.<MoveFilter>newArrayList(new ClassicMoveFilter(PieceType.getKingPieceType())),
-                PiecePromoter.createClassicPiecePromoter(1),
                 Collections.<PostMoveAction>emptyList(),
                 new CaptureObjectiveEndCondition()
         );
 
         Team[] teams = new Team[2];
-        teams[0] = new Team(whiteRules);
-        teams[1] = new Team(blackRules);
+        teams[0] = new Team(Piece.TEAM_ONE, whiteRules, PiecePromoter.createClassicPiecePromoter(8));
+        teams[1] = new Team(Piece.TEAM_TWO, blackRules, PiecePromoter.createClassicPiecePromoter(1));
 
         Board[] boards = new Board[]{new Board(BoardSize.withDimensions(8, 8))};
 

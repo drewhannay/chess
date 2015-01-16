@@ -2,6 +2,7 @@ package com.drewhannay.chesscrafter.models;
 
 import com.drewhannay.chesscrafter.models.turnkeeper.TurnKeeper;
 import com.google.common.base.Preconditions;
+import org.jetbrains.annotations.NotNull;
 
 public final class Game {
 
@@ -37,5 +38,56 @@ public final class Game {
         Preconditions.checkPositionIndex(boardIndex, mBoards.length);
 
         return mBoards[boardIndex].getPiece(coordinates);
+    }
+
+    public void executeMove(@NotNull Move move) {
+        Board board = mBoards[0];
+        Team team = getTeam(mTurnKeeper.getActiveTeamId());
+
+        Piece capturedPiece = board.movePiece(move.origin, move.destination);
+        if (capturedPiece != null) {
+            team.capturePiece(move, capturedPiece);
+        }
+
+        if (move.promotionType != null) {
+            Piece promotedPiece = team.getPiecePromoter().promotePiece(board.getPiece(move.destination), move.promotionType);
+            board.addPiece(promotedPiece, move.destination);
+        }
+
+        // TODO: PostMoveAction
+        // TODO: Check end condition
+
+        mTurnKeeper.finishTurn();
+    }
+
+    public void undoMove(@NotNull Move move) {
+        mTurnKeeper.undoFinishTurn();
+
+        Board board = mBoards[0];
+        Team team = getTeam(mTurnKeeper.getActiveTeamId());
+
+        // TODO: Undo check end condition
+        // TODO: Undo PostMoveAction
+
+        if (move.promotionType != null) {
+            Piece demotedPiece = team.getPiecePromoter().undoPromotion();
+            board.addPiece(demotedPiece, move.destination);
+        }
+
+        mBoards[0].undoMovePiece(move.destination, move.origin);
+
+        Piece capturedPiece = getTeam(mTurnKeeper.getActiveTeamId()).undoCapturePiece(move);
+        if (capturedPiece != null) {
+            mBoards[0].addPiece(capturedPiece, move.destination);
+        }
+    }
+
+    private Team getTeam(int teamId) {
+        for (Team team : mTeams) {
+            if (team.getTeamId() == teamId) {
+                return team;
+            }
+        }
+        throw new IllegalArgumentException("invalid teamId");
     }
 }

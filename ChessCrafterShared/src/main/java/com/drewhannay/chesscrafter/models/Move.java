@@ -7,6 +7,7 @@ public final class Move {
 
     public final ChessCoordinate origin;
     public final ChessCoordinate destination;
+    public final PieceType promotionType;
 
     private Move(ChessCoordinate origin, ChessCoordinate destination) {
         Preconditions.checkArgument(origin != null);
@@ -14,9 +15,10 @@ public final class Move {
 
         this.origin = origin;
         this.destination = destination;
+        this.promotionType = null;
     }
 
-    public static Move from(@NotNull ChessCoordinate origin, @NotNull ChessCoordinate destination) {
+    static Move from(@NotNull ChessCoordinate origin, @NotNull ChessCoordinate destination) {
         return new Move(origin, destination);
     }
 }

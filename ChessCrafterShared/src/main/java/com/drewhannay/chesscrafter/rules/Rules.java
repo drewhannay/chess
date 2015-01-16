@@ -1,12 +1,10 @@
 package com.drewhannay.chesscrafter.rules;
 
 import com.drewhannay.chesscrafter.models.Move;
-import com.drewhannay.chesscrafter.models.Piece;
 import com.drewhannay.chesscrafter.models.PieceType;
 import com.drewhannay.chesscrafter.rules.endconditions.EndCondition;
 import com.drewhannay.chesscrafter.rules.movefilter.MoveFilter;
 import com.drewhannay.chesscrafter.rules.postmoveaction.PostMoveAction;
-import com.drewhannay.chesscrafter.rules.promotionmethods.PiecePromoter;
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 
@@ -17,12 +15,10 @@ public final class Rules {
     public static final int DESTINATION_OPPOSITE_BOARD = 1;
 
     public Rules(PieceType objectivePieceType, int destinationBoardType,
-                 List<MoveFilter> moveFilters, PiecePromoter piecePromoter,
-                 List<PostMoveAction> postMoveActions, EndCondition endCondition) {
+                 List<MoveFilter> moveFilters, List<PostMoveAction> postMoveActions, EndCondition endCondition) {
         mObjectivePieceType = objectivePieceType;
         mDestinationBoardType = destinationBoardType;
         mMoveFilters = Lists.newArrayList(moveFilters);
-        mPiecePromoter = piecePromoter;
         mPostMoveActions = Lists.newArrayList(postMoveActions);
         mEndCondition = endCondition;
     }
@@ -36,14 +32,6 @@ public final class Rules {
 
     public PieceType getObjectivePieceType() {
         return mObjectivePieceType;
-    }
-
-    public Piece promotePiece(Piece pieceToPromote) {
-        return null;//mPiecePromoter.promotePiece(pieceToPromote);
-    }
-
-    public Piece undoPromotion(Piece pieceToDemote) {
-        return null;//mPiecePromoter.undoPromotion(pieceToDemote);
     }
 
     public int getDestinationBoardIndex(int startIndex) {
@@ -85,20 +73,18 @@ public final class Rules {
                 && Objects.equal(mDestinationBoardType, otherRules.mDestinationBoardType)
                 && Objects.equal(mMoveFilters, otherRules.mMoveFilters)
                 && Objects.equal(mPostMoveActions, otherRules.mPostMoveActions)
-                && Objects.equal(mPiecePromoter, otherRules.mPiecePromoter)
                 && Objects.equal(mEndCondition, otherRules.mEndCondition);
     }
 
     @Override
     public int hashCode() {
         return Objects.hashCode(mObjectivePieceType, mDestinationBoardType,
-                mMoveFilters, mPostMoveActions, mPiecePromoter, mEndCondition);
+                mMoveFilters, mPostMoveActions, mEndCondition);
     }
 
     private final PieceType mObjectivePieceType;
     private final int mDestinationBoardType;
     private final List<MoveFilter> mMoveFilters;
     private final List<PostMoveAction> mPostMoveActions;
-    private final PiecePromoter mPiecePromoter;
     private final EndCondition mEndCondition;
 }
