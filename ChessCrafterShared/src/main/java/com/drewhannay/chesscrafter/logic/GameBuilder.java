@@ -4,8 +4,8 @@ import com.drewhannay.chesscrafter.models.*;
 import com.drewhannay.chesscrafter.models.turnkeeper.TurnKeeper;
 import com.drewhannay.chesscrafter.rules.Rules;
 import com.drewhannay.chesscrafter.rules.endconditions.CaptureObjectiveEndCondition;
-import com.drewhannay.chesscrafter.rules.legaldestinationcropper.ClassicLegalDestinationCropper;
-import com.drewhannay.chesscrafter.rules.legaldestinationcropper.LegalDestinationCropper;
+import com.drewhannay.chesscrafter.rules.movefilter.ClassicMoveFilter;
+import com.drewhannay.chesscrafter.rules.movefilter.MoveFilter;
 import com.drewhannay.chesscrafter.rules.postmoveaction.PostMoveAction;
 import com.drewhannay.chesscrafter.rules.promotionmethods.PiecePromoter;
 import com.google.common.collect.Lists;
@@ -77,7 +77,7 @@ public class GameBuilder {
         Rules whiteRules = new Rules(
                 PieceType.getKingPieceType(),
                 Rules.DESTINATION_SAME_BOARD,
-                Lists.<LegalDestinationCropper>newArrayList(new ClassicLegalDestinationCropper()),
+                Lists.<MoveFilter>newArrayList(new ClassicMoveFilter(PieceType.getKingPieceType())),
                 PiecePromoter.createClassicPiecePromoter(8),
                 Collections.<PostMoveAction>emptyList(),
                 new CaptureObjectiveEndCondition()
@@ -85,7 +85,7 @@ public class GameBuilder {
         Rules blackRules = new Rules(
                 PieceType.getKingPieceType(),
                 Rules.DESTINATION_SAME_BOARD,
-                Lists.<LegalDestinationCropper>newArrayList(new ClassicLegalDestinationCropper()),
+                Lists.<MoveFilter>newArrayList(new ClassicMoveFilter(PieceType.getKingPieceType())),
                 PiecePromoter.createClassicPiecePromoter(1),
                 Collections.<PostMoveAction>emptyList(),
                 new CaptureObjectiveEndCondition()

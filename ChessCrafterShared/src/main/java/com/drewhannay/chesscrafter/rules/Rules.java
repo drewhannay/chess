@@ -4,7 +4,7 @@ import com.drewhannay.chesscrafter.models.Move;
 import com.drewhannay.chesscrafter.models.Piece;
 import com.drewhannay.chesscrafter.models.PieceType;
 import com.drewhannay.chesscrafter.rules.endconditions.EndCondition;
-import com.drewhannay.chesscrafter.rules.legaldestinationcropper.LegalDestinationCropper;
+import com.drewhannay.chesscrafter.rules.movefilter.MoveFilter;
 import com.drewhannay.chesscrafter.rules.postmoveaction.PostMoveAction;
 import com.drewhannay.chesscrafter.rules.promotionmethods.PiecePromoter;
 import com.google.common.base.Objects;
@@ -17,11 +17,11 @@ public final class Rules {
     public static final int DESTINATION_OPPOSITE_BOARD = 1;
 
     public Rules(PieceType objectivePieceType, int destinationBoardType,
-                 List<LegalDestinationCropper> legalDestinationCroppers, PiecePromoter piecePromoter,
+                 List<MoveFilter> moveFilters, PiecePromoter piecePromoter,
                  List<PostMoveAction> postMoveActions, EndCondition endCondition) {
         mObjectivePieceType = objectivePieceType;
         mDestinationBoardType = destinationBoardType;
-        mLegalDestinationCroppers = Lists.newArrayList(legalDestinationCroppers);
+        mMoveFilters = Lists.newArrayList(moveFilters);
         mPiecePromoter = piecePromoter;
         mPostMoveActions = Lists.newArrayList(postMoveActions);
         mEndCondition = endCondition;
@@ -56,11 +56,6 @@ public final class Rules {
         }
     }
 
-    public void cropLegalDestinations() {
-        for (LegalDestinationCropper cropper : mLegalDestinationCroppers)
-            cropper.cropLegalDestinations();
-    }
-
     public void performPostMoveActions(Move move) {
         for (PostMoveAction action : mPostMoveActions)
             action.perform(move);
@@ -88,7 +83,7 @@ public final class Rules {
 
         return Objects.equal(mObjectivePieceType, otherRules.mObjectivePieceType)
                 && Objects.equal(mDestinationBoardType, otherRules.mDestinationBoardType)
-                && Objects.equal(mLegalDestinationCroppers, otherRules.mLegalDestinationCroppers)
+                && Objects.equal(mMoveFilters, otherRules.mMoveFilters)
                 && Objects.equal(mPostMoveActions, otherRules.mPostMoveActions)
                 && Objects.equal(mPiecePromoter, otherRules.mPiecePromoter)
                 && Objects.equal(mEndCondition, otherRules.mEndCondition);
@@ -97,12 +92,12 @@ public final class Rules {
     @Override
     public int hashCode() {
         return Objects.hashCode(mObjectivePieceType, mDestinationBoardType,
-                mLegalDestinationCroppers, mPostMoveActions, mPiecePromoter, mEndCondition);
+                mMoveFilters, mPostMoveActions, mPiecePromoter, mEndCondition);
     }
 
     private final PieceType mObjectivePieceType;
     private final int mDestinationBoardType;
-    private final List<LegalDestinationCropper> mLegalDestinationCroppers;
+    private final List<MoveFilter> mMoveFilters;
     private final List<PostMoveAction> mPostMoveActions;
     private final PiecePromoter mPiecePromoter;
     private final EndCondition mEndCondition;
