@@ -95,6 +95,12 @@ public class GameBuilder {
 
         Board[] boards = new Board[]{new Board(BoardSize.withDimensions(8, 8))};
 
+        setupClassicPieces(boards[0], 1, Piece.TEAM_ONE);
+        setupClassicPawns(boards[0], 2, Piece.TEAM_ONE);
+
+        setupClassicPawns(boards[0], 7, Piece.TEAM_TWO);
+        setupClassicPieces(boards[0], 8, Piece.TEAM_TWO);
+
         return new Game("Classic", boards, teams, TurnKeeper.createClassic(Piece.TEAM_ONE, Piece.TEAM_TWO));
     }
 
