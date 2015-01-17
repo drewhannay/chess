@@ -64,7 +64,7 @@ public class SquareJLabel extends JLabel {
             ImageIcon pieceIcon = PieceIconUtility.getPieceIcon(mPiece.getName(), mImageScale, mPiece.getTeamId());
 
             if (pieceIcon == null)
-                setText(mPiece.getPieceType().getName());
+                setText(mPiece.getName());
             else {
                 setIcon(pieceIcon);
             }

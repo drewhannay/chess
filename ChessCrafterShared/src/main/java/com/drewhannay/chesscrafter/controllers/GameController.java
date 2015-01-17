@@ -186,23 +186,8 @@ public final class GameController {
      * @param move The Move to play
      * @throws Exception If the Move was illegal
      */
-    public static void playMove(Move move) throws Exception {
-        MoveController.execute(move);
-
-        // TODO: seems odd that this check would be necessary
-//		if (sGame.getHistory().contains(move))
-//			return;
-
-//        sGame.getHistory().add(move);
-
-        // TODO: probably need to stop somehow when we hit a valid end condition
-        for (Team team : sGame.getTeams())
-            team.getRules().checkEndCondition();
-
-        // TODO: We're just using this for it's side effect of changing the team index. Do we ever need to store it?
-        sGame.getTurnKeeper().finishTurn();
-
-        computeLegalDestinations();
+    public static void playMove(Move move) {
+        sGame.executeMove(move);
     }
 
     private static Game sGame;

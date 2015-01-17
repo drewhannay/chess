@@ -4,7 +4,7 @@ import com.drewhannay.chesscrafter.controllers.GameController;
 import com.drewhannay.chesscrafter.gui.PlayGamePanel;
 import com.drewhannay.chesscrafter.gui.SquareJLabel;
 import com.drewhannay.chesscrafter.models.ChessCoordinate;
-import com.drewhannay.chesscrafter.models.Move;
+import com.drewhannay.chesscrafter.models.MoveBuilder;
 import com.google.common.collect.ImmutableList;
 
 import javax.swing.*;
@@ -28,14 +28,11 @@ public class DropManager extends AbstractDropManager {
             return;
         }
 
-        ChessCoordinate originCoordinates = originSquareLabel.getCoordinates();
-        ChessCoordinate destinationCoordinates = destinationSquareLabel.getCoordinates();
+        ChessCoordinate origin = originSquareLabel.getCoordinates();
+        ChessCoordinate destination = destinationSquareLabel.getCoordinates();
 
-        try {
-            GameController.playMove(Move.from(originCoordinates, destinationCoordinates));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        MoveBuilder moveBuilder = new MoveBuilder(origin, destination);
+        GameController.playMove(moveBuilder.build());
         PlayGamePanel.boardRefresh();
     }
 }

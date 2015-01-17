@@ -1,13 +1,11 @@
 package com.drewhannay.chesscrafter.utility;
 
 import com.drewhannay.chesscrafter.models.Piece;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
 public final class PieceIconUtility {
@@ -31,17 +29,17 @@ public final class PieceIconUtility {
 
     public static ImageIcon getPieceIcon(String pieceName, int imageScale, int teamId) {
         String pieceKey = pieceName + imageScale;
-        List<ImageIcon> list = IMAGE_MAP.get(pieceKey);
+        Map<Integer, ImageIcon> list = IMAGE_MAP.get(pieceKey);
         if (list == null) {
             try {
-                list = Lists.newArrayList();
+                list = Maps.newHashMap();
 //				for (Iterator<Color> colorIterator = pieceColorMap.values().iterator(); colorIterator.hasNext(); )
 //				{
 //					//TODO: basic black/white setup. Soon enough we should be able to take a grayscale image and filter it for each team
 //					list.add(ImageUtility.getImage(pieceName, colorIterator.next(), imageScale));
 //				}
-                list.add(Piece.TEAM_ONE, ImageUtility.getLightImage(pieceName, imageScale));
-                list.add(Piece.TEAM_TWO, ImageUtility.getDarkImage(pieceName, imageScale));
+                list.put(Piece.TEAM_ONE, ImageUtility.getLightImage(pieceName, imageScale));
+                list.put(Piece.TEAM_TWO, ImageUtility.getDarkImage(pieceName, imageScale));
             } catch (IOException e) {
                 System.out.println(e);
             }
@@ -50,5 +48,5 @@ public final class PieceIconUtility {
         return list.get(teamId);
     }
 
-    private static final Map<String, List<ImageIcon>> IMAGE_MAP = Maps.newHashMap();
+    private static final Map<String, Map<Integer, ImageIcon>> IMAGE_MAP = Maps.newHashMap();
 }

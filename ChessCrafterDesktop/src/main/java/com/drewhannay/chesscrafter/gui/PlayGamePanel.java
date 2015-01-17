@@ -35,11 +35,7 @@ public class PlayGamePanel extends ChessPanel {
         // mWhiteTimer.restart();
         // mBlackTimer.restart();
         // turn(game.isBlackMove());
-        try {
-            initComponents();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        initComponents();
     }
 
 //	protected void resetTurnLabels()
@@ -254,7 +250,7 @@ public class PlayGamePanel extends ChessPanel {
         return mOptionsMenu;
     }
 
-    private void initComponents() throws Exception {
+    private void initComponents() {
         /*
          * JButton undoButton = new
 		 * JButton(Messages.getString("PlayGamePanel.undo")); //$NON-NLS-1$
@@ -300,7 +296,7 @@ public class PlayGamePanel extends ChessPanel {
             gridx += constraints.gridwidth;
 
             mGameBoards[boardIndex] =
-                    new BoardPanel(boards[boardIndex].getRowCount(), boards[boardIndex].getColumnCount(), boardIndex, mGlobalGlassPane, mDropManager, false);
+                    new BoardPanel(boards[boardIndex].getBoardSize(), boardIndex, mGlobalGlassPane, mDropManager, false);
             add(mGameBoards[boardIndex], constraints);
         }
 
@@ -321,10 +317,9 @@ public class PlayGamePanel extends ChessPanel {
         // mWhiteCapturePanel = createGrid(mWhiteCapturesJail, true).first;
 
         for (int teamIndex = 0; teamIndex < mGame.getTeams().length; teamIndex++) {
-            mJails[teamIndex] = new BoardPanel(jailBoardSize, jailBoardSize, teamIndex, mGlobalGlassPane, mDropManager, true);
+            mJails[teamIndex] = new BoardPanel(BoardSize.withDimensions(jailBoardSize, jailBoardSize), 0, mGlobalGlassPane, mDropManager, true);
             mJails[teamIndex].setBorder(GuiUtility.createBorder(Messages.getString("PlayGamePanel.capturedPieces"))); //$NON-NLS-1$
             mJails[teamIndex].setLayout(new GridLayout(jailBoardSize, jailBoardSize));
-
             mJails[teamIndex].setPreferredSize(new Dimension((jailBoardSize + 1) * 25, (jailBoardSize + 1) * 25));
         }
 
