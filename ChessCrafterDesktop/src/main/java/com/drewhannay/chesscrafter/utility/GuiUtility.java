@@ -99,7 +99,7 @@ public final class GuiUtility {
     }
 
     public static String getPieceToolTipText(Piece piece) {
-        String name = piece.getPieceType().getName();
+        String name = piece.getName();
         //PieceMovements movements = piece.getPieceType().getPieceMovements();
 
         StringBuilder builder = new StringBuilder("<html><b>"); //$NON-NLS-1$

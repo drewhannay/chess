@@ -122,7 +122,7 @@ public final class GameController {
      * @return The Pieces guarding the Square
      */
     public static List<Piece> getGuards(ChessCoordinate coordinates, int guardTeamIndex) {
-        List<Piece> pieces = sGame.getTeams()[guardTeamIndex].getPieces();
+//        List<Piece> pieces = sGame.getTeams()[guardTeamIndex].getPieces();
         List<Piece> guards = Lists.newArrayList();
 
         /*for (Piece piece : pieces) {
@@ -153,7 +153,7 @@ public final class GameController {
     }
 
     private static List<Piece> getThreats(ChessCoordinate threatened, int attackerTeamIndex) {
-        List<Piece> pieces = sGame.getTeams()[attackerTeamIndex].getPieces();
+//        List<Piece> pieces = sGame.getTeams()[attackerTeamIndex].getPieces();
         List<Piece> attackers = Lists.newArrayList();
 
         /*for (Piece piece : pieces) {

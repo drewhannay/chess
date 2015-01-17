@@ -20,20 +20,6 @@ public final class Piece {
         mMoveCount = 0;
     }
 
-    @Deprecated
-    public PieceType getPieceType() {
-        return mPieceType;
-    }
-
-    @Deprecated
-    public ChessCoordinate getCoordinates() {
-        return null;
-    }
-
-    @Deprecated
-    public void setCoordinates(ChessCoordinate coordinates) {
-    }
-
     public String getName() {
         return mPieceType.getName();
     }

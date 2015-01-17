@@ -88,13 +88,15 @@ public class PlayGamePanel extends ChessPanel {
 //	}
 
     public static void boardRefresh() {
-        updateJailSquares();
-
-        for (BoardPanel panel : mGameBoards)
+        for (BoardPanel panel : mGameBoards) {
+            panel.updatePieceLocations(mGame.getBoards());
             panel.refreshSquares();
+        }
 
-        for (BoardPanel panel : mJails)
+        for (BoardPanel panel : mJails) {
+            panel.updateJailPopulation(mGame.getTeams());
             panel.refreshSquares();
+        }
 
         // refreshGameSquares();
 
@@ -287,16 +289,16 @@ public class PlayGamePanel extends ChessPanel {
         int gridx = 0;
 
         for (int boardIndex = 0; boardIndex < boards.length; boardIndex++) {
-            constraints.gridheight = boards[boardIndex].getRowCount() + 2; // Added 2 for row labels? I dunno.
+            constraints.gridheight = boards[boardIndex].getBoardSize().height + 2; // Added 2 for row labels? I dunno.
             constraints.gridy = 0;
             constraints.fill = GridBagConstraints.HORIZONTAL;
             constraints.insets = new Insets(10, 0, 0, 0);
             constraints.gridx = gridx;
-            constraints.gridwidth = boards[boardIndex].getColumnCount() + 2; // Added 2 for row labels?
+            constraints.gridwidth = boards[boardIndex].getBoardSize().width + 2; // Added 2 for row labels?
             gridx += constraints.gridwidth;
 
             mGameBoards[boardIndex] =
-                    new BoardPanel(boards[boardIndex].getBoardSize(), boardIndex, mGlobalGlassPane, mDropManager, false);
+                    new BoardPanel(boards[boardIndex].getBoardSize(), boardIndex, 0, mGlobalGlassPane, mDropManager, false);
             add(mGameBoards[boardIndex], constraints);
         }
 
@@ -317,7 +319,7 @@ public class PlayGamePanel extends ChessPanel {
         // mWhiteCapturePanel = createGrid(mWhiteCapturesJail, true).first;
 
         for (int teamIndex = 0; teamIndex < mGame.getTeams().length; teamIndex++) {
-            mJails[teamIndex] = new BoardPanel(BoardSize.withDimensions(jailBoardSize, jailBoardSize), 0, mGlobalGlassPane, mDropManager, true);
+            mJails[teamIndex] = new BoardPanel(BoardSize.withDimensions(jailBoardSize, jailBoardSize), 0, teamIndex, mGlobalGlassPane, mDropManager, true);
             mJails[teamIndex].setBorder(GuiUtility.createBorder(Messages.getString("PlayGamePanel.capturedPieces"))); //$NON-NLS-1$
             mJails[teamIndex].setLayout(new GridLayout(jailBoardSize, jailBoardSize));
             mJails[teamIndex].setPreferredSize(new Dimension((jailBoardSize + 1) * 25, (jailBoardSize + 1) * 25));
@@ -383,15 +385,7 @@ public class PlayGamePanel extends ChessPanel {
     }
 
     private int getJailDimension() {
-        double size = 0;
-        Team[] teams = mGame.getTeams();
-
-        for (int i = 0; i < teams.length; i++) {
-            if (teams[i].getTotalTeamSize() > size)
-                size = teams[i].getTotalTeamSize();
-        }
-
-        return Math.max((int) Math.ceil(Math.sqrt(size)), 4);
+        return 4;
     }
 
     public void setNextMoveMustPlacePiece(boolean nextMoveMustPlacePiece) {
@@ -429,23 +423,6 @@ public class PlayGamePanel extends ChessPanel {
             return labels;
         } else
             return null;
-    }
-
-    public static void updateJailSquares() {
-        Team[] teams = GameController.getGame().getTeams();
-        for (int teamCount = 0; teamCount < teams.length; teamCount++) {
-            int column = 1;
-            int row = 1;
-            for (Piece piece : teams[teamCount].getCapturedOpposingPieces()) {
-                int boardIndex = teamCount + GameController.getGame().getBoards().length;
-                piece.setCoordinates(ChessCoordinate.at(row, column, boardIndex));
-                column++;
-                if (column == 5) {
-                    column = 1;
-                    row++;
-                }
-            }
-        }
     }
 
     private static final long serialVersionUID = -2507232401817253688L;

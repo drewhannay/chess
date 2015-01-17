@@ -65,11 +65,11 @@ public class CustomBoardPanel extends ChessPanel {
         mDimensionsLabel = GuiUtility.createJLabel(Messages.getString("CustomBoardPanel.dimensions")); //$NON-NLS-1$
         mNumberOfRowsLabel = GuiUtility.createJLabel(Messages.getString("CustomBoardPanel.rows")); //$NON-NLS-1$
         mNumberOfRowsTextField = new JTextField(5);
-        mNumberOfRowsTextField.setText(board[0].getRowCount() + Messages.getString("CustomBoardPanel.empty")); //$NON-NLS-1$
+        mNumberOfRowsTextField.setText(board[0].getBoardSize().height + Messages.getString("CustomBoardPanel.empty")); //$NON-NLS-1$
         mNumberOfRowsTextField.setToolTipText(Messages.getString("CustomBoardPanel.enterRowAmount")); //$NON-NLS-1$
         mNumberOfColumnsLabel = GuiUtility.createJLabel(Messages.getString("CustomBoardPanel.columns")); //$NON-NLS-1$
         mNumberOfColumnsTextField = new JTextField(5);
-        mNumberOfColumnsTextField.setText(board[0].getColumnCount() + Messages.getString("CustomBoardPanel.empty")); //$NON-NLS-1$
+        mNumberOfColumnsTextField.setText(board[0].getBoardSize().width + Messages.getString("CustomBoardPanel.empty")); //$NON-NLS-1$
         mNumberOfColumnsTextField.setToolTipText(Messages.getString("CustomBoardPanel.amountOfColumns")); //$NON-NLS-1$
 
         JPanel rowCol = new JPanel();
@@ -138,16 +138,15 @@ public class CustomBoardPanel extends ChessPanel {
                 Board[] oldBoards = new Board[1];//variant.getBuilder().getBoards();
                 int change = NO_CHANGES;
 
-                if (oldBoards[0].isWrapAroundBoard() != mWrapAroundCheckBox.isSelected())
-                    change = WRAP_ONLY;
+//                s    change = WRAP_ONLY;
 
                 if (mTwoBoardsButton.isSelected() && oldBoards.length != 2)
                     change = SHAPE_CHANGE;
                 else if (!mTwoBoardsButton.isSelected() && oldBoards.length != 1)
                     change = SHAPE_CHANGE;
-                else if (oldBoards[0].getColumnCount() != Integer.parseInt(mNumberOfColumnsTextField.getText()))
+                else if (oldBoards[0].getBoardSize().width != Integer.parseInt(mNumberOfColumnsTextField.getText()))
                     change = SHAPE_CHANGE;
-                else if (oldBoards[0].getRowCount() != Integer.parseInt(mNumberOfRowsTextField.getText()))
+                else if (oldBoards[0].getBoardSize().height != Integer.parseInt(mNumberOfRowsTextField.getText()))
                     change = SHAPE_CHANGE;
 
                 return change;

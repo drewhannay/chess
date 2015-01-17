@@ -7,7 +7,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public final class Team {
@@ -33,16 +32,6 @@ public final class Team {
 
     public PiecePromoter getPiecePromoter() {
         return mPiecePromoter;
-    }
-
-    @Deprecated
-    public List<Piece> getPieces() {
-        return null;
-    }
-
-    @Deprecated
-    public int getTotalTeamSize() {
-        return 0;
     }
 
     public Collection<Piece> getCapturedOpposingPieces() {

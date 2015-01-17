@@ -113,19 +113,4 @@ public final class Board {
             Preconditions.checkArgument(coordinate.isValid(mBoardSize));
         }
     }
-
-    @Deprecated
-    public boolean isWrapAroundBoard() {
-        return false;
-    }
-
-    @Deprecated
-    public int getRowCount() {
-        return mBoardSize.height;
-    }
-
-    @Deprecated
-    public int getColumnCount() {
-        return mBoardSize.width;
-    }
 }
