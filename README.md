@@ -43,6 +43,7 @@ IntelliJ provides Gradle project support out of the box, which is why it's our r
 * Choose "Import project from external model" and select "Gradle"
 * On the next screen, choose "Use customizable gradle wrapper" and click "Finish"
 * IntelliJ will do some work to set up the Gradle project and then you're done!
+* Note: if you want to run and debug the project directly from IntelliJ, you can right click on the "Driver" file in the gui package of the Desktop module and click "Run Driver.main()" or "Debug Driver.main()"
 
 #### Eclipse
 Eclipse doesn't support Gradle by default, so we need to do a little extra work to get things ready.
