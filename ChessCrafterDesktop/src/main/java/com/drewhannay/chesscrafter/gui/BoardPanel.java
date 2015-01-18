@@ -36,7 +36,7 @@ public class BoardPanel extends JPanel {
             label.setHorizontalAlignment(SwingConstants.CENTER);
             add(label);
             for (int x = boardSize.width; x > 0; x--) {
-                SquareJLabel square = new SquareJLabel(ChessCoordinate.at(x, y), true, 48);
+                SquareJLabel square = new SquareJLabel(BoardCoordinate.at(x, y), true, 48);
                 square.addMouseMotionListener(new MotionAdapter(mGlassPane));
                 square.addMouseListener(new SquareListener(square, mDropManager, mGlassPane));
                 add(square);
@@ -60,7 +60,7 @@ public class BoardPanel extends JPanel {
         for (int x = 0; x < mSquareLabels.length; x++) {
             for (int y = 0; y < mSquareLabels[x].length; y++) {
                 SquareJLabel square = mSquareLabels[x][y];
-                square.setPiece(board.getPiece(ChessCoordinate.at(x + 1, y + 1)));
+                square.setPiece(board.getPiece(BoardCoordinate.at(x + 1, y + 1)));
             }
         }
     }
@@ -89,16 +89,16 @@ public class BoardPanel extends JPanel {
     private void createJailGrid(BoardSize boardSize) {
         for (int x = 1; x <= boardSize.width; x++) {
             for (int y = 1; y <= boardSize.height; y++) {
-                SquareJLabel square = new SquareJLabel(ChessCoordinate.at(x, y), true, 25);
+                SquareJLabel square = new SquareJLabel(BoardCoordinate.at(x, y), true, 25);
                 add(square);
                 mSquareLabels[x - 1][y - 1] = square;
             }
         }
     }
 
-    public List<SquareJLabel> highlightSquares(Set<ChessCoordinate> coordinates) {
+    public List<SquareJLabel> highlightSquares(Set<BoardCoordinate> coordinates) {
         List<SquareJLabel> toHighlight = Lists.newArrayList();
-        for (ChessCoordinate coordinate : coordinates) {
+        for (BoardCoordinate coordinate : coordinates) {
             SquareJLabel label = mSquareLabels[coordinate.x - 1][coordinate.y - 1];
             label.highlight();
             toHighlight.add(label);

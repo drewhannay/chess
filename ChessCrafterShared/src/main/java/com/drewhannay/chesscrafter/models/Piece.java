@@ -50,7 +50,7 @@ public final class Piece {
         mMoveCount--;
     }
 
-    public Set<ChessCoordinate> getMovesFrom(@NotNull ChessCoordinate coordinate, @NotNull BoardSize boardSize) {
+    public Set<BoardCoordinate> getMovesFrom(@NotNull BoardCoordinate coordinate, @NotNull BoardSize boardSize) {
         return mPieceType.getMovesFrom(coordinate, boardSize, mMoveCount);
     }
 

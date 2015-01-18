@@ -26,49 +26,49 @@ public class Board_GetMovesFrom_Given_ClassicChess_Should {
 
     @Test
     public void returnASetOfMovesForAPawnContainingOneSpaceAhead() {
-        Set<ChessCoordinate> moves = mTarget.getMovesFrom(ChessCoordinate.at(1, 2));
-        assertTrue(moves.contains(ChessCoordinate.at(1, 3)));
+        Set<BoardCoordinate> moves = mTarget.getMovesFrom(BoardCoordinate.at(1, 2));
+        assertTrue(moves.contains(BoardCoordinate.at(1, 3)));
     }
 
     @Test
     public void returnASetOfMovesForAPawnContainingTwoSpacesAhead() {
-        Set<ChessCoordinate> moves = mTarget.getMovesFrom(ChessCoordinate.at(1, 2));
-        assertTrue(moves.contains(ChessCoordinate.at(1, 4)));
+        Set<BoardCoordinate> moves = mTarget.getMovesFrom(BoardCoordinate.at(1, 2));
+        assertTrue(moves.contains(BoardCoordinate.at(1, 4)));
     }
 
     @Test
     public void returnEmptySetForRookAt1_1() {
-        Set<ChessCoordinate> moves = mTarget.getMovesFrom(ChessCoordinate.at(1, 1));
+        Set<BoardCoordinate> moves = mTarget.getMovesFrom(BoardCoordinate.at(1, 1));
         assertTrue(moves.isEmpty());
     }
 
     @Test
     public void returnEmptySetForRookAt8_1() {
-        Set<ChessCoordinate> moves = mTarget.getMovesFrom(ChessCoordinate.at(8, 1));
+        Set<BoardCoordinate> moves = mTarget.getMovesFrom(BoardCoordinate.at(8, 1));
         assertTrue(moves.isEmpty());
     }
 
     @Test
     public void returnEmptySetForRookAt8_8() {
-        Set<ChessCoordinate> moves = mTarget.getMovesFrom(ChessCoordinate.at(8, 8));
+        Set<BoardCoordinate> moves = mTarget.getMovesFrom(BoardCoordinate.at(8, 8));
         assertTrue(moves.isEmpty());
     }
 
     @Test
     public void returnSetWith3_3ForKnightAt2_1() {
-        Set<ChessCoordinate> moves = mTarget.getMovesFrom(ChessCoordinate.at(2, 1));
-        assertTrue(moves.contains(ChessCoordinate.at(3, 3)));
+        Set<BoardCoordinate> moves = mTarget.getMovesFrom(BoardCoordinate.at(2, 1));
+        assertTrue(moves.contains(BoardCoordinate.at(3, 3)));
     }
 
     @Test
     public void returnSetWith1_3ForKnightAt2_1() {
-        Set<ChessCoordinate> moves = mTarget.getMovesFrom(ChessCoordinate.at(2, 1));
-        assertTrue(moves.contains(ChessCoordinate.at(1, 3)));
+        Set<BoardCoordinate> moves = mTarget.getMovesFrom(BoardCoordinate.at(2, 1));
+        assertTrue(moves.contains(BoardCoordinate.at(1, 3)));
     }
 
     @Test
     public void notReturn4_2ForKnightAt2_1() {
-        Set<ChessCoordinate> moves = mTarget.getMovesFrom(ChessCoordinate.at(2, 1));
-        assertFalse(moves.contains(ChessCoordinate.at(4, 2)));
+        Set<BoardCoordinate> moves = mTarget.getMovesFrom(BoardCoordinate.at(2, 1));
+        assertFalse(moves.contains(BoardCoordinate.at(4, 2)));
     }
 }

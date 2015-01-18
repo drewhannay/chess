@@ -5,7 +5,7 @@ import com.drewhannay.chesscrafter.dragNdrop.DropAdapter;
 import com.drewhannay.chesscrafter.dragNdrop.DropEvent;
 import com.drewhannay.chesscrafter.dragNdrop.DropManager;
 import com.drewhannay.chesscrafter.dragNdrop.GlassPane;
-import com.drewhannay.chesscrafter.models.ChessCoordinate;
+import com.drewhannay.chesscrafter.models.BoardCoordinate;
 import com.drewhannay.chesscrafter.models.Game;
 import com.drewhannay.chesscrafter.models.Piece;
 import com.drewhannay.chesscrafter.utility.PieceIconUtility;
@@ -68,7 +68,7 @@ public class SquareListener extends DropAdapter implements MouseListener, Prefer
 		 */
 
         Game game = GameController.getGame();
-        ChessCoordinate coordinates = mSquareLabel.getCoordinates();
+        BoardCoordinate coordinates = mSquareLabel.getCoordinates();
         if (game.getPiece(0, coordinates) == null || game.getPiece(0, coordinates).getTeamId() != game.getTurnKeeper().getActiveTeamId())
             return;
 

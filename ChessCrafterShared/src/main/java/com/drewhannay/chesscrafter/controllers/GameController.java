@@ -1,7 +1,7 @@
 package com.drewhannay.chesscrafter.controllers;
 
 import com.drewhannay.chesscrafter.models.Board;
-import com.drewhannay.chesscrafter.models.ChessCoordinate;
+import com.drewhannay.chesscrafter.models.BoardCoordinate;
 import com.drewhannay.chesscrafter.models.Game;
 import com.drewhannay.chesscrafter.models.Move;
 import com.google.common.base.Preconditions;
@@ -26,7 +26,7 @@ public final class GameController {
         Preconditions.checkArgument(sGame != null);
     }
 
-    public static Set<ChessCoordinate> getLegalDestinations(Board board, ChessCoordinate coordinate) {
+    public static Set<BoardCoordinate> getLegalDestinations(Board board, BoardCoordinate coordinate) {
         return board.getMovesFrom(coordinate);
     }
 

@@ -8,14 +8,14 @@ import static org.junit.Assert.*;
 
 public class Board_MovePiece_Given_ClassicWithoutPawns_Should {
     Board mTarget;
-    ChessCoordinate mOriginCoordinate;
-    ChessCoordinate mDestinationCoordinate;
+    BoardCoordinate mOriginCoordinate;
+    BoardCoordinate mDestinationCoordinate;
 
     @Before
     public void setup() {
         mTarget = new Board(BoardSize.CLASSIC_SIZE);
-        mOriginCoordinate = ChessCoordinate.at(1, 1);
-        mDestinationCoordinate = ChessCoordinate.at(1, 2);
+        mOriginCoordinate = BoardCoordinate.at(1, 1);
+        mDestinationCoordinate = BoardCoordinate.at(1, 2);
 
         GameBuilder.setupClassicPieces(mTarget, 1, Piece.TEAM_ONE);
         GameBuilder.setupClassicPieces(mTarget, 8, Piece.TEAM_TWO);
@@ -54,18 +54,18 @@ public class Board_MovePiece_Given_ClassicWithoutPawns_Should {
 
     @Test
     public void returnPieceWhenMovingRookFrom1_1To1_8() {
-        Piece capturedPiece = mTarget.movePiece(mOriginCoordinate, ChessCoordinate.at(1, 8));
+        Piece capturedPiece = mTarget.movePiece(mOriginCoordinate, BoardCoordinate.at(1, 8));
         assertNotNull(capturedPiece);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void throwExceptionForOutOfBoundsOriginArgument() {
-        mTarget.movePiece(ChessCoordinate.at(1, 9), mDestinationCoordinate);
+        mTarget.movePiece(BoardCoordinate.at(1, 9), mDestinationCoordinate);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void throwExceptionForOutOfBoundsDestinationArgument() {
-        mTarget.movePiece(mOriginCoordinate, ChessCoordinate.at(10, 10));
+        mTarget.movePiece(mOriginCoordinate, BoardCoordinate.at(10, 10));
     }
 
     @Test(expected = IllegalArgumentException.class)

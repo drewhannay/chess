@@ -1,7 +1,6 @@
 package com.drewhannay.chesscrafter.gui;
 
-import com.drewhannay.chesscrafter.controllers.GameController;
-import com.drewhannay.chesscrafter.models.ChessCoordinate;
+import com.drewhannay.chesscrafter.models.BoardCoordinate;
 import com.drewhannay.chesscrafter.models.Piece;
 import com.drewhannay.chesscrafter.utility.GuiUtility;
 import com.drewhannay.chesscrafter.utility.PieceIconUtility;
@@ -14,15 +13,15 @@ public class SquareJLabel extends JLabel {
     public static final Color HIGHLIGHT_COLOR = new Color(20, 129, 191);
     public static final Color THREAT_COLOR = new Color(120, 20, 20);
 
-    public SquareJLabel(ChessCoordinate coordinates, boolean isHabitable, int imageScale) {
-        mChessCoordinate = coordinates;
+    public SquareJLabel(BoardCoordinate coordinates, boolean isHabitable, int imageScale) {
+        mBoardCoordinate = coordinates;
         mIsHabitable = isHabitable;
         mImageScale = imageScale;
         setOpaque(true);
     }
 
-    public ChessCoordinate getCoordinates() {
-        return mChessCoordinate;
+    public BoardCoordinate getCoordinates() {
+        return mBoardCoordinate;
     }
 
     public Color getColor() {
@@ -100,8 +99,8 @@ public class SquareJLabel extends JLabel {
         }
         setBorder(null);
         // Otherwise make our normal light/dark pattern.
-        if ((mChessCoordinate.y % 2 != 0 && mChessCoordinate.x % 2 != 0)
-                || (mChessCoordinate.y % 2 == 0 && mChessCoordinate.x % 2 == 0)) {
+        if ((mBoardCoordinate.y % 2 != 0 && mBoardCoordinate.x % 2 != 0)
+                || (mBoardCoordinate.y % 2 == 0 && mBoardCoordinate.x % 2 == 0)) {
             setBackground(Color.LIGHT_GRAY);
             setForeground(Color.getHSBColor(30, 70, 70));
         } else {
@@ -137,7 +136,7 @@ public class SquareJLabel extends JLabel {
 
     private Color mBackgroundColor;
 
-    private final ChessCoordinate mChessCoordinate;
+    private final BoardCoordinate mBoardCoordinate;
     private Piece mPiece;
     private boolean mIsHabitable;
     private int mImageScale;

@@ -5,11 +5,11 @@ import org.jetbrains.annotations.NotNull;
 
 public final class Move {
 
-    public final ChessCoordinate origin;
-    public final ChessCoordinate destination;
+    public final BoardCoordinate origin;
+    public final BoardCoordinate destination;
     public final PieceType promotionType;
 
-    private Move(ChessCoordinate origin, ChessCoordinate destination) {
+    private Move(BoardCoordinate origin, BoardCoordinate destination) {
         Preconditions.checkArgument(origin != null);
         Preconditions.checkArgument(destination != null);
 
@@ -18,7 +18,7 @@ public final class Move {
         this.promotionType = null;
     }
 
-    static Move from(@NotNull ChessCoordinate origin, @NotNull ChessCoordinate destination) {
+    static Move from(@NotNull BoardCoordinate origin, @NotNull BoardCoordinate destination) {
         return new Move(origin, destination);
     }
 }

@@ -43,13 +43,13 @@ public class PieceType {
         return mName;
     }
 
-    public Set<ChessCoordinate> getMovesFrom(@NotNull ChessCoordinate startLocation,
+    public Set<BoardCoordinate> getMovesFrom(@NotNull BoardCoordinate startLocation,
                                              @NotNull BoardSize boardSize, int moveCount) {
         if (getName().equals(PAWN_NAME)) {
             return getPawnMovesFrom(startLocation, boardSize, moveCount);
         }
 
-        Set<ChessCoordinate> moves = new HashSet<>();
+        Set<BoardCoordinate> moves = new HashSet<>();
 
         for (Direction direction : mMovements.keySet()) {
             PathMaker pathMaker = new PathMaker(startLocation, direction.getFurthestPoint(startLocation, boardSize));
@@ -57,13 +57,13 @@ public class PieceType {
         }
 
         for (TwoHopMovement twoHopMovement : mTwoHopMovements) {
-            Set<ChessCoordinate> allMoves = new HashSet<>();
+            Set<BoardCoordinate> allMoves = new HashSet<>();
 
             for (int quadrant = 1; quadrant <= 4; quadrant++) {
                 allMoves.addAll(getQuadrantMoves(startLocation, twoHopMovement, quadrant));
             }
 
-            for (ChessCoordinate move : allMoves) {
+            for (BoardCoordinate move : allMoves) {
                 if (move.isValid(boardSize)) {
                     moves.add(move);
                 }
@@ -73,26 +73,26 @@ public class PieceType {
         return moves;
     }
 
-    private Set<ChessCoordinate> getPawnMovesFrom(@NotNull ChessCoordinate startLocation,
+    private Set<BoardCoordinate> getPawnMovesFrom(@NotNull BoardCoordinate startLocation,
                                                   @NotNull BoardSize boardSize, int moveCount) {
-        Set<ChessCoordinate> moves = new HashSet<>(2);
-        moves.add(ChessCoordinate.at(startLocation.x, startLocation.y + 1));
+        Set<BoardCoordinate> moves = new HashSet<>(2);
+        moves.add(BoardCoordinate.at(startLocation.x, startLocation.y + 1));
         if (moveCount == 0) {
-            moves.add(ChessCoordinate.at(startLocation.x, startLocation.y + 2));
+            moves.add(BoardCoordinate.at(startLocation.x, startLocation.y + 2));
         }
         return moves;
     }
 
 
-    private Set<ChessCoordinate> getQuadrantMoves(@NotNull ChessCoordinate coordinate,
+    private Set<BoardCoordinate> getQuadrantMoves(@NotNull BoardCoordinate coordinate,
                                                   @NotNull TwoHopMovement movement,
                                                   int quadrant) {
         int xMultiplier = quadrant == 1 || quadrant == 4 ? 1 : -1;
         int yMultiplier = quadrant == 1 || quadrant == 2 ? 1 : -1;
 
-        Set<ChessCoordinate> moves = new HashSet<>(2);
-        moves.add(ChessCoordinate.at(coordinate.x + movement.x * xMultiplier, coordinate.y + movement.y * yMultiplier));
-        moves.add(ChessCoordinate.at(coordinate.x + movement.y * xMultiplier, coordinate.y + movement.x * yMultiplier));
+        Set<BoardCoordinate> moves = new HashSet<>(2);
+        moves.add(BoardCoordinate.at(coordinate.x + movement.x * xMultiplier, coordinate.y + movement.y * yMultiplier));
+        moves.add(BoardCoordinate.at(coordinate.x + movement.y * xMultiplier, coordinate.y + movement.x * yMultiplier));
         return moves;
     }
 

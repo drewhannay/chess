@@ -3,7 +3,7 @@ package com.drewhannay.chesscrafter.dragNdrop;
 import com.drewhannay.chesscrafter.controllers.GameController;
 import com.drewhannay.chesscrafter.gui.PlayGamePanel;
 import com.drewhannay.chesscrafter.gui.SquareJLabel;
-import com.drewhannay.chesscrafter.models.ChessCoordinate;
+import com.drewhannay.chesscrafter.models.BoardCoordinate;
 import com.drewhannay.chesscrafter.models.MoveBuilder;
 import com.google.common.collect.ImmutableList;
 
@@ -28,8 +28,8 @@ public class DropManager extends AbstractDropManager {
             return;
         }
 
-        ChessCoordinate origin = originSquareLabel.getCoordinates();
-        ChessCoordinate destination = destinationSquareLabel.getCoordinates();
+        BoardCoordinate origin = originSquareLabel.getCoordinates();
+        BoardCoordinate destination = destinationSquareLabel.getCoordinates();
 
         MoveBuilder moveBuilder = new MoveBuilder(origin, destination);
         GameController.playMove(moveBuilder.build());

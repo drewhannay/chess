@@ -20,13 +20,13 @@ public class Board_RemovePiece_Given_ClassicWithoutPawns_Should {
 
     @Test
     public void resultInGetPieceFor1_1BeingNullWhenCalledWith1_1() {
-        mTarget.removePiece(ChessCoordinate.at(1, 1));
+        mTarget.removePiece(BoardCoordinate.at(1, 1));
 
-        assertNull(mTarget.getPiece(ChessCoordinate.at(1, 1)));
+        assertNull(mTarget.getPiece(BoardCoordinate.at(1, 1)));
     }
 
     @Test(expected = IllegalStateException.class)
     public void throwExceptionWhenCalledWith1_2() {
-        mTarget.removePiece(ChessCoordinate.at(1, 2));
+        mTarget.removePiece(BoardCoordinate.at(1, 2));
     }
 }

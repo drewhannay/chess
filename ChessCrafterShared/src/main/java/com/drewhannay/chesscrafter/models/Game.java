@@ -38,7 +38,7 @@ public final class Game {
         return mTurnKeeper;
     }
 
-    public Piece getPiece(int boardIndex, ChessCoordinate coordinates) {
+    public Piece getPiece(int boardIndex, BoardCoordinate coordinates) {
         Preconditions.checkPositionIndex(boardIndex, mBoards.length);
 
         return mBoards[boardIndex].getPiece(coordinates);

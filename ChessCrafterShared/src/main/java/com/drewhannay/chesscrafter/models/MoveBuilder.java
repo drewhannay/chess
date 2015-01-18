@@ -5,10 +5,10 @@ import org.jetbrains.annotations.NotNull;
 
 public final class MoveBuilder {
 
-    private final ChessCoordinate mOrigin;
-    private final ChessCoordinate mDestination;
+    private final BoardCoordinate mOrigin;
+    private final BoardCoordinate mDestination;
 
-    public MoveBuilder(@NotNull ChessCoordinate origin, @NotNull ChessCoordinate destination) {
+    public MoveBuilder(@NotNull BoardCoordinate origin, @NotNull BoardCoordinate destination) {
         Preconditions.checkArgument(origin != null);
         Preconditions.checkArgument(destination != null);
 

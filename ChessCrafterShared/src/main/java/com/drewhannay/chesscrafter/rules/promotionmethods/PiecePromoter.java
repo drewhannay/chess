@@ -1,7 +1,7 @@
 package com.drewhannay.chesscrafter.rules.promotionmethods;
 
 import com.drewhannay.chesscrafter.models.BoardSize;
-import com.drewhannay.chesscrafter.models.ChessCoordinate;
+import com.drewhannay.chesscrafter.models.BoardCoordinate;
 import com.drewhannay.chesscrafter.models.Piece;
 import com.drewhannay.chesscrafter.models.PieceType;
 import com.google.common.base.Preconditions;
@@ -19,10 +19,10 @@ import java.util.Stack;
 public class PiecePromoter {
 
     private final Map<PieceType, Set<PieceType>> mPromotionMap;
-    private final Map<Integer, Set<ChessCoordinate>> mPromotionCoordinateMap;
+    private final Map<Integer, Set<BoardCoordinate>> mPromotionCoordinateMap;
     private final Stack<Piece> mPromotionStack;
 
-    public PiecePromoter(@NotNull Map<Integer, Set<ChessCoordinate>> promotionCoordinateMap,
+    public PiecePromoter(@NotNull Map<Integer, Set<BoardCoordinate>> promotionCoordinateMap,
                          @NotNull Map<PieceType, Set<PieceType>> promotionMap) {
         mPromotionCoordinateMap = ImmutableMap.copyOf(promotionCoordinateMap);
         mPromotionMap = ImmutableMap.copyOf(promotionMap);
@@ -30,12 +30,12 @@ public class PiecePromoter {
     }
 
     public static PiecePromoter createClassicPiecePromoter(int promotionRow) {
-        Set<ChessCoordinate> promotionCoordinates = new HashSet<>();
+        Set<BoardCoordinate> promotionCoordinates = new HashSet<>();
         for (int i = 1; i < BoardSize.CLASSIC_SIZE.width; i++) {
-            promotionCoordinates.add(ChessCoordinate.at(i, promotionRow));
+            promotionCoordinates.add(BoardCoordinate.at(i, promotionRow));
         }
 
-        Map<Integer, Set<ChessCoordinate>> promotionCoordinateMap = ImmutableMap.of(0, promotionCoordinates);
+        Map<Integer, Set<BoardCoordinate>> promotionCoordinateMap = ImmutableMap.of(0, promotionCoordinates);
 
         Map<PieceType, Set<PieceType>> promotionMap = Maps.newHashMap();
         promotionMap.put(PieceType.getPawnPieceType(), Sets.newHashSet(
@@ -48,7 +48,7 @@ public class PiecePromoter {
         return new PiecePromoter(promotionCoordinateMap, promotionMap);
     }
 
-    public boolean isPiecePromotable(int boardIndex, @NotNull ChessCoordinate coordinate, @NotNull Piece piece) {
+    public boolean isPiecePromotable(int boardIndex, @NotNull BoardCoordinate coordinate, @NotNull Piece piece) {
         return getPieceTypeByName(piece.getName()) != null && mPromotionCoordinateMap.get(boardIndex).contains(coordinate);
     }
 

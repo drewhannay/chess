@@ -55,21 +55,21 @@ public class GameBuilder {
 
     public static void setupClassicPawns(Board target, int row, int teamId) {
         for (int x = 1; x <= BoardSize.CLASSIC_SIZE.width; x++)
-            target.addPiece(Piece.newPawn(teamId), ChessCoordinate.at(x, row));
+            target.addPiece(Piece.newPawn(teamId), BoardCoordinate.at(x, row));
     }
 
     public static void setupClassicPieces(Board target, int row, int teamId) {
-        target.addPiece(Piece.newRook(teamId), ChessCoordinate.at(1, row));
-        target.addPiece(Piece.newRook(teamId), ChessCoordinate.at(8, row));
+        target.addPiece(Piece.newRook(teamId), BoardCoordinate.at(1, row));
+        target.addPiece(Piece.newRook(teamId), BoardCoordinate.at(8, row));
 
-        target.addPiece(Piece.newKnight(teamId), ChessCoordinate.at(2, row));
-        target.addPiece(Piece.newKnight(teamId), ChessCoordinate.at(7, row));
+        target.addPiece(Piece.newKnight(teamId), BoardCoordinate.at(2, row));
+        target.addPiece(Piece.newKnight(teamId), BoardCoordinate.at(7, row));
 
-        target.addPiece(Piece.newBishop(teamId), ChessCoordinate.at(3, row));
-        target.addPiece(Piece.newBishop(teamId), ChessCoordinate.at(6, row));
+        target.addPiece(Piece.newBishop(teamId), BoardCoordinate.at(3, row));
+        target.addPiece(Piece.newBishop(teamId), BoardCoordinate.at(6, row));
 
-        target.addPiece(Piece.newQueen(teamId), ChessCoordinate.at(4, row));
-        target.addPiece(Piece.newKing(teamId, true), ChessCoordinate.at(5, row));
+        target.addPiece(Piece.newQueen(teamId), BoardCoordinate.at(4, row));
+        target.addPiece(Piece.newKing(teamId, true), BoardCoordinate.at(5, row));
     }
 
     @NotNull

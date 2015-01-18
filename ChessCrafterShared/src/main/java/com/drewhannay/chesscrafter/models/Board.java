@@ -23,7 +23,7 @@ public final class Board {
         return mBoardSize;
     }
 
-    public void addPiece(@NotNull Piece piece, @NotNull ChessCoordinate location) {
+    public void addPiece(@NotNull Piece piece, @NotNull BoardCoordinate location) {
         //noinspection ConstantConditions
         Preconditions.checkArgument(piece != null);
         Preconditions.checkArgument(location.isValid(mBoardSize));
@@ -31,23 +31,23 @@ public final class Board {
         setPiece(piece, location);
     }
 
-    public void removePiece(@NotNull ChessCoordinate coordinateForRemoval) {
+    public void removePiece(@NotNull BoardCoordinate coordinateForRemoval) {
         Preconditions.checkState(doesPieceExistAt(coordinateForRemoval));
 
         setPiece(null, coordinateForRemoval);
     }
 
     @Nullable
-    public Piece undoMovePiece(@NotNull ChessCoordinate origin, @NotNull ChessCoordinate destination) {
+    public Piece undoMovePiece(@NotNull BoardCoordinate origin, @NotNull BoardCoordinate destination) {
         return movePieceImpl(origin, destination, false);
     }
 
     @Nullable
-    public Piece movePiece(@NotNull ChessCoordinate origin, @NotNull ChessCoordinate destination) {
+    public Piece movePiece(@NotNull BoardCoordinate origin, @NotNull BoardCoordinate destination) {
         return movePieceImpl(origin, destination, true);
     }
 
-    private Piece movePieceImpl(@NotNull ChessCoordinate origin, @NotNull ChessCoordinate destination, boolean incrementMoveCount) {
+    private Piece movePieceImpl(@NotNull BoardCoordinate origin, @NotNull BoardCoordinate destination, boolean incrementMoveCount) {
         verifyCoordinatesOrThrow(origin, destination);
 
         Piece pieceToCapture = getPiece(destination);
@@ -65,29 +65,29 @@ public final class Board {
         return pieceToCapture;
     }
 
-    public boolean doesPieceExistAt(@NotNull ChessCoordinate coordinateToCheck) {
+    public boolean doesPieceExistAt(@NotNull BoardCoordinate coordinateToCheck) {
         return getPiece(coordinateToCheck) != null;
     }
 
-    private boolean doesFriendlyPieceExistAt(ChessCoordinate origin, ChessCoordinate destination) {
+    private boolean doesFriendlyPieceExistAt(BoardCoordinate origin, BoardCoordinate destination) {
         Piece piece = getPiece(destination);
         return piece != null && piece.getTeamId() == getPiece(origin).getTeamId();
     }
 
-    public Piece getPiece(@NotNull ChessCoordinate coordinateToRetrieve) {
+    public Piece getPiece(@NotNull BoardCoordinate coordinateToRetrieve) {
         return mPieces[coordinateToRetrieve.x - 1][coordinateToRetrieve.y - 1];
     }
 
-    private void setPiece(@Nullable Piece piece, @NotNull ChessCoordinate location) {
+    private void setPiece(@Nullable Piece piece, @NotNull BoardCoordinate location) {
         mPieces[location.x - 1][location.y - 1] = piece;
     }
 
-    public Set<ChessCoordinate> getMovesFrom(ChessCoordinate originCoordinate) {
+    public Set<BoardCoordinate> getMovesFrom(BoardCoordinate originCoordinate) {
         Piece piece = getPiece(originCoordinate);
-        Set<ChessCoordinate> allPossibleMoves = Sets.newHashSet(piece.getMovesFrom(originCoordinate, mBoardSize));
+        Set<BoardCoordinate> allPossibleMoves = Sets.newHashSet(piece.getMovesFrom(originCoordinate, mBoardSize));
 
-        Set<ChessCoordinate> validMoves = Sets.newHashSetWithExpectedSize(allPossibleMoves.size());
-        for (ChessCoordinate move : allPossibleMoves) {
+        Set<BoardCoordinate> validMoves = Sets.newHashSetWithExpectedSize(allPossibleMoves.size());
+        for (BoardCoordinate move : allPossibleMoves) {
             if (!isBlocked(originCoordinate, move) && !doesFriendlyPieceExistAt(originCoordinate, move)) {
                 validMoves.add(move);
             }
@@ -96,11 +96,11 @@ public final class Board {
         return validMoves;
     }
 
-    private boolean isBlocked(ChessCoordinate origin, ChessCoordinate destination) {
+    private boolean isBlocked(BoardCoordinate origin, BoardCoordinate destination) {
         PathMaker pathMaker = new PathMaker(origin, destination);
-        List<ChessCoordinate> spacesAlongPath = pathMaker.getPathToDestination();
-        ChessCoordinate lastSpace = spacesAlongPath.isEmpty() ? null : spacesAlongPath.get(spacesAlongPath.size() - 1);
-        for (ChessCoordinate space : spacesAlongPath) {
+        List<BoardCoordinate> spacesAlongPath = pathMaker.getPathToDestination();
+        BoardCoordinate lastSpace = spacesAlongPath.isEmpty() ? null : spacesAlongPath.get(spacesAlongPath.size() - 1);
+        for (BoardCoordinate space : spacesAlongPath) {
             if (doesFriendlyPieceExistAt(origin, space) || (doesPieceExistAt(space) && !space.equals(lastSpace))) {
                 return true;
             }
@@ -108,8 +108,8 @@ public final class Board {
         return false;
     }
 
-    private void verifyCoordinatesOrThrow(@NotNull ChessCoordinate... coordinates) {
-        for (ChessCoordinate coordinate : coordinates) {
+    private void verifyCoordinatesOrThrow(@NotNull BoardCoordinate... coordinates) {
+        for (BoardCoordinate coordinate : coordinates) {
             Preconditions.checkArgument(coordinate.isValid(mBoardSize));
         }
     }

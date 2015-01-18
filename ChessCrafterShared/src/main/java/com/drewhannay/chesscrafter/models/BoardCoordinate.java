@@ -2,17 +2,17 @@ package com.drewhannay.chesscrafter.models;
 
 import java.util.Objects;
 
-public final class ChessCoordinate {
+public final class BoardCoordinate {
     public final int x;
     public final int y;
 
-    private ChessCoordinate(int x, int y) {
+    private BoardCoordinate(int x, int y) {
         this.x = x;
         this.y = y;
     }
 
-    public static ChessCoordinate at(int x, int y) {
-        return new ChessCoordinate(x, y);
+    public static BoardCoordinate at(int x, int y) {
+        return new BoardCoordinate(x, y);
     }
 
     public boolean isValid(BoardSize boardSize) {
@@ -23,15 +23,15 @@ public final class ChessCoordinate {
         return dimensionValue > 0 && dimensionValue <= boardSize;
     }
 
-    public boolean isOnSameVerticalPathAs(ChessCoordinate other) {
+    public boolean isOnSameVerticalPathAs(BoardCoordinate other) {
         return x == other.x;
     }
 
-    public boolean isOnSameHorizontalPathAs(ChessCoordinate other) {
+    public boolean isOnSameHorizontalPathAs(BoardCoordinate other) {
         return y == other.y;
     }
 
-    public boolean isOnSameDiagonalPathAs(ChessCoordinate other) {
+    public boolean isOnSameDiagonalPathAs(BoardCoordinate other) {
         return Math.abs(x - other.x) == Math.abs(y - other.y);
     }
 
@@ -40,7 +40,7 @@ public final class ChessCoordinate {
         if (obj == null || obj.getClass() != this.getClass())
             return false;
 
-        ChessCoordinate other = (ChessCoordinate) obj;
+        BoardCoordinate other = (BoardCoordinate) obj;
 
         return x == other.x && y == other.y;
     }
@@ -52,6 +52,6 @@ public final class ChessCoordinate {
 
     @Override
     public String toString() {
-        return "ChessCoordinate{x=" + x + ", y=" + y + "}";
+        return "BoardCoordinate{x=" + x + ", y=" + y + "}";
     }
 }

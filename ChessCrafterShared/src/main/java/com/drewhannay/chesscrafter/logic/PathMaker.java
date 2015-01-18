@@ -1,25 +1,25 @@
 package com.drewhannay.chesscrafter.logic;
 
-import com.drewhannay.chesscrafter.models.ChessCoordinate;
+import com.drewhannay.chesscrafter.models.BoardCoordinate;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class PathMaker {
-    private final ChessCoordinate mOrigin;
-    private final ChessCoordinate mDestination;
+    private final BoardCoordinate mOrigin;
+    private final BoardCoordinate mDestination;
 
-    public PathMaker(ChessCoordinate origin, ChessCoordinate destination) {
+    public PathMaker(BoardCoordinate origin, BoardCoordinate destination) {
         mOrigin = origin;
         mDestination = destination;
     }
 
-    public List<ChessCoordinate> getPathToDestination() {
+    public List<BoardCoordinate> getPathToDestination() {
         return getPathToDestination(Integer.MAX_VALUE);
     }
 
-    public List<ChessCoordinate> getPathToDestination(int maxSteps) {
+    public List<BoardCoordinate> getPathToDestination(int maxSteps) {
         if (mOrigin.isOnSameHorizontalPathAs(mDestination)) {
             return getHorizontalPathSpaces(maxSteps);
         } else if (mOrigin.isOnSameVerticalPathAs(mDestination)) {
@@ -31,14 +31,14 @@ public class PathMaker {
         }
     }
 
-    private List<ChessCoordinate> getHorizontalPathSpaces(int maxSteps) {
+    private List<BoardCoordinate> getHorizontalPathSpaces(int maxSteps) {
         int least = Math.min(mOrigin.x, mDestination.x);
         int most = Math.max(mOrigin.x, mDestination.x);
 
-        List<ChessCoordinate> spaces = new ArrayList<>();
+        List<BoardCoordinate> spaces = new ArrayList<>();
         for (int x = least; x <= most; x++) {
             if (Math.abs(mOrigin.x - x) <= maxSteps) {
-                spaces.add(ChessCoordinate.at(x, mOrigin.y));
+                spaces.add(BoardCoordinate.at(x, mOrigin.y));
             }
         }
         // don't include mOrigin in the path
@@ -46,14 +46,14 @@ public class PathMaker {
         return spaces;
     }
 
-    private List<ChessCoordinate> getVerticalPathSpaces(int maxSteps) {
+    private List<BoardCoordinate> getVerticalPathSpaces(int maxSteps) {
         int least = Math.min(mOrigin.y, mDestination.y);
         int most = Math.max(mOrigin.y, mDestination.y);
 
-        List<ChessCoordinate> spaces = new ArrayList<>();
+        List<BoardCoordinate> spaces = new ArrayList<>();
         for (int y = least + 1; y <= most; y++) {
             if (Math.abs(mOrigin.y - y) <= maxSteps) {
-                spaces.add(ChessCoordinate.at(mOrigin.x, y));
+                spaces.add(BoardCoordinate.at(mOrigin.x, y));
             }
         }
         // don't include mOrigin in the path
@@ -61,14 +61,14 @@ public class PathMaker {
         return spaces;
     }
 
-    private List<ChessCoordinate> getDiagonalPathSpaces(int maxSteps) {
+    private List<BoardCoordinate> getDiagonalPathSpaces(int maxSteps) {
         int absoluteDistance = Math.abs(mOrigin.x - mDestination.x);
         int xDirection = (mDestination.x - mOrigin.x) / absoluteDistance;
         int yDirection = (mDestination.y - mOrigin.y) / absoluteDistance;
 
-        List<ChessCoordinate> spaces = new ArrayList<>();
+        List<BoardCoordinate> spaces = new ArrayList<>();
         for (int index = 1; index <= absoluteDistance && index <= maxSteps; index++) {
-            spaces.add(ChessCoordinate.at(mOrigin.x + index * xDirection, mOrigin.y + index * yDirection));
+            spaces.add(BoardCoordinate.at(mOrigin.x + index * xDirection, mOrigin.y + index * yDirection));
         }
         return spaces;
     }
