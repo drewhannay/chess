@@ -21,19 +21,19 @@ public class Board_AddPiece_Given_EmptyBoard_Should {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void throwExceptionWhenChessCoordinateHasLargerXValueThanBoardSize() {
+    public void throwExceptionWhenBoardCoordinateHasLargerXValueThanBoardSize() {
         BoardCoordinate coordinate = BoardCoordinate.at(9, 1);
         mTarget.addPiece(mPawn, coordinate);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void throwExceptionWhenChessCoordinateHasLargerYValueThanBoardSize() {
+    public void throwExceptionWhenBoardCoordinateHasLargerYValueThanBoardSize() {
         BoardCoordinate coordinate = BoardCoordinate.at(1, 9);
         mTarget.addPiece(mPawn, coordinate);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void throwExceptionWhenChessCoordinateHasZeroXValue() {
+    public void throwExceptionWhenBoardCoordinateHasZeroXValue() {
         BoardCoordinate coordinate = BoardCoordinate.at(0, 3);
         mTarget.addPiece(mPawn, coordinate);
     }
