@@ -10,12 +10,18 @@ public final class Piece {
 
     private final int mTeamId;
     private final PieceType mPieceType;
+    private final boolean mIsObjectivePiece;
 
     private int mMoveCount;
 
     public Piece(int teamId, PieceType pieceType) {
+        this(teamId, pieceType, false);
+    }
+
+    public Piece(int teamId, PieceType pieceType, boolean isObjectivePiece) {
         mTeamId = teamId;
         mPieceType = pieceType;
+        mIsObjectivePiece = isObjectivePiece;
 
         mMoveCount = 0;
     }
@@ -26,6 +32,10 @@ public final class Piece {
 
     public int getTeamId() {
         return mTeamId;
+    }
+
+    public boolean isObjectivePiece() {
+        return mIsObjectivePiece;
     }
 
     public boolean hasMoved() {
@@ -57,12 +67,12 @@ public final class Piece {
         return new Piece(teamId, PieceType.getBishopPieceType());
     }
 
-    public static Piece newKing() {
-        return newKing(TEAM_ONE);
+    public static Piece newKing(int teamId) {
+        return newKing(teamId, false);
     }
 
-    public static Piece newKing(int teamId) {
-        return new Piece(teamId, PieceType.getKingPieceType());
+    public static Piece newKing(int teamId, boolean isObjectivePiece) {
+        return new Piece(teamId, PieceType.getKingPieceType(), isObjectivePiece);
     }
 
     public static Piece newKnight() {

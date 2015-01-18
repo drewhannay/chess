@@ -69,7 +69,7 @@ public class GameBuilder {
         target.addPiece(Piece.newBishop(teamId), ChessCoordinate.at(6, row));
 
         target.addPiece(Piece.newQueen(teamId), ChessCoordinate.at(4, row));
-        target.addPiece(Piece.newKing(teamId), ChessCoordinate.at(5, row));
+        target.addPiece(Piece.newKing(teamId, true), ChessCoordinate.at(5, row));
     }
 
     @NotNull
