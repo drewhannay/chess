@@ -5,21 +5,14 @@ import java.util.Objects;
 public final class ChessCoordinate {
     public final int x;
     public final int y;
-    public final int boardIndex;
 
-    private ChessCoordinate(int x, int y, int boardIndex) {
+    private ChessCoordinate(int x, int y) {
         this.x = x;
         this.y = y;
-        this.boardIndex = boardIndex;
     }
 
     public static ChessCoordinate at(int x, int y) {
-        // TODO: keep or remove this method?
-        return ChessCoordinate.at(x, y, 0);
-    }
-
-    public static ChessCoordinate at(int x, int y, int boardIndex) {
-        return new ChessCoordinate(x, y, boardIndex);
+        return new ChessCoordinate(x, y);
     }
 
     public boolean isValid(BoardSize boardSize) {
@@ -49,18 +42,16 @@ public final class ChessCoordinate {
 
         ChessCoordinate other = (ChessCoordinate) obj;
 
-        return x == other.x &&
-                y == other.y &&
-                boardIndex == other.boardIndex;
+        return x == other.x && y == other.y;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(x, y, boardIndex);
+        return Objects.hash(x, y);
     }
 
     @Override
     public String toString() {
-        return "ChessCoordinate{x=" + x + ", y=" + y + ", boardIndex=" + boardIndex + "}";
+        return "ChessCoordinate{x=" + x + ", y=" + y + "}";
     }
 }

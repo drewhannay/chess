@@ -418,8 +418,8 @@ public class PlayGamePanel extends ChessPanel {
         Piece movingPiece = GameController.getGame().getPiece(boardIndex, coordinates);
         if (movingPiece != null && PreferenceUtility.getHighlightMovesPreference()) {
             Set<ChessCoordinate> legalDestinations = GameController.getLegalDestinations(getGame().getBoards()[boardIndex], coordinates);
-            List<SquareJLabel> labels = mGameBoards[coordinates.boardIndex].highlightSquares(legalDestinations);
-            mGameBoards[coordinates.boardIndex].repaint();
+            List<SquareJLabel> labels = mGameBoards[boardIndex].highlightSquares(legalDestinations);
+            mGameBoards[boardIndex].repaint();
             return labels;
         } else
             return null;
