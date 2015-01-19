@@ -85,13 +85,21 @@ public final class Board {
         mPieces[location.x - 1][location.y - 1] = piece;
     }
 
-    public Set<BoardCoordinate> getMovesFrom(BoardCoordinate originCoordinate) {
-        Piece piece = getPiece(originCoordinate);
-        Set<BoardCoordinate> allPossibleMoves = Sets.newHashSet(piece.getMovesFrom(originCoordinate, mBoardSize));
+    public Set<BoardCoordinate> getMovesFrom(BoardCoordinate origin) {
+        Piece piece = getPiece(origin);
 
+        Set<BoardCoordinate> allPossibleMoves = piece.getMovesFrom(origin, mBoardSize);
+        Set<BoardCoordinate> capturingMoves = piece.getCapturingMovesFrom(origin, mBoardSize);
         Set<BoardCoordinate> validMoves = Sets.newHashSetWithExpectedSize(allPossibleMoves.size());
+
         for (BoardCoordinate move : allPossibleMoves) {
-            if (!isBlocked(originCoordinate, move) && !doesFriendlyPieceExistAt(originCoordinate, move)) {
+            if (!isBlocked(origin, move) && !doesFriendlyPieceExistAt(origin, move)) {
+                validMoves.add(move);
+            }
+        }
+
+        for (BoardCoordinate move : capturingMoves) {
+            if (!isBlocked(origin, move) && doesPieceExistAt(move) && !doesFriendlyPieceExistAt(origin, move)) {
                 validMoves.add(move);
             }
         }

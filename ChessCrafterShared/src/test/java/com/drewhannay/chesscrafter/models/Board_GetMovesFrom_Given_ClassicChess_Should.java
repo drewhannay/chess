@@ -37,6 +37,50 @@ public class Board_GetMovesFrom_Given_ClassicChess_Should {
     }
 
     @Test
+    public void notReturn1_3ForAPawnAt2_2() {
+        Set<BoardCoordinate> moves = mTarget.getMovesFrom(BoardCoordinate.at(2, 2));
+        assertFalse(moves.contains(BoardCoordinate.at(1, 3)));
+    }
+
+    @Test
+    public void return1_3ForAPawnAt2_2WhenOpposingPawnIsAt1_3() {
+        mTarget.addPiece(Piece.newSouthFacingPawn(Piece.TEAM_TWO), BoardCoordinate.at(1, 3));
+
+        Set<BoardCoordinate> moves = mTarget.getMovesFrom(BoardCoordinate.at(2, 2));
+        assertTrue(moves.contains(BoardCoordinate.at(1, 3)));
+    }
+
+    @Test
+    public void return3_3ForAPawnAt2_2WhenOpposingPawnIsAt3_3() {
+        mTarget.addPiece(Piece.newSouthFacingPawn(Piece.TEAM_TWO), BoardCoordinate.at(3, 3));
+
+        Set<BoardCoordinate> moves = mTarget.getMovesFrom(BoardCoordinate.at(2, 2));
+        assertTrue(moves.contains(BoardCoordinate.at(3, 3)));
+    }
+
+    @Test
+    public void notReturn1_6ForAPawnAt2_7() {
+        Set<BoardCoordinate> moves = mTarget.getMovesFrom(BoardCoordinate.at(2, 7));
+        assertFalse(moves.contains(BoardCoordinate.at(1, 6)));
+    }
+
+    @Test
+    public void return1_6ForAPawnAt2_7WhenOpposingPawnIsAt1_6() {
+        mTarget.addPiece(Piece.newNorthFacingPawn(Piece.TEAM_ONE), BoardCoordinate.at(1, 6));
+
+        Set<BoardCoordinate> moves = mTarget.getMovesFrom(BoardCoordinate.at(2, 7));
+        assertTrue(moves.contains(BoardCoordinate.at(1, 6)));
+    }
+
+    @Test
+    public void return3_6ForAPawnAt2_7WhenOpposingPawnIsAt3_6() {
+        mTarget.addPiece(Piece.newNorthFacingPawn(Piece.TEAM_ONE), BoardCoordinate.at(3, 6));
+
+        Set<BoardCoordinate> moves = mTarget.getMovesFrom(BoardCoordinate.at(2, 7));
+        assertTrue(moves.contains(BoardCoordinate.at(3, 6)));
+    }
+
+    @Test
     public void returnEmptySetForRookAt1_1() {
         Set<BoardCoordinate> moves = mTarget.getMovesFrom(BoardCoordinate.at(1, 1));
         assertTrue(moves.isEmpty());

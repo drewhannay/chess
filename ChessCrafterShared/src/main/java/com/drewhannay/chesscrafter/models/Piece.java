@@ -54,6 +54,10 @@ public final class Piece {
         return mPieceType.getMovesFrom(coordinate, boardSize, mMoveCount);
     }
 
+    public Set<BoardCoordinate> getCapturingMovesFrom(@NotNull BoardCoordinate coordinate, @NotNull BoardSize boardSize) {
+        return mPieceType.getCapturingMovesFrom(coordinate, boardSize);
+    }
+
     @Override
     public String toString() {
         return mPieceType.toString();
