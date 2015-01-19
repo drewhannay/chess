@@ -1,9 +1,11 @@
 package com.drewhannay.chesscrafter.models;
 
 import com.drewhannay.chesscrafter.models.turnkeeper.TurnKeeper;
+import com.drewhannay.chesscrafter.rules.movefilter.MoveFilter;
 import com.google.common.base.Preconditions;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Set;
 import java.util.Stack;
 
 public final class Game {
@@ -42,6 +44,19 @@ public final class Game {
         Preconditions.checkPositionIndex(boardIndex, mBoards.length);
 
         return mBoards[boardIndex].getPiece(coordinates);
+    }
+
+    public Set<BoardCoordinate> getMovesFrom(int boardIndex, BoardCoordinate coordinate) {
+        Board board = mBoards[boardIndex];
+        Team team = getTeam(mTurnKeeper.getActiveTeamId());
+
+        Set<BoardCoordinate> moves = board.getMovesFrom(coordinate);
+
+        for (MoveFilter moveFilter : team.getRules().getMoveFilters()) {
+            moves = moveFilter.filterMoves(board, coordinate, moves);
+        }
+
+        return moves;
     }
 
     public void executeMove(@NotNull Move move) {
