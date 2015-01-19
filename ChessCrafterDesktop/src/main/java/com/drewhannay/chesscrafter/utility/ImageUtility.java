@@ -37,7 +37,8 @@ public final class ImageUtility {
     private static final String DARK_PREFIX = "d_"; //$NON-NLS-1$
     private static final String PNG = ".png"; //$NON-NLS-1$
     private static final List<String> PIECE_NAMES = Lists.newArrayList(
-            Messages.getString("Utility.pawn"),
+            Messages.getString("Utility.northFacingPawn"),
+            Messages.getString("Utility.southFacingPawn"),
             Messages.getString("Utility.rook"),
             Messages.getString("Utility.bishop"),
             Messages.getString("Utility.knight"),

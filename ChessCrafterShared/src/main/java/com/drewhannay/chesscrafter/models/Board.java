@@ -38,13 +38,16 @@ public final class Board {
     }
 
     @Nullable
-    public Piece undoMovePiece(@NotNull BoardCoordinate origin, @NotNull BoardCoordinate destination) {
-        return movePieceImpl(origin, destination, false);
-    }
-
-    @Nullable
     public Piece movePiece(@NotNull BoardCoordinate origin, @NotNull BoardCoordinate destination) {
         return movePieceImpl(origin, destination, true);
+    }
+
+    public void undoMovePiece(@NotNull BoardCoordinate originalOrigin, @NotNull BoardCoordinate originalDestination,
+                              @Nullable Piece capturedPiece) {
+        movePieceImpl(originalDestination, originalOrigin, false);
+        if (capturedPiece != null) {
+            addPiece(capturedPiece, originalDestination);
+        }
     }
 
     private Piece movePieceImpl(@NotNull BoardCoordinate origin, @NotNull BoardCoordinate destination, boolean incrementMoveCount) {

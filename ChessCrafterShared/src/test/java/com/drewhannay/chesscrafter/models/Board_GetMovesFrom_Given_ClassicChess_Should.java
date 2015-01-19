@@ -18,9 +18,9 @@ public class Board_GetMovesFrom_Given_ClassicChess_Should {
         mTarget = new Board(BoardSize.CLASSIC_SIZE);
 
         GameBuilder.setupClassicPieces(mTarget, 1, Piece.TEAM_ONE);
-        GameBuilder.setupClassicPawns(mTarget, 2, Piece.TEAM_ONE);
+        GameBuilder.setupClassicNorthFacingPawns(mTarget, 2, Piece.TEAM_ONE);
 
-        GameBuilder.setupClassicPawns(mTarget, 7, Piece.TEAM_TWO);
+        GameBuilder.setupClassicSouthFacingPawns(mTarget, 7, Piece.TEAM_TWO);
         GameBuilder.setupClassicPieces(mTarget, 8, Piece.TEAM_TWO);
     }
 

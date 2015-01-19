@@ -12,7 +12,7 @@ public class Board_AddPiece_Given_EmptyBoard_Should {
     @Before
     public void setup() {
         mTarget = new Board(BoardSize.withDimensions(8, 8));
-        mPawn = Piece.newPawn();
+        mPawn = Piece.newNorthFacingPawn();
     }
 
     @Test

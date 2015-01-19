@@ -28,10 +28,7 @@ public final class ClassicMoveFilter implements MoveFilter {
             if (isObjectivePieceSafe(teamId, board)) {
                 filteredMoves.add(move);
             }
-            board.undoMovePiece(move, start);
-            if (capturedPiece != null) {
-                board.addPiece(capturedPiece, move);
-            }
+            board.undoMovePiece(start, move, capturedPiece);
         }
 
         return filteredMoves;

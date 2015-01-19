@@ -38,7 +38,7 @@ public class PiecePromoter {
         Map<Integer, Set<BoardCoordinate>> promotionCoordinateMap = ImmutableMap.of(0, promotionCoordinates);
 
         Map<PieceType, Set<PieceType>> promotionMap = Maps.newHashMap();
-        promotionMap.put(PieceType.getPawnPieceType(), Sets.newHashSet(
+        promotionMap.put(PieceType.getNorthFacingPawnPieceType(), Sets.newHashSet(
                 PieceType.getRookPieceType(),
                 PieceType.getKnightPieceType(),
                 PieceType.getBishopPieceType(),

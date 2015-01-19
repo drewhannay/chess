@@ -84,9 +84,10 @@ public final class Game {
             board.addPiece(demotedPiece, move.destination);
         }
 
-        mBoards[0].undoMovePiece(move.destination, move.origin);
-
         Piece capturedPiece = getTeam(mTurnKeeper.getActiveTeamId()).undoCapturePiece(move);
+        mBoards[0].undoMovePiece(move.origin, move.destination, capturedPiece);
+
+
         if (capturedPiece != null) {
             mBoards[0].addPiece(capturedPiece, move.destination);
         }

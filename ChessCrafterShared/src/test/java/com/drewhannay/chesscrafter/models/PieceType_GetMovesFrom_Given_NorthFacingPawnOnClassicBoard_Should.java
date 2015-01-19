@@ -8,7 +8,7 @@ import java.util.Set;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class PieceType_GetMovesFrom_Given_PawnOnClassicBoard_Should {
+public class PieceType_GetMovesFrom_Given_NorthFacingPawnOnClassicBoard_Should {
 
     PieceType mTarget;
     BoardSize mBoardSize;
@@ -16,7 +16,7 @@ public class PieceType_GetMovesFrom_Given_PawnOnClassicBoard_Should {
 
     @Before
     public void setup() {
-        mTarget = PieceType.getPawnPieceType();
+        mTarget = PieceType.getNorthFacingPawnPieceType();
         mBoardSize = BoardSize.withDimensions(8, 8);
         mMovesFrom2_2 = mTarget.getMovesFrom(BoardCoordinate.at(2, 2), mBoardSize, 0);
     }

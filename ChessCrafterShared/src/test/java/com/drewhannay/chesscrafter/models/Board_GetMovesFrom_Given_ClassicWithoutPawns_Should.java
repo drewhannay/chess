@@ -40,8 +40,8 @@ public class Board_GetMovesFrom_Given_ClassicWithoutPawns_Should {
 
     @Test
     public void returnEmptyForBishopAfterBlockingPawnsAreAdded() {
-        mTarget.addPiece(Piece.newPawn(), BoardCoordinate.at(2, 2));
-        mTarget.addPiece(Piece.newPawn(), BoardCoordinate.at(4, 2));
+        mTarget.addPiece(Piece.newNorthFacingPawn(), BoardCoordinate.at(2, 2));
+        mTarget.addPiece(Piece.newNorthFacingPawn(), BoardCoordinate.at(4, 2));
 
         Set<BoardCoordinate> moves = mTarget.getMovesFrom(BoardCoordinate.at(3, 1));
         assertTrue(moves.isEmpty());
@@ -49,7 +49,7 @@ public class Board_GetMovesFrom_Given_ClassicWithoutPawns_Should {
 
     @Test
     public void returnMovesForBishopThatIsNotBlocked() {
-        mTarget.addPiece(Piece.newPawn(), BoardCoordinate.at(2, 2));
+        mTarget.addPiece(Piece.newNorthFacingPawn(), BoardCoordinate.at(2, 2));
         Set<BoardCoordinate> moves = mTarget.getMovesFrom(BoardCoordinate.at(3, 1));
         assertFalse(moves.isEmpty());
     }
@@ -62,8 +62,8 @@ public class Board_GetMovesFrom_Given_ClassicWithoutPawns_Should {
 
     @Test
     public void returnEmptyForBishopAt3_8WhenBlocked() {
-        mTarget.addPiece(Piece.newPawn(Piece.TEAM_TWO), BoardCoordinate.at(2, 7));
-        mTarget.addPiece(Piece.newPawn(Piece.TEAM_TWO), BoardCoordinate.at(4, 7));
+        mTarget.addPiece(Piece.newSouthFacingPawn(Piece.TEAM_TWO), BoardCoordinate.at(2, 7));
+        mTarget.addPiece(Piece.newSouthFacingPawn(Piece.TEAM_TWO), BoardCoordinate.at(4, 7));
 
         Set<BoardCoordinate> moves = mTarget.getMovesFrom(BoardCoordinate.at(3, 8));
         assertTrue(moves.isEmpty());
@@ -77,7 +77,7 @@ public class Board_GetMovesFrom_Given_ClassicWithoutPawns_Should {
 
     @Test
     public void notAllowRookAt1_1ToCaptureRookAt1_8WhenAPawnIsInFrontOfIt() {
-        mTarget.addPiece(Piece.newPawn(Piece.TEAM_TWO), BoardCoordinate.at(1, 7));
+        mTarget.addPiece(Piece.newSouthFacingPawn(Piece.TEAM_TWO), BoardCoordinate.at(1, 7));
         Set<BoardCoordinate> moves = mTarget.getMovesFrom(BoardCoordinate.at(1, 1));
         assertFalse(moves.contains(BoardCoordinate.at(1, 8)));
     }

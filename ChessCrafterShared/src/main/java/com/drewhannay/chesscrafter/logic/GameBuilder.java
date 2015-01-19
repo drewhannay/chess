@@ -1,6 +1,12 @@
 package com.drewhannay.chesscrafter.logic;
 
-import com.drewhannay.chesscrafter.models.*;
+import com.drewhannay.chesscrafter.models.Board;
+import com.drewhannay.chesscrafter.models.BoardCoordinate;
+import com.drewhannay.chesscrafter.models.BoardSize;
+import com.drewhannay.chesscrafter.models.Game;
+import com.drewhannay.chesscrafter.models.Piece;
+import com.drewhannay.chesscrafter.models.PieceType;
+import com.drewhannay.chesscrafter.models.Team;
 import com.drewhannay.chesscrafter.models.turnkeeper.TurnKeeper;
 import com.drewhannay.chesscrafter.rules.Rules;
 import com.drewhannay.chesscrafter.rules.endconditions.CaptureObjectiveEndCondition;
@@ -53,9 +59,14 @@ public class GameBuilder {
         mBlackRules = blackRules;
     }
 
-    public static void setupClassicPawns(Board target, int row, int teamId) {
+    public static void setupClassicNorthFacingPawns(Board target, int row, int teamId) {
         for (int x = 1; x <= BoardSize.CLASSIC_SIZE.width; x++)
-            target.addPiece(Piece.newPawn(teamId), BoardCoordinate.at(x, row));
+            target.addPiece(Piece.newNorthFacingPawn(teamId), BoardCoordinate.at(x, row));
+    }
+
+    public static void setupClassicSouthFacingPawns(Board target, int row, int teamId) {
+        for (int x = 1; x <= BoardSize.CLASSIC_SIZE.width; x++)
+            target.addPiece(Piece.newSouthFacingPawn(teamId), BoardCoordinate.at(x, row));
     }
 
     public static void setupClassicPieces(Board target, int row, int teamId) {
@@ -96,9 +107,9 @@ public class GameBuilder {
         Board[] boards = new Board[]{new Board(BoardSize.withDimensions(8, 8))};
 
         setupClassicPieces(boards[0], 1, Piece.TEAM_ONE);
-//        setupClassicPawns(boards[0], 2, Piece.TEAM_ONE);
+        setupClassicNorthFacingPawns(boards[0], 2, Piece.TEAM_ONE);
 
-//        setupClassicPawns(boards[0], 7, Piece.TEAM_TWO);
+        setupClassicSouthFacingPawns(boards[0], 7, Piece.TEAM_TWO);
         setupClassicPieces(boards[0], 8, Piece.TEAM_TWO);
 
         return new Game("Classic", boards, teams, TurnKeeper.createClassic(Piece.TEAM_ONE, Piece.TEAM_TWO));

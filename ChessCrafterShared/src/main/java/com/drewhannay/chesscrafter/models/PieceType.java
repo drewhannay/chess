@@ -17,9 +17,6 @@ import java.util.Set;
 public class PieceType {
     public static final int UNLIMITED = Integer.MAX_VALUE;
 
-    // TODO: this should eventually be removed, when our variant creation is good enough to create pawns
-    public static final String PAWN_NAME = "Pawn";
-
     private final String mName;
     private final ImmutableMap<Direction, Integer> mMovements;
     private final ImmutableSet<TwoHopMovement> mTwoHopMovements;
@@ -45,11 +42,15 @@ public class PieceType {
 
     public Set<BoardCoordinate> getMovesFrom(@NotNull BoardCoordinate startLocation,
                                              @NotNull BoardSize boardSize, int moveCount) {
-        if (getName().equals(PAWN_NAME)) {
-            return getPawnMovesFrom(startLocation, boardSize, moveCount);
-        }
-
         Set<BoardCoordinate> moves = new HashSet<>();
+
+        if (moveCount == 0) {
+            if (getName().equals("NorthFacingPawn")) {
+                moves.add(BoardCoordinate.at(startLocation.x, startLocation.y + 2));
+            } else if (getName().equals("SouthFacingPawn")) {
+                moves.add(BoardCoordinate.at(startLocation.x, startLocation.y - 2));
+            }
+        }
 
         for (Direction direction : mMovements.keySet()) {
             PathMaker pathMaker = new PathMaker(startLocation, direction.getFurthestPoint(startLocation, boardSize));
@@ -72,17 +73,6 @@ public class PieceType {
 
         return moves;
     }
-
-    private Set<BoardCoordinate> getPawnMovesFrom(@NotNull BoardCoordinate startLocation,
-                                                  @NotNull BoardSize boardSize, int moveCount) {
-        Set<BoardCoordinate> moves = new HashSet<>(2);
-        moves.add(BoardCoordinate.at(startLocation.x, startLocation.y + 1));
-        if (moveCount == 0) {
-            moves.add(BoardCoordinate.at(startLocation.x, startLocation.y + 2));
-        }
-        return moves;
-    }
-
 
     private Set<BoardCoordinate> getQuadrantMoves(@NotNull BoardCoordinate coordinate,
                                                   @NotNull TwoHopMovement movement,
@@ -146,8 +136,18 @@ public class PieceType {
         return new PieceType("Night", null, twoHopMovements);
     }
 
-    public static PieceType getPawnPieceType() {
-        return new PieceType(PieceType.PAWN_NAME, null, null);
+    public static PieceType getNorthFacingPawnPieceType() {
+        Map<Direction, Integer> movements = Maps.newHashMap();
+        movements.put(Direction.NORTH, 1);
+
+        return new PieceType("NorthFacingPawn", movements, null);
+    }
+
+    public static PieceType getSouthFacingPawnPieceType() {
+        Map<Direction, Integer> movements = Maps.newHashMap();
+        movements.put(Direction.SOUTH, 1);
+
+        return new PieceType("SouthFacingPawn", movements, null);
     }
 
     public static PieceType getQueenPieceType() {

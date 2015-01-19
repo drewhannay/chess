@@ -83,12 +83,16 @@ public final class Piece {
         return new Piece(teamId, PieceType.getKnightPieceType());
     }
 
-    public static Piece newPawn() {
-        return newPawn(TEAM_ONE);
+    public static Piece newNorthFacingPawn() {
+        return newNorthFacingPawn(TEAM_ONE);
     }
 
-    public static Piece newPawn(int teamId) {
-        return new Piece(teamId, PieceType.getPawnPieceType());
+    public static Piece newNorthFacingPawn(int teamId) {
+        return new Piece(teamId, PieceType.getNorthFacingPawnPieceType());
+    }
+
+    public static Piece newSouthFacingPawn(int teamId) {
+        return new Piece(teamId, PieceType.getSouthFacingPawnPieceType());
     }
 
     public static Piece newQueen() {
