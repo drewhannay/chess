@@ -44,6 +44,10 @@ public final class Rules {
         }
     }
 
+    public List<MoveFilter> getMoveFilters() {
+        return mMoveFilters;
+    }
+
     public void performPostMoveActions(Move move) {
         for (PostMoveAction action : mPostMoveActions)
             action.perform(move);

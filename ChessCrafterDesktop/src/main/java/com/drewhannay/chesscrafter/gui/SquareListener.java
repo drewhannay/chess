@@ -69,10 +69,11 @@ public class SquareListener extends DropAdapter implements MouseListener, Prefer
 
         Game game = GameController.getGame();
         BoardCoordinate coordinates = mSquareLabel.getCoordinates();
-        if (game.getPiece(0, coordinates) == null || game.getPiece(0, coordinates).getTeamId() != game.getTurnKeeper().getActiveTeamId())
+        Piece movingPiece = game.getPiece(0, coordinates);
+        if (movingPiece == null || movingPiece.getTeamId() != game.getTurnKeeper().getActiveTeamId())
             return;
 
-        List<SquareJLabel> destinationLabels = PlayGamePanel.highlightLegalDestinations(0, coordinates);
+        List<SquareJLabel> destinationLabels = PlayGamePanel.highlightLegalDestinations(movingPiece.getTeamId(), 0, coordinates);
 
         mDropManager.setComponentList(destinationLabels);
         mSquareLabel.hideIcon();
