@@ -1,5 +1,6 @@
 package com.drewhannay.chesscrafter.models;
 
+import com.drewhannay.chesscrafter.logic.Result;
 import com.drewhannay.chesscrafter.models.turnkeeper.TurnKeeper;
 import com.drewhannay.chesscrafter.rules.movefilter.MoveFilter;
 import com.google.common.base.Preconditions;
@@ -74,9 +75,12 @@ public final class Game {
         }
 
         // TODO: PostMoveAction
-        // TODO: Check end condition
 
         mTurnKeeper.finishTurn();
+
+        Result result = getTeam(mTurnKeeper.getActiveTeamId()).getRules().getEndCondition().checkEndCondition(this);
+        // TODO: remove println
+        System.out.println(result);
 
         mHistory.push(move);
     }
@@ -86,12 +90,13 @@ public final class Game {
 
         Move move = mHistory.pop();
 
+        // TODO: Undo check end condition
+
         mTurnKeeper.undoFinishTurn();
 
         Board board = mBoards[0];
         Team team = getTeam(mTurnKeeper.getActiveTeamId());
 
-        // TODO: Undo check end condition
         // TODO: Undo PostMoveAction
 
         if (move.promotionType != null) {

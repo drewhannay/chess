@@ -58,12 +58,8 @@ public final class Rules {
             action.undo(move);
     }
 
-    public void checkEndCondition() {
-        mEndCondition.checkEndCondition();
-    }
-
-    public void undoCheckEndCondition() {
-        mEndCondition.undo();
+    public EndCondition getEndCondition() {
+        return mEndCondition;
     }
 
     @Override

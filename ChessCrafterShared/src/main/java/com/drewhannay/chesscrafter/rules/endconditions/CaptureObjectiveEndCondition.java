@@ -1,61 +1,102 @@
 package com.drewhannay.chesscrafter.rules.endconditions;
 
-public final class CaptureObjectiveEndCondition extends EndCondition {
+import com.drewhannay.chesscrafter.logic.Result;
+import com.drewhannay.chesscrafter.models.Board;
+import com.drewhannay.chesscrafter.models.BoardCoordinate;
+import com.drewhannay.chesscrafter.models.BoardSize;
+import com.drewhannay.chesscrafter.models.Game;
+import com.drewhannay.chesscrafter.models.Piece;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Set;
+
+public final class CaptureObjectiveEndCondition implements EndCondition {
+    private final int mTeamId;
+
+    private BoardCoordinate mObjectivePieceLocation;
+
+    public CaptureObjectiveEndCondition(int teamId) {
+        mTeamId = teamId;
+    }
+
     @Override
-    public void checkEndCondition() {
-        // TODO Auto-generated method stub
-        // if (mGame.getLegalMoveCount() == 0 || objectivePiece.isCaptured())
-        // {
-        // // if the King is threatened, it's check mate.
-        // if (objectivePiece == null || objectivePiece.isInCheck() ||
-        // objectivePiece.isCaptured())
-        // {
-        // if (mGame.getLastMove() != null)
-        // {
-        // mGame.getLastMove().setCheckmate(true);
-        // Result result = mGame.isBlackMove() ? Result.WHITE_WIN :
-        // Result.BLACK_WIN;
-        //					String resultText = Messages.getString("gameOverExc") + result.winText() + "\n"; //$NON-NLS-1$ //$NON-NLS-2$
-        //
-        // if (mGame.getThreats(objectivePiece) != null)
-        // {
-        //						resultText += Messages.getString("pieceCausedFinalCheck") //$NON-NLS-1$
-        //								+ Messages.getString("piecePlacedWasThe") //$NON-NLS-1$
-        //								+ mGame.getThreats(objectivePiece)[0].getName() + Messages.getString("atLocation") //$NON-NLS-1$
-        //								+ mGame.getThreats(objectivePiece)[0].getSquare().toString(new boolean[] { false, false }) + "\n"; //$NON-NLS-1$
-        // }
-        //					result.setGuiText(resultText + Messages.getString("whatWouldYouLikeToDo")); //$NON-NLS-1$
-        // mGame.getLastMove().setResult(result);
-        // if (!mGame.getHistory().contains(mGame.getLastMove()))
-        // mGame.getHistory().add(mGame.getLastMove());
-        //
-        // // let the user see the final move
-        // GuiUtility.getChessCrafter().getPlayGameScreen(mGame).boardRefresh(mGame.getBoards());
-        // GuiUtility.getChessCrafter().getPlayGameScreen(mGame).endOfGame(result);
-        // }
-        // }
-        // // if the King isn't threatened, then it's stalemate
-        // else
-        // {
-        // if (mGame.getLastMove() != null)
-        // {
-        // mGame.getLastMove().setStalemate(true);
-        // Result result = Result.DRAW;
-        //					result.setGuiText(Messages.getString("drawExc") + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
-        // mGame.getLastMove().setResult(result);
-        // if (!mGame.getHistory().contains(mGame.getLastMove()))
-        // {
-        // mGame.getHistory().add(mGame.getLastMove());
-        // }
-        // // let the user see the final move
-        // GuiUtility.getChessCrafter().getPlayGameScreen(mGame).boardRefresh(mGame.getBoards());
-        // GuiUtility.getChessCrafter().getPlayGameScreen(mGame).endOfGame(result);
-        // }
-        // }
-        // }
+    public Result checkEndCondition(@NotNull Game game) {
+        int boardIndex = 0;
+        Board board = game.getBoards()[boardIndex];
+        // @NotNull Board board, @NotNull BoardCoordinate start, @NotNull Set<BoardCoordinate> moves
+
+        updateObjectivePieceLocation(mTeamId, board);
+
+        int attackCount = getObjectivePieceAttackCount(mTeamId, board);
+        int legalMoveCount = 0;
+
+        BoardSize boardSize = board.getBoardSize();
+        for (int x = 1; x <= boardSize.width; x++) {
+            for (int y = 1; y <= boardSize.height; y++) {
+                BoardCoordinate coordinate = BoardCoordinate.at(x, y);
+                if (board.doesPieceExistAt(coordinate)) {
+                    if (game.getPiece(boardIndex, coordinate).getTeamId() == mTeamId) {
+                        Set<BoardCoordinate> moves = game.getMovesFrom(boardIndex, BoardCoordinate.at(x, y));
+                        legalMoveCount += moves.size();
+                    }
+                }
+            }
+        }
+
+        return legalMoveCount > 0 && attackCount == 1 ? Result.CHECK
+                : legalMoveCount > 0 && attackCount > 1 ? Result.DOUBLE_CHECK
+                : legalMoveCount == 0 && attackCount == 0 ? Result.STALEMATE
+                : legalMoveCount == 0 && attackCount > 0 ? Result.CHECKMATE
+                : Result.CONTINUE;
     }
 
     @Override
     public void undo() {
+        // nothing to undo
+    }
+
+    private int getObjectivePieceAttackCount(int teamId, @NotNull Board board) {
+        updateObjectivePieceLocation(teamId, board);
+
+        int attackCount = 0;
+
+        BoardSize boardSize = board.getBoardSize();
+        for (int x = 1; x <= boardSize.width; x++) {
+            for (int y = 1; y <= boardSize.height; y++) {
+                BoardCoordinate coordinate = BoardCoordinate.at(x, y);
+                if (board.doesPieceExistAt(coordinate)) {
+                    Set<BoardCoordinate> moves = board.getMovesFrom(coordinate);
+                    if (moves.contains(mObjectivePieceLocation)) {
+                        attackCount++;
+                    }
+                }
+            }
+        }
+
+        return attackCount;
+    }
+
+    private void updateObjectivePieceLocation(int teamId, @NotNull Board board) {
+        if (mObjectivePieceLocation != null && isPieceObjectivePiece(teamId, board.getPiece(mObjectivePieceLocation))) {
+            return;
+        }
+
+        BoardSize boardSize = board.getBoardSize();
+        for (int x = 1; x <= boardSize.width; x++) {
+            for (int y = 1; y <= boardSize.height; y++) {
+                BoardCoordinate coordinate = BoardCoordinate.at(x, y);
+                if (isPieceObjectivePiece(teamId, board.getPiece(coordinate))) {
+                    mObjectivePieceLocation = coordinate;
+                    return;
+                }
+            }
+        }
+
+        throw new IllegalStateException("No objective piece found");
+    }
+
+    private boolean isPieceObjectivePiece(int teamId, @Nullable Piece piece) {
+        return piece != null && piece.getTeamId() == teamId && piece.isObjectivePiece();
     }
 }

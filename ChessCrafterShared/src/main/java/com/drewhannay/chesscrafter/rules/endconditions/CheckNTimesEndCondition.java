@@ -1,9 +1,13 @@
 package com.drewhannay.chesscrafter.rules.endconditions;
 
-public final class CheckNTimesEndCondition extends EndCondition {
+import com.drewhannay.chesscrafter.logic.Result;
+import com.drewhannay.chesscrafter.models.Game;
+import org.jetbrains.annotations.NotNull;
+
+public final class CheckNTimesEndCondition implements EndCondition {
 
     @Override
-    public void checkEndCondition() {
+    public Result checkEndCondition(@NotNull Game game) {
         // TODO Auto-generated method stub
         // if (mGame.getLastMove() != null && mGame.getLastMove().isVerified()
         // && mGame.getLastMove().isCheck()
@@ -18,6 +22,7 @@ public final class CheckNTimesEndCondition extends EndCondition {
         // }
         // }
         // mMove = mGame.getLastMove();
+        return null;
     }
 
     @Override

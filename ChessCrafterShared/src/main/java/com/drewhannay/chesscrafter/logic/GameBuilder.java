@@ -90,14 +90,14 @@ public class GameBuilder {
                 Rules.DESTINATION_SAME_BOARD,
                 Lists.<MoveFilter>newArrayList(new ClassicMoveFilter()),
                 Collections.<PostMoveAction>emptyList(),
-                new CaptureObjectiveEndCondition()
+                new CaptureObjectiveEndCondition(Piece.TEAM_ONE)
         );
         Rules blackRules = new Rules(
                 PieceType.getKingPieceType(),
                 Rules.DESTINATION_SAME_BOARD,
                 Lists.<MoveFilter>newArrayList(new ClassicMoveFilter()),
                 Collections.<PostMoveAction>emptyList(),
-                new CaptureObjectiveEndCondition()
+                new CaptureObjectiveEndCondition(Piece.TEAM_TWO)
         );
 
         Team[] teams = new Team[2];
