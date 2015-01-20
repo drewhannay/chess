@@ -63,24 +63,12 @@ public final class Piece {
         return mPieceType.toString();
     }
 
-    public static Piece newBishop() {
-        return newBishop(TEAM_ONE);
-    }
-
     public static Piece newBishop(int teamId) {
         return new Piece(teamId, PieceType.getBishopPieceType());
     }
 
-    public static Piece newKing(int teamId) {
-        return newKing(teamId, false);
-    }
-
     public static Piece newKing(int teamId, boolean isObjectivePiece) {
         return new Piece(teamId, PieceType.getKingPieceType(), isObjectivePiece);
-    }
-
-    public static Piece newKnight() {
-        return newKnight(TEAM_ONE);
     }
 
     public static Piece newKnight(int teamId) {
@@ -99,16 +87,8 @@ public final class Piece {
         return new Piece(teamId, PieceType.getSouthFacingPawnPieceType());
     }
 
-    public static Piece newQueen() {
-        return newQueen(TEAM_ONE);
-    }
-
     public static Piece newQueen(int teamId) {
         return new Piece(teamId, PieceType.getQueenPieceType());
-    }
-
-    public static Piece newRook() {
-        return newQueen(TEAM_ONE);
     }
 
     public static Piece newRook(int teamId) {
