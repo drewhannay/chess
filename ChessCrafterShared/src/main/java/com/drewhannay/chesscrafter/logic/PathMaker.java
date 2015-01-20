@@ -1,6 +1,7 @@
 package com.drewhannay.chesscrafter.logic;
 
 import com.drewhannay.chesscrafter.models.BoardCoordinate;
+import com.google.common.collect.Lists;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -43,6 +44,12 @@ public class PathMaker {
         }
         // don't include mOrigin in the path
         spaces.remove(mOrigin);
+
+        int direction = (int) Math.signum(mDestination.x - mOrigin.x);
+        if (direction < 0) {
+            spaces = Lists.reverse(spaces);
+        }
+
         return spaces;
     }
 
@@ -51,13 +58,19 @@ public class PathMaker {
         int most = Math.max(mOrigin.y, mDestination.y);
 
         List<BoardCoordinate> spaces = new ArrayList<>();
-        for (int y = least + 1; y <= most; y++) {
+        for (int y = least; y <= most; y++) {
             if (Math.abs(mOrigin.y - y) <= maxSteps) {
                 spaces.add(BoardCoordinate.at(mOrigin.x, y));
             }
         }
         // don't include mOrigin in the path
         spaces.remove(mOrigin);
+
+        int direction = (int) Math.signum(mDestination.y - mOrigin.y);
+        if (direction < 0) {
+            spaces = Lists.reverse(spaces);
+        }
+
         return spaces;
     }
 
