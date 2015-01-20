@@ -86,15 +86,11 @@ public class GameBuilder {
     @NotNull
     public static Game buildClassic() {
         Rules whiteRules = new Rules(
-                PieceType.getKingPieceType(),
-                Rules.DESTINATION_SAME_BOARD,
                 Lists.<MoveFilter>newArrayList(new ClassicMoveFilter()),
                 Collections.<PostMoveAction>emptyList(),
                 new CaptureObjectiveEndCondition(Piece.TEAM_ONE)
         );
         Rules blackRules = new Rules(
-                PieceType.getKingPieceType(),
-                Rules.DESTINATION_SAME_BOARD,
                 Lists.<MoveFilter>newArrayList(new ClassicMoveFilter()),
                 Collections.<PostMoveAction>emptyList(),
                 new CaptureObjectiveEndCondition(Piece.TEAM_TWO)
