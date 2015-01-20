@@ -1,7 +1,7 @@
 package com.drewhannay.chesscrafter.rules.promotionmethods;
 
-import com.drewhannay.chesscrafter.models.BoardSize;
 import com.drewhannay.chesscrafter.models.BoardCoordinate;
+import com.drewhannay.chesscrafter.models.BoardSize;
 import com.drewhannay.chesscrafter.models.Piece;
 import com.drewhannay.chesscrafter.models.PieceType;
 import com.google.common.base.Preconditions;
@@ -29,16 +29,16 @@ public class PiecePromoter {
         mPromotionStack = new Stack<>();
     }
 
-    public static PiecePromoter createClassicPiecePromoter(int promotionRow) {
+    public static PiecePromoter createClassicPiecePromoter(int promotionRow, @NotNull PieceType pawnType) {
         Set<BoardCoordinate> promotionCoordinates = new HashSet<>();
-        for (int i = 1; i < BoardSize.CLASSIC_SIZE.width; i++) {
+        for (int i = 1; i <= BoardSize.CLASSIC_SIZE.width; i++) {
             promotionCoordinates.add(BoardCoordinate.at(i, promotionRow));
         }
 
         Map<Integer, Set<BoardCoordinate>> promotionCoordinateMap = ImmutableMap.of(0, promotionCoordinates);
 
         Map<PieceType, Set<PieceType>> promotionMap = Maps.newHashMap();
-        promotionMap.put(PieceType.getNorthFacingPawnPieceType(), Sets.newHashSet(
+        promotionMap.put(pawnType, Sets.newHashSet(
                 PieceType.getRookPieceType(),
                 PieceType.getKnightPieceType(),
                 PieceType.getBishopPieceType(),
@@ -61,11 +61,14 @@ public class PiecePromoter {
         return mPromotionMap.get(pieceType);
     }
 
+    @NotNull
     public Piece promotePiece(@NotNull Piece pieceToPromote, @NotNull PieceType promotedPieceType) {
         mPromotionStack.push(pieceToPromote);
-        return new Piece(pieceToPromote.getTeamId(), promotedPieceType);
+        return new Piece(pieceToPromote.getTeamId(), promotedPieceType,
+                pieceToPromote.isObjectivePiece(), pieceToPromote.getMoveCount());
     }
 
+    @NotNull
     public Piece undoPromotion() {
         Preconditions.checkState(!mPromotionStack.isEmpty());
         return mPromotionStack.pop();

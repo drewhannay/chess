@@ -60,6 +60,10 @@ public final class Game {
         return moves;
     }
 
+    public MoveBuilder newMoveBuilder(@NotNull BoardCoordinate origin, @NotNull BoardCoordinate destination) {
+        return new MoveBuilder(getTeam(mTurnKeeper.getActiveTeamId()), mBoards[0], origin, destination);
+    }
+
     public void executeMove(@NotNull Move move) {
         Board board = mBoards[0];
         Team team = getTeam(mTurnKeeper.getActiveTeamId());

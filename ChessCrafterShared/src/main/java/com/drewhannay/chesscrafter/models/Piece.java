@@ -19,11 +19,14 @@ public final class Piece {
     }
 
     public Piece(int teamId, PieceType pieceType, boolean isObjectivePiece) {
+        this(teamId, pieceType, isObjectivePiece, 0);
+    }
+
+    public Piece(int teamId, PieceType pieceType, boolean isObjectivePiece, int moveCount) {
         mTeamId = teamId;
         mPieceType = pieceType;
         mIsObjectivePiece = isObjectivePiece;
-
-        mMoveCount = 0;
+        mMoveCount = moveCount;
     }
 
     public String getName() {
@@ -40,6 +43,10 @@ public final class Piece {
 
     public boolean hasMoved() {
         return mMoveCount != 0;
+    }
+
+    public int getMoveCount() {
+        return mMoveCount;
     }
 
     public void incrementMoveCount() {

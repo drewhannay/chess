@@ -101,8 +101,8 @@ public class GameBuilder {
         );
 
         Team[] teams = new Team[2];
-        teams[0] = new Team(Piece.TEAM_ONE, whiteRules, PiecePromoter.createClassicPiecePromoter(8));
-        teams[1] = new Team(Piece.TEAM_TWO, blackRules, PiecePromoter.createClassicPiecePromoter(1));
+        teams[0] = new Team(Piece.TEAM_ONE, whiteRules, PiecePromoter.createClassicPiecePromoter(8, PieceType.getNorthFacingPawnPieceType()));
+        teams[1] = new Team(Piece.TEAM_TWO, blackRules, PiecePromoter.createClassicPiecePromoter(1, PieceType.getSouthFacingPawnPieceType()));
 
         Board[] boards = new Board[]{new Board(BoardSize.withDimensions(8, 8))};
 
