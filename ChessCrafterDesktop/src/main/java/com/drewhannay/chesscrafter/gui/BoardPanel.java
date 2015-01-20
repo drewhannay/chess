@@ -35,7 +35,7 @@ public class BoardPanel extends JPanel {
             JLabel label = GuiUtility.createJLabel("" + y); //$NON-NLS-1$
             label.setHorizontalAlignment(SwingConstants.CENTER);
             add(label);
-            for (int x = boardSize.width; x > 0; x--) {
+            for (int x = 1; x <= boardSize.width; x++) {
                 SquareJLabel square = new SquareJLabel(BoardCoordinate.at(x, y), true, 48);
                 square.addMouseMotionListener(new MotionAdapter(mGlassPane));
                 square.addMouseListener(new SquareListener(square, mDropManager, mGlassPane));
