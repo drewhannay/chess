@@ -93,7 +93,7 @@ public final class Board {
         Set<BoardCoordinate> validMoves = Sets.newHashSetWithExpectedSize(allPossibleMoves.size());
 
         for (BoardCoordinate move : allPossibleMoves) {
-            if (!isBlocked(origin, move) && !doesFriendlyPieceExistAt(origin, move)) {
+            if (!isBlocked(origin, move) && !doesPieceExistAt(move)) {
                 validMoves.add(move);
             }
         }

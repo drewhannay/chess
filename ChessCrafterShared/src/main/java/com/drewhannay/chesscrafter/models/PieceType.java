@@ -23,6 +23,11 @@ public class PieceType {
     private final ImmutableSet<TwoHopMovement> mTwoHopMovements;
 
     public PieceType(@NotNull String name, @Nullable Map<Direction, Integer> movements,
+                     @Nullable Set<TwoHopMovement> twoHopMovements) {
+        this(name, movements, movements, twoHopMovements);
+    }
+
+    public PieceType(@NotNull String name, @Nullable Map<Direction, Integer> movements,
                      @Nullable Map<Direction, Integer> capturingMovements,
                      @Nullable Set<TwoHopMovement> twoHopMovements) {
         Preconditions.checkArgument(!name.isEmpty());
@@ -45,7 +50,7 @@ public class PieceType {
 
     public Set<BoardCoordinate> getMovesFrom(@NotNull BoardCoordinate startLocation,
                                              @NotNull BoardSize boardSize, int moveCount) {
-        Set<BoardCoordinate> moves = new HashSet<>();
+        Set<BoardCoordinate> moves = getMovesFromImpl(startLocation, boardSize, mMovements);
 
         if (moveCount == 0) {
             if (getName().equals("NorthFacingPawn")) {
@@ -55,9 +60,22 @@ public class PieceType {
             }
         }
 
-        for (Direction direction : mMovements.keySet()) {
+        return moves;
+    }
+
+    public Set<BoardCoordinate> getCapturingMovesFrom(@NotNull BoardCoordinate startLocation,
+                                                      @NotNull BoardSize boardSize) {
+        return getMovesFromImpl(startLocation, boardSize, mCapturingMovements);
+    }
+
+    private Set<BoardCoordinate> getMovesFromImpl(@NotNull BoardCoordinate startLocation,
+                                                  @NotNull BoardSize boardSize,
+                                                  @NotNull Map<Direction, Integer> movements) {
+        Set<BoardCoordinate> moves = new HashSet<>();
+
+        for (Direction direction : movements.keySet()) {
             PathMaker pathMaker = new PathMaker(startLocation, direction.getFurthestPoint(startLocation, boardSize));
-            moves.addAll(pathMaker.getPathToDestination(mMovements.get(direction)));
+            moves.addAll(pathMaker.getPathToDestination(movements.get(direction)));
         }
 
         for (TwoHopMovement twoHopMovement : mTwoHopMovements) {
@@ -72,18 +90,6 @@ public class PieceType {
                     moves.add(move);
                 }
             }
-        }
-
-        return moves;
-    }
-
-    public Set<BoardCoordinate> getCapturingMovesFrom(@NotNull BoardCoordinate startLocation,
-                                                      @NotNull BoardSize boardSize) {
-        Set<BoardCoordinate> moves = new HashSet<>();
-
-        for (Direction direction : mCapturingMovements.keySet()) {
-            PathMaker pathMaker = new PathMaker(startLocation, direction.getFurthestPoint(startLocation, boardSize));
-            moves.addAll(pathMaker.getPathToDestination(mCapturingMovements.get(direction)));
         }
 
         return moves;
@@ -133,7 +139,7 @@ public class PieceType {
             movements.put(direction, UNLIMITED);
         }
 
-        return new PieceType("Bishop", movements, null, null);
+        return new PieceType("Bishop", movements, null);
     }
 
     public static PieceType getKingPieceType() {
@@ -142,13 +148,13 @@ public class PieceType {
             movements.put(direction, 1);
         }
 
-        return new PieceType("King", movements, null, null);
+        return new PieceType("King", movements, null);
     }
 
     public static PieceType getKnightPieceType() {
         Set<TwoHopMovement> twoHopMovements = Sets.newHashSet(TwoHopMovement.with(2, 1));
 
-        return new PieceType("Night", null, null, twoHopMovements);
+        return new PieceType("Night", null, twoHopMovements);
     }
 
     public static PieceType getNorthFacingPawnPieceType() {
@@ -179,7 +185,7 @@ public class PieceType {
             movements.put(direction, UNLIMITED);
         }
 
-        return new PieceType("Queen", movements, null, null);
+        return new PieceType("Queen", movements, null);
     }
 
     public static PieceType getRookPieceType() {
@@ -188,6 +194,6 @@ public class PieceType {
             movements.put(direction, UNLIMITED);
         }
 
-        return new PieceType("Rook", movements, null, null);
+        return new PieceType("Rook", movements, null);
     }
 }

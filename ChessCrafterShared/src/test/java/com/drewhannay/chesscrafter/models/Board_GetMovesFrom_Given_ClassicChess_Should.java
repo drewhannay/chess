@@ -25,15 +25,31 @@ public class Board_GetMovesFrom_Given_ClassicChess_Should {
     }
 
     @Test
-    public void returnASetOfMovesForAPawnContainingOneSpaceAhead() {
+    public void return1_3ForAPawnAt1_2() {
         Set<BoardCoordinate> moves = mTarget.getMovesFrom(BoardCoordinate.at(1, 2));
         assertTrue(moves.contains(BoardCoordinate.at(1, 3)));
     }
 
     @Test
-    public void returnASetOfMovesForAPawnContainingTwoSpacesAhead() {
+    public void return1_4ForAPawnAt1_2ThatHasNotMoved() {
         Set<BoardCoordinate> moves = mTarget.getMovesFrom(BoardCoordinate.at(1, 2));
         assertTrue(moves.contains(BoardCoordinate.at(1, 4)));
+    }
+
+    @Test
+    public void notReturn1_3ForAPawnAt1_2WhenOpposingPawnIsAt1_3() {
+        mTarget.addPiece(Piece.newSouthFacingPawn(Piece.TEAM_TWO), BoardCoordinate.at(1, 3));
+
+        Set<BoardCoordinate> moves = mTarget.getMovesFrom(BoardCoordinate.at(1, 2));
+        assertFalse(moves.contains(BoardCoordinate.at(1, 3)));
+    }
+
+    @Test
+    public void notReturn1_4ForAPawnAt1_2WhenOpposingPawnIsAt1_4() {
+        mTarget.addPiece(Piece.newSouthFacingPawn(Piece.TEAM_TWO), BoardCoordinate.at(1, 4));
+
+        Set<BoardCoordinate> moves = mTarget.getMovesFrom(BoardCoordinate.at(1, 2));
+        assertFalse(moves.contains(BoardCoordinate.at(1, 4)));
     }
 
     @Test
@@ -78,6 +94,22 @@ public class Board_GetMovesFrom_Given_ClassicChess_Should {
 
         Set<BoardCoordinate> moves = mTarget.getMovesFrom(BoardCoordinate.at(2, 7));
         assertTrue(moves.contains(BoardCoordinate.at(3, 6)));
+    }
+
+    @Test
+    public void notReturn1_6ForAPawnAt1_7WhenOpposingPawnIsAt1_6() {
+        mTarget.addPiece(Piece.newSouthFacingPawn(Piece.TEAM_ONE), BoardCoordinate.at(1, 6));
+
+        Set<BoardCoordinate> moves = mTarget.getMovesFrom(BoardCoordinate.at(1, 7));
+        assertFalse(moves.contains(BoardCoordinate.at(1, 6)));
+    }
+
+    @Test
+    public void notReturn1_5ForAPawnAt1_2WhenOpposingPawnIsAt1_5() {
+        mTarget.addPiece(Piece.newSouthFacingPawn(Piece.TEAM_ONE), BoardCoordinate.at(1, 5));
+
+        Set<BoardCoordinate> moves = mTarget.getMovesFrom(BoardCoordinate.at(1, 7));
+        assertFalse(moves.contains(BoardCoordinate.at(1, 5)));
     }
 
     @Test
