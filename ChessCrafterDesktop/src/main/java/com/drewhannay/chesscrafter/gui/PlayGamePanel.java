@@ -4,7 +4,14 @@ import com.drewhannay.chesscrafter.controllers.GameController;
 import com.drewhannay.chesscrafter.dragNdrop.DropManager;
 import com.drewhannay.chesscrafter.dragNdrop.GlassPane;
 import com.drewhannay.chesscrafter.logic.Result;
-import com.drewhannay.chesscrafter.models.*;
+import com.drewhannay.chesscrafter.models.Board;
+import com.drewhannay.chesscrafter.models.BoardCoordinate;
+import com.drewhannay.chesscrafter.models.BoardSize;
+import com.drewhannay.chesscrafter.models.Game;
+import com.drewhannay.chesscrafter.models.MoveBuilder;
+import com.drewhannay.chesscrafter.models.Piece;
+import com.drewhannay.chesscrafter.models.PieceType;
+import com.drewhannay.chesscrafter.models.Team;
 import com.drewhannay.chesscrafter.timer.ChessTimer;
 import com.drewhannay.chesscrafter.utility.GuiUtility;
 import com.drewhannay.chesscrafter.utility.PieceIconUtility;
@@ -13,8 +20,6 @@ import com.google.common.collect.Maps;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.List;
 import java.util.Map;
@@ -40,34 +45,25 @@ public class PlayGamePanel extends ChessPanel {
         initComponents();
     }
 
-    private static void playPromotionMove(PieceType promotionPieceType, MoveBuilder moveBuilder){
+    private static void playPromotionMove(PieceType promotionPieceType, MoveBuilder moveBuilder) {
         moveBuilder.setPromotionType(promotionPieceType);
         updateLabels(GameController.playMove(moveBuilder.build()));
         boardRefresh();
     }
 
-    public static void createPromotionPopup(Set<PieceType> promotionOptions, MoveBuilder moveBuilder){
+    public static void createPromotionPopup(Set<PieceType> promotionOptions, MoveBuilder moveBuilder) {
         JFrame promotionFrame = new JFrame();
         ChessPanel promotionPanel = new ChessPanel();
-        JButton[] pieceLabels = new JButton[promotionOptions.size()];
         JLabel promotionText = new JLabel("Choose a piece to promote to:");
         promotionText.setForeground(Color.white);
         promotionPanel.add(promotionText);
-        int count = 0;
-        Map<String, PieceType> pieceNames = Maps.newHashMapWithExpectedSize(promotionOptions.size());
-        for(PieceType pieceTypeName : promotionOptions){
-            pieceNames.put(pieceTypeName.getName(), pieceTypeName);
-            pieceLabels[count] = new JButton(PieceIconUtility.getPieceIcon(pieceTypeName.getName(), 48, GameController.getGame().getTurnKeeper().getActiveTeamId()));
-            pieceLabels[count].setName(pieceTypeName.getName());
-            pieceLabels[count].addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    JButton fired = (JButton) e.getSource();
-                    playPromotionMove(pieceNames.get(fired.getName()), moveBuilder);
-                    promotionFrame.dispose();
-                }
+        for (PieceType pieceType : promotionOptions) {
+            JButton label = new JButton(PieceIconUtility.getPieceIcon(pieceType.getName(), 48, GameController.getGame().getTurnKeeper().getActiveTeamId()));
+            label.addActionListener(e -> {
+                playPromotionMove(pieceType, moveBuilder);
+                promotionFrame.dispose();
             });
-            promotionPanel.add(pieceLabels[count]);
-            count++;
+            promotionPanel.add(label);
         }
 
         promotionFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -77,19 +73,18 @@ public class PlayGamePanel extends ChessPanel {
         promotionFrame.setVisible(true);
     }
 
-    public static void updateLabels(Result result){
+    public static void updateLabels(Result result) {
         int teamID = GameController.getGame().getTurnKeeper().getActiveTeamId();
-        if(result == Result.CHECK){
+        if (result == Result.CHECK) {
             mTeamLabels.get(teamID).setBackground(Color.RED);
             mTeamLabels.get(teamID).setForeground(Color.WHITE);
-            mTeamLabels.get(teamID).setText(mTeamNames.get(teamID) + " " +  Messages.getString("PlayGamePanel.inCheck"));
-        }
-        else {
+            mTeamLabels.get(teamID).setText(mTeamNames.get(teamID) + " " + Messages.getString("PlayGamePanel.inCheck"));
+        } else {
             mTeamLabels.get(teamID).setBackground(Color.CYAN);
             mTeamLabels.get(teamID).setForeground(Color.BLACK);
         }
-        for(Map.Entry<Integer, JLabel> otherTeamLabel : mTeamLabels.entrySet()) {
-            if(otherTeamLabel.getKey() != teamID) {
+        for (Map.Entry<Integer, JLabel> otherTeamLabel : mTeamLabels.entrySet()) {
+            if (otherTeamLabel.getKey() != teamID) {
                 otherTeamLabel.getValue().setBackground(Color.WHITE);
                 otherTeamLabel.getValue().setForeground(Color.BLACK);
                 otherTeamLabel.getValue().setText(mTeamNames.get(otherTeamLabel.getKey()));
@@ -256,13 +251,12 @@ public class PlayGamePanel extends ChessPanel {
             teamLabel.setBorder(BorderFactory.createTitledBorder("")); //$NON-NLS-1$
             teamLabel.setOpaque(true);
             mTeamLabels.put(team.getTeamId(), teamLabel);
-            if(GameController.getGame().getGameType().equals("Classic")) {
+            if (GameController.getGame().getGameType().equals("Classic")) {
                 if (team.getTeamId() == 1)
                     mTeamNames.put(team.getTeamId(), Messages.getString("PlayGamePanel.whiteTeam"));
                 else
                     mTeamNames.put(team.getTeamId(), Messages.getString("PlayGamePanel.blackTeam"));
-            }
-            else
+            } else
                 mTeamNames.put(team.getTeamId(), "Team " + team.getTeamId());
         }
 
