@@ -38,8 +38,10 @@ public class DropManager extends AbstractDropManager {
         MoveBuilder moveBuilder = GameController.getGame().newMoveBuilder(origin, destination);
         if (moveBuilder.needsPromotion()) {
             Set<PieceType> promotionOptions = moveBuilder.getPromotionOptions();
-            PieceType promotionChoice = getPromotionChoice(promotionOptions);
-            moveBuilder.setPromotionType(promotionChoice);
+            PlayGamePanel.createPromotionPopup(promotionOptions, moveBuilder);
+            return;
+            //PieceType promotionChoice = getPromotionChoice(promotionOptions);
+            //moveBuilder.setPromotionType(promotionChoice);
         }
         PlayGamePanel.updateLabels(GameController.playMove(moveBuilder.build()));
         PlayGamePanel.boardRefresh();
