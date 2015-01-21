@@ -12,17 +12,12 @@ import com.drewhannay.chesscrafter.models.Piece;
 import com.drewhannay.chesscrafter.models.Team;
 import com.drewhannay.chesscrafter.timer.ChessTimer;
 import com.drewhannay.chesscrafter.utility.GuiUtility;
-import com.drewhannay.chesscrafter.utility.PieceIconUtility;
 import com.drewhannay.chesscrafter.utility.PreferenceUtility;
 import com.google.common.collect.Maps;
-import sun.plugin2.message.Message;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
