@@ -9,13 +9,13 @@ import com.drewhannay.chesscrafter.models.PieceType;
 import com.drewhannay.chesscrafter.models.Team;
 import com.drewhannay.chesscrafter.models.turnkeeper.TurnKeeper;
 import com.drewhannay.chesscrafter.rules.Rules;
-import com.drewhannay.chesscrafter.rules.conditionalmovegenerator.ConditionalMoveGenerator;
+import com.drewhannay.chesscrafter.rules.conditionalmovegenerator.CastlingMoveGenerator;
 import com.drewhannay.chesscrafter.rules.conditionalmovegenerator.EnPassantMoveGenerator;
 import com.drewhannay.chesscrafter.rules.endconditions.CaptureObjectiveEndCondition;
 import com.drewhannay.chesscrafter.rules.movefilter.ClassicMoveFilter;
 import com.drewhannay.chesscrafter.rules.movefilter.MoveFilter;
+import com.drewhannay.chesscrafter.rules.postmoveaction.CastlingPostMoveAction;
 import com.drewhannay.chesscrafter.rules.postmoveaction.EnPassantPostMoveAction;
-import com.drewhannay.chesscrafter.rules.postmoveaction.PostMoveAction;
 import com.drewhannay.chesscrafter.rules.promotionmethods.PiecePromoter;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -90,23 +90,23 @@ public class GameBuilder {
     public static Game buildClassic() {
         Rules whiteRules = new Rules(
                 Lists.<MoveFilter>newArrayList(new ClassicMoveFilter()),
-                Lists.<PostMoveAction>newArrayList(new EnPassantPostMoveAction()),
+                Lists.newArrayList(new EnPassantPostMoveAction(), new CastlingPostMoveAction()),
                 new CaptureObjectiveEndCondition(Piece.TEAM_ONE)
         );
         Rules blackRules = new Rules(
                 Lists.<MoveFilter>newArrayList(new ClassicMoveFilter()),
-                Lists.<PostMoveAction>newArrayList(new EnPassantPostMoveAction()),
+                Lists.newArrayList(new EnPassantPostMoveAction(), new CastlingPostMoveAction()),
                 new CaptureObjectiveEndCondition(Piece.TEAM_TWO)
         );
 
         Team[] teams = new Team[2];
         teams[0] = new Team(Piece.TEAM_ONE,
                 whiteRules,
-                Sets.<ConditionalMoveGenerator>newHashSet(new EnPassantMoveGenerator()),
+                Sets.newHashSet(new EnPassantMoveGenerator(), new CastlingMoveGenerator()),
                 PiecePromoter.createClassicPiecePromoter(8, PieceType.getNorthFacingPawnPieceType()));
         teams[1] = new Team(Piece.TEAM_TWO,
                 blackRules,
-                Sets.<ConditionalMoveGenerator>newHashSet(new EnPassantMoveGenerator()),
+                Sets.newHashSet(new EnPassantMoveGenerator(), new CastlingMoveGenerator()),
                 PiecePromoter.createClassicPiecePromoter(1, PieceType.getSouthFacingPawnPieceType()));
 
         Board[] boards = new Board[]{new Board(BoardSize.withDimensions(8, 8))};
