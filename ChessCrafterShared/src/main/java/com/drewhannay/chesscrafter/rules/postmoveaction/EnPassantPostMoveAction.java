@@ -61,6 +61,11 @@ public final class EnPassantPostMoveAction implements PostMoveAction {
 
         Piece piece = board.getPiece(lastMove.destination);
 
+        // must have moved a piece
+        if (piece == null) {
+            return;
+        }
+
         // must have moved a pawn
         if (!isPawn(piece)) {
             return;
