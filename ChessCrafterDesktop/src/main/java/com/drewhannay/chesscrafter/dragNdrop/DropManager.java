@@ -3,6 +3,7 @@ package com.drewhannay.chesscrafter.dragNdrop;
 import com.drewhannay.chesscrafter.controllers.GameController;
 import com.drewhannay.chesscrafter.gui.PlayGamePanel;
 import com.drewhannay.chesscrafter.gui.SquareJLabel;
+import com.drewhannay.chesscrafter.logic.Result;
 import com.drewhannay.chesscrafter.models.BoardCoordinate;
 import com.drewhannay.chesscrafter.models.MoveBuilder;
 import com.drewhannay.chesscrafter.models.PieceType;
@@ -41,8 +42,7 @@ public class DropManager extends AbstractDropManager {
             PieceType promotionChoice = getPromotionChoice(promotionOptions);
             moveBuilder.setPromotionType(promotionChoice);
         }
-
-        GameController.playMove(moveBuilder.build());
+        //PlayGamePanel.updateLabels();
         PlayGamePanel.boardRefresh();
     }
 

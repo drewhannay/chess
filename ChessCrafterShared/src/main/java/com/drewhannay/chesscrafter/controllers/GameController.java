@@ -1,5 +1,6 @@
 package com.drewhannay.chesscrafter.controllers;
 
+import com.drewhannay.chesscrafter.logic.Result;
 import com.drewhannay.chesscrafter.models.BoardCoordinate;
 import com.drewhannay.chesscrafter.models.Game;
 import com.drewhannay.chesscrafter.models.Move;
@@ -29,8 +30,8 @@ public final class GameController {
         return sGame.getMovesFrom(boardIndex, coordinate);
     }
 
-    public static void playMove(Move move) {
-        sGame.executeMove(move);
+    public static Result playMove(Move move) {
+        return sGame.executeMove(move);
     }
 
     private static Game sGame;

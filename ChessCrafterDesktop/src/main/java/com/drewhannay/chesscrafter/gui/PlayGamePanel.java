@@ -3,6 +3,7 @@ package com.drewhannay.chesscrafter.gui;
 import com.drewhannay.chesscrafter.controllers.GameController;
 import com.drewhannay.chesscrafter.dragNdrop.DropManager;
 import com.drewhannay.chesscrafter.dragNdrop.GlassPane;
+import com.drewhannay.chesscrafter.logic.Result;
 import com.drewhannay.chesscrafter.models.*;
 import com.drewhannay.chesscrafter.timer.ChessTimer;
 import com.drewhannay.chesscrafter.utility.GuiUtility;
@@ -86,6 +87,19 @@ public class PlayGamePanel extends ChessPanel {
 //		constraints.gridx = 11 + twoBoardsGridBagOffset;
 //		add(resetLabel, constraints);
 //	}
+
+    public static void updateLabels(Result result){
+        int teamID = GameController.getGame().getTurnKeeper().getActiveTeamId();
+        if(result == Result.CHECK){
+            mTeamLabels[teamID].setBackground(Color.RED);
+        }
+        else {
+            mTeamLabels[teamID].setBackground(Color.CYAN);
+        }
+        mTeamLabels[teamID].setForeground(Color.WHITE);
+        mTeamLabels[(teamID + 1) % GameController.getGame().getTeams().length].setBackground(Color.white);
+        mTeamLabels[(teamID + 1) % GameController.getGame().getTeams().length].setForeground(Color.black);
+    }
 
     public static void boardRefresh() {
         for (BoardPanel panel : mGameBoards) {
@@ -290,7 +304,7 @@ public class PlayGamePanel extends ChessPanel {
 
         for (int boardIndex = 0; boardIndex < boards.length; boardIndex++) {
             constraints.gridheight = boards[boardIndex].getBoardSize().height + 2; // Added 2 for row labels? I dunno.
-            constraints.gridy = 0;
+            constraints.gridy = 1;
             constraints.fill = GridBagConstraints.HORIZONTAL;
             constraints.insets = new Insets(10, 0, 0, 0);
             constraints.gridx = gridx;
@@ -310,6 +324,8 @@ public class PlayGamePanel extends ChessPanel {
             mTeamLabels[teamIndex].setBorder(BorderFactory.createTitledBorder("")); //$NON-NLS-1$
             mTeamLabels[teamIndex].setOpaque(true);
             mTeamLabels[teamIndex].setVisible(true);
+            mTeamLabels[teamIndex].setBackground(Color.WHITE);
+            mTeamLabels[teamIndex].setForeground(Color.BLACK);
         }
 
         int jailBoardSize = getJailDimension();
@@ -325,7 +341,7 @@ public class PlayGamePanel extends ChessPanel {
             mJails[teamIndex].setPreferredSize(new Dimension((jailBoardSize + 1) * 25, (jailBoardSize + 1) * 25));
         }
 
-        // add the Black timer
+        //Add the Black Team Label
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.anchor = GridBagConstraints.BASELINE;
         constraints.gridwidth = 3;
@@ -333,6 +349,18 @@ public class PlayGamePanel extends ChessPanel {
         constraints.ipadx = 100;
         constraints.gridx = 11 + twoBoardsGridBagOffset;
         constraints.gridy = 1;
+        constraints.insets = new Insets(25, 0, 25, 0);
+        mTeamLabels[0].setText("Black Team");
+        add(mTeamLabels[0], constraints);
+
+        // add the Black timer
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.anchor = GridBagConstraints.BASELINE;
+        constraints.gridwidth = 3;
+        constraints.gridheight = 1;
+        constraints.ipadx = 100;
+        constraints.gridx = 11 + twoBoardsGridBagOffset;
+        constraints.gridy = 2;
         constraints.insets = new Insets(0, 25, 10, 25);
         // TODO: This currently assumes a two-person game.
 //		if (!ChessTimer.isNoTimer(mTimers[1]))
@@ -345,7 +373,7 @@ public class PlayGamePanel extends ChessPanel {
         constraints.gridheight = 3;
         constraints.ipadx = 0;
         constraints.gridx = 11 + twoBoardsGridBagOffset;
-        constraints.gridy = 2;
+        constraints.gridy = 3;
         add(mJails[1], constraints);
 
         // adds the undo button
@@ -355,7 +383,7 @@ public class PlayGamePanel extends ChessPanel {
         constraints.gridheight = 1;
         constraints.ipadx = 100;
         constraints.gridx = 11 + twoBoardsGridBagOffset;
-        constraints.gridy = 5;
+        constraints.gridy = 6;
         // add(undoButton, constraints);
 
         // adds the White Jail
@@ -365,7 +393,7 @@ public class PlayGamePanel extends ChessPanel {
         constraints.gridheight = 3;
         constraints.ipadx = 0;
         constraints.gridx = 11 + twoBoardsGridBagOffset;
-        constraints.gridy = 6;
+        constraints.gridy = 7;
         add(mJails[0], constraints);
 
         // adds the White timer
@@ -375,8 +403,21 @@ public class PlayGamePanel extends ChessPanel {
         constraints.gridheight = 1;
         constraints.ipadx = 100;
         constraints.gridx = 11 + twoBoardsGridBagOffset;
-        constraints.gridy = 9;
+        constraints.gridy = 6;
         constraints.insets = new Insets(0, 0, 0, 0);
+
+        //Add the White Team Label
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.anchor = GridBagConstraints.BASELINE;
+        constraints.gridwidth = 3;
+        constraints.gridheight = 1;
+        constraints.ipadx = 100;
+        constraints.gridx = 11 + twoBoardsGridBagOffset;
+        constraints.gridy = 10;
+        constraints.insets = new Insets(25, 0, 25, 0);
+        mTeamLabels[1].setText("White Team");
+        add(mTeamLabels[1], constraints);
+
         // TODO: This assumes a two-player game
 //		add(new ChessTimerLabel(mTimers[0]), constraints);
 //		resetTimers();

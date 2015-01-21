@@ -3,6 +3,7 @@ package com.drewhannay.chesscrafter.gui;
 import com.drewhannay.chesscrafter.dragNdrop.DropManager;
 import com.drewhannay.chesscrafter.dragNdrop.GlassPane;
 import com.drewhannay.chesscrafter.dragNdrop.MotionAdapter;
+import com.drewhannay.chesscrafter.logic.Result;
 import com.drewhannay.chesscrafter.models.*;
 import com.drewhannay.chesscrafter.utility.GuiUtility;
 import com.google.common.collect.Lists;
@@ -63,6 +64,10 @@ public class BoardPanel extends JPanel {
                 square.setPiece(board.getPiece(BoardCoordinate.at(x + 1, y + 1)));
             }
         }
+    }
+
+    public void updateCheckLocation(Board[] boards){
+
     }
 
     public void updateJailPopulation(Team[] teams) {
