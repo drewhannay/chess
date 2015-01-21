@@ -41,8 +41,7 @@ public class DropManager extends AbstractDropManager {
             PieceType promotionChoice = getPromotionChoice(promotionOptions);
             moveBuilder.setPromotionType(promotionChoice);
         }
-
-        GameController.playMove(moveBuilder.build());
+        PlayGamePanel.updateLabels(GameController.playMove(moveBuilder.build()));
         PlayGamePanel.boardRefresh();
     }
 

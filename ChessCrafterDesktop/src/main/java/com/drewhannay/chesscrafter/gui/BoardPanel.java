@@ -65,6 +65,11 @@ public class BoardPanel extends JPanel {
         }
     }
 
+    //TODO update the square of the piece in check when Logic can provide it
+    /*public void updateCheckLocation(Board[] boards){
+
+    }*/
+
     public void updateJailPopulation(Team[] teams) {
         Team team = teams[mTeamIndex];
         Iterator<Piece> pieceIterator = team.getCapturedOpposingPieces().iterator();

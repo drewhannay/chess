@@ -71,7 +71,7 @@ public final class Game {
         return new MoveBuilder(getTeam(mTurnKeeper.getActiveTeamId()), mBoards[0], origin, destination);
     }
 
-    public void executeMove(@NotNull Move move) {
+    public Result executeMove(@NotNull Move move) {
         Board board = mBoards[0];
         Team team = getTeam(mTurnKeeper.getActiveTeamId());
 
@@ -95,11 +95,11 @@ public final class Game {
         Result result = newActiveTeam.getRules().getEndCondition().checkEndCondition(this);
         // TODO: remove println
         System.out.println(result);
-
         mHistory.push(move);
+        return result;
     }
 
-    public void undoMove() {
+    public Result undoMove() {
         Preconditions.checkState(!mHistory.isEmpty());
 
         Move move = mHistory.pop();
@@ -127,6 +127,8 @@ public final class Game {
         if (capturedPiece != null) {
             mBoards[0].addPiece(capturedPiece, move.destination);
         }
+        //TODO this needs to return the actual result value for the previous move we are returning to
+        return Result.CONTINUE;
     }
 
     private Team getTeam(int teamId) {
