@@ -99,7 +99,7 @@ public final class Game {
         return result;
     }
 
-    public void undoMove() {
+    public Result undoMove() {
         Preconditions.checkState(!mHistory.isEmpty());
 
         Move move = mHistory.pop();
@@ -127,6 +127,8 @@ public final class Game {
         if (capturedPiece != null) {
             mBoards[0].addPiece(capturedPiece, move.destination);
         }
+        //TODO this needs to return the actual result value for the previous move we are returning to
+        return Result.CONTINUE;
     }
 
     private Team getTeam(int teamId) {

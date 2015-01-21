@@ -3,6 +3,7 @@ package com.drewhannay.chesscrafter.gui;
 import com.drewhannay.chesscrafter.controllers.GameController;
 import com.drewhannay.chesscrafter.dragNdrop.DropManager;
 import com.drewhannay.chesscrafter.dragNdrop.GlassPane;
+import com.drewhannay.chesscrafter.logic.Result;
 import com.drewhannay.chesscrafter.models.Board;
 import com.drewhannay.chesscrafter.models.BoardCoordinate;
 import com.drewhannay.chesscrafter.models.BoardSize;
@@ -93,16 +94,17 @@ public class PlayGamePanel extends ChessPanel {
 //	}
 
     public static void updateLabels(Result result){
-        int teamID = GameController.getGame().getTurnKeeper().getActiveTeamId();
+        int teamID = GameController.getGame().getTurnKeeper().getActiveTeamId() - 1;
+        int otherTeamID = (teamID + 1) % GameController.getGame().getTeams().length;
         if(result == Result.CHECK){
-            mTeamLabels[teamID].setBackground(Color.RED);
+            mTeamLabels[otherTeamID].setBackground(Color.RED);
+            mTeamLabels[otherTeamID].setForeground(Color.WHITE);
         }
         else {
-            mTeamLabels[teamID].setBackground(Color.CYAN);
+            mTeamLabels[(teamID + 1) % GameController.getGame().getTeams().length].setBackground(Color.CYAN);
         }
-        mTeamLabels[teamID].setForeground(Color.WHITE);
-        mTeamLabels[(teamID + 1) % GameController.getGame().getTeams().length].setBackground(Color.white);
-        mTeamLabels[(teamID + 1) % GameController.getGame().getTeams().length].setForeground(Color.black);
+        mTeamLabels[teamID].setBackground(Color.WHITE);
+        mTeamLabels[teamID].setForeground(Color.BLACK);
     }
 
     public static void boardRefresh() {
@@ -270,7 +272,7 @@ public class PlayGamePanel extends ChessPanel {
     private void initComponents() {
         JButton undoButton = new JButton(Messages.getString("PlayGamePanel.undo")); //$NON-NLS-1$
         undoButton.addActionListener(event -> {
-            getGame().undoMove();
+            updateLabels(getGame().undoMove());
             boardRefresh();
         });
 
@@ -339,7 +341,7 @@ public class PlayGamePanel extends ChessPanel {
         constraints.ipadx = 100;
         constraints.gridx = 11 + twoBoardsGridBagOffset;
         constraints.gridy = 1;
-        constraints.insets = new Insets(25, 0, 25, 0);
+        constraints.insets = new Insets(10, 0, 10, 0);
         mTeamLabels[0].setText("Black Team");
         add(mTeamLabels[0], constraints);
 
@@ -373,7 +375,7 @@ public class PlayGamePanel extends ChessPanel {
         constraints.gridheight = 1;
         constraints.ipadx = 100;
         constraints.gridx = 11 + twoBoardsGridBagOffset;
-        constraints.gridy = 5;
+        constraints.gridy = 6;
         add(undoButton, constraints);
 
         // adds the White Jail
@@ -404,7 +406,7 @@ public class PlayGamePanel extends ChessPanel {
         constraints.ipadx = 100;
         constraints.gridx = 11 + twoBoardsGridBagOffset;
         constraints.gridy = 10;
-        constraints.insets = new Insets(25, 0, 25, 0);
+        constraints.insets = new Insets(10, 0, 10, 0);
         mTeamLabels[1].setText("White Team");
         add(mTeamLabels[1], constraints);
 
@@ -412,6 +414,7 @@ public class PlayGamePanel extends ChessPanel {
 //		add(new ChessTimerLabel(mTimers[0]), constraints);
 //		resetTimers();
         boardRefresh();
+        updateLabels(Result.CONTINUE);
         Driver.getInstance().pack();
     }
 
