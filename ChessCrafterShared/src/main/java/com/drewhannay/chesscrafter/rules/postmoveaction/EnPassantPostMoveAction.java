@@ -15,6 +15,11 @@ public final class EnPassantPostMoveAction implements PostMoveAction {
     public void perform(@NotNull Board board, @NotNull Team team, @NotNull Move move, @Nullable Piece capturedPiece) {
         Piece piece = board.getPiece(move.destination);
 
+        // must have moved a piece
+        if (piece == null) {
+            return;
+        }
+
         // must have moved a pawn
         if (!isPawn(piece)) {
             return;
