@@ -33,7 +33,7 @@ public final class EnPassantMoveGenerator implements ConditionalMoveGenerator {
 
         // must have moved a pawn on the last turn
         Piece lastMovedPiece = board.getPiece(lastMove.destination);
-        if (lastMovedPiece != null && !isPawn(lastMovedPiece)) {
+        if (lastMovedPiece == null || !isPawn(lastMovedPiece)) {
             return Collections.emptySet();
         }
 
