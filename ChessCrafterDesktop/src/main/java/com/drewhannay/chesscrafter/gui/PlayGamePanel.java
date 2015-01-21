@@ -15,6 +15,7 @@ import com.drewhannay.chesscrafter.utility.GuiUtility;
 import com.drewhannay.chesscrafter.utility.PieceIconUtility;
 import com.drewhannay.chesscrafter.utility.PreferenceUtility;
 import com.google.common.collect.Maps;
+import sun.plugin2.message.Message;
 
 import javax.swing.*;
 import java.awt.*;
@@ -46,69 +47,22 @@ public class PlayGamePanel extends ChessPanel {
         initComponents();
     }
 
-//	protected void resetTurnLabels()
-//	{
-//		mTeamLabels[currentTeamIndex].setVisible(true);
-//		mTeamLabels[currentTeamIndex].setBackground(Color.red);
-//
-//		for (JLabel label : mTeamLabels)
-//			remove(label);
-//		GridBagConstraints constraints = new GridBagConstraints();
-//
-//		if (isBlackTeam)
-//		{
-//			constraints.gridy = 0;
-//			resetLabel.setForeground(mTeamIndex == 1 ? Color.white : Color.black);
-//			resetLabel.setBackground(mTeamIndex == 1 ? SquareJLabel.HIGHLIGHT_COLOR :
-//					null);
-//			if (inCheck)
-//				resetLabel.setText(Messages.getString("PlayGamePanel.blackTeam") + " " + Messages.getString("PlayGamePanel.inCheck")); //$NON-NLS-2$
-//			else
-//				resetLabel.setText(Messages.getString("PlayGamePanel.blackTeam")); //$NON-NLS-1$
-//		}
-//		else
-//		{
-//			// change spacing if there is a timer
-//			// TODO: This assumes a two-player game
-//			constraints.gridy = ChessTimer.isNoTimer(mTimers[0]) ? 9 : 10;
-//			if (inCheck)
-//				resetLabel.setText(Messages.getString("PlayGamePanel.whiteTeam") + " " + Messages.getString("PlayGamePanel.inCheck")); //$NON-NLS-2$
-//			else
-//				resetLabel.setText(Messages.getString("PlayGamePanel.whiteTeam")); //$NON-NLS-1$
-//			resetLabel.setForeground(mTeamIndex == 0 ? Color.white : Color.black);
-//			resetLabel.setBackground(mTeamIndex == 0 ? SquareJLabel.HIGHLIGHT_COLOR :
-//					null);
-//		}
-//		if (inCheck)
-//		{
-//			resetLabel.setForeground(Color.white);
-//			resetLabel.setBackground(Color.red);
-//			constraints.ipadx = 50;
-//		}
-//		else
-//		{
-//			constraints.ipadx = 100;
-//		}
-//		constraints.gridwidth = 3;
-//		constraints.insets = new Insets(10, 0, 10, 0);
-//		constraints.gridx = 11 + twoBoardsGridBagOffset;
-//		add(resetLabel, constraints);
-//	}
-
     public static void updateLabels(Result result){
         int teamID = GameController.getGame().getTurnKeeper().getActiveTeamId();
-        //int otherTeamID = (teamID + 1) % GameController.getGame().getTeams().length;
         if(result == Result.CHECK){
             mTeamLabels.get(teamID).setBackground(Color.RED);
             mTeamLabels.get(teamID).setForeground(Color.WHITE);
+            mTeamLabels.get(teamID).setText(mTeamNames.get(teamID) + " " +  Messages.getString("PlayGamePanel.inCheck"));
         }
         else {
             mTeamLabels.get(teamID).setBackground(Color.CYAN);
+            mTeamLabels.get(teamID).setForeground(Color.BLACK);
         }
         for(Map.Entry<Integer, JLabel> otherTeamLabel : mTeamLabels.entrySet()) {
             if(otherTeamLabel.getKey() != teamID) {
                 otherTeamLabel.getValue().setBackground(Color.WHITE);
                 otherTeamLabel.getValue().setForeground(Color.BLACK);
+                otherTeamLabel.getValue().setText(mTeamNames.get(otherTeamLabel.getKey()));
             }
         }
     }
@@ -123,55 +77,6 @@ public class PlayGamePanel extends ChessPanel {
             panel.updateJailPopulation(mGame.getTeams());
             panel.refreshSquares();
         }
-
-        // refreshGameSquares();
-
-        // Team[] teams = getGame().getTeams();
-        //
-        // int currentTeamIndex = getGame().getTurnKeeper().getCurrentTeamIndex();
-        //
-        // // TODO: This may need to adapt based on the number of players or
-        // // whatnot.
-        // int jailDimension = 5;
-        //
-        // for (int teamIndex = 0; teamIndex < teams.length; teamIndex++)
-        // {
-        // Team currentTeam = teams[teamIndex];
-        // List<Piece> capturedPieces = currentTeam.getCapturedOpposingPieces();
-        // if (capturedPieces == null)
-        // capturedPieces = Lists.newArrayList();
-        //
-        // int capturedPieceIndex = 0;
-        //
-        // mJails[teamIndex] = new BoardPanel(jailDimension, jailDimension, true);
-        // mJails[teamIndex].createJailGrid(jailDimension, jailDimension);
-        //
-        // for (int rowIndex = 1; rowIndex <= jailDimension && capturedPieceIndex < capturedPieces.size(); rowIndex++)
-        // {
-        // for (int columnIndex = 1; columnIndex <= jailDimension && capturedPieceIndex < capturedPieces.size(); columnIndex++)
-        // {
-        // mJails[teamIndex].updateSquareLabel(new ChessCoordinates(rowIndex, columnIndex, teamIndex),
-        // capturedPieces.get(capturedPieceIndex));
-        // capturedPieceIndex++;
-        // }
-        // }
-        //
-        // }
-        //
-        // List<Piece> currentObjectivePieces = teams[currentTeamIndex].getNonCapturedObjectivePieces();
-        //
-        // if (currentObjectivePieces != null && teams[currentTeamIndex].objectivePieceIsInCheck(currentTeamIndex))
-        // {
-        // // resetTurnLabels();
-        //
-        // // for (Piece piece : getGame().getThreats(currentObjectivePieces))
-        // // getGame().getBoards()[piece.getCoordinates().boardIndex].getSquare(piece.getCoordinates().row,
-        // // piece.getCoordinates().column).setIsThreatSquare(true);
-        // }
-        // else
-        // {
-        // // resetTurnLabels();
-        // }
     }
 
 	/*
@@ -292,6 +197,7 @@ public class PlayGamePanel extends ChessPanel {
         GridBagConstraints constraints = new GridBagConstraints();
         Team[] teams = GameController.getGame().getTeams();
         mTeamLabels = Maps.newHashMapWithExpectedSize(teams.length);
+        mTeamNames = Maps.newHashMapWithExpectedSize(teams.length);
         mJails = new BoardPanel[teams.length];
 
         Board[] boards = GameController.getGame().getBoards();
@@ -314,24 +220,23 @@ public class PlayGamePanel extends ChessPanel {
             add(mGameBoards[boardIndex], constraints);
         }
 
-        Iterator<String> colorIterator = PieceIconUtility.pieceColorMap.keySet().iterator();
         for (Team team : mGame.getTeams()) {
-            String colorString = colorIterator.next();
-            JLabel teamLabel = GuiUtility.createJLabel(colorString);
+            JLabel teamLabel = GuiUtility.createJLabel("");
             teamLabel.setHorizontalAlignment(SwingConstants.CENTER);
             teamLabel.setBorder(BorderFactory.createTitledBorder("")); //$NON-NLS-1$
             teamLabel.setOpaque(true);
-            teamLabel.setVisible(true);
-            teamLabel.setBackground(Color.WHITE);
-            teamLabel.setForeground(Color.BLACK);
             mTeamLabels.put(team.getTeamId(), teamLabel);
+            if(GameController.getGame().getGameType().equals("Classic")) {
+                if (team.getTeamId() == 1)
+                    mTeamNames.put(team.getTeamId(), Messages.getString("PlayGamePanel.whiteTeam"));
+                else
+                    mTeamNames.put(team.getTeamId(), Messages.getString("PlayGamePanel.blackTeam"));
+            }
+            else
+                mTeamNames.put(team.getTeamId(), "Team " + team.getTeamId());
         }
 
         int jailBoardSize = getJailDimension();
-
-        // mWhiteCapturesJail = new BoardController(jailBoardSize,
-        // jailBoardSize, false);
-        // mWhiteCapturePanel = createGrid(mWhiteCapturesJail, true).first;
 
         for (int teamIndex = 0; teamIndex < mGame.getTeams().length; teamIndex++) {
             mJails[teamIndex] = new BoardPanel(BoardSize.withDimensions(jailBoardSize, jailBoardSize), 0, teamIndex, mGlobalGlassPane, mDropManager, true);
@@ -345,7 +250,6 @@ public class PlayGamePanel extends ChessPanel {
         constraints.anchor = GridBagConstraints.BASELINE;
         constraints.gridwidth = 3;
         constraints.gridheight = 1;
-        constraints.ipadx = 100;
         constraints.gridx = 11 + twoBoardsGridBagOffset;
         constraints.gridy = 1;
         constraints.insets = new Insets(10, 0, 10, 0);
@@ -357,7 +261,6 @@ public class PlayGamePanel extends ChessPanel {
         constraints.anchor = GridBagConstraints.BASELINE;
         constraints.gridwidth = 3;
         constraints.gridheight = 1;
-        constraints.ipadx = 100;
         constraints.gridx = 11 + twoBoardsGridBagOffset;
         constraints.gridy = 2;
         constraints.insets = new Insets(0, 25, 10, 25);
@@ -370,7 +273,6 @@ public class PlayGamePanel extends ChessPanel {
         constraints.anchor = GridBagConstraints.BASELINE;
         constraints.gridwidth = 3;
         constraints.gridheight = 3;
-        constraints.ipadx = 0;
         constraints.gridx = 11 + twoBoardsGridBagOffset;
         constraints.gridy = 3;
         add(mJails[1], constraints);
@@ -380,7 +282,6 @@ public class PlayGamePanel extends ChessPanel {
         constraints.anchor = GridBagConstraints.BASELINE;
         constraints.gridwidth = 3;
         constraints.gridheight = 1;
-        constraints.ipadx = 100;
         constraints.gridx = 11 + twoBoardsGridBagOffset;
         constraints.gridy = 6;
         add(undoButton, constraints);
@@ -390,7 +291,6 @@ public class PlayGamePanel extends ChessPanel {
         constraints.anchor = GridBagConstraints.BASELINE;
         constraints.gridwidth = 3;
         constraints.gridheight = 3;
-        constraints.ipadx = 0;
         constraints.gridx = 11 + twoBoardsGridBagOffset;
         constraints.gridy = 7;
         add(mJails[0], constraints);
@@ -400,7 +300,6 @@ public class PlayGamePanel extends ChessPanel {
         constraints.anchor = GridBagConstraints.BASELINE;
         constraints.gridwidth = 3;
         constraints.gridheight = 1;
-        constraints.ipadx = 100;
         constraints.gridx = 11 + twoBoardsGridBagOffset;
         constraints.gridy = 6;
         constraints.insets = new Insets(0, 0, 0, 0);
@@ -410,7 +309,6 @@ public class PlayGamePanel extends ChessPanel {
         constraints.anchor = GridBagConstraints.BASELINE;
         constraints.gridwidth = 3;
         constraints.gridheight = 1;
-        constraints.ipadx = 100;
         constraints.gridx = 11 + twoBoardsGridBagOffset;
         constraints.gridy = 10;
         constraints.insets = new Insets(10, 0, 10, 0);
@@ -428,19 +326,6 @@ public class PlayGamePanel extends ChessPanel {
     private int getJailDimension() {
         return 4;
     }
-
-    public void setNextMoveMustPlacePiece(boolean nextMoveMustPlacePiece) {
-        mNextMoveMustPlacePiece = nextMoveMustPlacePiece;
-    }
-
-    public boolean getNextMoveMustPlacePiece() {
-        return mNextMoveMustPlacePiece;
-    }
-
-	/*
-     * public void setPieceToPlace(PieceController piece) { mPieceToPlace =
-	 * piece; }
-	 */
 
     public static void setGame(Game game) {
         mGame = game;
@@ -468,11 +353,11 @@ public class PlayGamePanel extends ChessPanel {
 
     private static final long serialVersionUID = -2507232401817253688L;
 
-    protected static boolean mNextMoveMustPlacePiece;
     protected int twoBoardsGridBagOffset;
     protected static Game mGame;
     protected static ChessTimer[] mTimers;
     protected static Map<Integer, JLabel> mTeamLabels;
+    protected static Map<Integer, String> mTeamNames;
     protected static BoardPanel[] mGameBoards;
     protected static BoardPanel[] mJails;
     protected static JMenu mOptionsMenu;
