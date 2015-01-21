@@ -3,7 +3,6 @@ package com.drewhannay.chesscrafter.gui;
 import com.drewhannay.chesscrafter.dragNdrop.DropManager;
 import com.drewhannay.chesscrafter.dragNdrop.GlassPane;
 import com.drewhannay.chesscrafter.dragNdrop.MotionAdapter;
-import com.drewhannay.chesscrafter.logic.Result;
 import com.drewhannay.chesscrafter.models.*;
 import com.drewhannay.chesscrafter.utility.GuiUtility;
 import com.google.common.collect.Lists;
@@ -66,9 +65,10 @@ public class BoardPanel extends JPanel {
         }
     }
 
-    public void updateCheckLocation(Board[] boards){
+    //TODO update the square of the piece in check when Logic can provide it
+    /*public void updateCheckLocation(Board[] boards){
 
-    }
+    }*/
 
     public void updateJailPopulation(Team[] teams) {
         Team team = teams[mTeamIndex];
