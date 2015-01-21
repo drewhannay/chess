@@ -1,10 +1,15 @@
 package com.drewhannay.chesscrafter.rules.postmoveaction;
 
+import com.drewhannay.chesscrafter.models.Board;
 import com.drewhannay.chesscrafter.models.Move;
+import com.drewhannay.chesscrafter.models.Piece;
+import com.drewhannay.chesscrafter.models.Team;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public final class CapturerStealsCapturedPostMoveAction extends PostMoveAction {
+public final class CapturerStealsCapturedPostMoveAction implements PostMoveAction {
     @Override
-    public void perform(Move move) {
+    public void perform(@NotNull Board board, @NotNull Team team, @NotNull Move move, @Nullable Piece capturedPiece) {
         // TODO Auto-generated method stub
         // if (move.getCaptured() == null)
         // return;
@@ -28,7 +33,7 @@ public final class CapturerStealsCapturedPostMoveAction extends PostMoveAction {
     }
 
     @Override
-    public void undo(Move move) {
+    public void undo(@NotNull Board board, @NotNull Team team, @NotNull Move lastMove, @NotNull Move opponentsLastMove) {
         // TODO Auto-generated method stub
         // if (move.getOldPos() == null)
         // return;

@@ -2,7 +2,9 @@ package com.drewhannay.chesscrafter.models;
 
 import com.drewhannay.chesscrafter.logic.Result;
 import com.drewhannay.chesscrafter.models.turnkeeper.TurnKeeper;
+import com.drewhannay.chesscrafter.rules.conditionalmovegenerator.ConditionalMoveGenerator;
 import com.drewhannay.chesscrafter.rules.movefilter.MoveFilter;
+import com.drewhannay.chesscrafter.rules.postmoveaction.PostMoveAction;
 import com.google.common.base.Preconditions;
 import org.jetbrains.annotations.NotNull;
 
@@ -47,11 +49,16 @@ public final class Game {
         return mBoards[boardIndex].getPiece(coordinates);
     }
 
-    public Set<BoardCoordinate> getMovesFrom(int boardIndex, BoardCoordinate coordinate) {
+    @NotNull
+    public Set<BoardCoordinate> getMovesFrom(int boardIndex, @NotNull BoardCoordinate coordinate) {
         Board board = mBoards[boardIndex];
         Team team = getTeam(mTurnKeeper.getActiveTeamId());
 
         Set<BoardCoordinate> moves = board.getMovesFrom(coordinate);
+
+        for (ConditionalMoveGenerator conditionalMoveGenerator : team.getConditionalMoveGenerators()) {
+            moves.addAll(conditionalMoveGenerator.generateMoves(board, coordinate, mHistory));
+        }
 
         for (MoveFilter moveFilter : team.getRules().getMoveFilters()) {
             moves = moveFilter.filterMoves(board, coordinate, moves);
@@ -78,11 +85,14 @@ public final class Game {
             board.addPiece(promotedPiece, move.destination);
         }
 
-        // TODO: PostMoveAction
+        for (PostMoveAction action : team.getRules().getPostMoveActions()) {
+            action.perform(board, team, move, capturedPiece);
+        }
 
         mTurnKeeper.finishTurn();
 
-        Result result = getTeam(mTurnKeeper.getActiveTeamId()).getRules().getEndCondition().checkEndCondition(this);
+        Team newActiveTeam = getTeam(mTurnKeeper.getActiveTeamId());
+        Result result = newActiveTeam.getRules().getEndCondition().checkEndCondition(this);
         // TODO: remove println
         System.out.println(result);
         mHistory.push(move);
@@ -101,7 +111,9 @@ public final class Game {
         Board board = mBoards[0];
         Team team = getTeam(mTurnKeeper.getActiveTeamId());
 
-        // TODO: Undo PostMoveAction
+        for (PostMoveAction action : team.getRules().getPostMoveActions()) {
+            action.undo(board, team, move, mHistory.isEmpty() ? null : mHistory.peek());
+        }
 
         if (move.promotionType != null) {
             Piece demotedPiece = team.getPiecePromoter().undoPromotion();
