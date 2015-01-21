@@ -1,6 +1,5 @@
 package com.drewhannay.chesscrafter.rules;
 
-import com.drewhannay.chesscrafter.models.Move;
 import com.drewhannay.chesscrafter.rules.endconditions.EndCondition;
 import com.drewhannay.chesscrafter.rules.movefilter.MoveFilter;
 import com.drewhannay.chesscrafter.rules.postmoveaction.PostMoveAction;
@@ -16,18 +15,14 @@ public final class Rules {
         mEndCondition = endCondition;
     }
 
+    // TODO: should be a set?
     public List<MoveFilter> getMoveFilters() {
         return mMoveFilters;
     }
 
-    public void performPostMoveActions(Move move) {
-        for (PostMoveAction action : mPostMoveActions)
-            action.perform(move);
-    }
-
-    public void undoPostMoveActions(Move move) {
-        for (PostMoveAction action : mPostMoveActions)
-            action.undo(move);
+    // TODO: should be a set?
+    public List<PostMoveAction> getPostMoveActions() {
+        return mPostMoveActions;
     }
 
     public EndCondition getEndCondition() {

@@ -1,17 +1,24 @@
 package com.drewhannay.chesscrafter.rules.postmoveaction;
 
+import com.drewhannay.chesscrafter.models.Board;
 import com.drewhannay.chesscrafter.models.Move;
+import com.drewhannay.chesscrafter.models.Piece;
+import com.drewhannay.chesscrafter.models.Team;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public final class AtomicCapturePostMoveAction extends PostMoveAction {
+public final class AtomicCapturePostMoveAction implements PostMoveAction {
     /**
      * Capture removes pieces from 8 surrounding squares, including the
      * capturing piece - with the exception of pawns, unless the pawn is either
      * the captured piece or the capturer.
      *
-     * @param move The move performed.
+     * @param game
+     * @param move          The move performed.
+     * @param capturedPiece
      */
     @Override
-    public void perform(Move move) {
+    public void perform(@NotNull Board board, @NotNull Team team, @NotNull Move move, @Nullable Piece capturedPiece) {
         // TODO Auto-generated method stub
         // if (move.getCaptured() == null)
         // return;
@@ -69,7 +76,7 @@ public final class AtomicCapturePostMoveAction extends PostMoveAction {
     }
 
     @Override
-    public void undo(Move move) {
+    public void undo(@NotNull Board board, @NotNull Team team, @NotNull Move lastMove, @NotNull Move opponentsLastMove) {
         // TODO Auto-generated method stub
         // if (move.getCaptured() == null)
         // return;

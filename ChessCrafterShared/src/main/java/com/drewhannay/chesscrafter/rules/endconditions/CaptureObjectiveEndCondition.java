@@ -24,7 +24,6 @@ public final class CaptureObjectiveEndCondition implements EndCondition {
     public Result checkEndCondition(@NotNull Game game) {
         int boardIndex = 0;
         Board board = game.getBoards()[boardIndex];
-        // @NotNull Board board, @NotNull BoardCoordinate start, @NotNull Set<BoardCoordinate> moves
 
         updateObjectivePieceLocation(mTeamId, board);
 

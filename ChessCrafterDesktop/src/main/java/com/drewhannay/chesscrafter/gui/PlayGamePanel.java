@@ -3,7 +3,12 @@ package com.drewhannay.chesscrafter.gui;
 import com.drewhannay.chesscrafter.controllers.GameController;
 import com.drewhannay.chesscrafter.dragNdrop.DropManager;
 import com.drewhannay.chesscrafter.dragNdrop.GlassPane;
-import com.drewhannay.chesscrafter.models.*;
+import com.drewhannay.chesscrafter.models.Board;
+import com.drewhannay.chesscrafter.models.BoardCoordinate;
+import com.drewhannay.chesscrafter.models.BoardSize;
+import com.drewhannay.chesscrafter.models.Game;
+import com.drewhannay.chesscrafter.models.Piece;
+import com.drewhannay.chesscrafter.models.Team;
 import com.drewhannay.chesscrafter.timer.ChessTimer;
 import com.drewhannay.chesscrafter.utility.GuiUtility;
 import com.drewhannay.chesscrafter.utility.PieceIconUtility;
@@ -233,17 +238,14 @@ public class PlayGamePanel extends ChessPanel {
 		 * endOfGame(result); } });
 		 */
 
-        saveMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        saveMenuItem.addActionListener(event -> {
 //				mWhiteTimer.stopTimer();
 //				mBlackTimer.stopTimer();
-                saveGame();
+            saveGame();
 
-                mOptionsMenu.setVisible(false);
-                PreferenceUtility.clearTooltipListeners();
-                Driver.getInstance().revertToMainPanel();
-            }
+            mOptionsMenu.setVisible(false);
+            PreferenceUtility.clearTooltipListeners();
+            Driver.getInstance().revertToMainPanel();
         });
 
         mOptionsMenu.add(drawMenuItem);
@@ -253,22 +255,11 @@ public class PlayGamePanel extends ChessPanel {
     }
 
     private void initComponents() {
-        /*
-         * JButton undoButton = new
-		 * JButton(Messages.getString("PlayGamePanel.undo")); //$NON-NLS-1$
-		 * undoButton.addActionListener(new ActionListener() {
-		 * 
-		 * @Override public void actionPerformed(ActionEvent event) { if
-		 * (getGame().getHistory().size() == 0) return;
-		 * 
-		 * try { getGame().getHistory().get(getGame().getHistory().size() -
-		 * 1).undo(); } catch (Exception e) { e.printStackTrace(); }
-		 * 
-		 * getGame().getHistory().remove(getGame().getHistory().size() - 1);
-		 * (getGame().isBlackMove() ? getGame().getBlackRules() :
-		 * getGame().getWhiteRules()).undoEndOfGame();
-		 * boardRefresh(getGame().getBoards()); } });
-		 */
+        JButton undoButton = new JButton(Messages.getString("PlayGamePanel.undo")); //$NON-NLS-1$
+        undoButton.addActionListener(event -> {
+            getGame().undoMove();
+            boardRefresh();
+        });
 
         twoBoardsGridBagOffset = 0;
         if (mOptionsMenu == null || !mOptionsMenu.isVisible())
@@ -356,7 +347,7 @@ public class PlayGamePanel extends ChessPanel {
         constraints.ipadx = 100;
         constraints.gridx = 11 + twoBoardsGridBagOffset;
         constraints.gridy = 5;
-        // add(undoButton, constraints);
+        add(undoButton, constraints);
 
         // adds the White Jail
         constraints.fill = GridBagConstraints.NONE;
