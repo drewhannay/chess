@@ -31,6 +31,7 @@ public final class Game {
         return mGameType;
     }
 
+    // TODO: don't want this to be public
     public Stack getHistory() {
         return mHistory;
     }

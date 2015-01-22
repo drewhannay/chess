@@ -3,7 +3,6 @@ package com.drewhannay.chesscrafter.logic;
 import com.drewhannay.chesscrafter.models.Direction;
 import com.drewhannay.chesscrafter.models.PieceType;
 import com.drewhannay.chesscrafter.models.TwoHopMovement;
-import com.drewhannay.chesscrafter.utility.GsonUtility;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -18,7 +17,7 @@ public class PieceBuilder {
     }
 
     public static PieceType parsePieceType(String json) {
-        return GsonUtility.getGson().fromJson(json, PieceType.class);
+        return null;//GsonUtility.getGson().fromJson(json, PieceType.class);
     }
 
     public void addMovement(Direction direction, int distance) {
