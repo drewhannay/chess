@@ -14,7 +14,6 @@ import com.drewhannay.chesscrafter.models.PieceType;
 import com.drewhannay.chesscrafter.models.Team;
 import com.drewhannay.chesscrafter.timer.ChessTimer;
 import com.drewhannay.chesscrafter.utility.AppConstants;
-import com.drewhannay.chesscrafter.utility.FileUtility;
 import com.drewhannay.chesscrafter.utility.GuiUtility;
 import com.drewhannay.chesscrafter.utility.PieceIconUtility;
 import com.drewhannay.chesscrafter.utility.PreferenceUtility;
@@ -49,7 +48,7 @@ public class PlayGamePanel extends ChessPanel {
 
     private static void playPromotionMove(PieceType promotionPieceType, MoveBuilder moveBuilder) {
         moveBuilder.setPromotionType(promotionPieceType);
-        updateLabels(GameController.playMove(moveBuilder.build()));
+        changeTurns(GameController.playMove(moveBuilder.build()));
         boardRefresh();
     }
 
@@ -75,7 +74,7 @@ public class PlayGamePanel extends ChessPanel {
         promotionFrame.setVisible(true);
     }
 
-    public static void updateLabels(Result result) {
+    public static void changeTurns(Result result) {
         if(result == Result.CHECKMATE) {
             endOfGame(result);
         }
@@ -226,7 +225,7 @@ public class PlayGamePanel extends ChessPanel {
     private void initComponents() {
         JButton undoButton = new JButton(Messages.getString("PlayGamePanel.undo")); //$NON-NLS-1$
         undoButton.addActionListener(event -> {
-            updateLabels(getGame().undoMove());
+            changeTurns(getGame().undoMove());
             boardRefresh();
         });
 
@@ -361,7 +360,7 @@ public class PlayGamePanel extends ChessPanel {
 //		add(new ChessTimerLabel(mTimers[0]), constraints);
 //		resetTimers();
         boardRefresh();
-        updateLabels(Result.CONTINUE);
+        changeTurns(Result.CONTINUE);
         Driver.getInstance().pack();
     }
 
