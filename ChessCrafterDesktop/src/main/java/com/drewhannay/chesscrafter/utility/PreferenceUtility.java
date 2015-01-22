@@ -175,6 +175,13 @@ public final class PreferenceUtility {
         return mPreference.get(SAVELOCATION, "default");
     }
 
+    /**
+     * Method to set the preference for Save game location
+     */
+    public static void setSaveLocationPreference(String location){
+        mPreference.put(SAVELOCATION, location);
+    }
+
     public static void addPieceToolTipListener(PieceToolTipPreferenceChangedListener listener) {
         if (mToolTipListeners == null)
             mToolTipListeners = Lists.newArrayList();

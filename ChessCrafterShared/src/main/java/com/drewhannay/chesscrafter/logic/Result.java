@@ -5,5 +5,6 @@ public enum Result {
     CHECK,
     DOUBLE_CHECK,
     CHECKMATE,
-    STALEMATE
+    STALEMATE,
+    DRAW
 }

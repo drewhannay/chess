@@ -31,6 +31,10 @@ public final class Game {
         return mGameType;
     }
 
+    public Stack getHistory() {
+        return mHistory;
+    }
+
     public Board[] getBoards() {
         return mBoards;
     }
