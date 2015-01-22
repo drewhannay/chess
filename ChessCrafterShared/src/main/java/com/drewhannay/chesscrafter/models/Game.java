@@ -91,11 +91,13 @@ public final class Game {
 
         mTurnKeeper.finishTurn();
 
+        mHistory.push(move);
+
         Team newActiveTeam = getTeam(mTurnKeeper.getActiveTeamId());
         Result result = newActiveTeam.getRules().getEndCondition().checkEndCondition(this);
         // TODO: remove println
         System.out.println(result);
-        mHistory.push(move);
+
         return result;
     }
 
