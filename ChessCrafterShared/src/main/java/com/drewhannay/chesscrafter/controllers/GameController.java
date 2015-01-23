@@ -1,9 +1,7 @@
 package com.drewhannay.chesscrafter.controllers;
 
-import com.drewhannay.chesscrafter.logic.Result;
 import com.drewhannay.chesscrafter.models.BoardCoordinate;
 import com.drewhannay.chesscrafter.models.Game;
-import com.drewhannay.chesscrafter.models.Move;
 import com.google.common.base.Preconditions;
 
 import java.util.Set;
@@ -28,10 +26,6 @@ public final class GameController {
 
     public static Set<BoardCoordinate> getLegalDestinations(int boardIndex, BoardCoordinate coordinate) {
         return sGame.getMovesFrom(boardIndex, coordinate);
-    }
-
-    public static Result playMove(Move move) {
-        return sGame.executeMove(move);
     }
 
     private static Game sGame;

@@ -17,13 +17,12 @@ import com.drewhannay.chesscrafter.utility.AppConstants;
 import com.drewhannay.chesscrafter.utility.GuiUtility;
 import com.drewhannay.chesscrafter.utility.PieceIconUtility;
 import com.drewhannay.chesscrafter.utility.PreferenceUtility;
-import com.google.common.collect.Maps;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 public class PlayGamePanel extends ChessPanel {
@@ -46,22 +45,27 @@ public class PlayGamePanel extends ChessPanel {
         initComponents();
     }
 
-    private static void playPromotionMove(PieceType promotionPieceType, MoveBuilder moveBuilder) {
-        moveBuilder.setPromotionType(promotionPieceType);
-        changeTurns(GameController.playMove(moveBuilder.build()));
-        boardRefresh();
+    public static void playMove(MoveBuilder moveBuilder) {
+        if (moveBuilder.needsPromotion()) {
+            createPromotionPopup(moveBuilder);
+        } else {
+            mGame.executeMove(moveBuilder.build());
+            changeTurns(mGame.getResult());
+            boardRefresh();
+        }
     }
 
-    public static void createPromotionPopup(Set<PieceType> promotionOptions, MoveBuilder moveBuilder) {
+    private static void createPromotionPopup(MoveBuilder moveBuilder) {
         JFrame promotionFrame = new JFrame();
         ChessPanel promotionPanel = new ChessPanel();
         JLabel promotionText = new JLabel("Choose a piece to promote to:");
         promotionText.setForeground(Color.white);
         promotionPanel.add(promotionText);
-        for (PieceType pieceType : promotionOptions) {
+        for (PieceType pieceType : moveBuilder.getPromotionOptions()) {
             JButton label = new JButton(PieceIconUtility.getPieceIcon(pieceType.getName(), 48, mGame.getTurnKeeper().getActiveTeamId()));
             label.addActionListener(e -> {
-                playPromotionMove(pieceType, moveBuilder);
+                moveBuilder.setPromotionType(pieceType);
+                playMove(moveBuilder);
                 promotionFrame.dispose();
             });
             promotionPanel.add(label);
@@ -74,11 +78,9 @@ public class PlayGamePanel extends ChessPanel {
         promotionFrame.setVisible(true);
     }
 
-    public static void changeTurns(Result result){
-        for(Team team : mGame.getTeams()){
-            Boolean isActive = (team.getTeamId() == mGame.getTurnKeeper().getActiveTeamId());
-            mTeamLabels.get(team.getTeamId()).changeTurns(result, isActive);
-        }
+    public static void changeTurns(Result result) {
+        int activeTeamId = mGame.getTurnKeeper().getActiveTeamId();
+        mTeamLabels.stream().forEach(teamLabel -> teamLabel.changeTurns(result, activeTeamId));
     }
 
     public static void boardRefresh() {
@@ -93,70 +95,71 @@ public class PlayGamePanel extends ChessPanel {
         }
     }
 
-     public static void endOfGame(Result result) {
-         if (mGame.getHistory().size() == 0) { return;}
-         else if (result == Result.STALEMATE) {
-             JOptionPane.showMessageDialog(null, Messages.getString("PlayGamePanel.noMovesMade"), //$NON-NLS-1$
-                     Messages.getString("PlayGamePanel.timeRanOut"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$
-             PreferenceUtility.clearTooltipListeners();
-             Driver.getInstance().revertToMainPanel();
-             Driver.getInstance().setFileMenuVisibility(true);
-             return;
-         }
+    public static void endOfGame(Result result) {
+        if (mGame.getHistory().size() == 0) {
+            return;
+        } else if (result == Result.STALEMATE) {
+            JOptionPane.showMessageDialog(null, Messages.getString("PlayGamePanel.noMovesMade"), //$NON-NLS-1$
+                    Messages.getString("PlayGamePanel.timeRanOut"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$
+            PreferenceUtility.clearTooltipListeners();
+            Driver.getInstance().revertToMainPanel();
+            Driver.getInstance().setFileMenuVisibility(true);
+            return;
+        }
 
-         Object[] options = new String[] {
-             Messages.getString("PlayGamePanel.saveRecord"),//$NON-NLS-1$
-             Messages.getString("PlayGamePanel.newGame"), //$NON-NLS-2$
-             Messages.getString("PlayGamePanel.mainMenu")  //$NON-NLS-3$
-         };
-         mOptionsMenu.setVisible(false);
-         //TODO make this work with more than classic teams
-         String winningTeamName = mTeamLabels.get(1).getName();
-         if(mGame.getTurnKeeper().getActiveTeamId() == 1) {
-             winningTeamName = mTeamLabels.get(2).getName();
-         }
-         String panelTitle = winningTeamName + " Wins!";
-         String panelMessage = Messages.getString("PlayGamePanel.gameOver");
-         if(result == Result.DRAW) {
-             panelTitle = Messages.getString("PlayGamePanel.declareDraw");
-             panelMessage = Messages.getString("PlayGamePanel.drawWhatNow");
-         }
+        Object[] options = new String[]{
+                Messages.getString("PlayGamePanel.saveRecord"),//$NON-NLS-1$
+                Messages.getString("PlayGamePanel.newGame"), //$NON-NLS-2$
+                Messages.getString("PlayGamePanel.mainMenu")  //$NON-NLS-3$
+        };
+        mOptionsMenu.setVisible(false);
+        //TODO make this work with more than classic teams
+        String winningTeamName = mTeamLabels.get(1).getName();
+        if (mGame.getTurnKeeper().getActiveTeamId() == 1) {
+            winningTeamName = mTeamLabels.get(2).getName();
+        }
+        String panelTitle = winningTeamName + " Wins!";
+        String panelMessage = Messages.getString("PlayGamePanel.gameOver");
+        if (result == Result.DRAW) {
+            panelTitle = Messages.getString("PlayGamePanel.declareDraw");
+            panelMessage = Messages.getString("PlayGamePanel.drawWhatNow");
+        }
 
-         switch(JOptionPane.showOptionDialog(Driver.getInstance(), panelMessage, panelTitle,
-                 JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0])){
-             case JOptionPane.YES_OPTION:
-                 if (PreferenceUtility.getSaveLocationPreference().equals("default")) {
-                     JOptionPane .showMessageDialog(Driver.getInstance(), Messages.getString("PlayGamePanel.sinceFirstTime") + AppConstants.APP_NAME //$NON-NLS-1$
-                     + Messages.getString("PlayGamePanel.pleaseChooseDefault")/*$NON-NLS-1$*/ + Messages.getString("PlayGamePanel.pressingCancel"),
-                     Messages.getString("PlayGamePanel.saveLocation"),
-                     JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$ JFileChooser
-                     JFileChooser fileChooser = new JFileChooser();
-                     fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY); int
-                     returnVal = fileChooser.showOpenDialog(Driver.getInstance());
-                     if(returnVal == JFileChooser.APPROVE_OPTION)
-                         PreferenceUtility.setSaveLocationPreference(fileChooser.getSelectedFile().getAbsolutePath());
-                 }
-                 String saveFileName = JOptionPane.showInputDialog(Driver.getInstance(), Messages.getString("PlayGamePanel.enterAName"),
-                         Messages.getString("PlayGamePanel.saving"), //$NON-NLS-1$ //$NON-NLS-2$
-                         JOptionPane.PLAIN_MESSAGE);
-                 //getGame().saveGame(saveFileName, getGame().getGameType().equals("Classic"), false);
-                 //mGame.setBlackMove(false);
-                 Driver.getInstance().setFileMenuVisibility(true);
-                 PreferenceUtility.clearTooltipListeners();
-                 Driver.getInstance().revertToMainPanel();
-                 break;
-             case JOptionPane.NO_OPTION:
-                 //mGame.setBlackMove(false);
-                 Driver.getInstance().setUpNewGame();
-                 break;
-             case JOptionPane.CANCEL_OPTION:
-                 PreferenceUtility.clearTooltipListeners();
-                 Driver.getInstance().revertToMainPanel();
-                 Driver.getInstance().setFileMenuVisibility(true);
-                 break;
-         }
-     }
-
+        switch (JOptionPane.showOptionDialog(Driver.getInstance(), panelMessage, panelTitle,
+                JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0])) {
+            case JOptionPane.YES_OPTION:
+                if (PreferenceUtility.getSaveLocationPreference().equals("default")) {
+                    JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("PlayGamePanel.sinceFirstTime") + AppConstants.APP_NAME //$NON-NLS-1$
+                                    + Messages.getString("PlayGamePanel.pleaseChooseDefault")/*$NON-NLS-1$*/ + Messages.getString("PlayGamePanel.pressingCancel"),
+                            Messages.getString("PlayGamePanel.saveLocation"),
+                            JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$ JFileChooser
+                    JFileChooser fileChooser = new JFileChooser();
+                    fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                    int
+                            returnVal = fileChooser.showOpenDialog(Driver.getInstance());
+                    if (returnVal == JFileChooser.APPROVE_OPTION)
+                        PreferenceUtility.setSaveLocationPreference(fileChooser.getSelectedFile().getAbsolutePath());
+                }
+                String saveFileName = JOptionPane.showInputDialog(Driver.getInstance(), Messages.getString("PlayGamePanel.enterAName"),
+                        Messages.getString("PlayGamePanel.saving"), //$NON-NLS-1$ //$NON-NLS-2$
+                        JOptionPane.PLAIN_MESSAGE);
+                //getGame().saveGame(saveFileName, getGame().getGameType().equals("Classic"), false);
+                //mGame.setBlackMove(false);
+                Driver.getInstance().setFileMenuVisibility(true);
+                PreferenceUtility.clearTooltipListeners();
+                Driver.getInstance().revertToMainPanel();
+                break;
+            case JOptionPane.NO_OPTION:
+                //mGame.setBlackMove(false);
+                Driver.getInstance().setUpNewGame();
+                break;
+            case JOptionPane.CANCEL_OPTION:
+                PreferenceUtility.clearTooltipListeners();
+                Driver.getInstance().revertToMainPanel();
+                Driver.getInstance().setFileMenuVisibility(true);
+                break;
+        }
+    }
 
     public void saveGame() {
         String fileName = JOptionPane.showInputDialog(Driver.getInstance(),
@@ -182,13 +185,13 @@ public class PlayGamePanel extends ChessPanel {
         JMenuItem saveMenuItem = new JMenuItem(Messages.getString("PlayGamePanel.saveAndQuit"), KeyEvent.VK_S); //$NON-NLS-1$
 
 
-         drawMenuItem.addActionListener(e -> {
-             if(getGame().getHistory().size() == 0)
-                 return;
-             mOptionsMenu.setVisible(false);
-             //getGame().getLastMove().setResult(result);
-             endOfGame(Result.DRAW);
-         });
+        drawMenuItem.addActionListener(e -> {
+            if (getGame().getHistory().size() == 0)
+                return;
+            mOptionsMenu.setVisible(false);
+            //getGame().getLastMove().setResult(result);
+            endOfGame(Result.DRAW);
+        });
 
 
         saveMenuItem.addActionListener(event -> {
@@ -210,7 +213,8 @@ public class PlayGamePanel extends ChessPanel {
     private void initComponents() {
         JButton undoButton = new JButton(Messages.getString("PlayGamePanel.undo")); //$NON-NLS-1$
         undoButton.addActionListener(event -> {
-            changeTurns(getGame().undoMove());
+            getGame().undoMove();
+            changeTurns(mGame.getResult());
             boardRefresh();
         });
 
@@ -223,7 +227,7 @@ public class PlayGamePanel extends ChessPanel {
         setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
         Team[] teams = GameController.getGame().getTeams();
-        mTeamLabels = Maps.newHashMapWithExpectedSize(teams.length);
+        mTeamLabels = new ArrayList<>(teams.length);
 
         mJails = new BoardPanel[teams.length];
 
@@ -247,15 +251,14 @@ public class PlayGamePanel extends ChessPanel {
             add(mGameBoards[boardIndex], constraints);
         }
 
-        for(Team team : teams){
-            if(GameController.getGame().getGameType().equals("Classic")) {
-                if(team.getTeamId() == 1)
-                    mTeamLabels.put(team.getTeamId(), new TeamLabel(team.getTeamId(), Messages.getString("PlayGamePanel.whiteTeam")));
+        for (Team team : teams) {
+            if (GameController.getGame().getGameType().equals("Classic")) {
+                if (team.getTeamId() == 1)
+                    mTeamLabels.add(new TeamLabel(team.getTeamId(), Messages.getString("PlayGamePanel.whiteTeam")));
                 else
-                    mTeamLabels.put(team.getTeamId(), new TeamLabel(team.getTeamId(), Messages.getString("PlayGamePanel.blackTeam")));
-            }
-            else
-                mTeamLabels.put(team.getTeamId(), new TeamLabel(team.getTeamId(), "Team " + team.getTeamId()));
+                    mTeamLabels.add(new TeamLabel(team.getTeamId(), Messages.getString("PlayGamePanel.blackTeam")));
+            } else
+                mTeamLabels.add(new TeamLabel(team.getTeamId(), "Team " + team.getTeamId()));
         }
 
         int jailBoardSize = getJailDimension();
@@ -355,11 +358,6 @@ public class PlayGamePanel extends ChessPanel {
         return mGame;
     }
 
-    public static void resetTimers() {
-        for (ChessTimer timer : mTimers)
-            timer.reset();
-    }
-
     public static List<SquareJLabel> highlightLegalDestinations(int boardIndex, BoardCoordinate coordinates) {
         Piece movingPiece = GameController.getGame().getPiece(boardIndex, coordinates);
         if (movingPiece != null && PreferenceUtility.getHighlightMovesPreference()) {
@@ -376,7 +374,7 @@ public class PlayGamePanel extends ChessPanel {
     protected int twoBoardsGridBagOffset;
     protected static Game mGame;
     protected static ChessTimer[] mTimers;
-    protected static Map<Integer, TeamLabel> mTeamLabels;
+    protected static List<TeamLabel> mTeamLabels;
     protected static BoardPanel[] mGameBoards;
     protected static BoardPanel[] mJails;
     protected static JMenu mOptionsMenu;
