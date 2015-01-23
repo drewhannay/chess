@@ -74,25 +74,10 @@ public class PlayGamePanel extends ChessPanel {
         promotionFrame.setVisible(true);
     }
 
-    public static void changeTurns(Result result) {
-        if(result == Result.CHECKMATE) {
-            endOfGame(result);
-        }
-        int teamID = mGame.getTurnKeeper().getActiveTeamId();
-        if (result == Result.CHECK) {
-            mTeamLabels.get(teamID).setBackground(Color.RED);
-            mTeamLabels.get(teamID).setForeground(Color.WHITE);
-            mTeamLabels.get(teamID).setText(mTeamNames.get(teamID) + " " + Messages.getString("PlayGamePanel.inCheck"));
-        } else {
-            mTeamLabels.get(teamID).setBackground(Color.CYAN);
-            mTeamLabels.get(teamID).setForeground(Color.BLACK);
-        }
-        for (Map.Entry<Integer, JLabel> otherTeamLabel : mTeamLabels.entrySet()) {
-            if (otherTeamLabel.getKey() != teamID) {
-                otherTeamLabel.getValue().setBackground(Color.WHITE);
-                otherTeamLabel.getValue().setForeground(Color.BLACK);
-                otherTeamLabel.getValue().setText(mTeamNames.get(otherTeamLabel.getKey()));
-            }
+    public static void changeTurns(Result result){
+        for(Team team : mGame.getTeams()){
+            Boolean isActive = (team.getTeamId() == mGame.getTurnKeeper().getActiveTeamId());
+            mTeamLabels.get(team.getTeamId()).changeTurns(result, isActive);
         }
     }
 
@@ -126,9 +111,9 @@ public class PlayGamePanel extends ChessPanel {
          };
          mOptionsMenu.setVisible(false);
          //TODO make this work with more than classic teams
-         String winningTeamName = mTeamNames.get(1);
+         String winningTeamName = mTeamLabels.get(1).getName();
          if(mGame.getTurnKeeper().getActiveTeamId() == 1) {
-             winningTeamName = mTeamNames.get(2);
+             winningTeamName = mTeamLabels.get(2).getName();
          }
          String panelTitle = winningTeamName + " Wins!";
          String panelMessage = Messages.getString("PlayGamePanel.gameOver");
@@ -239,7 +224,7 @@ public class PlayGamePanel extends ChessPanel {
         GridBagConstraints constraints = new GridBagConstraints();
         Team[] teams = GameController.getGame().getTeams();
         mTeamLabels = Maps.newHashMapWithExpectedSize(teams.length);
-        mTeamNames = Maps.newHashMapWithExpectedSize(teams.length);
+
         mJails = new BoardPanel[teams.length];
 
         Board[] boards = GameController.getGame().getBoards();
@@ -262,19 +247,15 @@ public class PlayGamePanel extends ChessPanel {
             add(mGameBoards[boardIndex], constraints);
         }
 
-        for (Team team : mGame.getTeams()) {
-            JLabel teamLabel = GuiUtility.createJLabel("");
-            teamLabel.setHorizontalAlignment(SwingConstants.CENTER);
-            teamLabel.setBorder(BorderFactory.createTitledBorder("")); //$NON-NLS-1$
-            teamLabel.setOpaque(true);
-            mTeamLabels.put(team.getTeamId(), teamLabel);
-            if (GameController.getGame().getGameType().equals("Classic")) {
-                if (team.getTeamId() == 1)
-                    mTeamNames.put(team.getTeamId(), Messages.getString("PlayGamePanel.whiteTeam"));
+        for(Team team : teams){
+            if(GameController.getGame().getGameType().equals("Classic")) {
+                if(team.getTeamId() == 1)
+                    mTeamLabels.put(team.getTeamId(), new TeamLabel(team.getTeamId(), Messages.getString("PlayGamePanel.whiteTeam")));
                 else
-                    mTeamNames.put(team.getTeamId(), Messages.getString("PlayGamePanel.blackTeam"));
-            } else
-                mTeamNames.put(team.getTeamId(), "Team " + team.getTeamId());
+                    mTeamLabels.put(team.getTeamId(), new TeamLabel(team.getTeamId(), Messages.getString("PlayGamePanel.blackTeam")));
+            }
+            else
+                mTeamLabels.put(team.getTeamId(), new TeamLabel(team.getTeamId(), "Team " + team.getTeamId()));
         }
 
         int jailBoardSize = getJailDimension();
@@ -294,7 +275,6 @@ public class PlayGamePanel extends ChessPanel {
         constraints.gridx = 11 + twoBoardsGridBagOffset;
         constraints.gridy = 1;
         constraints.insets = new Insets(10, 0, 10, 0);
-        mTeamLabels.get(2).setText("Black Team");
         add(mTeamLabels.get(2), constraints);
 
         // add the Black timer
@@ -353,7 +333,6 @@ public class PlayGamePanel extends ChessPanel {
         constraints.gridx = 11 + twoBoardsGridBagOffset;
         constraints.gridy = 10;
         constraints.insets = new Insets(10, 0, 10, 0);
-        mTeamLabels.get(1).setText("White Team");
         add(mTeamLabels.get(1), constraints);
 
         // TODO: This assumes a two-player game
@@ -397,8 +376,7 @@ public class PlayGamePanel extends ChessPanel {
     protected int twoBoardsGridBagOffset;
     protected static Game mGame;
     protected static ChessTimer[] mTimers;
-    protected static Map<Integer, JLabel> mTeamLabels;
-    protected static Map<Integer, String> mTeamNames;
+    protected static Map<Integer, TeamLabel> mTeamLabels;
     protected static BoardPanel[] mGameBoards;
     protected static BoardPanel[] mJails;
     protected static JMenu mOptionsMenu;
