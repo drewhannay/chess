@@ -3,7 +3,6 @@ package com.drewhannay.chesscrafter.dragNdrop;
 import com.google.common.collect.Lists;
 
 import java.awt.event.MouseAdapter;
-import java.util.Iterator;
 import java.util.List;
 
 public class DropAdapter extends MouseAdapter {
@@ -23,9 +22,7 @@ public class DropAdapter extends MouseAdapter {
     }
 
     protected void fireDropEvent(DropEvent event, boolean fromDisplayBoard) {
-        Iterator<DropListener> iterator = mListeners.iterator();
-        while (iterator.hasNext())
-            ((DropListener) iterator.next()).dropped(event, fromDisplayBoard);
+        for (DropListener mListener : mListeners) mListener.dropped(event, fromDisplayBoard);
     }
 
     protected GlassPane mGlassPane;
