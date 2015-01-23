@@ -5,8 +5,6 @@ import com.google.common.collect.Lists;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.prefs.Preferences;
 
@@ -50,38 +48,24 @@ public final class PreferenceUtility {
         highlightingCheckBox.setSelected(mPreference.getBoolean(HIGHLIGHTMOVES, true));
         pieceToolTipCheckBox.setSelected(mPreference.getBoolean(PIECETOOLTIPS, false));
 
-        resetButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                currentSaveLocationField.setText(defaultSaveLocation);
+        resetButton.addActionListener(event -> currentSaveLocationField.setText(defaultSaveLocation));
+
+        changeLocationButton.addActionListener(event -> {
+            try {
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                int returnVal = fileChooser.showOpenDialog(Driver.getInstance());
+                if (returnVal == JFileChooser.APPROVE_OPTION)
+                    currentSaveLocationField.setText(fileChooser.getSelectedFile().getAbsolutePath());
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
 
-        changeLocationButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                try {
-                    JFileChooser fileChooser = new JFileChooser();
-                    fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                    int returnVal = fileChooser.showOpenDialog(Driver.getInstance());
-                    if (returnVal == JFileChooser.APPROVE_OPTION)
-                        currentSaveLocationField.setText(fileChooser.getSelectedFile().getAbsolutePath());
-                    else
-                        return;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        doneButton.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                mPreference.put(SAVELOCATION, currentSaveLocationField.getText());
-                mPreference.putBoolean(HIGHLIGHTMOVES, highlightingCheckBox.isSelected());
-                mPreference.putBoolean(PIECETOOLTIPS, pieceToolTipCheckBox.isSelected());
-            }
+        doneButton.addActionListener(e -> {
+            mPreference.put(SAVELOCATION, currentSaveLocationField.getText());
+            mPreference.putBoolean(HIGHLIGHTMOVES, highlightingCheckBox.isSelected());
+            mPreference.putBoolean(PIECETOOLTIPS, pieceToolTipCheckBox.isSelected());
         });
 
         GuiUtility.setupDoneButton(cancelButton, popupFrame);
@@ -137,6 +121,7 @@ public final class PreferenceUtility {
 
     /**
      * Generic method to get string preference from the system
+     *
      * @param key the String key for the preference to return
      * @return returns the value paired with the given key
      */
@@ -146,6 +131,7 @@ public final class PreferenceUtility {
 
     /**
      * Generic method to get a boolean preference from the system
+     *
      * @param key the String key for the preference to return
      * @return returns the boolean value matched with the given key
      */
@@ -155,30 +141,35 @@ public final class PreferenceUtility {
 
     /**
      * Method to get the preference for if moves should be Highlighted
+     *
      * @return returns the boolean value for move highlighting
      */
-    public static Boolean getHighlightMovesPreference(){
+    public static Boolean getHighlightMovesPreference() {
         return mPreference.getBoolean(HIGHLIGHTMOVES, true);
     }
+
     /**
      * Method to get the preference for if Pieces should display a tooltip
+     *
      * @return returns the boolean value for piece highlighting
      */
-    public static Boolean getPieceToolTipPreference(){
+    public static Boolean getPieceToolTipPreference() {
         return mPreference.getBoolean(PIECETOOLTIPS, true);
     }
+
     /**
      * Method to get the preference for Save game location
+     *
      * @return returns the string value for the save game location
      */
-    public static String getSaveLocationPreference(){
+    public static String getSaveLocationPreference() {
         return mPreference.get(SAVELOCATION, "default");
     }
 
     /**
      * Method to set the preference for Save game location
      */
-    public static void setSaveLocationPreference(String location){
+    public static void setSaveLocationPreference(String location) {
         mPreference.put(SAVELOCATION, location);
     }
 

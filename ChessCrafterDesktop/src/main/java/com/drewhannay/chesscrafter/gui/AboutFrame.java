@@ -5,8 +5,6 @@ import com.drewhannay.chesscrafter.utility.GuiUtility;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.URI;
 
@@ -44,15 +42,12 @@ public class AboutFrame extends JFrame {
 
         JButton siteButton = new JButton();
         siteButton.setIcon(piecePicture.getIcon());
-        siteButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                if (Desktop.isDesktopSupported()) {
-                    try {
-                        Desktop.getDesktop().browse(new URI(AppConstants.PROJECT_URL));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+        siteButton.addActionListener(event -> {
+            if (Desktop.isDesktopSupported()) {
+                try {
+                    Desktop.getDesktop().browse(new URI(AppConstants.PROJECT_URL));
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         });

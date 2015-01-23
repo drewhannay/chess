@@ -6,8 +6,6 @@ import com.drewhannay.chesscrafter.utility.GuiUtility;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -31,14 +29,11 @@ public class NewGamePanel extends ChessPanel {
         buttonPanel.setOpaque(false);
 
         JButton humanPlayButton = new JButton(Messages.getString("NewGamePanel.humanPlay")); //$NON-NLS-1$
-        humanPlayButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                if (mPopupFrame == null) {
-                    //createNewGamePopup();
-                    GameController.setGame(GameBuilder.buildClassic());
-                    Driver.getInstance().setPanel(new PlayGamePanel());
-                }
+        humanPlayButton.addActionListener(event -> {
+            if (mPopupFrame == null) {
+                //createNewGamePopup();
+                GameController.setGame(GameBuilder.buildClassic());
+                Driver.getInstance().setPanel(new PlayGamePanel());
             }
         });
         constraints.gridy = 1;
@@ -51,12 +46,7 @@ public class NewGamePanel extends ChessPanel {
 
         JButton backButton = new JButton(Messages.getString("NewGamePanel.returnToMenu")); //$NON-NLS-1$
         backButton.setToolTipText(Messages.getString("NewGamePanel.returnToMenu")); //$NON-NLS-1$
-        backButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                Driver.getInstance().revertToMainPanel();
-            }
-        });
+        backButton.addActionListener(event -> Driver.getInstance().revertToMainPanel());
 
         constraints.gridy = 2;
         add(backButton, constraints);
@@ -212,12 +202,9 @@ public class NewGamePanel extends ChessPanel {
 
         // set up the cancel button
         final JButton cancelButton = new JButton(Messages.getString("NewGamePanel.cancel")); //$NON-NLS-1$
-        cancelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                mPopupFrame.dispose();
-                mPopupFrame = null;
-            }
+        cancelButton.addActionListener(event -> {
+            mPopupFrame.dispose();
+            mPopupFrame = null;
         });
 
         // add the done and cancel buttons to the panel

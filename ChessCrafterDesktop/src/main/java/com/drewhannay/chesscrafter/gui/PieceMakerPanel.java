@@ -1,6 +1,7 @@
 package com.drewhannay.chesscrafter.gui;
 
 import com.drewhannay.chesscrafter.logic.PieceBuilder;
+import com.drewhannay.chesscrafter.models.Direction;
 import com.drewhannay.chesscrafter.models.TwoHopMovement;
 import com.drewhannay.chesscrafter.utility.GuiUtility;
 import com.drewhannay.chesscrafter.utility.ImageUtility;
@@ -20,8 +21,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.StringTokenizer;
-
-import com.drewhannay.chesscrafter.models.Direction;
 
 public class PieceMakerPanel extends ChessPanel {
     public interface PieceListChangedListener {
@@ -257,32 +256,26 @@ public class PieceMakerPanel extends ChessPanel {
         mKnightTwoField.addKeyListener(getKnightFieldKeyListener());
 
         mAddKnightMoveButton.setEnabled(false);
-        mAddKnightMoveButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                mBidirectionalMovementComboBox.setEnabled(true);
-                mRemoveKnightMoveButton.setEnabled(true);
-                String toAdd = mKnightOneField.getText() + " x " + mKnightTwoField.getText(); //$NON-NLS-1$
-                mTempBidirectionalMovements.add(toAdd);
-                mBidirectionalMovementComboBox.addItem(toAdd);
-                mKnightOneField.setText(""); //$NON-NLS-1$
-                mKnightTwoField.setText(""); //$NON-NLS-1$
-                mAddKnightMoveButton.setEnabled(false);
-            }
+        mAddKnightMoveButton.addActionListener(event -> {
+            mBidirectionalMovementComboBox.setEnabled(true);
+            mRemoveKnightMoveButton.setEnabled(true);
+            String toAdd = mKnightOneField.getText() + " x " + mKnightTwoField.getText(); //$NON-NLS-1$
+            mTempBidirectionalMovements.add(toAdd);
+            mBidirectionalMovementComboBox.addItem(toAdd);
+            mKnightOneField.setText(""); //$NON-NLS-1$
+            mKnightTwoField.setText(""); //$NON-NLS-1$
+            mAddKnightMoveButton.setEnabled(false);
         });
 
         mRemoveKnightMoveButton.setEnabled(mBidirectionalMovementComboBox.getItemCount() != 0);
-        mRemoveKnightMoveButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                mTempBidirectionalMovements.remove(mBidirectionalMovementComboBox.getSelectedItem().toString());
-                mBidirectionalMovementComboBox.removeAllItems();
-                for (String kMovement : mTempBidirectionalMovements) {
-                    mBidirectionalMovementComboBox.addItem(kMovement);
-                }
-                mBidirectionalMovementComboBox.setEnabled(mBidirectionalMovementComboBox.getItemCount() != 0);
-                mRemoveKnightMoveButton.setEnabled(mBidirectionalMovementComboBox.getItemCount() != 0);
+        mRemoveKnightMoveButton.addActionListener(e -> {
+            mTempBidirectionalMovements.remove(mBidirectionalMovementComboBox.getSelectedItem().toString());
+            mBidirectionalMovementComboBox.removeAllItems();
+            for (String kMovement : mTempBidirectionalMovements) {
+                mBidirectionalMovementComboBox.addItem(kMovement);
             }
+            mBidirectionalMovementComboBox.setEnabled(mBidirectionalMovementComboBox.getItemCount() != 0);
+            mRemoveKnightMoveButton.setEnabled(mBidirectionalMovementComboBox.getItemCount() != 0);
         });
 
         mLeaperCheckBox.setToolTipText(Messages.getString("PieceMakerPanel.pressForJump")); //$NON-NLS-1$
@@ -383,88 +376,82 @@ public class PieceMakerPanel extends ChessPanel {
 
         final JButton savePieceButton = new JButton(Messages.getString("PieceMakerPanel.saveAndReturn")); //$NON-NLS-1$
         savePieceButton.setToolTipText(Messages.getString("PieceMakerPanel.pressToSave")); //$NON-NLS-1$
-        savePieceButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                String pieceName = mPieceNameField.getText().trim();
-                //TODO fix this when checking for an existing piece
-                if (pieceName.isEmpty() || PieceBuilder.parsePieceType(mPieceNameField.getText()) != null) {
-                    JOptionPane.showMessageDialog(
-                            PieceMakerPanel.this,
-                            Messages.getString("PieceMakerPanel.enterUniqueName"), Messages.getString("PieceMakerPanel.invalidPieceName"), //$NON-NLS-1$ //$NON-NLS-2$
-                            JOptionPane.PLAIN_MESSAGE);
-                    return;
-                }
-
-                if (isIntegerDistance(mNorthField) && isIntegerDistance(mNorthEastField) && isIntegerDistance(mNorthWestField)
-                        && isIntegerDistance(mEastField) && isIntegerDistance(mWestField) && isIntegerDistance(mSouthField)
-                        && isIntegerDistance(mSouthEastField) && isIntegerDistance(mSouthWestField)) {
-                    mBuilder.addMovement(Direction.NORTH, Integer.parseInt(mNorthField.getText()));
-                    mBuilder.addMovement(Direction.NORTHEAST, Integer.parseInt(mNorthEastField.getText()));
-                    mBuilder.addMovement(Direction.NORTHWEST, Integer.parseInt(mNorthWestField.getText()));
-                    mBuilder.addMovement(Direction.EAST, Integer.parseInt(mEastField.getText()));
-                    mBuilder.addMovement(Direction.WEST, Integer.parseInt(mWestField.getText()));
-                    mBuilder.addMovement(Direction.SOUTH, Integer.parseInt(mSouthField.getText()));
-                    mBuilder.addMovement(Direction.SOUTHEAST, Integer.parseInt(mSouthEastField.getText()));
-                    mBuilder.addMovement(Direction.SOUTHWEST, Integer.parseInt(mSouthWestField.getText()));
-                }
-
-                if (mBidirectionalMovementComboBox.getItemCount() != 0) {
-                    mBuilder.clearBidirectionalMovements();
-                    for (int i = 0; i < mBidirectionalMovementComboBox.getItemCount(); i++) {
-                        String line = mBidirectionalMovementComboBox.getItemAt(i).toString();
-                        StringTokenizer tokenizer = new StringTokenizer(line);
-
-                        int k1 = Integer.parseInt(tokenizer.nextToken());
-                        tokenizer.nextToken();
-                        int k2 = Integer.parseInt(tokenizer.nextToken());
-                        mBuilder.addBidirectionalMovement(TwoHopMovement.with(k2, k1));
-                    }
-                }
-
-                try {
-                    ImageUtility.writeLightImage(pieceName, mLightImage);
-                    ImageUtility.writeDarkImage(pieceName, mDarkImage);
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(
-                            PieceMakerPanel.this,
-                            Messages.getString("PieceMakerPanel.cannotWriteImageFiles"), Messages.getString("PieceMakerPanel.ImageError"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
-                    return;
-                }
-
-                mBuilder.setName(pieceName);
-                mBuilder.setCanJump(mLeaperCheckBox.isSelected());
-                //TODO Write new piece to disk
-                //PieceBuilder.savePieceType(mBuilder);
-                //PieceBuilder.writeToDisk(mBuilder);
-
-                //refreshVariants();
-
-                mFrame.dispose();
-                mPieceMenuPanel.refreshList();
-                PieceMakerPanel.this.removeAll();
+        savePieceButton.addActionListener(event -> {
+            String pieceName = mPieceNameField.getText().trim();
+            //TODO fix this when checking for an existing piece
+            if (pieceName.isEmpty() || PieceBuilder.parsePieceType(mPieceNameField.getText()) != null) {
+                JOptionPane.showMessageDialog(
+                        PieceMakerPanel.this,
+                        Messages.getString("PieceMakerPanel.enterUniqueName"), Messages.getString("PieceMakerPanel.invalidPieceName"), //$NON-NLS-1$ //$NON-NLS-2$
+                        JOptionPane.PLAIN_MESSAGE);
+                return;
             }
+
+            if (isIntegerDistance(mNorthField) && isIntegerDistance(mNorthEastField) && isIntegerDistance(mNorthWestField)
+                    && isIntegerDistance(mEastField) && isIntegerDistance(mWestField) && isIntegerDistance(mSouthField)
+                    && isIntegerDistance(mSouthEastField) && isIntegerDistance(mSouthWestField)) {
+                mBuilder.addMovement(Direction.NORTH, Integer.parseInt(mNorthField.getText()));
+                mBuilder.addMovement(Direction.NORTHEAST, Integer.parseInt(mNorthEastField.getText()));
+                mBuilder.addMovement(Direction.NORTHWEST, Integer.parseInt(mNorthWestField.getText()));
+                mBuilder.addMovement(Direction.EAST, Integer.parseInt(mEastField.getText()));
+                mBuilder.addMovement(Direction.WEST, Integer.parseInt(mWestField.getText()));
+                mBuilder.addMovement(Direction.SOUTH, Integer.parseInt(mSouthField.getText()));
+                mBuilder.addMovement(Direction.SOUTHEAST, Integer.parseInt(mSouthEastField.getText()));
+                mBuilder.addMovement(Direction.SOUTHWEST, Integer.parseInt(mSouthWestField.getText()));
+            }
+
+            if (mBidirectionalMovementComboBox.getItemCount() != 0) {
+                mBuilder.clearBidirectionalMovements();
+                for (int i = 0; i < mBidirectionalMovementComboBox.getItemCount(); i++) {
+                    String line = mBidirectionalMovementComboBox.getItemAt(i).toString();
+                    StringTokenizer tokenizer = new StringTokenizer(line);
+
+                    int k1 = Integer.parseInt(tokenizer.nextToken());
+                    tokenizer.nextToken();
+                    int k2 = Integer.parseInt(tokenizer.nextToken());
+                    mBuilder.addBidirectionalMovement(TwoHopMovement.with(k2, k1));
+                }
+            }
+
+            try {
+                ImageUtility.writeLightImage(pieceName, mLightImage);
+                ImageUtility.writeDarkImage(pieceName, mDarkImage);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(
+                        PieceMakerPanel.this,
+                        Messages.getString("PieceMakerPanel.cannotWriteImageFiles"), Messages.getString("PieceMakerPanel.ImageError"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
+                return;
+            }
+
+            mBuilder.setName(pieceName);
+            mBuilder.setCanJump(mLeaperCheckBox.isSelected());
+            //TODO Write new piece to disk
+            //PieceBuilder.savePieceType(mBuilder);
+            //PieceBuilder.writeToDisk(mBuilder);
+
+            //refreshVariants();
+
+            mFrame.dispose();
+            mPieceMenuPanel.refreshList();
+            PieceMakerPanel.this.removeAll();
         });
 
         final JButton cancelButton = new JButton(Messages.getString("PieceMakerPanel.cancel")); //$NON-NLS-1$
         cancelButton.setToolTipText(Messages.getString("PieceMakerPanel.pressToReturn")); //$NON-NLS-1$
-        cancelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                if (mPieceNameField.getText().trim().isEmpty()) {
-                    mFrame.dispose();
-                    PieceMakerPanel.this.removeAll();
-                } else {
-                    switch (JOptionPane.showConfirmDialog(PieceMakerPanel.this,
-                            Messages.getString("PieceMakerPanel.ifYouContinue"), Messages.getString("PieceMakerPanel.pieceMaker"), //$NON-NLS-1$ //$NON-NLS-2$
-                            JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE)) {
-                        case JOptionPane.YES_OPTION:
-                            mFrame.dispose();
-                            PieceMakerPanel.this.removeAll();
-                            break;
-                        case JOptionPane.NO_OPTION:
-                            break;
-                    }
+        cancelButton.addActionListener(event -> {
+            if (mPieceNameField.getText().trim().isEmpty()) {
+                mFrame.dispose();
+                PieceMakerPanel.this.removeAll();
+            } else {
+                switch (JOptionPane.showConfirmDialog(PieceMakerPanel.this,
+                        Messages.getString("PieceMakerPanel.ifYouContinue"), Messages.getString("PieceMakerPanel.pieceMaker"), //$NON-NLS-1$ //$NON-NLS-2$
+                        JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE)) {
+                    case JOptionPane.YES_OPTION:
+                        mFrame.dispose();
+                        PieceMakerPanel.this.removeAll();
+                        break;
+                    case JOptionPane.NO_OPTION:
+                        break;
                 }
             }
         });

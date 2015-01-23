@@ -3,22 +3,17 @@ package com.drewhannay.chesscrafter.gui;
 import com.drewhannay.chesscrafter.utility.FileUtility;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class PieceMenuPanel extends ChessPanel {
 
     public PieceMenuPanel() {
-        mPieceListModel = new DefaultListModel();
-        initGuiComponents();
+        this(null);
     }
 
     public PieceMenuPanel(JFrame frame) {
         mFrame = frame;
-        mPieceListModel = new DefaultListModel();
+        mPieceListModel = new DefaultListModel<>();
         initGuiComponents();
     }
 
@@ -32,12 +27,7 @@ public class PieceMenuPanel extends ChessPanel {
         constraints.anchor = GridBagConstraints.CENTER;
 
         JButton createNewPieceButton = new JButton(Messages.getString("PieceMenuPanel.createNew")); //$NON-NLS-1$
-        createNewPieceButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                new PieceMakerPanel(PieceMenuPanel.this);
-            }
-        });
+        createNewPieceButton.addActionListener(event -> new PieceMakerPanel(PieceMenuPanel.this));
         add(createNewPieceButton, constraints);
 
         final JPanel editDeletePanel = new JPanel();
@@ -52,7 +42,7 @@ public class PieceMenuPanel extends ChessPanel {
         constraints.fill = GridBagConstraints.HORIZONTAL;
 
         JScrollPane scrollPane = new JScrollPane();
-        final JList pieceList = new JList();
+        final JList<String> pieceList = new JList<>();
         scrollPane.setSize(500, 500);
         pieceList.setSize(500, 500);
         scrollPane.setViewportView(pieceList);
@@ -71,32 +61,24 @@ public class PieceMenuPanel extends ChessPanel {
         constraints.ipadx = 7;
         final JButton editButton = new JButton(Messages.getString("PieceMenuPanel.edit")); //$NON-NLS-1$
         editButton.setEnabled(false);
-        editButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                new PieceMakerPanel(mPieceListModel.get(pieceList.getSelectedIndex()).toString(), PieceMenuPanel.this);
-            }
-        });
+        editButton.addActionListener(event -> new PieceMakerPanel(mPieceListModel.get(pieceList.getSelectedIndex()), PieceMenuPanel.this));
         buttonPanel.add(editButton, constraints);
 
         final JButton deleteButton = new JButton(Messages.getString("PieceMenuPanel.delete")); //$NON-NLS-1$
         deleteButton.setEnabled(false);
-        deleteButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                if (pieceList.getSelectedIndices().length > 0) {
-                    int[] selectedIndices = pieceList.getSelectedIndices();
-                    for (int i = selectedIndices.length - 1; i >= 0; i--) {
-                        FileUtility.deletePiece(mPieceListModel.get(selectedIndices[i]).toString());
-                        mPieceListModel.removeElementAt(selectedIndices[i]);
-                    }
+        deleteButton.addActionListener(event -> {
+            if (pieceList.getSelectedIndices().length > 0) {
+                int[] selectedIndices = pieceList.getSelectedIndices();
+                for (int i = selectedIndices.length - 1; i >= 0; i--) {
+                    FileUtility.deletePiece(mPieceListModel.get(selectedIndices[i]));
+                    mPieceListModel.removeElementAt(selectedIndices[i]);
                 }
+            }
 
-                if (mPieceListModel.size() == 0) {
-                    editButton.setEnabled(false);
-                    deleteButton.setEnabled(false);
-                    editDeletePanel.setVisible(false);
-                }
+            if (mPieceListModel.size() == 0) {
+                editButton.setEnabled(false);
+                deleteButton.setEnabled(false);
+                editDeletePanel.setVisible(false);
             }
         });
         constraints.ipadx = 8;
@@ -108,24 +90,16 @@ public class PieceMenuPanel extends ChessPanel {
         constraints.gridy = 1;
         add(editDeletePanel, constraints);
 
-        pieceList.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent arg0) {
-                boolean isSelected = pieceList.getSelectedIndex() != -1;
-                deleteButton.setEnabled(isSelected);
-                editButton.setEnabled(isSelected);
-            }
+        pieceList.addListSelectionListener(arg0 -> {
+            boolean isSelected = pieceList.getSelectedIndex() != -1;
+            deleteButton.setEnabled(isSelected);
+            editButton.setEnabled(isSelected);
         });
 
         if (mFrame == null) {
             JButton backButton = new JButton(Messages.getString("PieceMenuPanel.returnToMenu")); //$NON-NLS-1$
             backButton.setToolTipText(Messages.getString("PieceMenuPanel.returnToMenu")); //$NON-NLS-1$
-            backButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent event) {
-                    Driver.getInstance().revertToMainPanel();
-                }
-            });
+            backButton.addActionListener(event -> Driver.getInstance().revertToMainPanel());
 
             constraints.gridy = 2;
             constraints.insets = new Insets(15, 5, 10, 5);
@@ -133,13 +107,7 @@ public class PieceMenuPanel extends ChessPanel {
         } else {
             JButton doneButton = new JButton(Messages.getString("PieceMenuPanel.done")); //$NON-NLS-1$
             doneButton.setToolTipText(Messages.getString("PieceMenuPanel.returnToVariant")); //$NON-NLS-1$
-            doneButton.addActionListener(new ActionListener() {
-
-                @Override
-                public void actionPerformed(ActionEvent arg0) {
-                    mFrame.dispose();
-                }
-            });
+            doneButton.addActionListener(arg0 -> mFrame.dispose());
 
             constraints.gridy = 2;
             constraints.insets = new Insets(15, 5, 10, 5);
@@ -157,7 +125,7 @@ public class PieceMenuPanel extends ChessPanel {
 
     private static final long serialVersionUID = -6371389704966320508L;
 
-    private DefaultListModel mPieceListModel;
+    private DefaultListModel<String> mPieceListModel;
     private JFrame mFrame;
 
     private PieceMakerPanel.PieceListChangedListener mListener;
@@ -170,8 +138,8 @@ public class PieceMenuPanel extends ChessPanel {
         mPieceListModel.clear();
 
         String[] pieceArray = FileUtility.getCustomPieceArray();
-        for (int i = 0; i < pieceArray.length; i++) {
-            mPieceListModel.addElement(pieceArray[i]);
+        for (String aPieceArray : pieceArray) {
+            mPieceListModel.addElement(aPieceArray);
         }
 
         if (mListener != null)

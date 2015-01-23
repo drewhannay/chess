@@ -6,20 +6,13 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 public final class GuiUtility {
     public static void requestFocus(final JComponent component) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                component.requestFocus();
-            }
-        });
+        SwingUtilities.invokeLater(component::requestFocus);
     }
 
     public static JLabel createJLabel(String labelText) {
@@ -41,21 +34,13 @@ public final class GuiUtility {
     }
 
     public static void setupDoneButton(JButton doneButton, final JFrame popup) {
-        doneButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                popup.dispose();
-            }
-        });
+        doneButton.addActionListener(event -> popup.dispose());
     }
 
     public static void setupVariantCancelButton(JButton cancelButton, final JPanel displayPanel, final JFrame popup) {
-        cancelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                displayPanel.removeAll();
-                popup.setVisible(false);
-            }
+        cancelButton.addActionListener(event -> {
+            displayPanel.removeAll();
+            popup.setVisible(false);
         });
     }
 
@@ -64,8 +49,7 @@ public final class GuiUtility {
     }
 
     public static BufferedImage createBufferedImage(int width, int height, String name) throws IOException {
-        BufferedImage bufferedImage = ImageIO.read(new File(FileUtility.getImagePath(name)));
-        return bufferedImage;
+        return ImageIO.read(new File(FileUtility.getImagePath(name)));
     }
 
     public static ImageIcon createImageIcon(int imageWidth, int imageHeight, String imageLocation, boolean isBuiltInFile)

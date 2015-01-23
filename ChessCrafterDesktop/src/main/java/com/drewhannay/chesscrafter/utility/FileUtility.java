@@ -121,9 +121,9 @@ public final class FileUtility {
 
     public static BufferedImage getFrontPageImage() {
         BufferedImage frontPage = null;
-        String path = null;
+        String path = "/chess_logo.png";
         try {
-            URL resource = FileUtility.class.getResource("/chess_logo.png"); //$NON-NLS-1$
+            URL resource = FileUtility.class.getResource(path); //$NON-NLS-1$
             frontPage = ImageIO.read(resource);
         } catch (IOException e) {
             System.out.println(Messages.getString("cantFindPath") + path); //$NON-NLS-1$
