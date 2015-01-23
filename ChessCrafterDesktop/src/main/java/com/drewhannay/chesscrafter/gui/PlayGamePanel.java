@@ -294,7 +294,7 @@ public class PlayGamePanel extends ChessPanel {
         constraints.gridx = 11 + twoBoardsGridBagOffset;
         constraints.gridy = 1;
         constraints.insets = new Insets(10, 0, 10, 0);
-        add(mTeamLabels.get(0), constraints);
+        add(mTeamLabels.get(1), constraints);
 
         // add the Black timer
         constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -352,7 +352,7 @@ public class PlayGamePanel extends ChessPanel {
         constraints.gridx = 11 + twoBoardsGridBagOffset;
         constraints.gridy = 10;
         constraints.insets = new Insets(10, 0, 10, 0);
-        add(mTeamLabels.get(1), constraints);
+        add(mTeamLabels.get(0), constraints);
 
         // TODO: This assumes a two-player game
 //		add(new ChessTimerLabel(mTimers[0]), constraints);
