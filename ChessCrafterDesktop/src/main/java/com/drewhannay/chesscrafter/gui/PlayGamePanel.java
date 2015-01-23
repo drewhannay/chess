@@ -79,8 +79,24 @@ public class PlayGamePanel extends ChessPanel {
     }
 
     public static void changeTurns(Result result) {
+        if (result == Result.CHECKMATE) {
+            endOfGame(result);
+        }
+
         int activeTeamId = mGame.getTurnKeeper().getActiveTeamId();
-        mTeamLabels.stream().forEach(teamLabel -> teamLabel.changeTurns(result, activeTeamId));
+        mTeamLabels.stream()
+                .filter(teamLabel -> teamLabel.getTeamId() == activeTeamId)
+                .forEach(teamLabel -> {
+                    if (result == Result.CHECK || result == Result.DOUBLE_CHECK) {
+                        teamLabel.setInCheck();
+                    } else {
+                        teamLabel.setActive();
+                    }
+                });
+        mTeamLabels.stream()
+                .filter(teamLabel -> teamLabel.getTeamId() != activeTeamId)
+                .forEach(TeamLabel::setInActive);
+
     }
 
     public static void boardRefresh() {
@@ -114,9 +130,9 @@ public class PlayGamePanel extends ChessPanel {
         };
         mOptionsMenu.setVisible(false);
         //TODO make this work with more than classic teams
-        String winningTeamName = mTeamLabels.get(1).getName();
+        String winningTeamName = mTeamLabels.get(0).getName();
         if (mGame.getTurnKeeper().getActiveTeamId() == 1) {
-            winningTeamName = mTeamLabels.get(2).getName();
+            winningTeamName = mTeamLabels.get(1).getName();
         }
         String panelTitle = winningTeamName + " Wins!";
         String panelMessage = Messages.getString("PlayGamePanel.gameOver");
@@ -278,7 +294,7 @@ public class PlayGamePanel extends ChessPanel {
         constraints.gridx = 11 + twoBoardsGridBagOffset;
         constraints.gridy = 1;
         constraints.insets = new Insets(10, 0, 10, 0);
-        add(mTeamLabels.get(2), constraints);
+        add(mTeamLabels.get(0), constraints);
 
         // add the Black timer
         constraints.fill = GridBagConstraints.HORIZONTAL;
