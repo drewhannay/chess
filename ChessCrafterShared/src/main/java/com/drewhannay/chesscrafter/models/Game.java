@@ -1,5 +1,6 @@
 package com.drewhannay.chesscrafter.models;
 
+import com.drewhannay.chesscrafter.logic.PieceTypeManager;
 import com.drewhannay.chesscrafter.logic.Result;
 import com.drewhannay.chesscrafter.models.turnkeeper.TurnKeeper;
 import com.drewhannay.chesscrafter.rules.conditionalmovegenerator.ConditionalMoveGenerator;
@@ -7,9 +8,10 @@ import com.drewhannay.chesscrafter.rules.movefilter.MoveFilter;
 import com.drewhannay.chesscrafter.rules.postmoveaction.PostMoveAction;
 import com.google.common.base.Preconditions;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Set;
-import java.util.Stack;
 
 public final class Game {
 
@@ -17,16 +19,26 @@ public final class Game {
     private final Team[] mTeams;
     private final Board[] mBoards;
     private final TurnKeeper mTurnKeeper;
-    private final Stack<Move> mHistory;
+    private final History mHistory;
 
     private Result mResult;
 
-    public Game(String gameType, Board[] boards, Team[] teams, TurnKeeper turnKeeper) {
+    public Game(@NotNull String gameType, @NotNull Board[] boards, @NotNull Team[] teams,
+                @NotNull TurnKeeper turnKeeper, @Nullable History history) {
         mGameType = gameType;
         mBoards = boards;
         mTeams = teams;
         mTurnKeeper = turnKeeper;
-        mHistory = new Stack<>();
+
+        mHistory = new History(gameType, new ArrayList<Move>());
+        if (history != null) {
+            Preconditions.checkArgument(gameType.equals(history.variantName),
+                    "History variantName {" + history.variantName + "} does not match gameType {" + gameType + "}");
+
+            for (Move move : history.moves) {
+                executeMove(move);
+            }
+        }
     }
 
     public String getGameType() {
@@ -34,7 +46,7 @@ public final class Game {
     }
 
     // TODO: don't want this to be public
-    public Stack getHistory() {
+    public History getHistory() {
         return mHistory;
     }
 
@@ -92,7 +104,8 @@ public final class Game {
         }
 
         if (move.promotionType != null) {
-            Piece promotedPiece = team.getPiecePromoter().promotePiece(board.getPiece(move.destination), move.promotionType);
+            Piece promotedPiece = team.getPiecePromoter().promotePiece(board.getPiece(move.destination),
+                    PieceTypeManager.INSTANCE.getPieceTypeByName(move.promotionType));
             board.addPiece(promotedPiece, move.destination);
         }
 
@@ -102,7 +115,7 @@ public final class Game {
 
         mTurnKeeper.finishTurn();
 
-        mHistory.push(move);
+        mHistory.moves.add(move);
 
         Team newActiveTeam = getTeam(mTurnKeeper.getActiveTeamId());
         mResult = newActiveTeam.getRules().getEndCondition().checkEndCondition(this);
@@ -111,9 +124,9 @@ public final class Game {
     }
 
     public void undoMove() {
-        Preconditions.checkState(!mHistory.isEmpty());
+        Preconditions.checkState(!mHistory.moves.isEmpty());
 
-        Move move = mHistory.pop();
+        Move move = mHistory.moves.remove(mHistory.moves.size() - 1);
 
         // TODO: Undo check end condition
 
@@ -123,7 +136,7 @@ public final class Game {
         Team team = getTeam(mTurnKeeper.getActiveTeamId());
 
         for (PostMoveAction action : team.getRules().getPostMoveActions()) {
-            action.undo(board, team, move, mHistory.isEmpty() ? null : mHistory.peek());
+            action.undo(board, team, move, mHistory.moves.isEmpty() ? null : mHistory.moves.get(mHistory.moves.size() - 1));
         }
 
         if (move.promotionType != null) {

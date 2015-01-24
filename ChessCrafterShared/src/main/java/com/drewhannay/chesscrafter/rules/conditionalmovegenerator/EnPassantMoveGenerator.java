@@ -3,6 +3,7 @@ package com.drewhannay.chesscrafter.rules.conditionalmovegenerator;
 import com.drewhannay.chesscrafter.logic.PieceTypeManager;
 import com.drewhannay.chesscrafter.models.Board;
 import com.drewhannay.chesscrafter.models.BoardCoordinate;
+import com.drewhannay.chesscrafter.models.History;
 import com.drewhannay.chesscrafter.models.Move;
 import com.drewhannay.chesscrafter.models.Piece;
 import com.google.common.collect.Sets;
@@ -10,7 +11,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.Set;
-import java.util.Stack;
 
 public final class EnPassantMoveGenerator extends ConditionalMoveGenerator {
 
@@ -19,13 +19,13 @@ public final class EnPassantMoveGenerator extends ConditionalMoveGenerator {
     @NotNull
     @Override
     public Set<BoardCoordinate> generateMoves(@NotNull Board board, @NotNull BoardCoordinate start,
-                                              @NotNull Stack<Move> history) {
+                                              @NotNull History history) {
         // must not be the first turn
-        if (history.isEmpty()) {
+        if (history.moves.isEmpty()) {
             return Collections.emptySet();
         }
 
-        Move lastMove = history.peek();
+        Move lastMove = history.moves.get(history.moves.size() - 1);
         Piece movingPiece = board.getPiece(start);
 
         // must be moving a pawn

@@ -4,7 +4,7 @@ import com.drewhannay.chesscrafter.logic.PathMaker;
 import com.drewhannay.chesscrafter.logic.PieceTypeManager;
 import com.drewhannay.chesscrafter.models.Board;
 import com.drewhannay.chesscrafter.models.BoardCoordinate;
-import com.drewhannay.chesscrafter.models.Move;
+import com.drewhannay.chesscrafter.models.History;
 import com.drewhannay.chesscrafter.models.Piece;
 import com.drewhannay.chesscrafter.rules.movefilter.ClassicMoveFilter;
 import com.drewhannay.chesscrafter.rules.movefilter.MoveFilter;
@@ -15,14 +15,13 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.Stack;
 
 public final class CastlingMoveGenerator extends ConditionalMoveGenerator {
     public static final String NAME = "CastlingMoveGenerator";
 
     @NotNull
     @Override
-    public Set<BoardCoordinate> generateMoves(@NotNull Board board, @NotNull BoardCoordinate start, @NotNull Stack<Move> history) {
+    public Set<BoardCoordinate> generateMoves(@NotNull Board board, @NotNull BoardCoordinate start, @NotNull History history) {
         Piece movingPiece = board.getPiece(start);
 
         // must be moving the king

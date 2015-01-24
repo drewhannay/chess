@@ -107,7 +107,8 @@ public class PlayGamePanel extends ChessPanel {
     }
 
     public static void endOfGame(Result result) {
-        if (mGame.getHistory().size() == 0) {
+        // TODO: not loving this API
+        if (mGame.getHistory().moves.size() == 0) {
             return;
         } else if (result == Result.STALEMATE) {
             JOptionPane.showMessageDialog(null, Messages.getString("PlayGamePanel.noMovesMade"), //$NON-NLS-1$
@@ -195,15 +196,13 @@ public class PlayGamePanel extends ChessPanel {
         JMenuItem drawMenuItem = new JMenuItem(Messages.getString("PlayGamePanel.declareDraw"), KeyEvent.VK_D); //$NON-NLS-1$
         JMenuItem saveMenuItem = new JMenuItem(Messages.getString("PlayGamePanel.saveAndQuit"), KeyEvent.VK_S); //$NON-NLS-1$
 
-
         drawMenuItem.addActionListener(e -> {
-            if (getGame().getHistory().size() == 0)
+            // TODO: not loving this API
+            if (getGame().getHistory().moves.size() == 0)
                 return;
             mOptionsMenu.setVisible(false);
-            //getGame().getLastMove().setResult(result);
             endOfGame(Result.DRAW);
         });
-
 
         saveMenuItem.addActionListener(event -> {
 //				mWhiteTimer.stopTimer();

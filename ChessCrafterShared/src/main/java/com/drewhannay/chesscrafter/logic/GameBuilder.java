@@ -9,6 +9,7 @@ import com.drewhannay.chesscrafter.models.Board;
 import com.drewhannay.chesscrafter.models.BoardCoordinate;
 import com.drewhannay.chesscrafter.models.BoardSize;
 import com.drewhannay.chesscrafter.models.Game;
+import com.drewhannay.chesscrafter.models.History;
 import com.drewhannay.chesscrafter.models.Piece;
 import com.drewhannay.chesscrafter.models.PieceType;
 import com.drewhannay.chesscrafter.models.Team;
@@ -22,6 +23,7 @@ import com.drewhannay.chesscrafter.rules.promotionmethods.PiecePromoter;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -87,13 +89,18 @@ public class GameBuilder {
 
     @NotNull
     public static Game buildGame(GameConfiguration config) {
+        return buildGame(config, null);
+    }
+
+    @NotNull
+    public static Game buildGame(@NotNull GameConfiguration config, @Nullable History history) {
         Board[] boards = buildBoards(config.boards);
         Team[] teams = buildTeams(config.teams);
 
         TurnKeeper turnKeeper = new TurnKeeper(config.turnKeeper.teamIds, config.turnKeeper.turnCounts,
                 config.turnKeeper.turnIncrements);
 
-        return new Game(config.variantName, boards, teams, turnKeeper);
+        return new Game(config.variantName, boards, teams, turnKeeper, history);
     }
 
     @NotNull
