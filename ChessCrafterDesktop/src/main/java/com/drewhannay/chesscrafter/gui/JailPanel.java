@@ -21,7 +21,7 @@ public class JailPanel extends JPanel {
     private SquareJLabel[][] mSquareLabels;
     private int mTeamIndex;
 
-    public JailPanel(@NotNull int totalPieces, @NotNull int teamIndex) {
+    public JailPanel(int totalPieces, int teamIndex) {
         int jailDimension = (totalPieces / 4) + (totalPieces % 4);
         setOpaque(false);
         setLayout(new GridLayout(jailDimension, jailDimension));
@@ -34,7 +34,7 @@ public class JailPanel extends JPanel {
         createGrid(jailDimension);
     }
 
-    private void createGrid(@NotNull int jailDimensions) {
+    private void createGrid(int jailDimensions) {
         for (int x = 1; x <= jailDimensions; x++) {
             for (int y = 1; y <= jailDimensions; y++) {
                 SquareJLabel square = new SquareJLabel(BoardCoordinate.at(x, y), true, 25);
