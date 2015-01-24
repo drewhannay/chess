@@ -15,7 +15,7 @@ import java.util.Set;
 
 public class BoardPanel extends JPanel {
 
-    public BoardPanel(BoardSize boardSize, int boardIndex, int teamIndex, GlassPane globalGlassPane, DropManager dropManager, boolean isJail) {
+    public BoardPanel(BoardSize boardSize, int boardIndex, GlassPane globalGlassPane, DropManager dropManager) {
         setOpaque(false);
         setLayout(new GridLayout(boardSize.width + 1, boardSize.height));
         setPreferredSize(new Dimension((boardSize.width + 1) * 48, (boardSize.height + 1) * 48));
@@ -23,11 +23,7 @@ public class BoardPanel extends JPanel {
         mGlassPane = globalGlassPane;
         mDropManager = dropManager;
         mBoardIndex = boardIndex;
-        mTeamIndex = teamIndex;
-        if (isJail)
-            createJailGrid(boardSize);
-        else
-            createGrid(boardSize);
+        createGrid(boardSize);
     }
 
     private void createGrid(BoardSize boardSize) {
@@ -63,42 +59,13 @@ public class BoardPanel extends JPanel {
                 square.setPiece(board.getPiece(BoardCoordinate.at(x + 1, y + 1)));
             }
         }
-    }
-
-    //TODO update the square of the piece in check when Logic can provide it
-    /*public void updateCheckLocation(Board[] boards){
-
-    }*/
-
-    public void updateJailPopulation(Team[] teams) {
-        Team team = teams[mTeamIndex];
-        Iterator<Piece> pieceIterator = team.getCapturedOpposingPieces().iterator();
-        for (int x = 0; x < mSquareLabels.length; x++) {
-            for (int y = 0; y < mSquareLabels[x].length; y++) {
-                SquareJLabel square = mSquareLabels[x][y];
-                if (pieceIterator.hasNext()) {
-                    square.setPiece(pieceIterator.next());
-                } else {
-                    square.setPiece(null);
-                }
-            }
-        }
+        refreshSquares();
     }
 
     public void refreshSquares() {
         for (SquareJLabel[] labelArray : mSquareLabels)
             for (SquareJLabel label : labelArray)
                 label.refresh();
-    }
-
-    private void createJailGrid(BoardSize boardSize) {
-        for (int x = 1; x <= boardSize.width; x++) {
-            for (int y = 1; y <= boardSize.height; y++) {
-                SquareJLabel square = new SquareJLabel(BoardCoordinate.at(x, y), true, 25);
-                add(square);
-                mSquareLabels[x - 1][y - 1] = square;
-            }
-        }
     }
 
     public List<SquareJLabel> highlightSquares(Set<BoardCoordinate> coordinates) {
@@ -116,7 +83,6 @@ public class BoardPanel extends JPanel {
     private SquareJLabel[][] mSquareLabels;
 
     private int mBoardIndex;
-    private int mTeamIndex;
     private GlassPane mGlassPane;
     private DropManager mDropManager;
 }

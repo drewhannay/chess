@@ -14,6 +14,7 @@ import com.drewhannay.chesscrafter.models.PieceType;
 import com.drewhannay.chesscrafter.models.Team;
 import com.drewhannay.chesscrafter.timer.ChessTimer;
 import com.drewhannay.chesscrafter.utility.AppConstants;
+import com.drewhannay.chesscrafter.utility.FileUtility;
 import com.drewhannay.chesscrafter.utility.GuiUtility;
 import com.drewhannay.chesscrafter.utility.PieceIconUtility;
 import com.drewhannay.chesscrafter.utility.PreferenceUtility;
@@ -96,18 +97,15 @@ public class PlayGamePanel extends ChessPanel {
         mTeamLabels.stream()
                 .filter(teamLabel -> teamLabel.getTeamId() != activeTeamId)
                 .forEach(TeamLabel::setInActive);
-
     }
 
     public static void boardRefresh() {
         for (BoardPanel panel : mGameBoards) {
             panel.updatePieceLocations(mGame.getBoards());
-            panel.refreshSquares();
         }
-
-        for (BoardPanel panel : mJails) {
-            panel.updateJailPopulation(mGame.getTeams());
-            panel.refreshSquares();
+        int panelCount = 0;
+        for (Team team : mGame.getTeams()) {
+            mJails[panelCount++].updateJailPopulation(team.getCapturedOpposingPieces());
         }
     }
 
@@ -245,7 +243,7 @@ public class PlayGamePanel extends ChessPanel {
         Team[] teams = GameController.getGame().getTeams();
         mTeamLabels = new ArrayList<>(teams.length);
 
-        mJails = new BoardPanel[teams.length];
+        mJails = new JailPanel[teams.length];
 
         Board[] boards = GameController.getGame().getBoards();
         mGameBoards = new BoardPanel[boards.length];
@@ -263,7 +261,7 @@ public class PlayGamePanel extends ChessPanel {
             gridx += constraints.gridwidth;
 
             mGameBoards[boardIndex] =
-                    new BoardPanel(boards[boardIndex].getBoardSize(), boardIndex, 0, mGlobalGlassPane, mDropManager, false);
+                    new BoardPanel(boards[boardIndex].getBoardSize(), boardIndex, mGlobalGlassPane, mDropManager);
             add(mGameBoards[boardIndex], constraints);
         }
 
@@ -277,13 +275,9 @@ public class PlayGamePanel extends ChessPanel {
                 mTeamLabels.add(new TeamLabel(team.getTeamId(), "Team " + team.getTeamId()));
         }
 
-        int jailBoardSize = getJailDimension();
-
-        for (int teamIndex = 0; teamIndex < mGame.getTeams().length; teamIndex++) {
-            mJails[teamIndex] = new BoardPanel(BoardSize.withDimensions(jailBoardSize, jailBoardSize), 0, teamIndex, mGlobalGlassPane, mDropManager, true);
-            mJails[teamIndex].setBorder(GuiUtility.createBorder(Messages.getString("PlayGamePanel.capturedPieces"))); //$NON-NLS-1$
-            mJails[teamIndex].setLayout(new GridLayout(jailBoardSize, jailBoardSize));
-            mJails[teamIndex].setPreferredSize(new Dimension((jailBoardSize + 1) * 25, (jailBoardSize + 1) * 25));
+       for (int teamIndex = 0; teamIndex < mGame.getTeams().length; teamIndex++) {
+           //TODO Figure out a way to get the total number of pieces in the game for each team
+            mJails[teamIndex] = new JailPanel(16, teamIndex);
         }
 
         //Add the Black Team Label
@@ -362,10 +356,6 @@ public class PlayGamePanel extends ChessPanel {
         Driver.getInstance().pack();
     }
 
-    private int getJailDimension() {
-        return 4;
-    }
-
     public static void setGame(Game game) {
         mGame = game;
     }
@@ -392,7 +382,7 @@ public class PlayGamePanel extends ChessPanel {
     protected static ChessTimer[] mTimers;
     protected static List<TeamLabel> mTeamLabels;
     protected static BoardPanel[] mGameBoards;
-    protected static BoardPanel[] mJails;
+    protected static JailPanel[] mJails;
     protected static JMenu mOptionsMenu;
     private final DropManager mDropManager;
     protected GlassPane mGlobalGlassPane;
