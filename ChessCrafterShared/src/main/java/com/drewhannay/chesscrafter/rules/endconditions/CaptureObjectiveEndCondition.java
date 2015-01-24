@@ -11,7 +11,10 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
 
-public final class CaptureObjectiveEndCondition implements EndCondition {
+public final class CaptureObjectiveEndCondition extends EndCondition {
+
+    public static final String NAME = "CaptureObjectiveEndCondition";
+
     private final int mTeamId;
 
     private BoardCoordinate mObjectivePieceLocation;

@@ -7,8 +7,19 @@ import com.drewhannay.chesscrafter.models.Team;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface PostMoveAction {
-    public void perform(@NotNull Board board, @NotNull Team team, @NotNull Move move, @Nullable Piece capturedPiece);
+public abstract class PostMoveAction {
+    public abstract void perform(@NotNull Board board, @NotNull Team team, @NotNull Move move, @Nullable Piece capturedPiece);
 
-    public void undo(@NotNull Board board, @NotNull Team team, @NotNull Move lastMove, @Nullable Move opponentsLastMove);
+    public abstract void undo(@NotNull Board board, @NotNull Team team, @NotNull Move lastMove, @Nullable Move opponentsLastMove);
+
+    public static PostMoveAction from(@NotNull String name) {
+        switch (name) {
+            case CastlingPostMoveAction.NAME:
+                return new CastlingPostMoveAction();
+            case EnPassantPostMoveAction.NAME:
+                return new EnPassantPostMoveAction();
+        }
+
+        throw new IllegalArgumentException("Unknown PostMoveAction name:" + name);
+    }
 }

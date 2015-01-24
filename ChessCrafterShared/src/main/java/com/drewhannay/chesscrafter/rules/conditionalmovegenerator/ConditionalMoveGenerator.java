@@ -8,8 +8,19 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Set;
 import java.util.Stack;
 
-public interface ConditionalMoveGenerator {
+public abstract class ConditionalMoveGenerator {
     @NotNull
-    public Set<BoardCoordinate> generateMoves(@NotNull Board board, @NotNull BoardCoordinate start,
-                                              @NotNull Stack<Move> history);
+    public abstract Set<BoardCoordinate> generateMoves(@NotNull Board board, @NotNull BoardCoordinate start,
+                                                       @NotNull Stack<Move> history);
+
+    public static ConditionalMoveGenerator from(@NotNull String name) {
+        switch (name) {
+            case CastlingMoveGenerator.NAME:
+                return new CastlingMoveGenerator();
+            case EnPassantMoveGenerator.NAME:
+                return new EnPassantMoveGenerator();
+        }
+
+        throw new IllegalArgumentException("Unknown ConditionalMoveGenerator name:" + name);
+    }
 }

@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collections;
 import java.util.Set;
 
-public final class StationaryObjectiveMoveFilter implements MoveFilter {
+public final class StationaryObjectiveMoveFilter extends MoveFilter {
 
     private final PieceType mObjectivePieceType;
 

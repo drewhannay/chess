@@ -1,15 +1,18 @@
 package com.drewhannay.chesscrafter.rules.postmoveaction;
 
+import com.drewhannay.chesscrafter.logic.PieceTypeManager;
 import com.drewhannay.chesscrafter.models.Board;
 import com.drewhannay.chesscrafter.models.BoardCoordinate;
 import com.drewhannay.chesscrafter.models.Move;
 import com.drewhannay.chesscrafter.models.Piece;
-import com.drewhannay.chesscrafter.models.PieceType;
 import com.drewhannay.chesscrafter.models.Team;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public final class CastlingPostMoveAction implements PostMoveAction {
+public final class CastlingPostMoveAction extends PostMoveAction {
+
+    public static final String NAME = "CastlingPostMoveAction";
+
     @Override
     public void perform(@NotNull Board board, @NotNull Team team, @NotNull Move move, @Nullable Piece capturedPiece) {
         Piece piece = board.getPiece(move.destination);
@@ -67,6 +70,6 @@ public final class CastlingPostMoveAction implements PostMoveAction {
     }
 
     private boolean isKing(Piece piece) {
-        return piece.getName().equals(PieceType.getKingPieceType().getName());
+        return piece.getName().equals(PieceTypeManager.getKingPieceType().getName());
     }
 }

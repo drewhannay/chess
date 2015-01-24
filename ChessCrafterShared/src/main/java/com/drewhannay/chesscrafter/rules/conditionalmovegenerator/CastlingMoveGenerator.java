@@ -1,11 +1,11 @@
 package com.drewhannay.chesscrafter.rules.conditionalmovegenerator;
 
 import com.drewhannay.chesscrafter.logic.PathMaker;
+import com.drewhannay.chesscrafter.logic.PieceTypeManager;
 import com.drewhannay.chesscrafter.models.Board;
 import com.drewhannay.chesscrafter.models.BoardCoordinate;
 import com.drewhannay.chesscrafter.models.Move;
 import com.drewhannay.chesscrafter.models.Piece;
-import com.drewhannay.chesscrafter.models.PieceType;
 import com.drewhannay.chesscrafter.rules.movefilter.ClassicMoveFilter;
 import com.drewhannay.chesscrafter.rules.movefilter.MoveFilter;
 import com.google.common.collect.Sets;
@@ -17,7 +17,9 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Stack;
 
-public final class CastlingMoveGenerator implements ConditionalMoveGenerator {
+public final class CastlingMoveGenerator extends ConditionalMoveGenerator {
+    public static final String NAME = "CastlingMoveGenerator";
+
     @NotNull
     @Override
     public Set<BoardCoordinate> generateMoves(@NotNull Board board, @NotNull BoardCoordinate start, @NotNull Stack<Move> history) {
@@ -73,7 +75,7 @@ public final class CastlingMoveGenerator implements ConditionalMoveGenerator {
     }
 
     private boolean isKing(Piece piece) {
-        return piece.getName().equals(PieceType.getKingPieceType().getName());
+        return piece.getName().equals(PieceTypeManager.getKingPieceType().getName());
     }
 
     private boolean isCastleableRook(@Nullable Piece rook) {
@@ -81,6 +83,6 @@ public final class CastlingMoveGenerator implements ConditionalMoveGenerator {
     }
 
     private boolean isRook(Piece piece) {
-        return piece.getName().equals(PieceType.getRookPieceType().getName());
+        return piece.getName().equals(PieceTypeManager.getRookPieceType().getName());
     }
 }

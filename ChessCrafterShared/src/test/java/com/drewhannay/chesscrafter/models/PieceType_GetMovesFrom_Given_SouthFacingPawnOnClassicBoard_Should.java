@@ -1,5 +1,6 @@
 package com.drewhannay.chesscrafter.models;
 
+import com.drewhannay.chesscrafter.logic.PieceTypeManager;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,7 +16,7 @@ public class PieceType_GetMovesFrom_Given_SouthFacingPawnOnClassicBoard_Should {
 
     @Before
     public void setup() {
-        mTarget = PieceType.getSouthFacingPawnPieceType();
+        mTarget = PieceTypeManager.getSouthFacingPawnPieceType();
         mBoardSize = BoardSize.withDimensions(8, 8);
         mMovesFrom2_7 = mTarget.getMovesFrom(BoardCoordinate.at(2, 7), mBoardSize, 0);
     }

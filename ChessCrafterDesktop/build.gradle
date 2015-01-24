@@ -23,6 +23,16 @@ repositories {
 dependencies {
 	compile project(':ChessCrafterShared')
 	compile 'com.google.guava:guava:18.0'
+	compile 'com.google.code.gson:gson:2.3.1'
+
+	testCompile 'junit:junit:4.12'
+}
+
+test {
+	testLogging {
+		// show that events are run in the command-line output
+		events 'started', 'passed'
+	}
 }
 
 jar {

@@ -1,10 +1,10 @@
 package com.drewhannay.chesscrafter.rules.conditionalmovegenerator;
 
+import com.drewhannay.chesscrafter.logic.PieceTypeManager;
 import com.drewhannay.chesscrafter.models.Board;
 import com.drewhannay.chesscrafter.models.BoardCoordinate;
 import com.drewhannay.chesscrafter.models.Move;
 import com.drewhannay.chesscrafter.models.Piece;
-import com.drewhannay.chesscrafter.models.PieceType;
 import com.google.common.collect.Sets;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,7 +12,9 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.Stack;
 
-public final class EnPassantMoveGenerator implements ConditionalMoveGenerator {
+public final class EnPassantMoveGenerator extends ConditionalMoveGenerator {
+
+    public static final String NAME = "EnPassantMoveGenerator";
 
     @NotNull
     @Override
@@ -59,7 +61,7 @@ public final class EnPassantMoveGenerator implements ConditionalMoveGenerator {
     }
 
     private boolean isPawn(@NotNull Piece piece) {
-        return piece.getName().equals(PieceType.getNorthFacingPawnPieceType().getName())
-                || piece.getName().equals(PieceType.getSouthFacingPawnPieceType().getName());
+        return piece.getName().equals(PieceTypeManager.getNorthFacingPawnPieceType().getName())
+                || piece.getName().equals(PieceTypeManager.getSouthFacingPawnPieceType().getName());
     }
 }

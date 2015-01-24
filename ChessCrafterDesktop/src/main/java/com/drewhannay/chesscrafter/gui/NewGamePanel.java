@@ -32,7 +32,7 @@ public class NewGamePanel extends ChessPanel {
         humanPlayButton.addActionListener(event -> {
             if (mPopupFrame == null) {
                 //createNewGamePopup();
-                GameController.setGame(GameBuilder.buildClassic());
+                GameController.setGame(GameBuilder.buildGame(GameBuilder.getClassicConfiguration()));
                 Driver.getInstance().setPanel(new PlayGamePanel());
             }
         });

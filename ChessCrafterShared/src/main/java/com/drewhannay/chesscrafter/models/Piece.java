@@ -1,5 +1,6 @@
 package com.drewhannay.chesscrafter.models;
 
+import com.drewhannay.chesscrafter.logic.PieceTypeManager;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
@@ -71,15 +72,15 @@ public final class Piece {
     }
 
     public static Piece newBishop(int teamId) {
-        return new Piece(teamId, PieceType.getBishopPieceType());
+        return new Piece(teamId, PieceTypeManager.getBishopPieceType());
     }
 
     public static Piece newKing(int teamId, boolean isObjectivePiece) {
-        return new Piece(teamId, PieceType.getKingPieceType(), isObjectivePiece);
+        return new Piece(teamId, PieceTypeManager.getKingPieceType(), isObjectivePiece);
     }
 
     public static Piece newKnight(int teamId) {
-        return new Piece(teamId, PieceType.getKnightPieceType());
+        return new Piece(teamId, PieceTypeManager.getKnightPieceType());
     }
 
     public static Piece newNorthFacingPawn() {
@@ -87,18 +88,18 @@ public final class Piece {
     }
 
     public static Piece newNorthFacingPawn(int teamId) {
-        return new Piece(teamId, PieceType.getNorthFacingPawnPieceType());
+        return new Piece(teamId, PieceTypeManager.getNorthFacingPawnPieceType());
     }
 
     public static Piece newSouthFacingPawn(int teamId) {
-        return new Piece(teamId, PieceType.getSouthFacingPawnPieceType());
+        return new Piece(teamId, PieceTypeManager.getSouthFacingPawnPieceType());
     }
 
     public static Piece newQueen(int teamId) {
-        return new Piece(teamId, PieceType.getQueenPieceType());
+        return new Piece(teamId, PieceTypeManager.getQueenPieceType());
     }
 
     public static Piece newRook(int teamId) {
-        return new Piece(teamId, PieceType.getRookPieceType());
+        return new Piece(teamId, PieceTypeManager.getRookPieceType());
     }
 }

@@ -1,15 +1,17 @@
 package com.drewhannay.chesscrafter.rules.postmoveaction;
 
+import com.drewhannay.chesscrafter.logic.PieceTypeManager;
 import com.drewhannay.chesscrafter.models.Board;
 import com.drewhannay.chesscrafter.models.BoardCoordinate;
 import com.drewhannay.chesscrafter.models.Move;
 import com.drewhannay.chesscrafter.models.Piece;
-import com.drewhannay.chesscrafter.models.PieceType;
 import com.drewhannay.chesscrafter.models.Team;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public final class EnPassantPostMoveAction implements PostMoveAction {
+public final class EnPassantPostMoveAction extends PostMoveAction {
+
+    public static final String NAME = "EnPassantPostMoveAction";
 
     @Override
     public void perform(@NotNull Board board, @NotNull Team team, @NotNull Move move, @Nullable Piece capturedPiece) {
@@ -82,7 +84,7 @@ public final class EnPassantPostMoveAction implements PostMoveAction {
     }
 
     private boolean isPawn(Piece piece) {
-        return piece.getName().equals(PieceType.getNorthFacingPawnPieceType().getName())
-                || piece.getName().equals(PieceType.getSouthFacingPawnPieceType().getName());
+        return piece.getName().equals(PieceTypeManager.getNorthFacingPawnPieceType().getName())
+                || piece.getName().equals(PieceTypeManager.getSouthFacingPawnPieceType().getName());
     }
 }

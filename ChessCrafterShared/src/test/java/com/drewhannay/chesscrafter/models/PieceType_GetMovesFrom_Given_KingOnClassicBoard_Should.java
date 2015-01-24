@@ -1,5 +1,6 @@
 package com.drewhannay.chesscrafter.models;
 
+import com.drewhannay.chesscrafter.logic.PieceTypeManager;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -16,7 +17,7 @@ public class PieceType_GetMovesFrom_Given_KingOnClassicBoard_Should {
 
     @Before
     public void setup() {
-        mTarget = PieceType.getKingPieceType();
+        mTarget = PieceTypeManager.getKingPieceType();
         mBoardSize = BoardSize.withDimensions(8, 8);
         mMovesFrom3_3 = mTarget.getMovesFrom(BoardCoordinate.at(3, 3), mBoardSize, 0);
     }

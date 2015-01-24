@@ -1,8 +1,8 @@
 package com.drewhannay.chesscrafter.rules.promotionmethods;
 
+import com.drewhannay.chesscrafter.logic.PieceTypeManager;
 import com.drewhannay.chesscrafter.models.BoardCoordinate;
 import com.drewhannay.chesscrafter.models.Piece;
-import com.drewhannay.chesscrafter.models.PieceType;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,10 +19,10 @@ public class PiecePromoter_Given_ClassicRules_Should {
 
     @Before
     public void setUp() {
-        mWhiteTarget = PiecePromoter.createClassicPiecePromoter(8, PieceType.getNorthFacingPawnPieceType());
+        mWhiteTarget = PiecePromoter.createClassicPiecePromoter(8, PieceTypeManager.getNorthFacingPawnPieceType());
         mWhitePawn = Piece.newNorthFacingPawn(Piece.TEAM_ONE);
 
-        mBlackTarget = PiecePromoter.createClassicPiecePromoter(1, PieceType.getSouthFacingPawnPieceType());
+        mBlackTarget = PiecePromoter.createClassicPiecePromoter(1, PieceTypeManager.getSouthFacingPawnPieceType());
         mBlackPawn = Piece.newSouthFacingPawn(Piece.TEAM_TWO);
     }
 
@@ -66,12 +66,12 @@ public class PiecePromoter_Given_ClassicRules_Should {
     public static class GetPromotionOptions extends PiecePromoter_Given_ClassicRules_Should {
         @Test
         public void notReturnKingAsPromotionOption() {
-            assertFalse(mWhiteTarget.getPromotionOptions(mWhitePawn).contains(PieceType.getKingPieceType()));
+            assertFalse(mWhiteTarget.getPromotionOptions(mWhitePawn).contains(PieceTypeManager.getKingPieceType()));
         }
 
         @Test
         public void returnQueenAsPromotionOption() {
-            assertTrue(mWhiteTarget.getPromotionOptions(mWhitePawn).contains(PieceType.getQueenPieceType()));
+            assertTrue(mWhiteTarget.getPromotionOptions(mWhitePawn).contains(PieceTypeManager.getQueenPieceType()));
         }
 
         @Test
@@ -88,15 +88,15 @@ public class PiecePromoter_Given_ClassicRules_Should {
     public static class PromotePiece extends PiecePromoter_Given_ClassicRules_Should {
         @Test
         public void returnQueenWhenPromotingToQueen() {
-            Piece queen = mWhiteTarget.promotePiece(mWhitePawn, PieceType.getQueenPieceType());
-            assertEquals(PieceType.getQueenPieceType().getName(), queen.getName());
+            Piece queen = mWhiteTarget.promotePiece(mWhitePawn, PieceTypeManager.getQueenPieceType());
+            assertEquals(PieceTypeManager.getQueenPieceType().getName(), queen.getName());
         }
 
         @Test
         public void returnPromotedPieceWithSameMoveCountAsOriginalPiece() {
             mWhitePawn.incrementMoveCount();
             mWhitePawn.incrementMoveCount();
-            Piece queen = mWhiteTarget.promotePiece(mWhitePawn, PieceType.getQueenPieceType());
+            Piece queen = mWhiteTarget.promotePiece(mWhitePawn, PieceTypeManager.getQueenPieceType());
             assertEquals(mWhitePawn.getMoveCount(), queen.getMoveCount());
         }
     }
@@ -104,7 +104,7 @@ public class PiecePromoter_Given_ClassicRules_Should {
     public static class UndoPromotion extends PiecePromoter_Given_ClassicRules_Should {
         @Test
         public void returnOriginalPieceAfterUndoingPromotion() {
-            mWhiteTarget.promotePiece(mWhitePawn, PieceType.getQueenPieceType());
+            mWhiteTarget.promotePiece(mWhitePawn, PieceTypeManager.getQueenPieceType());
             Piece demotedPiece = mWhiteTarget.undoPromotion();
             assertEquals(mWhitePawn, demotedPiece);
         }

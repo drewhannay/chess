@@ -11,7 +11,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 
-public final class ClassicMoveFilter implements MoveFilter {
+public final class ClassicMoveFilter extends MoveFilter {
+
+    public static final String NAME = "ClassicMoveFilter";
 
     private BoardCoordinate mObjectivePieceLocation;
 

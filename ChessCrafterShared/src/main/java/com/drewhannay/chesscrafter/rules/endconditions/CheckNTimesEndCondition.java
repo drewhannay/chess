@@ -4,7 +4,7 @@ import com.drewhannay.chesscrafter.logic.Result;
 import com.drewhannay.chesscrafter.models.Game;
 import org.jetbrains.annotations.NotNull;
 
-public final class CheckNTimesEndCondition implements EndCondition {
+public final class CheckNTimesEndCondition extends EndCondition {
 
     @Override
     public Result checkEndCondition(@NotNull Game game) {

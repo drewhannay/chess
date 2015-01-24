@@ -7,7 +7,7 @@ import com.drewhannay.chesscrafter.models.Team;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public final class ReturnCapturedToOriginPostMoveAction implements PostMoveAction {
+public final class ReturnCapturedToOriginPostMoveAction extends PostMoveAction {
     @Override
     public void perform(@NotNull Board board, @NotNull Team team, @NotNull Move move, @Nullable Piece capturedPiece) {
         // TODO Auto-generated method stub

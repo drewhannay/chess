@@ -1,5 +1,6 @@
 package com.drewhannay.chesscrafter.rules.promotionmethods;
 
+import com.drewhannay.chesscrafter.logic.PieceTypeManager;
 import com.drewhannay.chesscrafter.models.BoardCoordinate;
 import com.drewhannay.chesscrafter.models.BoardSize;
 import com.drewhannay.chesscrafter.models.Piece;
@@ -39,10 +40,10 @@ public class PiecePromoter {
 
         Map<PieceType, Set<PieceType>> promotionMap = Maps.newHashMap();
         promotionMap.put(pawnType, Sets.newHashSet(
-                PieceType.getRookPieceType(),
-                PieceType.getKnightPieceType(),
-                PieceType.getBishopPieceType(),
-                PieceType.getQueenPieceType()
+                PieceTypeManager.getRookPieceType(),
+                PieceTypeManager.getKnightPieceType(),
+                PieceTypeManager.getBishopPieceType(),
+                PieceTypeManager.getQueenPieceType()
         ));
 
         return new PiecePromoter(promotionCoordinateMap, promotionMap);

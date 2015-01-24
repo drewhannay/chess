@@ -4,7 +4,7 @@ import com.drewhannay.chesscrafter.logic.Result;
 import com.drewhannay.chesscrafter.models.Game;
 import org.jetbrains.annotations.NotNull;
 
-public final class LoseAllPiecesEndCondition implements EndCondition {
+public final class LoseAllPiecesEndCondition extends EndCondition {
     @Override
     public Result checkEndCondition(@NotNull Game game) {
         // TODO Auto-generated method stub

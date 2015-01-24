@@ -7,7 +7,7 @@ import com.drewhannay.chesscrafter.models.Team;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public final class AtomicCapturePostMoveAction implements PostMoveAction {
+public final class AtomicCapturePostMoveAction extends PostMoveAction {
     /**
      * Capture removes pieces from 8 surrounding squares, including the
      * capturing piece - with the exception of pawns, unless the pawn is either

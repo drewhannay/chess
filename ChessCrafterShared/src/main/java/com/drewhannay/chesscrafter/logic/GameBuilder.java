@@ -1,5 +1,10 @@
 package com.drewhannay.chesscrafter.logic;
 
+import com.drewhannay.chesscrafter.logic.GameConfiguration.BoardConfiguration;
+import com.drewhannay.chesscrafter.logic.GameConfiguration.PieceConfiguration;
+import com.drewhannay.chesscrafter.logic.GameConfiguration.PiecePromoterConfiguration;
+import com.drewhannay.chesscrafter.logic.GameConfiguration.TeamConfiguration;
+import com.drewhannay.chesscrafter.logic.GameConfiguration.TurnKeeperConfiguration;
 import com.drewhannay.chesscrafter.models.Board;
 import com.drewhannay.chesscrafter.models.BoardCoordinate;
 import com.drewhannay.chesscrafter.models.BoardSize;
@@ -9,31 +14,25 @@ import com.drewhannay.chesscrafter.models.PieceType;
 import com.drewhannay.chesscrafter.models.Team;
 import com.drewhannay.chesscrafter.models.turnkeeper.TurnKeeper;
 import com.drewhannay.chesscrafter.rules.Rules;
-import com.drewhannay.chesscrafter.rules.conditionalmovegenerator.CastlingMoveGenerator;
-import com.drewhannay.chesscrafter.rules.conditionalmovegenerator.EnPassantMoveGenerator;
-import com.drewhannay.chesscrafter.rules.endconditions.CaptureObjectiveEndCondition;
-import com.drewhannay.chesscrafter.rules.movefilter.ClassicMoveFilter;
+import com.drewhannay.chesscrafter.rules.conditionalmovegenerator.ConditionalMoveGenerator;
+import com.drewhannay.chesscrafter.rules.endconditions.EndCondition;
 import com.drewhannay.chesscrafter.rules.movefilter.MoveFilter;
-import com.drewhannay.chesscrafter.rules.postmoveaction.CastlingPostMoveAction;
-import com.drewhannay.chesscrafter.rules.postmoveaction.EnPassantPostMoveAction;
+import com.drewhannay.chesscrafter.rules.postmoveaction.PostMoveAction;
 import com.drewhannay.chesscrafter.rules.promotionmethods.PiecePromoter;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class GameBuilder {
     public static final int BLACK = 1;
     public static final int WHITE = 2;
     public static final int BOTH = 3;
-
-    // TODO: remove this eventually
-    public static void main(String[] args) {
-        buildClassic();
-    }
 
     /**
      * Constructor
@@ -87,37 +86,169 @@ public class GameBuilder {
     }
 
     @NotNull
-    public static Game buildClassic() {
-        Rules whiteRules = new Rules(
-                Lists.<MoveFilter>newArrayList(new ClassicMoveFilter()),
-                Lists.newArrayList(new EnPassantPostMoveAction(), new CastlingPostMoveAction()),
-                new CaptureObjectiveEndCondition(Piece.TEAM_ONE)
-        );
-        Rules blackRules = new Rules(
-                Lists.<MoveFilter>newArrayList(new ClassicMoveFilter()),
-                Lists.newArrayList(new EnPassantPostMoveAction(), new CastlingPostMoveAction()),
-                new CaptureObjectiveEndCondition(Piece.TEAM_TWO)
-        );
+    public static Game buildGame(GameConfiguration config) {
+        Board[] boards = buildBoards(config.boards);
+        Team[] teams = buildTeams(config.teams);
 
-        Team[] teams = new Team[2];
-        teams[0] = new Team(Piece.TEAM_ONE,
-                whiteRules,
-                Sets.newHashSet(new EnPassantMoveGenerator(), new CastlingMoveGenerator()),
-                PiecePromoter.createClassicPiecePromoter(8, PieceType.getNorthFacingPawnPieceType()));
-        teams[1] = new Team(Piece.TEAM_TWO,
-                blackRules,
-                Sets.newHashSet(new EnPassantMoveGenerator(), new CastlingMoveGenerator()),
-                PiecePromoter.createClassicPiecePromoter(1, PieceType.getSouthFacingPawnPieceType()));
+        TurnKeeper turnKeeper = new TurnKeeper(config.turnKeeper.teamIds, config.turnKeeper.turnCounts,
+                config.turnKeeper.turnIncrements);
 
-        Board[] boards = new Board[]{new Board(BoardSize.withDimensions(8, 8))};
+        return new Game(config.variantName, boards, teams, turnKeeper);
+    }
 
-        setupClassicPieces(boards[0], 1, Piece.TEAM_ONE);
-        setupClassicNorthFacingPawns(boards[0], 2, Piece.TEAM_ONE);
+    @NotNull
+    private static Board[] buildBoards(@NotNull BoardConfiguration[] boardConfigs) {
+        Board[] boards = new Board[boardConfigs.length];
+        for (int i = 0; i < boardConfigs.length; i++) {
+            BoardConfiguration boardConfig = boardConfigs[i];
+            Board board = new Board(BoardSize.withDimensions(boardConfig.width, boardConfig.height));
+            for (int x = 0; x < boardConfig.pieces.length; x++) {
+                for (int y = 0; y < boardConfig.pieces[x].length; y++) {
+                    PieceConfiguration pieceConfig = boardConfig.pieces[x][y];
+                    if (pieceConfig != null) {
+                        board.addPiece(new Piece(pieceConfig.teamId,
+                                PieceTypeManager.INSTANCE.getPieceTypeByName(pieceConfig.pieceType),
+                                pieceConfig.isObjective, 0), BoardCoordinate.at(x + 1, y + 1));
+                    }
+                }
+            }
 
-        setupClassicSouthFacingPawns(boards[0], 7, Piece.TEAM_TWO);
-        setupClassicPieces(boards[0], 8, Piece.TEAM_TWO);
+            boards[i] = board;
+        }
+        return boards;
+    }
 
-        return new Game("Classic", boards, teams, TurnKeeper.createClassic(Piece.TEAM_ONE, Piece.TEAM_TWO));
+    @NotNull
+    private static Team[] buildTeams(@NotNull TeamConfiguration[] teamConfigs) {
+        Team[] teams = new Team[teamConfigs.length];
+        for (int i = 0; i < teamConfigs.length; i++) {
+            TeamConfiguration teamConfig = teamConfigs[i];
+
+            List<MoveFilter> moveFilters = new ArrayList<>();
+            for (String name : teamConfig.moveFilters) {
+                moveFilters.add(MoveFilter.from(name));
+            }
+            List<PostMoveAction> postMoveActions = new ArrayList<>();
+            for (String name : teamConfig.postMoveActions) {
+                postMoveActions.add(PostMoveAction.from(name));
+            }
+
+            Rules rules = new Rules(moveFilters, postMoveActions, EndCondition.from(teamConfig.endCondition, teamConfig.teamId));
+
+            PiecePromoterConfiguration promoterConfig = teamConfig.piecePromoterConfiguration;
+            PiecePromoter piecePromoter = PiecePromoter.createClassicPiecePromoter(promoterConfig.promotionRow,
+                    PieceTypeManager.INSTANCE.getPieceTypeByName(promoterConfig.pieceType));
+
+            Set<ConditionalMoveGenerator> moveGenerators = new HashSet<>();
+            for (String name : teamConfig.conditionalMoveGenerators) {
+                moveGenerators.add(ConditionalMoveGenerator.from(name));
+            }
+
+            Team team = new Team(teamConfig.teamId, rules, moveGenerators, piecePromoter);
+            teams[i] = team;
+        }
+        return teams;
+    }
+
+    @NotNull
+    public static GameConfiguration getClassicConfiguration() {
+        PiecePromoterConfiguration teamOnePiecePromoter = new PiecePromoterConfiguration();
+        teamOnePiecePromoter.promotionRow = 8;
+        teamOnePiecePromoter.pieceType = "NorthFacingPawn";
+
+        PiecePromoterConfiguration teamTwoPiecePromoter = new PiecePromoterConfiguration();
+        teamTwoPiecePromoter.promotionRow = 1;
+        teamTwoPiecePromoter.pieceType = "SouthFacingPawn";
+
+        TeamConfiguration teamOne = new TeamConfiguration();
+        teamOne.teamId = Piece.TEAM_ONE;
+        teamOne.conditionalMoveGenerators = new String[]{"CastlingMoveGenerator", "EnPassantMoveGenerator"};
+        teamOne.moveFilters = new String[]{"ClassicMoveFilter"};
+        teamOne.postMoveActions = new String[]{"CastlingPostMoveAction", "EnPassantPostMoveAction"};
+        teamOne.piecePromoterConfiguration = teamOnePiecePromoter;
+        teamOne.endCondition = "CaptureObjectiveEndCondition";
+
+        TeamConfiguration teamTwo = new TeamConfiguration();
+        teamTwo.teamId = Piece.TEAM_TWO;
+        teamTwo.conditionalMoveGenerators = new String[]{"CastlingMoveGenerator", "EnPassantMoveGenerator"};
+        teamTwo.moveFilters = new String[]{"ClassicMoveFilter"};
+        teamTwo.postMoveActions = new String[]{"CastlingPostMoveAction", "EnPassantPostMoveAction"};
+        teamTwo.piecePromoterConfiguration = teamTwoPiecePromoter;
+        teamTwo.endCondition = "CaptureObjectiveEndCondition";
+
+        TeamConfiguration[] teams = new TeamConfiguration[]{teamOne, teamTwo};
+
+        PieceConfiguration[][] boardOnePieces = new PieceConfiguration[8][8];
+        setupClassicPawns(boardOnePieces, 2, Piece.TEAM_ONE, "NorthFacingPawn");
+        setupClassicPawns(boardOnePieces, 7, Piece.TEAM_TWO, "SouthFacingPawn");
+        setupClassicPieces(boardOnePieces, 1, Piece.TEAM_ONE);
+        setupClassicPieces(boardOnePieces, 8, Piece.TEAM_TWO);
+
+        BoardConfiguration boardOne = new BoardConfiguration();
+        boardOne.width = 8;
+        boardOne.height = 8;
+        boardOne.pieces = boardOnePieces;
+
+        BoardConfiguration[] boards = new BoardConfiguration[]{boardOne};
+
+        TurnKeeperConfiguration turnKeeper = new TurnKeeperConfiguration();
+        turnKeeper.teamIds = new int[]{Piece.TEAM_ONE, Piece.TEAM_TWO};
+        turnKeeper.turnCounts = new int[]{1, 1};
+        turnKeeper.turnIncrements = new int[]{0, 0};
+
+        GameConfiguration classicConfig = new GameConfiguration();
+        classicConfig.variantName = "Classic";
+        classicConfig.boards = boards;
+        classicConfig.teams = teams;
+        classicConfig.turnKeeper = turnKeeper;
+
+        return classicConfig;
+    }
+
+    private static void setupClassicPawns(PieceConfiguration[][] pieces, int row, int teamId, String pieceType) {
+        PieceConfiguration pieceConfiguration = new PieceConfiguration();
+        pieceConfiguration.teamId = teamId;
+        pieceConfiguration.isObjective = false;
+        pieceConfiguration.pieceType = pieceType;
+        for (int x = 1; x <= BoardSize.CLASSIC_SIZE.width; x++) {
+            pieces[x - 1][row - 1] = pieceConfiguration;
+        }
+    }
+
+    private static void setupClassicPieces(PieceConfiguration[][] pieces, int row, int teamId) {
+        PieceConfiguration rook = new PieceConfiguration();
+        rook.teamId = teamId;
+        rook.pieceType = "Rook";
+
+        pieces[0][row - 1] = rook;
+        pieces[7][row - 1] = rook;
+
+        PieceConfiguration knight = new PieceConfiguration();
+        knight.teamId = teamId;
+        knight.pieceType = "Night";
+
+        pieces[1][row - 1] = knight;
+        pieces[6][row - 1] = knight;
+
+        PieceConfiguration bishop = new PieceConfiguration();
+        bishop.teamId = teamId;
+        bishop.pieceType = "Bishop";
+
+        pieces[2][row - 1] = bishop;
+        pieces[5][row - 1] = bishop;
+
+        PieceConfiguration queen = new PieceConfiguration();
+        queen.teamId = teamId;
+        queen.pieceType = "Queen";
+
+        pieces[3][row - 1] = queen;
+
+        PieceConfiguration king = new PieceConfiguration();
+        king.teamId = teamId;
+        king.isObjective = true;
+        king.pieceType = "King";
+
+        pieces[4][row - 1] = king;
     }
 
     public Board[] getBoards() {

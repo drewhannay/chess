@@ -1,5 +1,6 @@
 package com.drewhannay.chesscrafter.models;
 
+import com.drewhannay.chesscrafter.logic.PieceTypeManager;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -16,7 +17,7 @@ public class PieceType_GetMovesFrom_Given_NorthFacingPawnOnClassicBoard_Should {
 
     @Before
     public void setup() {
-        mTarget = PieceType.getNorthFacingPawnPieceType();
+        mTarget = PieceTypeManager.getNorthFacingPawnPieceType();
         mBoardSize = BoardSize.withDimensions(8, 8);
         mMovesFrom2_2 = mTarget.getMovesFrom(BoardCoordinate.at(2, 2), mBoardSize, 0);
     }
