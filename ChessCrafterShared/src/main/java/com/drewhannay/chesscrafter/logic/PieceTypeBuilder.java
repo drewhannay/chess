@@ -10,8 +10,8 @@ import com.google.common.collect.Sets;
 import java.util.Map;
 import java.util.Set;
 
-public class PieceBuilder {
-    public PieceBuilder() {
+public class PieceTypeBuilder {
+    public PieceTypeBuilder() {
         mMovements = Maps.newHashMap();
         mTwoHopMovements = Sets.newHashSet();
     }

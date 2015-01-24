@@ -1,6 +1,6 @@
 package com.drewhannay.chesscrafter.gui;
 
-import com.drewhannay.chesscrafter.logic.PieceBuilder;
+import com.drewhannay.chesscrafter.logic.PieceTypeBuilder;
 import com.drewhannay.chesscrafter.models.Direction;
 import com.drewhannay.chesscrafter.models.TwoHopMovement;
 import com.drewhannay.chesscrafter.utility.GuiUtility;
@@ -69,7 +69,7 @@ public class PieceMakerPanel extends ChessPanel {
         mAddKnightMoveButton = new JButton(Messages.getString("PieceMakerPanel.add")); //$NON-NLS-1$
         mRemoveKnightMoveButton = new JButton(Messages.getString("PieceMakerPanel.remove")); //$NON-NLS-1$
 
-        PieceBuilder builder = null;
+        PieceTypeBuilder builder = null;
         //TODO Fix editing pieces
         //if (pieceName != null)
         //	builder = PieceBuilder.loadFromDisk(pieceName);
@@ -93,9 +93,9 @@ public class PieceMakerPanel extends ChessPanel {
         initGUIComponents(builder);
     }
 
-    private void initGUIComponents(PieceBuilder builder) {
+    private void initGUIComponents(PieceTypeBuilder builder) {
         if (builder == null)
-            mBuilder = new PieceBuilder();
+            mBuilder = new PieceTypeBuilder();
         else
             mBuilder = builder;
 
@@ -379,7 +379,7 @@ public class PieceMakerPanel extends ChessPanel {
         savePieceButton.addActionListener(event -> {
             String pieceName = mPieceNameField.getText().trim();
             //TODO fix this when checking for an existing piece
-            if (pieceName.isEmpty() || PieceBuilder.parsePieceType(mPieceNameField.getText()) != null) {
+            if (pieceName.isEmpty() || PieceTypeBuilder.parsePieceType(mPieceNameField.getText()) != null) {
                 JOptionPane.showMessageDialog(
                         PieceMakerPanel.this,
                         Messages.getString("PieceMakerPanel.enterUniqueName"), Messages.getString("PieceMakerPanel.invalidPieceName"), //$NON-NLS-1$ //$NON-NLS-2$
@@ -638,7 +638,7 @@ public class PieceMakerPanel extends ChessPanel {
     private final JComboBox mBidirectionalMovementComboBox;
     private final JButton mAddKnightMoveButton;
     private final JButton mRemoveKnightMoveButton;
-    private PieceBuilder mBuilder;
+    private PieceTypeBuilder mBuilder;
     private PieceMenuPanel mPieceMenuPanel;
     private BufferedImage mLightImage;
     private BufferedImage mDarkImage;
