@@ -34,6 +34,10 @@ public final class MoveBuilder {
         return this;
     }
 
+    public boolean hasPromotionType() {
+        return mPromotionType != null;
+    }
+
     public boolean needsPromotion() {
         Piece piece = mBoard.getPiece(mOrigin);
         return mTeam.getPiecePromoter().isPiecePromotable(0, mDestination, piece);

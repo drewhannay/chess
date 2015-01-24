@@ -6,7 +6,6 @@ import com.drewhannay.chesscrafter.dragNdrop.GlassPane;
 import com.drewhannay.chesscrafter.logic.Result;
 import com.drewhannay.chesscrafter.models.Board;
 import com.drewhannay.chesscrafter.models.BoardCoordinate;
-import com.drewhannay.chesscrafter.models.BoardSize;
 import com.drewhannay.chesscrafter.models.Game;
 import com.drewhannay.chesscrafter.models.MoveBuilder;
 import com.drewhannay.chesscrafter.models.Piece;
@@ -14,8 +13,6 @@ import com.drewhannay.chesscrafter.models.PieceType;
 import com.drewhannay.chesscrafter.models.Team;
 import com.drewhannay.chesscrafter.timer.ChessTimer;
 import com.drewhannay.chesscrafter.utility.AppConstants;
-import com.drewhannay.chesscrafter.utility.FileUtility;
-import com.drewhannay.chesscrafter.utility.GuiUtility;
 import com.drewhannay.chesscrafter.utility.PieceIconUtility;
 import com.drewhannay.chesscrafter.utility.PreferenceUtility;
 
@@ -47,7 +44,7 @@ public class PlayGamePanel extends ChessPanel {
     }
 
     public static void playMove(MoveBuilder moveBuilder) {
-        if (moveBuilder.needsPromotion()) {
+        if (moveBuilder.needsPromotion() && !moveBuilder.hasPromotionType()) {
             createPromotionPopup(moveBuilder);
         } else {
             mGame.executeMove(moveBuilder.build());
@@ -275,8 +272,8 @@ public class PlayGamePanel extends ChessPanel {
                 mTeamLabels.add(new TeamLabel(team.getTeamId(), "Team " + team.getTeamId()));
         }
 
-       for (int teamIndex = 0; teamIndex < mGame.getTeams().length; teamIndex++) {
-           //TODO Figure out a way to get the total number of pieces in the game for each team
+        for (int teamIndex = 0; teamIndex < mGame.getTeams().length; teamIndex++) {
+            //TODO Figure out a way to get the total number of pieces in the game for each team
             mJails[teamIndex] = new JailPanel(16, teamIndex);
         }
 
