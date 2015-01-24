@@ -14,6 +14,7 @@ import com.drewhannay.chesscrafter.models.PieceType;
 import com.drewhannay.chesscrafter.models.Team;
 import com.drewhannay.chesscrafter.timer.ChessTimer;
 import com.drewhannay.chesscrafter.utility.AppConstants;
+import com.drewhannay.chesscrafter.utility.FileUtility;
 import com.drewhannay.chesscrafter.utility.GuiUtility;
 import com.drewhannay.chesscrafter.utility.PieceIconUtility;
 import com.drewhannay.chesscrafter.utility.PreferenceUtility;
@@ -96,18 +97,15 @@ public class PlayGamePanel extends ChessPanel {
         mTeamLabels.stream()
                 .filter(teamLabel -> teamLabel.getTeamId() != activeTeamId)
                 .forEach(TeamLabel::setInActive);
-
     }
 
     public static void boardRefresh() {
         for (BoardPanel panel : mGameBoards) {
             panel.updatePieceLocations(mGame.getBoards());
-            panel.refreshSquares();
         }
-
-        for (JailPanel panel : mJails) {
-            panel.updateJailPopulation(mGame.getTeams());
-            panel.refreshSquares();
+        int panelCount = 0;
+        for (Team team : mGame.getTeams()) {
+            mJails[panelCount++].updateJailPopulation(team.getCapturedOpposingPieces());
         }
     }
 

@@ -6,16 +6,22 @@ import com.drewhannay.chesscrafter.dragNdrop.MotionAdapter;
 import com.drewhannay.chesscrafter.models.*;
 import com.drewhannay.chesscrafter.utility.GuiUtility;
 import com.google.common.collect.Lists;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 public class JailPanel extends JPanel {
 
-    public JailPanel(int totalPieces, int teamIndex) {
+    private static final long serialVersionUID = 9042633590279303353L;
+    private SquareJLabel[][] mSquareLabels;
+    private int mTeamIndex;
+
+    public JailPanel(@NotNull int totalPieces, @NotNull int teamIndex) {
         int jailDimension = (totalPieces / 4) + (totalPieces % 4);
         setOpaque(false);
         setLayout(new GridLayout(jailDimension, jailDimension));
@@ -28,7 +34,7 @@ public class JailPanel extends JPanel {
         createGrid(jailDimension);
     }
 
-    private void createGrid(int jailDimensions) {
+    private void createGrid(@NotNull int jailDimensions) {
         for (int x = 1; x <= jailDimensions; x++) {
             for (int y = 1; y <= jailDimensions; y++) {
                 SquareJLabel square = new SquareJLabel(BoardCoordinate.at(x, y), true, 25);
@@ -38,14 +44,8 @@ public class JailPanel extends JPanel {
         }
     }
 
-    //TODO update the square of the piece in check when Logic can provide it
-    /*public void updateCheckLocation(Board[] boards){
-
-    }*/
-
-    public void updateJailPopulation(Team[] teams) {
-        Team team = teams[mTeamIndex];
-        Iterator<Piece> pieceIterator = team.getCapturedOpposingPieces().iterator();
+    public void updateJailPopulation(@NotNull Collection<Piece> pieces) {
+        Iterator<Piece> pieceIterator = pieces.iterator();
         for (int x = 0; x < mSquareLabels.length; x++) {
             for (int y = 0; y < mSquareLabels[x].length; y++) {
                 SquareJLabel square = mSquareLabels[x][y];
@@ -56,6 +56,7 @@ public class JailPanel extends JPanel {
                 }
             }
         }
+        refreshSquares();
     }
 
     public void refreshSquares() {
@@ -63,10 +64,4 @@ public class JailPanel extends JPanel {
             for (SquareJLabel label : labelArray)
                 label.refresh();
     }
-
-    private static final long serialVersionUID = 9042633590279303353L;
-
-    private SquareJLabel[][] mSquareLabels;
-
-    private int mTeamIndex;
 }

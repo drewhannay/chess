@@ -59,6 +59,7 @@ public class BoardPanel extends JPanel {
                 square.setPiece(board.getPiece(BoardCoordinate.at(x + 1, y + 1)));
             }
         }
+        refreshSquares();
     }
 
     public void refreshSquares() {
