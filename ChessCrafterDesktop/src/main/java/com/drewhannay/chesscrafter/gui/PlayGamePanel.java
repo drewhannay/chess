@@ -13,12 +13,16 @@ import com.drewhannay.chesscrafter.models.PieceType;
 import com.drewhannay.chesscrafter.models.Team;
 import com.drewhannay.chesscrafter.timer.ChessTimer;
 import com.drewhannay.chesscrafter.utility.AppConstants;
+import com.drewhannay.chesscrafter.utility.FileUtility;
+import com.drewhannay.chesscrafter.utility.GsonUtility;
 import com.drewhannay.chesscrafter.utility.PieceIconUtility;
 import com.drewhannay.chesscrafter.utility.PreferenceUtility;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -178,6 +182,14 @@ public class PlayGamePanel extends ChessPanel {
                 Messages.getString("PlayGamePanel.enterAName"), Messages.getString("PlayGamePanel.saving"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
         if (fileName == null)
             return;
+
+        try (FileOutputStream fileOut = new FileOutputStream(FileUtility.getGamesInProgressFile(fileName))) {
+            String json = GsonUtility.toJson(mGame.getHistory());
+            fileOut.write(json.getBytes());
+            fileOut.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         // getGame().saveGame(fileName, false, true);
     }
 

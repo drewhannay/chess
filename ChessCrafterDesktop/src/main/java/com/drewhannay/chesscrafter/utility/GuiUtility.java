@@ -65,23 +65,6 @@ public final class GuiUtility {
         return imageIcon;
     }
 
-    public static boolean tryAIFileInstall(Component parent) {
-        JFileChooser fileChooser = new JFileChooser();
-        int returnVal = fileChooser.showOpenDialog(parent);
-        File file = fileChooser.getSelectedFile();
-
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            if (!file.renameTo(FileUtility.getAIFile(file.getName()))) {
-                JOptionPane.showMessageDialog(parent, Messages.getString("fileNotInstalledSuccessfully"), Messages.getString("error"), //$NON-NLS-1$ //$NON-NLS-2$
-                        JOptionPane.PLAIN_MESSAGE);
-            } else {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     public static String getPieceToolTipText(Piece piece) {
         String name = piece.getName();
         //PieceMovements movements = piece.getPieceType().getPieceMovements();

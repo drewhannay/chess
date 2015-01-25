@@ -4,8 +4,6 @@ import com.drewhannay.chesscrafter.utility.FileUtility;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 
 public class VariantMenuPanel extends ChessPanel {
@@ -42,7 +40,7 @@ public class VariantMenuPanel extends ChessPanel {
         final JList<String> variantList = new JList<>();
         JScrollPane scrollPane = new JScrollPane();
         DefaultListModel<String> variantListModel = new DefaultListModel<>();
-        String[] variantArray = FileUtility.getVariantsFileArrayNoClassic();
+        String[] variantArray = FileUtility.getVariantsFileArray();
         for (String variant : variantArray) {
             variantListModel.addElement(variant);
         }

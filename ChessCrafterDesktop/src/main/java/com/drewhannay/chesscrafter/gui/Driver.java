@@ -1,12 +1,16 @@
 package com.drewhannay.chesscrafter.gui;
 
 import com.drewhannay.chesscrafter.controllers.GameController;
-import com.drewhannay.chesscrafter.models.Game;
+import com.drewhannay.chesscrafter.logic.GameBuilder;
+import com.drewhannay.chesscrafter.models.History;
 import com.drewhannay.chesscrafter.timer.ChessTimer;
 import com.drewhannay.chesscrafter.utility.AppConstants;
 import com.drewhannay.chesscrafter.utility.FileUtility;
+import com.drewhannay.chesscrafter.utility.GsonUtility;
 import com.drewhannay.chesscrafter.utility.GuiUtility;
 import com.drewhannay.chesscrafter.utility.PreferenceUtility;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,9 +20,8 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 
 public final class Driver extends JFrame {
     public static void main(String[] args) {
@@ -329,117 +332,115 @@ public final class Driver extends JFrame {
             e.printStackTrace();
         }
         continueGameButton.addActionListener(event -> {
-            String[] files = FileUtility.getGamesInProgressFileArray();
+                    String[] files = FileUtility.getGamesInProgressFileArray();
 
-            if (files.length == 0) {
-                JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("Driver.noSavedGames"), //$NON-NLS-1$
-                        Messages.getString("Driver.noCompletedGames"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
-                return;
-            }
-
-            final JFrame poppedFrame = new JFrame(Messages.getString("Driver.loadSavedGame")); //$NON-NLS-1$
-            poppedFrame.setSize(225, 200);
-            poppedFrame.setResizable(false);
-            poppedFrame.setLocationRelativeTo(Driver.this);
-            GridBagConstraints constraints = new GridBagConstraints();
-
-            final ChessPanel popupPanel = new ChessPanel();
-            popupPanel.setLayout(new GridBagLayout());
-
-            final JList gamesInProgressList = new JList(FileUtility.getGamesInProgressFileArray());
-            final JScrollPane scrollPane = new JScrollPane(gamesInProgressList);
-            scrollPane.setPreferredSize(new Dimension(200, 200));
-            gamesInProgressList.setSelectedIndex(0);
-
-            JButton nextButton = new JButton(Messages.getString("Driver.loadSavedGame")); //$NON-NLS-1$
-            nextButton.addActionListener(event1 -> {
-                FileInputStream fileInputStream;
-                ObjectInputStream objectInputStream;
-                Game gameToPlay;
-                try {
-                    if (gamesInProgressList.getSelectedValue() == null) {
-                        JOptionPane.showMessageDialog(Driver.getInstance(),
-                                Messages.getString("Driver.selectGame"), Messages.getString("Driver.error"), //$NON-NLS-1$ //$NON-NLS-2$
-                                JOptionPane.PLAIN_MESSAGE);
+                    if (files.length == 0) {
+                        JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("Driver.noSavedGames"), //$NON-NLS-1$
+                                Messages.getString("Driver.noCompletedGames"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
                         return;
                     }
-                    fileInputStream = new FileInputStream(FileUtility.getGamesInProgressFile(gamesInProgressList
-                            .getSelectedValue().toString()));
-                    objectInputStream = new ObjectInputStream(fileInputStream);
-                    gameToPlay = (Game) objectInputStream.readObject();
-                    GameController.setGame(gameToPlay);
 
-                    // set the help menu info to be specific for game
-                    // play
-                    if (mOptionsMenu != null)
-                        mOptionsMenu.setVisible(true);
+                    final JFrame poppedFrame = new JFrame(Messages.getString("Driver.loadSavedGame")); //$NON-NLS-1$
+                    poppedFrame.setSize(225, 200);
+                    poppedFrame.setResizable(false);
+                    poppedFrame.setLocationRelativeTo(Driver.this);
+                    GridBagConstraints constraints = new GridBagConstraints();
 
-                    m_playGameScreen = new PlayGamePanel();
-                    setPanel(m_playGameScreen);
-                    poppedFrame.dispose();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    JOptionPane.showMessageDialog(Driver.getInstance(),
-                            Messages.getString("Driver.noValidSavedGames"), Messages.getString("Driver.invalidSavedGames"), //$NON-NLS-1$ //$NON-NLS-2$
-                            JOptionPane.PLAIN_MESSAGE);
-                }
-            });
+                    final ChessPanel popupPanel = new ChessPanel();
+                    popupPanel.setLayout(new GridBagLayout());
 
-            JButton cancelButton = new JButton(Messages.getString("Driver.cancel")); //$NON-NLS-1$
-            GuiUtility.setupDoneButton(cancelButton, poppedFrame);
+                    final JList<String> gamesInProgressList = new JList<>(FileUtility.getGamesInProgressFileArray());
+                    final JScrollPane scrollPane = new JScrollPane(gamesInProgressList);
+                    scrollPane.setPreferredSize(new Dimension(200, 200));
+                    gamesInProgressList.setSelectedIndex(0);
 
-            JButton deleteButton = new JButton(Messages.getString("Driver.deleteSavedGame")); //$NON-NLS-1$
-            deleteButton.addActionListener(event1 -> {
-                if (gamesInProgressList.getSelectedValue() != null) {
-                    boolean didDeleteSuccessfully = FileUtility.getGamesInProgressFile(
-                            gamesInProgressList.getSelectedValue().toString()).delete();
-                    if (!didDeleteSuccessfully) {
-                        JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("Driver.savedGameNotDeleted"), //$NON-NLS-1$
-                                Messages.getString("Driver.error"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
-                    } else {
-                        gamesInProgressList.setListData(FileUtility.getGamesInProgressFileArray());
-                        gamesInProgressList.setSelectedIndex(0);
+                    JButton nextButton = new JButton(Messages.getString("Driver.loadSavedGame")); //$NON-NLS-1$
+                    nextButton.addActionListener(event1 -> {
                         if (gamesInProgressList.getSelectedValue() == null) {
-                            JOptionPane.showMessageDialog(Driver.getInstance(), Messages
-                                            .getString("Driver.noMoreCompletedGames"), Messages.getString("Driver.noCompletedGames"), //$NON-NLS-1$ //$NON-NLS-2$
+                            JOptionPane.showMessageDialog(Driver.getInstance(),
+                                    Messages.getString("Driver.selectGame"), Messages.getString("Driver.error"), //$NON-NLS-1$ //$NON-NLS-2$
                                     JOptionPane.PLAIN_MESSAGE);
-                            poppedFrame.dispose();
+                            return;
                         }
-                        scrollPane.getViewport().add(gamesInProgressList, null);
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("Driver.noSaveFiles"), //$NON-NLS-1$
-                            Messages.getString("Driver.noSaveFileSelected"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$
+                        String fileName = gamesInProgressList.getSelectedValue();
+                        try {
+                            JsonParser parser = new JsonParser();
+                            JsonElement jsonElement = parser.parse(new FileReader(FileUtility.getGamesInProgressFile(fileName)));
+                            History history = GsonUtility.fromJson(jsonElement, History.class);
+                            // TODO: should read variant name from history
+                            GameController.setGame(GameBuilder.buildGame(GameBuilder.getClassicConfiguration(), history));
+
+                            // set the help menu info to be specific for game play
+                            if (mOptionsMenu != null)
+                                mOptionsMenu.setVisible(true);
+
+                            m_playGameScreen = new PlayGamePanel();
+                            setPanel(m_playGameScreen);
+                            poppedFrame.dispose();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            JOptionPane.showMessageDialog(Driver.getInstance(),
+                                    Messages.getString("Driver.noValidSavedGames"), Messages.getString("Driver.invalidSavedGames"), //$NON-NLS-1$ //$NON-NLS-2$
+                                    JOptionPane.PLAIN_MESSAGE);
+                        }
+                    });
+
+                    JButton cancelButton = new JButton(Messages.getString("Driver.cancel")); //$NON-NLS-1$
+                    GuiUtility.setupDoneButton(cancelButton, poppedFrame);
+
+                    JButton deleteButton = new JButton(Messages.getString("Driver.deleteSavedGame")); //$NON-NLS-1$
+                    deleteButton.addActionListener(event1 -> {
+                        if (gamesInProgressList.getSelectedValue() != null) {
+                            boolean didDeleteSuccessfully = FileUtility.getGamesInProgressFile(
+                                    gamesInProgressList.getSelectedValue()).delete();
+                            if (!didDeleteSuccessfully) {
+                                JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("Driver.savedGameNotDeleted"), //$NON-NLS-1$
+                                        Messages.getString("Driver.error"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
+                            } else {
+                                gamesInProgressList.setListData(FileUtility.getGamesInProgressFileArray());
+                                gamesInProgressList.setSelectedIndex(0);
+                                if (gamesInProgressList.getSelectedValue() == null) {
+                                    JOptionPane.showMessageDialog(Driver.getInstance(), Messages
+                                                    .getString("Driver.noMoreCompletedGames"), Messages.getString("Driver.noCompletedGames"), //$NON-NLS-1$ //$NON-NLS-2$
+                                            JOptionPane.PLAIN_MESSAGE);
+                                    poppedFrame.dispose();
+                                }
+                                scrollPane.getViewport().add(gamesInProgressList, null);
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("Driver.noSaveFiles"), //$NON-NLS-1$
+                                    Messages.getString("Driver.noSaveFileSelected"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$
+                        }
+                    });
+
+                    constraints.gridx = 0;
+                    constraints.gridy = 0;
+                    constraints.gridwidth = 2;
+                    constraints.insets = new Insets(5, 5, 5, 5);
+                    popupPanel.add(scrollPane, constraints);
+
+                    constraints.gridx = 0;
+                    constraints.gridy = 1;
+                    popupPanel.add(deleteButton, constraints);
+
+                    constraints.weighty = 1.0;
+                    constraints.weightx = 1.0;
+                    constraints.gridx = 0;
+                    constraints.gridy = 2;
+                    constraints.gridwidth = 1;
+                    constraints.anchor = GridBagConstraints.EAST;
+                    popupPanel.add(nextButton, constraints);
+
+                    constraints.gridx = 1;
+                    constraints.gridy = 2;
+                    constraints.anchor = GridBagConstraints.WEST;
+                    popupPanel.add(cancelButton, constraints);
+
+                    poppedFrame.add(popupPanel);
+                    poppedFrame.setVisible(true);
+                    poppedFrame.pack();
                 }
-            });
-
-            constraints.gridx = 0;
-            constraints.gridy = 0;
-            constraints.gridwidth = 2;
-            constraints.insets = new Insets(5, 5, 5, 5);
-            popupPanel.add(scrollPane, constraints);
-
-            constraints.gridx = 0;
-            constraints.gridy = 1;
-            popupPanel.add(deleteButton, constraints);
-
-            constraints.weighty = 1.0;
-            constraints.weightx = 1.0;
-            constraints.gridx = 0;
-            constraints.gridy = 2;
-            constraints.gridwidth = 1;
-            constraints.anchor = GridBagConstraints.EAST;
-            popupPanel.add(nextButton, constraints);
-
-            constraints.gridx = 1;
-            constraints.gridy = 2;
-            constraints.anchor = GridBagConstraints.WEST;
-            popupPanel.add(cancelButton, constraints);
-
-            poppedFrame.add(popupPanel);
-            poppedFrame.setVisible(true);
-            poppedFrame.pack();
-        });
+        );
 
         return continueGameButton;
     }
@@ -469,7 +470,7 @@ public final class Driver extends JFrame {
                 poppedFrame.setLocationRelativeTo(Driver.this);
                 GridBagConstraints constraints = new GridBagConstraints();
 
-                final JList completedGamesList = new JList(FileUtility.getCompletedGamesFileArray());
+                final JList<String> completedGamesList = new JList<>(FileUtility.getCompletedGamesFileArray());
                 final JScrollPane scrollPane = new JScrollPane(completedGamesList);
                 scrollPane.setPreferredSize(new Dimension(200, 200));
                 completedGamesList.setSelectedIndex(0);
@@ -498,7 +499,7 @@ public final class Driver extends JFrame {
                 deleteButton.addActionListener(event1 -> {
                     if (completedGamesList.getSelectedValue() != null) {
                         boolean didDeleteCompletedGameSuccessfully = FileUtility.getCompletedGamesFile(
-                                completedGamesList.getSelectedValue().toString()).delete();
+                                completedGamesList.getSelectedValue()).delete();
                         if (!didDeleteCompletedGameSuccessfully) {
                             JOptionPane.showMessageDialog(Driver.getInstance(),
                                     Messages.getString("Driver.completedNotDeleted"), //$NON-NLS-1$

@@ -4,31 +4,17 @@ import com.drewhannay.chesscrafter.logic.GameBuilder;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.URL;
-import java.util.Locale;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
 
 public final class FileUtility {
-
-    public static String[] getAIFileList() {
-        File file = new File(HIDDEN_DIR + SLASH + AI);
-        file.mkdirs();
-        return file.list();
-    }
-
-    public static File getAIFile(String aiName) {
-        String path = HIDDEN_DIR + SLASH + AI;
-        new File(path).mkdirs();
-        return new File(path + SLASH + aiName);
-    }
-
     public static String getImagePath(String imageName) {
         File file = new File(HIDDEN_DIR + SLASH + IMAGES);
         file.mkdirs();
-        String imagePath = HIDDEN_DIR + SLASH + IMAGES + SLASH + imageName;
-        return imagePath;
+        return HIDDEN_DIR + SLASH + IMAGES + SLASH + imageName;
     }
 
     public static String[] getVariantsFileArray() {
@@ -41,19 +27,6 @@ public final class FileUtility {
         File file = new File(HIDDEN_DIR + SLASH + PIECES);
         file.mkdirs();
         return file.list();
-    }
-
-    public static String[] getVariantsFileArrayNoClassic() {
-        String[] variants = getVariantsFileArray();
-        for (int i = 0; i < variants.length; i++) {
-            if (variants[i].contentEquals(Messages.getString("classic"))) //$NON-NLS-1$
-            {
-                variants[i] = variants[variants.length - 1];
-                variants[variants.length - 1] = null;
-                break;
-            }
-        }
-        return variants;
     }
 
     public static File getVariantsFile(String variantName) {
@@ -84,13 +57,9 @@ public final class FileUtility {
 
     public static File getCompletedGamesFile(String completedGameFileName) {
         String path = PreferenceUtility.getSaveLocationPreference();
-        if(path.equals("default"))
+        if (path.equals("default"))
             path = HIDDEN_DIR + SLASH + COMPLETED_GAMES;
         return new File(path + SLASH + completedGameFileName);
-    }
-
-    public static String getHiddenDir() {
-        return HIDDEN_DIR;
     }
 
     public static String getDefaultCompletedLocation() {
@@ -152,7 +121,6 @@ public final class FileUtility {
     }
 
     private static final String HIDDEN_DIR;
-    private static final String AI = "AI"; //$NON-NLS-1$
     private static final String IMAGES = "images"; //$NON-NLS-1$
     private static final String VARIANTS = "variants"; //$NON-NLS-1$
     private static final String PIECES = "pieces"; //$NON-NLS-1$
