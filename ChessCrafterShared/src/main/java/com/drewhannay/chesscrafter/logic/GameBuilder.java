@@ -21,46 +21,27 @@ import com.drewhannay.chesscrafter.rules.movefilter.MoveFilter;
 import com.drewhannay.chesscrafter.rules.postmoveaction.PostMoveAction;
 import com.drewhannay.chesscrafter.rules.promotionmethods.PiecePromoter;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 public class GameBuilder {
-    public static final int BLACK = 1;
-    public static final int WHITE = 2;
-    public static final int BOTH = 3;
-
-    /**
-     * Constructor
-     *
-     * @param name The name of this Game type
-     */
     public GameBuilder(String name) {
         mName = name;
         mWhiteTeam = Lists.newArrayList();
         mBlackTeam = Lists.newArrayList();
-
-        mWhitePromotionMap = Maps.newHashMap();
-        mBlackPromotionMap = Maps.newHashMap();
     }
 
-    public GameBuilder(String name, Board[] boards, List<Piece> whiteTeam, List<Piece> blackTeam, Rules whiteRules, Rules blackRules) {
+    public GameBuilder(String name, Board[] boards, List<Piece> whiteTeam, List<Piece> blackTeam) {
         mName = name;
         mBoards = boards;
 
         mWhiteTeam = whiteTeam;
         mBlackTeam = blackTeam;
-        mWhitePromotionMap = Maps.newHashMap();
-        mBlackPromotionMap = Maps.newHashMap();
-
-        mWhiteRules = whiteRules;
-        mBlackRules = blackRules;
     }
 
     public static void setupClassicNorthFacingPawns(Board target, int row, int teamId) {
@@ -113,8 +94,7 @@ public class GameBuilder {
                 for (int y = 0; y < boardConfig.pieces[x].length; y++) {
                     PieceConfiguration pieceConfig = boardConfig.pieces[x][y];
                     if (pieceConfig != null) {
-                        board.addPiece(new Piece(pieceConfig.teamId,
-                                PieceTypeManager.INSTANCE.getPieceTypeByName(pieceConfig.pieceType),
+                        board.addPiece(new Piece(pieceConfig.teamId, pieceConfig.pieceType,
                                 pieceConfig.isObjective, 0), BoardCoordinate.at(x + 1, y + 1));
                     }
                 }
@@ -186,8 +166,8 @@ public class GameBuilder {
         TeamConfiguration[] teams = new TeamConfiguration[]{teamOne, teamTwo};
 
         PieceConfiguration[][] boardOnePieces = new PieceConfiguration[8][8];
-        setupClassicPawns(boardOnePieces, 2, Piece.TEAM_ONE, "NorthFacingPawn");
-        setupClassicPawns(boardOnePieces, 7, Piece.TEAM_TWO, "SouthFacingPawn");
+        setupClassicPawns(boardOnePieces, 2, Piece.TEAM_ONE, PieceTypeManager.getNorthFacingPawnPieceType());
+        setupClassicPawns(boardOnePieces, 7, Piece.TEAM_TWO, PieceTypeManager.getSouthFacingPawnPieceType());
         setupClassicPieces(boardOnePieces, 1, Piece.TEAM_ONE);
         setupClassicPieces(boardOnePieces, 8, Piece.TEAM_TWO);
 
@@ -212,7 +192,7 @@ public class GameBuilder {
         return classicConfig;
     }
 
-    private static void setupClassicPawns(PieceConfiguration[][] pieces, int row, int teamId, String pieceType) {
+    private static void setupClassicPawns(PieceConfiguration[][] pieces, int row, int teamId, PieceType pieceType) {
         PieceConfiguration pieceConfiguration = new PieceConfiguration();
         pieceConfiguration.teamId = teamId;
         pieceConfiguration.isObjective = false;
@@ -225,35 +205,35 @@ public class GameBuilder {
     private static void setupClassicPieces(PieceConfiguration[][] pieces, int row, int teamId) {
         PieceConfiguration rook = new PieceConfiguration();
         rook.teamId = teamId;
-        rook.pieceType = "Rook";
+        rook.pieceType = PieceTypeManager.getRookPieceType();
 
         pieces[0][row - 1] = rook;
         pieces[7][row - 1] = rook;
 
         PieceConfiguration knight = new PieceConfiguration();
         knight.teamId = teamId;
-        knight.pieceType = "Night";
+        knight.pieceType = PieceTypeManager.getKnightPieceType();
 
         pieces[1][row - 1] = knight;
         pieces[6][row - 1] = knight;
 
         PieceConfiguration bishop = new PieceConfiguration();
         bishop.teamId = teamId;
-        bishop.pieceType = "Bishop";
+        bishop.pieceType = PieceTypeManager.getBishopPieceType();
 
         pieces[2][row - 1] = bishop;
         pieces[5][row - 1] = bishop;
 
         PieceConfiguration queen = new PieceConfiguration();
         queen.teamId = teamId;
-        queen.pieceType = "Queen";
+        queen.pieceType = PieceTypeManager.getQueenPieceType();
 
         pieces[3][row - 1] = queen;
 
         PieceConfiguration king = new PieceConfiguration();
         king.teamId = teamId;
         king.isObjective = true;
-        king.pieceType = "King";
+        king.pieceType = PieceTypeManager.getKingPieceType();
 
         pieces[4][row - 1] = king;
     }
@@ -270,62 +250,13 @@ public class GameBuilder {
         mName = name;
     }
 
-    public void addToPromotionMap(PieceType key, List<PieceType> value, int colorCode) {
-        if (colorCode == WHITE || colorCode == BOTH)
-            mWhitePromotionMap.put(key, value);
-        if (colorCode == BLACK || colorCode == BOTH)
-            mBlackPromotionMap.put(key, value);
-    }
-
-    public void setWhitePromotionMap(Map<PieceType, List<PieceType>> promotionMap) {
-        mWhitePromotionMap.clear();
-        mWhitePromotionMap.putAll(promotionMap);
-    }
-
-    public void setBlackPromotionMap(Map<PieceType, List<PieceType>> promotionMap) {
-        mBlackPromotionMap.clear();
-        mBlackPromotionMap.putAll(promotionMap);
-    }
-
-    public Map<PieceType, List<PieceType>> getWhitePromotionMap() {
-        return mWhitePromotionMap;
-    }
-
-    public Map<PieceType, List<PieceType>> getBlackPromotionMap() {
-        return mBlackPromotionMap;
-    }
-
-    public Rules getWhiteRules() {
-        return mWhiteRules;
-    }
-
-    public void setWhiteRules(Rules whiteRules) {
-        mWhiteRules = whiteRules;
-    }
-
-    public Rules getBlackRules() {
-        return mBlackRules;
-    }
-
-    public void setBlackRules(Rules blackRules) {
-        mBlackRules = blackRules;
-    }
-
     public String getName() {
         return mName;
-    }
-
-    public List<Piece> getWhiteTeam() {
-        return mWhiteTeam;
     }
 
     public void setWhiteTeam(List<Piece> whiteTeam) {
         mWhiteTeam.clear();
         mWhiteTeam.addAll(whiteTeam);
-    }
-
-    public List<Piece> getBlackTeam() {
-        return mBlackTeam;
     }
 
     public void setBlackTeam(List<Piece> blackTeam) {
@@ -335,11 +266,7 @@ public class GameBuilder {
 
     private final List<Piece> mWhiteTeam;
     private final List<Piece> mBlackTeam;
-    private final Map<PieceType, List<PieceType>> mWhitePromotionMap;
-    private final Map<PieceType, List<PieceType>> mBlackPromotionMap;
 
     private String mName;
     private Board[] mBoards;
-    private Rules mWhiteRules;
-    private Rules mBlackRules;
 }

@@ -34,14 +34,6 @@ public class PieceTypeBuilder {
         return mName;
     }
 
-    public boolean isLeaper() {
-        return mIsLeaper;
-    }
-
-    public void setCanJump(boolean mCanJump) {
-        this.mIsLeaper = mCanJump;
-    }
-
     public void addBidirectionalMovement(TwoHopMovement movement) {
         mTwoHopMovements.add(movement);
     }
@@ -54,5 +46,4 @@ public class PieceTypeBuilder {
     private final Set<TwoHopMovement> mTwoHopMovements;
 
     private String mName;
-    private boolean mIsLeaper;
 }

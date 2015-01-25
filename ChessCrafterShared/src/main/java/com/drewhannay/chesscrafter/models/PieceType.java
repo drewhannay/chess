@@ -5,8 +5,6 @@ import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,9 +16,9 @@ public class PieceType {
     public static final int UNLIMITED = Integer.MAX_VALUE;
 
     private final String mName;
-    private final ImmutableMap<Direction, Integer> mMovements;
-    private final ImmutableMap<Direction, Integer> mCapturingMovements;
-    private final ImmutableSet<TwoHopMovement> mTwoHopMovements;
+    private final Map<Direction, Integer> mMovements;
+    private final Map<Direction, Integer> mCapturingMovements;
+    private final Set<TwoHopMovement> mTwoHopMovements;
 
     public PieceType(@NotNull String name, @Nullable Map<Direction, Integer> movements,
                      @Nullable Set<TwoHopMovement> twoHopMovements) {

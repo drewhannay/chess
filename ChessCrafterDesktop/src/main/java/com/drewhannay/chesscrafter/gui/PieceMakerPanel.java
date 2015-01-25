@@ -279,8 +279,8 @@ public class PieceMakerPanel extends ChessPanel {
         });
 
         mLeaperCheckBox.setToolTipText(Messages.getString("PieceMakerPanel.pressForJump")); //$NON-NLS-1$
-        if (builder != null)
-            mLeaperCheckBox.setSelected(builder.isLeaper());
+//        if (builder != null)
+//            mLeaperCheckBox.setSelected(builder.isLeaper());
 
         final JPanel knightMovementPanel = new JPanel();
         knightMovementPanel.setOpaque(false);
@@ -424,7 +424,7 @@ public class PieceMakerPanel extends ChessPanel {
             }
 
             mBuilder.setName(pieceName);
-            mBuilder.setCanJump(mLeaperCheckBox.isSelected());
+//            mBuilder.setCanJump(mLeaperCheckBox.isSelected());
             //TODO Write new piece to disk
             //PieceBuilder.savePieceType(mBuilder);
             //PieceBuilder.writeToDisk(mBuilder);

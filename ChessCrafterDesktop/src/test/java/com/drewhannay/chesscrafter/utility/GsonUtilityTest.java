@@ -2,9 +2,11 @@ package com.drewhannay.chesscrafter.utility;
 
 import com.drewhannay.chesscrafter.logic.GameBuilder;
 import com.drewhannay.chesscrafter.logic.GameConfiguration;
+import com.drewhannay.chesscrafter.logic.PieceTypeManager;
 import com.drewhannay.chesscrafter.models.BoardCoordinate;
 import com.drewhannay.chesscrafter.models.Game;
 import com.drewhannay.chesscrafter.models.History;
+import com.drewhannay.chesscrafter.models.PieceType;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -41,6 +43,13 @@ public class GsonUtilityTest {
             String json = GsonUtility.toJson(mHistory);
             assertNotNull(json);
         }
+
+        @Test
+        public void returnsValidJsonForQueenPieceType() {
+            PieceType queen = PieceTypeManager.getQueenPieceType();
+            String json = GsonUtility.toJson(queen);
+            assertNotNull(json);
+        }
     }
 
     public static class FromJson extends GsonUtilityTest {
@@ -70,6 +79,14 @@ public class GsonUtilityTest {
             String json = GsonUtility.toJson(mHistory);
             History history = GsonUtility.fromJson(json, History.class);
             assertEquals(mHistory.moves, history.moves);
+        }
+
+        @Test
+        public void returnsSamePieceTypeForQueen() {
+            PieceType queen = PieceTypeManager.getQueenPieceType();
+            String json = GsonUtility.toJson(queen);
+            PieceType jsonQueen = GsonUtility.fromJson(json, PieceType.class);
+            assertEquals(queen, jsonQueen);
         }
     }
 }
