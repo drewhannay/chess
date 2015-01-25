@@ -32,9 +32,9 @@ public class PlayGamePanel extends ChessPanel {
 
     private static final long serialVersionUID = -2507232401817253688L;
 
-    private static List<TeamLabel> mTeamLabels;
-    private static BoardPanel[] mGameBoards;
-    private static JailPanel[] mJails;
+    private List<TeamLabel> mTeamLabels;
+    private BoardPanel[] mGameBoards;
+    private JailPanel[] mJails;
 
     private final Game mGame;
     private final DropManager mDropManager;
