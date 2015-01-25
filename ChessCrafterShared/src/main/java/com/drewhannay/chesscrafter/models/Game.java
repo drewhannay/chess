@@ -83,7 +83,7 @@ public final class Game {
             moves.addAll(conditionalMoveGenerator.generateMoves(board, coordinate, mHistory));
         }
 
-        for (MoveFilter moveFilter : team.getRules().getMoveFilters()) {
+        for (MoveFilter moveFilter : team.getMoveFilters()) {
             moves = moveFilter.filterMoves(board, coordinate, moves);
         }
 
@@ -109,7 +109,7 @@ public final class Game {
             board.addPiece(promotedPiece, move.destination);
         }
 
-        for (PostMoveAction action : team.getRules().getPostMoveActions()) {
+        for (PostMoveAction action : team.getPostMoveActions()) {
             action.perform(board, team, move, capturedPiece);
         }
 
@@ -118,7 +118,7 @@ public final class Game {
         mHistory.moves.add(move);
 
         Team newActiveTeam = getTeam(mTurnKeeper.getActiveTeamId());
-        mResult = newActiveTeam.getRules().getEndCondition().checkEndCondition(this);
+        mResult = newActiveTeam.getEndCondition().checkEndCondition(this);
         // TODO: remove println
         System.out.println(mResult);
     }
@@ -135,7 +135,7 @@ public final class Game {
         Board board = mBoards[0];
         Team team = getTeam(mTurnKeeper.getActiveTeamId());
 
-        for (PostMoveAction action : team.getRules().getPostMoveActions()) {
+        for (PostMoveAction action : team.getPostMoveActions()) {
             action.undo(board, team, move, mHistory.moves.isEmpty() ? null : mHistory.moves.get(mHistory.moves.size() - 1));
         }
 

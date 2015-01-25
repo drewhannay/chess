@@ -8,7 +8,6 @@ import com.drewhannay.chesscrafter.models.Board;
 import com.drewhannay.chesscrafter.models.BoardSize;
 import com.drewhannay.chesscrafter.models.Piece;
 import com.drewhannay.chesscrafter.models.PieceType;
-import com.drewhannay.chesscrafter.rules.Rules;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -963,9 +962,6 @@ public class VariantCreationPanel extends ChessPanel implements PieceMakerPanel.
     private final GlassPane mGlobalGlassPane;
     //private final DropManager mDropManager;
     private final SquareJLabel[] mPieceDisplaySquares = new SquareJLabel[2];
-
-    public Rules mWhiteRules;
-    public Rules mBlackRules;
 
     private JPanel[] mBoardPanels;
     private JPanel mPieceListPanel;

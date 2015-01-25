@@ -1,7 +1,9 @@
 package com.drewhannay.chesscrafter.models;
 
-import com.drewhannay.chesscrafter.rules.Rules;
 import com.drewhannay.chesscrafter.rules.conditionalmovegenerator.ConditionalMoveGenerator;
+import com.drewhannay.chesscrafter.rules.endconditions.EndCondition;
+import com.drewhannay.chesscrafter.rules.movefilter.MoveFilter;
+import com.drewhannay.chesscrafter.rules.postmoveaction.PostMoveAction;
 import com.drewhannay.chesscrafter.rules.promotionmethods.PiecePromoter;
 import com.google.common.base.Preconditions;
 import org.jetbrains.annotations.NotNull;
@@ -14,15 +16,24 @@ import java.util.Set;
 
 public final class Team {
     private final int mTeamId;
-    private final Rules mRules;
     private final Set<ConditionalMoveGenerator> mConditionalMoveGenerators;
-    private final Map<Move, Piece> mCapturedPieces;
+    private final Set<MoveFilter> mMoveFilters;
+    private final Set<PostMoveAction> mPostMoveActions;
+    private final EndCondition mEndCondition;
     private final PiecePromoter mPiecePromoter;
+    private final Map<Move, Piece> mCapturedPieces;
 
-    public Team(int teamId, Rules rules, Set<ConditionalMoveGenerator> conditionalMoveGenerators, PiecePromoter piecePromoter) {
+    public Team(int teamId,
+                @NotNull Set<ConditionalMoveGenerator> conditionalMoveGenerators,
+                @NotNull Set<MoveFilter> moveFilters,
+                @NotNull Set<PostMoveAction> postMoveActions,
+                @NotNull EndCondition endCondition,
+                @NotNull PiecePromoter piecePromoter) {
         mTeamId = teamId;
-        mRules = rules;
         mConditionalMoveGenerators = conditionalMoveGenerators;
+        mMoveFilters = moveFilters;
+        mPostMoveActions = postMoveActions;
+        mEndCondition = endCondition;
         mPiecePromoter = piecePromoter;
         mCapturedPieces = new HashMap<>();
     }
@@ -31,12 +42,20 @@ public final class Team {
         return mTeamId;
     }
 
-    public Rules getRules() {
-        return mRules;
-    }
-
     public Set<ConditionalMoveGenerator> getConditionalMoveGenerators() {
         return mConditionalMoveGenerators;
+    }
+
+    public Set<MoveFilter> getMoveFilters() {
+        return mMoveFilters;
+    }
+
+    public Set<PostMoveAction> getPostMoveActions() {
+        return mPostMoveActions;
+    }
+
+    public EndCondition getEndCondition() {
+        return mEndCondition;
     }
 
     public PiecePromoter getPiecePromoter() {

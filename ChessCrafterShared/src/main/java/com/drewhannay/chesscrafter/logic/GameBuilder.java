@@ -14,7 +14,6 @@ import com.drewhannay.chesscrafter.models.Piece;
 import com.drewhannay.chesscrafter.models.PieceType;
 import com.drewhannay.chesscrafter.models.Team;
 import com.drewhannay.chesscrafter.models.turnkeeper.TurnKeeper;
-import com.drewhannay.chesscrafter.rules.Rules;
 import com.drewhannay.chesscrafter.rules.conditionalmovegenerator.ConditionalMoveGenerator;
 import com.drewhannay.chesscrafter.rules.endconditions.EndCondition;
 import com.drewhannay.chesscrafter.rules.movefilter.MoveFilter;
@@ -24,7 +23,6 @@ import com.google.common.collect.Lists;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -111,27 +109,26 @@ public class GameBuilder {
         for (int i = 0; i < teamConfigs.length; i++) {
             TeamConfiguration teamConfig = teamConfigs[i];
 
-            List<MoveFilter> moveFilters = new ArrayList<>();
+            Set<MoveFilter> moveFilters = new HashSet<>();
             for (String name : teamConfig.moveFilters) {
                 moveFilters.add(MoveFilter.from(name));
             }
-            List<PostMoveAction> postMoveActions = new ArrayList<>();
+            Set<PostMoveAction> postMoveActions = new HashSet<>();
             for (String name : teamConfig.postMoveActions) {
                 postMoveActions.add(PostMoveAction.from(name));
             }
-
-            Rules rules = new Rules(moveFilters, postMoveActions, EndCondition.from(teamConfig.endCondition, teamConfig.teamId));
-
-            PiecePromoterConfiguration promoterConfig = teamConfig.piecePromoterConfiguration;
-            PiecePromoter piecePromoter = PiecePromoter.createClassicPiecePromoter(promoterConfig.promotionRow,
-                    PieceTypeManager.INSTANCE.getPieceTypeByName(promoterConfig.pieceType));
-
             Set<ConditionalMoveGenerator> moveGenerators = new HashSet<>();
             for (String name : teamConfig.conditionalMoveGenerators) {
                 moveGenerators.add(ConditionalMoveGenerator.from(name));
             }
 
-            Team team = new Team(teamConfig.teamId, rules, moveGenerators, piecePromoter);
+            EndCondition endCondition = EndCondition.from(teamConfig.endCondition, teamConfig.teamId);
+
+            PiecePromoterConfiguration promoterConfig = teamConfig.piecePromoterConfiguration;
+            PiecePromoter piecePromoter = PiecePromoter.createClassicPiecePromoter(promoterConfig.promotionRow,
+                    PieceTypeManager.INSTANCE.getPieceTypeByName(promoterConfig.pieceType));
+
+            Team team = new Team(teamConfig.teamId, moveGenerators, moveFilters, postMoveActions, endCondition, piecePromoter);
             teams[i] = team;
         }
         return teams;
