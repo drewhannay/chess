@@ -151,6 +151,9 @@ public final class Game {
         Board board = mBoards[0];
         Team team = getTeam(mTurnKeeper.getActiveTeamId());
 
+        // TODO: test this more closely to make sure it's correct
+        mStatus = team.getEndCondition().checkEndCondition(this);
+
         for (PostMoveAction action : team.getPostMoveActions()) {
             action.undo(board, team, move, mHistory.moves.isEmpty() ? null : mHistory.moves.get(mHistory.moves.size() - 1));
         }
