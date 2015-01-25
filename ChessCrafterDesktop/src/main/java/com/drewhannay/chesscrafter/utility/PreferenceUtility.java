@@ -144,7 +144,7 @@ public final class PreferenceUtility {
      *
      * @return returns the boolean value for move highlighting
      */
-    public static Boolean getHighlightMovesPreference() {
+    public static boolean getHighlightMovesPreference() {
         return mPreference.getBoolean(HIGHLIGHTMOVES, true);
     }
 

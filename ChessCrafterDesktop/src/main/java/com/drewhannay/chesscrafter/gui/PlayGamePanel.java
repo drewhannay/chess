@@ -1,18 +1,15 @@
 package com.drewhannay.chesscrafter.gui;
 
-import com.drewhannay.chesscrafter.controllers.GameController;
 import com.drewhannay.chesscrafter.dragNdrop.DropManager;
 import com.drewhannay.chesscrafter.dragNdrop.GlassPane;
 import com.drewhannay.chesscrafter.logic.Result;
 import com.drewhannay.chesscrafter.logic.Status;
 import com.drewhannay.chesscrafter.models.Board;
-import com.drewhannay.chesscrafter.models.BoardCoordinate;
 import com.drewhannay.chesscrafter.models.Game;
 import com.drewhannay.chesscrafter.models.MoveBuilder;
 import com.drewhannay.chesscrafter.models.Piece;
 import com.drewhannay.chesscrafter.models.PieceType;
 import com.drewhannay.chesscrafter.models.Team;
-import com.drewhannay.chesscrafter.timer.ChessTimer;
 import com.drewhannay.chesscrafter.utility.AppConstants;
 import com.drewhannay.chesscrafter.utility.FileUtility;
 import com.drewhannay.chesscrafter.utility.GsonUtility;
@@ -20,6 +17,7 @@ import com.drewhannay.chesscrafter.utility.Messages;
 import com.drewhannay.chesscrafter.utility.PieceIconUtility;
 import com.drewhannay.chesscrafter.utility.PreferenceUtility;
 import com.google.common.base.Preconditions;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -27,30 +25,35 @@ import java.awt.event.KeyEvent;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 public class PlayGamePanel extends ChessPanel {
-    public PlayGamePanel() {
-        if (GameController.getGame() != null)
-            setGame(GameController.getGame());
-        else
-            System.out.println("Didn't set Game in GameController. Things may go wonky...");
 
-        mDropManager = new DropManager();
+    private static final long serialVersionUID = -2507232401817253688L;
+
+    private static List<TeamLabel> mTeamLabels;
+    private static BoardPanel[] mGameBoards;
+    private static JailPanel[] mJails;
+
+    private final Game mGame;
+    private final DropManager mDropManager;
+
+    private JMenu mOptionsMenu;
+    private GlassPane mGlobalGlassPane;
+
+    public PlayGamePanel(@NotNull Game game) {
+        mGame = game;
+        mDropManager = new DropManager(this::boardRefresh, pair -> playMove(mGame.newMoveBuilder(pair.first, pair.second)));
         mGlobalGlassPane = new GlassPane();
         mGlobalGlassPane.setOpaque(false);
+
         Driver.getInstance().setGlassPane(mGlobalGlassPane);
 
-        // PlayGamePanel.mWhiteTimer = game.getWhiteTimer();
-        // PlayGamePanel.mBlackTimer = game.getBlackTimer();
-        // mWhiteTimer.restart();
-        // mBlackTimer.restart();
-        // turn(game.isBlackMove());
         initComponents();
     }
 
-    public static void playMove(MoveBuilder moveBuilder) {
+    private void playMove(MoveBuilder moveBuilder) {
         if (moveBuilder.needsPromotion() && !moveBuilder.hasPromotionType()) {
             createPromotionPopup(moveBuilder);
         } else {
@@ -60,7 +63,7 @@ public class PlayGamePanel extends ChessPanel {
         }
     }
 
-    private static void createPromotionPopup(MoveBuilder moveBuilder) {
+    private void createPromotionPopup(MoveBuilder moveBuilder) {
         JFrame promotionFrame = new JFrame();
         ChessPanel promotionPanel = new ChessPanel();
         JLabel promotionText = new JLabel("Choose a piece to promote to:");
@@ -83,7 +86,7 @@ public class PlayGamePanel extends ChessPanel {
         promotionFrame.setVisible(true);
     }
 
-    public static void refreshStatus() {
+    private void refreshStatus() {
         Status status = mGame.getStatus();
         if (Status.END_OF_GAME_STATUS.contains(status)) {
             endOfGame();
@@ -104,7 +107,7 @@ public class PlayGamePanel extends ChessPanel {
                 .forEach(TeamLabel::setInActive);
     }
 
-    public static void boardRefresh() {
+    private void boardRefresh() {
         for (BoardPanel panel : mGameBoards) {
             panel.updatePieceLocations(mGame.getBoards());
         }
@@ -114,7 +117,7 @@ public class PlayGamePanel extends ChessPanel {
         }
     }
 
-    public static void endOfGame() {
+    private void endOfGame() {
         Result result = mGame.getHistory().getResult();
 
         Preconditions.checkNotNull(result);
@@ -146,7 +149,6 @@ public class PlayGamePanel extends ChessPanel {
                 Messages.getString("PlayGamePanel.newGame"),
                 Messages.getString("PlayGamePanel.mainMenu")
         };
-        mOptionsMenu.setVisible(false);
 
         switch (JOptionPane.showOptionDialog(Driver.getInstance(), panelMessage, panelTitle,
                 JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0])) {
@@ -199,7 +201,7 @@ public class PlayGamePanel extends ChessPanel {
         }
     }
 
-    public JMenu createMenuBar() {
+    private JMenu createMenuBar() {
         mOptionsMenu = new JMenu(Messages.getString("PlayGamePanel.menu"));
 
         JMenuItem drawMenuItem = new JMenuItem(Messages.getString("PlayGamePanel.declareDraw"), KeyEvent.VK_D);
@@ -230,12 +232,12 @@ public class PlayGamePanel extends ChessPanel {
     private void initComponents() {
         JButton undoButton = new JButton(Messages.getString("PlayGamePanel.undo"));
         undoButton.addActionListener(event -> {
-            getGame().undoMove();
+            mGame.undoMove();
             refreshStatus();
             boardRefresh();
         });
 
-        twoBoardsGridBagOffset = 0;
+        int twoBoardsGridBagOffset = 0;
         if (mOptionsMenu == null || !mOptionsMenu.isVisible())
             Driver.getInstance().setMenu(createMenuBar());
 
@@ -243,12 +245,12 @@ public class PlayGamePanel extends ChessPanel {
 
         setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
-        Team[] teams = GameController.getGame().getTeams();
+        Team[] teams = mGame.getTeams();
         mTeamLabels = new ArrayList<>(teams.length);
 
         mJails = new JailPanel[teams.length];
 
-        Board[] boards = GameController.getGame().getBoards();
+        Board[] boards = mGame.getBoards();
         mGameBoards = new BoardPanel[boards.length];
         // setBorder(BorderFactory.createLoweredBevelBorder());
 
@@ -263,13 +265,20 @@ public class PlayGamePanel extends ChessPanel {
             constraints.gridwidth = boards[boardIndex].getBoardSize().width + 2; // Added 2 for row labels?
             gridx += constraints.gridwidth;
 
-            mGameBoards[boardIndex] =
-                    new BoardPanel(boards[boardIndex].getBoardSize(), boardIndex, mGlobalGlassPane, mDropManager);
+            mGameBoards[boardIndex] = new BoardPanel(boards[boardIndex].getBoardSize(), boardIndex,
+                    mGlobalGlassPane, mDropManager, pair -> {
+                Piece piece = mGame.getPiece(pair.first, pair.second);
+                if (piece != null && piece.getTeamId() == mGame.getTurnKeeper().getActiveTeamId()) {
+                    return mGame.getMovesFrom(pair.first, pair.second);
+                } else {
+                    return Collections.emptySet();
+                }
+            });
             add(mGameBoards[boardIndex], constraints);
         }
 
         for (Team team : teams) {
-            if (GameController.getGame().getGameType().equals("Classic")) {
+            if (mGame.getGameType().equals("Classic")) {
                 if (team.getTeamId() == 1)
                     mTeamLabels.add(new TeamLabel(team.getTeamId(), Messages.getString("PlayGamePanel.whiteTeam")));
                 else
@@ -283,7 +292,7 @@ public class PlayGamePanel extends ChessPanel {
             mJails[teamIndex] = new JailPanel(16, teamIndex);
         }
 
-        //Add the Black Team Label
+        // add the Black Team Label
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.anchor = GridBagConstraints.BASELINE;
         constraints.gridwidth = 3;
@@ -358,35 +367,4 @@ public class PlayGamePanel extends ChessPanel {
         refreshStatus();
         Driver.getInstance().pack();
     }
-
-    public static void setGame(Game game) {
-        mGame = game;
-    }
-
-    public static Game getGame() {
-        return mGame;
-    }
-
-    public static List<SquareJLabel> highlightLegalDestinations(int boardIndex, BoardCoordinate coordinates) {
-        Piece movingPiece = GameController.getGame().getPiece(boardIndex, coordinates);
-        if (movingPiece != null && PreferenceUtility.getHighlightMovesPreference()) {
-            Set<BoardCoordinate> legalDestinations = GameController.getLegalDestinations(boardIndex, coordinates);
-            List<SquareJLabel> labels = mGameBoards[boardIndex].highlightSquares(legalDestinations);
-            mGameBoards[boardIndex].repaint();
-            return labels;
-        } else
-            return null;
-    }
-
-    private static final long serialVersionUID = -2507232401817253688L;
-
-    protected int twoBoardsGridBagOffset;
-    protected static Game mGame;
-    protected static ChessTimer[] mTimers;
-    protected static List<TeamLabel> mTeamLabels;
-    protected static BoardPanel[] mGameBoards;
-    protected static JailPanel[] mJails;
-    protected static JMenu mOptionsMenu;
-    private final DropManager mDropManager;
-    protected GlassPane mGlobalGlassPane;
 }

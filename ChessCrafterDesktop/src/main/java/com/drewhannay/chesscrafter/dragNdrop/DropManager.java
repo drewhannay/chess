@@ -1,33 +1,37 @@
 package com.drewhannay.chesscrafter.dragNdrop;
 
-import com.drewhannay.chesscrafter.controllers.GameController;
-import com.drewhannay.chesscrafter.gui.PlayGamePanel;
 import com.drewhannay.chesscrafter.gui.SquareJLabel;
 import com.drewhannay.chesscrafter.models.BoardCoordinate;
-import com.drewhannay.chesscrafter.models.MoveBuilder;
-import com.google.common.collect.ImmutableList;
-
-import javax.swing.*;
-import java.util.List;
+import com.drewhannay.chesscrafter.utility.Pair;
+import com.drewhannay.chesscrafter.utility.RunnableOfT;
+import org.jetbrains.annotations.NotNull;
 
 public class DropManager extends AbstractDropManager {
+
+    private final Runnable mRefreshCallback;
+    private final RunnableOfT<Pair<BoardCoordinate, BoardCoordinate>> mPlayMoveCallback;
+
+    public DropManager(@NotNull Runnable refreshCallback,
+                       @NotNull RunnableOfT<Pair<BoardCoordinate, BoardCoordinate>> playMoveCallback) {
+        mRefreshCallback = refreshCallback;
+        mPlayMoveCallback = playMoveCallback;
+    }
+
     @Override
     public void dropped(DropEvent event, boolean fromDisplayBoard) {
         SquareJLabel originSquareLabel = (SquareJLabel) event.getOriginComponent();
         SquareJLabel destinationSquareLabel = (SquareJLabel) isInTarget(event.getDropLocation());
 
-        final List<JComponent> dummyList = ImmutableList.of();
-        setComponentList(dummyList);
+        clearComponentList();
 
         if (destinationSquareLabel == null) {
-            PlayGamePanel.boardRefresh();
+            mRefreshCallback.run();
             return;
         }
 
         BoardCoordinate origin = originSquareLabel.getCoordinates();
         BoardCoordinate destination = destinationSquareLabel.getCoordinates();
 
-        MoveBuilder moveBuilder = GameController.getGame().newMoveBuilder(origin, destination);
-        PlayGamePanel.playMove(moveBuilder);
+        mPlayMoveCallback.run(Pair.create(origin, destination));
     }
 }

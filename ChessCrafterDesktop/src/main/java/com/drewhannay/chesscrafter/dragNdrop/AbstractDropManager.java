@@ -29,6 +29,10 @@ public abstract class AbstractDropManager implements DropListener {
         mComponents = components;
     }
 
+    public void clearComponentList() {
+        mComponents = ImmutableList.of();
+    }
+
     public abstract void dropped(DropEvent event, boolean fromDisplayBoard);
 
     protected List<? extends JComponent> mComponents;

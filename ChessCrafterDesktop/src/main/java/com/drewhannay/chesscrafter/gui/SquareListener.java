@@ -1,12 +1,10 @@
 package com.drewhannay.chesscrafter.gui;
 
-import com.drewhannay.chesscrafter.controllers.GameController;
 import com.drewhannay.chesscrafter.dragNdrop.DropAdapter;
 import com.drewhannay.chesscrafter.dragNdrop.DropEvent;
 import com.drewhannay.chesscrafter.dragNdrop.DropManager;
 import com.drewhannay.chesscrafter.dragNdrop.GlassPane;
 import com.drewhannay.chesscrafter.models.BoardCoordinate;
-import com.drewhannay.chesscrafter.models.Game;
 import com.drewhannay.chesscrafter.models.Piece;
 import com.drewhannay.chesscrafter.utility.PieceIconUtility;
 import com.drewhannay.chesscrafter.utility.PreferenceUtility;
@@ -17,12 +15,22 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.util.List;
+import java.util.function.Function;
 
 public class SquareListener extends DropAdapter implements MouseListener, PreferenceUtility.PieceToolTipPreferenceChangedListener {
-    public SquareListener(SquareJLabel squareLabel, DropManager dropManager, GlassPane glassPane) {
+    private final DropManager mDropManager;
+    private final SquareJLabel mSquareLabel;
+    private final Function<BoardCoordinate, List<SquareJLabel>> mHighlightCallback;
+
+
+    public SquareListener(SquareJLabel squareLabel, DropManager dropManager, GlassPane glassPane,
+                          Function<BoardCoordinate, List<SquareJLabel>> highlightCallback) {
         super(glassPane);
+
         mSquareLabel = squareLabel;
         mDropManager = dropManager;
+        mHighlightCallback = highlightCallback;
+
         addDropListener(mDropManager);
         PreferenceUtility.addPieceToolTipListener(this);
     }
@@ -41,42 +49,13 @@ public class SquareListener extends DropAdapter implements MouseListener, Prefer
 
     @Override
     public void mousePressed(MouseEvent event) {
-        // TODO: dropping from a jail currently doesn't work
-        // if (m_nextMoveMustPlacePiece)
-        // {
-        // m_nextMoveMustPlacePiece = false;
-        // getGame().nextTurn();
-        // if (!m_clickedSquare.isOccupied() &&
-        // m_clickedSquare.isHabitable() && m_pieceToPlace != null)
-        // {
-        // m_pieceToPlace.setSquare(m_clickedSquare);
-        // m_clickedSquare.setPiece(m_pieceToPlace);
-        // m_pieceToPlace = null;
-        // m_nextMoveMustPlacePiece = false;
-        // boardRefresh(getGame().getBoards());
-        // getGame().genLegalDests();
-        // }
-        //
-        // return;
-        // }
-
-		/*
-         * if (mSquareLabel.getPiece() == null || mSquareLabel.getPiece().isBlack() != getGame().isBlackMove())
-		 * {
-		 * return;
-		 * }
-		 */
-
-        Game game = GameController.getGame();
-        BoardCoordinate coordinates = mSquareLabel.getCoordinates();
-        // TODO: do we need this check?
-        Piece movingPiece = game.getPiece(0, coordinates);
-        if (movingPiece == null || movingPiece.getTeamId() != game.getTurnKeeper().getActiveTeamId())
+        BoardCoordinate origin = mSquareLabel.getCoordinates();
+        List<SquareJLabel> destinations = mHighlightCallback.apply(origin);
+        if (destinations.isEmpty()) {
             return;
+        }
 
-        List<SquareJLabel> destinationLabels = PlayGamePanel.highlightLegalDestinations(0, coordinates);
-
-        mDropManager.setComponentList(destinationLabels);
+        mDropManager.setComponentList(destinations);
         mSquareLabel.hideIcon();
 
         Driver.getInstance().setGlassPane(mGlassPane);
@@ -121,7 +100,4 @@ public class SquareListener extends DropAdapter implements MouseListener, Prefer
     public void onPieceToolTipPreferenceChanged() {
         mSquareLabel.refresh();
     }
-
-    private SquareJLabel mSquareLabel;
-    private final DropManager mDropManager;
 }

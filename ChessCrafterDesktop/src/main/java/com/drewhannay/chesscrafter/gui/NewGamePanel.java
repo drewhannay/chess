@@ -1,7 +1,7 @@
 package com.drewhannay.chesscrafter.gui;
 
-import com.drewhannay.chesscrafter.controllers.GameController;
 import com.drewhannay.chesscrafter.logic.GameBuilder;
+import com.drewhannay.chesscrafter.models.Game;
 import com.drewhannay.chesscrafter.utility.GuiUtility;
 import com.drewhannay.chesscrafter.utility.Messages;
 
@@ -23,18 +23,17 @@ public class NewGamePanel extends ChessPanel {
         constraints.ipadx = 0;
         constraints.insets = new Insets(5, 50, 5, 50);
         constraints.anchor = GridBagConstraints.CENTER;
-        add(GuiUtility.createJLabel(Messages.getString("NewGamePanel.howToPlay")), constraints); //$NON-NLS-1$
+        add(GuiUtility.createJLabel(Messages.getString("NewGamePanel.howToPlay")), constraints);
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new GridBagLayout());
         buttonPanel.setOpaque(false);
 
-        JButton humanPlayButton = new JButton(Messages.getString("NewGamePanel.humanPlay")); //$NON-NLS-1$
+        JButton humanPlayButton = new JButton(Messages.getString("NewGamePanel.humanPlay"));
         humanPlayButton.addActionListener(event -> {
             if (mPopupFrame == null) {
-                //createNewGamePopup();
-                GameController.setGame(GameBuilder.buildGame(GameBuilder.getClassicConfiguration()));
-                Driver.getInstance().setPanel(new PlayGamePanel());
+                Game game = GameBuilder.buildGame(GameBuilder.getClassicConfiguration());
+                Driver.getInstance().setPanel(new PlayGamePanel(game));
             }
         });
         constraints.gridy = 1;
@@ -45,8 +44,8 @@ public class NewGamePanel extends ChessPanel {
         constraints.gridy = 1;
         add(buttonPanel, constraints);
 
-        JButton backButton = new JButton(Messages.getString("NewGamePanel.returnToMenu")); //$NON-NLS-1$
-        backButton.setToolTipText(Messages.getString("NewGamePanel.returnToMenu")); //$NON-NLS-1$
+        JButton backButton = new JButton(Messages.getString("NewGamePanel.returnToMenu"));
+        backButton.setToolTipText(Messages.getString("NewGamePanel.returnToMenu"));
         backButton.addActionListener(event -> Driver.getInstance().revertToMainPanel());
 
         constraints.gridy = 2;
@@ -54,7 +53,7 @@ public class NewGamePanel extends ChessPanel {
     }
 
     private void initPopup() {
-        mPopupFrame = new JFrame(Messages.getString("NewGamePanel.newGame")); //$NON-NLS-1$
+        mPopupFrame = new JFrame(Messages.getString("NewGamePanel.newGame"));
         mPopupFrame.setSize(325, 225);
         mPopupFrame.setResizable(false);
         Driver.centerFrame();
@@ -84,7 +83,7 @@ public class NewGamePanel extends ChessPanel {
 		}
 		catch (IOException e1)
 		{
-			JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("NewGamePanel.errorCouldntLoadVariantFiles")); //$NON-NLS-1$
+			JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("NewGamePanel.errorCouldntLoadVariantFiles"));
 			e1.printStackTrace();
 			return;
 		}*/
@@ -93,7 +92,7 @@ public class NewGamePanel extends ChessPanel {
         constraints.gridx = 0;
         constraints.gridy = 0;
         constraints.anchor = GridBagConstraints.WEST;
-        mPopupPanel.add(GuiUtility.createJLabel(Messages.getString("NewGamePanel.type")), constraints); //$NON-NLS-1$
+        mPopupPanel.add(GuiUtility.createJLabel(Messages.getString("NewGamePanel.type")), constraints);
 
         constraints.gridx = 1;
         constraints.gridy = 0;
@@ -101,16 +100,16 @@ public class NewGamePanel extends ChessPanel {
         //mPopupPanel.add(dropdown, constraints);
 
         // total time and increment fields
-        final JLabel totalTimeLabel = GuiUtility.createJLabel(Messages.getString("NewGamePanel.totalTime")); //$NON-NLS-1$
+        final JLabel totalTimeLabel = GuiUtility.createJLabel(Messages.getString("NewGamePanel.totalTime"));
         totalTimeLabel.setEnabled(false);
         totalTimeLabel.setForeground(Color.white);
-        final JTextField totalTimeField = new JTextField("120", 3); //$NON-NLS-1$
+        final JTextField totalTimeField = new JTextField("120", 3);
         totalTimeField.setEnabled(false);
 
-        final JLabel incrementLabel = GuiUtility.createJLabel(Messages.getString("NewGamePanel.increment")); //$NON-NLS-1$
+        final JLabel incrementLabel = GuiUtility.createJLabel(Messages.getString("NewGamePanel.increment"));
         incrementLabel.setEnabled(false);
         incrementLabel.setForeground(Color.white);
-        final JTextField incrementField = new JTextField("10", 3); //$NON-NLS-1$
+        final JTextField incrementField = new JTextField("10", 3);
         incrementField.setEnabled(false);
 
         // combo box for selecting a timer
@@ -141,7 +140,7 @@ public class NewGamePanel extends ChessPanel {
         // add the combo box to the frame
         constraints.gridx = 0;
         constraints.gridy = 1;
-        mPopupPanel.add(GuiUtility.createJLabel(Messages.getString("NewGamePanel.timer")), constraints); //$NON-NLS-1$
+        mPopupPanel.add(GuiUtility.createJLabel(Messages.getString("NewGamePanel.timer")), constraints);
 
         constraints.gridx = 1;
         constraints.gridy = 1;
@@ -168,7 +167,7 @@ public class NewGamePanel extends ChessPanel {
         mPopupPanel.add(incrementField, constraints);
 
         // set up the done button
-        /*final JButton doneButton = new JButton(Messages.getString("NewGamePanel.start")); //$NON-NLS-1$
+        /*final JButton doneButton = new JButton(Messages.getString("NewGamePanel.start"));
         doneButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -186,7 +185,7 @@ public class NewGamePanel extends ChessPanel {
 					public void run(Boolean isBlackTimer)
 					{
 						Result result = isBlackTimer ? Result.WHITE_WIN : Result.BLACK_WIN;
-						result.setGuiText(Messages.getString("NewGamePanel.timeHasRunOut") + result.winText() + Messages.getString("NewGamePanel.newLine")); //$NON-NLS-1$ //$NON-NLS-2$
+						result.setGuiText(Messages.getString("NewGamePanel.timeHasRunOut") + result.winText() + Messages.getString("NewGamePanel.newLine"));
 						// GuiUtility.getChessCrafter().getPlayGameScreen(gameToPlay).endOfGame(result);
 					}
 				};
@@ -202,7 +201,7 @@ public class NewGamePanel extends ChessPanel {
 		});*/
 
         // set up the cancel button
-        final JButton cancelButton = new JButton(Messages.getString("NewGamePanel.cancel")); //$NON-NLS-1$
+        final JButton cancelButton = new JButton(Messages.getString("NewGamePanel.cancel"));
         cancelButton.addActionListener(event -> {
             mPopupFrame.dispose();
             mPopupFrame = null;

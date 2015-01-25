@@ -1,7 +1,7 @@
 package com.drewhannay.chesscrafter.gui;
 
-import com.drewhannay.chesscrafter.controllers.GameController;
 import com.drewhannay.chesscrafter.logic.GameBuilder;
+import com.drewhannay.chesscrafter.models.Game;
 import com.drewhannay.chesscrafter.models.History;
 import com.drewhannay.chesscrafter.timer.ChessTimer;
 import com.drewhannay.chesscrafter.utility.AppConstants;
@@ -20,7 +20,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -53,8 +52,6 @@ public final class Driver extends JFrame {
     }
 
     public void setUpNewGame() {
-        if (PlayGamePanel.mOptionsMenu != null)
-            PlayGamePanel.mOptionsMenu.setVisible(false);
         ChessTimer.stopTimers();
         setPanel(new NewGamePanel());
     }
@@ -198,8 +195,7 @@ public final class Driver extends JFrame {
                             .showOptionDialog(
                                     Driver.getInstance(),
                                     Messages.getString("Driver.saveBeforeQuitting"),
-                                    Messages.getString("Driver.quitQ"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]))
-                    {
+                                    Messages.getString("Driver.quitQ"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0])) {
                         case JOptionPane.YES_OPTION:
                             ((PlayGamePanel) mOtherPanel).saveGame();
                             break;
@@ -227,8 +223,7 @@ public final class Driver extends JFrame {
     private void createWindowsTrayIconIfNecessary() {
         try {
             BufferedImage frontPageImage = FileUtility.getFrontPageImage();
-            if (System.getProperty("os.name").startsWith("Windows"))
-            {
+            if (System.getProperty("os.name").startsWith("Windows")) {
                 final SystemTray sysTray = SystemTray.getSystemTray();
                 TrayIcon tray = new TrayIcon(frontPageImage.getScaledInstance(25, 18, Image.SCALE_SMOOTH));
                 sysTray.add(tray);
@@ -369,13 +364,13 @@ public final class Driver extends JFrame {
                             JsonElement jsonElement = parser.parse(new FileReader(FileUtility.getGamesInProgressFile(fileName)));
                             History history = GsonUtility.fromJson(jsonElement, History.class);
                             // TODO: should read variant name from history
-                            GameController.setGame(GameBuilder.buildGame(GameBuilder.getClassicConfiguration(), history));
+                            Game game = GameBuilder.buildGame(GameBuilder.getClassicConfiguration(), history);
 
                             // set the help menu info to be specific for game play
                             if (mOptionsMenu != null)
                                 mOptionsMenu.setVisible(true);
 
-                            m_playGameScreen = new PlayGamePanel();
+                            m_playGameScreen = new PlayGamePanel(game);
                             setPanel(m_playGameScreen);
                             poppedFrame.dispose();
                         } catch (IOException e) {
@@ -584,18 +579,6 @@ public final class Driver extends JFrame {
 //		}
 //		driver.setLocation((int) ((s_screenWidth / 2) - (width / 2)), (int) ((s_screenHeight / 2) - (height / 2)));
         getInstance().setLocationRelativeTo(null);
-    }
-
-    public PlayGamePanel getPlayGameScreen() {
-        if (m_playGameScreen == null)
-            m_playGameScreen = new PlayGamePanel();
-        return m_playGameScreen;
-    }
-
-    public WatchGamePanel getWatchGameScreen(File acnFile) {
-        //if (m_watchGameScreen == null)
-        //	m_watchGameScreen = new WatchGamePanel(acnFile);
-        return m_watchGameScreen;
     }
 
     public void setPanel(Object newPanel) {
