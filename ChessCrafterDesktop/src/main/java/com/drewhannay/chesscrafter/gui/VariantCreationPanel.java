@@ -8,6 +8,7 @@ import com.drewhannay.chesscrafter.models.Board;
 import com.drewhannay.chesscrafter.models.BoardSize;
 import com.drewhannay.chesscrafter.models.Piece;
 import com.drewhannay.chesscrafter.models.PieceType;
+import com.drewhannay.chesscrafter.utility.Messages;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 

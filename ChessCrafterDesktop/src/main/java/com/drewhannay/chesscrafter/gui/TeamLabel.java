@@ -1,5 +1,7 @@
 package com.drewhannay.chesscrafter.gui;
 
+import com.drewhannay.chesscrafter.utility.Messages;
+
 import javax.swing.*;
 import java.awt.*;
 

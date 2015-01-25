@@ -1,11 +1,11 @@
 package com.drewhannay.chesscrafter.rules.endconditions;
 
-import com.drewhannay.chesscrafter.logic.Result;
+import com.drewhannay.chesscrafter.logic.Status;
 import com.drewhannay.chesscrafter.models.Game;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class EndCondition {
-    public abstract Result checkEndCondition(@NotNull Game game);
+    public abstract Status checkEndCondition(@NotNull Game game);
 
     public abstract void undo();
 

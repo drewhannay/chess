@@ -3,6 +3,7 @@ package com.drewhannay.chesscrafter.gui;
 import com.drewhannay.chesscrafter.controllers.GameController;
 import com.drewhannay.chesscrafter.logic.GameBuilder;
 import com.drewhannay.chesscrafter.utility.GuiUtility;
+import com.drewhannay.chesscrafter.utility.Messages;
 
 import javax.swing.*;
 import java.awt.*;

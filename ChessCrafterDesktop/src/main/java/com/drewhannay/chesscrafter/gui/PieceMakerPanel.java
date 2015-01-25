@@ -5,6 +5,7 @@ import com.drewhannay.chesscrafter.models.Direction;
 import com.drewhannay.chesscrafter.models.TwoHopMovement;
 import com.drewhannay.chesscrafter.utility.GuiUtility;
 import com.drewhannay.chesscrafter.utility.ImageUtility;
+import com.drewhannay.chesscrafter.utility.Messages;
 import com.google.common.collect.Lists;
 
 import javax.imageio.ImageIO;

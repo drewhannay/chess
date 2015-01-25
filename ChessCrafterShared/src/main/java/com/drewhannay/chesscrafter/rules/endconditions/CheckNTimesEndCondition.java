@@ -1,13 +1,13 @@
 package com.drewhannay.chesscrafter.rules.endconditions;
 
-import com.drewhannay.chesscrafter.logic.Result;
+import com.drewhannay.chesscrafter.logic.Status;
 import com.drewhannay.chesscrafter.models.Game;
 import org.jetbrains.annotations.NotNull;
 
 public final class CheckNTimesEndCondition extends EndCondition {
 
     @Override
-    public Result checkEndCondition(@NotNull Game game) {
+    public Status checkEndCondition(@NotNull Game game) {
         // TODO Auto-generated method stub
         // if (mGame.getLastMove() != null && mGame.getLastMove().isVerified()
         // && mGame.getLastMove().isCheck()

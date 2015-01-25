@@ -8,6 +8,7 @@ import com.drewhannay.chesscrafter.utility.AppConstants;
 import com.drewhannay.chesscrafter.utility.FileUtility;
 import com.drewhannay.chesscrafter.utility.GsonUtility;
 import com.drewhannay.chesscrafter.utility.GuiUtility;
+import com.drewhannay.chesscrafter.utility.Messages;
 import com.drewhannay.chesscrafter.utility.PreferenceUtility;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -28,7 +29,7 @@ public final class Driver extends JFrame {
         try {
             getInstance().initGuiComponents();
         } catch (Exception e) {
-            System.out.println(Messages.getString("Driver.errorSettingUpInitialScreen")); //$NON-NLS-1$
+            System.out.println(Messages.getString("Driver.errorSettingUpInitialScreen"));
             e.printStackTrace();
         }
     }
@@ -70,7 +71,7 @@ public final class Driver extends JFrame {
         mMainMenuItem.setVisible(true);
         add(panel);
         // FIXME
-        if (panel.toString().contains(Messages.getString("Driver.playGame")) || panel.toString().contains(Messages.getString("Driver.playNetGame"))) //$NON-NLS-1$ //$NON-NLS-2$
+        if (panel.toString().contains(Messages.getString("Driver.playGame")) || panel.toString().contains(Messages.getString("Driver.playNetGame")))
             activateWindowListener();
         mOtherPanel = panel;
         pack();
@@ -91,8 +92,8 @@ public final class Driver extends JFrame {
         mMenuBar.add(mOptionsMenu);
         mOptionsMenu.setVisible(true);
         mOptionsMenu.setMnemonic('O');
-        mOptionsMenu.setText(Messages.getString("Driver.options")); //$NON-NLS-1$
-        mOptionsMenu.setToolTipText(Messages.getString("Driver.accessGameOptions")); //$NON-NLS-1$
+        mOptionsMenu.setText(Messages.getString("Driver.options"));
+        mOptionsMenu.setToolTipText(Messages.getString("Driver.accessGameOptions"));
     }
 
     private void initGuiComponents() throws ClassNotFoundException, InstantiationException, IllegalAccessException,
@@ -108,7 +109,7 @@ public final class Driver extends JFrame {
 
         // make the app match the look and feel of the user's system
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        UIManager.put("TabbedPane.contentOpaque", false); //$NON-NLS-1$
+        UIManager.put("TabbedPane.contentOpaque", false);
         createWindowsTrayIconIfNecessary();
 
         // create the menu bar
@@ -130,7 +131,7 @@ public final class Driver extends JFrame {
         c.gridx = 0;
         c.gridy = 0;
         try {
-            mMainPanel.add(new JLabel(GuiUtility.createImageIcon(400, 400, "/chess_logo.png")), c); //$NON-NLS-1$
+            mMainPanel.add(new JLabel(GuiUtility.createImageIcon(400, 400, "/chess_logo.png")), c);
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -174,10 +175,10 @@ public final class Driver extends JFrame {
     }
 
     private JButton pieceMenuButton() {
-        JButton pieceButton = new JButton(Messages.getString("Driver.pieces")); //$NON-NLS-1$
-        pieceButton.setToolTipText(Messages.getString("Driver.createEditRemove")); //$NON-NLS-1$
+        JButton pieceButton = new JButton(Messages.getString("Driver.pieces"));
+        pieceButton.setToolTipText(Messages.getString("Driver.createEditRemove"));
         try {
-            pieceButton.setIcon(GuiUtility.createImageIcon(10, 30, "/pieces.png")); //$NON-NLS-1$
+            pieceButton.setIcon(GuiUtility.createImageIcon(10, 30, "/pieces.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -192,12 +193,12 @@ public final class Driver extends JFrame {
                 @Override
                 public void windowClosing(WindowEvent e) {
                     Object[] options = new String[]{
-                            Messages.getString("Driver.saveGame"), Messages.getString("Driver.dontSave"), Messages.getString("Driver.cancel")}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                            Messages.getString("Driver.saveGame"), Messages.getString("Driver.dontSave"), Messages.getString("Driver.cancel")};
                     switch (JOptionPane
                             .showOptionDialog(
                                     Driver.getInstance(),
-                                    Messages.getString("Driver.saveBeforeQuitting"), //$NON-NLS-1$
-                                    Messages.getString("Driver.quitQ"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0])) //$NON-NLS-1$
+                                    Messages.getString("Driver.saveBeforeQuitting"),
+                                    Messages.getString("Driver.quitQ"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]))
                     {
                         case JOptionPane.YES_OPTION:
                             ((PlayGamePanel) mOtherPanel).saveGame();
@@ -226,7 +227,7 @@ public final class Driver extends JFrame {
     private void createWindowsTrayIconIfNecessary() {
         try {
             BufferedImage frontPageImage = FileUtility.getFrontPageImage();
-            if (System.getProperty("os.name").startsWith("Windows")) //$NON-NLS-1$ //$NON-NLS-2$
+            if (System.getProperty("os.name").startsWith("Windows"))
             {
                 final SystemTray sysTray = SystemTray.getSystemTray();
                 TrayIcon tray = new TrayIcon(frontPageImage.getScaledInstance(25, 18, Image.SCALE_SMOOTH));
@@ -248,17 +249,17 @@ public final class Driver extends JFrame {
     }
 
     private JMenu createFileMenu() {
-        JMenu fileMenu = new JMenu(Messages.getString("Driver.file")); //$NON-NLS-1$
+        JMenu fileMenu = new JMenu(Messages.getString("Driver.file"));
         fileMenu.setMnemonic('F');
 
-        JMenuItem newGameItem = new JMenuItem(Messages.getString("Driver.newGame"), KeyEvent.VK_N); //$NON-NLS-1$
-        newGameItem.setToolTipText(Messages.getString("Driver.startNewGame")); //$NON-NLS-1$
+        JMenuItem newGameItem = new JMenuItem(Messages.getString("Driver.newGame"), KeyEvent.VK_N);
+        newGameItem.setToolTipText(Messages.getString("Driver.startNewGame"));
         newGameItem.addActionListener(event -> setPanel(new NewGamePanel()));
 
         fileMenu.add(newGameItem);
 
-        mMainMenuItem = new JMenuItem(Messages.getString("Driver.mainMenu"), KeyEvent.VK_M); //$NON-NLS-1$
-        mMainMenuItem.setToolTipText(Messages.getString("Driver.returnToMain")); //$NON-NLS-1$
+        mMainMenuItem = new JMenuItem(Messages.getString("Driver.mainMenu"), KeyEvent.VK_M);
+        mMainMenuItem.setToolTipText(Messages.getString("Driver.returnToMain"));
         mMainMenuItem.addActionListener(event -> {
             if (mOptionsMenu != null)
                 mOptionsMenu.setVisible(false);
@@ -271,16 +272,16 @@ public final class Driver extends JFrame {
         mMainMenuItem.setVisible(false);
         fileMenu.add(mMainMenuItem);
 
-        JMenuItem preferences = new JMenuItem(Messages.getString("Driver.preferences"), KeyEvent.VK_P); //$NON-NLS-1$
-        preferences.setToolTipText(Messages.getString("Driver.changePreferences")); //$NON-NLS-1$
+        JMenuItem preferences = new JMenuItem(Messages.getString("Driver.preferences"), KeyEvent.VK_P);
+        preferences.setToolTipText(Messages.getString("Driver.changePreferences"));
         preferences.addActionListener(event -> PreferenceUtility.createPreferencePopup(Driver.this));
         fileMenu.add(preferences);
 
-        JMenuItem exitMenuItem = new JMenuItem(Messages.getString("Driver.quit"), KeyEvent.VK_Q); //$NON-NLS-1$
-        exitMenuItem.setToolTipText(Messages.getString("Driver.closeProgram")); //$NON-NLS-1$
+        JMenuItem exitMenuItem = new JMenuItem(Messages.getString("Driver.quit"), KeyEvent.VK_Q);
+        exitMenuItem.setToolTipText(Messages.getString("Driver.closeProgram"));
         exitMenuItem.addActionListener(event -> {
             int answer = JOptionPane.showConfirmDialog(Driver.getInstance(),
-                    Messages.getString("Driver.sureYouWannaQuit"), Messages.getString("Driver.quitQ"), //$NON-NLS-1$ //$NON-NLS-2$
+                    Messages.getString("Driver.sureYouWannaQuit"), Messages.getString("Driver.quitQ"),
                     JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
             if (answer == 0)
                 System.exit(0);
@@ -293,16 +294,16 @@ public final class Driver extends JFrame {
     }
 
     private JMenu createHelpMenu() {
-        JMenu helpMenu = new JMenu(Messages.getString("Driver.help")); //$NON-NLS-1$
+        JMenu helpMenu = new JMenu(Messages.getString("Driver.help"));
         helpMenu.setMnemonic('H');
 
-        JMenuItem helpMenuItem = new JMenuItem(Messages.getString("Driver.browseHelp"), KeyEvent.VK_H); //$NON-NLS-1$
-        helpMenuItem.setToolTipText(Messages.getString("Driver.clickToGetHelp")); //$NON-NLS-1$
+        JMenuItem helpMenuItem = new JMenuItem(Messages.getString("Driver.browseHelp"), KeyEvent.VK_H);
+        helpMenuItem.setToolTipText(Messages.getString("Driver.clickToGetHelp"));
         helpMenuItem.addActionListener(event -> new HelpFrame());
         helpMenu.add(helpMenuItem);
 
-        JMenuItem aboutItem = new JMenuItem(Messages.getString("Driver.about") + AppConstants.APP_NAME, KeyEvent.VK_A); //$NON-NLS-1$
-        aboutItem.setToolTipText(Messages.getString("Driver.informationAbout") + AppConstants.APP_NAME); //$NON-NLS-1$
+        JMenuItem aboutItem = new JMenuItem(Messages.getString("Driver.about") + AppConstants.APP_NAME, KeyEvent.VK_A);
+        aboutItem.setToolTipText(Messages.getString("Driver.informationAbout") + AppConstants.APP_NAME);
         aboutItem.addActionListener(event -> new AboutFrame(mMainPanel));
         helpMenu.add(aboutItem);
 
@@ -310,11 +311,11 @@ public final class Driver extends JFrame {
     }
 
     private JButton createNewGameButton() {
-        JButton newGameButton = new JButton(Messages.getString("Driver.newGame")); //$NON-NLS-1$
+        JButton newGameButton = new JButton(Messages.getString("Driver.newGame"));
 
-        newGameButton.setToolTipText(Messages.getString("Driver.startANewGame")); //$NON-NLS-1$
+        newGameButton.setToolTipText(Messages.getString("Driver.startANewGame"));
         try {
-            newGameButton.setIcon(GuiUtility.createImageIcon(30, 30, "/start_game.png")); //$NON-NLS-1$
+            newGameButton.setIcon(GuiUtility.createImageIcon(30, 30, "/start_game.png"));
         } catch (IOException ae) {
             ae.printStackTrace();
         }
@@ -324,10 +325,10 @@ public final class Driver extends JFrame {
     }
 
     private JButton createContinueGameButton() {
-        JButton continueGameButton = new JButton(Messages.getString("Driver.loadGame")); //$NON-NLS-1$
-        continueGameButton.setToolTipText(Messages.getString("Driver.loadASavedGame")); //$NON-NLS-1$
+        JButton continueGameButton = new JButton(Messages.getString("Driver.loadGame"));
+        continueGameButton.setToolTipText(Messages.getString("Driver.loadASavedGame"));
         try {
-            continueGameButton.setIcon(GuiUtility.createImageIcon(30, 30, "/saved_games.png")); //$NON-NLS-1$
+            continueGameButton.setIcon(GuiUtility.createImageIcon(30, 30, "/saved_games.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -335,12 +336,12 @@ public final class Driver extends JFrame {
                     String[] files = FileUtility.getGamesInProgressFileArray();
 
                     if (files.length == 0) {
-                        JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("Driver.noSavedGames"), //$NON-NLS-1$
-                                Messages.getString("Driver.noCompletedGames"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
+                        JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("Driver.noSavedGames"),
+                                Messages.getString("Driver.noCompletedGames"), JOptionPane.ERROR_MESSAGE);
                         return;
                     }
 
-                    final JFrame poppedFrame = new JFrame(Messages.getString("Driver.loadSavedGame")); //$NON-NLS-1$
+                    final JFrame poppedFrame = new JFrame(Messages.getString("Driver.loadSavedGame"));
                     poppedFrame.setSize(225, 200);
                     poppedFrame.setResizable(false);
                     poppedFrame.setLocationRelativeTo(Driver.this);
@@ -354,11 +355,11 @@ public final class Driver extends JFrame {
                     scrollPane.setPreferredSize(new Dimension(200, 200));
                     gamesInProgressList.setSelectedIndex(0);
 
-                    JButton nextButton = new JButton(Messages.getString("Driver.loadSavedGame")); //$NON-NLS-1$
+                    JButton nextButton = new JButton(Messages.getString("Driver.loadSavedGame"));
                     nextButton.addActionListener(event1 -> {
                         if (gamesInProgressList.getSelectedValue() == null) {
                             JOptionPane.showMessageDialog(Driver.getInstance(),
-                                    Messages.getString("Driver.selectGame"), Messages.getString("Driver.error"), //$NON-NLS-1$ //$NON-NLS-2$
+                                    Messages.getString("Driver.selectGame"), Messages.getString("Driver.error"),
                                     JOptionPane.PLAIN_MESSAGE);
                             return;
                         }
@@ -380,36 +381,36 @@ public final class Driver extends JFrame {
                         } catch (IOException e) {
                             e.printStackTrace();
                             JOptionPane.showMessageDialog(Driver.getInstance(),
-                                    Messages.getString("Driver.noValidSavedGames"), Messages.getString("Driver.invalidSavedGames"), //$NON-NLS-1$ //$NON-NLS-2$
+                                    Messages.getString("Driver.noValidSavedGames"), Messages.getString("Driver.invalidSavedGames"),
                                     JOptionPane.PLAIN_MESSAGE);
                         }
                     });
 
-                    JButton cancelButton = new JButton(Messages.getString("Driver.cancel")); //$NON-NLS-1$
+                    JButton cancelButton = new JButton(Messages.getString("Driver.cancel"));
                     GuiUtility.setupDoneButton(cancelButton, poppedFrame);
 
-                    JButton deleteButton = new JButton(Messages.getString("Driver.deleteSavedGame")); //$NON-NLS-1$
+                    JButton deleteButton = new JButton(Messages.getString("Driver.deleteSavedGame"));
                     deleteButton.addActionListener(event1 -> {
                         if (gamesInProgressList.getSelectedValue() != null) {
                             boolean didDeleteSuccessfully = FileUtility.getGamesInProgressFile(
                                     gamesInProgressList.getSelectedValue()).delete();
                             if (!didDeleteSuccessfully) {
-                                JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("Driver.savedGameNotDeleted"), //$NON-NLS-1$
-                                        Messages.getString("Driver.error"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
+                                JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("Driver.savedGameNotDeleted"),
+                                        Messages.getString("Driver.error"), JOptionPane.ERROR_MESSAGE);
                             } else {
                                 gamesInProgressList.setListData(FileUtility.getGamesInProgressFileArray());
                                 gamesInProgressList.setSelectedIndex(0);
                                 if (gamesInProgressList.getSelectedValue() == null) {
                                     JOptionPane.showMessageDialog(Driver.getInstance(), Messages
-                                                    .getString("Driver.noMoreCompletedGames"), Messages.getString("Driver.noCompletedGames"), //$NON-NLS-1$ //$NON-NLS-2$
+                                                    .getString("Driver.noMoreCompletedGames"), Messages.getString("Driver.noCompletedGames"),
                                             JOptionPane.PLAIN_MESSAGE);
                                     poppedFrame.dispose();
                                 }
                                 scrollPane.getViewport().add(gamesInProgressList, null);
                             }
                         } else {
-                            JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("Driver.noSaveFiles"), //$NON-NLS-1$
-                                    Messages.getString("Driver.noSaveFileSelected"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$
+                            JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("Driver.noSaveFiles"),
+                                    Messages.getString("Driver.noSaveFileSelected"), JOptionPane.PLAIN_MESSAGE);
                         }
                     });
 
@@ -446,11 +447,10 @@ public final class Driver extends JFrame {
     }
 
     private JButton createViewCompletedGamesButton() {
-
-        JButton viewCompletedGameButton = new JButton(Messages.getString("Driver.completedGames")); //$NON-NLS-1$
-        viewCompletedGameButton.setToolTipText(Messages.getString("Driver.reviewFinishedGame")); //$NON-NLS-1$
+        JButton viewCompletedGameButton = new JButton(Messages.getString("Driver.completedGames"));
+        viewCompletedGameButton.setToolTipText(Messages.getString("Driver.reviewFinishedGame"));
         try {
-            viewCompletedGameButton.setIcon(GuiUtility.createImageIcon(30, 30, "/view_completed.png")); //$NON-NLS-1$
+            viewCompletedGameButton.setIcon(GuiUtility.createImageIcon(30, 30, "/view_completed.png"));
         } catch (IOException ae) {
             ae.printStackTrace();
         }
@@ -458,12 +458,12 @@ public final class Driver extends JFrame {
             try {
                 String[] files = FileUtility.getCompletedGamesFileArray();
                 if (files.length == 0) {
-                    JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("Driver.noCompletedToDisplay"), //$NON-NLS-1$
-                            Messages.getString("Driver.noCompleted"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$
+                    JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("Driver.noCompletedToDisplay"),
+                            Messages.getString("Driver.noCompleted"), JOptionPane.PLAIN_MESSAGE);
                     return;
                 }
 
-                final JFrame poppedFrame = new JFrame(Messages.getString("Driver.viewCompleted")); //$NON-NLS-1$
+                final JFrame poppedFrame = new JFrame(Messages.getString("Driver.viewCompleted"));
                 poppedFrame.setLayout(new GridBagLayout());
                 poppedFrame.setSize(225, 200);
                 poppedFrame.setResizable(false);
@@ -475,11 +475,11 @@ public final class Driver extends JFrame {
                 scrollPane.setPreferredSize(new Dimension(200, 200));
                 completedGamesList.setSelectedIndex(0);
 
-                JButton nextButton = new JButton(Messages.getString("Driver.next")); //$NON-NLS-1$
+                JButton nextButton = new JButton(Messages.getString("Driver.next"));
                 nextButton.addActionListener(event1 -> {
                     if (completedGamesList.getSelectedValue() == null) {
                         JOptionPane.showMessageDialog(Driver.getInstance(),
-                                Messages.getString("Driver.selectGame"), Messages.getString("Driver.error"), //$NON-NLS-1$ //$NON-NLS-2$
+                                Messages.getString("Driver.selectGame"), Messages.getString("Driver.error"),
                                 JOptionPane.PLAIN_MESSAGE);
                         return;
                     }
@@ -492,18 +492,18 @@ public final class Driver extends JFrame {
                     poppedFrame.dispose();
                 });
 
-                JButton cancelButton = new JButton(Messages.getString("Driver.cancel")); //$NON-NLS-1$
+                JButton cancelButton = new JButton(Messages.getString("Driver.cancel"));
                 GuiUtility.setupDoneButton(cancelButton, poppedFrame);
 
-                JButton deleteButton = new JButton(Messages.getString("Driver.deleteCompleted")); //$NON-NLS-1$
+                JButton deleteButton = new JButton(Messages.getString("Driver.deleteCompleted"));
                 deleteButton.addActionListener(event1 -> {
                     if (completedGamesList.getSelectedValue() != null) {
                         boolean didDeleteCompletedGameSuccessfully = FileUtility.getCompletedGamesFile(
                                 completedGamesList.getSelectedValue()).delete();
                         if (!didDeleteCompletedGameSuccessfully) {
                             JOptionPane.showMessageDialog(Driver.getInstance(),
-                                    Messages.getString("Driver.completedNotDeleted"), //$NON-NLS-1$
-                                    Messages.getString("Driver.error"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$
+                                    Messages.getString("Driver.completedNotDeleted"),
+                                    Messages.getString("Driver.error"), JOptionPane.PLAIN_MESSAGE);
                         } else {
                             completedGamesList.removeAll();
                             completedGamesList.setListData(FileUtility.getCompletedGamesFileArray());
@@ -511,15 +511,15 @@ public final class Driver extends JFrame {
                             if (completedGamesList.getSelectedValue() == null) {
                                 JOptionPane.showMessageDialog(
                                         Driver.getInstance(),
-                                        Messages.getString("Driver.noMoreCompleted"), Messages.getString("Driver.noCompleted"), //$NON-NLS-1$ //$NON-NLS-2$
+                                        Messages.getString("Driver.noMoreCompleted"), Messages.getString("Driver.noCompleted"),
                                         JOptionPane.PLAIN_MESSAGE);
                                 poppedFrame.dispose();
                             }
                             scrollPane.getViewport().add(completedGamesList, null);
                         }
                     } else {
-                        JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("Driver.currentlyNoCompleted"), //$NON-NLS-1$
-                                Messages.getString("Driver.noCompletedSelected"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$
+                        JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("Driver.currentlyNoCompleted"),
+                                Messages.getString("Driver.noCompletedSelected"), JOptionPane.PLAIN_MESSAGE);
                     }
                 });
 
@@ -551,7 +551,7 @@ public final class Driver extends JFrame {
             } catch (Exception e) {
                 e.printStackTrace();
                 JOptionPane.showMessageDialog(Driver.getInstance(),
-                        Messages.getString("Driver.eitherNoCompletedOrGameMissing"), Messages.getString("Driver.noCompleted"), //$NON-NLS-1$ //$NON-NLS-2$
+                        Messages.getString("Driver.eitherNoCompletedOrGameMissing"), Messages.getString("Driver.noCompleted"),
                         JOptionPane.PLAIN_MESSAGE);
             }
         });
@@ -560,10 +560,10 @@ public final class Driver extends JFrame {
     }
 
     private JButton variantMenuButton() {
-        JButton variantButton = new JButton(Messages.getString("Driver.variants")); //$NON-NLS-1$
-        variantButton.setToolTipText(Messages.getString("Driver.createEditRemoveVariants")); //$NON-NLS-1$
+        JButton variantButton = new JButton(Messages.getString("Driver.variants"));
+        variantButton.setToolTipText(Messages.getString("Driver.createEditRemoveVariants"));
         try {
-            variantButton.setIcon(GuiUtility.createImageIcon(30, 30, "/chess_variants.jpg")); //$NON-NLS-1$
+            variantButton.setIcon(GuiUtility.createImageIcon(30, 30, "/chess_variants.jpg"));
         } catch (IOException e) {
             e.printStackTrace();
         }

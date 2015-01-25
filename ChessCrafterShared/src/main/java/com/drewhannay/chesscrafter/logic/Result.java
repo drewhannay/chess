@@ -1,10 +1,12 @@
 package com.drewhannay.chesscrafter.logic;
 
-public enum Result {
-    CONTINUE,
-    CHECK,
-    DOUBLE_CHECK,
-    CHECKMATE,
-    STALEMATE,
-    DRAW
+public final class Result {
+
+    public final Status status;
+    public final Integer winningTeamId;
+
+    public Result(Status status, Integer winningTeamId) {
+        this.winningTeamId = winningTeamId;
+        this.status = status;
+    }
 }

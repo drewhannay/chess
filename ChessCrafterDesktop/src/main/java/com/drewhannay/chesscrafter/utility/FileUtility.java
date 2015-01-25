@@ -56,9 +56,8 @@ public final class FileUtility {
     }
 
     public static File getCompletedGamesFile(String completedGameFileName) {
-        String path = PreferenceUtility.getSaveLocationPreference();
-        if (path.equals("default"))
-            path = HIDDEN_DIR + SLASH + COMPLETED_GAMES;
+        String path = HIDDEN_DIR + SLASH + COMPLETED_GAMES;
+        new File(path).mkdirs();
         return new File(path + SLASH + completedGameFileName);
     }
 

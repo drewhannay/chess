@@ -1,19 +1,15 @@
 package com.drewhannay.chesscrafter.gui;
 
-import com.drewhannay.chesscrafter.dragNdrop.DropManager;
-import com.drewhannay.chesscrafter.dragNdrop.GlassPane;
-import com.drewhannay.chesscrafter.dragNdrop.MotionAdapter;
-import com.drewhannay.chesscrafter.models.*;
+import com.drewhannay.chesscrafter.models.BoardCoordinate;
+import com.drewhannay.chesscrafter.models.Piece;
 import com.drewhannay.chesscrafter.utility.GuiUtility;
-import com.google.common.collect.Lists;
+import com.drewhannay.chesscrafter.utility.Messages;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
 
 public class JailPanel extends JPanel {
 

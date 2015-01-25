@@ -1,12 +1,12 @@
 package com.drewhannay.chesscrafter.rules.endconditions;
 
-import com.drewhannay.chesscrafter.logic.Result;
+import com.drewhannay.chesscrafter.logic.Status;
 import com.drewhannay.chesscrafter.models.Game;
 import org.jetbrains.annotations.NotNull;
 
 public final class LoseAllPiecesEndCondition extends EndCondition {
     @Override
-    public Result checkEndCondition(@NotNull Game game) {
+    public Status checkEndCondition(@NotNull Game game) {
         // TODO Auto-generated method stub
         // List<PieceController> team = (!mIsBlackRuleSet ? mGame.getBlackTeam()
         // : mGame.getWhiteTeam());

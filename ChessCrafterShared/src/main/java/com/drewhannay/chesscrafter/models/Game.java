@@ -2,6 +2,7 @@ package com.drewhannay.chesscrafter.models;
 
 import com.drewhannay.chesscrafter.logic.PieceTypeManager;
 import com.drewhannay.chesscrafter.logic.Result;
+import com.drewhannay.chesscrafter.logic.Status;
 import com.drewhannay.chesscrafter.models.turnkeeper.TurnKeeper;
 import com.drewhannay.chesscrafter.rules.conditionalmovegenerator.ConditionalMoveGenerator;
 import com.drewhannay.chesscrafter.rules.movefilter.MoveFilter;
@@ -21,7 +22,7 @@ public final class Game {
     private final TurnKeeper mTurnKeeper;
     private final History mHistory;
 
-    private Result mResult;
+    private Status mStatus;
 
     public Game(@NotNull String gameType, @NotNull Board[] boards, @NotNull Team[] teams,
                 @NotNull TurnKeeper turnKeeper, @Nullable History history) {
@@ -29,6 +30,8 @@ public final class Game {
         mBoards = boards;
         mTeams = teams;
         mTurnKeeper = turnKeeper;
+
+        mStatus = Status.CONTINUE;
 
         mHistory = new History(gameType, new ArrayList<Move>());
         if (history != null) {
@@ -62,8 +65,8 @@ public final class Game {
         return mTurnKeeper;
     }
 
-    public Result getResult() {
-        return mResult;
+    public Status getStatus() {
+        return mStatus;
     }
 
     public Piece getPiece(int boardIndex, BoardCoordinate coordinates) {
@@ -94,6 +97,13 @@ public final class Game {
         return new MoveBuilder(getTeam(mTurnKeeper.getActiveTeamId()), mBoards[0], origin, destination);
     }
 
+    public void declareDraw() {
+        Preconditions.checkState(mHistory.getResult() == null);
+
+        mStatus = Status.DRAW;
+        mHistory.setResult(new Result(mStatus, null));
+    }
+
     public void executeMove(@NotNull Move move) {
         Board board = mBoards[0];
         Team team = getTeam(mTurnKeeper.getActiveTeamId());
@@ -118,9 +128,15 @@ public final class Game {
         mHistory.moves.add(move);
 
         Team newActiveTeam = getTeam(mTurnKeeper.getActiveTeamId());
-        mResult = newActiveTeam.getEndCondition().checkEndCondition(this);
+        mStatus = newActiveTeam.getEndCondition().checkEndCondition(this);
+
         // TODO: remove println
-        System.out.println(mResult);
+        System.out.println(mStatus);
+
+        if (Status.END_OF_GAME_STATUS.contains(mStatus)) {
+            Integer winningTeamId = mStatus == Status.CHECKMATE ? team.getTeamId() : null;
+            mHistory.setResult(new Result(mStatus, winningTeamId));
+        }
     }
 
     public void undoMove() {

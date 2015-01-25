@@ -1,6 +1,6 @@
 package com.drewhannay.chesscrafter.rules.endconditions;
 
-import com.drewhannay.chesscrafter.logic.Result;
+import com.drewhannay.chesscrafter.logic.Status;
 import com.drewhannay.chesscrafter.models.Board;
 import com.drewhannay.chesscrafter.models.BoardCoordinate;
 import com.drewhannay.chesscrafter.models.BoardSize;
@@ -24,7 +24,7 @@ public final class CaptureObjectiveEndCondition extends EndCondition {
     }
 
     @Override
-    public Result checkEndCondition(@NotNull Game game) {
+    public Status checkEndCondition(@NotNull Game game) {
         int boardIndex = 0;
         Board board = game.getBoards()[boardIndex];
 
@@ -46,11 +46,11 @@ public final class CaptureObjectiveEndCondition extends EndCondition {
             }
         }
 
-        return legalMoveCount > 0 && attackCount == 1 ? Result.CHECK
-                : legalMoveCount > 0 && attackCount > 1 ? Result.DOUBLE_CHECK
-                : legalMoveCount == 0 && attackCount == 0 ? Result.STALEMATE
-                : legalMoveCount == 0 && attackCount > 0 ? Result.CHECKMATE
-                : Result.CONTINUE;
+        return legalMoveCount > 0 && attackCount == 1 ? Status.CHECK
+                : legalMoveCount > 0 && attackCount > 1 ? Status.DOUBLE_CHECK
+                : legalMoveCount == 0 && attackCount == 0 ? Status.STALEMATE
+                : legalMoveCount == 0 && attackCount > 0 ? Status.CHECKMATE
+                : Status.CONTINUE;
     }
 
     @Override
