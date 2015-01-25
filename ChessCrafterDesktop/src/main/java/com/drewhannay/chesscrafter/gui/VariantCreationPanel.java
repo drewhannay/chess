@@ -1,6 +1,5 @@
 package com.drewhannay.chesscrafter.gui;
 
-import com.drewhannay.chesscrafter.controllers.GameController;
 import com.drewhannay.chesscrafter.dragNdrop.GlassPane;
 import com.drewhannay.chesscrafter.dragNdrop.MotionAdapter;
 import com.drewhannay.chesscrafter.logic.GameBuilder;
@@ -27,7 +26,6 @@ public class VariantCreationPanel extends ChessPanel implements PieceMakerPanel.
         mPieceListPanel = new JPanel();
         mPieceListPanel.setOpaque(false);
 
-        GameController gameToEdit = null;
         if (variantName != null) {
             // FIXME: we shouldn't be constructing an actual Game object here;
             // we should be able to get everything we need from the GameBuilder
