@@ -124,6 +124,8 @@ public final class Driver extends JFrame {
         UIManager.put("TabbedPane.contentOpaque", false);
         createWindowsTrayIconIfNecessary();
         enableOSXFullscreen(this);
+        // put menus in the OS X menu bar if we're on OS X
+        System.setProperty("apple.laf.useScreenMenuBar", "true");
 
         // create the menu bar
         createMenuBar();
