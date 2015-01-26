@@ -10,6 +10,7 @@ import com.drewhannay.chesscrafter.utility.GsonUtility;
 import com.drewhannay.chesscrafter.utility.GuiUtility;
 import com.drewhannay.chesscrafter.utility.Messages;
 import com.drewhannay.chesscrafter.utility.PreferenceUtility;
+import com.google.common.base.Preconditions;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
@@ -22,6 +23,7 @@ import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.Method;
 
 public final class Driver extends JFrame {
     public static void main(String[] args) {
@@ -41,6 +43,19 @@ public final class Driver extends JFrame {
             sInstance = new Driver();
 
         return sInstance;
+    }
+
+    public static void enableOSXFullscreen(Window window) {
+        Preconditions.checkNotNull(window);
+        try {
+            Class util = Class.forName("com.apple.eawt.FullScreenUtilities");
+            Class<?> params[] = new Class[]{Window.class, Boolean.TYPE};
+            @SuppressWarnings("unchecked")
+            Method method = util.getMethod("setWindowCanFullScreen", params);
+            method.invoke(util, window, true);
+        } catch (Exception e) {
+            System.out.println("OS X Fullscreen FAIL" + e.getLocalizedMessage());
+        }
     }
 
     public void setFileMenuVisibility(boolean isVisible) {
@@ -108,6 +123,7 @@ public final class Driver extends JFrame {
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         UIManager.put("TabbedPane.contentOpaque", false);
         createWindowsTrayIconIfNecessary();
+        enableOSXFullscreen(this);
 
         // create the menu bar
         createMenuBar();
