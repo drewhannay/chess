@@ -52,22 +52,22 @@ public class BoardPanel extends JPanel {
         };
 
         setOpaque(false);
-        setLayout(new GridLayout(mBoardSize.width + 1, mBoardSize.height));
+        setLayout(new GridLayout(mBoardSize.width + 1, mBoardSize.height + 1));
         setPreferredSize(new Dimension((mBoardSize.width + 1) * 48, (mBoardSize.height + 1) * 48));
         createGrid();
     }
 
     public void rescaleBoard(double panelWidth, double panelHeight){
-        Double boardScale = panelHeight * .85;
-        Double scale = panelHeight / panelWidth;
+        double boardScale = panelHeight * .85;
+        double scale = panelHeight / panelWidth;
         if(scale > .75) {
             boardScale = panelHeight * (.80 - (scale - .75));
         }
         boardScale = boardScale / mBoardSize.width + 1;
-        setPreferredSize(new Dimension((mBoardSize.width + 1) * boardScale.intValue(), (mBoardSize.height + 1) * boardScale.intValue()));
+        setPreferredSize(new Dimension((mBoardSize.width + 1) * (int) boardScale, (mBoardSize.height + 1) * (int) boardScale));
         for (int y = mBoardSize.height; y > 0; y--) {
             for (int x = 1; x <= mBoardSize.width; x++) {
-                mSquareLabels[x - 1][y - 1].setImageScale(boardScale.intValue());
+                mSquareLabels[x - 1][y - 1].setImageScale((int) boardScale);
                 mSquareLabels[x - 1][y - 1].refresh();
             }
         }

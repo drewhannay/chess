@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class PlayGamePanel extends ChessPanel {
 
@@ -232,13 +233,8 @@ public class PlayGamePanel extends ChessPanel {
     }
 
     private void resizeElements(int width, int height){
-        for (BoardPanel board : mGameBoards) {
-            board.rescaleBoard((double) width, (double)height);
-        }
-
-        for (JailPanel jailPanel : mJails) {
-            jailPanel.rescaleBoard((double) width, (double)height);
-        }
+        Stream.of(mGameBoards).forEach(board -> board.rescaleBoard(width, height));
+        Stream.of(mJails).forEach(jail -> jail.rescaleBoard(width, height));
     }
 
     private void initComponents() {
