@@ -264,6 +264,7 @@ public final class Driver extends JFrame {
         fileMenu.setMnemonic('F');
 
         JMenuItem newGameItem = new JMenuItem(Messages.getString("Driver.newGame"), KeyEvent.VK_N);
+        newGameItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         newGameItem.setToolTipText(Messages.getString("Driver.startNewGame"));
         newGameItem.addActionListener(event -> setPanel(new NewGamePanel()));
 
@@ -284,11 +285,13 @@ public final class Driver extends JFrame {
         fileMenu.add(mMainMenuItem);
 
         JMenuItem preferences = new JMenuItem(Messages.getString("Driver.preferences"), KeyEvent.VK_P);
+        preferences.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_COMMA, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         preferences.setToolTipText(Messages.getString("Driver.changePreferences"));
         preferences.addActionListener(event -> PreferenceUtility.createPreferencePopup(Driver.this));
         fileMenu.add(preferences);
 
         JMenuItem exitMenuItem = new JMenuItem(Messages.getString("Driver.quit"), KeyEvent.VK_Q);
+        exitMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         exitMenuItem.setToolTipText(Messages.getString("Driver.closeProgram"));
         exitMenuItem.addActionListener(event -> {
             int answer = JOptionPane.showConfirmDialog(Driver.getInstance(),
