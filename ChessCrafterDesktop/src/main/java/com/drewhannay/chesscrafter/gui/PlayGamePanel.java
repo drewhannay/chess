@@ -233,11 +233,11 @@ public class PlayGamePanel extends ChessPanel {
 
     private void resizeElements(int width, int height){
         for (BoardPanel board : mGameBoards) {
-            board.rescaleBoard(width, height);
+            board.rescaleBoard((double) width, (double)height);
         }
 
         for (JailPanel jailPanel : mJails) {
-            jailPanel.rescaleBoard(width, height);
+            jailPanel.rescaleBoard((double) width, (double)height);
         }
     }
 

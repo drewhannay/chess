@@ -28,30 +28,30 @@ public class JailPanel extends JPanel {
         setBorder(GuiUtility.createBorder(Messages.getString("PlayGamePanel.capturedPieces")));
         setLayout(new GridLayout(mJailDimension, mJailDimension));
         setPreferredSize(new Dimension((mJailDimension + 1) * 25, (mJailDimension + 1) * 25));
-        createGrid(mJailDimension);
+        createGrid();
     }
-    public void rescaleBoard(int panelWidth, int panelHeight){
-        Double jailScale = (panelHeight * .30);
-        Double scale = (panelHeight * 1.0) / (panelWidth * 1.0);
+    public void rescaleBoard(double panelWidth, double panelHeight){
+        double jailScale = panelHeight * .30;
+        double scale = panelHeight / panelWidth;
         if(scale > .75) {
             jailScale = panelHeight * (.30 - (scale - .75) / 1.75);
         }
         jailScale = jailScale / mJailDimension;
         if(jailScale > 0) {
-            setPreferredSize(new Dimension(mJailDimension * jailScale.intValue(), mJailDimension * jailScale.intValue()));
+            setPreferredSize(new Dimension(mJailDimension * (int) jailScale, mJailDimension * (int) jailScale));
             jailScale = jailScale * .9;
             for (int y = mJailDimension; y > 0; y--) {
                 for (int x = 1; x <= mJailDimension; x++) {
-                    mSquareLabels[x - 1][y - 1].setImageScale(jailScale.intValue() - 1);
+                    mSquareLabels[x - 1][y - 1].setImageScale((int) jailScale - 1);
                     mSquareLabels[x - 1][y - 1].refresh();
                 }
             }
         }
     }
 
-    private void createGrid(int jailDimensions) {
-        for (int x = 1; x <= jailDimensions; x++) {
-            for (int y = 1; y <= jailDimensions; y++) {
+    private void createGrid() {
+        for (int x = 1; x <= mJailDimension; x++) {
+            for (int y = 1; y <= mJailDimension; y++) {
                 SquareJLabel square = new SquareJLabel(BoardCoordinate.at(x, y), true, 24);
                 add(square);
                 mSquareLabels[x - 1][y - 1] = square;
