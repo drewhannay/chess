@@ -21,6 +21,8 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -229,6 +231,16 @@ public class PlayGamePanel extends ChessPanel {
         return mOptionsMenu;
     }
 
+    private void resizeElements(int width, int height){
+        for (BoardPanel board : mGameBoards) {
+            board.rescaleBoard(width, height);
+        }
+
+        for (JailPanel jailPanel : mJails) {
+            jailPanel.rescaleBoard(width, height);
+        }
+    }
+
     private void initComponents() {
         JButton undoButton = new JButton(Messages.getString("PlayGamePanel.undo"));
         undoButton.addActionListener(event -> {
@@ -252,7 +264,19 @@ public class PlayGamePanel extends ChessPanel {
 
         Board[] boards = mGame.getBoards();
         mGameBoards = new BoardPanel[boards.length];
-        // setBorder(BorderFactory.createLoweredBevelBorder());
+
+        addComponentListener(new ComponentListener() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                resizeElements(e.getComponent().getWidth(), e.getComponent().getHeight());
+            }
+            @Override
+            public void componentMoved(ComponentEvent e) {}
+            @Override
+            public void componentShown(ComponentEvent e) {}
+            @Override
+            public void componentHidden(ComponentEvent e) {}
+        });
 
         int gridx = 0;
 
@@ -363,8 +387,8 @@ public class PlayGamePanel extends ChessPanel {
         // TODO: This assumes a two-player game
 //		add(new ChessTimerLabel(mTimers[0]), constraints);
 //		resetTimers();
+        Driver.getInstance().pack();
         boardRefresh();
         refreshStatus();
-        Driver.getInstance().pack();
     }
 }

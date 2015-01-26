@@ -72,7 +72,7 @@ public class SquareListener extends DropAdapter implements MouseListener, Prefer
         BufferedImage image;
 
         Piece piece = mSquareLabel.getPiece();
-        ImageIcon imageIcon = PieceIconUtility.getPieceIcon(piece.getName(), 48, piece.getTeamId());
+        ImageIcon imageIcon = PieceIconUtility.getPieceIcon(piece.getName(), mSquareLabel.getImageScale(), piece.getTeamId());
         int width = imageIcon.getIconWidth();
         int height = imageIcon.getIconHeight();
         image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);

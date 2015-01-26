@@ -12,6 +12,16 @@ import java.io.IOException;
 public class SquareJLabel extends JLabel {
     public static final Color HIGHLIGHT_COLOR = new Color(20, 129, 191);
     public static final Color THREAT_COLOR = new Color(120, 20, 20);
+    private Color mBackgroundColor;
+
+    private static final long serialVersionUID = -5060622037769752836L;
+
+    private static ImageIcon s_uninhabitableIcon;
+
+    private final BoardCoordinate mBoardCoordinate;
+    private Piece mPiece;
+    private boolean mIsHabitable;
+    private int mImageScale;
 
     public SquareJLabel(BoardCoordinate coordinates, boolean isHabitable, int imageScale) {
         mBoardCoordinate = coordinates;
@@ -44,6 +54,10 @@ public class SquareJLabel extends JLabel {
     public void hideIcon() {
         setIcon(null);
     }
+
+    public void setImageScale(int newImageScale){ mImageScale = newImageScale;}
+
+    public int getImageScale(){ return mImageScale ;}
 
     public void setPiece(Piece piece) {
         mPiece = piece;
@@ -129,15 +143,4 @@ public class SquareJLabel extends JLabel {
             ioe.printStackTrace();
         }
     }
-
-    private static final long serialVersionUID = -5060622037769752836L;
-
-    private static ImageIcon s_uninhabitableIcon;
-
-    private Color mBackgroundColor;
-
-    private final BoardCoordinate mBoardCoordinate;
-    private Piece mPiece;
-    private boolean mIsHabitable;
-    private int mImageScale;
 }
