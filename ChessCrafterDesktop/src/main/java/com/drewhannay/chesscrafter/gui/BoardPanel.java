@@ -26,6 +26,7 @@ public class BoardPanel extends JPanel {
     private final SquareJLabel[][] mSquareLabels;
     private final Function<Pair<Integer, BoardCoordinate>, Set<BoardCoordinate>> mGetMovesCallback;
     private final Function<BoardCoordinate, List<SquareJLabel>> mHighlightCallback;
+    private final BoardSize mBoardSize;
 
     private final GlassPane mGlassPane;
     private final DropManager mDropManager;
@@ -37,6 +38,7 @@ public class BoardPanel extends JPanel {
         mDropManager = dropManager;
         mBoardIndex = boardIndex;
         mGetMovesCallback = getMovesCallback;
+        mBoardSize = boardSize;
 
         mHighlightCallback = coordinate -> {
             Set<BoardCoordinate> coordinates = mGetMovesCallback.apply(Pair.create(mBoardIndex, coordinate));
@@ -50,17 +52,33 @@ public class BoardPanel extends JPanel {
         };
 
         setOpaque(false);
-        setLayout(new GridLayout(boardSize.width + 1, boardSize.height));
-        setPreferredSize(new Dimension((boardSize.width + 1) * 48, (boardSize.height + 1) * 48));
-        createGrid(boardSize);
+        setLayout(new GridLayout(mBoardSize.width + 1, mBoardSize.height + 1));
+        setPreferredSize(new Dimension((mBoardSize.width + 1) * 48, (mBoardSize.height + 1) * 48));
+        createGrid();
     }
 
-    private void createGrid(BoardSize boardSize) {
-        for (int y = boardSize.height; y > 0; y--) {
+    public void rescaleBoard(double panelWidth, double panelHeight){
+        double boardScale = panelHeight * .85;
+        double scale = panelHeight / panelWidth;
+        if(scale > .75) {
+            boardScale = panelHeight * (.80 - (scale - .75));
+        }
+        boardScale = boardScale / mBoardSize.width + 1;
+        setPreferredSize(new Dimension((mBoardSize.width + 1) * (int) boardScale, (mBoardSize.height + 1) * (int) boardScale));
+        for (int y = mBoardSize.height; y > 0; y--) {
+            for (int x = 1; x <= mBoardSize.width; x++) {
+                mSquareLabels[x - 1][y - 1].setImageScale((int) boardScale);
+                mSquareLabels[x - 1][y - 1].refresh();
+            }
+        }
+    }
+
+    private void createGrid() {
+        for (int y = mBoardSize.height; y > 0; y--) {
             JLabel label = GuiUtility.createJLabel("" + y); //$NON-NLS-1$
             label.setHorizontalAlignment(SwingConstants.CENTER);
             add(label);
-            for (int x = 1; x <= boardSize.width; x++) {
+            for (int x = 1; x <= mBoardSize.width; x++) {
                 SquareJLabel square = new SquareJLabel(BoardCoordinate.at(x, y), true, 48);
                 square.addMouseMotionListener(new MotionAdapter(mGlassPane));
                 square.addMouseListener(new SquareListener(square, mDropManager, mGlassPane, mHighlightCallback));
@@ -69,7 +87,7 @@ public class BoardPanel extends JPanel {
                 square.refresh();
             }
         }
-        for (int x = 0; x <= boardSize.width; x++) {
+        for (int x = 0; x <= mBoardSize.width; x++) {
             if (x != 0) {
                 JLabel label = GuiUtility.createJLabel("" + (char) (x - 1 + 'A')); //$NON-NLS-1$
                 label.setHorizontalAlignment(SwingConstants.CENTER);
