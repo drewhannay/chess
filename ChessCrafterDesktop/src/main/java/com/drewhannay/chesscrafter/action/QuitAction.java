@@ -1,6 +1,5 @@
 package com.drewhannay.chesscrafter.action;
 
-import com.drewhannay.chesscrafter.gui.Driver;
 import com.drewhannay.chesscrafter.utility.Messages;
 
 import javax.swing.*;
@@ -21,10 +20,7 @@ public final class QuitAction extends ChessAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        int answer = JOptionPane.showConfirmDialog(Driver.getInstance(),
-                Messages.getString("Driver.sureYouWannaQuit"), Messages.getString("Driver.quitQ"),
-                JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
-        if (answer == 0)
-            System.exit(0);
+        // TODO:
+        System.exit(0);
     }
 }

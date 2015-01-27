@@ -1,6 +1,5 @@
 package com.drewhannay.chesscrafter.utility;
 
-import com.drewhannay.chesscrafter.gui.Driver;
 import com.google.common.collect.Lists;
 
 import javax.swing.*;
@@ -54,7 +53,7 @@ public final class PreferenceUtility {
             try {
                 JFileChooser fileChooser = new JFileChooser();
                 fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                int returnVal = fileChooser.showOpenDialog(Driver.getInstance());
+                int returnVal = fileChooser.showOpenDialog(null);
                 if (returnVal == JFileChooser.APPROVE_OPTION)
                     currentSaveLocationField.setText(fileChooser.getSelectedFile().getAbsolutePath());
             } catch (Exception e) {

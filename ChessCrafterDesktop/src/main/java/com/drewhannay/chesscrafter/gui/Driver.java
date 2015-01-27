@@ -9,34 +9,20 @@ import com.drewhannay.chesscrafter.utility.FileUtility;
 import com.drewhannay.chesscrafter.utility.GsonUtility;
 import com.drewhannay.chesscrafter.utility.GuiUtility;
 import com.drewhannay.chesscrafter.utility.Messages;
-import com.google.common.base.Preconditions;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.FileReader;
 import java.io.IOException;
-import java.lang.reflect.Method;
 
 public final class Driver extends ChessFrame {
-    public static void main(String[] args) {
-        getInstance();
-    }
+
+    private JPanel mMainPanel;
+    private JPanel mOtherPanel;
 
     private Driver() {
-    }
-
-    public static Driver getInstance() {
-        if (sInstance == null)
-            sInstance = new Driver();
-
-        return sInstance;
-    }
-
-    public void setUpNewGame() {
-        setPanel(new NewGamePanel());
     }
 
     public void setPanel(JPanel panel) {
@@ -47,34 +33,12 @@ public final class Driver extends ChessFrame {
         add(panel);
         mOtherPanel = panel;
         pack();
-        centerFrame();
-    }
-
-    public void revertToMainPanel() {
-        remove(mOtherPanel);
-        add(mMainPanel);
-        pack();
-        centerFrame();
+        setLocationRelativeTo(null);
     }
 
     @Override
     void initComponents() {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
-        // TODO: do this once in the Main class
-        // make the app match the look and feel of the user's system
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        UIManager.put("TabbedPane.contentOpaque", false);
-        createWindowsTrayIconIfNecessary();
-        enableOSXFullscreen(this);
-
-        // TODO: do this once in the Main class
-        // put menus in the OS X menu bar if we're on OS X
-        System.setProperty("apple.laf.useScreenMenuBar", "true");
 
         // set up a new panel to hold everything in the main window
         mMainPanel = new ChessPanel();
@@ -137,33 +101,6 @@ public final class Driver extends ChessFrame {
         return pieceButton;
     }
 
-    private void createWindowsTrayIconIfNecessary() {
-        try {
-            BufferedImage frontPageImage = FileUtility.getFrontPageImage();
-            if (System.getProperty("os.name").startsWith("Windows")) {
-                final SystemTray sysTray = SystemTray.getSystemTray();
-                TrayIcon tray = new TrayIcon(frontPageImage.getScaledInstance(25, 18, Image.SCALE_SMOOTH));
-                sysTray.add(tray);
-            }
-            setIconImage(frontPageImage);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void enableOSXFullscreen(Window window) {
-        Preconditions.checkNotNull(window);
-        try {
-            Class util = Class.forName("com.apple.eawt.FullScreenUtilities");
-            Class<?> params[] = new Class[]{Window.class, Boolean.TYPE};
-            @SuppressWarnings("unchecked")
-            Method method = util.getMethod("setWindowCanFullScreen", params);
-            method.invoke(util, window, true);
-        } catch (Exception e) {
-            System.out.println("OS X Fullscreen FAIL" + e.getLocalizedMessage());
-        }
-    }
-
     private JButton createNewGameButton() {
         JButton newGameButton = new JButton(new NewGameAction());
         newGameButton.setIcon(GuiUtility.createSystemImageIcon(30, 30, "/start_game.png"));
@@ -186,7 +123,7 @@ public final class Driver extends ChessFrame {
             try {
                 String[] files = FileUtility.getCompletedGamesFileArray();
                 if (files.length == 0) {
-                    JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("Driver.noCompletedToDisplay"),
+                    JOptionPane.showMessageDialog(this, Messages.getString("Driver.noCompletedToDisplay"),
                             Messages.getString("Driver.noCompleted"), JOptionPane.PLAIN_MESSAGE);
                     return;
                 }
@@ -195,7 +132,7 @@ public final class Driver extends ChessFrame {
                 poppedFrame.setLayout(new GridBagLayout());
                 poppedFrame.setSize(225, 200);
                 poppedFrame.setResizable(false);
-                poppedFrame.setLocationRelativeTo(Driver.this);
+                poppedFrame.setLocationRelativeTo(this);
                 GridBagConstraints constraints = new GridBagConstraints();
 
                 final JList<String> completedGamesList = new JList<>(FileUtility.getCompletedGamesFileArray());
@@ -206,9 +143,7 @@ public final class Driver extends ChessFrame {
                 JButton nextButton = new JButton(Messages.getString("Driver.next"));
                 nextButton.addActionListener(event1 -> {
                     if (completedGamesList.getSelectedValue() == null) {
-                        JOptionPane.showMessageDialog(Driver.getInstance(),
-                                Messages.getString("Driver.selectGame"), Messages.getString("Driver.error"),
-                                JOptionPane.PLAIN_MESSAGE);
+                        JOptionPane.showMessageDialog(this, Messages.getString("Driver.selectGame"), Messages.getString("Driver.error"), JOptionPane.PLAIN_MESSAGE);
                         return;
                     }
 
@@ -227,8 +162,7 @@ public final class Driver extends ChessFrame {
                         boolean didDeleteCompletedGameSuccessfully = FileUtility.getCompletedGamesFile(
                                 completedGamesList.getSelectedValue()).delete();
                         if (!didDeleteCompletedGameSuccessfully) {
-                            JOptionPane.showMessageDialog(Driver.getInstance(),
-                                    Messages.getString("Driver.completedNotDeleted"),
+                            JOptionPane.showMessageDialog(this, Messages.getString("Driver.completedNotDeleted"),
                                     Messages.getString("Driver.error"), JOptionPane.PLAIN_MESSAGE);
                         } else {
                             completedGamesList.removeAll();
@@ -236,7 +170,7 @@ public final class Driver extends ChessFrame {
                             completedGamesList.setSelectedIndex(0);
                             if (completedGamesList.getSelectedValue() == null) {
                                 JOptionPane.showMessageDialog(
-                                        Driver.getInstance(),
+                                        this,
                                         Messages.getString("Driver.noMoreCompleted"), Messages.getString("Driver.noCompleted"),
                                         JOptionPane.PLAIN_MESSAGE);
                                 poppedFrame.dispose();
@@ -244,7 +178,7 @@ public final class Driver extends ChessFrame {
                             scrollPane.getViewport().add(completedGamesList, null);
                         }
                     } else {
-                        JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("Driver.currentlyNoCompleted"),
+                        JOptionPane.showMessageDialog(this, Messages.getString("Driver.currentlyNoCompleted"),
                                 Messages.getString("Driver.noCompletedSelected"), JOptionPane.PLAIN_MESSAGE);
                     }
                 });
@@ -276,7 +210,7 @@ public final class Driver extends ChessFrame {
                 poppedFrame.pack();
             } catch (Exception e) {
                 e.printStackTrace();
-                JOptionPane.showMessageDialog(Driver.getInstance(),
+                JOptionPane.showMessageDialog(this,
                         Messages.getString("Driver.eitherNoCompletedOrGameMissing"), Messages.getString("Driver.noCompleted"),
                         JOptionPane.PLAIN_MESSAGE);
             }
@@ -294,11 +228,11 @@ public final class Driver extends ChessFrame {
         return variantButton;
     }
 
-    public void openGame() {
+    public static void openGame() {
         String[] files = FileUtility.getGamesInProgressFileArray();
 
         if (files.length == 0) {
-            JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("Driver.noSavedGames"),
+            JOptionPane.showMessageDialog(null, Messages.getString("Driver.noSavedGames"),
                     Messages.getString("Driver.noCompletedGames"), JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -306,21 +240,21 @@ public final class Driver extends ChessFrame {
         final JFrame poppedFrame = new JFrame(Messages.getString("Driver.loadSavedGame"));
         poppedFrame.setSize(225, 200);
         poppedFrame.setResizable(false);
-        poppedFrame.setLocationRelativeTo(this);
+        poppedFrame.setLocationRelativeTo(null);
         GridBagConstraints constraints = new GridBagConstraints();
 
-        final ChessPanel popupPanel = new ChessPanel();
+        ChessPanel popupPanel = new ChessPanel();
         popupPanel.setLayout(new GridBagLayout());
 
-        final JList<String> gamesInProgressList = new JList<>(FileUtility.getGamesInProgressFileArray());
-        final JScrollPane scrollPane = new JScrollPane(gamesInProgressList);
+        JList<String> gamesInProgressList = new JList<>(FileUtility.getGamesInProgressFileArray());
+        JScrollPane scrollPane = new JScrollPane(gamesInProgressList);
         scrollPane.setPreferredSize(new Dimension(200, 200));
         gamesInProgressList.setSelectedIndex(0);
 
         JButton nextButton = new JButton(Messages.getString("Driver.loadSavedGame"));
         nextButton.addActionListener(event1 -> {
             if (gamesInProgressList.getSelectedValue() == null) {
-                JOptionPane.showMessageDialog(Driver.getInstance(),
+                JOptionPane.showMessageDialog(null,
                         Messages.getString("Driver.selectGame"), Messages.getString("Driver.error"),
                         JOptionPane.PLAIN_MESSAGE);
                 return;
@@ -338,7 +272,7 @@ public final class Driver extends ChessFrame {
                 poppedFrame.dispose();
             } catch (IOException ioe) {
                 ioe.printStackTrace();
-                JOptionPane.showMessageDialog(Driver.getInstance(),
+                JOptionPane.showMessageDialog(null,
                         Messages.getString("Driver.noValidSavedGames"), Messages.getString("Driver.invalidSavedGames"),
                         JOptionPane.PLAIN_MESSAGE);
             }
@@ -353,21 +287,20 @@ public final class Driver extends ChessFrame {
                 boolean didDeleteSuccessfully = FileUtility.getGamesInProgressFile(
                         gamesInProgressList.getSelectedValue()).delete();
                 if (!didDeleteSuccessfully) {
-                    JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("Driver.savedGameNotDeleted"),
+                    JOptionPane.showMessageDialog(null, Messages.getString("Driver.savedGameNotDeleted"),
                             Messages.getString("Driver.error"), JOptionPane.ERROR_MESSAGE);
                 } else {
                     gamesInProgressList.setListData(FileUtility.getGamesInProgressFileArray());
                     gamesInProgressList.setSelectedIndex(0);
                     if (gamesInProgressList.getSelectedValue() == null) {
-                        JOptionPane.showMessageDialog(Driver.getInstance(), Messages
-                                        .getString("Driver.noMoreCompletedGames"), Messages.getString("Driver.noCompletedGames"),
+                        JOptionPane.showMessageDialog(null, Messages.getString("Driver.noMoreCompletedGames"), Messages.getString("Driver.noCompletedGames"),
                                 JOptionPane.PLAIN_MESSAGE);
                         poppedFrame.dispose();
                     }
                     scrollPane.getViewport().add(gamesInProgressList, null);
                 }
             } else {
-                JOptionPane.showMessageDialog(Driver.getInstance(), Messages.getString("Driver.noSaveFiles"),
+                JOptionPane.showMessageDialog(null, Messages.getString("Driver.noSaveFiles"),
                         Messages.getString("Driver.noSaveFileSelected"), JOptionPane.PLAIN_MESSAGE);
             }
         });
@@ -399,15 +332,4 @@ public final class Driver extends ChessFrame {
         poppedFrame.setVisible(true);
         poppedFrame.pack();
     }
-
-    private void centerFrame() {
-        getInstance().setLocationRelativeTo(null);
-    }
-
-    private static final long serialVersionUID = -3533604157531154757L;
-
-    private static Driver sInstance;
-
-    private JPanel mMainPanel;
-    private JPanel mOtherPanel;
 }

@@ -21,6 +21,6 @@ public final class OpenGameAction extends ChessAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        Driver.getInstance().openGame();
+        Driver.openGame();
     }
 }

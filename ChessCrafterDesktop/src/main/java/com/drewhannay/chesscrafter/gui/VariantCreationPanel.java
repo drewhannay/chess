@@ -21,7 +21,7 @@ public class VariantCreationPanel extends ChessPanel implements PieceMakerPanel.
         //mDropManager = new DropManager();
         mGlobalGlassPane = new GlassPane();
         mGlobalGlassPane.setOpaque(false);
-        Driver.getInstance().setGlassPane(mGlobalGlassPane);
+//        Driver.getInstance().setGlassPane(mGlobalGlassPane);
         m_motionAdapter = new MotionAdapter(mGlobalGlassPane);
         mPieceListPanel = new JPanel();
         mPieceListPanel.setOpaque(false);

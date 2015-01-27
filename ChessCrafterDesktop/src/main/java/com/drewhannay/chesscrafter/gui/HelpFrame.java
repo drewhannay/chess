@@ -15,7 +15,7 @@ public class HelpFrame extends JFrame {
         setTitle(Messages.getString("HelpFrame.help"));
         // setSize(825, 525);
         setResizable(true);
-        setLocationRelativeTo(Driver.getInstance());
+        setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         mHelpPanel = new ChessPanel();

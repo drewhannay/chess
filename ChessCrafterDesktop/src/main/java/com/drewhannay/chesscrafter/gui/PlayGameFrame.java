@@ -37,7 +37,7 @@ public class PlayGameFrame extends ChessFrame {
     private final PlayGamePanel mPanel;
 
     public PlayGameFrame(@NotNull Game game) {
-        mPanel = new PlayGamePanel(game);
+        mPanel = new PlayGamePanel(this, game);
         add(mPanel);
         pack();
 
@@ -56,12 +56,14 @@ public class PlayGameFrame extends ChessFrame {
                 mPanel.saveGame();
                 PreferenceUtility.clearTooltipListeners();
             });
+            ChessActions.NEW_GAME.getAction().setActionListener(event -> new NewGameDialog(PlayGameFrame.this));
         }
 
         @Override
         public void focusLost(FocusEvent e) {
             ChessActions.DECLARE_DRAW.getAction().removeActionListener();
             ChessActions.SAVE_GAME.getAction().removeActionListener();
+            ChessActions.NEW_GAME.getAction().removeActionListener();
         }
     };
 
@@ -74,13 +76,13 @@ public class PlayGameFrame extends ChessFrame {
         private JailPanel[] mJails;
         private GlassPane mGlobalGlassPane;
 
-        private PlayGamePanel(@NotNull Game game) {
+        private PlayGamePanel(@NotNull JFrame frame, @NotNull Game game) {
             mGame = game;
             mDropManager = new DropManager(this::boardRefresh, pair -> playMove(mGame.newMoveBuilder(pair.first, pair.second)));
             mGlobalGlassPane = new GlassPane();
             mGlobalGlassPane.setOpaque(false);
 
-            Driver.getInstance().setGlassPane(mGlobalGlassPane);
+            frame.setGlassPane(mGlobalGlassPane);
 
             initComponents();
         }
@@ -204,20 +206,21 @@ public class PlayGameFrame extends ChessFrame {
                         e.printStackTrace();
                     }
                     PreferenceUtility.clearTooltipListeners();
-                    Driver.getInstance().revertToMainPanel();
+                    // TODO: transition to review mode?
                     break;
                 case JOptionPane.NO_OPTION:
-                    Driver.getInstance().setUpNewGame();
+                    // TODO: hacky method call
+                    ChessActions.NEW_GAME.getAction().actionPerformed(null);
                     break;
                 case JOptionPane.CANCEL_OPTION:
                     PreferenceUtility.clearTooltipListeners();
-                    Driver.getInstance().revertToMainPanel();
+                    // TODO: transition to review mode?
                     break;
             }
         }
 
         public void saveGame() {
-            String fileName = JOptionPane.showInputDialog(Driver.getInstance(),
+            String fileName = JOptionPane.showInputDialog(null,
                     Messages.getString("PlayGamePanel.enterAName"), Messages.getString("PlayGamePanel.saving"), JOptionPane.PLAIN_MESSAGE);
             if (fileName == null)
                 return;
@@ -384,7 +387,6 @@ public class PlayGameFrame extends ChessFrame {
             // TODO: This assumes a two-player game
 //		add(new ChessTimerLabel(mTimers[0]), constraints);
 //		resetTimers();
-            Driver.getInstance().pack();
             boardRefresh();
             refreshStatus();
         }

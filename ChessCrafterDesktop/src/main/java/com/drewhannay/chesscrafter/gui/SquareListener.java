@@ -58,7 +58,6 @@ public class SquareListener extends DropAdapter implements MouseListener, Prefer
         mDropManager.setComponentList(destinations);
         mSquareLabel.hideIcon();
 
-        Driver.getInstance().setGlassPane(mGlassPane);
         Component component = event.getComponent();
 
         mGlassPane.setVisible(true);

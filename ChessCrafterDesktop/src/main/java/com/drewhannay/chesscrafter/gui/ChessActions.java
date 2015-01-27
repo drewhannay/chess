@@ -4,7 +4,6 @@ import com.drewhannay.chesscrafter.action.AboutAction;
 import com.drewhannay.chesscrafter.action.ChessAction;
 import com.drewhannay.chesscrafter.action.DeclareDrawAction;
 import com.drewhannay.chesscrafter.action.HelpAction;
-import com.drewhannay.chesscrafter.action.MainMenuAction;
 import com.drewhannay.chesscrafter.action.NewGameAction;
 import com.drewhannay.chesscrafter.action.OpenGameAction;
 import com.drewhannay.chesscrafter.action.PreferencesAction;
@@ -20,7 +19,6 @@ public enum ChessActions {
     ABOUT(new AboutAction()),
     DECLARE_DRAW(new DeclareDrawAction()),
     HELP(new HelpAction()),
-    MAIN_MENU(new MainMenuAction()),
     NEW_GAME(new NewGameAction()),
     OPEN_GAME(new OpenGameAction()),
     PREFERENCES(new PreferencesAction()),
@@ -46,7 +44,6 @@ public enum ChessActions {
 
         fileMenu.add(NEW_GAME.mAction);
         fileMenu.add(OPEN_GAME.mAction);
-        fileMenu.add(MAIN_MENU.mAction);
         fileMenu.add(PREFERENCES.mAction);
         fileMenu.add(QUIT.mAction);
 

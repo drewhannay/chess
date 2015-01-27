@@ -1,13 +1,9 @@
 package com.drewhannay.chesscrafter.utility;
 
-import com.drewhannay.chesscrafter.logic.GameBuilder;
-
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.net.URL;
 
 public final class FileUtility {
@@ -68,22 +64,21 @@ public final class FileUtility {
     }
 
     static {
-        if (System.getProperty("os.name").startsWith("Windows")) //$NON-NLS-1$ //$NON-NLS-2$
-        {
-            HIDDEN_DIR = System.getProperty("user.home") + "\\chess"; //$NON-NLS-1$ //$NON-NLS-2$
-            SLASH = "\\"; //$NON-NLS-1$
+        if (System.getProperty("os.name").startsWith("Windows")) {
+            HIDDEN_DIR = System.getProperty("user.home") + "\\chess";
+            SLASH = "\\";
 
             try {
                 Runtime rt = Runtime.getRuntime();
                 // try to make our folder hidden on Windows
-                rt.exec("attrib +H " + System.getProperty("user.home") + "\\chess"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                rt.exec("attrib +H " + System.getProperty("user.home") + "\\chess");
             } catch (Throwable t) {
                 t.printStackTrace();
             }
         } else {
             // if we're not on Windows, just add a period
-            HIDDEN_DIR = System.getProperty("user.home") + "/.chess"; //$NON-NLS-1$ //$NON-NLS-2$
-            SLASH = "/"; //$NON-NLS-1$
+            HIDDEN_DIR = System.getProperty("user.home") + "/.chess";
+            SLASH = "/";
         }
     }
 
@@ -91,10 +86,10 @@ public final class FileUtility {
         BufferedImage frontPage = null;
         String path = "/chess_logo.png";
         try {
-            URL resource = FileUtility.class.getResource(path); //$NON-NLS-1$
+            URL resource = FileUtility.class.getResource(path);
             frontPage = ImageIO.read(resource);
         } catch (IOException e) {
-            System.out.println(Messages.getString("cantFindPath") + path); //$NON-NLS-1$
+            System.out.println("Can't find path:" + path);
             e.printStackTrace();
         }
         return frontPage;
@@ -103,28 +98,16 @@ public final class FileUtility {
     public static void deletePiece(String pieceName) {
         File pieceFile = getPieceFile(pieceName);
         pieceFile.delete();
-        new File((getImagePath("l_" + pieceName + ".png"))).delete(); //$NON-NLS-1$ //$NON-NLS-2$
-        new File((getImagePath("d_" + pieceName + ".png"))).delete(); //$NON-NLS-1$ //$NON-NLS-2$
-    }
-
-    public static void writeGameBuilder(GameBuilder builder) {
-        try {
-            FileOutputStream f_out = new FileOutputStream(getVariantsFile(builder.getName()));
-            ObjectOutputStream out = new ObjectOutputStream(f_out);
-            out.writeObject(builder);
-            out.close();
-            f_out.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        new File((getImagePath("l_" + pieceName + ".png"))).delete();
+        new File((getImagePath("d_" + pieceName + ".png"))).delete();
     }
 
     private static final String HIDDEN_DIR;
-    private static final String IMAGES = "images"; //$NON-NLS-1$
-    private static final String VARIANTS = "variants"; //$NON-NLS-1$
-    private static final String PIECES = "pieces"; //$NON-NLS-1$
-    private static final String GAMES_IN_PROGRESS = "gamesInProgress"; //$NON-NLS-1$
-    private static final String COMPLETED_GAMES = "completedGames"; //$NON-NLS-1$
+    private static final String IMAGES = "images";
+    private static final String VARIANTS = "variants";
+    private static final String PIECES = "pieces";
+    private static final String GAMES_IN_PROGRESS = "gamesInProgress";
+    private static final String COMPLETED_GAMES = "completedGames";
 
     private static final String SLASH;
 }
