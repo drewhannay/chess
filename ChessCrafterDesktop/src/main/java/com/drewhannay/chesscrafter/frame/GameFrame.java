@@ -10,11 +10,11 @@ import org.jetbrains.annotations.NotNull;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 
-public class PlayGameFrame extends ChessFrame {
+public class GameFrame extends ChessFrame {
 
     private final GamePanel mPanel;
 
-    public PlayGameFrame(@NotNull Game game) {
+    public GameFrame(@NotNull Game game) {
         mPanel = new GamePanel(this, game);
         add(mPanel);
         pack();
@@ -34,7 +34,7 @@ public class PlayGameFrame extends ChessFrame {
                 mPanel.saveGame();
                 PreferenceUtility.clearTooltipListeners();
             });
-            ChessActions.NEW_GAME.getAction().setActionListener(event -> new NewGameDialog(PlayGameFrame.this));
+            ChessActions.NEW_GAME.getAction().setActionListener(event -> new NewGameDialog(GameFrame.this));
         }
 
         @Override

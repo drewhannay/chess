@@ -1,6 +1,6 @@
 package com.drewhannay.chesscrafter.dialog;
 
-import com.drewhannay.chesscrafter.frame.PlayGameFrame;
+import com.drewhannay.chesscrafter.frame.GameFrame;
 import com.drewhannay.chesscrafter.logic.GameBuilder;
 import com.drewhannay.chesscrafter.models.Game;
 import com.drewhannay.chesscrafter.utility.GuiUtility;
@@ -38,7 +38,7 @@ public class NewGameDialog extends JDialog {
         JButton humanPlayButton = new JButton(Messages.getString("NewGamePanel.humanPlay"));
         humanPlayButton.addActionListener(event -> {
             Game game = GameBuilder.buildGame(GameBuilder.getClassicConfiguration());
-            new PlayGameFrame(game);
+            new GameFrame(game);
             dispose();
         });
         constraints.gridy = 1;

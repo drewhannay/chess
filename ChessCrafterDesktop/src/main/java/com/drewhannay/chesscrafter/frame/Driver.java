@@ -270,7 +270,7 @@ public final class Driver extends ChessFrame {
                 // TODO: should read variant name from history
                 Game game = GameBuilder.buildGame(GameBuilder.getClassicConfiguration(), history);
 
-                new PlayGameFrame(game);
+                new GameFrame(game);
 //                setPanel();
                 poppedFrame.dispose();
             } catch (IOException ioe) {
