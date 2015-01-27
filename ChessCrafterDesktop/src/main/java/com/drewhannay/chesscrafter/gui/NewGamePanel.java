@@ -33,7 +33,7 @@ public class NewGamePanel extends ChessPanel {
         humanPlayButton.addActionListener(event -> {
             if (mPopupFrame == null) {
                 Game game = GameBuilder.buildGame(GameBuilder.getClassicConfiguration());
-                Driver.getInstance().setPanel(new PlayGamePanel(game));
+                new PlayGameFrame(game);
             }
         });
         constraints.gridy = 1;
@@ -56,7 +56,6 @@ public class NewGamePanel extends ChessPanel {
         mPopupFrame = new JFrame(Messages.getString("NewGamePanel.newGame"));
         mPopupFrame.setSize(325, 225);
         mPopupFrame.setResizable(false);
-        Driver.centerFrame();
         mPopupFrame.setLocationRelativeTo(Driver.getInstance());
         mPopupFrame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         mPopupFrame.addWindowListener(new WindowAdapter() {

@@ -29,7 +29,7 @@ public class PieceMakerPanel extends ChessPanel {
     }
 
     public PieceMakerPanel(PieceMenuPanel menuPanel) {
-        mLeaperCheckBox = new JCheckBox(Messages.getString("PieceMakerPanel.canJump"), false); //$NON-NLS-1$
+        mLeaperCheckBox = new JCheckBox(Messages.getString("PieceMakerPanel.canJump"), false);
         mPieceNameField = new JTextField(15);
         mNorthField = new JTextField(4);
         mNorthEastField = new JTextField(4);
@@ -42,18 +42,18 @@ public class PieceMakerPanel extends ChessPanel {
         mKnightOneField = new JTextField(4);
         mKnightTwoField = new JTextField(4);
         mBidirectionalMovementComboBox = new JComboBox();
-        mAddKnightMoveButton = new JButton(Messages.getString("PieceMakerPanel.add")); //$NON-NLS-1$
-        mRemoveKnightMoveButton = new JButton(Messages.getString("PieceMakerPanel.remove")); //$NON-NLS-1$
+        mAddKnightMoveButton = new JButton(Messages.getString("PieceMakerPanel.add"));
+        mRemoveKnightMoveButton = new JButton(Messages.getString("PieceMakerPanel.remove"));
         new PieceMakerPanel(null, menuPanel);
     }
 
     public PieceMakerPanel(String pieceName, PieceMenuPanel menuPanel) {
         mPieceMenuPanel = menuPanel;
-        mFrame = new JFrame(Messages.getString("PieceMakerPanel.pieceEditor")); //$NON-NLS-1$
+        mFrame = new JFrame(Messages.getString("PieceMakerPanel.pieceEditor"));
         mFrame.add(this);
         mFrame.setSize(400, 600);
         mFrame.setLocationRelativeTo(menuPanel);
-        mLeaperCheckBox = new JCheckBox(Messages.getString("PieceMakerPanel.canJump"), false); //$NON-NLS-1$
+        mLeaperCheckBox = new JCheckBox(Messages.getString("PieceMakerPanel.canJump"), false);
         mLeaperCheckBox.setOpaque(false);
         mLeaperCheckBox.setForeground(Color.white);
         mPieceNameField = new JTextField(15);
@@ -67,8 +67,8 @@ public class PieceMakerPanel extends ChessPanel {
         mNorthWestField = new JTextField(4);
         mKnightOneField = new JTextField(4);
         mKnightTwoField = new JTextField(4);
-        mAddKnightMoveButton = new JButton(Messages.getString("PieceMakerPanel.add")); //$NON-NLS-1$
-        mRemoveKnightMoveButton = new JButton(Messages.getString("PieceMakerPanel.remove")); //$NON-NLS-1$
+        mAddKnightMoveButton = new JButton(Messages.getString("PieceMakerPanel.add"));
+        mRemoveKnightMoveButton = new JButton(Messages.getString("PieceMakerPanel.remove"));
 
         PieceTypeBuilder builder = null;
         //TODO Fix editing pieces
@@ -112,8 +112,8 @@ public class PieceMakerPanel extends ChessPanel {
         namePanel.setOpaque(false);
         namePanel.setLayout(new FlowLayout());
 
-        namePanel.add(GuiUtility.createJLabel(Messages.getString("PieceMakerPanel.pieceName"))); //$NON-NLS-1$
-        mPieceNameField.setToolTipText(Messages.getString("PieceMakerPanel.enterNameOfNewPiece")); //$NON-NLS-1$
+        namePanel.add(GuiUtility.createJLabel(Messages.getString("PieceMakerPanel.pieceName")));
+        mPieceNameField.setToolTipText(Messages.getString("PieceMakerPanel.enterNameOfNewPiece"));
         if (builder != null)
             mPieceNameField.setText(builder.getName());
         GuiUtility.requestFocus(mPieceNameField);
@@ -123,18 +123,13 @@ public class PieceMakerPanel extends ChessPanel {
         constraints.gridy = 0;
         pieceCreationPanel.add(namePanel, constraints);
 
-        ImageIcon blankSquare = null;
-        try {
-            blankSquare = GuiUtility.createImageIcon(48, 48, "/WhiteSquare.png"); //$NON-NLS-1$
-        } catch (IOException e4) {
-            e4.printStackTrace();
-        }
+        ImageIcon blankSquare = GuiUtility.createSystemImageIcon(48, 48, "/WhiteSquare.png");
 
         blankSquare.setImage(blankSquare.getImage().getScaledInstance(48, 48, Image.SCALE_SMOOTH));
         final JPanel lightIconPanel = new JPanel();
         lightIconPanel.setLayout(new FlowLayout());
         lightIconPanel.setOpaque(false);
-        final JLabel lightIconLabel = GuiUtility.createJLabel(""); //$NON-NLS-1$
+        final JLabel lightIconLabel = GuiUtility.createJLabel("");
         lightIconLabel.setSize(48, 48);
 
         try {
@@ -145,15 +140,15 @@ public class PieceMakerPanel extends ChessPanel {
 
         if (builder != null) {
             try {
-                mLightImage = GuiUtility.createBufferedImage(48, 48, "l_" + builder.getName() + ".png"); //$NON-NLS-1$ //$NON-NLS-2$
-                mDarkImage = GuiUtility.createBufferedImage(48, 48, "d_" + builder.getName() + ".png"); //$NON-NLS-1$ //$NON-NLS-2$
+                mLightImage = GuiUtility.createBufferedImage(48, 48, "l_" + builder.getName() + ".png");
+                mDarkImage = GuiUtility.createBufferedImage(48, 48, "d_" + builder.getName() + ".png");
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
         }
 
-        final JButton lightImageButton = new JButton(Messages.getString("PieceMakerPanel.chooseLightImage")); //$NON-NLS-1$
-        lightImageButton.setToolTipText(Messages.getString("PieceMakerPanel.clickForLight")); //$NON-NLS-1$
+        final JButton lightImageButton = new JButton(Messages.getString("PieceMakerPanel.chooseLightImage"));
+        lightImageButton.setToolTipText(Messages.getString("PieceMakerPanel.clickForLight"));
         lightImageButton.addActionListener(new ImageButtonActionListener(lightIconLabel, false));
         lightIconPanel.add(lightImageButton);
         lightIconPanel.add(lightIconLabel);
@@ -165,7 +160,7 @@ public class PieceMakerPanel extends ChessPanel {
         final JPanel darkIconPanel = new JPanel();
         darkIconPanel.setLayout(new FlowLayout());
         darkIconPanel.setOpaque(false);
-        final JLabel darkIconLabel = GuiUtility.createJLabel(""); //$NON-NLS-1$
+        final JLabel darkIconLabel = GuiUtility.createJLabel("");
         darkIconLabel.setSize(48, 48);
 
         try {
@@ -174,8 +169,8 @@ public class PieceMakerPanel extends ChessPanel {
             e2.printStackTrace();
         }
 
-        final JButton darkImageButton = new JButton(Messages.getString("PieceMakerPanel.chooseDark")); //$NON-NLS-1$
-        darkImageButton.setToolTipText(Messages.getString("PieceMakerPanel.clickForDark")); //$NON-NLS-1$
+        final JButton darkImageButton = new JButton(Messages.getString("PieceMakerPanel.chooseDark"));
+        darkImageButton.setToolTipText(Messages.getString("PieceMakerPanel.clickForDark"));
         darkImageButton.addActionListener(new ImageButtonActionListener(darkIconLabel, true));
         darkIconPanel.add(darkImageButton);
         darkIconPanel.add(darkIconLabel);
@@ -187,30 +182,25 @@ public class PieceMakerPanel extends ChessPanel {
         //PieceMovements movements = builder == null ? null : builder.getPieceMovements();
         //PieceMovements movements = null;
 
-        /*mNorthField.setToolTipText(Messages.getString("PieceMakerPanel.north")); //$NON-NLS-1$
-        mNorthField.setText(builder == null ? "0" : "" + movements.getDistance(Direction.NORTH)); //$NON-NLS-1$ //$NON-NLS-2$
-        mNorthEastField.setToolTipText(Messages.getString("PieceMakerPanel.northEast")); //$NON-NLS-1$
-        mNorthEastField.setText(builder == null ? "0" : "" + movements.getDistance(Direction.NORTHEAST)); //$NON-NLS-1$ //$NON-NLS-2$
-        mNorthWestField.setToolTipText(Messages.getString("PieceMakerPanel.northwest")); //$NON-NLS-1$
-        mNorthWestField.setText(builder == null ? "0" : "" + movements.getDistance(Direction.NORTHWEST)); //$NON-NLS-1$ //$NON-NLS-2$
-        mEastField.setToolTipText(Messages.getString("PieceMakerPanel.east")); //$NON-NLS-1$
-        mEastField.setText(builder == null ? "0" : "" + movements.getDistance(Direction.EAST)); //$NON-NLS-1$ //$NON-NLS-2$
-        mSouthEastField.setToolTipText(Messages.getString("PieceMakerPanel.southEast")); //$NON-NLS-1$
-        mSouthEastField.setText(builder == null ? "0" : "" + movements.getDistance(Direction.SOUTHEAST)); //$NON-NLS-1$ //$NON-NLS-2$
-        mSouthField.setToolTipText(Messages.getString("PieceMakerPanel.south")); //$NON-NLS-1$
-        mSouthField.setText(builder == null ? "0" : "" + movements.getDistance(Direction.SOUTH)); //$NON-NLS-1$ //$NON-NLS-2$
-        mSouthWestField.setToolTipText(Messages.getString("PieceMakerPanel.southWest")); //$NON-NLS-1$
-        mSouthWestField.setText(builder == null ? "0" : "" + movements.getDistance(Direction.SOUTHWEST)); //$NON-NLS-1$ //$NON-NLS-2$
-        mWestField.setToolTipText(Messages.getString("PieceMakerPanel.west")); //$NON-NLS-1$
-        mWestField.setText(builder == null ? "0" : "" + movements.getDistance(Direction.WEST)); //$NON-NLS-1$ //$NON-NLS-2$
+        /*mNorthField.setToolTipText(Messages.getString("PieceMakerPanel.north"));
+        mNorthField.setText(builder == null ? "0" : "" + movements.getDistance(Direction.NORTH));
+        mNorthEastField.setToolTipText(Messages.getString("PieceMakerPanel.northEast"));
+        mNorthEastField.setText(builder == null ? "0" : "" + movements.getDistance(Direction.NORTHEAST));
+        mNorthWestField.setToolTipText(Messages.getString("PieceMakerPanel.northwest"));
+        mNorthWestField.setText(builder == null ? "0" : "" + movements.getDistance(Direction.NORTHWEST));
+        mEastField.setToolTipText(Messages.getString("PieceMakerPanel.east"));
+        mEastField.setText(builder == null ? "0" : "" + movements.getDistance(Direction.EAST));
+        mSouthEastField.setToolTipText(Messages.getString("PieceMakerPanel.southEast"));
+        mSouthEastField.setText(builder == null ? "0" : "" + movements.getDistance(Direction.SOUTHEAST));
+        mSouthField.setToolTipText(Messages.getString("PieceMakerPanel.south"));
+        mSouthField.setText(builder == null ? "0" : "" + movements.getDistance(Direction.SOUTH));
+        mSouthWestField.setToolTipText(Messages.getString("PieceMakerPanel.southWest"));
+        mSouthWestField.setText(builder == null ? "0" : "" + movements.getDistance(Direction.SOUTHWEST));
+        mWestField.setToolTipText(Messages.getString("PieceMakerPanel.west"));
+        mWestField.setText(builder == null ? "0" : "" + movements.getDistance(Direction.WEST));
         */
 
-        JLabel movementPictureHolder = null;
-        try {
-            movementPictureHolder = GuiUtility.createJLabel(GuiUtility.createImageIcon(130, 130, "/movement_directions.png")); //$NON-NLS-1$
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
+        JLabel movementPictureHolder = GuiUtility.createJLabel(GuiUtility.createSystemImageIcon(130, 130, "/movement_directions.png"));
 
         JPanel movement = new JPanel();
         movement.setLayout(new GridBagLayout());
@@ -249,10 +239,10 @@ public class PieceMakerPanel extends ChessPanel {
         movement.add(mSouthEastField, constraints);
 
         final JTextField distanceField = new JTextField(3);
-        distanceField.setToolTipText(Messages.getString("PieceMakerPanel.greatestSpaces")); //$NON-NLS-1$
+        distanceField.setToolTipText(Messages.getString("PieceMakerPanel.greatestSpaces"));
 
-        mKnightOneField.setToolTipText(Messages.getString("PieceMakerPanel.enterKnightLike")); //$NON-NLS-1$
-        mKnightTwoField.setToolTipText(Messages.getString("PieceMakerPanel.enterOtherDirection")); //$NON-NLS-1$
+        mKnightOneField.setToolTipText(Messages.getString("PieceMakerPanel.enterKnightLike"));
+        mKnightTwoField.setToolTipText(Messages.getString("PieceMakerPanel.enterOtherDirection"));
         mKnightOneField.addKeyListener(getKnightFieldKeyListener());
         mKnightTwoField.addKeyListener(getKnightFieldKeyListener());
 
@@ -260,11 +250,11 @@ public class PieceMakerPanel extends ChessPanel {
         mAddKnightMoveButton.addActionListener(event -> {
             mBidirectionalMovementComboBox.setEnabled(true);
             mRemoveKnightMoveButton.setEnabled(true);
-            String toAdd = mKnightOneField.getText() + " x " + mKnightTwoField.getText(); //$NON-NLS-1$
+            String toAdd = mKnightOneField.getText() + " x " + mKnightTwoField.getText();
             mTempBidirectionalMovements.add(toAdd);
             mBidirectionalMovementComboBox.addItem(toAdd);
-            mKnightOneField.setText(""); //$NON-NLS-1$
-            mKnightTwoField.setText(""); //$NON-NLS-1$
+            mKnightOneField.setText("");
+            mKnightTwoField.setText("");
             mAddKnightMoveButton.setEnabled(false);
         });
 
@@ -279,13 +269,13 @@ public class PieceMakerPanel extends ChessPanel {
             mRemoveKnightMoveButton.setEnabled(mBidirectionalMovementComboBox.getItemCount() != 0);
         });
 
-        mLeaperCheckBox.setToolTipText(Messages.getString("PieceMakerPanel.pressForJump")); //$NON-NLS-1$
+        mLeaperCheckBox.setToolTipText(Messages.getString("PieceMakerPanel.pressForJump"));
 //        if (builder != null)
 //            mLeaperCheckBox.setSelected(builder.isLeaper());
 
         final JPanel knightMovementPanel = new JPanel();
         knightMovementPanel.setOpaque(false);
-        knightMovementPanel.setToolTipText(Messages.getString("PieceMakerPanel.useForKnight")); //$NON-NLS-1$
+        knightMovementPanel.setToolTipText(Messages.getString("PieceMakerPanel.useForKnight"));
         knightMovementPanel.setLayout(new GridBagLayout());
 
         constraints.anchor = GridBagConstraints.CENTER;
@@ -312,7 +302,7 @@ public class PieceMakerPanel extends ChessPanel {
         constraints.gridy = 0;
         constraints.gridheight = 1;
         constraints.gridwidth = 1;
-        inputPanel.add(GuiUtility.createJLabel(Messages.getString("PieceMakerPanel.51")), constraints); //$NON-NLS-1$
+        inputPanel.add(GuiUtility.createJLabel(Messages.getString("PieceMakerPanel.51")), constraints);
 
         constraints.anchor = GridBagConstraints.CENTER;
         constraints.gridx = 2;
@@ -352,7 +342,7 @@ public class PieceMakerPanel extends ChessPanel {
         constraints.gridx = 0;
         constraints.gridy = 0;
         constraints.anchor = GridBagConstraints.CENTER;
-        movementPanel.add(GuiUtility.createJLabel(Messages.getString("PieceMakerPanel.normalMovementHTML")), constraints); //$NON-NLS-1$
+        movementPanel.add(GuiUtility.createJLabel(Messages.getString("PieceMakerPanel.normalMovementHTML")), constraints);
         constraints.insets = new Insets(5, 0, 0, 0);
         constraints.gridx = 0;
         constraints.gridy = 1;
@@ -366,7 +356,7 @@ public class PieceMakerPanel extends ChessPanel {
         constraints.insets = new Insets(5, 0, 5, 0);
         constraints.gridx = 0;
         constraints.gridy = 6;
-        movementPanel.add(GuiUtility.createJLabel(Messages.getString("PieceMakerPanel.knightLikeMovementHTML")), constraints); //$NON-NLS-1$
+        movementPanel.add(GuiUtility.createJLabel(Messages.getString("PieceMakerPanel.knightLikeMovementHTML")), constraints);
         constraints.gridx = 0;
         constraints.gridy = 7;
         movementPanel.add(knightMovementPanel, constraints);
@@ -375,15 +365,15 @@ public class PieceMakerPanel extends ChessPanel {
         constraints.gridy = 5;
         pieceCreationPanel.add(movementPanel, constraints);
 
-        final JButton savePieceButton = new JButton(Messages.getString("PieceMakerPanel.saveAndReturn")); //$NON-NLS-1$
-        savePieceButton.setToolTipText(Messages.getString("PieceMakerPanel.pressToSave")); //$NON-NLS-1$
+        final JButton savePieceButton = new JButton(Messages.getString("PieceMakerPanel.saveAndReturn"));
+        savePieceButton.setToolTipText(Messages.getString("PieceMakerPanel.pressToSave"));
         savePieceButton.addActionListener(event -> {
             String pieceName = mPieceNameField.getText().trim();
             //TODO fix this when checking for an existing piece
             if (pieceName.isEmpty() || PieceTypeBuilder.parsePieceType(mPieceNameField.getText()) != null) {
                 JOptionPane.showMessageDialog(
                         PieceMakerPanel.this,
-                        Messages.getString("PieceMakerPanel.enterUniqueName"), Messages.getString("PieceMakerPanel.invalidPieceName"), //$NON-NLS-1$ //$NON-NLS-2$
+                        Messages.getString("PieceMakerPanel.enterUniqueName"), Messages.getString("PieceMakerPanel.invalidPieceName"),
                         JOptionPane.PLAIN_MESSAGE);
                 return;
             }
@@ -420,7 +410,7 @@ public class PieceMakerPanel extends ChessPanel {
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(
                         PieceMakerPanel.this,
-                        Messages.getString("PieceMakerPanel.cannotWriteImageFiles"), Messages.getString("PieceMakerPanel.ImageError"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
+                        Messages.getString("PieceMakerPanel.cannotWriteImageFiles"), Messages.getString("PieceMakerPanel.ImageError"), JOptionPane.PLAIN_MESSAGE);
                 return;
             }
 
@@ -437,15 +427,15 @@ public class PieceMakerPanel extends ChessPanel {
             PieceMakerPanel.this.removeAll();
         });
 
-        final JButton cancelButton = new JButton(Messages.getString("PieceMakerPanel.cancel")); //$NON-NLS-1$
-        cancelButton.setToolTipText(Messages.getString("PieceMakerPanel.pressToReturn")); //$NON-NLS-1$
+        final JButton cancelButton = new JButton(Messages.getString("PieceMakerPanel.cancel"));
+        cancelButton.setToolTipText(Messages.getString("PieceMakerPanel.pressToReturn"));
         cancelButton.addActionListener(event -> {
             if (mPieceNameField.getText().trim().isEmpty()) {
                 mFrame.dispose();
                 PieceMakerPanel.this.removeAll();
             } else {
                 switch (JOptionPane.showConfirmDialog(PieceMakerPanel.this,
-                        Messages.getString("PieceMakerPanel.ifYouContinue"), Messages.getString("PieceMakerPanel.pieceMaker"), //$NON-NLS-1$ //$NON-NLS-2$
+                        Messages.getString("PieceMakerPanel.ifYouContinue"), Messages.getString("PieceMakerPanel.pieceMaker"),
                         JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE)) {
                     case JOptionPane.YES_OPTION:
                         mFrame.dispose();
@@ -516,7 +506,7 @@ public class PieceMakerPanel extends ChessPanel {
 	}
 	*/
     private boolean isIntegerDistance(JTextField textField) {
-        if (textField.getText().equals("")) //$NON-NLS-1$
+        if (textField.getText().equals(""))
             return false;
         try {
             Integer.parseInt(textField.getText());
@@ -525,8 +515,8 @@ public class PieceMakerPanel extends ChessPanel {
             JOptionPane
                     .showMessageDialog(
                             PieceMakerPanel.this,
-                            Messages.getString("PieceMakerPanel.allMovementDist") + textField.getToolTipText() //$NON-NLS-1$
-                                    + Messages.getString("PieceMakerPanel.directionBox"), Messages.getString("PieceMakerPanel.error"), JOptionPane.PLAIN_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
+                            Messages.getString("PieceMakerPanel.allMovementDist") + textField.getToolTipText()
+                                    + Messages.getString("PieceMakerPanel.directionBox"), Messages.getString("PieceMakerPanel.error"), JOptionPane.PLAIN_MESSAGE);
             return false;
         }
     }
@@ -558,22 +548,22 @@ public class PieceMakerPanel extends ChessPanel {
         public void actionPerformed(ActionEvent event) {
             Object[] options =
                     new String[]{
-                            Messages.getString("PieceMakerPanel.browseComputer"), Messages.getString("PieceMakerPanel.imageFromInternet"), Messages.getString("PieceMakerPanel.cancel")}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                            Messages.getString("PieceMakerPanel.browseComputer"), Messages.getString("PieceMakerPanel.imageFromInternet"), Messages.getString("PieceMakerPanel.cancel")};
 
             switch (JOptionPane.showOptionDialog(PieceMakerPanel.this,
-                    Messages.getString("PieceMakerPanel.whereFrom"), Messages.getString("PieceMakerPanel.chooseImage"), //$NON-NLS-1$ //$NON-NLS-2$
+                    Messages.getString("PieceMakerPanel.whereFrom"), Messages.getString("PieceMakerPanel.chooseImage"),
                     JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0])) {
                 case JOptionPane.YES_OPTION:
-                    JFileChooser fileChooser = new JFileChooser("~/"); //$NON-NLS-1$
+                    JFileChooser fileChooser = new JFileChooser("~/");
                     fileChooser.setFileFilter(new FileFilter() {
                         @Override
                         public String getDescription() {
-                            return "PNG Files"; //$NON-NLS-1$
+                            return "PNG Files";
                         }
 
                         @Override
                         public boolean accept(File f) {
-                            if (f.isDirectory() || f.getName().endsWith(".png")) //$NON-NLS-1$
+                            if (f.isDirectory() || f.getName().endsWith(".png"))
                                 return true;
                             else
                                 return false;
@@ -598,7 +588,7 @@ public class PieceMakerPanel extends ChessPanel {
                     break;
                 case JOptionPane.NO_OPTION:
                     String url = JOptionPane.showInputDialog(PieceMakerPanel.this,
-                            Messages.getString("PieceMakerPanel.enterURL"), Messages.getString("PieceMakerPanel.inputURL"), //$NON-NLS-1$ //$NON-NLS-2$
+                            Messages.getString("PieceMakerPanel.enterURL"), Messages.getString("PieceMakerPanel.inputURL"),
                             JOptionPane.PLAIN_MESSAGE);
                     try {
                         if (m_isDarkImage) {

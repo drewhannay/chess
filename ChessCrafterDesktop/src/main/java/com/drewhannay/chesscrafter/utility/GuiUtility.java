@@ -44,8 +44,16 @@ public final class GuiUtility {
         });
     }
 
-    public static ImageIcon createImageIcon(int imageWidth, int imageHeight, String imageLocation) throws IOException {
-        return createImageIcon(imageWidth, imageHeight, imageLocation, true);
+    /**
+     * Should only be called for images that are bundled with the app.
+     * Will crash the app if the image cannot be found.
+     */
+    public static ImageIcon createSystemImageIcon(int imageWidth, int imageHeight, String imageLocation) {
+        try {
+            return createImageIcon(imageWidth, imageHeight, imageLocation, true);
+        } catch (IOException e) {
+            throw new RuntimeException("Cannot find image:" + imageLocation);
+        }
     }
 
     public static BufferedImage createBufferedImage(int width, int height, String name) throws IOException {

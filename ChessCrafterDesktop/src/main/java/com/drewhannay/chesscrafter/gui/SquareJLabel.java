@@ -7,16 +7,16 @@ import com.drewhannay.chesscrafter.utility.PieceIconUtility;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
 
 public class SquareJLabel extends JLabel {
     public static final Color HIGHLIGHT_COLOR = new Color(20, 129, 191);
     public static final Color THREAT_COLOR = new Color(120, 20, 20);
-    private Color mBackgroundColor;
 
     private static final long serialVersionUID = -5060622037769752836L;
 
-    private static ImageIcon s_uninhabitableIcon;
+    private final static ImageIcon UNINHABITABLE_ICON = GuiUtility.createSystemImageIcon(48, 48, "/Uninhabitable.png");
+
+    private Color mBackgroundColor;
 
     private final BoardCoordinate mBoardCoordinate;
     private Piece mPiece;
@@ -55,9 +55,13 @@ public class SquareJLabel extends JLabel {
         setIcon(null);
     }
 
-    public void setImageScale(int newImageScale){ mImageScale = newImageScale;}
+    public void setImageScale(int newImageScale) {
+        mImageScale = newImageScale;
+    }
 
-    public int getImageScale(){ return mImageScale ;}
+    public int getImageScale() {
+        return mImageScale;
+    }
 
     public void setPiece(Piece piece) {
         mPiece = piece;
@@ -69,7 +73,7 @@ public class SquareJLabel extends JLabel {
      */
     public void refresh() {
         if (!mIsHabitable) {
-            setIcon(s_uninhabitableIcon);
+            setIcon(UNINHABITABLE_ICON);
             return;
         }
 
@@ -134,13 +138,5 @@ public class SquareJLabel extends JLabel {
     @Override
     public String toString() {
         return getCoordinates().toString();
-    }
-
-    static {
-        try {
-            s_uninhabitableIcon = GuiUtility.createImageIcon(48, 48, "/Uninhabitable.png"); //$NON-NLS-1$
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
     }
 }

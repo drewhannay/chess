@@ -6,16 +6,15 @@ import com.drewhannay.chesscrafter.utility.Messages;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
 import java.net.URI;
 
 public class AboutFrame extends JFrame {
-    public AboutFrame(JPanel mainPanel) {
-        initGUIComponents(mainPanel);
+    public AboutFrame() {
+        initGUIComponents();
     }
 
-    private void initGUIComponents(JPanel mainPanel) {
-        setTitle(Messages.getString("AboutFrame.about") + AppConstants.APP_NAME); //$NON-NLS-1$
+    private void initGUIComponents() {
+        setTitle(Messages.getString("AboutFrame.about") + AppConstants.APP_NAME);
         setSize(350, 450);
         setResizable(false);
         setLocationRelativeTo(this);
@@ -25,21 +24,15 @@ public class AboutFrame extends JFrame {
         mAboutPanel = new ChessPanel();
         mAboutPanel.setLayout(new GridBagLayout());
 
-        JLabel frontPageImage = null;
-        JLabel piecePicture = null;
-        try {
-            frontPageImage = new JLabel(GuiUtility.createImageIcon(250, 250, "/chess_logo.png")); //$NON-NLS-1$
-            piecePicture = new JLabel(GuiUtility.createImageIcon(48, 48, "/d_King.png")); //$NON-NLS-1$
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
+        JLabel frontPageImage = new JLabel(GuiUtility.createSystemImageIcon(250, 250, "/chess_logo.png"));
+        JLabel piecePicture = new JLabel(GuiUtility.createSystemImageIcon(48, 48, "/d_King.png"));
 
-        Font font = new Font(Messages.getString("AboutFrame.verdana"), Font.BOLD, 18); //$NON-NLS-1$
-        JLabel title = GuiUtility.createJLabel(AppConstants.APP_NAME + Messages.getString("AboutFrame.newline")); //$NON-NLS-1$
+        Font font = new Font(Messages.getString("AboutFrame.verdana"), Font.BOLD, 18);
+        JLabel title = GuiUtility.createJLabel(AppConstants.APP_NAME + Messages.getString("AboutFrame.newline"));
         title.setFont(font);
 
-        JLabel versionLabel = GuiUtility.createJLabel(Messages.getString("AboutFrame.version")); //$NON-NLS-1$
-        JLabel visitSiteLabel = GuiUtility.createJLabel(Messages.getString("AboutFrame.visitOurSite")); //$NON-NLS-1$
+        JLabel versionLabel = GuiUtility.createJLabel(Messages.getString("AboutFrame.version"));
+        JLabel visitSiteLabel = GuiUtility.createJLabel(Messages.getString("AboutFrame.visitOurSite"));
 
         JButton siteButton = new JButton();
         siteButton.setIcon(piecePicture.getIcon());
