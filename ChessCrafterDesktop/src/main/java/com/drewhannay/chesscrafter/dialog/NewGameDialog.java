@@ -11,8 +11,12 @@ import java.awt.*;
 
 public class NewGameDialog extends JDialog {
 
-    public NewGameDialog(JFrame owner) {
+    private final GameFrame mGameFrame;
+
+    public NewGameDialog(GameFrame owner) {
         super(owner, true);
+
+        mGameFrame = owner;
 
         setSize(400, 400);
         initGuiComponents();
@@ -38,7 +42,7 @@ public class NewGameDialog extends JDialog {
         JButton humanPlayButton = new JButton(Messages.getString("NewGamePanel.humanPlay"));
         humanPlayButton.addActionListener(event -> {
             Game game = GameBuilder.buildGame(GameBuilder.getClassicConfiguration());
-            new GameFrame(game);
+            mGameFrame.addGame(game);
             dispose();
         });
         constraints.gridy = 1;
