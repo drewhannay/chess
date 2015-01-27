@@ -27,7 +27,7 @@ public class ChessFrame extends JFrame {
         setLocationRelativeTo(null);
 
         setJMenuBar(ChessActions.createJMenuBar());
-        setSize(685, 450);
+        setPreferredSize(new Dimension(685, 450));
 
         initComponents();
 
