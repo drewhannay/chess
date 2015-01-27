@@ -1,6 +1,5 @@
 package com.drewhannay.chesscrafter.gui;
 
-import com.drewhannay.chesscrafter.utility.AppConstants;
 import com.drewhannay.chesscrafter.utility.GuiUtility;
 import com.drewhannay.chesscrafter.utility.Messages;
 
@@ -13,7 +12,7 @@ public class HelpFrame extends JFrame {
     }
 
     private void initGUIComponents() {
-        setTitle(Messages.getString("HelpFrame.help")); //$NON-NLS-1$
+        setTitle(Messages.getString("HelpFrame.help"));
         // setSize(825, 525);
         setResizable(true);
         setLocationRelativeTo(Driver.getInstance());
@@ -53,27 +52,27 @@ public class HelpFrame extends JFrame {
         JTabbedPane helpTypesTabbedPane = new JTabbedPane();
         helpTypesTabbedPane.setOpaque(false);
         helpTypesTabbedPane
-                .addTab(Messages.getString("HelpFrame.generalHelp"), null, generalHelpScrollPane, Messages.getString("HelpFrame.clickForGeneralHelp") + AppConstants.APP_NAME); //$NON-NLS-1$ //$NON-NLS-2$
+                .addTab(Messages.getString("HelpFrame.generalHelp"), null, generalHelpScrollPane);
         helpTypesTabbedPane
-                .addTab(Messages.getString("HelpFrame.gamePlayHelp"), null, gamePlayHelpScrollPane, Messages.getString("HelpFrame.clickForHelpPlaying")); //$NON-NLS-1$ //$NON-NLS-2$
+                .addTab(Messages.getString("HelpFrame.gamePlayHelp"), null, gamePlayHelpScrollPane);
         helpTypesTabbedPane
-                .addTab(Messages.getString("HelpFrame.variantHelp"), null, variantMakingHelpScrollPane, Messages.getString("HelpFrame.clickForNewGameHelp")); //$NON-NLS-1$ //$NON-NLS-2$
+                .addTab(Messages.getString("HelpFrame.variantHelp"), null, variantMakingHelpScrollPane);
         helpTypesTabbedPane
-                .addTab(Messages.getString("HelpFrame.pieceMakingHelp"), null, pieceMakingHelpScrollPane, Messages.getString("HelpFrame.clickForPieceMakingHelp")); //$NON-NLS-1$ //$NON-NLS-2$
+                .addTab(Messages.getString("HelpFrame.pieceMakingHelp"), null, pieceMakingHelpScrollPane);
         helpTypesTabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 
         mHelpPanel.add(helpTypesTabbedPane, BorderLayout.CENTER);
 
-        JLabel gamePlayHelpText = GuiUtility.createJLabel(Messages.getString("HelpFrame.gamePlayText")); //$NON-NLS-1$
+        JLabel gamePlayHelpText = GuiUtility.createJLabel(Messages.getString("HelpFrame.gamePlayText"));
         gamePlayHelpPanel.add(gamePlayHelpText);
 
-        JLabel generalHelpText = GuiUtility.createJLabel(Messages.getString("HelpFrame.generalHelpText")); //$NON-NLS-1$
+        JLabel generalHelpText = GuiUtility.createJLabel(Messages.getString("HelpFrame.generalHelpText"));
         generalHelpPanel.add(generalHelpText);
 
-        JLabel variantMakingHelpText = GuiUtility.createJLabel(Messages.getString("HelpFrame.variantHelpText")); //$NON-NLS-1$
+        JLabel variantMakingHelpText = GuiUtility.createJLabel(Messages.getString("HelpFrame.variantHelpText"));
         variantMakingHelpPanel.add(variantMakingHelpText);
 
-        JLabel pieceMakingHelpText = GuiUtility.createJLabel(Messages.getString("HelpFrame.pieceOptionsText")); //$NON-NLS-1$
+        JLabel pieceMakingHelpText = GuiUtility.createJLabel(Messages.getString("HelpFrame.pieceOptionsText"));
         pieceMakingHelpPanel.add(pieceMakingHelpText);
 
         add(mHelpPanel);
