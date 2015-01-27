@@ -26,11 +26,12 @@ import java.io.IOException;
 public class GameFrame extends ChessFrame {
 
     private final JTabbedPane mTabbedPane;
+    private int mGameCount;
 
     public GameFrame(@NotNull Game game) {
-
+        mGameCount = 1;
         mTabbedPane = new JTabbedPane();
-        addGame(game);
+        addGame(game, null);
         add(mTabbedPane);
         pack();
 
@@ -38,10 +39,16 @@ public class GameFrame extends ChessFrame {
         addWindowFocusListener(mWindowFocusListener);
     }
 
-    public void addGame(@NotNull Game game) {
+    public void addGame(@NotNull Game game, String gameName) {
         GamePanel panel = new GamePanel(this, game);
-        mTabbedPane.addTab(game.getGameType(), panel);
+        if(gameName != null)
+            mTabbedPane.addTab(gameName + " (" + game.getGameType() + ")", panel);
+        else if(mGameCount == 1)
+            mTabbedPane.addTab(game.getGameType(), panel);
+        else
+            mTabbedPane.addTab(game.getGameType() + " " + mGameCount, panel);
         mTabbedPane.setSelectedComponent(panel);
+        mGameCount++;
     }
 
     private final WindowFocusListener mWindowFocusListener = new WindowFocusListener() {
@@ -107,7 +114,7 @@ public class GameFrame extends ChessFrame {
                 History history = GsonUtility.fromJson(jsonElement, History.class);
                 // TODO: should read variant name from history
                 Game game = GameBuilder.buildGame(GameBuilder.getClassicConfiguration(), history);
-                addGame(game);
+                addGame(game, fileName);
 
                 poppedFrame.dispose();
             } catch (IOException ioe) {
