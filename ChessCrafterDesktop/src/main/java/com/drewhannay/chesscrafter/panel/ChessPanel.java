@@ -1,10 +1,10 @@
-package com.drewhannay.chesscrafter.gui;
+package com.drewhannay.chesscrafter.panel;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class ChessPanel extends JPanel {
-    ChessPanel() {
+    public ChessPanel() {
         setOpaque(false);
     }
 

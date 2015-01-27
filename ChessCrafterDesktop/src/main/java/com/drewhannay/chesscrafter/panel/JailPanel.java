@@ -1,5 +1,6 @@
-package com.drewhannay.chesscrafter.gui;
+package com.drewhannay.chesscrafter.panel;
 
+import com.drewhannay.chesscrafter.label.SquareJLabel;
 import com.drewhannay.chesscrafter.models.BoardCoordinate;
 import com.drewhannay.chesscrafter.models.Piece;
 import com.drewhannay.chesscrafter.utility.GuiUtility;
@@ -30,14 +31,15 @@ public class JailPanel extends JPanel {
         setPreferredSize(new Dimension((mJailDimension + 1) * 25, (mJailDimension + 1) * 25));
         createGrid();
     }
-    public void rescaleBoard(double panelWidth, double panelHeight){
+
+    public void rescaleBoard(double panelWidth, double panelHeight) {
         double jailScale = panelHeight * .30;
         double scale = panelHeight / panelWidth;
-        if(scale > .75) {
+        if (scale > .75) {
             jailScale = panelHeight * (.30 - (scale - .75) / 1.75);
         }
         jailScale = jailScale / mJailDimension;
-        if(jailScale > 0) {
+        if (jailScale > 0) {
             setPreferredSize(new Dimension(mJailDimension * (int) jailScale, mJailDimension * (int) jailScale));
             jailScale = jailScale * .9;
             for (int y = mJailDimension; y > 0; y--) {
@@ -80,7 +82,7 @@ public class JailPanel extends JPanel {
                 label.refresh();
     }
 
-    public int getJailDimension(){
+    public int getJailDimension() {
         return mJailDimension;
     }
 }

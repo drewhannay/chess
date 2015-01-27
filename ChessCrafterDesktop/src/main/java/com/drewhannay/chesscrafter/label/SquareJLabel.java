@@ -1,4 +1,4 @@
-package com.drewhannay.chesscrafter.gui;
+package com.drewhannay.chesscrafter.label;
 
 import com.drewhannay.chesscrafter.models.BoardCoordinate;
 import com.drewhannay.chesscrafter.models.Piece;

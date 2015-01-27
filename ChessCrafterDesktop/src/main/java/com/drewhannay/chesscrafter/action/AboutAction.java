@@ -1,6 +1,6 @@
 package com.drewhannay.chesscrafter.action;
 
-import com.drewhannay.chesscrafter.gui.AboutFrame;
+import com.drewhannay.chesscrafter.frame.AboutFrame;
 import com.drewhannay.chesscrafter.utility.AppConstants;
 import com.drewhannay.chesscrafter.utility.Messages;
 

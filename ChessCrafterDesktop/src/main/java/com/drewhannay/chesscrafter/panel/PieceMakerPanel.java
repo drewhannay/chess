@@ -1,4 +1,4 @@
-package com.drewhannay.chesscrafter.gui;
+package com.drewhannay.chesscrafter.panel;
 
 import com.drewhannay.chesscrafter.logic.PieceTypeBuilder;
 import com.drewhannay.chesscrafter.models.Direction;

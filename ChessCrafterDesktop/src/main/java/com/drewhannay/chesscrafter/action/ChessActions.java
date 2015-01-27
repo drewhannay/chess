@@ -1,14 +1,5 @@
-package com.drewhannay.chesscrafter.gui;
+package com.drewhannay.chesscrafter.action;
 
-import com.drewhannay.chesscrafter.action.AboutAction;
-import com.drewhannay.chesscrafter.action.ChessAction;
-import com.drewhannay.chesscrafter.action.DeclareDrawAction;
-import com.drewhannay.chesscrafter.action.HelpAction;
-import com.drewhannay.chesscrafter.action.NewGameAction;
-import com.drewhannay.chesscrafter.action.OpenGameAction;
-import com.drewhannay.chesscrafter.action.PreferencesAction;
-import com.drewhannay.chesscrafter.action.QuitAction;
-import com.drewhannay.chesscrafter.action.SaveGameAction;
 import com.drewhannay.chesscrafter.utility.Messages;
 import org.jetbrains.annotations.NotNull;
 

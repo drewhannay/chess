@@ -1,7 +1,8 @@
-package com.drewhannay.chesscrafter.gui;
+package com.drewhannay.chesscrafter.panel;
 
 import com.drewhannay.chesscrafter.dragNdrop.GlassPane;
 import com.drewhannay.chesscrafter.dragNdrop.MotionAdapter;
+import com.drewhannay.chesscrafter.label.SquareJLabel;
 import com.drewhannay.chesscrafter.logic.GameBuilder;
 import com.drewhannay.chesscrafter.models.Board;
 import com.drewhannay.chesscrafter.models.BoardSize;

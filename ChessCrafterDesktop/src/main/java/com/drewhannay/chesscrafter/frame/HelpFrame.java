@@ -1,5 +1,6 @@
-package com.drewhannay.chesscrafter.gui;
+package com.drewhannay.chesscrafter.frame;
 
+import com.drewhannay.chesscrafter.panel.ChessPanel;
 import com.drewhannay.chesscrafter.utility.GuiUtility;
 import com.drewhannay.chesscrafter.utility.Messages;
 

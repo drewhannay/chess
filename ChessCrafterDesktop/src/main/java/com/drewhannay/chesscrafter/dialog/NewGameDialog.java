@@ -1,5 +1,6 @@
-package com.drewhannay.chesscrafter.gui;
+package com.drewhannay.chesscrafter.dialog;
 
+import com.drewhannay.chesscrafter.frame.PlayGameFrame;
 import com.drewhannay.chesscrafter.logic.GameBuilder;
 import com.drewhannay.chesscrafter.models.Game;
 import com.drewhannay.chesscrafter.utility.GuiUtility;

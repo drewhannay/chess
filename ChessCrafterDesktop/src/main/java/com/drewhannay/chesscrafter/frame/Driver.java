@@ -1,10 +1,13 @@
-package com.drewhannay.chesscrafter.gui;
+package com.drewhannay.chesscrafter.frame;
 
 import com.drewhannay.chesscrafter.action.NewGameAction;
 import com.drewhannay.chesscrafter.action.OpenGameAction;
 import com.drewhannay.chesscrafter.logic.GameBuilder;
 import com.drewhannay.chesscrafter.models.Game;
 import com.drewhannay.chesscrafter.models.History;
+import com.drewhannay.chesscrafter.panel.ChessPanel;
+import com.drewhannay.chesscrafter.panel.PieceMenuPanel;
+import com.drewhannay.chesscrafter.panel.VariantMenuPanel;
 import com.drewhannay.chesscrafter.utility.FileUtility;
 import com.drewhannay.chesscrafter.utility.GsonUtility;
 import com.drewhannay.chesscrafter.utility.GuiUtility;

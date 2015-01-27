@@ -1,5 +1,6 @@
-package com.drewhannay.chesscrafter.gui;
+package com.drewhannay.chesscrafter.frame;
 
+import com.drewhannay.chesscrafter.action.ChessActions;
 import com.drewhannay.chesscrafter.utility.AppConstants;
 import com.drewhannay.chesscrafter.utility.FileUtility;
 import com.google.common.base.Preconditions;

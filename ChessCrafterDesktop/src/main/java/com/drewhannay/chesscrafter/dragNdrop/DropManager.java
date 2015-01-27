@@ -1,6 +1,6 @@
 package com.drewhannay.chesscrafter.dragNdrop;
 
-import com.drewhannay.chesscrafter.gui.SquareJLabel;
+import com.drewhannay.chesscrafter.label.SquareJLabel;
 import com.drewhannay.chesscrafter.models.BoardCoordinate;
 import com.drewhannay.chesscrafter.utility.Pair;
 import com.drewhannay.chesscrafter.utility.RunnableOfT;

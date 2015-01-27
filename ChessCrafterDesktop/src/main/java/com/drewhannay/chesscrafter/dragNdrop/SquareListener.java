@@ -1,9 +1,6 @@
-package com.drewhannay.chesscrafter.gui;
+package com.drewhannay.chesscrafter.dragNdrop;
 
-import com.drewhannay.chesscrafter.dragNdrop.DropAdapter;
-import com.drewhannay.chesscrafter.dragNdrop.DropEvent;
-import com.drewhannay.chesscrafter.dragNdrop.DropManager;
-import com.drewhannay.chesscrafter.dragNdrop.GlassPane;
+import com.drewhannay.chesscrafter.label.SquareJLabel;
 import com.drewhannay.chesscrafter.models.BoardCoordinate;
 import com.drewhannay.chesscrafter.models.Piece;
 import com.drewhannay.chesscrafter.utility.PieceIconUtility;

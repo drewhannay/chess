@@ -1,8 +1,10 @@
-package com.drewhannay.chesscrafter.gui;
+package com.drewhannay.chesscrafter.panel;
 
 import com.drewhannay.chesscrafter.dragNdrop.DropManager;
 import com.drewhannay.chesscrafter.dragNdrop.GlassPane;
 import com.drewhannay.chesscrafter.dragNdrop.MotionAdapter;
+import com.drewhannay.chesscrafter.dragNdrop.SquareListener;
+import com.drewhannay.chesscrafter.label.SquareJLabel;
 import com.drewhannay.chesscrafter.models.Board;
 import com.drewhannay.chesscrafter.models.BoardCoordinate;
 import com.drewhannay.chesscrafter.models.BoardSize;
@@ -57,10 +59,10 @@ public class BoardPanel extends JPanel {
         createGrid();
     }
 
-    public void rescaleBoard(double panelWidth, double panelHeight){
+    public void rescaleBoard(double panelWidth, double panelHeight) {
         double boardScale = panelHeight * .85;
         double scale = panelHeight / panelWidth;
-        if(scale > .75) {
+        if (scale > .75) {
             boardScale = panelHeight * (.80 - (scale - .75));
         }
         boardScale = boardScale / mBoardSize.width + 1;

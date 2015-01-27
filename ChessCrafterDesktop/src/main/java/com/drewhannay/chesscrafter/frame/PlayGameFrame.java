@@ -1,7 +1,10 @@
-package com.drewhannay.chesscrafter.gui;
+package com.drewhannay.chesscrafter.frame;
 
+import com.drewhannay.chesscrafter.action.ChessActions;
+import com.drewhannay.chesscrafter.dialog.NewGameDialog;
 import com.drewhannay.chesscrafter.dragNdrop.DropManager;
 import com.drewhannay.chesscrafter.dragNdrop.GlassPane;
+import com.drewhannay.chesscrafter.label.TeamLabel;
 import com.drewhannay.chesscrafter.logic.Result;
 import com.drewhannay.chesscrafter.logic.Status;
 import com.drewhannay.chesscrafter.models.Board;
@@ -10,6 +13,9 @@ import com.drewhannay.chesscrafter.models.MoveBuilder;
 import com.drewhannay.chesscrafter.models.Piece;
 import com.drewhannay.chesscrafter.models.PieceType;
 import com.drewhannay.chesscrafter.models.Team;
+import com.drewhannay.chesscrafter.panel.BoardPanel;
+import com.drewhannay.chesscrafter.panel.ChessPanel;
+import com.drewhannay.chesscrafter.panel.JailPanel;
 import com.drewhannay.chesscrafter.utility.AppConstants;
 import com.drewhannay.chesscrafter.utility.FileUtility;
 import com.drewhannay.chesscrafter.utility.GsonUtility;

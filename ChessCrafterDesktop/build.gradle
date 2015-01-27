@@ -36,14 +36,14 @@ test {
 }
 
 jar {
-	manifest.attributes("Main-Class": "com.drewhannay.chesscrafter.gui.Main", "provider": "gradle")
+	manifest.attributes("Main-Class": "com.drewhannay.chesscrafter.Main", "provider": "gradle")
     from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
 }
 
 apply plugin: 'macAppBundle'
 
 macAppBundle {
-    mainClassName = "com.drewhannay.chesscrafter.gui.Main"
+    mainClassName = "com.drewhannay.chesscrafter.Main"
 	appName = "Chess Crafter"
 	icon = "chess.icns"
 }

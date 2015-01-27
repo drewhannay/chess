@@ -1,6 +1,6 @@
 package com.drewhannay.chesscrafter.action;
 
-import com.drewhannay.chesscrafter.gui.Driver;
+import com.drewhannay.chesscrafter.frame.Driver;
 import com.drewhannay.chesscrafter.utility.Messages;
 
 import javax.swing.*;

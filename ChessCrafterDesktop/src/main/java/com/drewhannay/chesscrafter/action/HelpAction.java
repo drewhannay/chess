@@ -1,6 +1,6 @@
 package com.drewhannay.chesscrafter.action;
 
-import com.drewhannay.chesscrafter.gui.HelpFrame;
+import com.drewhannay.chesscrafter.frame.HelpFrame;
 import com.drewhannay.chesscrafter.utility.Messages;
 
 import java.awt.event.ActionEvent;
