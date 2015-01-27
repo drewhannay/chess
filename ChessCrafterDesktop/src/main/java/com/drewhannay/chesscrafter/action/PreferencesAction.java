@@ -9,7 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
 public final class PreferencesAction extends ChessAction {
-    public PreferencesAction() {
+    PreferencesAction() {
         super(false);
 
         putValue(NAME, Messages.getString("Driver.preferences"));

@@ -8,7 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
 public final class QuitAction extends ChessAction {
-    public QuitAction() {
+    QuitAction() {
         super(false);
 
         putValue(NAME, Messages.getString("Driver.quit"));

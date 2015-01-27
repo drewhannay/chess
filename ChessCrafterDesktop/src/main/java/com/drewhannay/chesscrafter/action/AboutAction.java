@@ -8,7 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
 public class AboutAction extends ChessAction {
-    public AboutAction() {
+    AboutAction() {
         super(false);
 
         // TODO: should insert app name into formatted string

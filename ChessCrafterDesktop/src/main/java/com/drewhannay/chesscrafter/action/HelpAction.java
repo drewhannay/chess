@@ -7,7 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
 public final class HelpAction extends ChessAction {
-    public HelpAction() {
+    HelpAction() {
         super(false);
 
         putValue(NAME, Messages.getString("Driver.browseHelp"));

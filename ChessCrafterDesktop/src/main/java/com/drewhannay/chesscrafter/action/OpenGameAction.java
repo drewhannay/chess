@@ -7,7 +7,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 
 public final class OpenGameAction extends ChessAction {
-    public OpenGameAction() {
+    OpenGameAction() {
         super(true);
 
         putValue(NAME, Messages.getString("Driver.openGame"));
