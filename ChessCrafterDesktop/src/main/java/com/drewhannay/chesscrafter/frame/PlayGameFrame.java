@@ -31,6 +31,8 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -48,12 +50,12 @@ public class PlayGameFrame extends ChessFrame {
         pack();
 
         setFocusable(true);
-        addFocusListener(mFocusListener);
+        addWindowFocusListener(mWindowFocusListener);
     }
 
-    private final FocusListener mFocusListener = new FocusListener() {
+    private final WindowFocusListener mWindowFocusListener = new WindowFocusListener() {
         @Override
-        public void focusGained(FocusEvent e) {
+        public void windowGainedFocus(WindowEvent e) {
             ChessActions.DECLARE_DRAW.getAction().setActionListener(event -> {
                 mPanel.mGame.declareDraw();
                 mPanel.endOfGame();
@@ -66,7 +68,7 @@ public class PlayGameFrame extends ChessFrame {
         }
 
         @Override
-        public void focusLost(FocusEvent e) {
+        public void windowLostFocus(WindowEvent e) {
             ChessActions.DECLARE_DRAW.getAction().removeActionListener();
             ChessActions.SAVE_GAME.getAction().removeActionListener();
             ChessActions.NEW_GAME.getAction().removeActionListener();
