@@ -7,6 +7,7 @@ import com.drewhannay.chesscrafter.models.Game;
 import com.drewhannay.chesscrafter.models.History;
 import com.drewhannay.chesscrafter.panel.ChessPanel;
 import com.drewhannay.chesscrafter.panel.GamePanel;
+import com.drewhannay.chesscrafter.panel.HintPanel;
 import com.drewhannay.chesscrafter.utility.FileUtility;
 import com.drewhannay.chesscrafter.utility.GsonUtility;
 import com.drewhannay.chesscrafter.utility.GuiUtility;
@@ -25,13 +26,27 @@ import java.io.IOException;
 
 public class GameFrame extends ChessFrame {
 
+    private static final String KEY_HINTS = "Hints";
+    private static final String KEY_TABS = "Tabs";
+
+    private final CardLayout mCardLayout;
+    private final JPanel mCardPanel;
+
+    private final HintPanel mHintPanel;
     private final JTabbedPane mTabbedPane;
 
-    public GameFrame(@NotNull Game game) {
-
+    public GameFrame() {
+        mHintPanel = new HintPanel();
         mTabbedPane = new JTabbedPane();
-        addGame(game);
-        add(mTabbedPane);
+
+        mCardLayout = new CardLayout();
+
+        mCardPanel = new JPanel(mCardLayout);
+        mCardPanel.add(mHintPanel, KEY_HINTS);
+        mCardPanel.add(mTabbedPane, KEY_TABS);
+
+        add(mCardPanel);
+
         pack();
 
         setFocusable(true);
@@ -42,6 +57,8 @@ public class GameFrame extends ChessFrame {
         GamePanel panel = new GamePanel(this, game);
         mTabbedPane.addTab(game.getGameType(), panel);
         mTabbedPane.setSelectedComponent(panel);
+
+        mCardLayout.show(mCardPanel, KEY_TABS);
     }
 
     private final WindowFocusListener mWindowFocusListener = new WindowFocusListener() {

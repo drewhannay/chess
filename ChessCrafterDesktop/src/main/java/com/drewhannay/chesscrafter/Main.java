@@ -1,7 +1,6 @@
 package com.drewhannay.chesscrafter;
 
 import com.drewhannay.chesscrafter.frame.GameFrame;
-import com.drewhannay.chesscrafter.logic.GameBuilder;
 import com.drewhannay.chesscrafter.utility.FileUtility;
 
 import javax.swing.*;
@@ -27,7 +26,7 @@ public final class Main {
             // set a tray icon if we're on Windows
             createWindowsTrayIcon();
 
-            new GameFrame(GameBuilder.buildGame(GameBuilder.getClassicConfiguration()));
+            new GameFrame();
         });
     }
 

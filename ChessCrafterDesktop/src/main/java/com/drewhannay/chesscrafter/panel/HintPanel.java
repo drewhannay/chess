@@ -1,10 +1,6 @@
-package com.drewhannay.chesscrafter.frame;
+package com.drewhannay.chesscrafter.panel;
 
-import com.drewhannay.chesscrafter.action.NewGameAction;
-import com.drewhannay.chesscrafter.action.OpenGameAction;
-import com.drewhannay.chesscrafter.panel.ChessPanel;
-import com.drewhannay.chesscrafter.panel.PieceMenuPanel;
-import com.drewhannay.chesscrafter.panel.VariantMenuPanel;
+import com.drewhannay.chesscrafter.action.ChessActions;
 import com.drewhannay.chesscrafter.utility.FileUtility;
 import com.drewhannay.chesscrafter.utility.GuiUtility;
 import com.drewhannay.chesscrafter.utility.Messages;
@@ -12,33 +8,10 @@ import com.drewhannay.chesscrafter.utility.Messages;
 import javax.swing.*;
 import java.awt.*;
 
-public final class Driver extends ChessFrame {
+public final class HintPanel extends ChessPanel {
 
-    private JPanel mMainPanel;
-    private JPanel mOtherPanel;
-
-    private Driver() {
-    }
-
-    public void setPanel(JPanel panel) {
-        remove(mMainPanel);
-        if (mOtherPanel != null) {
-            remove(mOtherPanel);
-        }
-        add(panel);
-        mOtherPanel = panel;
-        pack();
-        setLocationRelativeTo(null);
-    }
-
-    @Override
-    void initComponents() {
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
-        // set up a new panel to hold everything in the main window
-        mMainPanel = new ChessPanel();
-        mMainPanel.setBorder(BorderFactory.createLoweredBevelBorder());
-        mMainPanel.setLayout(new GridBagLayout());
+    public HintPanel() {
+        setLayout(new GridBagLayout());
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setOpaque(false);
@@ -50,7 +23,7 @@ public final class Driver extends ChessFrame {
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
         c.gridy = 0;
-        mMainPanel.add(new JLabel(GuiUtility.createSystemImageIcon(400, 400, "/chess_logo.png")), c);
+        add(new JLabel(GuiUtility.createSystemImageIcon(400, 400, "/chess_logo.png")), c);
 
         // new game
         c.gridx = 0;
@@ -80,30 +53,27 @@ public final class Driver extends ChessFrame {
 
         c.gridx = 1;
         c.gridy = 0;
-        mMainPanel.add(buttonPanel, c);
-
-        add(mMainPanel, BorderLayout.CENTER);
-        pack();
-        setVisible(true);
+        add(buttonPanel, c);
     }
 
     private JButton createPieceCreatorButton() {
         JButton pieceButton = new JButton(Messages.getString("Driver.pieces"));
         pieceButton.setToolTipText(Messages.getString("Driver.createEditRemove"));
         pieceButton.setIcon(GuiUtility.createSystemImageIcon(10, 30, "/pieces.png"));
-        pieceButton.addActionListener(e -> setPanel(new PieceMenuPanel()));
+        // TODO:
+//        pieceButton.addActionListener(e -> setPanel(new PieceMenuPanel()));
 
         return pieceButton;
     }
 
     private JButton createNewGameButton() {
-        JButton newGameButton = new JButton(new NewGameAction());
+        JButton newGameButton = new JButton(ChessActions.NEW_GAME.getAction());
         newGameButton.setIcon(GuiUtility.createSystemImageIcon(30, 30, "/start_game.png"));
         return newGameButton;
     }
 
     private JButton createContinueGameButton() {
-        JButton continueGameButton = new JButton(new OpenGameAction());
+        JButton continueGameButton = new JButton(ChessActions.OPEN_GAME.getAction());
         continueGameButton.setToolTipText(Messages.getString("Driver.openASavedGame"));
         continueGameButton.setIcon(GuiUtility.createSystemImageIcon(30, 30, "/saved_games.png"));
 
@@ -218,7 +188,8 @@ public final class Driver extends ChessFrame {
         JButton variantButton = new JButton(Messages.getString("Driver.variants"));
         variantButton.setToolTipText(Messages.getString("Driver.createEditRemoveVariants"));
         variantButton.setIcon(GuiUtility.createSystemImageIcon(30, 30, "/chess_variants.jpg"));
-        variantButton.addActionListener(e -> setPanel(new VariantMenuPanel()));
+        // TODO:
+//        variantButton.addActionListener(e -> setPanel(new VariantMenuPanel()));
 
         return variantButton;
     }
