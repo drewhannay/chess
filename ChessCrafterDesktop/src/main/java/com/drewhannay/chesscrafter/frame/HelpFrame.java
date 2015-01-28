@@ -9,8 +9,6 @@ import java.awt.*;
 
 public class HelpFrame extends ChessFrame {
 
-    private ChessPanel mHelpPanel;
-
     HelpFrame() {
     }
 
@@ -20,8 +18,8 @@ public class HelpFrame extends ChessFrame {
 
         setTitle(Messages.getString("HelpFrame.help"));
 
-        mHelpPanel = new ChessPanel();
-        mHelpPanel.setLayout(new BorderLayout());
+        ChessPanel helpPanel = new ChessPanel();
+        helpPanel.setLayout(new BorderLayout());
 
         JPanel gamePlayHelpPanel = new JPanel();
         gamePlayHelpPanel.setOpaque(false);
@@ -58,7 +56,7 @@ public class HelpFrame extends ChessFrame {
         helpTypesTabbedPane.addTab(Messages.getString("HelpFrame.variantHelp"), null, variantMakingHelpScrollPane);
         helpTypesTabbedPane.addTab(Messages.getString("HelpFrame.pieceMakingHelp"), null, pieceMakingHelpScrollPane);
 
-        mHelpPanel.add(helpTypesTabbedPane, BorderLayout.CENTER);
+        helpPanel.add(helpTypesTabbedPane, BorderLayout.CENTER);
 
         JLabel gamePlayHelpText = GuiUtility.createJLabel(Messages.getString("HelpFrame.gamePlayText"));
         gamePlayHelpPanel.add(gamePlayHelpText);
@@ -72,6 +70,6 @@ public class HelpFrame extends ChessFrame {
         JLabel pieceMakingHelpText = GuiUtility.createJLabel(Messages.getString("HelpFrame.pieceOptionsText"));
         pieceMakingHelpPanel.add(pieceMakingHelpText);
 
-        add(mHelpPanel);
+        add(helpPanel);
     }
 }
