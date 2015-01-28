@@ -21,14 +21,23 @@ public final class Main {
                 e.printStackTrace();
             }
 
-            // put menus in the OS X menu bar if we're on OS X
-            System.setProperty("apple.laf.useScreenMenuBar", "true");
+            setOsXProperties();
 
             // set a tray icon if the system supports it
             createTrayIcon();
 
             FrameManager.INSTANCE.openGameFrame();
         });
+    }
+
+    private static void setOsXProperties() {
+        // put menus in the OS X menu bar if we're on OS X
+        System.setProperty("apple.laf.useScreenMenuBar", "true");
+
+        Application application = Application.getApplication();
+        if (application != null) {
+            application.setDefaultMenuBar(ChessActions.createJMenuBar());
+        }
     }
 
     private static void createTrayIcon() {
