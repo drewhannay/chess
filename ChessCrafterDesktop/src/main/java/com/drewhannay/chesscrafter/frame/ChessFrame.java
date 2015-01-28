@@ -1,7 +1,6 @@
 package com.drewhannay.chesscrafter.frame;
 
 import com.drewhannay.chesscrafter.action.ChessActions;
-import com.drewhannay.chesscrafter.utility.AppConstants;
 import com.drewhannay.chesscrafter.utility.FileUtility;
 import com.google.common.base.Preconditions;
 
@@ -9,11 +8,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.lang.reflect.Method;
 
-public class ChessFrame extends JFrame {
-    public ChessFrame() {
+class ChessFrame extends JFrame {
+    ChessFrame() {
+    }
+
+    void initComponents() {
         enableOSXFullscreen(this);
 
-        setTitle(AppConstants.APP_NAME);
         setLayout(new BorderLayout());
         setResizable(true);
 
@@ -28,13 +29,6 @@ public class ChessFrame extends JFrame {
 
         setJMenuBar(ChessActions.createJMenuBar());
         setPreferredSize(new Dimension(685, 450));
-
-        initComponents();
-
-        setVisible(true);
-    }
-
-    void initComponents() {
     }
 
     private void enableOSXFullscreen(Window window) {

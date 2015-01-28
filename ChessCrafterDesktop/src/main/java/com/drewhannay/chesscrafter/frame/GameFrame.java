@@ -8,6 +8,7 @@ import com.drewhannay.chesscrafter.models.History;
 import com.drewhannay.chesscrafter.panel.ChessPanel;
 import com.drewhannay.chesscrafter.panel.GamePanel;
 import com.drewhannay.chesscrafter.panel.HintPanel;
+import com.drewhannay.chesscrafter.utility.AppConstants;
 import com.drewhannay.chesscrafter.utility.FileUtility;
 import com.drewhannay.chesscrafter.utility.GsonUtility;
 import com.drewhannay.chesscrafter.utility.GuiUtility;
@@ -39,19 +40,23 @@ public class GameFrame extends ChessFrame {
     private final HintPanel mHintPanel;
     private final JTabbedPane mTabbedPane;
 
-    public GameFrame() {
+    GameFrame() {
         mHintPanel = new HintPanel();
         mTabbedPane = new JTabbedPane();
-
         mCardLayout = new CardLayout();
-
         mCardPanel = new JPanel(mCardLayout);
+    }
+
+    @Override
+    void initComponents() {
+        super.initComponents();
+
+        setTitle(AppConstants.APP_NAME);
+
         mCardPanel.add(mHintPanel, KEY_HINTS);
         mCardPanel.add(mTabbedPane, KEY_TABS);
 
         add(mCardPanel);
-
-        pack();
 
         setFocusable(true);
         addWindowFocusListener(mWindowFocusListener);
