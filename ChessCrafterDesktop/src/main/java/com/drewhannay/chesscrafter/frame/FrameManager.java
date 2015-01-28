@@ -19,28 +19,33 @@ public enum FrameManager {
     }
 
     public void openGameFrame() {
-        verifyNotCreated(GameFrame.class);
-        openFrame(new GameFrame());
+        if (!tryToFocusExistingFrame(GameFrame.class)) {
+            openFrame(new GameFrame());
+        }
     }
 
     public void openGameCrafterFrame() {
-        verifyNotCreated(GameCrafterFrame.class);
-        openFrame(new GameCrafterFrame());
+        if (!tryToFocusExistingFrame(GameCrafterFrame.class)) {
+            openFrame(new GameCrafterFrame());
+        }
     }
 
     public void openPieceCrafterFrame() {
-        verifyNotCreated(PieceCrafterFrame.class);
-        openFrame(new PieceCrafterFrame());
+        if (!tryToFocusExistingFrame(PieceCrafterFrame.class)) {
+            openFrame(new PieceCrafterFrame());
+        }
     }
 
     public void openAboutFrame() {
-        verifyNotCreated(AboutFrame.class);
-        openFrame(new AboutFrame());
+        if (!tryToFocusExistingFrame(AboutFrame.class)) {
+            openFrame(new AboutFrame());
+        }
     }
 
     public void openHelpFrame() {
-        verifyNotCreated(HelpFrame.class);
-        openFrame(new HelpFrame());
+        if (!tryToFocusExistingFrame(HelpFrame.class)) {
+            openFrame(new HelpFrame());
+        }
     }
 
     private void openFrame(@NotNull ChessFrame frame) {
@@ -55,10 +60,15 @@ public enum FrameManager {
         mFrames.add(frame);
     }
 
-    private void verifyNotCreated(@NotNull Class<? extends ChessFrame> klazz) {
+    private boolean tryToFocusExistingFrame(@NotNull Class<? extends ChessFrame> klazz) {
         for (ChessFrame frame : mFrames) {
-            Preconditions.checkState(frame.getClass() != klazz);
+            if (frame.getClass() == klazz) {
+                frame.requestFocus();
+                return true;
+            }
         }
+
+        return false;
     }
 
     private final WindowListener mWindowListener = new WindowListener() {
