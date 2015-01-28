@@ -1,9 +1,10 @@
 package com.drewhannay.chesscrafter.panel;
 
+import com.drewhannay.chesscrafter.models.PieceType;
 import com.drewhannay.chesscrafter.utility.FileUtility;
+import com.drewhannay.chesscrafter.utility.RunnableOfT;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class PieceCrafterMasterPanel extends ChessPanel {
 
@@ -11,7 +12,12 @@ public class PieceCrafterMasterPanel extends ChessPanel {
 
     private PieceCrafterDetailPanel.PieceListChangedListener mListener;
 
-    public PieceCrafterMasterPanel() {
+    private final Runnable mNewPieceCallback;
+    private final RunnableOfT<PieceType> mPieceTypeSelectedCallback;
+
+    public PieceCrafterMasterPanel(Runnable newPieceCallback, RunnableOfT<PieceType> pieceTypeSelectedCallback) {
+        mNewPieceCallback = newPieceCallback;
+        mPieceTypeSelectedCallback = pieceTypeSelectedCallback;
 //        mPieceListModel = new DefaultListModel<>();
 //        initGuiComponents();
     }

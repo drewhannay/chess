@@ -2,6 +2,7 @@ package com.drewhannay.chesscrafter.panel;
 
 import com.drewhannay.chesscrafter.logic.PieceTypeBuilder;
 import com.drewhannay.chesscrafter.models.Direction;
+import com.drewhannay.chesscrafter.models.PieceType;
 import com.drewhannay.chesscrafter.models.TwoHopMovement;
 import com.drewhannay.chesscrafter.utility.GuiUtility;
 import com.drewhannay.chesscrafter.utility.ImageUtility;
@@ -50,10 +51,6 @@ public class PieceCrafterDetailPanel extends ChessPanel {
     }
 
     public PieceCrafterDetailPanel() {
-        this(null);
-    }
-
-    public PieceCrafterDetailPanel(String pieceName) {
         mPieceNameField = new JTextField(15);
         mNorthField = new JTextField(4);
         mNorthEastField = new JTextField(4);
@@ -90,6 +87,14 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         //}
 
         initGUIComponents(builder);
+    }
+
+    public void newPieceType() {
+        // TODO: unimplemented method stub
+    }
+
+    public void loadPieceType(PieceType pieceType) {
+        // TODO: unimplemented method stub
     }
 
     private void initGUIComponents(PieceTypeBuilder builder) {
