@@ -6,9 +6,6 @@ import com.drewhannay.chesscrafter.utility.PieceIconUtility;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 public final class HintPanel extends ChessPanel {
 
@@ -21,8 +18,6 @@ public final class HintPanel extends ChessPanel {
 
         c.gridx = 0;
         c.gridy = 0;
-        //c.gridwidth = 3;
-        //c.gridheight = 2;
         c.anchor = GridBagConstraints.CENTER;
         add(pieceImage, c);
 
@@ -49,10 +44,9 @@ public final class HintPanel extends ChessPanel {
 
         c.gridy = 5;
         add(createJButton(Messages.getString("HelpPanel.gameCrafterInstructions"), ChessActions.GAME_CRAFTER), c);
-
     }
 
-    private JButton createJButton(String buttonText, ChessActions action){
+    private JButton createJButton(String buttonText, ChessActions action) {
         JButton newButton = new JButton(action.getAction());
         newButton.setForeground(Color.white);
         newButton.setFont(new Font(newButton.getName(), Font.PLAIN, 14));

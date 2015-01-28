@@ -37,8 +37,6 @@ public class GameFrame extends ChessFrame {
     private final CardLayout mCardLayout;
     private final JPanel mCardPanel;
 
-    private int mGameCount = 0;
-
     private final HintPanel mHintPanel;
     private final JTabbedPane mTabbedPane;
 
@@ -59,8 +57,6 @@ public class GameFrame extends ChessFrame {
         mCardPanel.add(mTabbedPane, KEY_TABS);
 
         add(mCardPanel);
-
-        mGameCount = 1;
 
         setFocusable(true);
         addWindowFocusListener(mWindowFocusListener);
@@ -90,11 +86,7 @@ public class GameFrame extends ChessFrame {
 
     public void addGame(@NotNull Game game) {
         GamePanel panel = new GamePanel(this, game);
-        if(mGameCount == 1)
-            mTabbedPane.addTab(game.getGameType(), panel);
-        else
-            mTabbedPane.addTab(game.getGameType() + mGameCount, panel);
-        mGameCount++;
+        mTabbedPane.addTab(game.getGameType() + mTabbedPane.getTabCount(), panel);
         mTabbedPane.setSelectedComponent(panel);
 
         mCardLayout.show(mCardPanel, KEY_TABS);
