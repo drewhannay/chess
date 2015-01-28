@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Chess Crafter by drewhannay</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Chess Crafter</h1>
+        <h2>A Java application for defining and playing chess variants</h2>
+        <a href="https://github.com/drewhannay/chess" class="button"><small>View project on</small> GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>
+<a id="chess-crafter" class="anchor" href="#chess-crafter" aria-hidden="true"><span class="octicon octicon-link"></span></a>Chess Crafter</h1>
+
+<p>A Java application which allows users to design variants on chess, specifying new kinds of pieces and how they move, the board layout, the initial positions of pieces, how the game is won, and special rules.
+Users can play either as two humans at one computer, two humans at different computers through a network connection, or one human versus the computer.
+The AI for the "computer" player is be defined by plug-ins that users can write.</p>
+
+<hr>
+
+<h3>
+<a id="note" class="anchor" href="#note" aria-hidden="true"><span class="octicon octicon-link"></span></a>Note</h3>
+
+<p>All new development is happening on the <code>rewrite</code> branch, which is focused on separating the logic code from the UI and adding unit tests. Please do not submit pull requests to the <code>master</code> branch.</p>
+
+<hr>
+
+<h2>
+<a id="how-to-contribute" class="anchor" href="#how-to-contribute" aria-hidden="true"><span class="octicon octicon-link"></span></a>How to Contribute</h2>
+
+<p><em>Of course, there may be alternate ways to do many of these steps, but these are the ones we will help you with if you get stuck</em></p>
+
+<h3>
+<a id="getting-the-code" class="anchor" href="#getting-the-code" aria-hidden="true"><span class="octicon octicon-link"></span></a>Getting the Code</h3>
+
+<ul>
+<li>Install and set up <a href="http://www.syntevo.com/smartgit/index.html">SmartGit</a>
+
+<ul>
+<li>Choose non-commercial use when the installer asks</li>
+<li>The installer should automatically detect the location of your git executable <em>(Of course, this means if you don't have git installed, you need to go do that first)</em>
+</li>
+<li>Tell the installer that your hosting provider is github and log in with your credentials (if this doesn't work for you, just select "no host provider" and input the URL of your fork when it asks you)</li>
+<li>Also, go ahead and use SmartGit as SSH (unless you have a compelling reason not to)</li>
+</ul>
+</li>
+<li>Next, come back to github and Fork your own copy of the <a href="https://github.com/drewhannay/chess">chess repository</a>
+</li>
+<li>Back in SmartGit, choose Clone and put in the URL of your forked copy of chess
+
+<ul>
+<li>Choose where to save your local code, then give the project a name in SmartGit and hit Finish</li>
+<li>Next we need to set up a link to the original repository so we can keep our fork up to date with the latest code.</li>
+<li>Click the "Remote" menu item in SmartGit, then select "Manage Remotes" from the list and click "Add".</li>
+<li>Enter <code>upstream</code> as the name (no caps!) and <a href="https://github.com/drewhannay/chess">https://github.com/drewhannay/chess</a> as the URL, then press "Add".</li>
+<li>Now close the Remote Manager and open the Branch Manager by clicking the "Branch" menu item, and then "Branch Manager". You should see an "upstream/master" remote branch with no local branch. Click on that item and click add, giving it the name "upstream-master", then click "Add Branch".</li>
+<li>You can now close the Branch Manager and celebrate, knowing that you have finished setting up your repository!</li>
+</ul>
+</li>
+</ul>
+
+<h3>
+<a id="building-the-code" class="anchor" href="#building-the-code" aria-hidden="true"><span class="octicon octicon-link"></span></a>Building the Code</h3>
+
+<p>Chess Crafter uses the <a href="http://www.gradle.org/">Gradle build system</a> to build the project. Gradle lets us use the same build script in both development builds and release builds.
+To build the code, just run <code>gradlew build</code> from the root directory of the repository and this will run all the tests and produce a <code>build</code> directory for each module</p>
+
+<h3>
+<a id="setting-up-an-ide" class="anchor" href="#setting-up-an-ide" aria-hidden="true"><span class="octicon octicon-link"></span></a>Setting up an IDE</h3>
+
+<h4>
+<a id="intellij-idea-recommended" class="anchor" href="#intellij-idea-recommended" aria-hidden="true"><span class="octicon octicon-link"></span></a>IntelliJ IDEA (Recommended)</h4>
+
+<p>IntelliJ provides Gradle project support out of the box, which is why it's our recommended IDE. To get set up:</p>
+
+<ul>
+<li>Download and set up the <a href="https://www.jetbrains.com/idea/">IntelliJ IDEA Community Edition</a>
+</li>
+<li>Click "Import Project" and choose the root directory of your git repository</li>
+<li>Choose "Import project from external model" and select "Gradle"</li>
+<li>On the next screen, choose "Use customizable gradle wrapper" and click "Finish"</li>
+<li>IntelliJ will do some work to set up the Gradle project and then you're done!</li>
+<li>Note: if you want to run and debug the project directly from IntelliJ, you can right click on the "Driver" file in the gui package of the Desktop module and click "Run Driver.main()" or "Debug Driver.main()"</li>
+</ul>
+
+<h4>
+<a id="eclipse" class="anchor" href="#eclipse" aria-hidden="true"><span class="octicon octicon-link"></span></a>Eclipse</h4>
+
+<p>Eclipse doesn't support Gradle by default, so we need to do a little extra work to get things ready.</p>
+
+<ul>
+<li>From the command line, navigate to the root directory of the repository and run <code>gradlew eclipse</code>
+
+<ul>
+<li>This will generate the various <code>.project</code> and <code>.classpath</code> files needed to import the code into Eclipse</li>
+<li>If you decide to stop using Eclipse, you can run <code>gradlew cleanEclipse</code> to remove the generated files</li>
+</ul>
+</li>
+<li>Download and set up <a href="http://www.eclipse.org/downloads/packages/eclipse-ide-java-developers/lunasr1">Eclipse</a>
+</li>
+<li>In Eclipse, click File -&gt; Import -&gt; General -&gt; Existing Projects into Workspace</li>
+<li>Choose the location of your local source code and you should see two projects appear in the "Projects" window.</li>
+<li>Select both projects, "ChessCrafterShared" and "ChessCrafterDesktop" and click "Finish"</li>
+<li>Note: you cannot build the code from Eclipse at this point; Eclipse does not support Gradle builds. You may able to get some support using the <a href="https://www.gradle.org/tooling">Gradle Eclipse Plugin</a> but we haven't tested this. We recommend building your code from the command line with Gradle manually.</li>
+</ul>
+
+<h3>
+<a id="the-issue-system" class="anchor" href="#the-issue-system" aria-hidden="true"><span class="octicon octicon-link"></span></a>The Issue System</h3>
+
+<p>This project uses the github Issues system to track all work being done on the app.  To get started, visit the <a href="https://github.com/drewhannay/chess/issues">Issues Tab</a> and browse the list of things that need to be done.  Find one that looks interesting and isn't yet being worked on and claim it for yourself by leaving a comment saying you're working on it.  If you find a bug in the app or have a feature or enhancement idea, add an issue for it. <b>Every single commit</b> that gets added to the project should have an associated issue number (as specified below...)</p>
+
+<h3>
+<a id="making-and-committing-your-changes" class="anchor" href="#making-and-committing-your-changes" aria-hidden="true"><span class="octicon octicon-link"></span></a>Making and Committing Your Changes</h3>
+
+<p><em>Note: If you aren't familiar with Git, please read <a href="http://git-scm.com/book/en/Git-Basics">this tutorial</a>.</em></p>
+
+<p>Before editing any code, you should make a new branch for your changes (this really helps with managing pull requests and merges).</p>
+
+<ul>
+<li>Go to SmartGit and make sure you've opened the project you made earlier with your fork.</li>
+<li>Click "Branch" and then "Add Branch". Give your new branch a name (something like "MyChanges"...it doesn't really matter what you call it), then click "Add Branch &amp; Switch"</li>
+<li>You are now ready to code!</li>
+</ul>
+
+<p>When you are ready to commit, go back to SmartGit. Your changed files should appear in the the main section of the window.
+Select each of the files you want to commit and press the "Stage" button located directly above the list of files.
+Next, click "Commit" (next to the Stage button).  You will now be required to enter a commit message.
+Each commit should be associated with an Issue number from our <a href="https://github.com/drewhannay/chess/issues">Issues list</a>.
+Your commit messages should be in this form (where "N" is the appropriate issue number):</p>
+
+<p><code>Issue #N Short sentence describing what was changed<br><br>Any other description required should go in paragraph form below the initial message with a new line separating the two</code></p>
+
+<p>This formatting is very important because with it, github will conveniently link your commit message to the related issue number.</p>
+
+<h3>
+<a id="updating-your-fork" class="anchor" href="#updating-your-fork" aria-hidden="true"><span class="octicon octicon-link"></span></a>Updating Your Fork</h3>
+
+<p>Frequently you will want to update your forked copy of the repository with changes from the main repo. There's a few steps required for this:</p>
+
+<ul>
+<li>Switch to your <code>upstream-master</code> branch and press the large "Pull" button and select the remote branch to pull from (<a href="https://github.com/drewhannay/chess">https://github.com/drewhannay/chess</a>).</li>
+<li>After that is finished, switch to your <code>origin/master</code> branch and press "Merge". You should see a log of all the commit messages along with labels indicating the last commit for each branch. Click on the latest commit (which should have the label <code>upstream-master</code>) and click "Merge".</li>
+<li>Next, commit those files as you would any other changes, but use the commit message that SmartGit provides for you, then click "Push" to push the changes to your remote fork.</li>
+<li>You can repeat this process to merge changes into any of your other branches; just switch to the branch you want to update and hit "Merge".</li>
+</ul>
+
+<h3>
+<a id="getting-your-changes-merged-with-the-main-repository" class="anchor" href="#getting-your-changes-merged-with-the-main-repository" aria-hidden="true"><span class="octicon octicon-link"></span></a>Getting Your Changes Merged with the Main Repository</h3>
+
+<p>Once you've added a new feature or fixed a bug, you'll need to get your changes merged back into the main repository.</p>
+
+<ul>
+<li>Go to your forked repository on github and click "Branches" and find the branch you want merged with the main repo.</li>
+<li>Click "Pull Request" to open a message to the repo admins with your commit message in the subject line.
+
+<ul>
+<li>Here you can add a message to the admins describing your changes or clarifying anything you think they might find confusing when they're reviewing your code.</li>
+</ul>
+</li>
+<li>Click "Pull Request" to send the request on it's way.</li>
+<li>Now one of the admins will review your pull request and if they think there are any changes you need to make, they will leave a comment on the appropriate line, sending you a notification.
+
+<ul>
+<li>If they leave any comments, you'll get a notification on github and you can review their comments and make more changes.</li>
+<li>Commit your updates and push again, except this time your commit message should say <code>Code review. Issue #N</code>, where N is your issue number. This commit is automatically added to your pull request, so you don't need to make another one.</li>
+<li>Repeat these steps until your code is approved!</li>
+</ul>
+</li>
+<li>Once the admins accept your code, you will be able to see a new commit on the main repo with your changes and all contributors will be able to pull them and update.</li>
+</ul>
+
+<h3>
+<a id="now-what" class="anchor" href="#now-what" aria-hidden="true"><span class="octicon octicon-link"></span></a>Now what?</h3>
+
+<p>For more information on the project, visit our <a href="https://github.com/drewhannay/chess/wiki">Project Wiki</a> or contact one of the administrators or other contributors and we'll be more than happy to help you get started!</p>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/drewhannay/chess/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/drewhannay/chess/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/drewhannay/chess"></a> is maintained by <a href="https://github.com/drewhannay">drewhannay</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+            <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-8708870-6");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+  </body>
+</html>
