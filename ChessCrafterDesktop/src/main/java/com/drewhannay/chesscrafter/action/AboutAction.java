@@ -1,6 +1,7 @@
 package com.drewhannay.chesscrafter.action;
 
 import com.drewhannay.chesscrafter.frame.AboutFrame;
+import com.drewhannay.chesscrafter.frame.FrameManager;
 import com.drewhannay.chesscrafter.utility.AppConstants;
 import com.drewhannay.chesscrafter.utility.Messages;
 
@@ -20,6 +21,6 @@ public class AboutAction extends ChessAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        new AboutFrame();
+        FrameManager.INSTANCE.openAboutFrame();
     }
 }

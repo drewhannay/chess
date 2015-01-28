@@ -28,6 +28,11 @@ public enum FrameManager {
         openFrame(new PieceCrafterFrame());
     }
 
+    public void openAboutFrame() {
+        verifyNotCreated(AboutFrame.class);
+        openFrame(new AboutFrame());
+    }
+
     public void openHelpFrame() {
         verifyNotCreated(HelpFrame.class);
         openFrame(new HelpFrame());
