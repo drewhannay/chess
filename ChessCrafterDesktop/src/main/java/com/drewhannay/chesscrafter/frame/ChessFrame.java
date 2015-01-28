@@ -18,9 +18,6 @@ class ChessFrame extends JFrame {
         setLayout(new BorderLayout());
         setResizable(true);
 
-        // TODO: this is wrong
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
         // TODO: always use this image?
         setIconImage(FileUtility.getFrontPageImage());
 

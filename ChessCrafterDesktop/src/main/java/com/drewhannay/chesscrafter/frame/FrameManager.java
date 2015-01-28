@@ -3,6 +3,9 @@ package com.drewhannay.chesscrafter.frame;
 import com.google.common.base.Preconditions;
 import org.jetbrains.annotations.NotNull;
 
+import javax.swing.*;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +29,9 @@ public enum FrameManager {
     }
 
     private void openFrame(@NotNull ChessFrame frame) {
+        frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        frame.addWindowListener(mWindowListener);
+
         frame.initComponents();
         frame.pack();
         Preconditions.checkState(!frame.isVisible(), "Do not manually call Frame#setVisible!");
@@ -39,4 +45,41 @@ public enum FrameManager {
             Preconditions.checkState(frame.getClass() != klazz);
         }
     }
+
+    private final WindowListener mWindowListener = new WindowListener() {
+        @Override
+        public void windowOpened(WindowEvent e) {
+        }
+
+        @Override
+        public void windowClosing(WindowEvent e) {
+            ChessFrame frame = (ChessFrame) e.getSource();
+            frame.dispose();
+
+            mFrames.remove(frame);
+            if (mFrames.isEmpty()) {
+                System.exit(0);
+            }
+        }
+
+        @Override
+        public void windowClosed(WindowEvent e) {
+        }
+
+        @Override
+        public void windowIconified(WindowEvent e) {
+        }
+
+        @Override
+        public void windowDeiconified(WindowEvent e) {
+        }
+
+        @Override
+        public void windowActivated(WindowEvent e) {
+        }
+
+        @Override
+        public void windowDeactivated(WindowEvent e) {
+        }
+    };
 }
