@@ -3,14 +3,15 @@ package com.drewhannay.chesscrafter.panel;
 import com.drewhannay.chesscrafter.utility.FileUtility;
 
 import javax.swing.*;
+import java.awt.*;
 
-public class PieceMenuPanel extends ChessPanel {
+public class PieceCrafterMasterPanel extends ChessPanel {
 
     private DefaultListModel<String> mPieceListModel;
 
-    private PieceCrafterPanel.PieceListChangedListener mListener;
+    private PieceCrafterDetailPanel.PieceListChangedListener mListener;
 
-    public PieceMenuPanel() {
+    public PieceCrafterMasterPanel() {
 //        mPieceListModel = new DefaultListModel<>();
 //        initGuiComponents();
     }
@@ -121,7 +122,7 @@ public class PieceMenuPanel extends ChessPanel {
 //        }
 //    }
 
-    public void setPieceListChangedListener(PieceCrafterPanel.PieceListChangedListener listener) {
+    public void setPieceListChangedListener(PieceCrafterDetailPanel.PieceListChangedListener listener) {
         mListener = listener;
     }
 

@@ -17,7 +17,7 @@ import java.awt.*;
 import java.util.List;
 import java.util.Map;
 
-public class VariantCreationPanel extends ChessPanel implements PieceCrafterPanel.PieceListChangedListener {
+public class VariantCreationPanel extends ChessPanel implements PieceCrafterDetailPanel.PieceListChangedListener {
     private static final int WHITE_INDEX = 0;
     private static final int BLACK_INDEX = 1;
 

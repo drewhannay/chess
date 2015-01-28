@@ -23,7 +23,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.StringTokenizer;
 
-public class PieceCrafterPanel extends ChessPanel {
+public class PieceCrafterDetailPanel extends ChessPanel {
 
     private final JTextField mPieceNameField;
     private final JTextField mNorthField;
@@ -41,7 +41,6 @@ public class PieceCrafterPanel extends ChessPanel {
     private final JButton mRemoveKnightMoveButton;
 
     private PieceTypeBuilder mBuilder;
-    private PieceMenuPanel mPieceMenuPanel;
     private BufferedImage mLightImage;
     private BufferedImage mDarkImage;
     private List<String> mTempBidirectionalMovements;
@@ -50,12 +49,11 @@ public class PieceCrafterPanel extends ChessPanel {
         public void onPieceListChanged();
     }
 
-    public PieceCrafterPanel(PieceMenuPanel menuPanel) {
-        this(null, menuPanel);
+    public PieceCrafterDetailPanel() {
+        this(null);
     }
 
-    public PieceCrafterPanel(String pieceName, PieceMenuPanel menuPanel) {
-        mPieceMenuPanel = menuPanel;
+    public PieceCrafterDetailPanel(String pieceName) {
         mPieceNameField = new JTextField(15);
         mNorthField = new JTextField(4);
         mNorthEastField = new JTextField(4);
@@ -100,7 +98,6 @@ public class PieceCrafterPanel extends ChessPanel {
         else
             mBuilder = builder;
 
-        setSize(550, 875);
         setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
 
@@ -364,7 +361,7 @@ public class PieceCrafterPanel extends ChessPanel {
             //TODO fix this when checking for an existing piece
             if (pieceName.isEmpty() || PieceTypeBuilder.parsePieceType(mPieceNameField.getText()) != null) {
                 JOptionPane.showMessageDialog(
-                        PieceCrafterPanel.this,
+                        PieceCrafterDetailPanel.this,
                         Messages.getString("PieceMakerPanel.enterUniqueName"), Messages.getString("PieceMakerPanel.invalidPieceName"),
                         JOptionPane.PLAIN_MESSAGE);
                 return;
@@ -401,7 +398,7 @@ public class PieceCrafterPanel extends ChessPanel {
                 ImageUtility.writeDarkImage(pieceName, mDarkImage);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(
-                        PieceCrafterPanel.this,
+                        PieceCrafterDetailPanel.this,
                         Messages.getString("PieceMakerPanel.cannotWriteImageFiles"), Messages.getString("PieceMakerPanel.ImageError"), JOptionPane.PLAIN_MESSAGE);
                 return;
             }
@@ -414,21 +411,20 @@ public class PieceCrafterPanel extends ChessPanel {
 
             //refreshVariants();
 
-            mPieceMenuPanel.refreshList();
-            PieceCrafterPanel.this.removeAll();
+            PieceCrafterDetailPanel.this.removeAll();
         });
 
         final JButton cancelButton = new JButton(Messages.getString("PieceMakerPanel.cancel"));
         cancelButton.setToolTipText(Messages.getString("PieceMakerPanel.pressToReturn"));
         cancelButton.addActionListener(event -> {
             if (mPieceNameField.getText().trim().isEmpty()) {
-                PieceCrafterPanel.this.removeAll();
+                PieceCrafterDetailPanel.this.removeAll();
             } else {
-                switch (JOptionPane.showConfirmDialog(PieceCrafterPanel.this,
+                switch (JOptionPane.showConfirmDialog(PieceCrafterDetailPanel.this,
                         Messages.getString("PieceMakerPanel.ifYouContinue"), Messages.getString("PieceMakerPanel.pieceMaker"),
                         JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE)) {
                     case JOptionPane.YES_OPTION:
-                        PieceCrafterPanel.this.removeAll();
+                        PieceCrafterDetailPanel.this.removeAll();
                         break;
                     case JOptionPane.NO_OPTION:
                         break;
@@ -500,7 +496,7 @@ public class PieceCrafterPanel extends ChessPanel {
         } catch (Exception e) {
             JOptionPane
                     .showMessageDialog(
-                            PieceCrafterPanel.this,
+                            PieceCrafterDetailPanel.this,
                             Messages.getString("PieceMakerPanel.allMovementDist") + textField.getToolTipText()
                                     + Messages.getString("PieceMakerPanel.directionBox"), Messages.getString("PieceMakerPanel.error"), JOptionPane.PLAIN_MESSAGE);
             return false;
@@ -536,7 +532,7 @@ public class PieceCrafterPanel extends ChessPanel {
                     new String[]{
                             Messages.getString("PieceMakerPanel.browseComputer"), Messages.getString("PieceMakerPanel.imageFromInternet"), Messages.getString("PieceMakerPanel.cancel")};
 
-            switch (JOptionPane.showOptionDialog(PieceCrafterPanel.this,
+            switch (JOptionPane.showOptionDialog(PieceCrafterDetailPanel.this,
                     Messages.getString("PieceMakerPanel.whereFrom"), Messages.getString("PieceMakerPanel.chooseImage"),
                     JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0])) {
                 case JOptionPane.YES_OPTION:
@@ -556,7 +552,7 @@ public class PieceCrafterPanel extends ChessPanel {
                         }
                     });
 
-                    if (fileChooser.showOpenDialog(PieceCrafterPanel.this) == JFileChooser.APPROVE_OPTION) {
+                    if (fileChooser.showOpenDialog(PieceCrafterDetailPanel.this) == JFileChooser.APPROVE_OPTION) {
                         try {
                             if (m_isDarkImage) {
                                 mDarkImage = ImageIO.read(fileChooser.getSelectedFile());
@@ -573,7 +569,7 @@ public class PieceCrafterPanel extends ChessPanel {
                     }
                     break;
                 case JOptionPane.NO_OPTION:
-                    String url = JOptionPane.showInputDialog(PieceCrafterPanel.this,
+                    String url = JOptionPane.showInputDialog(PieceCrafterDetailPanel.this,
                             Messages.getString("PieceMakerPanel.enterURL"), Messages.getString("PieceMakerPanel.inputURL"),
                             JOptionPane.PLAIN_MESSAGE);
                     try {
