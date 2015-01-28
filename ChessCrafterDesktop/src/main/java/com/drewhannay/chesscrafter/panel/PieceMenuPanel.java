@@ -127,9 +127,9 @@ public class PieceMenuPanel extends ChessPanel {
     private DefaultListModel<String> mPieceListModel;
     private JFrame mFrame;
 
-    private PieceMakerPanel.PieceListChangedListener mListener;
+    private PieceCrafterPanel.PieceListChangedListener mListener;
 
-    public void setPieceListChangedListener(PieceMakerPanel.PieceListChangedListener listener) {
+    public void setPieceListChangedListener(PieceCrafterPanel.PieceListChangedListener listener) {
         mListener = listener;
     }
 

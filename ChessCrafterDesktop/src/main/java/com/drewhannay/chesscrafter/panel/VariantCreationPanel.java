@@ -17,7 +17,7 @@ import java.awt.*;
 import java.util.List;
 import java.util.Map;
 
-public class VariantCreationPanel extends ChessPanel implements PieceMakerPanel.PieceListChangedListener {
+public class VariantCreationPanel extends ChessPanel implements PieceCrafterPanel.PieceListChangedListener {
     public VariantCreationPanel(String variantName) {
         //mDropManager = new DropManager();
         mGlobalGlassPane = new GlassPane();

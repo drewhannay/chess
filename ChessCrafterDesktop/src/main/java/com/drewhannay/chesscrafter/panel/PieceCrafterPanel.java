@@ -23,12 +23,12 @@ import java.net.URL;
 import java.util.List;
 import java.util.StringTokenizer;
 
-public class PieceMakerPanel extends ChessPanel {
+public class PieceCrafterPanel extends ChessPanel {
     public interface PieceListChangedListener {
         public void onPieceListChanged();
     }
 
-    public PieceMakerPanel(PieceMenuPanel menuPanel) {
+    public PieceCrafterPanel(PieceMenuPanel menuPanel) {
         mLeaperCheckBox = new JCheckBox(Messages.getString("PieceMakerPanel.canJump"), false);
         mPieceNameField = new JTextField(15);
         mNorthField = new JTextField(4);
@@ -44,10 +44,10 @@ public class PieceMakerPanel extends ChessPanel {
         mBidirectionalMovementComboBox = new JComboBox();
         mAddKnightMoveButton = new JButton(Messages.getString("PieceMakerPanel.add"));
         mRemoveKnightMoveButton = new JButton(Messages.getString("PieceMakerPanel.remove"));
-        new PieceMakerPanel(null, menuPanel);
+        new PieceCrafterPanel(null, menuPanel);
     }
 
-    public PieceMakerPanel(String pieceName, PieceMenuPanel menuPanel) {
+    public PieceCrafterPanel(String pieceName, PieceMenuPanel menuPanel) {
         mPieceMenuPanel = menuPanel;
         mFrame = new JFrame(Messages.getString("PieceMakerPanel.pieceEditor"));
         mFrame.add(this);
@@ -372,7 +372,7 @@ public class PieceMakerPanel extends ChessPanel {
             //TODO fix this when checking for an existing piece
             if (pieceName.isEmpty() || PieceTypeBuilder.parsePieceType(mPieceNameField.getText()) != null) {
                 JOptionPane.showMessageDialog(
-                        PieceMakerPanel.this,
+                        PieceCrafterPanel.this,
                         Messages.getString("PieceMakerPanel.enterUniqueName"), Messages.getString("PieceMakerPanel.invalidPieceName"),
                         JOptionPane.PLAIN_MESSAGE);
                 return;
@@ -409,7 +409,7 @@ public class PieceMakerPanel extends ChessPanel {
                 ImageUtility.writeDarkImage(pieceName, mDarkImage);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(
-                        PieceMakerPanel.this,
+                        PieceCrafterPanel.this,
                         Messages.getString("PieceMakerPanel.cannotWriteImageFiles"), Messages.getString("PieceMakerPanel.ImageError"), JOptionPane.PLAIN_MESSAGE);
                 return;
             }
@@ -424,7 +424,7 @@ public class PieceMakerPanel extends ChessPanel {
 
             mFrame.dispose();
             mPieceMenuPanel.refreshList();
-            PieceMakerPanel.this.removeAll();
+            PieceCrafterPanel.this.removeAll();
         });
 
         final JButton cancelButton = new JButton(Messages.getString("PieceMakerPanel.cancel"));
@@ -432,14 +432,14 @@ public class PieceMakerPanel extends ChessPanel {
         cancelButton.addActionListener(event -> {
             if (mPieceNameField.getText().trim().isEmpty()) {
                 mFrame.dispose();
-                PieceMakerPanel.this.removeAll();
+                PieceCrafterPanel.this.removeAll();
             } else {
-                switch (JOptionPane.showConfirmDialog(PieceMakerPanel.this,
+                switch (JOptionPane.showConfirmDialog(PieceCrafterPanel.this,
                         Messages.getString("PieceMakerPanel.ifYouContinue"), Messages.getString("PieceMakerPanel.pieceMaker"),
                         JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE)) {
                     case JOptionPane.YES_OPTION:
                         mFrame.dispose();
-                        PieceMakerPanel.this.removeAll();
+                        PieceCrafterPanel.this.removeAll();
                         break;
                     case JOptionPane.NO_OPTION:
                         break;
@@ -514,7 +514,7 @@ public class PieceMakerPanel extends ChessPanel {
         } catch (Exception e) {
             JOptionPane
                     .showMessageDialog(
-                            PieceMakerPanel.this,
+                            PieceCrafterPanel.this,
                             Messages.getString("PieceMakerPanel.allMovementDist") + textField.getToolTipText()
                                     + Messages.getString("PieceMakerPanel.directionBox"), Messages.getString("PieceMakerPanel.error"), JOptionPane.PLAIN_MESSAGE);
             return false;
@@ -550,7 +550,7 @@ public class PieceMakerPanel extends ChessPanel {
                     new String[]{
                             Messages.getString("PieceMakerPanel.browseComputer"), Messages.getString("PieceMakerPanel.imageFromInternet"), Messages.getString("PieceMakerPanel.cancel")};
 
-            switch (JOptionPane.showOptionDialog(PieceMakerPanel.this,
+            switch (JOptionPane.showOptionDialog(PieceCrafterPanel.this,
                     Messages.getString("PieceMakerPanel.whereFrom"), Messages.getString("PieceMakerPanel.chooseImage"),
                     JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0])) {
                 case JOptionPane.YES_OPTION:
@@ -570,7 +570,7 @@ public class PieceMakerPanel extends ChessPanel {
                         }
                     });
 
-                    if (fileChooser.showOpenDialog(PieceMakerPanel.this) == JFileChooser.APPROVE_OPTION) {
+                    if (fileChooser.showOpenDialog(PieceCrafterPanel.this) == JFileChooser.APPROVE_OPTION) {
                         try {
                             if (m_isDarkImage) {
                                 mDarkImage = ImageIO.read(fileChooser.getSelectedFile());
@@ -587,7 +587,7 @@ public class PieceMakerPanel extends ChessPanel {
                     }
                     break;
                 case JOptionPane.NO_OPTION:
-                    String url = JOptionPane.showInputDialog(PieceMakerPanel.this,
+                    String url = JOptionPane.showInputDialog(PieceCrafterPanel.this,
                             Messages.getString("PieceMakerPanel.enterURL"), Messages.getString("PieceMakerPanel.inputURL"),
                             JOptionPane.PLAIN_MESSAGE);
                     try {
