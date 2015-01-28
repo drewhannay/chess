@@ -24,38 +24,38 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 public class PieceCrafterPanel extends ChessPanel {
+
+    private final JTextField mPieceNameField;
+    private final JTextField mNorthField;
+    private final JTextField mNorthEastField;
+    private final JTextField mEastField;
+    private final JTextField mSouthEastField;
+    private final JTextField mSouthField;
+    private final JTextField mSouthWestField;
+    private final JTextField mWestField;
+    private final JTextField mNorthWestField;
+    private final JTextField mKnightOneField;
+    private final JTextField mKnightTwoField;
+    private final JComboBox mBidirectionalMovementComboBox;
+    private final JButton mAddKnightMoveButton;
+    private final JButton mRemoveKnightMoveButton;
+
+    private PieceTypeBuilder mBuilder;
+    private PieceMenuPanel mPieceMenuPanel;
+    private BufferedImage mLightImage;
+    private BufferedImage mDarkImage;
+    private List<String> mTempBidirectionalMovements;
+
     public interface PieceListChangedListener {
         public void onPieceListChanged();
     }
 
     public PieceCrafterPanel(PieceMenuPanel menuPanel) {
-        mLeaperCheckBox = new JCheckBox(Messages.getString("PieceMakerPanel.canJump"), false);
-        mPieceNameField = new JTextField(15);
-        mNorthField = new JTextField(4);
-        mNorthEastField = new JTextField(4);
-        mEastField = new JTextField(4);
-        mSouthEastField = new JTextField(4);
-        mSouthField = new JTextField(4);
-        mSouthWestField = new JTextField(4);
-        mWestField = new JTextField(4);
-        mNorthWestField = new JTextField(4);
-        mKnightOneField = new JTextField(4);
-        mKnightTwoField = new JTextField(4);
-        mBidirectionalMovementComboBox = new JComboBox();
-        mAddKnightMoveButton = new JButton(Messages.getString("PieceMakerPanel.add"));
-        mRemoveKnightMoveButton = new JButton(Messages.getString("PieceMakerPanel.remove"));
-        new PieceCrafterPanel(null, menuPanel);
+        this(null, menuPanel);
     }
 
     public PieceCrafterPanel(String pieceName, PieceMenuPanel menuPanel) {
         mPieceMenuPanel = menuPanel;
-        mFrame = new JFrame(Messages.getString("PieceMakerPanel.pieceEditor"));
-        mFrame.add(this);
-        mFrame.setSize(400, 600);
-        mFrame.setLocationRelativeTo(menuPanel);
-        mLeaperCheckBox = new JCheckBox(Messages.getString("PieceMakerPanel.canJump"), false);
-        mLeaperCheckBox.setOpaque(false);
-        mLeaperCheckBox.setForeground(Color.white);
         mPieceNameField = new JTextField(15);
         mNorthField = new JTextField(4);
         mNorthEastField = new JTextField(4);
@@ -269,10 +269,6 @@ public class PieceCrafterPanel extends ChessPanel {
             mRemoveKnightMoveButton.setEnabled(mBidirectionalMovementComboBox.getItemCount() != 0);
         });
 
-        mLeaperCheckBox.setToolTipText(Messages.getString("PieceMakerPanel.pressForJump"));
-//        if (builder != null)
-//            mLeaperCheckBox.setSelected(builder.isLeaper());
-
         final JPanel knightMovementPanel = new JPanel();
         knightMovementPanel.setOpaque(false);
         knightMovementPanel.setToolTipText(Messages.getString("PieceMakerPanel.useForKnight"));
@@ -349,10 +345,6 @@ public class PieceCrafterPanel extends ChessPanel {
         constraints.gridwidth = 2;
         movementPanel.add(movement, constraints);
         constraints.insets = new Insets(5, 0, 0, 0);
-        constraints.gridx = 0;
-        constraints.gridy = 5;
-        movementPanel.add(mLeaperCheckBox, constraints);
-        constraints.insets = new Insets(5, 0, 0, 0);
         constraints.insets = new Insets(5, 0, 5, 0);
         constraints.gridx = 0;
         constraints.gridy = 6;
@@ -422,7 +414,6 @@ public class PieceCrafterPanel extends ChessPanel {
 
             //refreshVariants();
 
-            mFrame.dispose();
             mPieceMenuPanel.refreshList();
             PieceCrafterPanel.this.removeAll();
         });
@@ -431,14 +422,12 @@ public class PieceCrafterPanel extends ChessPanel {
         cancelButton.setToolTipText(Messages.getString("PieceMakerPanel.pressToReturn"));
         cancelButton.addActionListener(event -> {
             if (mPieceNameField.getText().trim().isEmpty()) {
-                mFrame.dispose();
                 PieceCrafterPanel.this.removeAll();
             } else {
                 switch (JOptionPane.showConfirmDialog(PieceCrafterPanel.this,
                         Messages.getString("PieceMakerPanel.ifYouContinue"), Messages.getString("PieceMakerPanel.pieceMaker"),
                         JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE)) {
                     case JOptionPane.YES_OPTION:
-                        mFrame.dispose();
                         PieceCrafterPanel.this.removeAll();
                         break;
                     case JOptionPane.NO_OPTION:
@@ -459,9 +448,6 @@ public class PieceCrafterPanel extends ChessPanel {
         constraints.gridx = 1;
         constraints.gridy = 7;
         add(savePieceButton, constraints);
-
-        mFrame.setVisible(true);
-        mFrame.pack();
     }
 
     /**
@@ -611,28 +597,4 @@ public class PieceCrafterPanel extends ChessPanel {
 
         private JLabel m_imageLabel;
     }
-
-    private static final long serialVersionUID = -6530771731937840358L;
-
-    private final JTextField mPieceNameField;
-    private final JCheckBox mLeaperCheckBox;
-    private final JTextField mNorthField;
-    private final JTextField mNorthEastField;
-    private final JTextField mEastField;
-    private final JTextField mSouthEastField;
-    private final JTextField mSouthField;
-    private final JTextField mSouthWestField;
-    private final JTextField mWestField;
-    private final JTextField mNorthWestField;
-    private final JTextField mKnightOneField;
-    private final JTextField mKnightTwoField;
-    private final JComboBox mBidirectionalMovementComboBox;
-    private final JButton mAddKnightMoveButton;
-    private final JButton mRemoveKnightMoveButton;
-    private PieceTypeBuilder mBuilder;
-    private PieceMenuPanel mPieceMenuPanel;
-    private BufferedImage mLightImage;
-    private BufferedImage mDarkImage;
-    private JFrame mFrame;
-    private List<String> mTempBidirectionalMovements;
 }

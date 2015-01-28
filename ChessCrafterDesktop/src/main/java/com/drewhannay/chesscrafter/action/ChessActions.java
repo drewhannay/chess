@@ -12,6 +12,7 @@ public enum ChessActions {
     HELP(new HelpAction()),
     NEW_GAME(new NewGameAction()),
     OPEN_GAME(new OpenGameAction()),
+    PIECE_CRAFTER(new PieceCrafterAction()),
     PREFERENCES(new PreferencesAction()),
     SAVE_GAME(new SaveGameAction()),
     QUIT(new QuitAction());
@@ -38,6 +39,11 @@ public enum ChessActions {
         fileMenu.add(PREFERENCES.mAction);
         fileMenu.add(QUIT.mAction);
 
+        JMenu craftMenu = new JMenu("Craft");
+        fileMenu.setMnemonic(KeyEvent.VK_C);
+
+        craftMenu.add(PIECE_CRAFTER.mAction);
+
         JMenu optionsMenu = new JMenu(Messages.getString("Driver.options"));
         optionsMenu.setMnemonic(KeyEvent.VK_O);
         optionsMenu.setToolTipText(Messages.getString("Driver.accessGameOptions"));
@@ -52,6 +58,7 @@ public enum ChessActions {
         helpMenu.add(ABOUT.mAction);
 
         menuBar.add(fileMenu);
+        menuBar.add(craftMenu);
         menuBar.add(optionsMenu);
         menuBar.add(helpMenu);
 
