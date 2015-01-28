@@ -1,6 +1,6 @@
 package com.drewhannay.chesscrafter.action;
 
-import com.drewhannay.chesscrafter.frame.HelpFrame;
+import com.drewhannay.chesscrafter.frame.FrameManager;
 import com.drewhannay.chesscrafter.utility.Messages;
 
 import java.awt.event.ActionEvent;
@@ -18,6 +18,6 @@ public final class HelpAction extends ChessAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        new HelpFrame();
+        FrameManager.INSTANCE.openHelpFrame();
     }
 }

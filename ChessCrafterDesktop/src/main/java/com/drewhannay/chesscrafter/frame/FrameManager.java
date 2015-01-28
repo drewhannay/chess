@@ -28,6 +28,11 @@ public enum FrameManager {
         openFrame(new PieceCrafterFrame());
     }
 
+    public void openHelpFrame() {
+        verifyNotCreated(HelpFrame.class);
+        openFrame(new HelpFrame());
+    }
+
     private void openFrame(@NotNull ChessFrame frame) {
         frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         frame.addWindowListener(mWindowListener);

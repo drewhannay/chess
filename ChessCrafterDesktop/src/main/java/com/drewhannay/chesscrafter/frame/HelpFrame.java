@@ -7,17 +7,18 @@ import com.drewhannay.chesscrafter.utility.Messages;
 import javax.swing.*;
 import java.awt.*;
 
-public class HelpFrame extends JFrame {
-    public HelpFrame() {
-        initGUIComponents();
+public class HelpFrame extends ChessFrame {
+
+    private ChessPanel mHelpPanel;
+
+    HelpFrame() {
     }
 
-    private void initGUIComponents() {
+    @Override
+    void initComponents() {
+        super.initComponents();
+
         setTitle(Messages.getString("HelpFrame.help"));
-        // setSize(825, 525);
-        setResizable(true);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         mHelpPanel = new ChessPanel();
         mHelpPanel.setLayout(new BorderLayout());
@@ -52,15 +53,10 @@ public class HelpFrame extends JFrame {
 
         JTabbedPane helpTypesTabbedPane = new JTabbedPane();
         helpTypesTabbedPane.setOpaque(false);
-        helpTypesTabbedPane
-                .addTab(Messages.getString("HelpFrame.generalHelp"), null, generalHelpScrollPane);
-        helpTypesTabbedPane
-                .addTab(Messages.getString("HelpFrame.gamePlayHelp"), null, gamePlayHelpScrollPane);
-        helpTypesTabbedPane
-                .addTab(Messages.getString("HelpFrame.variantHelp"), null, variantMakingHelpScrollPane);
-        helpTypesTabbedPane
-                .addTab(Messages.getString("HelpFrame.pieceMakingHelp"), null, pieceMakingHelpScrollPane);
-        helpTypesTabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+        helpTypesTabbedPane.addTab(Messages.getString("HelpFrame.generalHelp"), null, generalHelpScrollPane);
+        helpTypesTabbedPane.addTab(Messages.getString("HelpFrame.gamePlayHelp"), null, gamePlayHelpScrollPane);
+        helpTypesTabbedPane.addTab(Messages.getString("HelpFrame.variantHelp"), null, variantMakingHelpScrollPane);
+        helpTypesTabbedPane.addTab(Messages.getString("HelpFrame.pieceMakingHelp"), null, pieceMakingHelpScrollPane);
 
         mHelpPanel.add(helpTypesTabbedPane, BorderLayout.CENTER);
 
@@ -77,12 +73,5 @@ public class HelpFrame extends JFrame {
         pieceMakingHelpPanel.add(pieceMakingHelpText);
 
         add(mHelpPanel);
-
-        pack();
-
-        setVisible(true);
     }
-
-    private static final long serialVersionUID = -3375921014569944071L;
-    private ChessPanel mHelpPanel;
 }
