@@ -9,6 +9,7 @@ import java.awt.event.KeyEvent;
 public enum ChessActions {
     ABOUT(new AboutAction()),
     DECLARE_DRAW(new DeclareDrawAction()),
+    GAME_CRAFTER(new GameCrafterAction()),
     HELP(new HelpAction()),
     NEW_GAME(new NewGameAction()),
     OPEN_GAME(new OpenGameAction()),
@@ -43,6 +44,7 @@ public enum ChessActions {
         fileMenu.setMnemonic(KeyEvent.VK_C);
 
         craftMenu.add(PIECE_CRAFTER.mAction);
+        craftMenu.add(GAME_CRAFTER.mAction);
 
         JMenu optionsMenu = new JMenu(Messages.getString("Driver.options"));
         optionsMenu.setMnemonic(KeyEvent.VK_O);

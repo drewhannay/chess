@@ -48,8 +48,8 @@ public class GameFrame extends ChessFrame {
     }
 
     @Override
-    void initComponents() {
-        super.initComponents();
+    void doInitComponents() {
+        super.doInitComponents();
 
         setTitle(AppConstants.APP_NAME);
 

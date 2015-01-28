@@ -12,7 +12,7 @@ class ChessFrame extends JFrame {
     ChessFrame() {
     }
 
-    void initComponents() {
+    final void initComponents() {
         enableOSXFullscreen(this);
 
         setLayout(new BorderLayout());
@@ -26,6 +26,11 @@ class ChessFrame extends JFrame {
 
         setJMenuBar(ChessActions.createJMenuBar());
         setPreferredSize(new Dimension(685, 450));
+
+        doInitComponents();
+    }
+
+    void doInitComponents() {
     }
 
     private void enableOSXFullscreen(Window window) {

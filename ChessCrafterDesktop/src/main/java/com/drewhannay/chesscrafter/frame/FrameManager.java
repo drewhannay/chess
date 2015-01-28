@@ -23,6 +23,11 @@ public enum FrameManager {
         openFrame(new GameFrame());
     }
 
+    public void openGameCrafterFrame() {
+        verifyNotCreated(GameCrafterFrame.class);
+        openFrame(new GameCrafterFrame());
+    }
+
     public void openPieceCrafterFrame() {
         verifyNotCreated(PieceCrafterFrame.class);
         openFrame(new PieceCrafterFrame());

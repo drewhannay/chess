@@ -15,8 +15,8 @@ public class AboutFrame extends ChessFrame {
     }
 
     @Override
-    void initComponents() {
-        super.initComponents();
+    void doInitComponents() {
+        super.doInitComponents();
 
         setTitle(Messages.getString("AboutFrame.about") + AppConstants.APP_NAME);
 

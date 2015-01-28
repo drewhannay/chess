@@ -13,8 +13,8 @@ public class HelpFrame extends ChessFrame {
     }
 
     @Override
-    void initComponents() {
-        super.initComponents();
+    void doInitComponents() {
+        super.doInitComponents();
 
         setTitle(Messages.getString("HelpFrame.help"));
 
