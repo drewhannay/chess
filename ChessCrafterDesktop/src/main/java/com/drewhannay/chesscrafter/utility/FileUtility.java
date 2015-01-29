@@ -17,9 +17,9 @@ public final class FileUtility {
     public static final FileChooser.ExtensionFilter PIECE_EXTENSION_FILTER = new FileChooser.ExtensionFilter("Piece", "*.piece");
 
     private static final String HIDDEN_DIR;
-    private static final String IMAGES = "images";
-    private static final String VARIANTS = "variants";
-    private static final String PIECES = "pieces";
+    private static final String IMAGES = "Images";
+    private static final String VARIANTS = "Crafted_Games";
+    private static final String PIECES = "Pieces";
     private static final String SAVED_GAMES = "Saved_Games";
     private static final String SAVED_GAME_EXTENSION = ".chesscrafter";
     private static final String GAME_CRAFTER_EXTENSION = ".craftconfig";
