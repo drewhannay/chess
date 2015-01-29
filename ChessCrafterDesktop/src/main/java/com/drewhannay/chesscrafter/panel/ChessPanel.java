@@ -19,6 +19,4 @@ public class ChessPanel extends JPanel {
 
         g2.dispose();
     }
-
-    private static final long serialVersionUID = 2904391800353371870L;
 }

@@ -4,6 +4,7 @@ import com.drewhannay.chesscrafter.models.Direction;
 import com.drewhannay.chesscrafter.models.PieceType;
 import com.drewhannay.chesscrafter.models.TwoHopMovement;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import org.jetbrains.annotations.NotNull;
@@ -36,6 +37,11 @@ public enum PieceTypeManager {
             }
         }
         throw new IllegalArgumentException("Unknown PieceType:" + name);
+    }
+
+    @NotNull
+    public Set<PieceType> getAllPieceTypes() {
+        return ImmutableSet.copyOf(mPieceTypes);
     }
 
     public void registerPieceType(@NotNull PieceType pieceType) {
