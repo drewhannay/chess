@@ -25,6 +25,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -159,11 +160,10 @@ public final class GamePanel extends ChessPanel {
                 if (PreferenceUtility.getSaveLocationPreference().equals("default")) {
                     JOptionPane.showMessageDialog(this, Messages.getString("PlayGamePanel.sinceFirstTime", AppConstants.APP_NAME),
                             Messages.getString("PlayGamePanel.saveLocation"), JOptionPane.PLAIN_MESSAGE);
-                    JFileChooser fileChooser = new JFileChooser();
-                    fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                    int returnVal = fileChooser.showOpenDialog(this);
-                    if (returnVal == JFileChooser.APPROVE_OPTION)
-                        PreferenceUtility.setSaveLocationPreference(fileChooser.getSelectedFile().getAbsolutePath());
+                    File directory = FileUtility.chooseDirectory(this);
+                    if (directory != null) {
+                        PreferenceUtility.setSaveLocationPreference(directory.getAbsolutePath());
+                    }
                 }
                 String saveFileName = JOptionPane.showInputDialog(this, Messages.getString("PlayGamePanel.enterAName"),
                         Messages.getString("PlayGamePanel.saving"), JOptionPane.PLAIN_MESSAGE);

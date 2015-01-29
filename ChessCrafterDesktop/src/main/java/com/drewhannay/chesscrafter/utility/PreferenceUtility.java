@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.util.List;
 import java.util.prefs.Preferences;
 
@@ -50,14 +51,9 @@ public final class PreferenceUtility {
         resetButton.addActionListener(event -> currentSaveLocationField.setText(defaultSaveLocation));
 
         changeLocationButton.addActionListener(event -> {
-            try {
-                JFileChooser fileChooser = new JFileChooser();
-                fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                int returnVal = fileChooser.showOpenDialog(null);
-                if (returnVal == JFileChooser.APPROVE_OPTION)
-                    currentSaveLocationField.setText(fileChooser.getSelectedFile().getAbsolutePath());
-            } catch (Exception e) {
-                e.printStackTrace();
+            File directory = FileUtility.chooseDirectory(null);
+            if (directory != null) {
+                currentSaveLocationField.setText(directory.getAbsolutePath());
             }
         });
 

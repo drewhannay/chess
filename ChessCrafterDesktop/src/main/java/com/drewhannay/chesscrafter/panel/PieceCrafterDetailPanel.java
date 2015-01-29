@@ -4,6 +4,7 @@ import com.drewhannay.chesscrafter.logic.PieceTypeBuilder;
 import com.drewhannay.chesscrafter.models.Direction;
 import com.drewhannay.chesscrafter.models.PieceType;
 import com.drewhannay.chesscrafter.models.TwoHopMovement;
+import com.drewhannay.chesscrafter.utility.FileUtility;
 import com.drewhannay.chesscrafter.utility.GuiUtility;
 import com.drewhannay.chesscrafter.utility.ImageUtility;
 import com.drewhannay.chesscrafter.utility.Messages;
@@ -11,7 +12,6 @@ import com.google.common.collect.Lists;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.filechooser.FileFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -541,34 +541,18 @@ public class PieceCrafterDetailPanel extends ChessPanel {
                     Messages.getString("PieceMakerPanel.whereFrom"), Messages.getString("PieceMakerPanel.chooseImage"),
                     JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0])) {
                 case JOptionPane.YES_OPTION:
-                    JFileChooser fileChooser = new JFileChooser("~/");
-                    fileChooser.setFileFilter(new FileFilter() {
-                        @Override
-                        public String getDescription() {
-                            return "PNG Files";
-                        }
-
-                        @Override
-                        public boolean accept(File f) {
-                            if (f.isDirectory() || f.getName().endsWith(".png"))
-                                return true;
-                            else
-                                return false;
-                        }
-                    });
-
-                    if (fileChooser.showOpenDialog(PieceCrafterDetailPanel.this) == JFileChooser.APPROVE_OPTION) {
+                    File file = FileUtility.chooseFile(PieceCrafterDetailPanel.this, FileUtility.IMAGE_FILE_FILTER);
+                    if (file != null) {
                         try {
                             if (m_isDarkImage) {
-                                mDarkImage = ImageIO.read(fileChooser.getSelectedFile());
+                                mDarkImage = ImageIO.read(file);
                                 m_imageLabel.setIcon(new ImageIcon(mDarkImage.getScaledInstance(48, 48, Image.SCALE_SMOOTH)));
                             } else {
-                                mLightImage = ImageIO.read(fileChooser.getSelectedFile());
+                                mLightImage = ImageIO.read(file);
                                 m_imageLabel.setIcon(new ImageIcon(mLightImage.getScaledInstance(48, 48, Image.SCALE_SMOOTH)));
                             }
                         } catch (IOException e) {
-                            // TODO we should show the user an error message if this
-                            // fails
+                            // TODO we should show the user an error message if this fails
                             e.printStackTrace();
                         }
                     }

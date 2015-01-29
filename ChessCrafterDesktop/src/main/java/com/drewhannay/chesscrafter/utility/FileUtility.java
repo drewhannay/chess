@@ -1,12 +1,29 @@
 package com.drewhannay.chesscrafter.utility;
 
+import org.jetbrains.annotations.Nullable;
+
 import javax.imageio.ImageIO;
+import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
 public final class FileUtility {
+    public static final FileFilter IMAGE_FILE_FILTER = new FileFilter() {
+        @Override
+        public String getDescription() {
+            return "PNG Files";
+        }
+
+        @Override
+        public boolean accept(File f) {
+            return f.isDirectory() || f.getName().endsWith(".png");
+        }
+    };
+
     public static String getImagePath(String imageName) {
         File file = new File(HIDDEN_DIR + SLASH + IMAGES);
         file.mkdirs();
@@ -61,6 +78,28 @@ public final class FileUtility {
         String path = HIDDEN_DIR + SLASH + COMPLETED_GAMES;
         new File(path).mkdirs();
         return path;
+    }
+
+    @Nullable
+    public static File chooseFile(Component parent, FileFilter filter) {
+        JFileChooser fileChooser = new JFileChooser("~/");
+        fileChooser.setFileFilter(filter);
+
+        int choice = fileChooser.showOpenDialog(parent);
+        if (choice == JFileChooser.APPROVE_OPTION) {
+            return fileChooser.getSelectedFile();
+        }
+        return null;
+    }
+
+    @Nullable
+    public static File chooseDirectory(Component parent) {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        int choice = fileChooser.showOpenDialog(parent);
+        if (choice == JFileChooser.APPROVE_OPTION)
+            return fileChooser.getSelectedFile();
+        return null;
     }
 
     static {
