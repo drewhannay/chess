@@ -51,7 +51,7 @@ public final class PreferenceUtility {
         resetButton.addActionListener(event -> currentSaveLocationField.setText(defaultSaveLocation));
 
         changeLocationButton.addActionListener(event -> {
-            File directory = FileUtility.chooseDirectory(null);
+            File directory = FileUtility.chooseDirectory();
             if (directory != null) {
                 currentSaveLocationField.setText(directory.getAbsolutePath());
             }

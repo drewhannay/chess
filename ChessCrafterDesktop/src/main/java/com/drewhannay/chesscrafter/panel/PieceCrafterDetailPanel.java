@@ -541,7 +541,7 @@ public class PieceCrafterDetailPanel extends ChessPanel {
                     Messages.getString("PieceMakerPanel.whereFrom"), Messages.getString("PieceMakerPanel.chooseImage"),
                     JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0])) {
                 case JOptionPane.YES_OPTION:
-                    File file = FileUtility.chooseFile(PieceCrafterDetailPanel.this, FileUtility.IMAGE_FILE_FILTER);
+                    File file = FileUtility.chooseFile(FileUtility.IMAGE_EXTENSION_FILTER);
                     if (file != null) {
                         try {
                             if (m_isDarkImage) {

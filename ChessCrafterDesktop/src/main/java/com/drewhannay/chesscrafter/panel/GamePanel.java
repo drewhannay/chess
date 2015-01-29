@@ -160,7 +160,7 @@ public final class GamePanel extends ChessPanel {
                 if (PreferenceUtility.getSaveLocationPreference().equals("default")) {
                     JOptionPane.showMessageDialog(this, Messages.getString("PlayGamePanel.sinceFirstTime", AppConstants.APP_NAME),
                             Messages.getString("PlayGamePanel.saveLocation"), JOptionPane.PLAIN_MESSAGE);
-                    File directory = FileUtility.chooseDirectory(this);
+                    File directory = FileUtility.chooseDirectory();
                     if (directory != null) {
                         PreferenceUtility.setSaveLocationPreference(directory.getAbsolutePath());
                     }
