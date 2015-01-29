@@ -1,146 +1,75 @@
 package com.drewhannay.chesscrafter.panel;
 
+import com.drewhannay.chesscrafter.logic.PieceTypeManager;
 import com.drewhannay.chesscrafter.models.PieceType;
-import com.drewhannay.chesscrafter.utility.FileUtility;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.function.Consumer;
+import java.util.stream.IntStream;
 
 public class PieceCrafterMasterPanel extends ChessPanel {
-
-    private DefaultListModel<String> mPieceListModel;
-
-    private PieceCrafterDetailPanel.PieceListChangedListener mListener;
 
     private final Runnable mNewPieceCallback;
     private final Consumer<PieceType> mPieceTypeSelectedCallback;
 
+    private final JList<PieceType> mPieceList;
+    private final DefaultListModel<PieceType> mPieceListModel;
+
     public PieceCrafterMasterPanel(Runnable newPieceCallback, Consumer<PieceType> pieceTypeSelectedCallback) {
         mNewPieceCallback = newPieceCallback;
         mPieceTypeSelectedCallback = pieceTypeSelectedCallback;
-//        mPieceListModel = new DefaultListModel<>();
-//        initGuiComponents();
+
+        mPieceListModel = new DefaultListModel<>();
+        mPieceList = new JList<>(mPieceListModel);
+        refreshList();
+
+        initComponents();
+        validate();
     }
 
-//    private void initGuiComponents() {
-//        setLayout(new GridBagLayout());
-//        GridBagConstraints constraints = new GridBagConstraints();
-//
-//        constraints.gridy = 0;
-//        constraints.ipadx = 0;
-//        constraints.insets = new Insets(5, 10, 0, 10);
-//        constraints.anchor = GridBagConstraints.CENTER;
-//
-//        JButton createNewPieceButton = new JButton(Messages.getString("PieceMenuPanel.createNew"));
-//        createNewPieceButton.addActionListener(event -> new PieceMakerPanel(PieceMenuPanel.this));
-//        add(createNewPieceButton, constraints);
-//
-//        final JPanel editDeletePanel = new JPanel();
-//        editDeletePanel.setSize(500, 500);
-//        editDeletePanel.setOpaque(false);
-//
-//        editDeletePanel.setLayout(new GridBagLayout());
-//
-//        constraints.gridy = 1;
-//        constraints.ipadx = 7;
-//        constraints.insets = new Insets(5, 5, 0, 5);
-//        constraints.fill = GridBagConstraints.HORIZONTAL;
-//
-//        JScrollPane scrollPane = new JScrollPane();
-//        final JList<String> pieceList = new JList<>();
-//        scrollPane.setSize(500, 500);
-//        pieceList.setSize(500, 500);
-//        scrollPane.setViewportView(pieceList);
-//        refreshList();
-//        pieceList.setModel(mPieceListModel);
-//        pieceList.doLayout();
-//
-//        editDeletePanel.add(scrollPane, constraints);
-//        editDeletePanel.setVisible(mPieceListModel.size() != 0);
-//
-//        JPanel buttonPanel = new JPanel();
-//        buttonPanel.setLayout(new GridBagLayout());
-//        buttonPanel.setOpaque(false);
-//
-//        constraints.gridy = 2;
-//        constraints.ipadx = 7;
-//        final JButton editButton = new JButton(Messages.getString("PieceMenuPanel.edit"));
-//        editButton.setEnabled(false);
-//        editButton.addActionListener(event -> new PieceMakerPanel(mPieceListModel.get(pieceList.getSelectedIndex()), PieceMenuPanel.this));
-//        buttonPanel.add(editButton, constraints);
-//
-//        final JButton deleteButton = new JButton(Messages.getString("PieceMenuPanel.delete"));
-//        deleteButton.setEnabled(false);
-//        deleteButton.addActionListener(event -> {
-//            if (pieceList.getSelectedIndices().length > 0) {
-//                int[] selectedIndices = pieceList.getSelectedIndices();
-//                for (int i = selectedIndices.length - 1; i >= 0; i--) {
-//                    FileUtility.deletePiece(mPieceListModel.get(selectedIndices[i]));
-//                    mPieceListModel.removeElementAt(selectedIndices[i]);
-//                }
-//            }
-//
-//            if (mPieceListModel.size() == 0) {
-//                editButton.setEnabled(false);
-//                deleteButton.setEnabled(false);
-//                editDeletePanel.setVisible(false);
-//            }
-//        });
-//        constraints.ipadx = 8;
-//        buttonPanel.add(deleteButton, constraints);
-//
-//        constraints.gridy = 2;
-//        editDeletePanel.add(buttonPanel, constraints);
-//
-//        constraints.gridy = 1;
-//        add(editDeletePanel, constraints);
-//
-//        pieceList.addListSelectionListener(arg0 -> {
-//            boolean isSelected = pieceList.getSelectedIndex() != -1;
-//            deleteButton.setEnabled(isSelected);
-//            editButton.setEnabled(isSelected);
-//        });
-//
-//        if (mFrame == null) {
-//            JButton backButton = new JButton(Messages.getString("PieceMenuPanel.returnToMenu"));
-//            backButton.setToolTipText(Messages.getString("PieceMenuPanel.returnToMenu"));
-//            backButton.addActionListener(event -> Driver.getInstance().revertToMainPanel());
-//
-//            constraints.gridy = 2;
-//            constraints.insets = new Insets(15, 5, 10, 5);
-//            add(backButton, constraints);
-//        } else {
-//            JButton doneButton = new JButton(Messages.getString("PieceMenuPanel.done"));
-//            doneButton.setToolTipText(Messages.getString("PieceMenuPanel.returnToVariant"));
-//            doneButton.addActionListener(arg0 -> mFrame.dispose());
-//
-//            constraints.gridy = 2;
-//            constraints.insets = new Insets(15, 5, 10, 5);
-//            add(doneButton, constraints);
-//        }
-//
-//        if (mFrame != null) {
-//            mFrame.setTitle(Messages.getString("PieceMenuPanel.pieceMenu"));
-//            mFrame.setSize(225, 300);
-//            mFrame.add(this);
-//            mFrame.setLocationRelativeTo(Driver.getInstance());
-//            mFrame.setVisible(true);
-//        }
-//    }
+    private void initComponents() {
+        mPieceList.setCellRenderer(mCellRenderer);
+        mPieceList.setLayoutOrientation(JList.VERTICAL);
+        mPieceList.setVisibleRowCount(-1);
+        mPieceList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        mPieceList.addListSelectionListener(e -> {
+            if (e.getValueIsAdjusting()) {
+                return;
+            }
+            mPieceTypeSelectedCallback.accept(mPieceList.getSelectedValue());
+        });
 
-    public void setPieceListChangedListener(PieceCrafterDetailPanel.PieceListChangedListener listener) {
-        mListener = listener;
+        JScrollPane scrollPane = new JScrollPane(mPieceList);
+        scrollPane.setPreferredSize(new Dimension(190, 500));
+
+        add(scrollPane);
     }
 
     public void refreshList() {
         mPieceListModel.clear();
 
-        String[] pieceArray = FileUtility.getCustomPieceArray();
-        for (String aPieceArray : pieceArray) {
-            mPieceListModel.addElement(aPieceArray);
-        }
-
-        if (mListener != null)
-            mListener.onPieceListChanged();
+        // TODO: currently adding duplicates to force the list to scroll
+        IntStream.range(0, 30).forEach((i) -> PieceTypeManager.INSTANCE.getAllPieceTypes().forEach(mPieceListModel::addElement));
     }
+
+    private void deletePiece() {
+        // TODO: need to delete the actual custom piece
+        // TODO: don't allow deleting classic pieces
+        int index = mPieceList.getSelectedIndex();
+        if (index >= 0) {
+            mPieceListModel.remove(index);
+        }
+    }
+
+    private final ListCellRenderer<PieceType> mCellRenderer = (JList<? extends PieceType> list, PieceType value,
+                                                               int index, boolean isSelected, boolean cellHasFocus) -> {
+        JLabel label = new JLabel(value.getName());
+        label.setOpaque(true);
+        label.setBackground(isSelected ? list.getSelectionBackground() : list.getBackground());
+        label.setForeground(isSelected ? list.getSelectionForeground() : list.getForeground());
+
+        // TODO: render custom pieceType view here
+        return label;
+    };
 }
