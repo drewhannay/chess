@@ -12,6 +12,18 @@ import java.net.URL;
 
 public final class FileUtility {
     public static final FileChooser.ExtensionFilter IMAGE_EXTENSION_FILTER = new FileChooser.ExtensionFilter("PNG", "*.png");
+    public static final FileChooser.ExtensionFilter HISTORY_EXTENSION_FILTER = new FileChooser.ExtensionFilter("Saved Chess Game", "*.chesscrafter");
+    public static final FileChooser.ExtensionFilter CONFIG_EXTENSION_FILTER = new FileChooser.ExtensionFilter("Crafted Game", "*.craftconfig");
+    public static final FileChooser.ExtensionFilter PIECE_EXTENSION_FILTER = new FileChooser.ExtensionFilter("Piece", "*.piece");
+
+    private static final String HIDDEN_DIR;
+    private static final String IMAGES = "images";
+    private static final String VARIANTS = "variants";
+    private static final String PIECES = "pieces";
+    //private static final String GAMES_IN_PROGRESS = "gamesInProgress";
+    private static final String SAVED_GAMES = "Saved Games";
+
+    private static final String SLASH;
 
     public static String getImagePath(String imageName) {
         File file = new File(HIDDEN_DIR + SLASH + IMAGES);
@@ -39,32 +51,34 @@ public final class FileUtility {
         return new File(HIDDEN_DIR + SLASH + PIECES + SLASH + pieceName);
     }
 
-    public static String[] getGamesInProgressFileArray() {
-        File file = new File(HIDDEN_DIR + SLASH + GAMES_IN_PROGRESS);
+    /*public static String[] getGamesInProgressFileArray() {
+        File file = new File(HIDDEN_DIR + SLASH + SAVED_GAMES);
         file.mkdirs();
         return file.list();
-    }
+    }*/
 
-    public static File getGamesInProgressFile(String gameFileName) {
-        String path = HIDDEN_DIR + SLASH + GAMES_IN_PROGRESS;
+    public static File getGameFile(String gameFileName) {
+        String path = HIDDEN_DIR + SLASH + SAVED_GAMES;
+        if(PreferenceUtility.getSaveLocationPreference() != "default")
+            path = PreferenceUtility.getSaveLocationPreference();
         new File(path).mkdirs();
-        return new File(path + SLASH + gameFileName);
+        return new File(path + SLASH + gameFileName + Messages.getString("FileUtility.savedGameExtension"));
     }
 
     public static String[] getCompletedGamesFileArray() {
-        File file = new File(HIDDEN_DIR + SLASH + COMPLETED_GAMES);
+        File file = new File(HIDDEN_DIR + SLASH + SAVED_GAMES);
         file.mkdirs();
         return file.list();
     }
 
-    public static File getCompletedGamesFile(String completedGameFileName) {
+    /*public static File getCompletedGamesFile(String completedGameFileName) {
         String path = HIDDEN_DIR + SLASH + COMPLETED_GAMES;
         new File(path).mkdirs();
-        return new File(path + SLASH + completedGameFileName);
-    }
+        return new File(path + SLASH + completedGameFileName + Messages.getString("FileUtility.savedGameExtension"));
+    }*/
 
     public static String getDefaultCompletedLocation() {
-        String path = HIDDEN_DIR + SLASH + COMPLETED_GAMES;
+        String path = HIDDEN_DIR + SLASH + SAVED_GAMES;
         new File(path).mkdirs();
         return path;
     }
@@ -117,13 +131,4 @@ public final class FileUtility {
         new File((getImagePath("l_" + pieceName + ".png"))).delete();
         new File((getImagePath("d_" + pieceName + ".png"))).delete();
     }
-
-    private static final String HIDDEN_DIR;
-    private static final String IMAGES = "images";
-    private static final String VARIANTS = "variants";
-    private static final String PIECES = "pieces";
-    private static final String GAMES_IN_PROGRESS = "gamesInProgress";
-    private static final String COMPLETED_GAMES = "completedGames";
-
-    private static final String SLASH;
 }

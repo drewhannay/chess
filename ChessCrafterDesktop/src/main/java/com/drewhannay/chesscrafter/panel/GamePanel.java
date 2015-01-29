@@ -167,7 +167,7 @@ public final class GamePanel extends ChessPanel {
                 }
                 String saveFileName = JOptionPane.showInputDialog(this, Messages.getString("PlayGamePanel.enterAName"),
                         Messages.getString("PlayGamePanel.saving"), JOptionPane.PLAIN_MESSAGE);
-                try (FileOutputStream fileOut = new FileOutputStream(FileUtility.getCompletedGamesFile(saveFileName))) {
+                try (FileOutputStream fileOut = new FileOutputStream(FileUtility.getGameFile(saveFileName))) {
                     String json = GsonUtility.toJson(mGame.getHistory());
                     fileOut.write(json.getBytes());
                     fileOut.flush();
@@ -194,7 +194,7 @@ public final class GamePanel extends ChessPanel {
         if (fileName == null)
             return;
 
-        try (FileOutputStream fileOut = new FileOutputStream(FileUtility.getGamesInProgressFile(fileName))) {
+        try (FileOutputStream fileOut = new FileOutputStream(FileUtility.getGameFile(fileName))) {
             String json = GsonUtility.toJson(mGame.getHistory());
             fileOut.write(json.getBytes());
             fileOut.flush();

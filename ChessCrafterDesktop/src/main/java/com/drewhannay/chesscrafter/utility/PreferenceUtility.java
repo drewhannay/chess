@@ -9,6 +9,13 @@ import java.util.List;
 import java.util.prefs.Preferences;
 
 public final class PreferenceUtility {
+
+    private static List<PieceToolTipPreferenceChangedListener> mToolTipListeners;
+    private static final String SAVELOCATION = "saveLocation";
+    private static final String HIGHLIGHTMOVES = "highlightMoves";
+    private static final String PIECETOOLTIPS = "pieceToolTips";
+    private static final Preferences mPreference = Preferences.userRoot().node("ChessCrafterPreferences");
+
     private PreferenceUtility() {
     }
 
@@ -24,46 +31,58 @@ public final class PreferenceUtility {
         popupFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         GridBagConstraints constraints = new GridBagConstraints();
 
+        String userSaveLocation = PreferenceUtility.getSaveLocationPreference();
+        String defaultSaveLocation = FileUtility.getDefaultCompletedLocation();
+
         JPanel holder = new JPanel();
         holder.setBorder(BorderFactory.createTitledBorder(Messages.getString("PreferenceUtility.defaultCompletedLocation")));
         JLabel currentSaveLocationLabel = new JLabel(Messages.getString("PreferenceUtility.currentSaveLocation"));
         JTextField currentSaveLocationField = new JTextField(FileUtility.getDefaultCompletedLocation());
         currentSaveLocationField.setEditable(false);
+        if(userSaveLocation.length() > 300)
+            currentSaveLocationField.setPreferredSize(new Dimension(userSaveLocation.length() + 15, 25));
+        else
+            currentSaveLocationField.setPreferredSize(new Dimension(300, 25));
         JButton changeLocationButton = new JButton(Messages.getString("PreferenceUtility.chooseNewSaveLocation"));
         JButton resetButton = new JButton(Messages.getString("PreferenceUtility.resetToDefaultLocation"));
         JCheckBox highlightingCheckBox = new JCheckBox(Messages.getString("PreferenceUtility.enableHighlighting"));
         JCheckBox pieceToolTipCheckBox = new JCheckBox(Messages.getString("PreferenceUtility.showPieceTooltips"));
 
-        JButton cancelButton = new JButton(Messages.getString("PreferenceUtility.cancel"));
+        //JButton cancelButton = new JButton(Messages.getString("PreferenceUtility.cancel"));
 
-        JButton doneButton = new JButton(Messages.getString("PreferenceUtility.done"));
-        GuiUtility.setupDoneButton(doneButton, popupFrame);
+        JButton closeButton = new JButton(Messages.getString("PreferenceUtility.close"));
+        GuiUtility.setupDoneButton(closeButton, popupFrame);
 
         holder.add(currentSaveLocationLabel);
         holder.add(currentSaveLocationField);
-
-        String defaultSaveLocation = FileUtility.getDefaultCompletedLocation();
 
         currentSaveLocationField.setText(mPreference.get(SAVELOCATION, "default"));
         highlightingCheckBox.setSelected(mPreference.getBoolean(HIGHLIGHTMOVES, true));
         pieceToolTipCheckBox.setSelected(mPreference.getBoolean(PIECETOOLTIPS, false));
 
-        resetButton.addActionListener(event -> currentSaveLocationField.setText(defaultSaveLocation));
+        resetButton.addActionListener(event -> {
+            currentSaveLocationField.setText(FileUtility.getDefaultCompletedLocation());
+            PreferenceUtility.setSaveLocationPreference(defaultSaveLocation);
+        });
 
         changeLocationButton.addActionListener(event -> {
             File directory = FileUtility.chooseDirectory();
             if (directory != null) {
                 currentSaveLocationField.setText(directory.getAbsolutePath());
+                PreferenceUtility.setSaveLocationPreference(directory.getAbsolutePath());
             }
         });
 
-        doneButton.addActionListener(e -> {
+        highlightingCheckBox.addActionListener(event -> mPreference.putBoolean(HIGHLIGHTMOVES, highlightingCheckBox.isSelected()));
+        pieceToolTipCheckBox.addActionListener(event -> mPreference.putBoolean(PIECETOOLTIPS, pieceToolTipCheckBox.isSelected()));
+
+        /*closeButton.addActionListener(e -> {
             mPreference.put(SAVELOCATION, currentSaveLocationField.getText());
             mPreference.putBoolean(HIGHLIGHTMOVES, highlightingCheckBox.isSelected());
             mPreference.putBoolean(PIECETOOLTIPS, pieceToolTipCheckBox.isSelected());
-        });
+        });*/
 
-        GuiUtility.setupDoneButton(cancelButton, popupFrame);
+        //GuiUtility.setupDoneButton(cancelButton, popupFrame);
 
         constraints.gridx = 0;
         constraints.gridy = 0;
@@ -97,18 +116,13 @@ public final class PreferenceUtility {
         constraints.gridy = 4;
         constraints.gridwidth = 1;
         constraints.anchor = GridBagConstraints.CENTER;
-        popupFrame.add(cancelButton, constraints);
-
-        constraints.gridx = 1;
-        constraints.gridy = 4;
-        constraints.gridwidth = 1;
-        constraints.anchor = GridBagConstraints.CENTER;
-        popupFrame.add(doneButton, constraints);
+        //popupFrame.add(cancelButton, constraints);
 
         constraints.gridx = 0;
-        constraints.gridy = 2;
+        constraints.gridy = 4;
         constraints.gridwidth = 2;
         constraints.anchor = GridBagConstraints.CENTER;
+        popupFrame.add(closeButton, constraints);
 
         popupFrame.pack();
         popupFrame.setVisible(true);
@@ -179,10 +193,4 @@ public final class PreferenceUtility {
         if (mToolTipListeners != null)
             mToolTipListeners.clear();
     }
-
-    private static List<PieceToolTipPreferenceChangedListener> mToolTipListeners;
-    private static final String SAVELOCATION = "saveLocation";
-    private static final String HIGHLIGHTMOVES = "highlightMoves";
-    private static final String PIECETOOLTIPS = "pieceToolTips";
-    private static final Preferences mPreference = Preferences.userRoot().node("ChessCrafterPreferences");
 }

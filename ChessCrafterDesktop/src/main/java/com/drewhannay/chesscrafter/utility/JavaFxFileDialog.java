@@ -44,12 +44,14 @@ public final class JavaFxFileDialog {
 
     private static File doChooseDirectory() {
         DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setInitialDirectory(new File(PreferenceUtility.getSaveLocationPreference()));
         return directoryChooser.showDialog(null);
     }
 
     private static File doChooseFile(FileChooser.ExtensionFilter extensionFilter) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(extensionFilter);
+        fileChooser.setInitialDirectory(new File(PreferenceUtility.getSaveLocationPreference()));
         return fileChooser.showOpenDialog(null);
     }
 
