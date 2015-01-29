@@ -6,6 +6,9 @@ import com.google.common.base.Preconditions;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
 import java.lang.reflect.Method;
 
 class ChessFrame extends JFrame {
@@ -27,10 +30,23 @@ class ChessFrame extends JFrame {
         setJMenuBar(ChessActions.createJMenuBar());
         setPreferredSize(new Dimension(685, 450));
 
+        getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                .put(KeyStroke.getKeyStroke(KeyEvent.VK_W, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), "close");
+        getRootPane().getActionMap().put("close", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                onWindowCloseKeyboardRequest();
+            }
+        });
+
         doInitComponents();
     }
 
     void doInitComponents() {
+    }
+
+    void onWindowCloseKeyboardRequest() {
+        dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
     }
 
     private void enableOSXFullscreen(Window window) {

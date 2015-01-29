@@ -20,10 +20,8 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ContainerEvent;
 import java.awt.event.ContainerListener;
-import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 import java.io.FileReader;
@@ -61,15 +59,6 @@ public class GameFrame extends ChessFrame {
         setFocusable(true);
         addWindowFocusListener(mWindowFocusListener);
 
-        getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
-                .put(KeyStroke.getKeyStroke(KeyEvent.VK_W, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), "close");
-        getRootPane().getActionMap().put("close", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                mTabbedPane.remove(mTabbedPane.getSelectedIndex());
-            }
-        });
-
         mTabbedPane.addContainerListener(new ContainerListener() {
             @Override
             public void componentAdded(ContainerEvent e) {
@@ -82,6 +71,13 @@ public class GameFrame extends ChessFrame {
                 }
             }
         });
+    }
+
+    @Override
+    void onWindowCloseKeyboardRequest() {
+        if (mTabbedPane.getTabCount() != 0) {
+            mTabbedPane.remove(mTabbedPane.getSelectedIndex());
+        }
     }
 
     public void addGame(@NotNull Game game) {
