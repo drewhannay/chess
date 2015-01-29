@@ -17,7 +17,7 @@ import java.awt.*;
 import java.util.List;
 import java.util.Map;
 
-public class VariantCreationPanel extends ChessPanel implements PieceCrafterDetailPanel.PieceListChangedListener {
+public class VariantCreationPanel extends ChessPanel {
     private static final int WHITE_INDEX = 0;
     private static final int BLACK_INDEX = 1;
 
@@ -980,9 +980,4 @@ public class VariantCreationPanel extends ChessPanel implements PieceCrafterDeta
 		}
 	}
 	*/
-
-    @Override
-    public void onPieceListChanged() {
-        // TODO Auto-generated method stub
-    }
 }

@@ -46,6 +46,16 @@ public class PieceType {
         return mName;
     }
 
+    @NotNull
+    public Map<Direction, Integer> getMovements() {
+        return ImmutableMap.copyOf(mMovements);
+    }
+
+    @NotNull
+    public Set<TwoHopMovement> getTwoHopMovements() {
+        return ImmutableSet.copyOf(mTwoHopMovements);
+    }
+
     public Set<BoardCoordinate> getMovesFrom(@NotNull BoardCoordinate startLocation,
                                              @NotNull BoardSize boardSize, int moveCount) {
         Set<BoardCoordinate> moves = getMovesFromImpl(startLocation, boardSize, mMovements);
