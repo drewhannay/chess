@@ -39,10 +39,8 @@ public final class PreferenceUtility {
         JLabel currentSaveLocationLabel = new JLabel(Messages.getString("PreferenceUtility.currentSaveLocation"));
         JTextField currentSaveLocationField = new JTextField(FileUtility.getDefaultCompletedLocation());
         currentSaveLocationField.setEditable(false);
-        if(userSaveLocation.length() > 300)
-            currentSaveLocationField.setPreferredSize(new Dimension(userSaveLocation.length() + 15, 25));
-        else
-            currentSaveLocationField.setPreferredSize(new Dimension(300, 25));
+        int width = Math.max(userSaveLocation.length() + 15, 300);
+        currentSaveLocationField.setPreferredSize(new Dimension(width, 25));
         JButton changeLocationButton = new JButton(Messages.getString("PreferenceUtility.chooseNewSaveLocation"));
         JButton resetButton = new JButton(Messages.getString("PreferenceUtility.resetToDefaultLocation"));
         JCheckBox highlightingCheckBox = new JCheckBox(Messages.getString("PreferenceUtility.enableHighlighting"));
