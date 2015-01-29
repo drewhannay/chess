@@ -5,13 +5,11 @@ import com.drewhannay.chesscrafter.dialog.NewGameDialog;
 import com.drewhannay.chesscrafter.logic.GameBuilder;
 import com.drewhannay.chesscrafter.models.Game;
 import com.drewhannay.chesscrafter.models.History;
-import com.drewhannay.chesscrafter.panel.ChessPanel;
 import com.drewhannay.chesscrafter.panel.GamePanel;
 import com.drewhannay.chesscrafter.panel.HintPanel;
 import com.drewhannay.chesscrafter.utility.AppConstants;
 import com.drewhannay.chesscrafter.utility.FileUtility;
 import com.drewhannay.chesscrafter.utility.GsonUtility;
-import com.drewhannay.chesscrafter.utility.GuiUtility;
 import com.drewhannay.chesscrafter.utility.Messages;
 import com.drewhannay.chesscrafter.utility.PreferenceUtility;
 import com.google.gson.JsonElement;
@@ -24,6 +22,7 @@ import java.awt.event.ContainerEvent;
 import java.awt.event.ContainerListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -114,106 +113,21 @@ public class GameFrame extends ChessFrame {
     };
 
     private void openGame() {
-        String[] files = FileUtility.getGamesInProgressFileArray();
-
-        if (files.length == 0) {
-            JOptionPane.showMessageDialog(null, Messages.getString("Driver.noSavedGames"),
-                    Messages.getString("Driver.noCompletedGames"), JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        final JFrame poppedFrame = new JFrame(Messages.getString("Driver.loadSavedGame"));
-        poppedFrame.setSize(225, 200);
-        poppedFrame.setResizable(false);
-        poppedFrame.setLocationRelativeTo(null);
-        GridBagConstraints constraints = new GridBagConstraints();
-
-        ChessPanel popupPanel = new ChessPanel();
-        popupPanel.setLayout(new GridBagLayout());
-
-        JList<String> gamesInProgressList = new JList<>(FileUtility.getGamesInProgressFileArray());
-        JScrollPane scrollPane = new JScrollPane(gamesInProgressList);
-        scrollPane.setPreferredSize(new Dimension(200, 200));
-        gamesInProgressList.setSelectedIndex(0);
-
-        JButton nextButton = new JButton(Messages.getString("Driver.loadSavedGame"));
-        nextButton.addActionListener(event1 -> {
-            if (gamesInProgressList.getSelectedValue() == null) {
-                JOptionPane.showMessageDialog(null,
-                        Messages.getString("Driver.selectGame"), Messages.getString("Driver.error"),
-                        JOptionPane.PLAIN_MESSAGE);
-                return;
-            }
-            String fileName = gamesInProgressList.getSelectedValue();
-            try {
+        try {
+            File gameFile = FileUtility.chooseFile(FileUtility.HISTORY_EXTENSION_FILTER);
+            if(gameFile != null) {
                 JsonParser parser = new JsonParser();
-                JsonElement jsonElement = parser.parse(new FileReader(FileUtility.getGamesInProgressFile(fileName)));
+                JsonElement jsonElement = parser.parse(new FileReader(gameFile));
                 History history = GsonUtility.fromJson(jsonElement, History.class);
                 // TODO: should read variant name from history
                 Game game = GameBuilder.buildGame(GameBuilder.getClassicConfiguration(), history);
                 addGame(game);
-
-                poppedFrame.dispose();
-            } catch (IOException ioe) {
-                ioe.printStackTrace();
-                JOptionPane.showMessageDialog(null,
-                        Messages.getString("Driver.noValidSavedGames"), Messages.getString("Driver.invalidSavedGames"),
-                        JOptionPane.PLAIN_MESSAGE);
             }
-        });
-
-        JButton cancelButton = new JButton(Messages.getString("Driver.cancel"));
-        GuiUtility.setupDoneButton(cancelButton, poppedFrame);
-
-        JButton deleteButton = new JButton(Messages.getString("Driver.deleteSavedGame"));
-        deleteButton.addActionListener(event1 -> {
-            if (gamesInProgressList.getSelectedValue() != null) {
-                boolean didDeleteSuccessfully = FileUtility.getGamesInProgressFile(
-                        gamesInProgressList.getSelectedValue()).delete();
-                if (!didDeleteSuccessfully) {
-                    JOptionPane.showMessageDialog(null, Messages.getString("Driver.savedGameNotDeleted"),
-                            Messages.getString("Driver.error"), JOptionPane.ERROR_MESSAGE);
-                } else {
-                    gamesInProgressList.setListData(FileUtility.getGamesInProgressFileArray());
-                    gamesInProgressList.setSelectedIndex(0);
-                    if (gamesInProgressList.getSelectedValue() == null) {
-                        JOptionPane.showMessageDialog(null, Messages.getString("Driver.noMoreCompletedGames"), Messages.getString("Driver.noCompletedGames"),
-                                JOptionPane.PLAIN_MESSAGE);
-                        poppedFrame.dispose();
-                    }
-                    scrollPane.getViewport().add(gamesInProgressList, null);
-                }
-            } else {
-                JOptionPane.showMessageDialog(null, Messages.getString("Driver.noSaveFiles"),
-                        Messages.getString("Driver.noSaveFileSelected"), JOptionPane.PLAIN_MESSAGE);
-            }
-        });
-
-        constraints.gridx = 0;
-        constraints.gridy = 0;
-        constraints.gridwidth = 2;
-        constraints.insets = new Insets(5, 5, 5, 5);
-        popupPanel.add(scrollPane, constraints);
-
-        constraints.gridx = 0;
-        constraints.gridy = 1;
-        popupPanel.add(deleteButton, constraints);
-
-        constraints.weighty = 1.0;
-        constraints.weightx = 1.0;
-        constraints.gridx = 0;
-        constraints.gridy = 2;
-        constraints.gridwidth = 1;
-        constraints.anchor = GridBagConstraints.EAST;
-        popupPanel.add(nextButton, constraints);
-
-        constraints.gridx = 1;
-        constraints.gridy = 2;
-        constraints.anchor = GridBagConstraints.WEST;
-        popupPanel.add(cancelButton, constraints);
-
-        poppedFrame.add(popupPanel);
-        poppedFrame.setVisible(true);
-        poppedFrame.pack();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+            JOptionPane.showMessageDialog(null,
+                    Messages.getString("Driver.noValidSavedGames"), Messages.getString("Driver.invalidSavedGames"),
+                    JOptionPane.PLAIN_MESSAGE);
+        }
     }
 }
