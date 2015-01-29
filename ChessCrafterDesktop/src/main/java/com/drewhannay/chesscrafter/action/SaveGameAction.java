@@ -7,7 +7,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 
 public final class SaveGameAction extends ChessAction {
-    public SaveGameAction() {
+    SaveGameAction() {
         super(true);
 
         putValue(NAME, Messages.getString("Driver.saveGame"));

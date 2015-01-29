@@ -1,7 +1,6 @@
 package com.drewhannay.chesscrafter.frame;
 
 import com.drewhannay.chesscrafter.action.ChessActions;
-import com.drewhannay.chesscrafter.utility.AppConstants;
 import com.drewhannay.chesscrafter.utility.FileUtility;
 import com.google.common.base.Preconditions;
 
@@ -9,16 +8,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.lang.reflect.Method;
 
-public class ChessFrame extends JFrame {
-    public ChessFrame() {
+class ChessFrame extends JFrame {
+    ChessFrame() {
+    }
+
+    final void initComponents() {
         enableOSXFullscreen(this);
 
-        setTitle(AppConstants.APP_NAME);
         setLayout(new BorderLayout());
         setResizable(true);
-
-        // TODO: this is wrong
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         // TODO: always use this image?
         setIconImage(FileUtility.getFrontPageImage());
@@ -29,12 +27,10 @@ public class ChessFrame extends JFrame {
         setJMenuBar(ChessActions.createJMenuBar());
         setPreferredSize(new Dimension(685, 450));
 
-        initComponents();
-
-        setVisible(true);
+        doInitComponents();
     }
 
-    void initComponents() {
+    void doInitComponents() {
     }
 
     private void enableOSXFullscreen(Window window) {

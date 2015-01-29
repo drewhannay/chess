@@ -8,6 +8,7 @@ import com.drewhannay.chesscrafter.models.History;
 import com.drewhannay.chesscrafter.panel.ChessPanel;
 import com.drewhannay.chesscrafter.panel.GamePanel;
 import com.drewhannay.chesscrafter.panel.HintPanel;
+import com.drewhannay.chesscrafter.utility.AppConstants;
 import com.drewhannay.chesscrafter.utility.FileUtility;
 import com.drewhannay.chesscrafter.utility.GsonUtility;
 import com.drewhannay.chesscrafter.utility.GuiUtility;
@@ -19,6 +20,10 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ContainerEvent;
+import java.awt.event.ContainerListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 import java.io.FileReader;
@@ -35,38 +40,53 @@ public class GameFrame extends ChessFrame {
     private final HintPanel mHintPanel;
     private final JTabbedPane mTabbedPane;
 
-    private int mGameCount;
-
-    public GameFrame() {
-        mGameCount = 1;
+    GameFrame() {
         mHintPanel = new HintPanel();
         mTabbedPane = new JTabbedPane();
-
         mCardLayout = new CardLayout();
-
         mCardPanel = new JPanel(mCardLayout);
+    }
+
+    @Override
+    void doInitComponents() {
+        super.doInitComponents();
+
+        setTitle(AppConstants.APP_NAME);
+
         mCardPanel.add(mHintPanel, KEY_HINTS);
         mCardPanel.add(mTabbedPane, KEY_TABS);
 
         add(mCardPanel);
 
-        pack();
-
         setFocusable(true);
         addWindowFocusListener(mWindowFocusListener);
+
+        getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                .put(KeyStroke.getKeyStroke(KeyEvent.VK_W, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), "close");
+        getRootPane().getActionMap().put("close", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mTabbedPane.remove(mTabbedPane.getSelectedIndex());
+            }
+        });
+
+        mTabbedPane.addContainerListener(new ContainerListener() {
+            @Override
+            public void componentAdded(ContainerEvent e) {
+            }
+
+            @Override
+            public void componentRemoved(ContainerEvent e) {
+                if (mTabbedPane.getComponentCount() == 0) {
+                    mCardLayout.show(mCardPanel, KEY_HINTS);
+                }
+            }
+        });
     }
 
-    public void addGame(@NotNull Game game, String gameName) {
+    public void addGame(@NotNull Game game) {
         GamePanel panel = new GamePanel(this, game);
-        if(gameName != null)
-            mTabbedPane.addTab(gameName + " (" + game.getGameType() + ")", panel);
-        else {
-            if (mGameCount == 1)
-                mTabbedPane.addTab(game.getGameType(), panel);
-            else
-                mTabbedPane.addTab(game.getGameType() + " " + mGameCount, panel);
-            mGameCount++;
-        }
+        mTabbedPane.addTab(game.getGameType(), panel);
         mTabbedPane.setSelectedComponent(panel);
 
         mCardLayout.show(mCardPanel, KEY_TABS);
@@ -135,7 +155,7 @@ public class GameFrame extends ChessFrame {
                 History history = GsonUtility.fromJson(jsonElement, History.class);
                 // TODO: should read variant name from history
                 Game game = GameBuilder.buildGame(GameBuilder.getClassicConfiguration(), history);
-                addGame(game, fileName);
+                addGame(game);
 
                 poppedFrame.dispose();
             } catch (IOException ioe) {

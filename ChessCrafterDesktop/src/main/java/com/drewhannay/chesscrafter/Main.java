@@ -1,11 +1,12 @@
 package com.drewhannay.chesscrafter;
 
-import com.drewhannay.chesscrafter.frame.GameFrame;
+import com.apple.eawt.Application;
+import com.drewhannay.chesscrafter.action.ChessActions;
+import com.drewhannay.chesscrafter.frame.FrameManager;
 import com.drewhannay.chesscrafter.utility.FileUtility;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 
 public final class Main {
     public static void main(String[] args) {
@@ -23,20 +24,19 @@ public final class Main {
             // put menus in the OS X menu bar if we're on OS X
             System.setProperty("apple.laf.useScreenMenuBar", "true");
 
-            // set a tray icon if we're on Windows
-            createWindowsTrayIcon();
+            // set a tray icon if the system supports it
+            createTrayIcon();
 
-            new GameFrame();
+            FrameManager.INSTANCE.openGameFrame();
         });
     }
 
-    private static void createWindowsTrayIcon() {
-        BufferedImage frontPageImage = FileUtility.getFrontPageImage();
-        if (System.getProperty("os.name").startsWith("Windows")) {
-            SystemTray sysTray = SystemTray.getSystemTray();
-            TrayIcon tray = new TrayIcon(frontPageImage.getScaledInstance(25, 18, Image.SCALE_SMOOTH));
+    private static void createTrayIcon() {
+        if (SystemTray.isSupported()) {
+            SystemTray systemTray = SystemTray.getSystemTray();
+            TrayIcon tray = new TrayIcon(FileUtility.getFrontPageImage().getScaledInstance(25, 18, Image.SCALE_SMOOTH));
             try {
-                sysTray.add(tray);
+                systemTray.add(tray);
             } catch (AWTException e) {
                 System.err.println("Couldn't create a tray icon");
                 e.printStackTrace();

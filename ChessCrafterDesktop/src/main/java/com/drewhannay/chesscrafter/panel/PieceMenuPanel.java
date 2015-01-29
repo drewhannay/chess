@@ -6,12 +6,11 @@ import javax.swing.*;
 
 public class PieceMenuPanel extends ChessPanel {
 
-    public PieceMenuPanel() {
-        this(null);
-    }
+    private DefaultListModel<String> mPieceListModel;
 
-    public PieceMenuPanel(JFrame frame) {
-//        mFrame = frame;
+    private PieceCrafterPanel.PieceListChangedListener mListener;
+
+    public PieceMenuPanel() {
 //        mPieceListModel = new DefaultListModel<>();
 //        initGuiComponents();
     }
@@ -122,14 +121,7 @@ public class PieceMenuPanel extends ChessPanel {
 //        }
 //    }
 
-    private static final long serialVersionUID = -6371389704966320508L;
-
-    private DefaultListModel<String> mPieceListModel;
-    private JFrame mFrame;
-
-    private PieceMakerPanel.PieceListChangedListener mListener;
-
-    public void setPieceListChangedListener(PieceMakerPanel.PieceListChangedListener listener) {
+    public void setPieceListChangedListener(PieceCrafterPanel.PieceListChangedListener listener) {
         mListener = listener;
     }
 

@@ -1,6 +1,7 @@
 package com.drewhannay.chesscrafter.action;
 
 import com.drewhannay.chesscrafter.frame.AboutFrame;
+import com.drewhannay.chesscrafter.frame.FrameManager;
 import com.drewhannay.chesscrafter.utility.AppConstants;
 import com.drewhannay.chesscrafter.utility.Messages;
 
@@ -8,7 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
 public class AboutAction extends ChessAction {
-    public AboutAction() {
+    AboutAction() {
         super(false);
 
         // TODO: should insert app name into formatted string
@@ -20,6 +21,6 @@ public class AboutAction extends ChessAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        new AboutFrame();
+        FrameManager.INSTANCE.openAboutFrame();
     }
 }

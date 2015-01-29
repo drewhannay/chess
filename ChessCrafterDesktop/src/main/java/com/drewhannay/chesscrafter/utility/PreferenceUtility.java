@@ -16,32 +16,32 @@ public final class PreferenceUtility {
     }
 
     public static void createPreferencePopup(Component relativeComponent) {
-        final JFrame popupFrame = new JFrame(Messages.getString("PreferenceUtility.preferences")); //$NON-NLS-1$
+        JFrame popupFrame = new JFrame(Messages.getString("PreferenceUtility.preferences"));
         popupFrame.setSize(370, 120);
         popupFrame.setLocationRelativeTo(relativeComponent);
         popupFrame.setLayout(new GridBagLayout());
         popupFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         GridBagConstraints constraints = new GridBagConstraints();
 
-        final JPanel holder = new JPanel();
-        holder.setBorder(BorderFactory.createTitledBorder(Messages.getString("PreferenceUtility.defaultCompletedLocation"))); //$NON-NLS-1$
-        final JLabel currentSaveLocationLabel = new JLabel(Messages.getString("PreferenceUtility.currentSaveLocation")); //$NON-NLS-1$
-        final JTextField currentSaveLocationField = new JTextField(FileUtility.getDefaultCompletedLocation());
+        JPanel holder = new JPanel();
+        holder.setBorder(BorderFactory.createTitledBorder(Messages.getString("PreferenceUtility.defaultCompletedLocation")));
+        JLabel currentSaveLocationLabel = new JLabel(Messages.getString("PreferenceUtility.currentSaveLocation"));
+        JTextField currentSaveLocationField = new JTextField(FileUtility.getDefaultCompletedLocation());
         currentSaveLocationField.setEditable(false);
-        final JButton changeLocationButton = new JButton(Messages.getString("PreferenceUtility.chooseNewSaveLocation")); //$NON-NLS-1$
-        final JButton resetButton = new JButton(Messages.getString("PreferenceUtility.resetToDefaultLocation")); //$NON-NLS-1$
-        final JCheckBox highlightingCheckBox = new JCheckBox(Messages.getString("PreferenceUtility.enableHighlighting")); //$NON-NLS-1$
-        final JCheckBox pieceToolTipCheckBox = new JCheckBox(Messages.getString("PreferenceUtility.showPieceTooltips")); //$NON-NLS-1$
+        JButton changeLocationButton = new JButton(Messages.getString("PreferenceUtility.chooseNewSaveLocation"));
+        JButton resetButton = new JButton(Messages.getString("PreferenceUtility.resetToDefaultLocation"));
+        JCheckBox highlightingCheckBox = new JCheckBox(Messages.getString("PreferenceUtility.enableHighlighting"));
+        JCheckBox pieceToolTipCheckBox = new JCheckBox(Messages.getString("PreferenceUtility.showPieceTooltips"));
 
-        final JButton cancelButton = new JButton(Messages.getString("PreferenceUtility.cancel")); //$NON-NLS-1$
+        JButton cancelButton = new JButton(Messages.getString("PreferenceUtility.cancel"));
 
-        final JButton doneButton = new JButton(Messages.getString("PreferenceUtility.done")); //$NON-NLS-1$
+        JButton doneButton = new JButton(Messages.getString("PreferenceUtility.done"));
         GuiUtility.setupDoneButton(doneButton, popupFrame);
 
         holder.add(currentSaveLocationLabel);
         holder.add(currentSaveLocationField);
 
-        final String defaultSaveLocation = FileUtility.getDefaultCompletedLocation();
+        String defaultSaveLocation = FileUtility.getDefaultCompletedLocation();
 
         currentSaveLocationField.setText(mPreference.get(SAVELOCATION, "default"));
         highlightingCheckBox.setSelected(mPreference.getBoolean(HIGHLIGHTMOVES, true));
@@ -185,8 +185,8 @@ public final class PreferenceUtility {
     }
 
     private static List<PieceToolTipPreferenceChangedListener> mToolTipListeners;
-    private static final String SAVELOCATION = "saveLocation"; //$NON-NLS-1$
-    private static final String HIGHLIGHTMOVES = "highlightMoves"; //$NON-NLS-1$
-    private static final String PIECETOOLTIPS = "pieceToolTips"; //$NON-NLS-1$
+    private static final String SAVELOCATION = "saveLocation";
+    private static final String HIGHLIGHTMOVES = "highlightMoves";
+    private static final String PIECETOOLTIPS = "pieceToolTips";
     private static final Preferences mPreference = Preferences.userRoot().node("ChessCrafterPreferences");
 }

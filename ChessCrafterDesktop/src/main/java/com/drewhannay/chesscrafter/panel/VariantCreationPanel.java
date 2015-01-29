@@ -17,7 +17,29 @@ import java.awt.*;
 import java.util.List;
 import java.util.Map;
 
-public class VariantCreationPanel extends ChessPanel implements PieceMakerPanel.PieceListChangedListener {
+public class VariantCreationPanel extends ChessPanel implements PieceCrafterPanel.PieceListChangedListener {
+    private static final int WHITE_INDEX = 0;
+    private static final int BLACK_INDEX = 1;
+
+    private final GlassPane mGlobalGlassPane;
+    //private final DropManager mDropManager;
+    private final SquareJLabel[] mPieceDisplaySquares = new SquareJLabel[2];
+
+    private JPanel[] mBoardPanels;
+    private JPanel mPieceListPanel;
+    private Map<PieceType, List<PieceType>> mWhitePromotionMap;
+    private Map<PieceType, List<PieceType>> mBlackPromotionMap;
+    private List<Piece> mWhiteTeam;
+    private List<Piece> mBlackTeam;
+    private JButton mChangePromotionButton;
+    private JList mPieceTypeList;
+    private JFrame mOptionsFrame;
+    private JScrollPane mScrollPane = new JScrollPane();
+    private MotionAdapter m_motionAdapter;
+    private Board mDisplayBoard;
+    private Board[] mGameBoards;
+    public GameBuilder mBuilder;
+
     public VariantCreationPanel(String variantName) {
         //mDropManager = new DropManager();
         mGlobalGlassPane = new GlassPane();
@@ -954,30 +976,6 @@ public class VariantCreationPanel extends ChessPanel implements PieceMakerPanel.
 		}
 	}
 	*/
-
-    private static final long serialVersionUID = 7830479492072657640L;
-    private static final int WHITE_INDEX = 0;
-    private static final int BLACK_INDEX = 1;
-
-    private final GlassPane mGlobalGlassPane;
-    //private final DropManager mDropManager;
-    private final SquareJLabel[] mPieceDisplaySquares = new SquareJLabel[2];
-
-    private JPanel[] mBoardPanels;
-    private JPanel mPieceListPanel;
-    private Map<PieceType, List<PieceType>> mWhitePromotionMap;
-    private Map<PieceType, List<PieceType>> mBlackPromotionMap;
-    public GameBuilder mBuilder;
-    private List<Piece> mWhiteTeam;
-    private List<Piece> mBlackTeam;
-    private JButton mChangePromotionButton;
-    private JList mPieceTypeList;
-    private JFrame mOptionsFrame;
-    private JScrollPane mScrollPane = new JScrollPane();
-    private MotionAdapter m_motionAdapter;
-    private Board mDisplayBoard;
-    private Board[] mGameBoards;
-
 
     @Override
     public void onPieceListChanged() {

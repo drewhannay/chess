@@ -7,7 +7,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 
 public final class DeclareDrawAction extends ChessAction {
-    public DeclareDrawAction() {
+    DeclareDrawAction() {
         super(true);
 
         putValue(NAME, Messages.getString("PlayGamePanel.declareDraw"));

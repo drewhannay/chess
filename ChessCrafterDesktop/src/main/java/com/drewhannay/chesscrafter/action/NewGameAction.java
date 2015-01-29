@@ -7,8 +7,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 
 public final class NewGameAction extends ChessAction {
-
-    public NewGameAction() {
+    NewGameAction() {
         super(true);
 
         putValue(NAME, Messages.getString("Driver.newGame"));
