@@ -34,24 +34,24 @@ public final class JavaFxFileDialog {
         return true;
     }
 
-    public static File chooseDirectory() {
-        return choose(JavaFxFileDialog::doChooseDirectory);
+    public static File chooseDirectory(File initialDirectory) {
+        return choose(() -> doChooseDirectory(initialDirectory));
     }
 
-    public static File chooseFile(FileChooser.ExtensionFilter extensionFilter) {
-        return choose(() -> doChooseFile(extensionFilter));
+    public static File chooseFile(FileChooser.ExtensionFilter extensionFilter, File initialDirectory) {
+        return choose(() -> doChooseFile(extensionFilter, initialDirectory));
     }
 
-    private static File doChooseDirectory() {
+    private static File doChooseDirectory(File initialDirectory) {
         DirectoryChooser directoryChooser = new DirectoryChooser();
-        directoryChooser.setInitialDirectory(new File(PreferenceUtility.getSaveLocationPreference()));
+        directoryChooser.setInitialDirectory(initialDirectory);
         return directoryChooser.showDialog(null);
     }
 
-    private static File doChooseFile(FileChooser.ExtensionFilter extensionFilter) {
+    private static File doChooseFile(FileChooser.ExtensionFilter extensionFilter, File initialDirectory) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(extensionFilter);
-        fileChooser.setInitialDirectory(new File(PreferenceUtility.getSaveLocationPreference()));
+        fileChooser.setInitialDirectory(initialDirectory);
         return fileChooser.showOpenDialog(null);
     }
 

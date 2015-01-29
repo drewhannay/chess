@@ -48,8 +48,6 @@ public final class PreferenceUtility {
         JCheckBox highlightingCheckBox = new JCheckBox(Messages.getString("PreferenceUtility.enableHighlighting"));
         JCheckBox pieceToolTipCheckBox = new JCheckBox(Messages.getString("PreferenceUtility.showPieceTooltips"));
 
-        //JButton cancelButton = new JButton(Messages.getString("PreferenceUtility.cancel"));
-
         JButton closeButton = new JButton(Messages.getString("PreferenceUtility.close"));
         GuiUtility.setupDoneButton(closeButton, popupFrame);
 
@@ -75,14 +73,6 @@ public final class PreferenceUtility {
 
         highlightingCheckBox.addActionListener(event -> mPreference.putBoolean(HIGHLIGHTMOVES, highlightingCheckBox.isSelected()));
         pieceToolTipCheckBox.addActionListener(event -> mPreference.putBoolean(PIECETOOLTIPS, pieceToolTipCheckBox.isSelected()));
-
-        /*closeButton.addActionListener(e -> {
-            mPreference.put(SAVELOCATION, currentSaveLocationField.getText());
-            mPreference.putBoolean(HIGHLIGHTMOVES, highlightingCheckBox.isSelected());
-            mPreference.putBoolean(PIECETOOLTIPS, pieceToolTipCheckBox.isSelected());
-        });*/
-
-        //GuiUtility.setupDoneButton(cancelButton, popupFrame);
 
         constraints.gridx = 0;
         constraints.gridy = 0;
@@ -111,12 +101,6 @@ public final class PreferenceUtility {
         constraints.gridwidth = 1;
         constraints.anchor = GridBagConstraints.CENTER;
         popupFrame.add(pieceToolTipCheckBox, constraints);
-
-        constraints.gridx = 0;
-        constraints.gridy = 4;
-        constraints.gridwidth = 1;
-        constraints.anchor = GridBagConstraints.CENTER;
-        //popupFrame.add(cancelButton, constraints);
 
         constraints.gridx = 0;
         constraints.gridy = 4;
