@@ -42,7 +42,7 @@ public class NewGameDialog extends JDialog {
         JButton humanPlayButton = new JButton(Messages.getString("NewGamePanel.humanPlay"));
         humanPlayButton.addActionListener(event -> {
             Game game = GameBuilder.buildGame(GameBuilder.getClassicConfiguration());
-            mGameFrame.addGame(game, null);
+            mGameFrame.addGame(game);
             dispose();
         });
         constraints.gridy = 1;

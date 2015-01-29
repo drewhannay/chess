@@ -1,13 +1,12 @@
 package com.drewhannay.chesscrafter.panel;
 
 import com.drewhannay.chesscrafter.action.ChessActions;
-import com.drewhannay.chesscrafter.utility.FileUtility;
-import com.drewhannay.chesscrafter.utility.GuiUtility;
 import com.drewhannay.chesscrafter.utility.Messages;
 import com.drewhannay.chesscrafter.utility.PieceIconUtility;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -33,47 +32,36 @@ public final class HintPanel extends ChessPanel {
         c.gridy = 1;
         add(gettingStarted, c);
 
-        JLabel underline = createJLabel(Messages.getString("HelpPanel.underline"));
+        JLabel underline = new JLabel(Messages.getString("HelpPanel.underline"));
+        underline.setForeground(Color.white);
         c.anchor = GridBagConstraints.SOUTH;
         add(underline, c);
 
-        JLabel newGameInstructions = createJLabel(Messages.getString("HelpPanel.newGameInstructions"));
         c.anchor = GridBagConstraints.WEST;
         c.gridy = 2;
-        add(newGameInstructions, c);
+        add(createJButton(Messages.getString("HelpPanel.newGameInstructions"), ChessActions.NEW_GAME), c);
 
-        JLabel savedGameInstructions = createJLabel(Messages.getString("HelpPanel.savedGameInstructions"));
         c.gridy = 3;
-        add(savedGameInstructions, c);
+        add(createJButton(Messages.getString("HelpPanel.savedGameInstructions"), ChessActions.OPEN_GAME), c);
 
-        JLabel newVariantInstructions = createJLabel(Messages.getString("HelpPanel.newVariantInstructions"));
         c.gridy = 4;
-        add(newVariantInstructions, c);
+        add(createJButton(Messages.getString("HelpPanel.pieceCrafterInstructions"), ChessActions.PIECE_CRAFTER), c);
 
-        JLabel modifyVariantInstructions = createJLabel(Messages.getString("HelpPanel.modifyVariantInstructions"));
         c.gridy = 5;
-        add(modifyVariantInstructions, c);
+        add(createJButton(Messages.getString("HelpPanel.gameCrafterInstructions"), ChessActions.GAME_CRAFTER), c);
 
     }
 
-    private JLabel createJLabel(String labelText){
-        JLabel newLabel = new JLabel(labelText);
-        newLabel.setForeground(Color.white);
-        newLabel.setFont(new Font(newLabel.getName(), Font.PLAIN, 14));
-        newLabel.addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-
-            }
-            @Override
-            public void mousePressed(MouseEvent e) {}
-            @Override
-            public void mouseReleased(MouseEvent e) {}
-            @Override
-            public void mouseEntered(MouseEvent e) {}
-            @Override
-            public void mouseExited(MouseEvent e) {}
-        });
-        return newLabel;
+    private JButton createJButton(String buttonText, ChessActions action){
+        JButton newButton = new JButton(action.getAction());
+        newButton.setForeground(Color.white);
+        newButton.setFont(new Font(newButton.getName(), Font.PLAIN, 14));
+        newButton.setFocusPainted(false);
+        newButton.setMargin(new Insets(0, 0, 0, 0));
+        newButton.setContentAreaFilled(false);
+        newButton.setBorderPainted(false);
+        newButton.setText(buttonText);
+        setOpaque(false);
+        return newButton;
     }
 }
