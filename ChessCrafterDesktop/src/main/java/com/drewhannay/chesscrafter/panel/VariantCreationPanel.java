@@ -40,7 +40,7 @@ public class VariantCreationPanel extends ChessPanel implements PieceCrafterDeta
     private Board[] mGameBoards;
     public GameBuilder mBuilder;
 
-    public VariantCreationPanel(String variantName) {
+    public VariantCreationPanel() {
         //mDropManager = new DropManager();
         mGlobalGlassPane = new GlassPane();
         mGlobalGlassPane.setOpaque(false);
@@ -49,7 +49,7 @@ public class VariantCreationPanel extends ChessPanel implements PieceCrafterDeta
         mPieceListPanel = new JPanel();
         mPieceListPanel.setOpaque(false);
 
-        if (variantName != null) {
+        if (false/*variantName != null*/) {
             // FIXME: we shouldn't be constructing an actual Game object here;
             // we should be able to get everything we need from the GameBuilder
             //gameToEdit = GameBuilder.newGame(variantName);
@@ -99,6 +99,10 @@ public class VariantCreationPanel extends ChessPanel implements PieceCrafterDeta
         mScrollPane.setPreferredSize(new Dimension(200, 200));
 
         //initGUIComponents(gameToEdit, variantName);
+    }
+
+    public void onPieceTypeSelected(PieceType pieceTypeConsumer) {
+
     }
     /*
 
