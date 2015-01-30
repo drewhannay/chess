@@ -1,12 +1,16 @@
 package com.drewhannay.chesscrafter.dragNdrop;
 
+import org.jetbrains.annotations.NotNull;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 
 public class MotionAdapter extends MouseMotionAdapter {
-    public MotionAdapter(GlassPane glassPane) {
+    private final GlassPane mGlassPane;
+
+    public MotionAdapter(@NotNull GlassPane glassPane) {
         mGlassPane = glassPane;
     }
 
@@ -20,6 +24,4 @@ public class MotionAdapter extends MouseMotionAdapter {
         mGlassPane.setPoint(point);
         mGlassPane.repaint();
     }
-
-    private GlassPane mGlassPane;
 }

@@ -2,6 +2,7 @@ package com.drewhannay.chesscrafter.panel;
 
 import com.drewhannay.chesscrafter.dragNdrop.DropManager;
 import com.drewhannay.chesscrafter.dragNdrop.GlassPane;
+import com.drewhannay.chesscrafter.label.SquareJLabel;
 import com.drewhannay.chesscrafter.logic.PieceTypeManager;
 import com.drewhannay.chesscrafter.models.Board;
 import com.drewhannay.chesscrafter.models.BoardCoordinate;
@@ -21,7 +22,10 @@ public class VariantCreationPanel extends ChessPanel {
 
     public VariantCreationPanel(@NotNull GlassPane glassPane) {
         DropManager dropManager = new DropManager(this::boardRefresh,
-                pair -> setPiece(new Piece(Piece.TEAM_ONE, PieceTypeManager.getBishopPieceType()), pair.second));
+                pair -> {
+                    BoardCoordinate destination = ((SquareJLabel) pair.second).getCoordinates();
+                    setPiece(new Piece(Piece.TEAM_ONE, PieceTypeManager.getBishopPieceType()), destination);
+                });
 
         mBoard = new Board(BoardSize.CLASSIC_SIZE);
         mBoardPanel = new BoardPanel(mBoard.getBoardSize(), glassPane, dropManager, ImmutableSet::of);

@@ -1,7 +1,6 @@
 package com.drewhannay.chesscrafter.dragNdrop;
 
 import com.drewhannay.chesscrafter.label.SquareJLabel;
-import com.drewhannay.chesscrafter.utility.PreferenceUtility;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,7 +10,7 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class SquareListener extends DropAdapter implements MouseListener, PreferenceUtility.PieceToolTipPreferenceChangedListener {
+public class SquareListener extends DropAdapter implements MouseListener {
     private final DropManager mDropManager;
     private final Supplier<List<SquareJLabel>> mHighlightCallback;
 
@@ -23,7 +22,6 @@ public class SquareListener extends DropAdapter implements MouseListener, Prefer
         mHighlightCallback = highlightCallback;
 
         addDropListener(mDropManager);
-        PreferenceUtility.addPieceToolTipListener(this);
     }
 
     @Override
@@ -40,7 +38,6 @@ public class SquareListener extends DropAdapter implements MouseListener, Prefer
 
     @Override
     public void mousePressed(MouseEvent event) {
-        SquareJLabel squareLabel = (SquareJLabel) event.getSource();
         List<SquareJLabel> destinations = mHighlightCallback.get();
         if (destinations.isEmpty()) {
             return;
@@ -48,8 +45,9 @@ public class SquareListener extends DropAdapter implements MouseListener, Prefer
 
         mDropManager.setComponentList(destinations);
 
-        Icon imageIcon = squareLabel.getIcon();
-        if (imageIcon == null) {
+        SquareJLabel squareLabel = (SquareJLabel) event.getSource();
+        Icon icon = squareLabel.getIcon();
+        if (icon == null) {
             return;
         }
         squareLabel.hideIcon();
@@ -60,7 +58,7 @@ public class SquareListener extends DropAdapter implements MouseListener, Prefer
 
         BufferedImage image = new BufferedImage(squareLabel.getWidth(), squareLabel.getHeight(), BufferedImage.TYPE_INT_ARGB);
         Graphics graphics = image.getGraphics();
-        imageIcon.paintIcon(squareLabel, graphics, 0, 0);
+        icon.paintIcon(squareLabel, graphics, 0, 0);
         graphics.dispose();
 
         mGlassPane.setVisible(true);
@@ -78,10 +76,5 @@ public class SquareListener extends DropAdapter implements MouseListener, Prefer
         mGlassPane.setVisible(false);
 
         fireDropEvent(new DropEvent(point, (JComponent) event.getComponent()), false);
-    }
-
-    @Override
-    public void onPieceToolTipPreferenceChanged() {
-//        mSquareLabel.refresh();
     }
 }

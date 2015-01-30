@@ -3,10 +3,12 @@ package com.drewhannay.chesscrafter.panel;
 import com.drewhannay.chesscrafter.action.ChessActions;
 import com.drewhannay.chesscrafter.dragNdrop.DropManager;
 import com.drewhannay.chesscrafter.dragNdrop.GlassPane;
+import com.drewhannay.chesscrafter.label.SquareJLabel;
 import com.drewhannay.chesscrafter.label.TeamLabel;
 import com.drewhannay.chesscrafter.logic.Result;
 import com.drewhannay.chesscrafter.logic.Status;
 import com.drewhannay.chesscrafter.models.Board;
+import com.drewhannay.chesscrafter.models.BoardCoordinate;
 import com.drewhannay.chesscrafter.models.Game;
 import com.drewhannay.chesscrafter.models.MoveBuilder;
 import com.drewhannay.chesscrafter.models.Piece;
@@ -45,7 +47,11 @@ public final class GamePanel extends ChessPanel {
 
     public GamePanel(@NotNull JFrame frame, @NotNull Game game) {
         mGame = game;
-        mDropManager = new DropManager(this::boardRefresh, pair -> playMove(mGame.newMoveBuilder(pair.first, pair.second)));
+        mDropManager = new DropManager(this::boardRefresh, pair -> {
+            BoardCoordinate origin = ((SquareJLabel) pair.first).getCoordinates();
+            BoardCoordinate destination = ((SquareJLabel) pair.second).getCoordinates();
+            playMove(mGame.newMoveBuilder(origin, destination));
+        });
         mGlobalGlassPane = new GlassPane();
         mGlobalGlassPane.setOpaque(false);
 

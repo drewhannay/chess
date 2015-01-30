@@ -1,38 +1,36 @@
 package com.drewhannay.chesscrafter.dragNdrop;
 
-import com.drewhannay.chesscrafter.label.SquareJLabel;
-import com.drewhannay.chesscrafter.models.BoardCoordinate;
 import com.drewhannay.chesscrafter.utility.Pair;
 import org.jetbrains.annotations.NotNull;
 
+import javax.swing.*;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 public class DropManager extends AbstractDropManager {
 
-    private final Runnable mRefreshCallback;
-    private final Consumer<Pair<BoardCoordinate, BoardCoordinate>> mPlayMoveCallback;
+    private final Runnable mDropCanceledCallback;
+    private final Consumer<Pair<JComponent, JComponent>> mDragDropConsumer;
 
     public DropManager(@NotNull Runnable refreshCallback,
-                       @NotNull Consumer<Pair<BoardCoordinate, BoardCoordinate>> playMoveCallback) {
-        mRefreshCallback = refreshCallback;
-        mPlayMoveCallback = playMoveCallback;
+                       @NotNull Consumer<Pair<JComponent, JComponent>> dragDropConsumer) {
+        mDropCanceledCallback = refreshCallback;
+        mDragDropConsumer = dragDropConsumer;
     }
 
     @Override
     public void dropped(DropEvent event, boolean fromDisplayBoard) {
-        SquareJLabel originSquareLabel = (SquareJLabel) event.getOriginComponent();
-        SquareJLabel destinationSquareLabel = (SquareJLabel) isInTarget(event.getDropLocation());
+        Optional<? extends JComponent> optional = isInTarget(event.getDropLocation());
 
-        clearComponentList();
+        if (optional.isPresent()) {
+            JComponent origin = event.getOriginComponent();
+            JComponent destination = optional.get();
 
-        if (destinationSquareLabel == null) {
-            mRefreshCallback.run();
-            return;
+            mDragDropConsumer.accept(Pair.create(origin, destination));
+        } else {
+            mDropCanceledCallback.run();
         }
 
-        BoardCoordinate origin = originSquareLabel.getCoordinates();
-        BoardCoordinate destination = destinationSquareLabel.getCoordinates();
-
-        mPlayMoveCallback.accept(Pair.create(origin, destination));
+        clearComponentList();
     }
 }

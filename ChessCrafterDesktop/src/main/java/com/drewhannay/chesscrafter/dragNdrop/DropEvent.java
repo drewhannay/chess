@@ -4,6 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 
 public class DropEvent {
+    private final Point mPoint;
+    private final JComponent mOriginComponent;
+
     public DropEvent(Point point, JComponent originComponent) {
         mPoint = point;
         mOriginComponent = originComponent;
@@ -16,7 +19,4 @@ public class DropEvent {
     public JComponent getOriginComponent() {
         return mOriginComponent;
     }
-
-    private Point mPoint;
-    private JComponent mOriginComponent;
 }

@@ -3,7 +3,7 @@ package com.drewhannay.chesscrafter.dragNdrop;
 import javax.swing.*;
 import java.awt.*;
 
-public class GlassPane extends JPanel {
+public final class GlassPane extends JPanel {
     private final AlphaComposite mAlphaComposite;
 
     private Image mDraggedImage;
