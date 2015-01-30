@@ -2,7 +2,6 @@ package com.drewhannay.chesscrafter.label;
 
 import com.drewhannay.chesscrafter.models.BoardCoordinate;
 import com.drewhannay.chesscrafter.models.Piece;
-import com.drewhannay.chesscrafter.utility.GuiUtility;
 import com.drewhannay.chesscrafter.utility.PieceIconUtility;
 
 import javax.swing.*;
@@ -12,20 +11,14 @@ public class SquareJLabel extends JLabel {
     public static final Color HIGHLIGHT_COLOR = new Color(20, 129, 191);
     public static final Color THREAT_COLOR = new Color(120, 20, 20);
 
-    private static final long serialVersionUID = -5060622037769752836L;
-
-    private final static ImageIcon UNINHABITABLE_ICON = GuiUtility.createSystemImageIcon(48, 48, "/Uninhabitable.png");
-
     private Color mBackgroundColor;
 
     private final BoardCoordinate mBoardCoordinate;
     private Piece mPiece;
-    private boolean mIsHabitable;
     private int mImageScale;
 
-    public SquareJLabel(BoardCoordinate coordinates, boolean isHabitable, int imageScale) {
+    public SquareJLabel(BoardCoordinate coordinates, int imageScale) {
         mBoardCoordinate = coordinates;
-        mIsHabitable = isHabitable;
         mImageScale = imageScale;
         setOpaque(true);
     }
@@ -72,11 +65,6 @@ public class SquareJLabel extends JLabel {
      * information.
      */
     public void refresh() {
-        if (!mIsHabitable) {
-            setIcon(UNINHABITABLE_ICON);
-            return;
-        }
-
         if (mPiece != null) {
             ImageIcon pieceIcon = PieceIconUtility.getPieceIcon(mPiece.getName(), mImageScale, mPiece.getTeamId());
 

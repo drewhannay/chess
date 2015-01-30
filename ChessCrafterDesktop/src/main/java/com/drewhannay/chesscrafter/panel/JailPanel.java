@@ -54,7 +54,7 @@ public class JailPanel extends JPanel {
     private void createGrid() {
         for (int x = 1; x <= mJailDimension; x++) {
             for (int y = 1; y <= mJailDimension; y++) {
-                SquareJLabel square = new SquareJLabel(BoardCoordinate.at(x, y), true, 24);
+                SquareJLabel square = new SquareJLabel(BoardCoordinate.at(x, y), 24);
                 add(square);
                 mSquareLabels[x - 1][y - 1] = square;
             }

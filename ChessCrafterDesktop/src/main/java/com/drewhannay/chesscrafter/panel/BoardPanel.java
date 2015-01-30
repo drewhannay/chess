@@ -77,11 +77,11 @@ public class BoardPanel extends JPanel {
 
     private void createGrid() {
         for (int y = mBoardSize.height; y > 0; y--) {
-            JLabel label = GuiUtility.createJLabel("" + y); //$NON-NLS-1$
+            JLabel label = GuiUtility.createJLabel("" + y);
             label.setHorizontalAlignment(SwingConstants.CENTER);
             add(label);
             for (int x = 1; x <= mBoardSize.width; x++) {
-                SquareJLabel square = new SquareJLabel(BoardCoordinate.at(x, y), true, 48);
+                SquareJLabel square = new SquareJLabel(BoardCoordinate.at(x, y), 48);
                 square.addMouseMotionListener(new MotionAdapter(mGlassPane));
                 square.addMouseListener(new SquareListener(square, mDropManager, mGlassPane, mHighlightCallback));
                 add(square);
@@ -91,11 +91,11 @@ public class BoardPanel extends JPanel {
         }
         for (int x = 0; x <= mBoardSize.width; x++) {
             if (x != 0) {
-                JLabel label = GuiUtility.createJLabel("" + (char) (x - 1 + 'A')); //$NON-NLS-1$
+                JLabel label = GuiUtility.createJLabel("" + (char) (x - 1 + 'A'));
                 label.setHorizontalAlignment(SwingConstants.CENTER);
                 add(label);
             } else {
-                add(GuiUtility.createJLabel("")); //$NON-NLS-1$
+                add(GuiUtility.createJLabel(""));
             }
         }
     }
