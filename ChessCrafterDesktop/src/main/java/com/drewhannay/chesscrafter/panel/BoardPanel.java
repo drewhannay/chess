@@ -1,9 +1,6 @@
 package com.drewhannay.chesscrafter.panel;
 
-import com.drewhannay.chesscrafter.dragNdrop.DropManager;
-import com.drewhannay.chesscrafter.dragNdrop.GlassPane;
-import com.drewhannay.chesscrafter.dragNdrop.MotionAdapter;
-import com.drewhannay.chesscrafter.dragNdrop.SquareListener;
+import com.drewhannay.chesscrafter.dragNdrop.SquareConfig;
 import com.drewhannay.chesscrafter.label.SquareJLabel;
 import com.drewhannay.chesscrafter.models.Board;
 import com.drewhannay.chesscrafter.models.BoardCoordinate;
@@ -26,15 +23,13 @@ public class BoardPanel extends ChessPanel {
     private final List<SquareJLabel> mSquareLabels;
     private final Function<BoardCoordinate, Set<BoardCoordinate>> mGetMovesCallback;
 
-    private final GlassPane mGlassPane;
-    private final DropManager mDropManager;
+    private final SquareConfig mSquareConfig;
 
-    public BoardPanel(BoardSize boardSize, GlassPane globalGlassPane, DropManager dropManager,
+    public BoardPanel(BoardSize boardSize, SquareConfig squareConfig,
                       Function<BoardCoordinate, Set<BoardCoordinate>> getMovesCallback) {
         super(false);
 
-        mGlassPane = globalGlassPane;
-        mDropManager = dropManager;
+        mSquareConfig = squareConfig;
         mGetMovesCallback = getMovesCallback;
         mBoardSize = boardSize;
         mSquareLabels = new ArrayList<>(boardSize.width * boardSize.height);
@@ -93,11 +88,10 @@ public class BoardPanel extends ChessPanel {
             return label;
         } else {
             SquareJLabel square = new SquareJLabel(BoardCoordinate.at(x, y));
-            square.addMouseMotionListener(new MotionAdapter(mGlassPane));
-            square.addMouseListener(new SquareListener(mDropManager, mGlassPane, () -> {
+            mSquareConfig.configureSquare(square, () -> {
                 Set<BoardCoordinate> coordinates = mGetMovesCallback.apply(square.getCoordinates());
                 return !coordinates.isEmpty() ? getLabelsForCoordinates(coordinates) : Collections.emptyList();
-            }));
+            });
             mSquareLabels.add(square);
             return square;
         }

@@ -80,7 +80,7 @@ public class GameFrame extends ChessFrame {
     }
 
     public void addGame(@NotNull Game game) {
-        GamePanel panel = new GamePanel(this, game);
+        GamePanel panel = new GamePanel(getGlassPane(), game);
         mTabbedPane.addTab(game.getGameType() + mTabbedPane.getTabCount(), panel);
         mTabbedPane.setSelectedComponent(panel);
 
@@ -115,7 +115,7 @@ public class GameFrame extends ChessFrame {
     private void openGame() {
         try {
             File gameFile = FileUtility.chooseFile(FileUtility.HISTORY_EXTENSION_FILTER);
-            if(gameFile != null) {
+            if (gameFile != null) {
                 JsonParser parser = new JsonParser();
                 JsonElement jsonElement = parser.parse(new FileReader(gameFile));
                 History history = GsonUtility.fromJson(jsonElement, History.class);

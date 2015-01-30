@@ -2,6 +2,7 @@ package com.drewhannay.chesscrafter.panel;
 
 import com.drewhannay.chesscrafter.dragNdrop.DropManager;
 import com.drewhannay.chesscrafter.dragNdrop.GlassPane;
+import com.drewhannay.chesscrafter.dragNdrop.SquareConfig;
 import com.drewhannay.chesscrafter.label.SquareJLabel;
 import com.drewhannay.chesscrafter.logic.PieceTypeManager;
 import com.drewhannay.chesscrafter.models.Board;
@@ -28,7 +29,7 @@ public class VariantCreationPanel extends ChessPanel {
                 });
 
         mBoard = new Board(BoardSize.CLASSIC_SIZE);
-        mBoardPanel = new BoardPanel(mBoard.getBoardSize(), glassPane, dropManager, ImmutableSet::of);
+        mBoardPanel = new BoardPanel(mBoard.getBoardSize(), new SquareConfig(dropManager, glassPane), ImmutableSet::of);
         mTeamPanel = new TeamCreationPanel(dropManager, glassPane, mBoardPanel::getAllSquares);
 
         initComponents();

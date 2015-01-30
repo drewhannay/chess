@@ -3,6 +3,7 @@ package com.drewhannay.chesscrafter.panel;
 import com.drewhannay.chesscrafter.action.ChessActions;
 import com.drewhannay.chesscrafter.dragNdrop.DropManager;
 import com.drewhannay.chesscrafter.dragNdrop.GlassPane;
+import com.drewhannay.chesscrafter.dragNdrop.SquareConfig;
 import com.drewhannay.chesscrafter.label.SquareJLabel;
 import com.drewhannay.chesscrafter.label.TeamLabel;
 import com.drewhannay.chesscrafter.logic.Result;
@@ -38,24 +39,21 @@ import java.util.stream.Stream;
 
 public final class GamePanel extends ChessPanel {
     private final Game mGame;
-    private final DropManager mDropManager;
+    private final SquareConfig mSquareConfig;
 
     private List<TeamLabel> mTeamLabels;
     private BoardPanel[] mGameBoards;
     private JailPanel[] mJails;
-    private GlassPane mGlobalGlassPane;
 
-    public GamePanel(@NotNull JFrame frame, @NotNull Game game) {
+    public GamePanel(@NotNull GlassPane glassPane, @NotNull Game game) {
         mGame = game;
-        mDropManager = new DropManager(this::boardRefresh, pair -> {
+        DropManager dropManager = new DropManager(this::boardRefresh, pair -> {
             BoardCoordinate origin = ((SquareJLabel) pair.first).getCoordinates();
             BoardCoordinate destination = ((SquareJLabel) pair.second).getCoordinates();
             playMove(mGame.newMoveBuilder(origin, destination));
         });
-        mGlobalGlassPane = new GlassPane();
-        mGlobalGlassPane.setOpaque(false);
 
-        frame.setGlassPane(mGlobalGlassPane);
+        mSquareConfig = new SquareConfig(dropManager, glassPane);
 
         initComponents();
     }
@@ -261,7 +259,7 @@ public final class GamePanel extends ChessPanel {
             gridx += constraints.gridwidth;
 
             int boardIndex = index;
-            mGameBoards[boardIndex] = new BoardPanel(boards[boardIndex].getBoardSize(), mGlobalGlassPane, mDropManager,
+            mGameBoards[boardIndex] = new BoardPanel(boards[boardIndex].getBoardSize(), mSquareConfig,
                     coordinate -> {
                         Piece piece = mGame.getPiece(boardIndex, coordinate);
                         if (piece != null && piece.getTeamId() == mGame.getTurnKeeper().getActiveTeamId()) {

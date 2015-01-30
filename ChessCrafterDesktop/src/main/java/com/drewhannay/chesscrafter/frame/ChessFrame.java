@@ -1,6 +1,7 @@
 package com.drewhannay.chesscrafter.frame;
 
 import com.drewhannay.chesscrafter.action.ChessActions;
+import com.drewhannay.chesscrafter.dragNdrop.GlassPane;
 import com.drewhannay.chesscrafter.utility.FileUtility;
 import com.google.common.base.Preconditions;
 
@@ -12,7 +13,19 @@ import java.awt.event.WindowEvent;
 import java.lang.reflect.Method;
 
 class ChessFrame extends JFrame {
+
+    private final GlassPane mGlassPane;
+
     ChessFrame() {
+        mGlassPane = new GlassPane();
+        mGlassPane.setOpaque(false);
+
+        setGlassPane(mGlassPane);
+    }
+
+    @Override
+    public GlassPane getGlassPane() {
+        return mGlassPane;
     }
 
     final void initComponents() {

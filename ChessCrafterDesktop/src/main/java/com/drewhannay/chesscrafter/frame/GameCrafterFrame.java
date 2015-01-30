@@ -1,7 +1,6 @@
 package com.drewhannay.chesscrafter.frame;
 
 import com.drewhannay.chesscrafter.action.ChessActions;
-import com.drewhannay.chesscrafter.dragNdrop.GlassPane;
 import com.drewhannay.chesscrafter.panel.PieceCrafterMasterPanel;
 import com.drewhannay.chesscrafter.panel.VariantCreationPanel;
 
@@ -16,11 +15,7 @@ public final class GameCrafterFrame extends ChessFrame {
 
         setTitle("Game Crafter");
 
-        GlassPane glassPane = new GlassPane();
-        glassPane.setOpaque(false);
-        setGlassPane(glassPane);
-
-        VariantCreationPanel detailPanel = new VariantCreationPanel(glassPane);
+        VariantCreationPanel detailPanel = new VariantCreationPanel(getGlassPane());
         PieceCrafterMasterPanel masterPanel = new PieceCrafterMasterPanel(() -> {
             // TODO: hacky method call
             ChessActions.PIECE_CRAFTER.getAction().actionPerformed(null);
