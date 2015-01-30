@@ -12,14 +12,16 @@ import java.util.function.Supplier;
 
 public class SquareListener extends DropAdapter implements MouseListener {
     private final DropManager mDropManager;
-    private final Supplier<List<SquareJLabel>> mHighlightCallback;
+    private final Supplier<List<SquareJLabel>> mDropTargets;
+    private final boolean mHideIcon;
 
-    public SquareListener(DropManager dropManager, GlassPane glassPane,
+    public SquareListener(DropManager dropManager, GlassPane glassPane, boolean hideIcon,
                           Supplier<List<SquareJLabel>> highlightCallback) {
         super(glassPane);
 
         mDropManager = dropManager;
-        mHighlightCallback = highlightCallback;
+        mDropTargets = highlightCallback;
+        mHideIcon = hideIcon;
 
         addDropListener(mDropManager);
     }
@@ -38,7 +40,7 @@ public class SquareListener extends DropAdapter implements MouseListener {
 
     @Override
     public void mousePressed(MouseEvent event) {
-        List<SquareJLabel> destinations = mHighlightCallback.get();
+        List<SquareJLabel> destinations = mDropTargets.get();
         if (destinations.isEmpty()) {
             return;
         }
@@ -50,7 +52,9 @@ public class SquareListener extends DropAdapter implements MouseListener {
         if (icon == null) {
             return;
         }
-        squareLabel.hideIcon();
+        if (mHideIcon) {
+            squareLabel.hideIcon();
+        }
 
         Point point = (Point) event.getPoint().clone();
         SwingUtilities.convertPointToScreen(point, event.getComponent());

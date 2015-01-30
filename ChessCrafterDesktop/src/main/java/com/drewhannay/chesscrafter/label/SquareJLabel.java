@@ -16,6 +16,8 @@ public class SquareJLabel extends JLabel {
     private final Color mBackgroundColor;
     private final Color mForegroundColor;
 
+    private Piece mPiece;
+
     public SquareJLabel(BoardCoordinate coordinate) {
         this(coordinate, null, null);
     }
@@ -59,7 +61,13 @@ public class SquareJLabel extends JLabel {
         setIcon(null);
     }
 
+    @Nullable
+    public Piece getPiece() {
+        return mPiece;
+    }
+
     public void setPiece(@Nullable Piece piece) {
+        mPiece = piece;
         if (piece != null) {
             Icon icon = PieceIconUtility.getPieceIcon(piece.getName(), piece.getTeamId());
             if (icon != null) {
