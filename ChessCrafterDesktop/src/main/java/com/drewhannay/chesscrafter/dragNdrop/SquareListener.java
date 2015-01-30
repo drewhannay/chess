@@ -1,7 +1,6 @@
 package com.drewhannay.chesscrafter.dragNdrop;
 
 import com.drewhannay.chesscrafter.label.SquareJLabel;
-import com.drewhannay.chesscrafter.models.BoardCoordinate;
 import com.drewhannay.chesscrafter.utility.PreferenceUtility;
 
 import javax.swing.*;
@@ -10,14 +9,14 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.util.List;
-import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class SquareListener extends DropAdapter implements MouseListener, PreferenceUtility.PieceToolTipPreferenceChangedListener {
     private final DropManager mDropManager;
-    private final Function<BoardCoordinate, List<SquareJLabel>> mHighlightCallback;
+    private final Supplier<List<SquareJLabel>> mHighlightCallback;
 
     public SquareListener(DropManager dropManager, GlassPane glassPane,
-                          Function<BoardCoordinate, List<SquareJLabel>> highlightCallback) {
+                          Supplier<List<SquareJLabel>> highlightCallback) {
         super(glassPane);
 
         mDropManager = dropManager;
@@ -42,7 +41,7 @@ public class SquareListener extends DropAdapter implements MouseListener, Prefer
     @Override
     public void mousePressed(MouseEvent event) {
         SquareJLabel squareLabel = (SquareJLabel) event.getSource();
-        List<SquareJLabel> destinations = mHighlightCallback.apply(squareLabel.getCoordinates());
+        List<SquareJLabel> destinations = mHighlightCallback.get();
         if (destinations.isEmpty()) {
             return;
         }

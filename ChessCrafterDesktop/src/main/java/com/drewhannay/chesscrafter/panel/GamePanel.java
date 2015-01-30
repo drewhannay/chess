@@ -31,6 +31,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public final class GamePanel extends ChessPanel {
     private final Game mGame;
@@ -107,13 +109,8 @@ public final class GamePanel extends ChessPanel {
     }
 
     private void boardRefresh() {
-        for (BoardPanel panel : mGameBoards) {
-            panel.updatePieceLocations(mGame.getBoards());
-        }
-        int panelCount = 0;
-        for (Team team : mGame.getTeams()) {
-            mJails[panelCount++].updateJailPopulation(team.getCapturedOpposingPieces());
-        }
+        IntStream.range(0, mGameBoards.length).forEach(i -> mGameBoards[i].updatePieceLocations(mGame.getBoards()[i]));
+        IntStream.range(0, mJails.length).forEach(i -> mJails[i].updateJailPopulation(mGame.getTeams()[i].getCapturedOpposingPieces()));
     }
 
     public void declareDraw() {
@@ -204,7 +201,7 @@ public final class GamePanel extends ChessPanel {
 
     private void resizeElements(int width, int height) {
 //        Stream.of(mGameBoards).forEach(board -> board.rescaleBoard(width, height));
-//        Stream.of(mJails).forEach(jail -> jail.rescaleBoard(width, height));
+        Stream.of(mJails).forEach(jail -> jail.rescaleBoard(width, height));
     }
 
     private void initComponents() {
@@ -248,24 +245,25 @@ public final class GamePanel extends ChessPanel {
 
         int gridx = 0;
 
-        for (int boardIndex = 0; boardIndex < boards.length; boardIndex++) {
-            constraints.gridheight = boards[boardIndex].getBoardSize().height + 2; // Added 2 for row labels? I dunno.
+        for (int index = 0; index < boards.length; index++) {
+            constraints.gridheight = boards[index].getBoardSize().height + 2; // Added 2 for row labels? I dunno.
             constraints.gridy = 1;
             constraints.fill = GridBagConstraints.HORIZONTAL;
             constraints.insets = new Insets(10, 0, 0, 0);
             constraints.gridx = gridx;
-            constraints.gridwidth = boards[boardIndex].getBoardSize().width + 2; // Added 2 for row labels?
+            constraints.gridwidth = boards[index].getBoardSize().width + 2; // Added 2 for row labels?
             gridx += constraints.gridwidth;
 
-            mGameBoards[boardIndex] = new BoardPanel(boards[boardIndex].getBoardSize(), boardIndex,
-                    mGlobalGlassPane, mDropManager, pair -> {
-                Piece piece = mGame.getPiece(pair.first, pair.second);
-                if (piece != null && piece.getTeamId() == mGame.getTurnKeeper().getActiveTeamId()) {
-                    return mGame.getMovesFrom(pair.first, pair.second);
-                } else {
-                    return Collections.emptySet();
-                }
-            });
+            int boardIndex = index;
+            mGameBoards[boardIndex] = new BoardPanel(boards[boardIndex].getBoardSize(), mGlobalGlassPane, mDropManager,
+                    coordinate -> {
+                        Piece piece = mGame.getPiece(boardIndex, coordinate);
+                        if (piece != null && piece.getTeamId() == mGame.getTurnKeeper().getActiveTeamId()) {
+                            return mGame.getMovesFrom(boardIndex, coordinate);
+                        } else {
+                            return Collections.emptySet();
+                        }
+                    });
             add(mGameBoards[boardIndex], constraints);
         }
 
@@ -279,10 +277,8 @@ public final class GamePanel extends ChessPanel {
                 mTeamLabels.add(new TeamLabel(team.getTeamId(), "Team " + team.getTeamId()));
         }
 
-        for (int teamIndex = 0; teamIndex < mGame.getTeams().length; teamIndex++) {
-            //TODO Figure out a way to get the total number of pieces in the game for each team
-            mJails[teamIndex] = new JailPanel(16, teamIndex);
-        }
+        //TODO Figure out a way to get the total number of pieces in the game for each team
+        IntStream.range(0, mGame.getTeams().length).forEach(i -> mJails[i] = new JailPanel(16));
 
         // add the Black Team Label
         constraints.fill = GridBagConstraints.HORIZONTAL;

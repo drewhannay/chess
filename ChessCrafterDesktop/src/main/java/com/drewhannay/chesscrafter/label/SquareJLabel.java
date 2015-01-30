@@ -72,6 +72,7 @@ public class SquareJLabel extends JLabel {
             setText(null);
             setToolTipText(null);
         }
+        clearHighlight();
     }
 
     public void highlightThreat() {

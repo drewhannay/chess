@@ -16,8 +16,8 @@ public class MotionAdapter extends MouseMotionAdapter {
         Point point = (Point) event.getPoint().clone();
         SwingUtilities.convertPointToScreen(point, component);
         SwingUtilities.convertPointFromScreen(point, mGlassPane);
-        mGlassPane.setPoint(point);
 
+        mGlassPane.setPoint(point);
         mGlassPane.repaint();
     }
 

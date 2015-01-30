@@ -2,7 +2,6 @@ package com.drewhannay.chesscrafter.panel;
 
 import com.drewhannay.chesscrafter.dragNdrop.DropManager;
 import com.drewhannay.chesscrafter.dragNdrop.GlassPane;
-import com.drewhannay.chesscrafter.dragNdrop.MotionAdapter;
 import com.drewhannay.chesscrafter.logic.PieceTypeManager;
 import com.drewhannay.chesscrafter.models.Board;
 import com.drewhannay.chesscrafter.models.BoardCoordinate;
@@ -16,22 +15,17 @@ import java.awt.*;
 
 public class VariantCreationPanel extends ChessPanel {
 
-    private final GlassPane mGlassPane;
-    private final DropManager mDropManager;
-    private final MotionAdapter mMotionAdapter;
-
+    private final Board mBoard;
+    private final BoardPanel mBoardPanel;
     private final TeamCreationPanel mTeamPanel;
 
-    private Board mBoard;
-    private BoardPanel mBoardPanel;
-
     public VariantCreationPanel(@NotNull GlassPane glassPane) {
-        mDropManager = new DropManager(this::boardRefresh,
+        DropManager dropManager = new DropManager(this::boardRefresh,
                 pair -> setPiece(new Piece(Piece.TEAM_ONE, PieceTypeManager.getBishopPieceType()), pair.second));
-        mGlassPane = glassPane;
-        mMotionAdapter = new MotionAdapter(mGlassPane);
 
-        mTeamPanel = new TeamCreationPanel(mDropManager, mGlassPane, coordinate -> mBoardPanel.getSquareLabels());
+        mBoard = new Board(BoardSize.CLASSIC_SIZE);
+        mBoardPanel = new BoardPanel(mBoard.getBoardSize(), glassPane, dropManager, ImmutableSet::of);
+        mTeamPanel = new TeamCreationPanel(dropManager, glassPane, mBoardPanel::getAllSquares);
 
         initComponents();
     }
@@ -43,9 +37,6 @@ public class VariantCreationPanel extends ChessPanel {
     private void initComponents() {
         setLayout(new GridBagLayout());
         GridBagConstraints gbc;
-
-        mBoard = new Board(BoardSize.CLASSIC_SIZE);
-        mBoardPanel = new BoardPanel(mBoard.getBoardSize(), 0, mGlassPane, mDropManager, pair -> ImmutableSet.of());
 
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -63,7 +54,7 @@ public class VariantCreationPanel extends ChessPanel {
     }
 
     private void boardRefresh() {
-        mBoardPanel.updatePieceLocations(new Board[]{mBoard});
+        mBoardPanel.updatePieceLocations(mBoard);
     }
 
     private void setPiece(Piece piece, BoardCoordinate coordinate) {

@@ -2,6 +2,7 @@ package com.drewhannay.chesscrafter.panel;
 
 import com.drewhannay.chesscrafter.dragNdrop.DropManager;
 import com.drewhannay.chesscrafter.dragNdrop.GlassPane;
+import com.drewhannay.chesscrafter.dragNdrop.MotionAdapter;
 import com.drewhannay.chesscrafter.dragNdrop.SquareListener;
 import com.drewhannay.chesscrafter.label.SquareJLabel;
 import com.drewhannay.chesscrafter.models.BoardCoordinate;
@@ -12,6 +13,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class TeamCreationPanel extends ChessPanel {
 
@@ -28,7 +30,7 @@ public class TeamCreationPanel extends ChessPanel {
     private PieceType mPieceType;
 
     public TeamCreationPanel(DropManager dropManager, GlassPane glassPane,
-                             Function<BoardCoordinate, List<SquareJLabel>> highlightCallback) {
+                             Supplier<List<SquareJLabel>> highlightCallback) {
         super(false);
 
         mTeamInfos = new ArrayList<>(2);
@@ -56,12 +58,13 @@ public class TeamCreationPanel extends ChessPanel {
     }
 
     private void initComponents(DropManager dropManager, GlassPane glassPane,
-                                Function<BoardCoordinate, List<SquareJLabel>> highlightCallback) {
+                                Supplier<List<SquareJLabel>> highlightCallback) {
         setLayout(new FlowLayout(FlowLayout.CENTER));
 
         mTeamInfos.forEach(teamInfo -> {
             teamInfo.label = new SquareJLabel(BoardCoordinate.at(1, 1));
             teamInfo.label.addMouseListener(new SquareListener(dropManager, glassPane, highlightCallback));
+            teamInfo.label.addMouseMotionListener(new MotionAdapter(glassPane));
             add(teamInfo.label);
         });
     }

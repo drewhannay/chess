@@ -9,152 +9,97 @@ import com.drewhannay.chesscrafter.models.Board;
 import com.drewhannay.chesscrafter.models.BoardCoordinate;
 import com.drewhannay.chesscrafter.models.BoardSize;
 import com.drewhannay.chesscrafter.utility.GuiUtility;
-import com.drewhannay.chesscrafter.utility.Pair;
 import com.drewhannay.chesscrafter.utility.PreferenceUtility;
-import com.google.common.collect.Lists;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-public class BoardPanel extends JPanel {
+public class BoardPanel extends ChessPanel {
 
-    private static final long serialVersionUID = 9042633590279303353L;
-
-    private final int mBoardIndex;
-    private final SquareJLabel[][] mSquareLabels;
-    private final Function<Pair<Integer, BoardCoordinate>, Set<BoardCoordinate>> mGetMovesCallback;
-    private final Function<BoardCoordinate, List<SquareJLabel>> mHighlightCallback;
     private final BoardSize mBoardSize;
+    private final List<SquareJLabel> mSquareLabels;
+    private final Function<BoardCoordinate, Set<BoardCoordinate>> mGetMovesCallback;
 
     private final GlassPane mGlassPane;
     private final DropManager mDropManager;
 
-    public BoardPanel(BoardSize boardSize, int boardIndex, GlassPane globalGlassPane, DropManager dropManager,
-                      Function<Pair<Integer, BoardCoordinate>, Set<BoardCoordinate>> getMovesCallback) {
-        mSquareLabels = new SquareJLabel[boardSize.width][boardSize.height];
+    public BoardPanel(BoardSize boardSize, GlassPane globalGlassPane, DropManager dropManager,
+                      Function<BoardCoordinate, Set<BoardCoordinate>> getMovesCallback) {
+        super(false);
+
         mGlassPane = globalGlassPane;
         mDropManager = dropManager;
-        mBoardIndex = boardIndex;
         mGetMovesCallback = getMovesCallback;
         mBoardSize = boardSize;
+        mSquareLabels = new ArrayList<>(boardSize.width * boardSize.height);
 
-        mHighlightCallback = coordinate -> {
-            Set<BoardCoordinate> coordinates = mGetMovesCallback.apply(Pair.create(mBoardIndex, coordinate));
-            if (!coordinates.isEmpty()) {
-                List<SquareJLabel> labels = highlightSquares(coordinates);
-                repaint();
-                return labels;
-            } else {
-                return Collections.emptyList();
-            }
-        };
-
-        setOpaque(false);
-        setLayout(new GridLayout(mBoardSize.width + 1, mBoardSize.height + 1));
-        setPreferredSize(new Dimension((mBoardSize.width + 1) * 48, (mBoardSize.height + 1) * 48));
-        createGrid();
+        GridLayout gridLayout = new GridLayout(mBoardSize.width + 1, mBoardSize.height + 1);
+        setLayout(gridLayout);
+        createGrid(gridLayout);
     }
 
     @Override
     public Dimension getMinimumSize() {
-        Dimension squareSize = mSquareLabels[0][0].getMinimumSize();
+        Dimension squareSize = mSquareLabels.get(0).getMinimumSize();
         return new Dimension(mBoardSize.width * squareSize.width, mBoardSize.height * squareSize.height);
     }
 
-    @Override
-    public Dimension getPreferredSize() {
-        Dimension d = super.getPreferredSize();
-        Dimension prefSize;
-        Component c = getParent();
-        if (c == null) {
-            prefSize = new Dimension(d);
-        } else if (c.getWidth() > d.getWidth() && c.getHeight() > d.getHeight()) {
-            prefSize = c.getSize();
-        } else {
-            prefSize = d;
-        }
-        int w = (int) prefSize.getWidth() - 100;
-        int h = (int) prefSize.getHeight() - 20;
-        // the smaller of the two sizes
-        int s = (w > h ? h : w);
-        return new Dimension(s, s);
+    public void updatePieceLocations(Board board) {
+        mSquareLabels.forEach(square -> square.setPiece(board.getPiece(square.getCoordinates())));
     }
 
-    public List<SquareJLabel> getSquareLabels() {
-        return Stream.of(mSquareLabels).flatMap(Stream::of).collect(Collectors.toList());
+    public List<SquareJLabel> getAllSquares() {
+        return mSquareLabels;
     }
 
-    public void rescaleBoard(double panelWidth, double panelHeight) {
-//        double boardScale = panelHeight * .85;
-//        double scale = panelHeight / panelWidth;
-//        if (scale > .75) {
-//            boardScale = panelHeight * (.80 - (scale - .75));
-//        }
-//        boardScale = boardScale / mBoardSize.width + 1;
-//        setPreferredSize(new Dimension((mBoardSize.width + 1) * (int) boardScale, (mBoardSize.height + 1) * (int) boardScale));
-//        for (int y = mBoardSize.height; y > 0; y--) {
-//            for (int x = 1; x <= mBoardSize.width; x++) {
-//                mSquareLabels[x - 1][y - 1].setImageScale((int) boardScale);
-//                mSquareLabels[x - 1][y - 1].refresh();
-//            }
-//        }
-    }
+    public List<SquareJLabel> getLabelsForCoordinates(Set<BoardCoordinate> coordinates) {
+        List<SquareJLabel> labels = mSquareLabels.stream()
+                .filter(label -> coordinates.contains(label.getCoordinates()))
+                .collect(Collectors.toList());
 
-    private void createGrid() {
-        for (int y = mBoardSize.height; y > 0; y--) {
-            JLabel label = GuiUtility.createJLabel("" + y);
-            label.setHorizontalAlignment(SwingConstants.CENTER);
-            add(label);
-            for (int x = 1; x <= mBoardSize.width; x++) {
-                SquareJLabel square = new SquareJLabel(BoardCoordinate.at(x, y));
-                square.addMouseMotionListener(new MotionAdapter(mGlassPane));
-                square.addMouseListener(new SquareListener(mDropManager, mGlassPane, mHighlightCallback));
-                add(square);
-                mSquareLabels[x - 1][y - 1] = square;
-            }
-        }
-        for (int x = 0; x <= mBoardSize.width; x++) {
-            if (x != 0) {
-                JLabel label = GuiUtility.createJLabel("" + (char) (x - 1 + 'A'));
-                label.setHorizontalAlignment(SwingConstants.CENTER);
-                add(label);
-            } else {
-                add(GuiUtility.createJLabel(""));
-            }
-        }
-    }
-
-    public void updatePieceLocations(Board[] boards) {
-        Board board = boards[mBoardIndex];
-        for (int x = 0; x < mSquareLabels.length; x++) {
-            for (int y = 0; y < mSquareLabels[x].length; y++) {
-                SquareJLabel square = mSquareLabels[x][y];
-                square.setPiece(board.getPiece(BoardCoordinate.at(x + 1, y + 1)));
-            }
-        }
-        clearHighlights();
-    }
-
-    private void clearHighlights() {
-        getSquareLabels().forEach(SquareJLabel::clearHighlight);
-    }
-
-    public List<SquareJLabel> highlightSquares(Set<BoardCoordinate> coordinates) {
-        List<SquareJLabel> labels = Lists.newArrayList();
+        // TODO: doing highlights here violates the POLA, should move it somewhere else
         boolean shouldHighlight = PreferenceUtility.getHighlightMovesPreference();
-        for (BoardCoordinate coordinate : coordinates) {
-            SquareJLabel label = mSquareLabels[coordinate.x - 1][coordinate.y - 1];
-            if (shouldHighlight) {
-                label.highlight();
-            }
-            labels.add(label);
+        if (shouldHighlight) {
+            labels.forEach(SquareJLabel::highlight);
         }
+
         return labels;
+    }
+
+    private void createGrid(GridLayout gridLayout) {
+        for (int y = gridLayout.getRows() - 1; y >= 0; y--) {
+            for (int x = 0; x < gridLayout.getColumns(); x++) {
+                add(getComponentForCell(x, y));
+            }
+        }
+    }
+
+    private JLabel getComponentForCell(int x, int y) {
+        if (x == 0 && y == 0) {
+            return GuiUtility.createJLabel("");
+        } else if (x == 0) {
+            JLabel label = GuiUtility.createJLabel(String.valueOf(y - 1));
+            label.setHorizontalAlignment(SwingConstants.CENTER);
+            return label;
+        } else if (y == 0) {
+            JLabel label = GuiUtility.createJLabel(String.valueOf((char) (x - 1 + 'A')));
+            label.setHorizontalAlignment(SwingConstants.CENTER);
+            return label;
+        } else {
+            SquareJLabel square = new SquareJLabel(BoardCoordinate.at(x, y));
+            square.addMouseMotionListener(new MotionAdapter(mGlassPane));
+            square.addMouseListener(new SquareListener(mDropManager, mGlassPane, () -> {
+                Set<BoardCoordinate> coordinates = mGetMovesCallback.apply(square.getCoordinates());
+                return !coordinates.isEmpty() ? getLabelsForCoordinates(coordinates) : Collections.emptyList();
+            }));
+            mSquareLabels.add(square);
+            return square;
+        }
     }
 }
