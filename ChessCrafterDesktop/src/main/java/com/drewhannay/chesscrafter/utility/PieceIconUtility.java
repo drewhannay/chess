@@ -27,9 +27,8 @@ public final class PieceIconUtility {
     }
 
 
-    public static ImageIcon getPieceIcon(String pieceName, int imageScale, int teamId) {
-        String pieceKey = pieceName + imageScale;
-        Map<Integer, ImageIcon> list = IMAGE_MAP.get(pieceKey);
+    public static ImageIcon getPieceIcon(String pieceName, int teamId) {
+        Map<Integer, ImageIcon> list = IMAGE_MAP.get(pieceName);
         if (list == null) {
             try {
                 list = Maps.newHashMap();
@@ -38,12 +37,12 @@ public final class PieceIconUtility {
 //					//TODO: basic black/white setup. Soon enough we should be able to take a grayscale image and filter it for each team
 //					list.add(ImageUtility.getImage(pieceName, colorIterator.next(), imageScale));
 //				}
-                list.put(Piece.TEAM_ONE, ImageUtility.getLightImage(pieceName, imageScale));
-                list.put(Piece.TEAM_TWO, ImageUtility.getDarkImage(pieceName, imageScale));
+                list.put(Piece.TEAM_ONE, ImageUtility.getLightImage(pieceName));
+                list.put(Piece.TEAM_TWO, ImageUtility.getDarkImage(pieceName));
             } catch (IOException e) {
                 System.out.println(e);
             }
-            IMAGE_MAP.put(pieceKey, list);
+            IMAGE_MAP.put(pieceName, list);
         }
         return list.get(teamId);
     }

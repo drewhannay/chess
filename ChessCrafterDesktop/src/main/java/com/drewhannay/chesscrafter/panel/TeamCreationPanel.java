@@ -52,10 +52,7 @@ public class TeamCreationPanel extends ChessPanel {
     public void setPieceType(PieceType pieceType) {
         mPieceType = pieceType;
 
-        mTeamInfos.forEach(teamInfo -> {
-            teamInfo.label.setPiece(new Piece(teamInfo.teamId, mPieceType));
-            teamInfo.label.refresh();
-        });
+        mTeamInfos.forEach(teamInfo -> teamInfo.label.setPiece(new Piece(teamInfo.teamId, mPieceType)));
     }
 
     private void initComponents(DropManager dropManager, GlassPane glassPane,
@@ -63,7 +60,7 @@ public class TeamCreationPanel extends ChessPanel {
         setLayout(new FlowLayout(FlowLayout.CENTER));
 
         mTeamInfos.forEach(teamInfo -> {
-            teamInfo.label = new SquareJLabel(BoardCoordinate.at(1, 1), 48);
+            teamInfo.label = new SquareJLabel(BoardCoordinate.at(1, 1));
             teamInfo.label.addMouseListener(new SquareListener(dropManager, glassPane, highlightCallback));
             add(teamInfo.label);
         });

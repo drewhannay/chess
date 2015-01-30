@@ -11,6 +11,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class JailPanel extends JPanel {
 
@@ -41,20 +44,17 @@ public class JailPanel extends JPanel {
         jailScale = jailScale / mJailDimension;
         if (jailScale > 0) {
             setPreferredSize(new Dimension(mJailDimension * (int) jailScale, mJailDimension * (int) jailScale));
-            jailScale = jailScale * .9;
-            for (int y = mJailDimension; y > 0; y--) {
-                for (int x = 1; x <= mJailDimension; x++) {
-                    mSquareLabels[x - 1][y - 1].setImageScale((int) jailScale - 1);
-                    mSquareLabels[x - 1][y - 1].refresh();
-                }
-            }
         }
+    }
+
+    private List<SquareJLabel> getSquareLabels() {
+        return Stream.of(mSquareLabels).flatMap(Stream::of).collect(Collectors.toList());
     }
 
     private void createGrid() {
         for (int x = 1; x <= mJailDimension; x++) {
             for (int y = 1; y <= mJailDimension; y++) {
-                SquareJLabel square = new SquareJLabel(BoardCoordinate.at(x, y), 24);
+                SquareJLabel square = new SquareJLabel(BoardCoordinate.at(x, y));
                 add(square);
                 mSquareLabels[x - 1][y - 1] = square;
             }
@@ -73,16 +73,5 @@ public class JailPanel extends JPanel {
                 }
             }
         }
-        refreshSquares();
-    }
-
-    public void refreshSquares() {
-        for (SquareJLabel[] labelArray : mSquareLabels)
-            for (SquareJLabel label : labelArray)
-                label.refresh();
-    }
-
-    public int getJailDimension() {
-        return mJailDimension;
     }
 }

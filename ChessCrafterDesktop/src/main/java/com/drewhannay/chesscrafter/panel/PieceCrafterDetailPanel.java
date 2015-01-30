@@ -161,7 +161,7 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         lightIconLabel.setSize(48, 48);
 
         try {
-            lightIconLabel.setIcon(builder == null ? blankSquare : ImageUtility.getLightImage(builder.getName(), 24));
+            lightIconLabel.setIcon(builder == null ? blankSquare : ImageUtility.getLightImage(builder.getName()));
         } catch (IOException e3) {
             e3.printStackTrace();
         }
@@ -192,7 +192,7 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         darkIconLabel.setSize(48, 48);
 
         try {
-            darkIconLabel.setIcon(builder == null ? blankSquare : ImageUtility.getDarkImage(builder.getName(), 24));
+            darkIconLabel.setIcon(builder == null ? blankSquare : ImageUtility.getDarkImage(builder.getName()));
         } catch (IOException e2) {
             e2.printStackTrace();
         }

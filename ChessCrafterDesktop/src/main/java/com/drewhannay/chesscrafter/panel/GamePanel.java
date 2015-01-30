@@ -31,7 +31,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Stream;
 
 public final class GamePanel extends ChessPanel {
     private final Game mGame;
@@ -70,7 +69,7 @@ public final class GamePanel extends ChessPanel {
         promotionText.setForeground(Color.white);
         promotionPanel.add(promotionText);
         for (PieceType pieceType : moveBuilder.getPromotionOptions()) {
-            JButton label = new JButton(PieceIconUtility.getPieceIcon(pieceType.getName(), 48, mGame.getTurnKeeper().getActiveTeamId()));
+            JButton label = new JButton(PieceIconUtility.getPieceIcon(pieceType.getName(), mGame.getTurnKeeper().getActiveTeamId()));
             label.addActionListener(e -> {
                 moveBuilder.setPromotionType(pieceType);
                 playMove(moveBuilder);
@@ -204,8 +203,8 @@ public final class GamePanel extends ChessPanel {
     }
 
     private void resizeElements(int width, int height) {
-        Stream.of(mGameBoards).forEach(board -> board.rescaleBoard(width, height));
-        Stream.of(mJails).forEach(jail -> jail.rescaleBoard(width, height));
+//        Stream.of(mGameBoards).forEach(board -> board.rescaleBoard(width, height));
+//        Stream.of(mJails).forEach(jail -> jail.rescaleBoard(width, height));
     }
 
     private void initComponents() {

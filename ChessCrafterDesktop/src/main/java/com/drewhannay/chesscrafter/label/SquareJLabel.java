@@ -3,128 +3,98 @@ package com.drewhannay.chesscrafter.label;
 import com.drewhannay.chesscrafter.models.BoardCoordinate;
 import com.drewhannay.chesscrafter.models.Piece;
 import com.drewhannay.chesscrafter.utility.PieceIconUtility;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class SquareJLabel extends JLabel {
-    public static final Color HIGHLIGHT_COLOR = new Color(20, 129, 191);
-    public static final Color THREAT_COLOR = new Color(120, 20, 20);
+    private static final Color HIGHLIGHT_COLOR = new Color(20, 129, 191);
+    private static final Color THREAT_COLOR = new Color(120, 20, 20);
 
     private final BoardCoordinate mBoardCoordinate;
+    private final Color mBackgroundColor;
+    private final Color mForegroundColor;
 
-    private Color mBackgroundColor;
-    private Piece mPiece;
-    private int mImageScale;
+    public SquareJLabel(BoardCoordinate coordinate) {
+        this(coordinate, null, null);
+    }
 
-    public SquareJLabel(BoardCoordinate coordinates, int imageScale) {
-        mBoardCoordinate = coordinates;
-        mImageScale = imageScale;
+    public SquareJLabel(BoardCoordinate coordinate, @Nullable Color backgroundColor, @Nullable Color foregroundColor) {
+        mBoardCoordinate = coordinate;
+        mBackgroundColor = backgroundColor != null ? backgroundColor : getDefaultBackgroundColor();
+        mForegroundColor = foregroundColor != null ? foregroundColor : getDefaultForegroundColor();
+
+        setBackground(mBackgroundColor);
+        setForeground(mForegroundColor);
+        setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+
         setOpaque(true);
+    }
+
+    @Override
+    public Dimension getMinimumSize() {
+        return new Dimension(24, 24);
+    }
+
+    @Override
+    public Dimension getPreferredSize() {
+        Container c = getParent();
+        if (c == null) {
+            return getMinimumSize();
+        }
+
+        Dimension d = c.getSize();
+        int w = (int) d.getWidth();
+        int h = (int) d.getHeight();
+        int s = (w < h ? w : h);
+        return new Dimension(s, s);
     }
 
     public BoardCoordinate getCoordinates() {
         return mBoardCoordinate;
     }
 
-    public Color getColor() {
-        return getBackground();
-    }
-
-    /**
-     * Sets the background Color of the Square PERMANENTLY.
-     * NOTE: Do not use this method for temporarily highlighting a square.
-     * Use highlight() for that.
-     *
-     * @param c New Color
-     */
-    public void setBackgroundColor(Color c) {
-        mBackgroundColor = c;
-        setBackground(c);
-        setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-    }
-
     public void hideIcon() {
         setIcon(null);
     }
 
-    public void setImageScale(int newImageScale) {
-        mImageScale = newImageScale;
-    }
-
-    public int getImageScale() {
-        return mImageScale;
-    }
-
-    public void setPiece(Piece piece) {
-        mPiece = piece;
-    }
-
-    /**
-     * Refresh the GUI's view of this Square with the current accurate
-     * information.
-     */
-    public void refresh() {
-        if (mPiece != null) {
-            ImageIcon pieceIcon = PieceIconUtility.getPieceIcon(mPiece.getName(), mImageScale, mPiece.getTeamId());
-
-            if (pieceIcon == null)
-                setText(mPiece.getName());
-            else {
-                setIcon(pieceIcon);
+    public void setPiece(@Nullable Piece piece) {
+        if (piece != null) {
+            Icon icon = PieceIconUtility.getPieceIcon(piece.getName(), piece.getTeamId());
+            if (icon != null) {
+                setIcon(icon);
+            } else {
+                setText(piece.getName());
             }
-
-			/*
-             * if (PreferenceUtility.getPreference().showPieceToolTips())
-			 * setToolTipText(mPiece.getPieceType().getToolTipText()); else
-			 * setToolTipText(null);
-			 */
         } else {
-            // if there's no Piece, clear the Icon, tooltip, and Text of the
-            // Square
             setIcon(null);
-            setText(""); //$NON-NLS-1$
+            setText(null);
             setToolTipText(null);
         }
-
-        resetColor();
     }
 
-    public Piece getPiece() {
-        return mPiece;
-    }
-
-    public ImageIcon getPieceIcon() {
-        return PieceIconUtility.getPieceIcon(mPiece.getName(), mImageScale, mPiece.getTeamId());
-    }
-
-    /**
-     * Reset temporary changes to the Color of the Square
-     */
-    public void resetColor() {
-        if (mBackgroundColor != null) {
-            // If a custom background color has been saved, use that.
-            setBackground(mBackgroundColor);
-            return;
-        }
-        setBorder(null);
-        // Otherwise make our normal light/dark pattern.
-        if ((mBoardCoordinate.y % 2 != 0 && mBoardCoordinate.x % 2 != 0)
-                || (mBoardCoordinate.y % 2 == 0 && mBoardCoordinate.x % 2 == 0)) {
-            setBackground(Color.LIGHT_GRAY);
-            setForeground(Color.getHSBColor(30, 70, 70));
-        } else {
-            setBackground(Color.getHSBColor(30, 70, 70));
-            setForeground(Color.LIGHT_GRAY);
-        }
-    }
-
-    public void highlightAsThreat() {
+    public void highlightThreat() {
         setBackground(THREAT_COLOR);
     }
 
     public void highlight() {
         setBackground(HIGHLIGHT_COLOR);
+    }
+
+    public void clearHighlight() {
+        setBackground(mBackgroundColor);
+        setForeground(mForegroundColor);
+    }
+
+    private Color getDefaultBackgroundColor() {
+        return mBoardCoordinate.x % 2 == mBoardCoordinate.y % 2
+                ? Color.LIGHT_GRAY : Color.getHSBColor(30, 70, 70);
+    }
+
+    private Color getDefaultForegroundColor() {
+        return mBoardCoordinate.x % 2 == mBoardCoordinate.y % 2
+                ? Color.getHSBColor(30, 70, 70) : Color.LIGHT_GRAY;
     }
 
     @Override

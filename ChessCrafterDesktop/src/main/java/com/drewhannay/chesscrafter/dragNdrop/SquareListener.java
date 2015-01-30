@@ -42,23 +42,26 @@ public class SquareListener extends DropAdapter implements MouseListener, Prefer
     @Override
     public void mousePressed(MouseEvent event) {
         SquareJLabel squareLabel = (SquareJLabel) event.getSource();
-        BoardCoordinate origin = squareLabel.getCoordinates();
-        List<SquareJLabel> destinations = mHighlightCallback.apply(origin);
+        List<SquareJLabel> destinations = mHighlightCallback.apply(squareLabel.getCoordinates());
         if (destinations.isEmpty()) {
             return;
         }
 
         mDropManager.setComponentList(destinations);
+
+        Icon imageIcon = squareLabel.getIcon();
+        if (imageIcon == null) {
+            return;
+        }
         squareLabel.hideIcon();
 
         Point point = (Point) event.getPoint().clone();
         SwingUtilities.convertPointToScreen(point, event.getComponent());
         SwingUtilities.convertPointFromScreen(point, mGlassPane);
 
-        ImageIcon imageIcon = squareLabel.getPieceIcon();
-        BufferedImage image = new BufferedImage(imageIcon.getIconWidth(), imageIcon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
+        BufferedImage image = new BufferedImage(squareLabel.getWidth(), squareLabel.getHeight(), BufferedImage.TYPE_INT_ARGB);
         Graphics graphics = image.getGraphics();
-        imageIcon.paintIcon(null, graphics, 0, 0);
+        imageIcon.paintIcon(squareLabel, graphics, 0, 0);
         graphics.dispose();
 
         mGlassPane.setVisible(true);

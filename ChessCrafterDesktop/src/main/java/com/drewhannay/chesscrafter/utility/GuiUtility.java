@@ -60,17 +60,20 @@ public final class GuiUtility {
         return ImageIO.read(new File(FileUtility.getImagePath(name)));
     }
 
-    public static ImageIcon createImageIcon(int imageWidth, int imageHeight, String imageLocation, boolean isBuiltInFile)
-            throws IOException {
-        BufferedImage bufferedImage;
-        if (isBuiltInFile)
-            bufferedImage = ImageIO.read(GuiUtility.class.getResource(imageLocation));
-        else
-            bufferedImage = ImageIO.read(new File(FileUtility.getImagePath(imageLocation)));
+    public static ImageIcon createImageIcon(int width, int height, String path, boolean isSystemFile) throws IOException {
+        ImageIcon icon = createImageIcon(path, isSystemFile);
+        icon.setImage(icon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH));
+        return icon;
+    }
 
-        ImageIcon imageIcon = new ImageIcon(bufferedImage);
-        imageIcon.setImage(imageIcon.getImage().getScaledInstance(imageWidth, imageHeight, Image.SCALE_SMOOTH));
-        return imageIcon;
+    public static ImageIcon createImageIcon(String path, boolean isSystemFile) throws IOException {
+        BufferedImage bufferedImage;
+        if (isSystemFile)
+            bufferedImage = ImageIO.read(GuiUtility.class.getResource(path));
+        else
+            bufferedImage = ImageIO.read(new File(FileUtility.getImagePath(path)));
+
+        return new StretchIcon(bufferedImage, true);
     }
 
     public static String getPieceToolTipText(Piece piece) {

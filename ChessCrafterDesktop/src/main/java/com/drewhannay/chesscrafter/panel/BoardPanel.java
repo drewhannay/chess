@@ -61,24 +61,49 @@ public class BoardPanel extends JPanel {
         createGrid();
     }
 
+    @Override
+    public Dimension getMinimumSize() {
+        Dimension squareSize = mSquareLabels[0][0].getMinimumSize();
+        return new Dimension(mBoardSize.width * squareSize.width, mBoardSize.height * squareSize.height);
+    }
+
+    @Override
+    public Dimension getPreferredSize() {
+        Dimension d = super.getPreferredSize();
+        Dimension prefSize;
+        Component c = getParent();
+        if (c == null) {
+            prefSize = new Dimension(d);
+        } else if (c.getWidth() > d.getWidth() && c.getHeight() > d.getHeight()) {
+            prefSize = c.getSize();
+        } else {
+            prefSize = d;
+        }
+        int w = (int) prefSize.getWidth() - 100;
+        int h = (int) prefSize.getHeight() - 20;
+        // the smaller of the two sizes
+        int s = (w > h ? h : w);
+        return new Dimension(s, s);
+    }
+
     public List<SquareJLabel> getSquareLabels() {
         return Stream.of(mSquareLabels).flatMap(Stream::of).collect(Collectors.toList());
     }
 
     public void rescaleBoard(double panelWidth, double panelHeight) {
-        double boardScale = panelHeight * .85;
-        double scale = panelHeight / panelWidth;
-        if (scale > .75) {
-            boardScale = panelHeight * (.80 - (scale - .75));
-        }
-        boardScale = boardScale / mBoardSize.width + 1;
-        setPreferredSize(new Dimension((mBoardSize.width + 1) * (int) boardScale, (mBoardSize.height + 1) * (int) boardScale));
-        for (int y = mBoardSize.height; y > 0; y--) {
-            for (int x = 1; x <= mBoardSize.width; x++) {
-                mSquareLabels[x - 1][y - 1].setImageScale((int) boardScale);
-                mSquareLabels[x - 1][y - 1].refresh();
-            }
-        }
+//        double boardScale = panelHeight * .85;
+//        double scale = panelHeight / panelWidth;
+//        if (scale > .75) {
+//            boardScale = panelHeight * (.80 - (scale - .75));
+//        }
+//        boardScale = boardScale / mBoardSize.width + 1;
+//        setPreferredSize(new Dimension((mBoardSize.width + 1) * (int) boardScale, (mBoardSize.height + 1) * (int) boardScale));
+//        for (int y = mBoardSize.height; y > 0; y--) {
+//            for (int x = 1; x <= mBoardSize.width; x++) {
+//                mSquareLabels[x - 1][y - 1].setImageScale((int) boardScale);
+//                mSquareLabels[x - 1][y - 1].refresh();
+//            }
+//        }
     }
 
     private void createGrid() {
@@ -87,12 +112,11 @@ public class BoardPanel extends JPanel {
             label.setHorizontalAlignment(SwingConstants.CENTER);
             add(label);
             for (int x = 1; x <= mBoardSize.width; x++) {
-                SquareJLabel square = new SquareJLabel(BoardCoordinate.at(x, y), 48);
+                SquareJLabel square = new SquareJLabel(BoardCoordinate.at(x, y));
                 square.addMouseMotionListener(new MotionAdapter(mGlassPane));
                 square.addMouseListener(new SquareListener(mDropManager, mGlassPane, mHighlightCallback));
                 add(square);
                 mSquareLabels[x - 1][y - 1] = square;
-                square.refresh();
             }
         }
         for (int x = 0; x <= mBoardSize.width; x++) {
@@ -114,13 +138,11 @@ public class BoardPanel extends JPanel {
                 square.setPiece(board.getPiece(BoardCoordinate.at(x + 1, y + 1)));
             }
         }
-        refreshSquares();
+        clearHighlights();
     }
 
-    public void refreshSquares() {
-        for (SquareJLabel[] labelArray : mSquareLabels)
-            for (SquareJLabel label : labelArray)
-                label.refresh();
+    private void clearHighlights() {
+        getSquareLabels().forEach(SquareJLabel::clearHighlight);
     }
 
     public List<SquareJLabel> highlightSquares(Set<BoardCoordinate> coordinates) {
