@@ -19,6 +19,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class BoardPanel extends JPanel {
 
@@ -59,6 +61,10 @@ public class BoardPanel extends JPanel {
         createGrid();
     }
 
+    public List<SquareJLabel> getSquareLabels() {
+        return Stream.of(mSquareLabels).flatMap(Stream::of).collect(Collectors.toList());
+    }
+
     public void rescaleBoard(double panelWidth, double panelHeight) {
         double boardScale = panelHeight * .85;
         double scale = panelHeight / panelWidth;
@@ -83,7 +89,7 @@ public class BoardPanel extends JPanel {
             for (int x = 1; x <= mBoardSize.width; x++) {
                 SquareJLabel square = new SquareJLabel(BoardCoordinate.at(x, y), 48);
                 square.addMouseMotionListener(new MotionAdapter(mGlassPane));
-                square.addMouseListener(new SquareListener(square, mDropManager, mGlassPane, mHighlightCallback));
+                square.addMouseListener(new SquareListener(mDropManager, mGlassPane, mHighlightCallback));
                 add(square);
                 mSquareLabels[x - 1][y - 1] = square;
                 square.refresh();

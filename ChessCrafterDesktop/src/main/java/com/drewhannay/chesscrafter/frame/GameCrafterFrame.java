@@ -1,6 +1,7 @@
 package com.drewhannay.chesscrafter.frame;
 
 import com.drewhannay.chesscrafter.action.ChessActions;
+import com.drewhannay.chesscrafter.dragNdrop.GlassPane;
 import com.drewhannay.chesscrafter.panel.PieceCrafterMasterPanel;
 import com.drewhannay.chesscrafter.panel.VariantCreationPanel;
 
@@ -15,21 +16,27 @@ public final class GameCrafterFrame extends ChessFrame {
 
         setTitle("Game Crafter");
 
-        VariantCreationPanel detailPanel = new VariantCreationPanel();
+        GlassPane glassPane = new GlassPane();
+        glassPane.setOpaque(false);
+        setGlassPane(glassPane);
+
+        VariantCreationPanel detailPanel = new VariantCreationPanel(glassPane);
         PieceCrafterMasterPanel masterPanel = new PieceCrafterMasterPanel(() -> {
             // TODO: hacky method call
             ChessActions.PIECE_CRAFTER.getAction().actionPerformed(null);
         }, detailPanel::onPieceTypeSelected);
 
-        setPreferredSize(new Dimension(530, 575));
-        masterPanel.setMinimumSize(new Dimension(200, 575));
-        detailPanel.setMinimumSize(new Dimension(300, 575));
+        Dimension frameSize = new Dimension(755, 475);
+
+        setPreferredSize(frameSize);
+        masterPanel.setMinimumSize(new Dimension(225, 475));
+        detailPanel.setMinimumSize(new Dimension(500, 475));
 
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, masterPanel, detailPanel);
-        splitPane.setPreferredSize(new Dimension(530, 575));
-        splitPane.setDividerLocation(0.3);
+        splitPane.setPreferredSize(frameSize);
+        splitPane.setDividerLocation(0.2);
         splitPane.setDividerSize(1);
-        splitPane.setResizeWeight(0.5);
+        splitPane.setResizeWeight(0.3);
         splitPane.setEnabled(false);
         add(splitPane);
     }

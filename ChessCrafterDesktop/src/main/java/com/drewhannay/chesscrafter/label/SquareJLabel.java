@@ -11,9 +11,9 @@ public class SquareJLabel extends JLabel {
     public static final Color HIGHLIGHT_COLOR = new Color(20, 129, 191);
     public static final Color THREAT_COLOR = new Color(120, 20, 20);
 
-    private Color mBackgroundColor;
-
     private final BoardCoordinate mBoardCoordinate;
+
+    private Color mBackgroundColor;
     private Piece mPiece;
     private int mImageScale;
 
@@ -92,6 +92,10 @@ public class SquareJLabel extends JLabel {
 
     public Piece getPiece() {
         return mPiece;
+    }
+
+    public ImageIcon getPieceIcon() {
+        return PieceIconUtility.getPieceIcon(mPiece.getName(), mImageScale, mPiece.getTeamId());
     }
 
     /**

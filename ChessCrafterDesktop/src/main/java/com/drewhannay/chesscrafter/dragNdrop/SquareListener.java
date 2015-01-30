@@ -2,8 +2,6 @@ package com.drewhannay.chesscrafter.dragNdrop;
 
 import com.drewhannay.chesscrafter.label.SquareJLabel;
 import com.drewhannay.chesscrafter.models.BoardCoordinate;
-import com.drewhannay.chesscrafter.models.Piece;
-import com.drewhannay.chesscrafter.utility.PieceIconUtility;
 import com.drewhannay.chesscrafter.utility.PreferenceUtility;
 
 import javax.swing.*;
@@ -16,15 +14,12 @@ import java.util.function.Function;
 
 public class SquareListener extends DropAdapter implements MouseListener, PreferenceUtility.PieceToolTipPreferenceChangedListener {
     private final DropManager mDropManager;
-    private final SquareJLabel mSquareLabel;
     private final Function<BoardCoordinate, List<SquareJLabel>> mHighlightCallback;
 
-
-    public SquareListener(SquareJLabel squareLabel, DropManager dropManager, GlassPane glassPane,
+    public SquareListener(DropManager dropManager, GlassPane glassPane,
                           Function<BoardCoordinate, List<SquareJLabel>> highlightCallback) {
         super(glassPane);
 
-        mSquareLabel = squareLabel;
         mDropManager = dropManager;
         mHighlightCallback = highlightCallback;
 
@@ -46,38 +41,29 @@ public class SquareListener extends DropAdapter implements MouseListener, Prefer
 
     @Override
     public void mousePressed(MouseEvent event) {
-        BoardCoordinate origin = mSquareLabel.getCoordinates();
+        SquareJLabel squareLabel = (SquareJLabel) event.getSource();
+        BoardCoordinate origin = squareLabel.getCoordinates();
         List<SquareJLabel> destinations = mHighlightCallback.apply(origin);
         if (destinations.isEmpty()) {
             return;
         }
 
         mDropManager.setComponentList(destinations);
-        mSquareLabel.hideIcon();
-
-        Component component = event.getComponent();
-
-        mGlassPane.setVisible(true);
+        squareLabel.hideIcon();
 
         Point point = (Point) event.getPoint().clone();
-        SwingUtilities.convertPointToScreen(point, component);
+        SwingUtilities.convertPointToScreen(point, event.getComponent());
         SwingUtilities.convertPointFromScreen(point, mGlassPane);
 
+        ImageIcon imageIcon = squareLabel.getPieceIcon();
+        BufferedImage image = new BufferedImage(imageIcon.getIconWidth(), imageIcon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
+        Graphics graphics = image.getGraphics();
+        imageIcon.paintIcon(null, graphics, 0, 0);
+        graphics.dispose();
+
+        mGlassPane.setVisible(true);
         mGlassPane.setPoint(point);
-
-        BufferedImage image;
-
-        Piece piece = mSquareLabel.getPiece();
-        ImageIcon imageIcon = PieceIconUtility.getPieceIcon(piece.getName(), mSquareLabel.getImageScale(), piece.getTeamId());
-        int width = imageIcon.getIconWidth();
-        int height = imageIcon.getIconHeight();
-        image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D graphics2D = (Graphics2D) image.getGraphics();
-        imageIcon.paintIcon(null, graphics2D, 0, 0);
-        graphics2D.dispose();
-
         mGlassPane.setImage(image);
-
         mGlassPane.repaint();
     }
 
@@ -89,11 +75,11 @@ public class SquareListener extends DropAdapter implements MouseListener, Prefer
         mGlassPane.setImage(null);
         mGlassPane.setVisible(false);
 
-        fireDropEvent(new DropEvent(point, mSquareLabel), false);
+        fireDropEvent(new DropEvent(point, (JComponent) event.getComponent()), false);
     }
 
     @Override
     public void onPieceToolTipPreferenceChanged() {
-        mSquareLabel.refresh();
+//        mSquareLabel.refresh();
     }
 }
