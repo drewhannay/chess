@@ -23,9 +23,9 @@ public final class PieceCrafterFrame extends ChessFrame {
 
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, masterPanel, detailPanel);
         splitPane.setPreferredSize(new Dimension(530, 575));
-        splitPane.setDividerLocation(0.3);
+        splitPane.setDividerLocation(0.2);
         splitPane.setDividerSize(1);
-        splitPane.setResizeWeight(0.5);
+        splitPane.setResizeWeight(0.2);
         splitPane.setEnabled(false);
         add(splitPane);
     }

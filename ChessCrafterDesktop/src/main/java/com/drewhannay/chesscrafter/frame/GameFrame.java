@@ -81,7 +81,12 @@ public class GameFrame extends ChessFrame {
 
     public void addGame(@NotNull Game game) {
         GamePanel panel = new GamePanel(getGlassPane(), game);
-        mTabbedPane.addTab(game.getGameType() + mTabbedPane.getTabCount(), panel);
+        if(mTabbedPane.getTabCount() != 0) {
+            mTabbedPane.addTab(game.getGameType() + mTabbedPane.getTabCount(), panel);
+        }
+        else{
+            mTabbedPane.addTab(game.getGameType(), panel);
+        }
         mTabbedPane.setSelectedComponent(panel);
 
         mCardLayout.show(mCardPanel, KEY_TABS);

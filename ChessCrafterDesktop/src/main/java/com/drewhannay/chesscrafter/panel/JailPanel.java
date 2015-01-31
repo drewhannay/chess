@@ -25,22 +25,8 @@ public class JailPanel extends ChessPanel {
         mSquareLabels = new ArrayList<>(totalPieces);
 
         setBorder(GuiUtility.createBorder(Messages.getString("PlayGamePanel.capturedPieces")));
-        setPreferredSize(new Dimension((mJailDimension + 1) * 25, (mJailDimension + 1) * 25));
-
         setLayout(new GridLayout(mJailDimension, mJailDimension));
         createGrid();
-    }
-
-    public void rescaleBoard(double panelWidth, double panelHeight) {
-        double jailScale = panelHeight * .30;
-        double scale = panelHeight / panelWidth;
-        if (scale > .75) {
-            jailScale = panelHeight * (.30 - (scale - .75) / 1.75);
-        }
-        jailScale = jailScale / mJailDimension;
-        if (jailScale > 0) {
-            setPreferredSize(new Dimension(mJailDimension * (int) jailScale, mJailDimension * (int) jailScale));
-        }
     }
 
     private void createGrid() {

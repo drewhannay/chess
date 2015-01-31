@@ -468,7 +468,7 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         constraints.gridwidth = 1;
         constraints.gridx = 0;
         constraints.gridy = 7;
-        add(cancelButton, constraints);
+        //add(cancelButton, constraints);
 
         constraints.gridx = 1;
         constraints.gridy = 7;
