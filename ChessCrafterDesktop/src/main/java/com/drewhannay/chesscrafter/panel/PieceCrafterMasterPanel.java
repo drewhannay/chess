@@ -51,7 +51,7 @@ public class PieceCrafterMasterPanel extends ChessPanel {
         constraints.fill = GridBagConstraints.BOTH;
         constraints.weightx = .5;
         constraints.weighty = 1.0;
-        constraints.insets = new Insets(25,25,25,25);
+        constraints.insets = new Insets(25, 25, 25, 25);
         add(scrollPane, constraints);
     }
 
