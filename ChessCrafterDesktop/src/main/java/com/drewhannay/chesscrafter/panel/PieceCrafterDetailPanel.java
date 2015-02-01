@@ -40,7 +40,7 @@ public class PieceCrafterDetailPanel extends ChessPanel {
     private final JTextField mNorthWestField;
     private final JTextField mKnightOneField;
     private final JTextField mKnightTwoField;
-    private final JComboBox mBidirectionalMovementComboBox;
+    private final JComboBox<String> mBidirectionalMovementComboBox;
     private final JButton mAddKnightMoveButton;
     private final JButton mRemoveKnightMoveButton;
 
@@ -81,7 +81,7 @@ public class PieceCrafterDetailPanel extends ChessPanel {
 		}
 		else
 		{*/
-        mBidirectionalMovementComboBox = new JComboBox();
+        mBidirectionalMovementComboBox = new JComboBox<>();
         mBidirectionalMovementComboBox.setEnabled(false);
         //}
 
