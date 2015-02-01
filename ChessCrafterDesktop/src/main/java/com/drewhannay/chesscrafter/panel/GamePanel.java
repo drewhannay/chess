@@ -203,11 +203,6 @@ public final class GamePanel extends ChessPanel {
         }
     }
 
-    private void resizeElements(int width, int height) {
-//        Stream.of(mGameBoards).forEach(board -> board.rescaleBoard(width, height));
-        Stream.of(mJails).forEach(jail -> jail.rescaleBoard(width, height));
-    }
-
     private void initComponents() {
         JButton undoButton = new JButton(Messages.getString("PlayGamePanel.undo"));
         undoButton.addActionListener(event -> {
@@ -219,7 +214,9 @@ public final class GamePanel extends ChessPanel {
         int twoBoardsGridBagOffset = 0;
 
         setLayout(new GridBagLayout());
+
         GridBagConstraints constraints = new GridBagConstraints();
+
         Team[] teams = mGame.getTeams();
         mTeamLabels = new ArrayList<>(teams.length);
 
@@ -228,36 +225,7 @@ public final class GamePanel extends ChessPanel {
         Board[] boards = mGame.getBoards();
         mGameBoards = new BoardPanel[boards.length];
 
-        addComponentListener(new ComponentListener() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                resizeElements(e.getComponent().getWidth(), e.getComponent().getHeight());
-            }
-
-            @Override
-            public void componentMoved(ComponentEvent e) {
-            }
-
-            @Override
-            public void componentShown(ComponentEvent e) {
-            }
-
-            @Override
-            public void componentHidden(ComponentEvent e) {
-            }
-        });
-
-        int gridx = 0;
-
         for (int index = 0; index < boards.length; index++) {
-            constraints.gridheight = boards[index].getBoardSize().height + 2; // Added 2 for row labels? I dunno.
-            constraints.gridy = 1;
-            constraints.fill = GridBagConstraints.HORIZONTAL;
-            constraints.insets = new Insets(10, 0, 0, 0);
-            constraints.gridx = gridx;
-            constraints.gridwidth = boards[index].getBoardSize().width + 2; // Added 2 for row labels?
-            gridx += constraints.gridwidth;
-
             int boardIndex = index;
             mGameBoards[boardIndex] = new BoardPanel(boards[boardIndex].getBoardSize(), mSquareConfig,
                     coordinate -> {
@@ -268,6 +236,13 @@ public final class GamePanel extends ChessPanel {
                             return Collections.emptySet();
                         }
                     });
+            constraints.gridx = boardIndex;
+            constraints.weightx = 1.0;
+            constraints.weighty = 1.0;
+            constraints.ipadx = 200;
+            constraints.fill = GridBagConstraints.BOTH;
+            constraints.insets = new Insets(10, 0, 0, 0);
+
             add(mGameBoards[boardIndex], constraints);
         }
 
@@ -284,76 +259,60 @@ public final class GamePanel extends ChessPanel {
         //TODO Figure out a way to get the total number of pieces in the game for each team
         IntStream.range(0, mGame.getTeams().length).forEach(i -> mJails[i] = new JailPanel(16));
 
+        JPanel jailAndLabelPanel = new JPanel();
+        jailAndLabelPanel.setLayout(new GridBagLayout());
+        jailAndLabelPanel.setOpaque(false);
+
+        constraints.weightx = 0.5;
+        constraints.weighty = 0.0;
+        constraints.ipadx = 0;
+
         // add the Black Team Label
-        constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.anchor = GridBagConstraints.BASELINE;
-        constraints.gridwidth = 3;
-        constraints.gridheight = 1;
-        constraints.gridx = 11 + twoBoardsGridBagOffset;
-        constraints.gridy = 1;
-        constraints.insets = new Insets(10, 0, 10, 0);
-        add(mTeamLabels.get(1), constraints);
+        constraints.gridy = 0;
+        constraints.insets = new Insets(10, 0, 10, 10);
+        jailAndLabelPanel.add(mTeamLabels.get(1), constraints);
 
         // add the Black timer
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-        constraints.anchor = GridBagConstraints.BASELINE;
-        constraints.gridwidth = 3;
-        constraints.gridheight = 1;
-        constraints.gridx = 11 + twoBoardsGridBagOffset;
-        constraints.gridy = 2;
-        constraints.insets = new Insets(0, 25, 10, 25);
+        constraints.gridy = 1;
+        constraints.insets = new Insets(0, 0, 10, 10);
         // TODO: This currently assumes a two-person game.
 //		if (!ChessTimer.isNoTimer(mTimers[1]))
-//			add(new ChessTimerLabel(mTimers[1]), constraints);
+//			jailAndLabelPanel.add(new ChessTimerLabel(mTimers[1]), constraints);
 
         // add the Black Jail
-        constraints.fill = GridBagConstraints.NONE;
-        constraints.anchor = GridBagConstraints.BASELINE;
-        constraints.gridwidth = 3;
-        constraints.gridheight = 3;
-        constraints.gridx = 11 + twoBoardsGridBagOffset;
-        constraints.gridy = 3;
-        add(mJails[1], constraints);
+        constraints.gridy = 2;
+        constraints.weighty = 0.7;
+        jailAndLabelPanel.add(mJails[1], constraints);
 
         // adds the undo button
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-        constraints.anchor = GridBagConstraints.BASELINE;
-        constraints.gridwidth = 3;
-        constraints.gridheight = 1;
-        constraints.gridx = 11 + twoBoardsGridBagOffset;
-        constraints.gridy = 6;
-        add(undoButton, constraints);
+        constraints.weighty = 0.0;
+        constraints.gridy = 3;
+        jailAndLabelPanel.add(undoButton, constraints);
 
         // adds the White Jail
-        constraints.fill = GridBagConstraints.NONE;
-        constraints.anchor = GridBagConstraints.BASELINE;
-        constraints.gridwidth = 3;
-        constraints.gridheight = 3;
-        constraints.gridx = 11 + twoBoardsGridBagOffset;
-        constraints.gridy = 7;
-        add(mJails[0], constraints);
+        constraints.gridy = 4;
+        constraints.weighty = 0.7;
+        jailAndLabelPanel.add(mJails[0], constraints);
 
         // adds the White timer
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-        constraints.anchor = GridBagConstraints.BASELINE;
-        constraints.gridwidth = 3;
-        constraints.gridheight = 1;
-        constraints.gridx = 11 + twoBoardsGridBagOffset;
-        constraints.gridy = 6;
-        constraints.insets = new Insets(0, 0, 0, 0);
+        constraints.gridy = 5;
+        // TODO: This assumes a two-player game
+//		jailAndLabelPanel.add(new ChessTimerLabel(mTimers[0]), constraints);
 
         //Add the White Team Label
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-        constraints.anchor = GridBagConstraints.BASELINE;
-        constraints.gridwidth = 3;
-        constraints.gridheight = 1;
-        constraints.gridx = 11 + twoBoardsGridBagOffset;
-        constraints.gridy = 10;
-        constraints.insets = new Insets(10, 0, 10, 0);
-        add(mTeamLabels.get(0), constraints);
+        constraints.gridy = 6;
+        constraints.weighty = 0.275;
+        constraints.insets = new Insets(0, 0, 10, 10);
+        jailAndLabelPanel.add(mTeamLabels.get(0), constraints);
 
-        // TODO: This assumes a two-player game
-//		add(new ChessTimerLabel(mTimers[0]), constraints);
+        constraints.gridx = (boards.length * 2);
+        constraints.gridy = 0;
+        constraints.weighty = 0.0;
+        constraints.weightx = 0.3;
+        constraints.insets = new Insets(0, 25, 0, 10);
+        add(jailAndLabelPanel, constraints);
+
 //		resetTimers();
         boardRefresh();
         refreshStatus();

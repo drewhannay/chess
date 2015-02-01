@@ -32,6 +32,7 @@ public class PieceCrafterMasterPanel extends ChessPanel {
         mPieceList.setCellRenderer(mCellRenderer);
         mPieceList.setLayoutOrientation(JList.VERTICAL);
         mPieceList.setVisibleRowCount(-1);
+        mPieceList.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         mPieceList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         mPieceList.addListSelectionListener(e -> {
             if (e.getValueIsAdjusting()) {
@@ -41,16 +42,24 @@ public class PieceCrafterMasterPanel extends ChessPanel {
         });
 
         JScrollPane scrollPane = new JScrollPane(mPieceList);
+        scrollPane.setFont(new Font(mPieceList.getName(), Font.PLAIN, 26));
         scrollPane.setPreferredSize(new Dimension(190, 500));
 
-        add(scrollPane);
+        setLayout(new GridBagLayout());
+        GridBagConstraints constraints = new GridBagConstraints();
+
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.weightx = .5;
+        constraints.weighty = 1.0;
+        constraints.insets = new Insets(25, 25, 25, 25);
+        add(scrollPane, constraints);
     }
 
     public void refreshList() {
         mPieceListModel.clear();
 
         // TODO: currently adding duplicates to force the list to scroll
-        IntStream.range(0, 30).forEach((i) -> PieceTypeManager.INSTANCE.getAllPieceTypes().forEach(mPieceListModel::addElement));
+        IntStream.range(0, 6).forEach((i) -> PieceTypeManager.INSTANCE.getAllPieceTypes().forEach(mPieceListModel::addElement));
     }
 
     private void deletePiece() {
@@ -66,6 +75,7 @@ public class PieceCrafterMasterPanel extends ChessPanel {
                                                                int index, boolean isSelected, boolean cellHasFocus) -> {
         JLabel label = new JLabel(value.getName());
         label.setOpaque(true);
+        label.setFont(new Font(label.getName(), Font.PLAIN, 16));
         label.setBackground(isSelected ? list.getSelectionBackground() : list.getBackground());
         label.setForeground(isSelected ? list.getSelectionForeground() : list.getForeground());
 
