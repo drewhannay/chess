@@ -4,11 +4,20 @@ import com.apple.eawt.Application;
 import com.drewhannay.chesscrafter.action.ChessActions;
 import com.drewhannay.chesscrafter.frame.FrameManager;
 import com.drewhannay.chesscrafter.utility.FileUtility;
+import com.drewhannay.chesscrafter.utility.Log;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import java.awt.AWTException;
+import java.awt.Image;
+import java.awt.SystemTray;
+import java.awt.TrayIcon;
 
 public final class Main {
+
+    private static final String TAG = "Main";
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             // make the app match the look and feel of the user's system
@@ -16,9 +25,8 @@ public final class Main {
             try {
                 UIManager.setLookAndFeel(lookAndFeel);
             } catch (ClassNotFoundException | InstantiationException | UnsupportedLookAndFeelException | IllegalAccessException e) {
-                System.err.println("Couldn't get the specified look and feel " + lookAndFeel + " for some reason");
-                System.err.println("Using default look and feel");
-                e.printStackTrace();
+                Log.e(TAG, "Couldn't get the specified look and feel " + lookAndFeel + " for some reason");
+                Log.e(TAG, "Using default look and feel", e);
             }
 
             setOsXProperties();
@@ -47,8 +55,7 @@ public final class Main {
             try {
                 systemTray.add(tray);
             } catch (AWTException e) {
-                System.err.println("Couldn't create a tray icon");
-                e.printStackTrace();
+                Log.e(TAG, "Couldn't create a tray icon", e);
             }
         }
     }

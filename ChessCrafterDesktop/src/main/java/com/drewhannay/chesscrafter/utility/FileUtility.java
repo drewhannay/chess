@@ -4,7 +4,6 @@ import javafx.stage.FileChooser;
 import org.jetbrains.annotations.Nullable;
 
 import javax.imageio.ImageIO;
-import javax.swing.filechooser.FileFilter;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -15,6 +14,8 @@ public final class FileUtility {
     public static final FileChooser.ExtensionFilter HISTORY_EXTENSION_FILTER = new FileChooser.ExtensionFilter("Saved Chess Game", "*.chesscrafter");
     public static final FileChooser.ExtensionFilter CONFIG_EXTENSION_FILTER = new FileChooser.ExtensionFilter("Crafted Game", "*.craftconfig");
     public static final FileChooser.ExtensionFilter PIECE_EXTENSION_FILTER = new FileChooser.ExtensionFilter("Piece", "*.piece");
+
+    private static final String TAG = "FileUtility";
 
     private static final String HIDDEN_DIR;
     private static final String IMAGES = "Images";
@@ -55,7 +56,7 @@ public final class FileUtility {
 
     public static File getGameFile(String gameFileName) {
         String path = HIDDEN_DIR + SLASH + SAVED_GAMES;
-        if(PreferenceUtility.getSaveLocationPreference() != "default")
+        if (PreferenceUtility.getSaveLocationPreference() != "default")
             path = PreferenceUtility.getSaveLocationPreference();
         new File(path).mkdirs();
         return new File(path + SLASH + gameFileName + SAVED_GAME_EXTENSION);
@@ -103,8 +104,7 @@ public final class FileUtility {
             URL resource = FileUtility.class.getResource(path);
             frontPage = ImageIO.read(resource);
         } catch (IOException e) {
-            System.out.println("Can't find path:" + path);
-            e.printStackTrace();
+            Log.e(TAG, "Can't find path:" + path, e);
         }
         return frontPage;
     }
