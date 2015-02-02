@@ -52,7 +52,8 @@ public class VariantCreationPanel extends ChessPanel {
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.weighty = 0.1;
+        gbc.weightx = 1.0;
+        gbc.weighty = 0.2;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.anchor = GridBagConstraints.CENTER;
         add(mTeamPanel, gbc);
@@ -60,8 +61,7 @@ public class VariantCreationPanel extends ChessPanel {
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 1;
-        gbc.weightx = 1.0;
-        gbc.weighty = 0.9;
+        gbc.weighty = 0.8;
         gbc.fill = GridBagConstraints.BOTH;
         add(mBoardPanel, gbc);
     }
