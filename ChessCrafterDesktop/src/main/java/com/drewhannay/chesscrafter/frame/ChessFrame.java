@@ -1,18 +1,27 @@
 package com.drewhannay.chesscrafter.frame;
 
+import com.apple.eawt.FullScreenUtilities;
 import com.drewhannay.chesscrafter.action.ChessActions;
 import com.drewhannay.chesscrafter.dragNdrop.GlassPane;
 import com.drewhannay.chesscrafter.utility.FileUtility;
+import com.drewhannay.chesscrafter.utility.Log;
 import com.google.common.base.Preconditions;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.AbstractAction;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.KeyStroke;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
-import java.lang.reflect.Method;
 
 class ChessFrame extends JFrame {
+
+    private static final String TAG = "ChessFrame";
 
     private final GlassPane mGlassPane;
 
@@ -65,13 +74,9 @@ class ChessFrame extends JFrame {
     private void enableOSXFullscreen(Window window) {
         Preconditions.checkNotNull(window);
         try {
-            Class util = Class.forName("com.apple.eawt.FullScreenUtilities");
-            Class<?> params[] = new Class[]{Window.class, Boolean.TYPE};
-            @SuppressWarnings("unchecked")
-            Method method = util.getMethod("setWindowCanFullScreen", params);
-            method.invoke(util, window, true);
+            FullScreenUtilities.setWindowCanFullScreen(window, true);
         } catch (Exception e) {
-            System.out.println("OS X Fullscreen FAIL" + e.getLocalizedMessage());
+            Log.e(TAG, "OS X Fullscreen FAIL", e);
         }
     }
 }

@@ -8,9 +8,17 @@ import com.drewhannay.chesscrafter.models.PieceType;
 import com.drewhannay.chesscrafter.utility.GuiUtility;
 import com.drewhannay.chesscrafter.utility.Messages;
 
-import javax.swing.*;
-import javax.swing.colorchooser.AbstractColorChooserPanel;
-import java.awt.*;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JColorChooser;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -27,15 +35,20 @@ public class TeamCreationPanel extends ChessPanel {
     }
 
     private final List<TeamInfo> mTeamInfos;
+    private final Runnable mTeamListener;
 
     private PieceType mPieceType;
     private JTextField[] mTeamNameFields;
     private JTextField[] mTeamColorFields;
     private int mTeamIDCounter;
 
-    public TeamCreationPanel(SquareConfig squareConfig) {
+    public TeamCreationPanel(SquareConfig squareConfig, Runnable teamListener) {
         super(false);
+
+        mTeamListener = teamListener;
+
         setLayout(new GridBagLayout());
+
         mTeamIDCounter = 1;
         mTeamInfos = new ArrayList<>(4);
         mTeamNameFields = new JTextField[4];
@@ -56,6 +69,10 @@ public class TeamCreationPanel extends ChessPanel {
         initComponents(squareConfig);
     }
 
+    public List<TeamInfo> getTeamInfos() {
+        return mTeamInfos;
+    }
+
     public void setPieceType(PieceType pieceType) {
         mPieceType = pieceType;
 
@@ -63,9 +80,8 @@ public class TeamCreationPanel extends ChessPanel {
     }
 
     private void initComponents(SquareConfig squareConfig) {
-        mTeamInfos.forEach(teamInfo -> {
-            createTeamPanel(squareConfig, teamInfo);
-        });
+        mTeamInfos.forEach(teamInfo -> createTeamPanel(squareConfig, teamInfo));
+
         JButton addTeam = new JButton(Messages.getString("TeamCreationPanel.addTeam"));
         addTeam.addActionListener(event -> {
             TeamInfo newTeam = new TeamInfo();
@@ -80,6 +96,8 @@ public class TeamCreationPanel extends ChessPanel {
             }
             validate();
             repaint();
+
+            mTeamListener.run();
         });
         add(addTeam);
     }
@@ -154,6 +172,8 @@ public class TeamCreationPanel extends ChessPanel {
                 Color c = JColorChooser.showDialog(colorField, Messages.getString("TeamCreationPanel.teamColor"), colorField.getBackground());
                 colorField.setBackground(c);
                 teamInfo.color = c;
+                teamInfo.label.setPiece(teamInfo.label.getPiece(), c);
+                mTeamListener.run();
             }
 
             @Override

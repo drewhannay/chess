@@ -10,12 +10,15 @@ import com.drewhannay.chesscrafter.models.BoardCoordinate;
 import com.drewhannay.chesscrafter.models.BoardSize;
 import com.drewhannay.chesscrafter.models.Piece;
 import com.drewhannay.chesscrafter.models.PieceType;
+import com.drewhannay.chesscrafter.panel.TeamCreationPanel.TeamInfo;
 import com.drewhannay.chesscrafter.utility.Pair;
 import com.google.common.collect.ImmutableSet;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JComponent;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -36,7 +39,7 @@ public class VariantCreationPanel extends ChessPanel {
 
         SquareConfig squareConfig = new SquareConfig(teamDropManager, glassPane, mBoardPanel::getAllSquares);
         squareConfig.setHideIcon(false);
-        mTeamPanel = new TeamCreationPanel(squareConfig);
+        mTeamPanel = new TeamCreationPanel(squareConfig, this::boardRefresh);
 
         initComponents();
     }
@@ -67,7 +70,20 @@ public class VariantCreationPanel extends ChessPanel {
     }
 
     private void boardRefresh() {
-        mBoardPanel.updatePieceLocations(mBoard, teamId -> teamId == Piece.TEAM_ONE ? Color.WHITE : Color.BLACK);
+        List<TeamInfo> teamInfos = mTeamPanel.getTeamInfos();
+        mBoardPanel.getAllSquares().forEach(square -> {
+            Piece piece = mBoard.getPiece(square.getCoordinates());
+            Integer teamId = piece != null ? piece.getTeamId() : null;
+            if (piece != null && !teamInfos.stream().anyMatch(teamInfo -> teamInfo.teamId == teamId)) {
+                mBoard.removePiece(square.getCoordinates());
+                piece = null;
+            }
+
+            square.setPiece(piece, piece != null ? teamInfos.stream()
+                    .filter(teamInfo -> teamInfo.teamId == teamId)
+                    .findFirst()
+                    .orElseThrow(IllegalStateException::new).color : null);
+        });
     }
 
     private void setPiece(Piece piece, BoardCoordinate coordinate) {

@@ -15,6 +15,7 @@ public final class JavaFxFileDialog {
         Platform.setImplicitExit(false);
     }
 
+    private static final String TAG = "JavaFxFileDialog";
     private static final Object LOCK = new Object();
 
     /**
@@ -58,7 +59,7 @@ public final class JavaFxFileDialog {
     private static File choose(Supplier<File> fileSupplier) {
         // necessary, or the LOCK.wait() will never end
         if (!isJavaFXStillUsable()) {
-            System.err.println("Problem in chooseFile(): JavaFX launcher thread has already shut down, can't use JavaFX");
+            Log.e(TAG, "Problem in chooseFile(): JavaFX launcher thread has already shut down, can't use JavaFX");
             return null;
         }
 
