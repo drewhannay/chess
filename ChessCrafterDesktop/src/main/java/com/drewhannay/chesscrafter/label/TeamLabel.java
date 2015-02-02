@@ -27,17 +27,18 @@ public class TeamLabel extends JLabel {
     public void setInCheck() {
         setBackground(Color.RED);
         setForeground(Color.WHITE);
-        setText(mTeamName + " " + Messages.getString("PlayGamePanel.inCheck"));
+        setText(Messages.getString("GamePanel.inCheck"));
     }
 
     public void setActive() {
         setBackground(Color.CYAN);
         setForeground(Color.BLACK);
+        setText(Messages.getString("GamePanel.myTurn"));
     }
 
     public void setInActive() {
         setBackground(Color.WHITE);
         setForeground(Color.BLACK);
-        setText(mTeamName);
+        setText(Messages.getString("GamePanel.waiting"));
     }
 }

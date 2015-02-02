@@ -29,7 +29,7 @@ public final class GuiUtility {
 
     public static TitledBorder createBorder(String borderText) {
         TitledBorder newBorder = BorderFactory.createTitledBorder(borderText);
-        newBorder.setTitleColor(Color.white);
+        newBorder.setTitleColor(Color.black);
         return newBorder;
     }
 
