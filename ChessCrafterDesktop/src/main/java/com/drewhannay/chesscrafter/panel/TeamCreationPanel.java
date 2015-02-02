@@ -75,8 +75,9 @@ public class TeamCreationPanel extends ChessPanel {
             mTeamInfos.add(newTeam);
             createTeamPanel(squareConfig, newTeam);
             remove(addTeam);
-            if (mTeamIDCounter <= 4)
+            if (mTeamIDCounter <= 4) {
                 add(addTeam);
+            }
             validate();
             repaint();
         });
