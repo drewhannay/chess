@@ -62,7 +62,7 @@ public class TeamCreationPanel extends ChessPanel {
         mTeamInfos.forEach(teamInfo -> teamInfo.label.setPiece(new Piece(teamInfo.teamId, mPieceType), teamInfo.color));
     }
 
-    private void createMouseListener(JLabel colorField, TeamInfo teamInfo){
+    private void createMouseListener(JLabel colorField, TeamInfo teamInfo) {
         colorField.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -70,20 +70,28 @@ public class TeamCreationPanel extends ChessPanel {
                 colorField.setBackground(c);
                 teamInfo.color = c;
             }
+
             @Override
-            public void mousePressed(MouseEvent e) {}
+            public void mousePressed(MouseEvent e) {
+            }
+
             @Override
-            public void mouseReleased(MouseEvent e) {}
+            public void mouseReleased(MouseEvent e) {
+            }
+
             @Override
-            public void mouseEntered(MouseEvent e) {}
+            public void mouseEntered(MouseEvent e) {
+            }
+
             @Override
-            public void mouseExited(MouseEvent e) {}
+            public void mouseExited(MouseEvent e) {
+            }
         });
     }
 
     private void initComponents(SquareConfig squareConfig) {
         mTeamInfos.forEach(teamInfo -> {
-            int offssetTeamId = teamInfo.teamId - 1;
+            int offsetTeamId = teamInfo.teamId - 1;
             GridBagConstraints constraints = new GridBagConstraints();
 
             JPanel teamPanel = new JPanel();
@@ -91,7 +99,7 @@ public class TeamCreationPanel extends ChessPanel {
             teamPanel.setOpaque(false);
 
             constraints.gridy = 0;
-            constraints.insets = new Insets(0,0,10,0);
+            constraints.insets = new Insets(0, 0, 10, 0);
             constraints.gridwidth = 2;
             constraints.anchor = GridBagConstraints.CENTER;
             constraints.fill = GridBagConstraints.BOTH;
@@ -103,47 +111,47 @@ public class TeamCreationPanel extends ChessPanel {
             constraints.gridy = 1;
             constraints.weightx = 0.5;
             constraints.weighty = 1.0;
-            constraints.insets = new Insets(0,0,10,0);
+            constraints.insets = new Insets(0, 0, 10, 0);
             teamPanel.add(teamInfo.label, constraints);
 
             constraints.gridy = 2;
             constraints.gridwidth = 1;
             constraints.weighty = 0.0;
             constraints.weightx = 0.0;
-            constraints.insets = new Insets(0,0,10,10);
+            constraints.insets = new Insets(0, 0, 10, 10);
             teamPanel.add(GuiUtility.createJLabel(Messages.getString("TeamCreationPanel.name")), constraints);
 
             constraints.gridy = 2;
             constraints.gridx = 1;
             constraints.weightx = 1.0;
-            constraints.insets = new Insets(0,0,10,0);
-            mTeamNameFields[offssetTeamId] = new JTextField(20);
-            mTeamNameFields[offssetTeamId].setText(Messages.getString("TeamCreationPanel.myTeam"));
-            mTeamNameFields[offssetTeamId].setPreferredSize(new Dimension(50,25));
+            constraints.insets = new Insets(0, 0, 10, 0);
+            mTeamNameFields[offsetTeamId] = new JTextField(20);
+            mTeamNameFields[offsetTeamId].setText(Messages.getString("TeamCreationPanel.myTeam"));
+            mTeamNameFields[offsetTeamId].setPreferredSize(new Dimension(50, 25));
             constraints.anchor = GridBagConstraints.WEST;
-            teamPanel.add(mTeamNameFields[offssetTeamId], constraints);
+            teamPanel.add(mTeamNameFields[offsetTeamId], constraints);
 
             constraints.gridy = 3;
             constraints.gridx = 0;
             constraints.weightx = 0.0;
-            constraints.insets = new Insets(0,0,10,10);
+            constraints.insets = new Insets(0, 0, 10, 10);
             constraints.anchor = GridBagConstraints.CENTER;
             teamPanel.add(GuiUtility.createJLabel(Messages.getString("TeamCreationPanel.color")), constraints);
 
             constraints.gridy = 3;
             constraints.gridx = 1;
             constraints.weightx = 1.0;
-            constraints.insets = new Insets(0,0,10,0);
+            constraints.insets = new Insets(0, 0, 10, 0);
             constraints.anchor = GridBagConstraints.WEST;
-            mTeamColorFields[offssetTeamId] = new JLabel();
-            mTeamColorFields[offssetTeamId].setBackground(teamInfo.color);
-            mTeamColorFields[offssetTeamId].setOpaque(true);
-            createMouseListener(mTeamColorFields[offssetTeamId], teamInfo);
-            teamPanel.add(mTeamColorFields[offssetTeamId], constraints);
+            mTeamColorFields[offsetTeamId] = new JLabel();
+            mTeamColorFields[offsetTeamId].setBackground(teamInfo.color);
+            mTeamColorFields[offsetTeamId].setOpaque(true);
+            createMouseListener(mTeamColorFields[offsetTeamId], teamInfo);
+            teamPanel.add(mTeamColorFields[offsetTeamId], constraints);
 
             constraints.gridx = teamInfo.teamId;
             constraints.gridy = 0;
-            constraints.insets = new Insets(0,25,0,25);
+            constraints.insets = new Insets(0, 25, 0, 25);
             constraints.anchor = GridBagConstraints.CENTER;
             constraints.fill = GridBagConstraints.BOTH;
             add(teamPanel, constraints);
