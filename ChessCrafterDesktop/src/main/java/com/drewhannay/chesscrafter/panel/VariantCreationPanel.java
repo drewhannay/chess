@@ -67,7 +67,7 @@ public class VariantCreationPanel extends ChessPanel {
     }
 
     private void boardRefresh() {
-        mBoardPanel.updatePieceLocations(mBoard);
+        mBoardPanel.updatePieceLocations(mBoard, teamId -> teamId == Piece.TEAM_ONE ? Color.WHITE : Color.BLACK);
     }
 
     private void setPiece(Piece piece, BoardCoordinate coordinate) {

@@ -5,6 +5,7 @@ import com.drewhannay.chesscrafter.label.SquareJLabel;
 import com.drewhannay.chesscrafter.models.Board;
 import com.drewhannay.chesscrafter.models.BoardCoordinate;
 import com.drewhannay.chesscrafter.models.BoardSize;
+import com.drewhannay.chesscrafter.models.Piece;
 import com.drewhannay.chesscrafter.utility.GuiUtility;
 import com.drewhannay.chesscrafter.utility.PreferenceUtility;
 
@@ -45,8 +46,11 @@ public class BoardPanel extends ChessPanel {
         return new Dimension(mBoardSize.width * squareSize.width, mBoardSize.height * squareSize.height);
     }
 
-    public void updatePieceLocations(Board board) {
-        mSquareLabels.forEach(square -> square.setPiece(board.getPiece(square.getCoordinates())));
+    public void updatePieceLocations(Board board, Function<Integer, Color> teamColor) {
+        mSquareLabels.forEach(square -> {
+            Piece piece = board.getPiece(square.getCoordinates());
+            square.setPiece(piece, piece != null ? teamColor.apply(piece.getTeamId()) : null);
+        });
     }
 
     public List<SquareJLabel> getAllSquares() {

@@ -1,7 +1,6 @@
 package com.drewhannay.chesscrafter.panel;
 
 import com.drewhannay.chesscrafter.action.ChessActions;
-import com.drewhannay.chesscrafter.models.Piece;
 import com.drewhannay.chesscrafter.utility.Messages;
 import com.drewhannay.chesscrafter.utility.PieceIconUtility;
 
@@ -15,7 +14,8 @@ public final class HintPanel extends ChessPanel {
 
         GridBagConstraints c = new GridBagConstraints();
         JLabel pieceImage = new JLabel();
-        pieceImage.setIcon(PieceIconUtility.getPieceIcon("King", Piece.TEAM_TWO));
+        pieceImage.setIcon(PieceIconUtility.getPieceIcon("King", Color.BLACK));
+        pieceImage.setPreferredSize(new Dimension(80, 80));
 
         c.gridx = 0;
         c.gridy = 0;

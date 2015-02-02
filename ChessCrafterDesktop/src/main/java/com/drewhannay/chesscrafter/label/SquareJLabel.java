@@ -3,6 +3,7 @@ package com.drewhannay.chesscrafter.label;
 import com.drewhannay.chesscrafter.models.BoardCoordinate;
 import com.drewhannay.chesscrafter.models.Piece;
 import com.drewhannay.chesscrafter.utility.PieceIconUtility;
+import com.google.common.base.Preconditions;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
@@ -66,10 +67,11 @@ public class SquareJLabel extends JLabel {
         return mPiece;
     }
 
-    public void setPiece(@Nullable Piece piece) {
+    public void setPiece(@Nullable Piece piece, @Nullable Color teamColor) {
         mPiece = piece;
         if (piece != null) {
-            Icon icon = PieceIconUtility.getPieceIcon(piece.getName(), piece.getTeamId());
+            Preconditions.checkArgument(teamColor != null);
+            Icon icon = PieceIconUtility.getPieceIcon(piece.getName(), teamColor);
             if (icon != null) {
                 setIcon(icon);
             } else {

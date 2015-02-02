@@ -48,7 +48,7 @@ public class TeamCreationPanel extends ChessPanel {
     public void setPieceType(PieceType pieceType) {
         mPieceType = pieceType;
 
-        mTeamInfos.forEach(teamInfo -> teamInfo.label.setPiece(new Piece(teamInfo.teamId, mPieceType)));
+        mTeamInfos.forEach(teamInfo -> teamInfo.label.setPiece(new Piece(teamInfo.teamId, mPieceType), teamInfo.color));
     }
 
     private void initComponents(SquareConfig squareConfig) {
