@@ -5,6 +5,7 @@ import com.drewhannay.chesscrafter.models.PieceType;
 public final class GameConfiguration {
     public static class TeamConfiguration {
         public int teamId;
+        public int teamColor;
         public String[] conditionalMoveGenerators;
         public String[] moveFilters;
         public String[] postMoveActions;

@@ -6,7 +6,6 @@ import com.drewhannay.chesscrafter.models.PieceType;
 import com.drewhannay.chesscrafter.models.TwoHopMovement;
 import com.drewhannay.chesscrafter.utility.FileUtility;
 import com.drewhannay.chesscrafter.utility.GuiUtility;
-import com.drewhannay.chesscrafter.utility.ImageUtility;
 import com.drewhannay.chesscrafter.utility.Messages;
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
@@ -40,7 +39,7 @@ public class PieceCrafterDetailPanel extends ChessPanel {
     private final JTextField mNorthWestField;
     private final JTextField mKnightOneField;
     private final JTextField mKnightTwoField;
-    private final JComboBox mBidirectionalMovementComboBox;
+    private final JComboBox<String> mBidirectionalMovementComboBox;
     private final JButton mAddKnightMoveButton;
     private final JButton mRemoveKnightMoveButton;
 
@@ -81,7 +80,7 @@ public class PieceCrafterDetailPanel extends ChessPanel {
 		}
 		else
 		{*/
-        mBidirectionalMovementComboBox = new JComboBox();
+        mBidirectionalMovementComboBox = new JComboBox<>();
         mBidirectionalMovementComboBox.setEnabled(false);
         //}
 
@@ -160,12 +159,6 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         JLabel lightIconLabel = GuiUtility.createJLabel("");
         lightIconLabel.setSize(48, 48);
 
-        try {
-            lightIconLabel.setIcon(builder == null ? blankSquare : ImageUtility.getLightImage(builder.getName()));
-        } catch (IOException e3) {
-            e3.printStackTrace();
-        }
-
         if (builder != null) {
             try {
                 mLightImage = GuiUtility.createBufferedImage(48, 48, "l_" + builder.getName() + ".png");
@@ -190,12 +183,6 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         darkIconPanel.setOpaque(false);
         JLabel darkIconLabel = GuiUtility.createJLabel("");
         darkIconLabel.setSize(48, 48);
-
-        try {
-            darkIconLabel.setIcon(builder == null ? blankSquare : ImageUtility.getDarkImage(builder.getName()));
-        } catch (IOException e2) {
-            e2.printStackTrace();
-        }
 
         JButton darkImageButton = new JButton(Messages.getString("PieceMakerPanel.chooseDark"));
         darkImageButton.setToolTipText(Messages.getString("PieceMakerPanel.clickForDark"));
@@ -420,16 +407,6 @@ public class PieceCrafterDetailPanel extends ChessPanel {
                     int k2 = Integer.parseInt(tokenizer.nextToken());
                     mBuilder.addBidirectionalMovement(TwoHopMovement.with(k2, k1));
                 }
-            }
-
-            try {
-                ImageUtility.writeLightImage(pieceName, mLightImage);
-                ImageUtility.writeDarkImage(pieceName, mDarkImage);
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(
-                        PieceCrafterDetailPanel.this,
-                        Messages.getString("PieceMakerPanel.cannotWriteImageFiles"), Messages.getString("PieceMakerPanel.ImageError"), JOptionPane.PLAIN_MESSAGE);
-                return;
             }
 
             mBuilder.setName(pieceName);

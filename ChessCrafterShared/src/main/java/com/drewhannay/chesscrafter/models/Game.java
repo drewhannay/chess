@@ -172,7 +172,7 @@ public final class Game {
         }
     }
 
-    private Team getTeam(int teamId) {
+    public Team getTeam(int teamId) {
         for (Team team : mTeams) {
             if (team.getTeamId() == teamId) {
                 return team;

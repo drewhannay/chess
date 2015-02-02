@@ -26,8 +26,6 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -35,7 +33,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public final class GamePanel extends ChessPanel {
     private final Game mGame;
@@ -69,13 +66,16 @@ public final class GamePanel extends ChessPanel {
     }
 
     private void createPromotionPopup(MoveBuilder moveBuilder) {
+        Team activeTeam = mGame.getTeam(mGame.getTurnKeeper().getActiveTeamId());
+        Color activeTeamColor = new Color(activeTeam.getTeamColor());
+
         JFrame promotionFrame = new JFrame();
         ChessPanel promotionPanel = new ChessPanel();
         JLabel promotionText = new JLabel("Choose a piece to promote to:");
         promotionText.setForeground(Color.white);
         promotionPanel.add(promotionText);
         for (PieceType pieceType : moveBuilder.getPromotionOptions()) {
-            JButton label = new JButton(PieceIconUtility.getPieceIcon(pieceType.getName(), mGame.getTurnKeeper().getActiveTeamId()));
+            JButton label = new JButton(PieceIconUtility.getPieceIcon(pieceType.getName(), activeTeamColor));
             label.addActionListener(e -> {
                 moveBuilder.setPromotionType(pieceType);
                 playMove(moveBuilder);
@@ -113,8 +113,10 @@ public final class GamePanel extends ChessPanel {
     }
 
     private void boardRefresh() {
-        IntStream.range(0, mGameBoards.length).forEach(i -> mGameBoards[i].updatePieceLocations(mGame.getBoards()[i]));
-        IntStream.range(0, mJails.length).forEach(i -> mJails[i].updateJailPopulation(mGame.getTeams()[i].getCapturedOpposingPieces()));
+        IntStream.range(0, mGameBoards.length).forEach(i -> mGameBoards[i].updatePieceLocations(mGame.getBoards()[i],
+                teamId -> new Color(mGame.getTeam(teamId).getTeamColor())));
+        IntStream.range(0, mJails.length).forEach(i -> mJails[i].updateJailPopulation(mGame.getTeams()[i].getCapturedOpposingPieces(),
+                new Color(mGame.getTeams()[i].getTeamColor())));
     }
 
     public void declareDraw() {

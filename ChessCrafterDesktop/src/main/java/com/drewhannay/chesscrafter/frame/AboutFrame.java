@@ -4,6 +4,7 @@ import com.drewhannay.chesscrafter.panel.ChessPanel;
 import com.drewhannay.chesscrafter.utility.AppConstants;
 import com.drewhannay.chesscrafter.utility.GuiUtility;
 import com.drewhannay.chesscrafter.utility.Messages;
+import com.drewhannay.chesscrafter.utility.PieceIconUtility;
 
 import javax.swing.*;
 import java.awt.*;
@@ -29,7 +30,6 @@ public class AboutFrame extends ChessFrame {
         aboutPanel.setLayout(new GridBagLayout());
 
         JLabel frontPageImage = new JLabel(GuiUtility.createSystemImageIcon(250, 250, "/chess_logo.png"));
-        JLabel piecePicture = new JLabel(GuiUtility.createSystemImageIcon(48, 48, "/d_King.png"));
 
         Font font = new Font(Messages.getString("AboutFrame.verdana"), Font.BOLD, 18);
         JLabel title = GuiUtility.createJLabel(AppConstants.APP_NAME + Messages.getString("AboutFrame.newline"));
@@ -39,7 +39,8 @@ public class AboutFrame extends ChessFrame {
         JLabel visitSiteLabel = GuiUtility.createJLabel(Messages.getString("AboutFrame.visitOurSite"));
 
         JButton siteButton = new JButton();
-        siteButton.setIcon(piecePicture.getIcon());
+        siteButton.setIcon(PieceIconUtility.getPieceIcon("King", Color.BLACK));
+        siteButton.setPreferredSize(new Dimension(80, 80));
         siteButton.addActionListener(event -> {
             if (Desktop.isDesktopSupported()) {
                 try {

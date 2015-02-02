@@ -39,8 +39,8 @@ public class JailPanel extends ChessPanel {
         }
     }
 
-    public void updateJailPopulation(@NotNull Collection<Piece> pieces) {
+    public void updateJailPopulation(@NotNull Collection<Piece> pieces, Color teamColor) {
         Iterator<Piece> pieceIterator = pieces.iterator();
-        mSquareLabels.stream().forEach(square -> square.setPiece(pieceIterator.hasNext() ? pieceIterator.next() : null));
+        mSquareLabels.stream().forEach(square -> square.setPiece(pieceIterator.hasNext() ? pieceIterator.next() : null, teamColor));
     }
 }

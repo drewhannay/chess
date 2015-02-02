@@ -17,6 +17,7 @@ public enum PieceTypeManager {
     INSTANCE;
 
     private final Set<PieceType> mPieceTypes;
+    private final Set<String> mSystemPieceNames;
 
     private PieceTypeManager() {
         mPieceTypes = new HashSet<>();
@@ -27,6 +28,11 @@ public enum PieceTypeManager {
         mPieceTypes.add(getSouthFacingPawnPieceType());
         mPieceTypes.add(getQueenPieceType());
         mPieceTypes.add(getRookPieceType());
+
+        mSystemPieceNames = new HashSet<>(mPieceTypes.size());
+        for (PieceType pieceType : mPieceTypes) {
+            mSystemPieceNames.add(pieceType.getName());
+        }
     }
 
     @NotNull
@@ -118,5 +124,9 @@ public enum PieceTypeManager {
         }
 
         return new PieceType("Rook", movements, null);
+    }
+
+    public boolean isSystemPiece(@NotNull String pieceName) {
+        return mSystemPieceNames.contains(pieceName);
     }
 }
