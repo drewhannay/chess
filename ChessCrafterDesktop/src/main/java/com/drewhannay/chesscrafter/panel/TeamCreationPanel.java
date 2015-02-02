@@ -71,7 +71,7 @@ public class TeamCreationPanel extends ChessPanel {
             teamPanel.setLayout(new BoxLayout(teamPanel, BoxLayout.PAGE_AXIS));
             teamPanel.setOpaque(false);
 
-            teamPanel.add(GuiUtility.createJLabel(Messages.getString("TeamCreationPanel.team") + " " + teamInfo.teamId));
+            teamPanel.add(GuiUtility.createJLabel(Messages.getString("TeamCreationPanel.team", teamInfo.teamId)));
 
             teamInfo.label = new SquareJLabel(BoardCoordinate.at(1, teamInfo.teamId));
             squareConfig.configureSquare(teamInfo.label);
