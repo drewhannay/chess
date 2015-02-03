@@ -124,8 +124,6 @@ public final class GamePanel extends ChessPanel {
         gbc.gridx = 0;
         gbc.gridwidth = 2;
         gbc.weightx = 1.0;
-        //gbc.weighty = 0.2;
-        //gbc.insets = new Insets(0, 10, 10, 10);
         gbc.fill = GridBagConstraints.BOTH;
         buttonPanel.add(mUndoButton, gbc);
 
