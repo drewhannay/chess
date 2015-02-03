@@ -7,11 +7,13 @@ import com.drewhannay.chesscrafter.utility.GuiUtility;
 import com.drewhannay.chesscrafter.utility.Messages;
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Function;
 
 public class JailPanel extends ChessPanel {
 
@@ -39,8 +41,11 @@ public class JailPanel extends ChessPanel {
         }
     }
 
-    public void updateJailPopulation(@NotNull Collection<Piece> pieces, Color teamColor) {
+    public void updateJailPopulation(@NotNull Collection<Piece> pieces, Function<Integer, Color> teamColor) {
         Iterator<Piece> pieceIterator = pieces.iterator();
-        mSquareLabels.stream().forEach(square -> square.setPiece(pieceIterator.hasNext() ? pieceIterator.next() : null, teamColor));
+        mSquareLabels.stream().forEach(square -> {
+            Piece piece = pieceIterator.hasNext() ? pieceIterator.next() : null;
+            square.setPiece(piece, piece != null ? teamColor.apply(piece.getTeamId()) : null);
+        });
     }
 }

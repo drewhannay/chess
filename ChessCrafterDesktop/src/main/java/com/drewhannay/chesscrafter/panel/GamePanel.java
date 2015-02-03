@@ -266,6 +266,7 @@ public final class GamePanel extends ChessPanel {
         IntStream.range(0, mGameBoards.length).forEach(i -> mGameBoards[i].updatePieceLocations(mGame.getBoards()[i],
                 teamId -> new Color(mGame.getTeam(teamId).getTeamColor())));
         mTeamStatusPanels.forEach(panel -> panel.getJail().updateJailPopulation(
-                mGame.getTeam(panel.getTeamId()).getCapturedOpposingPieces(), new Color(mGame.getTeam(panel.getTeamId()).getTeamColor())));
+                mGame.getTeam(panel.getTeamId()).getCapturedOpposingPieces(),
+                teamId -> new Color(mGame.getTeam(teamId).getTeamColor())));
     }
 }
