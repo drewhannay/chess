@@ -156,7 +156,7 @@ public final class GamePanel extends ChessPanel {
 
         Preconditions.checkNotNull(result);
 
-        refresh();
+        refreshNavigationButtonState();
     }
 
     public void saveGame() {
