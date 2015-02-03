@@ -141,7 +141,7 @@ public final class GamePanel extends ChessPanel {
 
         constraints.gridy = 1;
         constraints.gridx = boards.length * 2;
-        constraints.weighty = 1.0;
+        constraints.weighty = 0.2;
         add(buttonPanel, constraints);
 
         refresh();
@@ -237,11 +237,11 @@ public final class GamePanel extends ChessPanel {
     }
 
     private void refreshNavigationButtonState() {
-        mUndoButton.setVisible(mGame.canUndoMove());
+        mUndoButton.setVisible(!mGame.hasPreviousMove() && !mGame.hasNextMove());
         mUndoButton.setEnabled(mGame.canUndoMove());
 
-        mForwardButton.setVisible(mGame.hasNextMove());
-        mBackButton.setVisible(mGame.hasPreviousMove());
+        mForwardButton.setVisible(mGame.hasPreviousMove() || mGame.hasNextMove());
+        mBackButton.setVisible(mGame.hasPreviousMove() || mGame.hasNextMove());
 
         mForwardButton.setEnabled(mGame.hasNextMove());
         mBackButton.setEnabled(mGame.hasPreviousMove());
