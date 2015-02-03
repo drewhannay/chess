@@ -39,7 +39,7 @@ public final class CaptureObjectiveEndCondition extends EndCondition {
                 BoardCoordinate coordinate = BoardCoordinate.at(x, y);
                 if (board.doesPieceExistAt(coordinate)) {
                     if (game.getPiece(boardIndex, coordinate).getTeamId() == mTeamId) {
-                        Set<BoardCoordinate> moves = game.getMovesFrom(boardIndex, BoardCoordinate.at(x, y));
+                        Set<BoardCoordinate> moves = game.doGetMovesFrom(boardIndex, BoardCoordinate.at(x, y));
                         legalMoveCount += moves.size();
                     }
                 }

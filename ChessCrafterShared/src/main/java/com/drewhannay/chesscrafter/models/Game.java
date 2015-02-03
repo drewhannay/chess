@@ -8,6 +8,7 @@ import com.drewhannay.chesscrafter.rules.conditionalmovegenerator.ConditionalMov
 import com.drewhannay.chesscrafter.rules.movefilter.MoveFilter;
 import com.drewhannay.chesscrafter.rules.postmoveaction.PostMoveAction;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableSet;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -78,6 +79,14 @@ public final class Game {
 
     @NotNull
     public Set<BoardCoordinate> getMovesFrom(int boardIndex, @NotNull BoardCoordinate coordinate) {
+        if (mHistory.isComplete()) {
+            return ImmutableSet.of();
+        }
+        return doGetMovesFrom(boardIndex, coordinate);
+    }
+
+    @NotNull
+    public Set<BoardCoordinate> doGetMovesFrom(int boardIndex, @NotNull BoardCoordinate coordinate) {
         Board board = mBoards[boardIndex];
         Team team = getTeam(mTurnKeeper.getActiveTeamId());
 
