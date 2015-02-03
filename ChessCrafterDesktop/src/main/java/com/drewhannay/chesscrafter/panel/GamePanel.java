@@ -24,6 +24,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
@@ -86,6 +87,7 @@ public final class GamePanel extends ChessPanel {
             constraints.gridx = boardIndex;
             constraints.weightx = 1.0;
             constraints.weighty = 1.0;
+            constraints.gridheight = 2;
             constraints.fill = GridBagConstraints.BOTH;
             constraints.insets = new Insets(10, 0, 0, 0);
 
@@ -97,6 +99,8 @@ public final class GamePanel extends ChessPanel {
 
         constraints.gridx = boards.length * 2;
         constraints.weightx = 0.3;
+        constraints.gridheight = 1;
+        constraints.weighty = 1.0;
         constraints.insets = new Insets(0, 25, 0, 10);
         add(mTabbedPane, constraints);
 
@@ -114,24 +118,34 @@ public final class GamePanel extends ChessPanel {
             refresh();
         });
 
+        GridBagConstraints gbc = new GridBagConstraints();
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new GridBagLayout());
+        buttonPanel.setOpaque(false);
 
         // add the undo button
-        constraints.weighty = 0.0;
-        constraints.gridy = 3;
-        constraints.fill = GridBagConstraints.BOTH;
-        add(mUndoButton, constraints);
+        gbc.gridy = 0;
+        gbc.gridx = 0;
+        gbc.gridwidth = 2;
+        gbc.weightx = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        buttonPanel.add(mUndoButton, gbc);
 
         // add the back button
-        constraints.gridy = 4;
-        constraints.gridx = 0;
-        constraints.weighty = 0.0;
-        constraints.gridwidth = 1;
-        constraints.insets = new Insets(0, 10, 10, 10);
-        add(mBackButton, constraints);
+        gbc.gridy = 1;
+        gbc.gridx = 0;
+        gbc.gridwidth = 1;
+        buttonPanel.add(mBackButton, gbc);
 
         // add the forward  button
-        constraints.gridx = 1;
-        add(mForwardButton, constraints);
+        gbc.gridx = 1;
+        buttonPanel.add(mForwardButton, gbc);
+
+        constraints.gridy = 1;
+        constraints.gridx = boards.length * 2;
+        constraints.weighty = 0.2;
+        add(buttonPanel, constraints);
 
         refresh();
     }
@@ -226,11 +240,11 @@ public final class GamePanel extends ChessPanel {
     }
 
     private void refreshNavigationButtonState() {
-        mUndoButton.setVisible(mGame.canUndoMove());
+        mUndoButton.setVisible(!mGame.hasPreviousMove() && !mGame.hasNextMove());
         mUndoButton.setEnabled(mGame.canUndoMove());
 
-        mForwardButton.setVisible(mGame.hasNextMove());
-        mBackButton.setVisible(mGame.hasPreviousMove());
+        mForwardButton.setVisible(mGame.hasPreviousMove() || mGame.hasNextMove());
+        mBackButton.setVisible(mGame.hasPreviousMove() || mGame.hasNextMove());
 
         mForwardButton.setEnabled(mGame.hasNextMove());
         mBackButton.setEnabled(mGame.hasPreviousMove());
