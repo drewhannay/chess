@@ -82,7 +82,7 @@ public class TeamCreationPanel extends ChessPanel {
     private void initComponents(SquareConfig squareConfig) {
         mTeamInfos.forEach(teamInfo -> createTeamPanel(squareConfig, teamInfo));
 
-        JButton addTeam = new JButton(Messages.getString("TeamCreationPanel.addTeam"));
+        JButton addTeam = new JButton("+");
         addTeam.addActionListener(event -> {
             TeamInfo newTeam = new TeamInfo();
             newTeam.teamId = mTeamIDCounter;
