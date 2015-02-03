@@ -6,6 +6,7 @@ public final class GameConfiguration {
     public static class TeamConfiguration {
         public int teamId;
         public int teamColor;
+        public String teamName;
         public String[] conditionalMoveGenerators;
         public String[] moveFilters;
         public String[] postMoveActions;

@@ -23,7 +23,7 @@ import com.google.common.collect.Lists;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -129,7 +129,7 @@ public class GameBuilder {
             PiecePromoter piecePromoter = PiecePromoter.createClassicPiecePromoter(promoterConfig.promotionRow,
                     PieceTypeManager.INSTANCE.getPieceTypeByName(promoterConfig.pieceType));
 
-            Team team = new Team(teamConfig.teamId, teamConfig.teamColor, moveGenerators,
+            Team team = new Team(teamConfig.teamId, teamConfig.teamColor, teamConfig.teamName, moveGenerators,
                     moveFilters, postMoveActions, endCondition, piecePromoter);
             teams[i] = team;
         }
@@ -149,6 +149,7 @@ public class GameBuilder {
         TeamConfiguration teamOne = new TeamConfiguration();
         teamOne.teamId = Piece.TEAM_ONE;
         teamOne.teamColor = Color.WHITE.getRGB();
+        teamOne.teamName = "White";
         teamOne.conditionalMoveGenerators = new String[]{"CastlingMoveGenerator", "EnPassantMoveGenerator"};
         teamOne.moveFilters = new String[]{"ClassicMoveFilter"};
         teamOne.postMoveActions = new String[]{"CastlingPostMoveAction", "EnPassantPostMoveAction"};
@@ -158,6 +159,7 @@ public class GameBuilder {
         TeamConfiguration teamTwo = new TeamConfiguration();
         teamTwo.teamId = Piece.TEAM_TWO;
         teamTwo.teamColor = Color.BLACK.getRGB();
+        teamTwo.teamName = "Black";
         teamTwo.conditionalMoveGenerators = new String[]{"CastlingMoveGenerator", "EnPassantMoveGenerator"};
         teamTwo.moveFilters = new String[]{"ClassicMoveFilter"};
         teamTwo.postMoveActions = new String[]{"CastlingPostMoveAction", "EnPassantPostMoveAction"};

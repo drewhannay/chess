@@ -17,6 +17,7 @@ import java.util.Set;
 public final class Team {
     private final int mTeamId;
     private final int mTeamColor;
+    private final String mTeamName;
     private final Set<ConditionalMoveGenerator> mConditionalMoveGenerators;
     private final Set<MoveFilter> mMoveFilters;
     private final Set<PostMoveAction> mPostMoveActions;
@@ -26,6 +27,7 @@ public final class Team {
 
     public Team(int teamId,
                 int teamColor,
+                @NotNull String teamName,
                 @NotNull Set<ConditionalMoveGenerator> conditionalMoveGenerators,
                 @NotNull Set<MoveFilter> moveFilters,
                 @NotNull Set<PostMoveAction> postMoveActions,
@@ -33,6 +35,7 @@ public final class Team {
                 @NotNull PiecePromoter piecePromoter) {
         mTeamId = teamId;
         mTeamColor = teamColor;
+        mTeamName = teamName;
         mConditionalMoveGenerators = conditionalMoveGenerators;
         mMoveFilters = moveFilters;
         mPostMoveActions = postMoveActions;
@@ -47,6 +50,10 @@ public final class Team {
 
     public int getTeamColor() {
         return mTeamColor;
+    }
+
+    public String getTeamName() {
+        return mTeamName;
     }
 
     public Set<ConditionalMoveGenerator> getConditionalMoveGenerators() {
