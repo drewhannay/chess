@@ -56,6 +56,16 @@ public final class EnPassantPostMoveAction extends PostMoveAction {
             return;
         }
 
+        // must have moved to the same column as opponent's last move
+        if (!lastMove.destination.isOnSameVerticalPathAs(opponentsLastMove.destination)) {
+            return;
+        }
+
+        // must have moved one space away from opponent's last move
+        if (Math.abs(lastMove.destination.y - opponentsLastMove.destination.y) != 1) {
+            return;
+        }
+
         // must have moved diagonally
         if (!lastMove.origin.isOnSameDiagonalPathAs(lastMove.destination)) {
             return;
