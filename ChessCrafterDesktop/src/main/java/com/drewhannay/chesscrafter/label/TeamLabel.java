@@ -2,7 +2,6 @@ package com.drewhannay.chesscrafter.label;
 
 import com.drewhannay.chesscrafter.utility.Messages;
 
-import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import java.awt.Color;
@@ -12,6 +11,24 @@ public class TeamLabel extends JLabel {
     public TeamLabel() {
         setHorizontalAlignment(SwingConstants.CENTER);
         setOpaque(true);
+    }
+
+    public void setDraw() {
+        setBackground(Color.BLACK);
+        setForeground(Color.WHITE);
+        setText(Messages.getString("GamePanel.draw"));
+    }
+
+    public void setStalemate() {
+        setBackground(Color.BLACK);
+        setForeground(Color.WHITE);
+        setText(Messages.getString("GamePanel.stalemate"));
+    }
+
+    public void setCheckmate() {
+        setBackground(Color.RED);
+        setForeground(Color.WHITE);
+        setText(Messages.getString("GamePanel.checkmate"));
     }
 
     public void setInCheck() {

@@ -48,9 +48,15 @@ public final class TeamStatusPanel extends ChessPanel {
     }
 
     public void updateStatus(int activeTeamId, Status status) {
-        if (mTeamId == activeTeamId) {
+        if (status == Status.DRAW) {
+            mTeamLabel.setDraw();
+        } else if (status == Status.STALEMATE) {
+            mTeamLabel.setStalemate();
+        } else if (mTeamId == activeTeamId) {
             if (Status.IN_CHECK_STATUS.contains(status)) {
                 mTeamLabel.setInCheck();
+            } else if (status == Status.CHECKMATE) {
+                mTeamLabel.setCheckmate();
             } else {
                 mTeamLabel.setActive();
             }
