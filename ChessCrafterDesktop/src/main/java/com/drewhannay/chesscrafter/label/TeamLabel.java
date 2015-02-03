@@ -9,9 +9,8 @@ import java.awt.Color;
 
 public class TeamLabel extends JLabel {
 
-    public TeamLabel(int teamID) {
+    public TeamLabel() {
         setHorizontalAlignment(SwingConstants.CENTER);
-        setBorder(BorderFactory.createTitledBorder(""));
         setOpaque(true);
     }
 

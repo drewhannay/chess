@@ -26,7 +26,7 @@ public final class TeamStatusPanel extends ChessPanel {
 
         mTeamId = team.getTeamId();
         mPlayerName = new JTextField(20);
-        mTeamLabel = new TeamLabel(team.getTeamId());
+        mTeamLabel = new TeamLabel();
         // TODO: figure out a way to get the total number of pieces in the game for each team
         mJailPanel = new JailPanel(16);
 
