@@ -27,8 +27,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Insets;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -192,12 +194,25 @@ public final class GamePanel extends ChessPanel {
         Color activeTeamColor = new Color(activeTeam.getTeamColor());
 
         JFrame promotionFrame = new JFrame();
-        ChessPanel promotionPanel = new ChessPanel();
+        promotionFrame.setLayout(new GridBagLayout());
+
+        JPanel promotionTextPanel = new ChessPanel();
+        promotionTextPanel.setOpaque(false);
+
         JLabel promotionText = new JLabel("Choose a piece to promote to:");
         promotionText.setForeground(Color.white);
-        promotionPanel.add(promotionText);
+
+        promotionTextPanel.add(promotionText);
+
+        ChessPanel promotionPanel = new ChessPanel();
+        int gridSize = (moveBuilder.getPromotionOptions().size() / 2) + (moveBuilder.getPromotionOptions().size() % 2);
+        promotionPanel.setLayout(new GridLayout(gridSize, gridSize));
         for (PieceType pieceType : moveBuilder.getPromotionOptions()) {
             JButton label = new JButton(PieceIconUtility.getPieceIcon(pieceType.getName(), activeTeamColor));
+            label.setPreferredSize(new Dimension(100, 100));
+            label.setBackground(activeTeamColor != Color.GRAY ? Color.GRAY : Color.getHSBColor(30, 70, 70));
+            label.setContentAreaFilled(false);
+            label.setOpaque(true);
             label.addActionListener(e -> {
                 moveBuilder.setPromotionType(pieceType);
                 playMove(moveBuilder);
@@ -206,10 +221,16 @@ public final class GamePanel extends ChessPanel {
             promotionPanel.add(label);
         }
 
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.BOTH;
+        promotionFrame.add(promotionTextPanel, gbc);
+        gbc.gridy = 1;
+        gbc.weighty = 1.0;
+        promotionFrame.add(promotionPanel, gbc);
+
         promotionFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        promotionFrame.setSize(200, 200);
-        promotionFrame.add(promotionPanel);
         promotionFrame.setLocationRelativeTo(null);
+        promotionFrame.pack();
         promotionFrame.setVisible(true);
     }
 
