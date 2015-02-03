@@ -83,7 +83,7 @@ public class BoardPanel extends ChessPanel {
         if (x == 0 && y == 0) {
             return GuiUtility.createJLabel("");
         } else if (x == 0) {
-            JLabel label = GuiUtility.createJLabel(String.valueOf(y - 1));
+            JLabel label = GuiUtility.createJLabel(String.valueOf(y));
             label.setHorizontalAlignment(SwingConstants.CENTER);
             return label;
         } else if (y == 0) {
