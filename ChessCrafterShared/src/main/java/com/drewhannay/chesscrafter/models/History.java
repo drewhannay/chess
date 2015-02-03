@@ -16,6 +16,10 @@ public final class History {
         this.moves = moves;
     }
 
+    public boolean isComplete() {
+        return mResult != null;
+    }
+
     @Nullable
     public Result getResult() {
         return mResult;

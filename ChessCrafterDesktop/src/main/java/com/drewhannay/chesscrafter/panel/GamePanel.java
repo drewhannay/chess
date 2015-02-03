@@ -1,6 +1,5 @@
 package com.drewhannay.chesscrafter.panel;
 
-import com.drewhannay.chesscrafter.action.ChessActions;
 import com.drewhannay.chesscrafter.dragNdrop.DropManager;
 import com.drewhannay.chesscrafter.dragNdrop.GlassPane;
 import com.drewhannay.chesscrafter.dragNdrop.SquareConfig;
@@ -14,12 +13,10 @@ import com.drewhannay.chesscrafter.models.MoveBuilder;
 import com.drewhannay.chesscrafter.models.Piece;
 import com.drewhannay.chesscrafter.models.PieceType;
 import com.drewhannay.chesscrafter.models.Team;
-import com.drewhannay.chesscrafter.utility.AppConstants;
 import com.drewhannay.chesscrafter.utility.FileUtility;
 import com.drewhannay.chesscrafter.utility.GsonUtility;
 import com.drewhannay.chesscrafter.utility.Messages;
 import com.drewhannay.chesscrafter.utility.PieceIconUtility;
-import com.drewhannay.chesscrafter.utility.PreferenceUtility;
 import com.google.common.base.Preconditions;
 import org.jetbrains.annotations.NotNull;
 
@@ -32,7 +29,6 @@ import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -48,9 +44,13 @@ public final class GamePanel extends ChessPanel {
     private final List<TeamStatusPanel> mTeamStatusPanels;
     private final JTabbedPane mTabbedPane;
 
+    private final JButton mUndoButton;
+    private final JButton mForwardButton;
+    private final JButton mBackButton;
+
     public GamePanel(@NotNull GlassPane glassPane, @NotNull Game game) {
         mGame = game;
-        DropManager dropManager = new DropManager(this::boardRefresh, pair -> {
+        DropManager dropManager = new DropManager(this::refresh, pair -> {
             BoardCoordinate origin = ((SquareJLabel) pair.first).getCoordinates();
             BoardCoordinate destination = ((SquareJLabel) pair.second).getCoordinates();
             playMove(mGame.newMoveBuilder(origin, destination));
@@ -60,6 +60,10 @@ public final class GamePanel extends ChessPanel {
         mGameBoards = new BoardPanel[mGame.getBoards().length];
         mTeamStatusPanels = new ArrayList<>(mGame.getTeams().length);
         mTabbedPane = new JTabbedPane();
+
+        mUndoButton = new JButton(Messages.getString("PlayGamePanel.undo"));
+        mForwardButton = new JButton("->");
+        mBackButton = new JButton("<-");
 
         initComponents();
     }
@@ -96,20 +100,26 @@ public final class GamePanel extends ChessPanel {
         constraints.insets = new Insets(0, 25, 0, 10);
         add(mTabbedPane, constraints);
 
-        JButton undoButton = new JButton(Messages.getString("PlayGamePanel.undo"));
-        undoButton.addActionListener(event -> {
+        mUndoButton.addActionListener(event -> {
             mGame.undoMove();
-            refreshStatus();
-            boardRefresh();
+            refresh();
         });
-        JButton forward = new JButton("->");
-        JButton back = new JButton("<-");
+
+        mForwardButton.addActionListener(event -> {
+            mGame.nextMove();
+            refresh();
+        });
+        mBackButton.addActionListener(event -> {
+            mGame.previousMove();
+            refresh();
+        });
+
 
         // add the undo button
         constraints.weighty = 0.0;
         constraints.gridy = 3;
         constraints.fill = GridBagConstraints.BOTH;
-        add(undoButton, constraints);
+        add(mUndoButton, constraints);
 
         // add the back button
         constraints.gridy = 4;
@@ -117,14 +127,13 @@ public final class GamePanel extends ChessPanel {
         constraints.weighty = 0.0;
         constraints.gridwidth = 1;
         constraints.insets = new Insets(0, 10, 10, 10);
-        add(back, constraints);
+        add(mBackButton, constraints);
 
         // add the forward  button
         constraints.gridx = 1;
-        add(forward, constraints);
+        add(mForwardButton, constraints);
 
-        boardRefresh();
-        refreshStatus();
+        refresh();
     }
 
     public void declareDraw() {
@@ -136,66 +145,7 @@ public final class GamePanel extends ChessPanel {
 
         Preconditions.checkNotNull(result);
 
-        String panelTitle;
-        String panelMessage;
-        switch (result.status) {
-            case DRAW:
-                panelTitle = Messages.getString("PlayGamePanel.declareDraw");
-                panelMessage = Messages.getString("PlayGamePanel.drawWhatNow");
-                break;
-            case STALEMATE:
-                panelTitle = Messages.getString("PlayGamePanel.declareDraw");
-                panelMessage = Messages.getString("PlayGamePanel.drawWhatNow");
-                break;
-            case CHECKMATE:
-                String teamName = mTeamStatusPanels.stream()
-                        .filter(panel -> panel.getTeamId() == result.winningTeamId)
-                        .findFirst().get().getName();
-                panelTitle = teamName + " Wins!";
-                panelMessage = Messages.getString("PlayGamePanel.gameOver");
-                break;
-            default:
-                throw new IllegalStateException("Cannot end game with status:" + result.status);
-        }
-
-        Object[] options = new String[]{
-                Messages.getString("PlayGamePanel.saveRecord"),
-                Messages.getString("PlayGamePanel.newGame"),
-                Messages.getString("PlayGamePanel.mainMenu")
-        };
-
-        switch (JOptionPane.showOptionDialog(this, panelMessage, panelTitle,
-                JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0])) {
-            case JOptionPane.YES_OPTION:
-                if (PreferenceUtility.getSaveLocationPreference().equals("default")) {
-                    JOptionPane.showMessageDialog(this, Messages.getString("PlayGamePanel.sinceFirstTime", AppConstants.APP_NAME),
-                            Messages.getString("PlayGamePanel.saveLocation"), JOptionPane.PLAIN_MESSAGE);
-                    File directory = FileUtility.chooseDirectory();
-                    if (directory != null) {
-                        PreferenceUtility.setSaveLocationPreference(directory.getAbsolutePath());
-                    }
-                }
-                String saveFileName = JOptionPane.showInputDialog(this, Messages.getString("PlayGamePanel.enterAName"),
-                        Messages.getString("PlayGamePanel.saving"), JOptionPane.PLAIN_MESSAGE);
-                try (FileOutputStream fileOut = new FileOutputStream(FileUtility.getGameFile(saveFileName))) {
-                    String json = GsonUtility.toJson(mGame.getHistory());
-                    fileOut.write(json.getBytes());
-                    fileOut.flush();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                PreferenceUtility.clearTooltipListeners();
-                // TODO: transition to review mode?
-                break;
-            case JOptionPane.NO_OPTION:
-                // TODO: hacky method call
-                ChessActions.NEW_GAME.getAction().actionPerformed(null);
-                break;
-            case JOptionPane.CANCEL_OPTION:
-                PreferenceUtility.clearTooltipListeners();
-                // TODO: transition to review mode?
-                break;
-        }
+        refresh();
     }
 
     public void saveGame() {
@@ -219,8 +169,7 @@ public final class GamePanel extends ChessPanel {
             createPromotionPopup(moveBuilder);
         } else {
             mGame.executeMove(moveBuilder.build());
-            refreshStatus();
-            boardRefresh();
+            refresh();
         }
     }
 
@@ -250,6 +199,12 @@ public final class GamePanel extends ChessPanel {
         promotionFrame.setVisible(true);
     }
 
+    private void refresh() {
+        refreshStatus();
+        refreshBoard();
+        refreshNavigationButtonState();
+    }
+
     private void refreshStatus() {
         Status status = mGame.getStatus();
         if (Status.END_OF_GAME_STATUS.contains(status)) {
@@ -262,11 +217,22 @@ public final class GamePanel extends ChessPanel {
                 .forEach(mTabbedPane::setSelectedComponent);
     }
 
-    private void boardRefresh() {
+    private void refreshBoard() {
         IntStream.range(0, mGameBoards.length).forEach(i -> mGameBoards[i].updatePieceLocations(mGame.getBoards()[i],
                 teamId -> new Color(mGame.getTeam(teamId).getTeamColor())));
         mTeamStatusPanels.forEach(panel -> panel.getJail().updateJailPopulation(
                 mGame.getTeam(panel.getTeamId()).getCapturedOpposingPieces(),
                 teamId -> new Color(mGame.getTeam(teamId).getTeamColor())));
+    }
+
+    private void refreshNavigationButtonState() {
+        mUndoButton.setVisible(mGame.canUndoMove());
+        mUndoButton.setEnabled(mGame.canUndoMove());
+
+        mForwardButton.setVisible(mGame.hasNextMove());
+        mBackButton.setVisible(mGame.hasPreviousMove());
+
+        mForwardButton.setEnabled(mGame.hasNextMove());
+        mBackButton.setEnabled(mGame.hasPreviousMove());
     }
 }
