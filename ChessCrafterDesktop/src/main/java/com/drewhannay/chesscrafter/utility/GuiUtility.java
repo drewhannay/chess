@@ -3,9 +3,17 @@ package com.drewhannay.chesscrafter.utility;
 import com.drewhannay.chesscrafter.models.Piece;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -17,19 +25,19 @@ public final class GuiUtility {
 
     public static JLabel createJLabel(String labelText) {
         JLabel newLabel = new JLabel(labelText);
-        newLabel.setForeground(Color.white);
+        newLabel.setForeground(Color.WHITE);
         return newLabel;
     }
 
     public static JLabel createJLabel(ImageIcon image) {
         JLabel newLabel = new JLabel(image);
-        newLabel.setForeground(Color.white);
+        newLabel.setForeground(Color.BLACK);
         return newLabel;
     }
 
     public static TitledBorder createBorder(String borderText) {
         TitledBorder newBorder = BorderFactory.createTitledBorder(borderText);
-        newBorder.setTitleColor(Color.black);
+        newBorder.setTitleColor(Color.BLACK);
         return newBorder;
     }
 

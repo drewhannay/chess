@@ -2,26 +2,17 @@ package com.drewhannay.chesscrafter.label;
 
 import com.drewhannay.chesscrafter.utility.Messages;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
+import java.awt.Color;
 
 public class TeamLabel extends JLabel {
 
-    private final int mTeamID;
-    private final String mTeamName;
-
-    public TeamLabel(int teamID, String teamName) {
-        mTeamName = teamName;
-        mTeamID = teamID;
-
-        setText(mTeamName);
+    public TeamLabel(int teamID) {
         setHorizontalAlignment(SwingConstants.CENTER);
-        setBorder(BorderFactory.createTitledBorder("")); //$NON-NLS-1$
+        setBorder(BorderFactory.createTitledBorder(""));
         setOpaque(true);
-    }
-
-    public int getTeamId() {
-        return mTeamID;
     }
 
     public void setInCheck() {
@@ -36,7 +27,7 @@ public class TeamLabel extends JLabel {
         setText(Messages.getString("GamePanel.myTurn"));
     }
 
-    public void setInActive() {
+    public void setInactive() {
         setBackground(Color.WHITE);
         setForeground(Color.BLACK);
         setText(Messages.getString("GamePanel.waiting"));
