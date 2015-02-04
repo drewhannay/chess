@@ -1,5 +1,8 @@
 package com.drewhannay.chesscrafter.utility;
 
+import com.drewhannay.chesscrafter.Main;
+import org.jetbrains.annotations.NotNull;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -18,9 +21,10 @@ import java.util.prefs.Preferences;
 
 public final class PreferenceUtility {
 
-    private static final String SAVELOCATION = "saveLocation";
-    private static final String HIGHLIGHTMOVES = "highlightMoves";
-    private static final Preferences mPreference = Preferences.userRoot().node("ChessCrafterPreferences");
+    private static final String SAVE_LOCATION = "saveLocation";
+    private static final String HIGHLIGHT_MOVES = "highlightMoves";
+
+    private static final Preferences PREFERENCES = Preferences.userNodeForPackage(Main.class);
 
     private PreferenceUtility() {
     }
@@ -34,7 +38,6 @@ public final class PreferenceUtility {
         GridBagConstraints constraints = new GridBagConstraints();
 
         String userSaveLocation = PreferenceUtility.getSaveLocationPreference();
-        String defaultSaveLocation = FileUtility.getDefaultCompletedLocation();
 
         JPanel holder = new JPanel();
         holder.setBorder(BorderFactory.createTitledBorder(Messages.getString("PreferenceUtility.defaultCompletedLocation")));
@@ -53,23 +56,25 @@ public final class PreferenceUtility {
         holder.add(currentSaveLocationLabel);
         holder.add(currentSaveLocationField);
 
-        currentSaveLocationField.setText(mPreference.get(SAVELOCATION, "default"));
-        highlightingCheckBox.setSelected(mPreference.getBoolean(HIGHLIGHTMOVES, true));
+        currentSaveLocationField.setText(userSaveLocation);
+        highlightingCheckBox.setSelected(getHighlightMovesPreference());
 
         resetButton.addActionListener(event -> {
-            currentSaveLocationField.setText(FileUtility.getDefaultCompletedLocation());
-            PreferenceUtility.setSaveLocationPreference(defaultSaveLocation);
+            String saveLocation = FileUtility.getDefaultCompletedLocation();
+            currentSaveLocationField.setText(saveLocation);
+            PreferenceUtility.setSaveLocationPreference(saveLocation);
         });
 
         changeLocationButton.addActionListener(event -> {
             File directory = FileUtility.chooseDirectory();
             if (directory != null) {
-                currentSaveLocationField.setText(directory.getAbsolutePath());
-                PreferenceUtility.setSaveLocationPreference(directory.getAbsolutePath());
+                String path = directory.getAbsolutePath();
+                currentSaveLocationField.setText(path);
+                PreferenceUtility.setSaveLocationPreference(path);
             }
         });
 
-        highlightingCheckBox.addActionListener(event -> mPreference.putBoolean(HIGHLIGHTMOVES, highlightingCheckBox.isSelected()));
+        highlightingCheckBox.addActionListener(event -> setHighlightMovesPreference(highlightingCheckBox.isSelected()));
 
         constraints.gridx = 0;
         constraints.gridy = 0;
@@ -104,32 +109,16 @@ public final class PreferenceUtility {
     }
 
     /**
-     * Generic method to get string preference from the system
-     *
-     * @param key the String key for the preference to return
-     * @return returns the value paired with the given key
-     */
-    public static String getStringPreference(String key) {
-        return mPreference.get(key, "default");
-    }
-
-    /**
-     * Generic method to get a boolean preference from the system
-     *
-     * @param key the String key for the preference to return
-     * @return returns the boolean value matched with the given key
-     */
-    public static Boolean getBooleanPreference(String key) {
-        return mPreference.getBoolean(key, true);
-    }
-
-    /**
      * Method to get the preference for if moves should be Highlighted
      *
      * @return returns the boolean value for move highlighting
      */
     public static boolean getHighlightMovesPreference() {
-        return mPreference.getBoolean(HIGHLIGHTMOVES, true);
+        return PREFERENCES.getBoolean(HIGHLIGHT_MOVES, true);
+    }
+
+    private static void setHighlightMovesPreference(boolean highlightMoves) {
+        PREFERENCES.putBoolean(HIGHLIGHT_MOVES, highlightMoves);
     }
 
     /**
@@ -138,13 +127,13 @@ public final class PreferenceUtility {
      * @return returns the string value for the save game location
      */
     public static String getSaveLocationPreference() {
-        return mPreference.get(SAVELOCATION, "default");
+        return PREFERENCES.get(SAVE_LOCATION, FileUtility.getDefaultCompletedLocation());
     }
 
     /**
      * Method to set the preference for Save game location
      */
-    public static void setSaveLocationPreference(String location) {
-        mPreference.put(SAVELOCATION, location);
+    public static void setSaveLocationPreference(@NotNull String location) {
+        PREFERENCES.put(SAVE_LOCATION, location);
     }
 }
