@@ -29,6 +29,7 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ContainerEvent;
 import java.awt.event.ContainerListener;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
@@ -82,8 +83,10 @@ public class GameFrame extends ChessFrame {
         });
 
         InputMap inputMap = getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_OPEN_BRACKET, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), "previousTab");
-        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_CLOSE_BRACKET, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), "nextTab");
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_OPEN_BRACKET,
+                InputEvent.SHIFT_DOWN_MASK | Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), "previousTab");
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_CLOSE_BRACKET,
+                InputEvent.SHIFT_DOWN_MASK | Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), "nextTab");
 
         ActionMap actionMap = getRootPane().getActionMap();
         actionMap.put("previousTab", new AbstractAction() {
