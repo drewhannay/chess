@@ -16,10 +16,20 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
+import javax.swing.KeyStroke;
+import java.awt.CardLayout;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
 import java.awt.event.ContainerEvent;
 import java.awt.event.ContainerListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 import java.io.File;
@@ -68,6 +78,24 @@ public class GameFrame extends ChessFrame {
                 if (mTabbedPane.getComponentCount() == 0) {
                     mCardLayout.show(mCardPanel, KEY_HINTS);
                 }
+            }
+        });
+
+        InputMap inputMap = getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_OPEN_BRACKET, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), "previousTab");
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_CLOSE_BRACKET, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), "nextTab");
+
+        ActionMap actionMap = getRootPane().getActionMap();
+        actionMap.put("previousTab", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cycleTabs(-1);
+            }
+        });
+        actionMap.put("nextTab", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cycleTabs(1);
             }
         });
     }
@@ -128,6 +156,16 @@ public class GameFrame extends ChessFrame {
             JOptionPane.showMessageDialog(null,
                     Messages.getString("Driver.noValidSavedGames"), Messages.getString("Driver.invalidSavedGames"),
                     JOptionPane.PLAIN_MESSAGE);
+        }
+    }
+
+    private void cycleTabs(int increment) {
+        if (mTabbedPane.getTabCount() > 1) {
+            int newIndex = (mTabbedPane.getSelectedIndex() + increment) % mTabbedPane.getTabCount();
+            if (newIndex < 0) {
+                newIndex += mTabbedPane.getTabCount();
+            }
+            mTabbedPane.setSelectedIndex(newIndex);
         }
     }
 }
