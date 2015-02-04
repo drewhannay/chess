@@ -124,7 +124,7 @@ public final class GamePanel extends ChessPanel {
         detailsPanel.setLayout(new GridBagLayout());
         detailsPanel.setOpaque(false);
 
-        //add the tabbed pane
+        // add the tabbed pane
         gbc.gridwidth = 2;
         gbc.weightx = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
