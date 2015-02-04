@@ -125,6 +125,7 @@ public class PieceType {
         if (equal) {
             // do not allow PieceTypes with the same name but different movement attributes
             Preconditions.checkState(Objects.equal(mMovements, other.mMovements));
+            Preconditions.checkState(Objects.equal(mCapturingMovements, other.mCapturingMovements));
             Preconditions.checkState(Objects.equal(mTwoHopMovements, other.mTwoHopMovements));
         }
 
@@ -133,7 +134,7 @@ public class PieceType {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(mName, mMovements, mTwoHopMovements);
+        return Objects.hashCode(mName, mMovements, mCapturingMovements, mTwoHopMovements);
     }
 
     @Override
