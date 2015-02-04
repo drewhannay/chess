@@ -3,7 +3,7 @@ package com.drewhannay.chesscrafter.frame;
 import com.google.common.base.Preconditions;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.*;
+import javax.swing.WindowConstants;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.ArrayList;
@@ -54,6 +54,10 @@ public enum FrameManager {
 
         frame.initComponents();
         frame.pack();
+
+        // put the window in the center of the screen, regardless of resolution
+        frame.setLocationRelativeTo(null);
+
         Preconditions.checkState(!frame.isVisible(), "Do not manually call Frame#setVisible!");
         frame.setVisible(true);
 

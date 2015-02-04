@@ -49,9 +49,6 @@ class ChessFrame extends JFrame {
         // TODO: always use this image?
         setIconImage(FileUtility.getFrontPageImage());
 
-        // put the window in the center of the screen, regardless of resolution
-        setLocationRelativeTo(null);
-
         setJMenuBar(ChessActions.createJMenuBar());
         setPreferredSize(new Dimension(685, 450));
 
