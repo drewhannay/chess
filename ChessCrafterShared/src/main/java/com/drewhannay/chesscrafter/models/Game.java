@@ -35,13 +35,17 @@ public final class Game {
 
         mStatus = Status.CONTINUE;
 
-        mHistory = new History(gameType, new ArrayList<Move>());
-        if (history != null) {
+        if (history == null) {
+            mHistory = new History(gameType, new ArrayList<Move>());
+        } else {
             Preconditions.checkArgument(gameType.equals(history.variantName),
                     "History variantName {" + history.variantName + "} does not match gameType {" + gameType + "}");
 
-            for (Move move : history.moves) {
-                executeMove(move);
+            mHistory = history;
+            if (!mHistory.isComplete()) {
+                for (Move move : history.moves) {
+                    executeMove(move);
+                }
             }
         }
     }
