@@ -85,11 +85,11 @@ public final class GuiUtility {
     }
 
     public static String getPieceToolTipText(Piece piece) {
-        String name = piece.getName();
+        String internalId = piece.getInternalId();
         //PieceMovements movements = piece.getPieceType().getPieceMovements();
 
         StringBuilder builder = new StringBuilder("<html><b>"); //$NON-NLS-1$
-        builder.append(name);
+        builder.append(internalId);
         builder.append("</b><br/>"); //$NON-NLS-1$
         /*
         builder.append("<table><tr>"); //$NON-NLS-1$
@@ -105,7 +105,7 @@ public final class GuiUtility {
         builder.append("<tr> <td align=\"center\">"); //$NON-NLS-1$
         builder.append(directionToTooltip(movements.getDistance(Direction.WEST)));
         builder.append("</td><td align=\"center\">"); //$NON-NLS-1$
-        builder.append(name.equals(Messages.getString("Piece.knight")) ? Messages.getString("Piece.knightChar") : name.charAt(0)); //$NON-NLS-1$ //$NON-NLS-2$
+        builder.append(internalId.equals(Messages.getString("Piece.knight")) ? Messages.getString("Piece.knightChar") : internalId.charAt(0)); //$NON-NLS-1$ //$NON-NLS-2$
         builder.append("</td><td align=\"center\">"); //$NON-NLS-1$
         builder.append(directionToTooltip(movements.getDistance(Direction.EAST)));
         builder.append("</td></tr>"); //$NON-NLS-1$

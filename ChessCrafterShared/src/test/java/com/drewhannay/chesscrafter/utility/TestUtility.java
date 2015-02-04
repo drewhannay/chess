@@ -13,7 +13,7 @@ public final class TestUtility {
             System.out.print('|');
             for (int x = 1; x <= board.getBoardSize().width; x++) {
                 BoardCoordinate space = BoardCoordinate.at(x, y);
-                String piece = board.doesPieceExistAt(space) ? String.valueOf(board.getPiece(space).getName().charAt(0)) : " ";
+                String piece = board.doesPieceExistAt(space) ? String.valueOf(board.getPiece(space).getInternalId().charAt(0)) : " ";
                 String move = moves.contains(space) ? "x" : " ";
                 System.out.print(piece + move + "|");
             }

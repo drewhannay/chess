@@ -61,7 +61,7 @@ public final class EnPassantMoveGenerator extends ConditionalMoveGenerator {
     }
 
     private boolean isPawn(@NotNull Piece piece) {
-        return piece.getName().equals(PieceTypeManager.getNorthFacingPawnPieceType().getName())
-                || piece.getName().equals(PieceTypeManager.getSouthFacingPawnPieceType().getName());
+        return piece.getInternalId().equals(PieceTypeManager.getNorthFacingPawnPieceType().getInternalId())
+                || piece.getInternalId().equals(PieceTypeManager.getSouthFacingPawnPieceType().getInternalId());
     }
 }

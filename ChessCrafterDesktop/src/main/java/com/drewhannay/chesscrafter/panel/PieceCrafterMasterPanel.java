@@ -73,7 +73,7 @@ public class PieceCrafterMasterPanel extends ChessPanel {
 
     private final ListCellRenderer<PieceType> mCellRenderer = (JList<? extends PieceType> list, PieceType value,
                                                                int index, boolean isSelected, boolean cellHasFocus) -> {
-        JLabel label = new JLabel(value.getName());
+        JLabel label = new JLabel(value.getInternalId());
         label.setOpaque(true);
         label.setFont(new Font(label.getName(), Font.PLAIN, 16));
         label.setBackground(isSelected ? list.getSelectionBackground() : list.getBackground());

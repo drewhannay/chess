@@ -127,7 +127,7 @@ public class GameBuilder {
 
             PiecePromoterConfiguration promoterConfig = teamConfig.piecePromoterConfiguration;
             PiecePromoter piecePromoter = PiecePromoter.createClassicPiecePromoter(promoterConfig.promotionRow,
-                    PieceTypeManager.INSTANCE.getPieceTypeByName(promoterConfig.pieceType));
+                    PieceTypeManager.INSTANCE.getPieceTypeById(promoterConfig.pieceType));
 
             Team team = new Team(teamConfig.teamId, teamConfig.teamColor, teamConfig.teamName, moveGenerators,
                     moveFilters, postMoveActions, endCondition, piecePromoter);

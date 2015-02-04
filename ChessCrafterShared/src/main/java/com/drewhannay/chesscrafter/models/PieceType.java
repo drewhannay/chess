@@ -15,22 +15,22 @@ import java.util.Set;
 public class PieceType {
     public static final int UNLIMITED = Integer.MAX_VALUE;
 
-    private final String mName;
+    private final String mInternalId;
     private final Map<Direction, Integer> mMovements;
     private final Map<Direction, Integer> mCapturingMovements;
     private final Set<TwoHopMovement> mTwoHopMovements;
 
-    public PieceType(@NotNull String name, @Nullable Map<Direction, Integer> movements,
+    public PieceType(@NotNull String internalId, @Nullable Map<Direction, Integer> movements,
                      @Nullable Set<TwoHopMovement> twoHopMovements) {
-        this(name, movements, movements, twoHopMovements);
+        this(internalId, movements, movements, twoHopMovements);
     }
 
-    public PieceType(@NotNull String name, @Nullable Map<Direction, Integer> movements,
+    public PieceType(@NotNull String internalId, @Nullable Map<Direction, Integer> movements,
                      @Nullable Map<Direction, Integer> capturingMovements,
                      @Nullable Set<TwoHopMovement> twoHopMovements) {
-        Preconditions.checkArgument(!name.isEmpty());
+        Preconditions.checkArgument(!internalId.isEmpty());
 
-        mName = name;
+        mInternalId = internalId;
         mMovements = movements != null ? ImmutableMap.copyOf(movements) : ImmutableMap.<Direction, Integer>of();
         mCapturingMovements = capturingMovements != null ? ImmutableMap.copyOf(capturingMovements) : ImmutableMap.<Direction, Integer>of();
         mTwoHopMovements = twoHopMovements != null ? ImmutableSet.copyOf(twoHopMovements) : ImmutableSet.<TwoHopMovement>of();
@@ -42,8 +42,8 @@ public class PieceType {
      *
      * @return a unique identifier for this PieceType
      */
-    public String getName() {
-        return mName;
+    public String getInternalId() {
+        return mInternalId;
     }
 
     @NotNull
@@ -61,9 +61,9 @@ public class PieceType {
         Set<BoardCoordinate> moves = getMovesFromImpl(startLocation, boardSize, mMovements);
 
         if (moveCount == 0) {
-            if (getName().equals("NorthFacingPawn")) {
+            if (getInternalId().equals("NorthFacingPawn")) {
                 moves.add(BoardCoordinate.at(startLocation.x, startLocation.y + 2));
-            } else if (getName().equals("SouthFacingPawn")) {
+            } else if (getInternalId().equals("SouthFacingPawn")) {
                 moves.add(BoardCoordinate.at(startLocation.x, startLocation.y - 2));
             }
         }
@@ -121,7 +121,7 @@ public class PieceType {
             return false;
 
         PieceType other = (PieceType) obj;
-        boolean equal = Objects.equal(mName, other.mName);
+        boolean equal = Objects.equal(mInternalId, other.mInternalId);
         if (equal) {
             // do not allow PieceTypes with the same name but different movement attributes
             Preconditions.checkState(Objects.equal(mMovements, other.mMovements));
@@ -134,11 +134,11 @@ public class PieceType {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(mName, mMovements, mCapturingMovements, mTwoHopMovements);
+        return Objects.hashCode(mInternalId, mMovements, mCapturingMovements, mTwoHopMovements);
     }
 
     @Override
     public String toString() {
-        return mName;
+        return mInternalId;
     }
 }

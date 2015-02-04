@@ -21,7 +21,7 @@ public final class StationaryObjectiveMoveFilter extends MoveFilter {
     public Set<BoardCoordinate> filterMoves(@NotNull Board board, @NotNull BoardCoordinate start, @NotNull Set<BoardCoordinate> moves) {
         Preconditions.checkArgument(board.doesPieceExistAt(start));
 
-        if (board.getPiece(start).getName().equals(mObjectivePieceType.getName())) {
+        if (board.getPiece(start).getInternalId().equals(mObjectivePieceType.getInternalId())) {
             return Collections.emptySet();
         }
 

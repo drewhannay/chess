@@ -17,7 +17,7 @@ public enum PieceTypeManager {
     INSTANCE;
 
     private final Set<PieceType> mPieceTypes;
-    private final Set<String> mSystemPieceNames;
+    private final Set<String> mSystemPieceIds;
 
     private PieceTypeManager() {
         mPieceTypes = new HashSet<>();
@@ -29,20 +29,20 @@ public enum PieceTypeManager {
         mPieceTypes.add(getQueenPieceType());
         mPieceTypes.add(getRookPieceType());
 
-        mSystemPieceNames = new HashSet<>(mPieceTypes.size());
+        mSystemPieceIds = new HashSet<>(mPieceTypes.size());
         for (PieceType pieceType : mPieceTypes) {
-            mSystemPieceNames.add(pieceType.getName());
+            mSystemPieceIds.add(pieceType.getInternalId());
         }
     }
 
     @NotNull
-    public PieceType getPieceTypeByName(@NotNull String name) {
+    public PieceType getPieceTypeById(@NotNull String internalId) {
         for (PieceType pieceType : mPieceTypes) {
-            if (name.equals(pieceType.getName())) {
+            if (internalId.equals(pieceType.getInternalId())) {
                 return pieceType;
             }
         }
-        throw new IllegalArgumentException("Unknown PieceType:" + name);
+        throw new IllegalArgumentException("Unknown PieceType:" + internalId);
     }
 
     @NotNull
@@ -126,7 +126,7 @@ public enum PieceTypeManager {
         return new PieceType("Rook", movements, null);
     }
 
-    public boolean isSystemPiece(@NotNull String pieceName) {
-        return mSystemPieceNames.contains(pieceName);
+    public boolean isSystemPiece(@NotNull String internalId) {
+        return mSystemPieceIds.contains(internalId);
     }
 }

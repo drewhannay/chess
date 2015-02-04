@@ -161,7 +161,7 @@ public final class Game {
 
         if (move.promotionType != null) {
             Piece promotedPiece = team.getPiecePromoter().promotePiece(board.getPiece(move.destination),
-                    PieceTypeManager.INSTANCE.getPieceTypeByName(move.promotionType));
+                    PieceTypeManager.INSTANCE.getPieceTypeById(move.promotionType));
             board.addPiece(promotedPiece, move.destination);
         }
 

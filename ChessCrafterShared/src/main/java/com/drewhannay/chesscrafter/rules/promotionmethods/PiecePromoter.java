@@ -50,12 +50,12 @@ public class PiecePromoter {
     }
 
     public boolean isPiecePromotable(int boardIndex, @NotNull BoardCoordinate coordinate, @NotNull Piece piece) {
-        return getPieceTypeByName(piece.getName()) != null && mPromotionCoordinateMap.get(boardIndex).contains(coordinate);
+        return getPieceTypeById(piece.getInternalId()) != null && mPromotionCoordinateMap.get(boardIndex).contains(coordinate);
     }
 
     @NotNull
     public Set<PieceType> getPromotionOptions(@NotNull Piece piece) {
-        PieceType pieceType = getPieceTypeByName(piece.getName());
+        PieceType pieceType = getPieceTypeById(piece.getInternalId());
 
         Preconditions.checkState(pieceType != null);
 
@@ -76,9 +76,9 @@ public class PiecePromoter {
     }
 
     @Nullable
-    private PieceType getPieceTypeByName(@NotNull String name) {
+    private PieceType getPieceTypeById(@NotNull String internalId) {
         for (PieceType pieceType : mPromotionMap.keySet()) {
-            if (name.equals(pieceType.getName())) {
+            if (internalId.equals(pieceType.getInternalId())) {
                 return pieceType;
             }
         }

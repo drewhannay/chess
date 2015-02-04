@@ -71,11 +71,11 @@ public class SquareJLabel extends JLabel {
         mPiece = piece;
         if (piece != null) {
             Preconditions.checkArgument(teamColor != null);
-            Icon icon = PieceIconUtility.getPieceIcon(piece.getName(), teamColor);
+            Icon icon = PieceIconUtility.getPieceIcon(piece.getInternalId(), teamColor);
             if (icon != null) {
                 setIcon(icon);
             } else {
-                setText(piece.getName());
+                setText(piece.getInternalId());
             }
         } else {
             setIcon(null);

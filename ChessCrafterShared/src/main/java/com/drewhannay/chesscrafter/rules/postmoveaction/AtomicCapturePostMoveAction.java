@@ -61,7 +61,7 @@ public final class AtomicCapturePostMoveAction extends PostMoveAction {
         // if (s == null)
         // continue;
         // PieceController p = s.getPiece();
-        //			if (p != null && (!(p.getName().equals(Messages.getString("pawn"))) && p != suicide) && p != captured) //$NON-NLS-1$
+        //			if (p != null && (!(p.getInternalId().equals(Messages.getString("pawn"))) && p != suicide) && p != captured) //$NON-NLS-1$
         // {
         // exploded.add(p);
         // p.setIsCaptured(true);

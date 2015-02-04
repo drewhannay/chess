@@ -60,6 +60,6 @@ public final class MoveBuilder {
             Preconditions.checkState(piecePromoter.getPromotionOptions(piece).contains(mPromotionType), "Invalid promotion type");
         }
 
-        return Move.from(mOrigin, mDestination, mPromotionType != null ? mPromotionType.getName() : null);
+        return Move.from(mOrigin, mDestination, mPromotionType != null ? mPromotionType.getInternalId() : null);
     }
 }

@@ -74,7 +74,7 @@ public final class CastlingMoveGenerator extends ConditionalMoveGenerator {
     }
 
     private boolean isKing(Piece piece) {
-        return piece.getName().equals(PieceTypeManager.getKingPieceType().getName());
+        return piece.getInternalId().equals(PieceTypeManager.getKingPieceType().getInternalId());
     }
 
     private boolean isCastleableRook(@Nullable Piece rook) {
@@ -82,6 +82,6 @@ public final class CastlingMoveGenerator extends ConditionalMoveGenerator {
     }
 
     private boolean isRook(Piece piece) {
-        return piece.getName().equals(PieceTypeManager.getRookPieceType().getName());
+        return piece.getInternalId().equals(PieceTypeManager.getRookPieceType().getInternalId());
     }
 }

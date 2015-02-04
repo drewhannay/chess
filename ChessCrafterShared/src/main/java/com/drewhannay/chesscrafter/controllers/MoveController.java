@@ -90,7 +90,7 @@ public class MoveController {
         //
         // if (board.getGame().isClassicChess())
         // {
-        //			if (origin.getPiece().getName().equals(Messages.getString("pawn")) && getCaptured() == null && origin.getCol() != getDest().getCol()) //$NON-NLS-1$
+        //			if (origin.getPiece().getInternalId().equals(Messages.getString("pawn")) && getCaptured() == null && origin.getCol() != getDest().getCol()) //$NON-NLS-1$
         // {
         // setCaptured(board.getSquare(origin.getRow(),
         // getDest().getCol()).getPiece());
@@ -113,13 +113,13 @@ public class MoveController {
         // if (board.getGame().isClassicChess())
         // {
         // // Mark enpassant on the board
-        //			if (origin.getPiece().getName().equals(Messages.getString("pawn")) && Math.abs(origin.getRow() - getDest().getRow()) == 2) //$NON-NLS-1$
+        //			if (origin.getPiece().getInternalId().equals(Messages.getString("pawn")) && Math.abs(origin.getRow() - getDest().getRow()) == 2) //$NON-NLS-1$
         // {
         // board.setEnpassantCol(origin.getCol());
         // }
         //
         // // Castling
-        //			if (origin.getPiece().getName().equals(Messages.getString("king")) && origin.getPiece().getMoveCount() == 0) //$NON-NLS-1$
+        //			if (origin.getPiece().getInternalId().equals(Messages.getString("king")) && origin.getPiece().getMoveCount() == 0) //$NON-NLS-1$
         // {
         //
         // SquareController rookOrigin;
@@ -252,7 +252,7 @@ public class MoveController {
         // if (board.getGame().isClassicChess())
         // {
         // // Castling
-        //			if (getPiece().getName().equals(Messages.getString("king")) && getPiece().getMoveCount() == 1) //$NON-NLS-1$
+        //			if (getPiece().getInternalId().equals(Messages.getString("king")) && getPiece().getMoveCount() == 1) //$NON-NLS-1$
         // {
         // SquareController rookOrigin;
         // SquareController rookDest;

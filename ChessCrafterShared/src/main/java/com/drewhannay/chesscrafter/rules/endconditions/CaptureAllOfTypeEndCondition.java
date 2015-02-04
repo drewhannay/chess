@@ -12,7 +12,7 @@ public final class CaptureAllOfTypeEndCondition extends EndCondition {
         // : mGame.getWhiteTeam());
         // for (PieceController piece : team)
         // {
-        // if (piece.getName().equals(mPieceName) && !piece.isCaptured())
+        // if (piece.getInternalId().equals(mPieceName) && !piece.isCaptured())
         // return;
         // }
         // Result result = mIsBlackRuleSet ? Result.BLACK_WIN :

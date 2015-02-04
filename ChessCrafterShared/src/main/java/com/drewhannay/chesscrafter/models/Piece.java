@@ -30,8 +30,8 @@ public final class Piece {
         mMoveCount = moveCount;
     }
 
-    public String getName() {
-        return mPieceType.getName();
+    public String getInternalId() {
+        return mPieceType.getInternalId();
     }
 
     public int getTeamId() {

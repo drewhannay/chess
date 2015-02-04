@@ -96,7 +96,7 @@ public class VariantCreationPanel extends ChessPanel {
             Piece piece = ((SquareJLabel) pair.first).getPiece();
             if (piece != null) {
                 BoardCoordinate destination = ((SquareJLabel) pair.second).getCoordinates();
-                setPiece(new Piece(piece.getTeamId(), PieceTypeManager.INSTANCE.getPieceTypeByName(piece.getName())), destination);
+                setPiece(new Piece(piece.getTeamId(), PieceTypeManager.INSTANCE.getPieceTypeById(piece.getInternalId())), destination);
             }
         };
     }

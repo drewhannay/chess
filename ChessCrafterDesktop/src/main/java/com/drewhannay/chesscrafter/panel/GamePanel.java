@@ -208,7 +208,7 @@ public final class GamePanel extends ChessPanel {
         int gridSize = (moveBuilder.getPromotionOptions().size() / 2) + (moveBuilder.getPromotionOptions().size() % 2);
         promotionPanel.setLayout(new GridLayout(gridSize, gridSize));
         for (PieceType pieceType : moveBuilder.getPromotionOptions()) {
-            JButton label = new JButton(PieceIconUtility.getPieceIcon(pieceType.getName(), activeTeamColor));
+            JButton label = new JButton(PieceIconUtility.getPieceIcon(pieceType.getInternalId(), activeTeamColor));
             label.setPreferredSize(new Dimension(100, 100));
             label.setBackground(activeTeamColor != Color.GRAY ? Color.GRAY : Color.getHSBColor(30, 70, 70));
             label.setContentAreaFilled(false);
