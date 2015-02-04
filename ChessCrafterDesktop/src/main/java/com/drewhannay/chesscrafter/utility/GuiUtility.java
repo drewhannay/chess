@@ -1,7 +1,5 @@
 package com.drewhannay.chesscrafter.utility;
 
-import com.drewhannay.chesscrafter.models.Piece;
-
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -83,72 +81,4 @@ public final class GuiUtility {
 
         return new StretchIcon(bufferedImage, true);
     }
-
-    public static String getPieceToolTipText(Piece piece) {
-//        String internalId = piece.getInternalId();
-        //PieceMovements movements = piece.getPieceType().getPieceMovements();
-
-//        StringBuilder builder = new StringBuilder("<html><b>"); //$NON-NLS-1$
-//        builder.append(internalId);
-//        builder.append("</b><br/>"); //$NON-NLS-1$
-        /*
-        builder.append("<table><tr>"); //$NON-NLS-1$
-        builder.append("<td>"); //$NON-NLS-1$
-        builder.append("<table border=\"1\"> <tr> <td align=\"center\">"); //$NON-NLS-1$
-        builder.append(directionToTooltip(movements.getDistance(Direction.NORTHWEST)));
-        builder.append("</td><td align=\"center\">"); //$NON-NLS-1$
-        builder.append(directionToTooltip(movements.getDistance(Direction.NORTH)));
-        builder.append("</td><td align=\"center\">"); //$NON-NLS-1$
-        builder.append(directionToTooltip(movements.getDistance(Direction.NORTHEAST)));
-        builder.append("</td></tr>"); //$NON-NLS-1$
-
-        builder.append("<tr> <td align=\"center\">"); //$NON-NLS-1$
-        builder.append(directionToTooltip(movements.getDistance(Direction.WEST)));
-        builder.append("</td><td align=\"center\">"); //$NON-NLS-1$
-        builder.append(internalId.equals(Messages.getString("Piece.knight")) ? Messages.getString("Piece.knightChar") : internalId.charAt(0)); //$NON-NLS-1$ //$NON-NLS-2$
-        builder.append("</td><td align=\"center\">"); //$NON-NLS-1$
-        builder.append(directionToTooltip(movements.getDistance(Direction.EAST)));
-        builder.append("</td></tr>"); //$NON-NLS-1$
-
-        builder.append("<tr> <td align=\"center\">"); //$NON-NLS-1$
-        builder.append(directionToTooltip(movements.getDistance(Direction.SOUTHWEST)));
-        builder.append("</td><td align=\"center\">"); //$NON-NLS-1$
-        builder.append(directionToTooltip(movements.getDistance(Direction.SOUTH)));
-        builder.append("</td><td align=\"center\">"); //$NON-NLS-1$
-        builder.append(directionToTooltip(movements.getDistance(Direction.SOUTHEAST)));
-        builder.append("</td></tr>"); //$NON-NLS-1$
-
-        builder.append("</table>"); //$NON-NLS-1$
-
-        builder.append("</td>"); //$NON-NLS-1$
-
-        builder.append("<td>"); //$NON-NLS-1$
-        if (piece.getPieceType().isLeaper())
-            builder.append(Messages.getString("Piece.ableToLeapBr")); //$NON-NLS-1$
-        else
-            builder.append(Messages.getString("Piece.notAbleToLeapBr")); //$NON-NLS-1$
-
-        for (TwoHopMovement movement : movements.getTwoHopMovements()) {
-            builder.append("- "); //$NON-NLS-1$
-            builder.append(movement.getRowDistance());
-            builder.append(" x "); //$NON-NLS-1$
-            builder.append(movement.getColumnDistance());
-            builder.append("<br/>"); //$NON-NLS-1$
-        }
-
-        builder.append("</td>"); //$NON-NLS-1$
-
-        builder.append("</html>"); //$NON-NLS-1$
-        */
-        return null;
-    }
-
-    private static String directionToTooltip(Integer direction) {
-        if (direction == UNLIMITED)
-            return "&infin;"; //$NON-NLS-1$
-        else
-            return direction.toString();
-    }
-
-    private static final int UNLIMITED = Integer.MAX_VALUE;
 }

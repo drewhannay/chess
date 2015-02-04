@@ -11,7 +11,6 @@ import com.drewhannay.chesscrafter.utility.AppConstants;
 import com.drewhannay.chesscrafter.utility.FileUtility;
 import com.drewhannay.chesscrafter.utility.GsonUtility;
 import com.drewhannay.chesscrafter.utility.Messages;
-import com.drewhannay.chesscrafter.utility.PreferenceUtility;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import org.jetbrains.annotations.NotNull;
@@ -129,7 +128,6 @@ public class GameFrame extends ChessFrame {
             ChessActions.SAVE_GAME.getAction().setActionListener(event -> {
                 GamePanel panel = (GamePanel) mTabbedPane.getSelectedComponent();
                 panel.saveGame();
-                PreferenceUtility.clearTooltipListeners();
             });
             ChessActions.NEW_GAME.getAction().setActionListener(event -> new NewGameDialog(GameFrame.this));
             ChessActions.OPEN_GAME.getAction().setActionListener(event -> openGame());

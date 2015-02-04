@@ -1,26 +1,28 @@
 package com.drewhannay.chesscrafter.utility;
 
-import com.google.common.collect.Lists;
-
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.WindowConstants;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.io.File;
-import java.util.List;
 import java.util.prefs.Preferences;
 
 public final class PreferenceUtility {
 
-    private static List<PieceToolTipPreferenceChangedListener> mToolTipListeners;
     private static final String SAVELOCATION = "saveLocation";
     private static final String HIGHLIGHTMOVES = "highlightMoves";
-    private static final String PIECETOOLTIPS = "pieceToolTips";
     private static final Preferences mPreference = Preferences.userRoot().node("ChessCrafterPreferences");
 
     private PreferenceUtility() {
-    }
-
-    public interface PieceToolTipPreferenceChangedListener {
-        public void onPieceToolTipPreferenceChanged();
     }
 
     public static void createPreferencePopup(Component relativeComponent) {
@@ -44,7 +46,6 @@ public final class PreferenceUtility {
         JButton changeLocationButton = new JButton(Messages.getString("PreferenceUtility.chooseNewSaveLocation"));
         JButton resetButton = new JButton(Messages.getString("PreferenceUtility.resetToDefaultLocation"));
         JCheckBox highlightingCheckBox = new JCheckBox(Messages.getString("PreferenceUtility.enableHighlighting"));
-        JCheckBox pieceToolTipCheckBox = new JCheckBox(Messages.getString("PreferenceUtility.showPieceTooltips"));
 
         JButton closeButton = new JButton(Messages.getString("PreferenceUtility.close"));
         GuiUtility.setupDoneButton(closeButton, popupFrame);
@@ -54,7 +55,6 @@ public final class PreferenceUtility {
 
         currentSaveLocationField.setText(mPreference.get(SAVELOCATION, "default"));
         highlightingCheckBox.setSelected(mPreference.getBoolean(HIGHLIGHTMOVES, true));
-        pieceToolTipCheckBox.setSelected(mPreference.getBoolean(PIECETOOLTIPS, false));
 
         resetButton.addActionListener(event -> {
             currentSaveLocationField.setText(FileUtility.getDefaultCompletedLocation());
@@ -70,7 +70,6 @@ public final class PreferenceUtility {
         });
 
         highlightingCheckBox.addActionListener(event -> mPreference.putBoolean(HIGHLIGHTMOVES, highlightingCheckBox.isSelected()));
-        pieceToolTipCheckBox.addActionListener(event -> mPreference.putBoolean(PIECETOOLTIPS, pieceToolTipCheckBox.isSelected()));
 
         constraints.gridx = 0;
         constraints.gridy = 0;
@@ -93,12 +92,6 @@ public final class PreferenceUtility {
         constraints.gridwidth = 1;
         constraints.anchor = GridBagConstraints.CENTER;
         popupFrame.add(highlightingCheckBox, constraints);
-
-        constraints.gridx = 1;
-        constraints.gridy = 3;
-        constraints.gridwidth = 1;
-        constraints.anchor = GridBagConstraints.CENTER;
-        popupFrame.add(pieceToolTipCheckBox, constraints);
 
         constraints.gridx = 0;
         constraints.gridy = 4;
@@ -140,15 +133,6 @@ public final class PreferenceUtility {
     }
 
     /**
-     * Method to get the preference for if Pieces should display a tooltip
-     *
-     * @return returns the boolean value for piece highlighting
-     */
-    public static Boolean getPieceToolTipPreference() {
-        return mPreference.getBoolean(PIECETOOLTIPS, true);
-    }
-
-    /**
      * Method to get the preference for Save game location
      *
      * @return returns the string value for the save game location
@@ -162,17 +146,5 @@ public final class PreferenceUtility {
      */
     public static void setSaveLocationPreference(String location) {
         mPreference.put(SAVELOCATION, location);
-    }
-
-    public static void addPieceToolTipListener(PieceToolTipPreferenceChangedListener listener) {
-        if (mToolTipListeners == null)
-            mToolTipListeners = Lists.newArrayList();
-        if (!mToolTipListeners.contains(listener))
-            mToolTipListeners.add(listener);
-    }
-
-    public static void clearTooltipListeners() {
-        if (mToolTipListeners != null)
-            mToolTipListeners.clear();
     }
 }

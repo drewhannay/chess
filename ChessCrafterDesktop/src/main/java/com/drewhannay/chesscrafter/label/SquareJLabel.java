@@ -80,7 +80,6 @@ public class SquareJLabel extends JLabel {
         } else {
             setIcon(null);
             setText(null);
-            setToolTipText(null);
         }
         clearHighlight();
     }
