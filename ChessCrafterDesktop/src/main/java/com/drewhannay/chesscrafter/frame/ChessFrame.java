@@ -1,6 +1,5 @@
 package com.drewhannay.chesscrafter.frame;
 
-import com.apple.eawt.Application;
 import com.drewhannay.chesscrafter.action.ChessActions;
 import com.drewhannay.chesscrafter.dragNdrop.GlassPane;
 import com.drewhannay.chesscrafter.utility.FileUtility;
@@ -70,10 +69,11 @@ class ChessFrame extends JFrame {
         actionMap.put("fullscreen", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Application application = Application.getApplication();
-                if (application != null) {
-                    application.requestToggleFullScreen(ChessFrame.this);
-                }
+                // TODO: fix full screen toggle
+//                Application application = Application.getApplication();
+//                if (application != null) {
+//                    application.requestToggleFullScreen(ChessFrame.this);
+//                }
             }
         });
 
