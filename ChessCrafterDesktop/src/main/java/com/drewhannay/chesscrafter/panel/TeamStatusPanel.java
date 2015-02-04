@@ -70,10 +70,10 @@ public final class TeamStatusPanel extends ChessPanel {
 
         setLayout(new GridBagLayout());
 
-        JPanel teamMetadata = new JPanel();
-        teamMetadata.setOpaque(false);
-        teamMetadata.setLayout(new GridBagLayout());
-        teamMetadata.setBorder(BorderFactory.createTitledBorder(Messages.getString("GamePanel.info")));
+        JPanel teamMetaData = new JPanel();
+        teamMetaData.setOpaque(false);
+        teamMetaData.setLayout(new GridBagLayout());
+        teamMetaData.setBorder(BorderFactory.createTitledBorder(Messages.getString("GamePanel.info")));
 
         GridBagConstraints teamConstraint = new GridBagConstraints();
 
@@ -81,24 +81,33 @@ public final class TeamStatusPanel extends ChessPanel {
         teamConstraint.fill = GridBagConstraints.BOTH;
         teamConstraint.gridx = 0;
         teamConstraint.gridy = 0;
-        teamConstraint.insets = new Insets(5, 0, 5, 5);
-        teamMetadata.add(new JLabel(Messages.getString("GamePanel.player")), teamConstraint);
+        //teamConstraint.weighty = 0.2;
+        teamConstraint.insets = new Insets(5, 0, 5, 0);
+        teamMetaData.add(new JLabel(Messages.getString("GamePanel.player")), teamConstraint);
 
         // add player name
         teamConstraint.weightx = 1.0;
         teamConstraint.gridx = 1;
-        teamMetadata.add(mPlayerName, teamConstraint);
+        teamMetaData.add(mPlayerName, teamConstraint);
 
         // add status label
         teamConstraint.gridx = 0;
         teamConstraint.gridy = 1;
         teamConstraint.weightx = 0.0;
-        teamMetadata.add(new JLabel(Messages.getString("GamePanel.status")), teamConstraint);
+        teamMetaData.add(new JLabel(Messages.getString("GamePanel.status")), teamConstraint);
 
         // add player status
         teamConstraint.gridx = 1;
         teamConstraint.weightx = 1.0;
-        teamMetadata.add(mTeamLabel, teamConstraint);
+        teamMetaData.add(mTeamLabel, teamConstraint);
+
+        // add the JailPanel
+        teamConstraint.gridy = 2;
+        teamConstraint.gridx = 0;
+        teamConstraint.gridwidth = 2;
+        teamConstraint.weighty = 0.1;
+        teamConstraint.weightx = 1.0;
+        teamMetaData.add(mJailPanel, teamConstraint);
 
         // add teamMetadata
         constraints.anchor = GridBagConstraints.BASELINE;
@@ -108,12 +117,8 @@ public final class TeamStatusPanel extends ChessPanel {
         constraints.weighty = 0.5;
         constraints.gridwidth = 2;
         constraints.insets = new Insets(10, 10, 10, 10);
-        add(teamMetadata, constraints);
+        add(teamMetaData, constraints);
 
-        // add the JailPanel
-        constraints.gridy = 2;
-        constraints.weighty = 1.0;
-        constraints.weightx = 1.0;
-        add(mJailPanel, constraints);
+
     }
 }
