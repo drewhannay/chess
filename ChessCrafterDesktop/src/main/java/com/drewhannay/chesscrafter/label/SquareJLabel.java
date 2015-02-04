@@ -75,7 +75,7 @@ public class SquareJLabel extends JLabel {
             if (icon != null) {
                 setIcon(icon);
             } else {
-                setText(piece.getInternalId());
+                setText(piece.getName());
             }
         } else {
             setIcon(null);

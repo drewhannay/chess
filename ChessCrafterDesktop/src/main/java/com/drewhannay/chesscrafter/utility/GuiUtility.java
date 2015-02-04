@@ -85,12 +85,12 @@ public final class GuiUtility {
     }
 
     public static String getPieceToolTipText(Piece piece) {
-        String internalId = piece.getInternalId();
+//        String internalId = piece.getInternalId();
         //PieceMovements movements = piece.getPieceType().getPieceMovements();
 
-        StringBuilder builder = new StringBuilder("<html><b>"); //$NON-NLS-1$
-        builder.append(internalId);
-        builder.append("</b><br/>"); //$NON-NLS-1$
+//        StringBuilder builder = new StringBuilder("<html><b>"); //$NON-NLS-1$
+//        builder.append(internalId);
+//        builder.append("</b><br/>"); //$NON-NLS-1$
         /*
         builder.append("<table><tr>"); //$NON-NLS-1$
         builder.append("<td>"); //$NON-NLS-1$
@@ -140,7 +140,7 @@ public final class GuiUtility {
 
         builder.append("</html>"); //$NON-NLS-1$
         */
-        return builder.toString();
+        return null;
     }
 
     private static String directionToTooltip(Integer direction) {

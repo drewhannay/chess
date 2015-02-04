@@ -3,8 +3,18 @@ package com.drewhannay.chesscrafter.panel;
 import com.drewhannay.chesscrafter.logic.PieceTypeManager;
 import com.drewhannay.chesscrafter.models.PieceType;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JScrollPane;
+import javax.swing.ListCellRenderer;
+import javax.swing.ListSelectionModel;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
@@ -73,7 +83,7 @@ public class PieceCrafterMasterPanel extends ChessPanel {
 
     private final ListCellRenderer<PieceType> mCellRenderer = (JList<? extends PieceType> list, PieceType value,
                                                                int index, boolean isSelected, boolean cellHasFocus) -> {
-        JLabel label = new JLabel(value.getInternalId());
+        JLabel label = new JLabel(value.getName());
         label.setOpaque(true);
         label.setFont(new Font(label.getName(), Font.PLAIN, 16));
         label.setBackground(isSelected ? list.getSelectionBackground() : list.getBackground());

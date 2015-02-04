@@ -95,7 +95,7 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         Map<Direction, Integer> movements = pieceType.getMovements();
         Set<TwoHopMovement> twoHopMovements = pieceType.getTwoHopMovements();
 
-        mPieceNameField.setText(pieceType.getInternalId());
+        mPieceNameField.setText(pieceType.getName());
         mNorthField.setText(getUserFriendlyValue(movements.get(Direction.NORTH)));
         mNorthEastField.setText(getUserFriendlyValue(movements.get(Direction.NORTHEAST)));
         mEastField.setText(getUserFriendlyValue(movements.get(Direction.EAST)));
