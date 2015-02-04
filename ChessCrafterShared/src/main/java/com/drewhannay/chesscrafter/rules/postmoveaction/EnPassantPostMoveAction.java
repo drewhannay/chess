@@ -90,6 +90,13 @@ public final class EnPassantPostMoveAction extends PostMoveAction {
             return;
         }
 
+        // must have captured a pawn
+        if (!isPawn(capturedPiece)) {
+            // "re-capture" the piece
+            team.capturePiece(lastMove, capturedPiece);
+            return;
+        }
+
         board.addPiece(capturedPiece, opponentsLastMove.destination);
     }
 
