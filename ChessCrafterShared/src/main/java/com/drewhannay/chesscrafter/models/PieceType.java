@@ -1,6 +1,7 @@
 package com.drewhannay.chesscrafter.models;
 
 import com.drewhannay.chesscrafter.logic.PathMaker;
+import com.drewhannay.chesscrafter.logic.PieceTypeManager;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
@@ -64,9 +65,9 @@ public class PieceType {
         Set<BoardCoordinate> moves = getMovesFromImpl(startLocation, boardSize, mMovements);
 
         if (moveCount == 0) {
-            if (getInternalId().equals("NorthFacingPawn")) {
+            if (getInternalId().equals(PieceTypeManager.NORTH_FACING_PAWN_ID)) {
                 moves.add(BoardCoordinate.at(startLocation.x, startLocation.y + 2));
-            } else if (getInternalId().equals("SouthFacingPawn")) {
+            } else if (getInternalId().equals(PieceTypeManager.SOUTH_FACING_PAWN_ID)) {
                 moves.add(BoardCoordinate.at(startLocation.x, startLocation.y - 2));
             }
         }

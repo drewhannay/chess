@@ -16,6 +16,15 @@ import java.util.Set;
 public enum PieceTypeManager {
     INSTANCE;
 
+    public static final String BISHOP_ID = "Bishop";
+    public static final String KING_ID = "King";
+    public static final String KNIGHT_ID = "Night";
+    public static final String NORTH_FACING_PAWN_ID = "NorthFacingPawn";
+    public static final String SOUTH_FACING_PAWN_ID = "SouthFacingPawn";
+    public static final String QUEEN_ID = "Queen";
+    public static final String ROOK_ID = "Rook";
+
+
     private final Set<PieceType> mPieceTypes;
     private final Set<String> mSystemPieceIds;
 
@@ -68,7 +77,7 @@ public enum PieceTypeManager {
             movements.put(direction, PieceType.UNLIMITED);
         }
 
-        return new PieceType("Bishop", "Bishop", movements, null);
+        return new PieceType(BISHOP_ID, "Bishop", movements, null);
     }
 
     public static PieceType getKingPieceType() {
@@ -77,13 +86,13 @@ public enum PieceTypeManager {
             movements.put(direction, 1);
         }
 
-        return new PieceType("King", "King", movements, null);
+        return new PieceType(KING_ID, "King", movements, null);
     }
 
     public static PieceType getKnightPieceType() {
         Set<TwoHopMovement> twoHopMovements = Sets.newHashSet(TwoHopMovement.with(2, 1));
 
-        return new PieceType("Night", "Knight", null, twoHopMovements);
+        return new PieceType(KNIGHT_ID, "Knight", null, twoHopMovements);
     }
 
     public static PieceType getNorthFacingPawnPieceType() {
@@ -94,7 +103,7 @@ public enum PieceTypeManager {
         capturingMovements.put(Direction.NORTHEAST, 1);
         capturingMovements.put(Direction.NORTHWEST, 1);
 
-        return new PieceType("NorthFacingPawn", "Pawn", movements, capturingMovements, null);
+        return new PieceType(NORTH_FACING_PAWN_ID, "Pawn", movements, capturingMovements, null);
     }
 
     public static PieceType getSouthFacingPawnPieceType() {
@@ -105,7 +114,7 @@ public enum PieceTypeManager {
         capturingMovements.put(Direction.SOUTHEAST, 1);
         capturingMovements.put(Direction.SOUTHWEST, 1);
 
-        return new PieceType("SouthFacingPawn", "Pawn", movements, capturingMovements, null);
+        return new PieceType(SOUTH_FACING_PAWN_ID, "Pawn", movements, capturingMovements, null);
     }
 
     public static PieceType getQueenPieceType() {
@@ -114,7 +123,7 @@ public enum PieceTypeManager {
             movements.put(direction, PieceType.UNLIMITED);
         }
 
-        return new PieceType("Queen", "Queen", movements, null);
+        return new PieceType(QUEEN_ID, "Queen", movements, null);
     }
 
     public static PieceType getRookPieceType() {
@@ -123,7 +132,7 @@ public enum PieceTypeManager {
             movements.put(direction, PieceType.UNLIMITED);
         }
 
-        return new PieceType("Rook", "Rook", movements, null);
+        return new PieceType(ROOK_ID, "Rook", movements, null);
     }
 
     public boolean isSystemPiece(@NotNull String internalId) {

@@ -89,7 +89,7 @@ public class PiecePromoter_Given_ClassicRules_Should {
         @Test
         public void returnQueenWhenPromotingToQueen() {
             Piece queen = mWhiteTarget.promotePiece(mWhitePawn, PieceTypeManager.getQueenPieceType());
-            assertEquals(PieceTypeManager.getQueenPieceType().getInternalId(), queen.getInternalId());
+            assertEquals(PieceTypeManager.QUEEN_ID, queen.getInternalId());
         }
 
         @Test

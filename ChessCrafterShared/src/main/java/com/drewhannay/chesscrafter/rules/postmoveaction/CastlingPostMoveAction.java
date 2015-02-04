@@ -70,6 +70,6 @@ public final class CastlingPostMoveAction extends PostMoveAction {
     }
 
     private boolean isKing(Piece piece) {
-        return piece.getInternalId().equals(PieceTypeManager.getKingPieceType().getInternalId());
+        return piece.getInternalId().equals(PieceTypeManager.KING_ID);
     }
 }
