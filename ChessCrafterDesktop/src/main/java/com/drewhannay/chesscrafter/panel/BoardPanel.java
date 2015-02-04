@@ -35,7 +35,7 @@ public class BoardPanel extends ChessPanel {
         mBoardSize = boardSize;
         mSquareLabels = new ArrayList<>(boardSize.width * boardSize.height);
 
-        GridLayout gridLayout = new GridLayout(mBoardSize.width + 1, mBoardSize.height + 1);
+        GridLayout gridLayout = new GridLayout(mBoardSize.width + 2, mBoardSize.height + 2);
         setLayout(gridLayout);
         createGrid(gridLayout);
     }
@@ -74,13 +74,13 @@ public class BoardPanel extends ChessPanel {
     private void createGrid(GridLayout gridLayout) {
         for (int y = gridLayout.getRows() - 1; y >= 0; y--) {
             for (int x = 0; x < gridLayout.getColumns(); x++) {
-                add(getComponentForCell(x, y));
+                add(getComponentForCell(x, y, gridLayout.getColumns()-1, gridLayout.getRows()-1));
             }
         }
     }
 
-    private JLabel getComponentForCell(int x, int y) {
-        if (x == 0 && y == 0) {
+    private JLabel getComponentForCell(int x, int y, int maxColumns, int maxRows) {
+        if ((x == 0 && y == 0) || (x == maxColumns) || (y == maxRows)) {
             return GuiUtility.createJLabel("");
         } else if (x == 0) {
             JLabel label = GuiUtility.createJLabel(String.valueOf(y));

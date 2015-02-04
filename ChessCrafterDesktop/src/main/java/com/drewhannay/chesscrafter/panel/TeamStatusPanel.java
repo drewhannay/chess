@@ -87,6 +87,7 @@ public final class TeamStatusPanel extends ChessPanel {
         // add player name
         teamConstraint.weightx = 1.0;
         teamConstraint.gridx = 1;
+        teamConstraint.insets = new Insets(5, 0, 5, 0);
         teamMetadata.add(mPlayerName, teamConstraint);
 
         // add status label
@@ -100,6 +101,14 @@ public final class TeamStatusPanel extends ChessPanel {
         teamConstraint.weightx = 1.0;
         teamMetadata.add(mTeamLabel, teamConstraint);
 
+        // add the JailPanel
+        teamConstraint.gridy = 2;
+        teamConstraint.gridx = 0;
+        teamConstraint.gridwidth = 2;
+        teamConstraint.weighty = 0.1;
+        teamConstraint.weightx = 1.0;
+        teamMetadata.add(mJailPanel, teamConstraint);
+
         // add teamMetadata
         constraints.anchor = GridBagConstraints.BASELINE;
         constraints.fill = GridBagConstraints.BOTH;
@@ -110,10 +119,6 @@ public final class TeamStatusPanel extends ChessPanel {
         constraints.insets = new Insets(10, 10, 10, 10);
         add(teamMetadata, constraints);
 
-        // add the JailPanel
-        constraints.gridy = 2;
-        constraints.weighty = 1.0;
-        constraints.weightx = 1.0;
-        add(mJailPanel, constraints);
+
     }
 }

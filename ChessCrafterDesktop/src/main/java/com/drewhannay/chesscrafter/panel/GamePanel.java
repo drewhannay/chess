@@ -25,6 +25,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -32,6 +33,9 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.awt.Toolkit;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -73,7 +77,10 @@ public final class GamePanel extends ChessPanel {
 
     private void initComponents() {
         setLayout(new GridBagLayout());
-        GridBagConstraints constraints = new GridBagConstraints();
+
+        JPanel boardPanels = new JPanel();
+        boardPanels.setOpaque(false);
+        boardPanels.setLayout(new GridBagLayout());
 
         Board[] boards = mGame.getBoards();
         IntStream.range(0, boards.length).forEach(boardIndex -> {
@@ -86,25 +93,16 @@ public final class GamePanel extends ChessPanel {
                             return Collections.emptySet();
                         }
                     });
-            constraints.gridx = boardIndex;
-            constraints.weightx = 1.0;
-            constraints.weighty = 1.0;
-            constraints.gridheight = 2;
-            constraints.fill = GridBagConstraints.BOTH;
-            constraints.insets = new Insets(10, 0, 0, 0);
-
-            add(mGameBoards[boardIndex], constraints);
+            GridBagConstraints gridBagConstraints = new GridBagConstraints();
+            gridBagConstraints.gridx = boardIndex;
+            gridBagConstraints.fill = GridBagConstraints.BOTH;
+            gridBagConstraints.weightx = 1.0;
+            gridBagConstraints.weighty = 1.0;
+            boardPanels.add(mGameBoards[boardIndex], gridBagConstraints);
         });
 
         Stream.of(mGame.getTeams()).forEach(team -> mTeamStatusPanels.add(new TeamStatusPanel(team)));
         mTeamStatusPanels.forEach(panel -> mTabbedPane.addTab(panel.getName(), panel));
-
-        constraints.gridx = boards.length * 2;
-        constraints.weightx = 0.3;
-        constraints.gridheight = 1;
-        constraints.weighty = 1.0;
-        constraints.insets = new Insets(0, 25, 0, 10);
-        add(mTabbedPane, constraints);
 
         mUndoButton.addActionListener(event -> {
             mGame.undoMove();
@@ -122,32 +120,50 @@ public final class GamePanel extends ChessPanel {
 
         GridBagConstraints gbc = new GridBagConstraints();
 
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridBagLayout());
-        buttonPanel.setOpaque(false);
+        JPanel detailsPanel = new JPanel();
+        detailsPanel.setLayout(new GridBagLayout());
+        detailsPanel.setOpaque(false);
 
-        // add the undo button
-        gbc.gridy = 0;
-        gbc.gridx = 0;
+        // add the tabbed pane
         gbc.gridwidth = 2;
         gbc.weightx = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
-        buttonPanel.add(mUndoButton, gbc);
+        gbc.weighty = 1.0;
+        gbc.insets = new Insets(0,10,10, 10);
+        detailsPanel.add(mTabbedPane, gbc);
 
-        // add the back button
+        // add the undo button
         gbc.gridy = 1;
         gbc.gridx = 0;
+        gbc.gridwidth = 2;
+        gbc.weighty = 0.0;
+        detailsPanel.add(mUndoButton, gbc);
+
+        // add the back button
+        gbc.gridy = 2;
+        gbc.gridx = 0;
         gbc.gridwidth = 1;
-        buttonPanel.add(mBackButton, gbc);
+        detailsPanel.add(mBackButton, gbc);
 
         // add the forward  button
         gbc.gridx = 1;
-        buttonPanel.add(mForwardButton, gbc);
+        detailsPanel.add(mForwardButton, gbc);
 
-        constraints.gridy = 1;
-        constraints.gridx = boards.length * 2;
-        constraints.weighty = 0.2;
-        add(buttonPanel, constraints);
+        GridBagConstraints constraints = new GridBagConstraints();
+
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, boardPanels, detailsPanel);
+        splitPane.setPreferredSize(new Dimension(755, 475));
+        splitPane.setDividerLocation(450);
+        splitPane.setOpaque(false);
+        splitPane.setDividerSize(1);
+        splitPane.setResizeWeight(0.7);
+        splitPane.setEnabled(false);
+        constraints.weightx = 1.0;
+        constraints.weighty = 1.0;
+        constraints.gridheight = 1;
+        constraints.fill = GridBagConstraints.BOTH;
+
+        add(splitPane, constraints);
 
         refresh();
     }
