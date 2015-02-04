@@ -30,6 +30,12 @@ public final class Piece {
         mMoveCount = moveCount;
     }
 
+    @NotNull
+    public String getName() {
+        return mPieceType.getName();
+    }
+
+    @NotNull
     public String getInternalId() {
         return mPieceType.getInternalId();
     }

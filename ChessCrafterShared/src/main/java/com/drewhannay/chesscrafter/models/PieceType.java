@@ -16,34 +16,37 @@ public class PieceType {
     public static final int UNLIMITED = Integer.MAX_VALUE;
 
     private final String mInternalId;
+    private final String mName;
     private final Map<Direction, Integer> mMovements;
     private final Map<Direction, Integer> mCapturingMovements;
     private final Set<TwoHopMovement> mTwoHopMovements;
 
-    public PieceType(@NotNull String internalId, @Nullable Map<Direction, Integer> movements,
+    public PieceType(@NotNull String internalId, @NotNull String name, @Nullable Map<Direction, Integer> movements,
                      @Nullable Set<TwoHopMovement> twoHopMovements) {
-        this(internalId, movements, movements, twoHopMovements);
+        this(internalId, name, movements, movements, twoHopMovements);
     }
 
-    public PieceType(@NotNull String internalId, @Nullable Map<Direction, Integer> movements,
+    public PieceType(@NotNull String internalId, @NotNull String name, @Nullable Map<Direction, Integer> movements,
                      @Nullable Map<Direction, Integer> capturingMovements,
                      @Nullable Set<TwoHopMovement> twoHopMovements) {
         Preconditions.checkArgument(!internalId.isEmpty());
+        Preconditions.checkArgument(!name.isEmpty());
 
         mInternalId = internalId;
+        mName = name;
         mMovements = movements != null ? ImmutableMap.copyOf(movements) : ImmutableMap.<Direction, Integer>of();
         mCapturingMovements = capturingMovements != null ? ImmutableMap.copyOf(capturingMovements) : ImmutableMap.<Direction, Integer>of();
         mTwoHopMovements = twoHopMovements != null ? ImmutableSet.copyOf(twoHopMovements) : ImmutableSet.<TwoHopMovement>of();
     }
 
-    /**
-     * NOTE: this value should NEVER be displayed to the user!
-     * Clients are responsible for maintaining a mapping between PieceTypes and user-facing names
-     *
-     * @return a unique identifier for this PieceType
-     */
+    @NotNull
     public String getInternalId() {
         return mInternalId;
+    }
+
+    @NotNull
+    public String getName() {
+        return mName;
     }
 
     @NotNull
@@ -123,7 +126,8 @@ public class PieceType {
         PieceType other = (PieceType) obj;
         boolean equal = Objects.equal(mInternalId, other.mInternalId);
         if (equal) {
-            // do not allow PieceTypes with the same name but different movement attributes
+            // do not allow PieceTypes with the same name but different attributes
+            Preconditions.checkState(Objects.equal(mName, other.mName));
             Preconditions.checkState(Objects.equal(mMovements, other.mMovements));
             Preconditions.checkState(Objects.equal(mCapturingMovements, other.mCapturingMovements));
             Preconditions.checkState(Objects.equal(mTwoHopMovements, other.mTwoHopMovements));
@@ -134,7 +138,7 @@ public class PieceType {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(mInternalId, mMovements, mCapturingMovements, mTwoHopMovements);
+        return Objects.hashCode(mInternalId, mName, mMovements, mCapturingMovements, mTwoHopMovements);
     }
 
     @Override

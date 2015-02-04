@@ -68,7 +68,7 @@ public enum PieceTypeManager {
             movements.put(direction, PieceType.UNLIMITED);
         }
 
-        return new PieceType("Bishop", movements, null);
+        return new PieceType("Bishop", "Bishop", movements, null);
     }
 
     public static PieceType getKingPieceType() {
@@ -77,13 +77,13 @@ public enum PieceTypeManager {
             movements.put(direction, 1);
         }
 
-        return new PieceType("King", movements, null);
+        return new PieceType("King", "King", movements, null);
     }
 
     public static PieceType getKnightPieceType() {
         Set<TwoHopMovement> twoHopMovements = Sets.newHashSet(TwoHopMovement.with(2, 1));
 
-        return new PieceType("Night", null, twoHopMovements);
+        return new PieceType("Night", "Knight", null, twoHopMovements);
     }
 
     public static PieceType getNorthFacingPawnPieceType() {
@@ -94,7 +94,7 @@ public enum PieceTypeManager {
         capturingMovements.put(Direction.NORTHEAST, 1);
         capturingMovements.put(Direction.NORTHWEST, 1);
 
-        return new PieceType("NorthFacingPawn", movements, capturingMovements, null);
+        return new PieceType("NorthFacingPawn", "Pawn", movements, capturingMovements, null);
     }
 
     public static PieceType getSouthFacingPawnPieceType() {
@@ -105,7 +105,7 @@ public enum PieceTypeManager {
         capturingMovements.put(Direction.SOUTHEAST, 1);
         capturingMovements.put(Direction.SOUTHWEST, 1);
 
-        return new PieceType("SouthFacingPawn", movements, capturingMovements, null);
+        return new PieceType("SouthFacingPawn", "Pawn", movements, capturingMovements, null);
     }
 
     public static PieceType getQueenPieceType() {
@@ -114,7 +114,7 @@ public enum PieceTypeManager {
             movements.put(direction, PieceType.UNLIMITED);
         }
 
-        return new PieceType("Queen", movements, null);
+        return new PieceType("Queen", "Queen", movements, null);
     }
 
     public static PieceType getRookPieceType() {
@@ -123,7 +123,7 @@ public enum PieceTypeManager {
             movements.put(direction, PieceType.UNLIMITED);
         }
 
-        return new PieceType("Rook", movements, null);
+        return new PieceType("Rook", "Rook", movements, null);
     }
 
     public boolean isSystemPiece(@NotNull String internalId) {
