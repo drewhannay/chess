@@ -82,12 +82,13 @@ public final class TeamStatusPanel extends ChessPanel {
         teamConstraint.gridx = 0;
         teamConstraint.gridy = 0;
         //teamConstraint.weighty = 0.2;
-        teamConstraint.insets = new Insets(5, 0, 5, 0);
+        teamConstraint.insets = new Insets(5, 0, 5, 5);
         teamMetaData.add(new JLabel(Messages.getString("GamePanel.player")), teamConstraint);
 
         // add player name
         teamConstraint.weightx = 1.0;
         teamConstraint.gridx = 1;
+        teamConstraint.insets = new Insets(5, 0, 5, 0);
         teamMetaData.add(mPlayerName, teamConstraint);
 
         // add status label
