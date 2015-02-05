@@ -1,9 +1,11 @@
 package com.drewhannay.chesscrafter.action;
 
+import com.apple.eawt.Application;
 import com.drewhannay.chesscrafter.utility.Messages;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.*;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 import java.awt.event.KeyEvent;
 
 public enum ChessActions {
@@ -30,6 +32,10 @@ public enum ChessActions {
     }
 
     public static JMenuBar createJMenuBar() {
+        return createJMenuBar(Application.getApplication() == null);
+    }
+
+    public static JMenuBar createJMenuBar(boolean includeAppMenuItems) {
         JMenuBar menuBar = new JMenuBar();
 
         JMenu fileMenu = new JMenu(Messages.getString("Driver.file"));
@@ -37,8 +43,10 @@ public enum ChessActions {
 
         fileMenu.add(NEW_GAME.mAction);
         fileMenu.add(OPEN_GAME.mAction);
-        fileMenu.add(PREFERENCES.mAction);
-        fileMenu.add(QUIT.mAction);
+        if (includeAppMenuItems) {
+            fileMenu.add(PREFERENCES.mAction);
+            fileMenu.add(QUIT.mAction);
+        }
 
         JMenu craftMenu = new JMenu("Craft");
         fileMenu.setMnemonic(KeyEvent.VK_C);
@@ -57,7 +65,9 @@ public enum ChessActions {
         helpMenu.setMnemonic(KeyEvent.VK_H);
 
         helpMenu.add(HELP.mAction);
-        helpMenu.add(ABOUT.mAction);
+        if (includeAppMenuItems) {
+            helpMenu.add(ABOUT.mAction);
+        }
 
         menuBar.add(fileMenu);
         menuBar.add(craftMenu);
