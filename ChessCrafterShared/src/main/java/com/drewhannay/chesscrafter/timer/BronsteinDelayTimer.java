@@ -1,15 +1,12 @@
 package com.drewhannay.chesscrafter.timer;
 
-import com.drewhannay.chesscrafter.utility.RunnableOfT;
-
 class BronsteinDelayTimer extends ChessTimer {
-    public BronsteinDelayTimer(RunnableOfT<Boolean> callback, long incrementAmount, long currentTime, boolean isBlackTeamTimer) {
+    public BronsteinDelayTimer(long incrementAmount, long currentTime, boolean isBlackTeamTimer) {
         mIncrementAmount = incrementAmount;
         mIsBlackTeamTimer = isBlackTeamTimer;
         mCurrentTime = currentTime;
         mInitialStartTime = mCurrentTime;
         mClockLastUpdatedTime = System.currentTimeMillis();
-        init(callback);
     }
 
     @Override

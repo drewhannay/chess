@@ -1,6 +1,5 @@
 package com.drewhannay.chesscrafter.timer;
 
-import com.drewhannay.chesscrafter.utility.RunnableOfT;
 import com.google.common.base.Preconditions;
 
 import java.text.NumberFormat;
@@ -18,10 +17,9 @@ public abstract class ChessTimer {
         public void onTimerRestart();
     }
 
-    public void init(RunnableOfT<Boolean> timeElapsedCallback) {
+    public void init() {
         mNumberFormat = NumberFormat.getNumberInstance();
         mNumberFormat.setMinimumIntegerDigits(2);
-        mTimeElapsedCallback = timeElapsedCallback;
         mIsStopped = false;
     }
 
@@ -43,25 +41,25 @@ public abstract class ChessTimer {
         return new NoTimer();
     }
 
-    public static ChessTimer createTimer(TimerTypes timerType, RunnableOfT<Boolean> timeElapsedCallback, long incrementAmount,
+    public static ChessTimer createTimer(TimerTypes timerType, long incrementAmount,
                                          long startTime, boolean isBlackTeamTimer) {
         switch (timerType) {
             case NO_TIMER:
                 return new NoTimer();
-            case BRONSTEIN_DELAY:
-                return new BronsteinDelayTimer(timeElapsedCallback, incrementAmount, startTime, isBlackTeamTimer);
-            case FISCHER:
-                return new FischerTimer(timeElapsedCallback, incrementAmount, startTime, false, isBlackTeamTimer);
-            case FISCHER_AFTER:
-                return new FischerTimer(timeElapsedCallback, incrementAmount, startTime, true, isBlackTeamTimer);
-            case HOUR_GLASS:
-                // time is halved since it is actually the time the player may not
-                // exceed
-                return new HourGlassTimer(timeElapsedCallback, startTime / 2, isBlackTeamTimer);
-            case SIMPLE_DELAY:
-                return new SimpleDelayTimer(timeElapsedCallback, incrementAmount, startTime, isBlackTeamTimer);
-            case WORD:
-                return new WordTimer(startTime);
+//            case BRONSTEIN_DELAY:
+//                return new BronsteinDelayTimer(timeElapsedCallback, incrementAmount, startTime, isBlackTeamTimer);
+//            case FISCHER:
+//                return new FischerTimer(timeElapsedCallback, incrementAmount, startTime, false, isBlackTeamTimer);
+//            case FISCHER_AFTER:
+//                return new FischerTimer(timeElapsedCallback, incrementAmount, startTime, true, isBlackTeamTimer);
+//            case HOUR_GLASS:
+//                // time is halved since it is actually the time the player may not
+//                // exceed
+//                return new HourGlassTimer(timeElapsedCallback, startTime / 2, isBlackTeamTimer);
+//            case SIMPLE_DELAY:
+//                return new SimpleDelayTimer(timeElapsedCallback, incrementAmount, startTime, isBlackTeamTimer);
+//            case WORD:
+//                return new WordTimer(startTime);
             default:
                 Preconditions.checkArgument(false);
                 return null;
@@ -116,7 +114,7 @@ public abstract class ChessTimer {
     public abstract void stopTimer();
 
     public void timeElapsed() {
-        mTimeElapsedCallback.run(mIsBlackTeamTimer);
+//        mTimeElapsedCallback.run(mIsBlackTeamTimer);
         if (mListener != null)
             mListener.onTimerStop();
     }
@@ -170,6 +168,5 @@ public abstract class ChessTimer {
     // up since it gets subtracted
     protected int mClockDirection = 1;
     protected static boolean mIsStopped;
-    protected RunnableOfT<Boolean> mTimeElapsedCallback;
     protected ChessTimerListener mListener;
 }

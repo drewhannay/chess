@@ -1,14 +1,11 @@
 package com.drewhannay.chesscrafter.timer;
 
-import com.drewhannay.chesscrafter.utility.RunnableOfT;
-
 class HourGlassTimer extends ChessTimer {
-    public HourGlassTimer(RunnableOfT<Boolean> timeElapsedCallback, long startTime, boolean isBlackTeamTimer) {
+    public HourGlassTimer(long startTime, boolean isBlackTeamTimer) {
         mCurrentTime = startTime;
         mIsBlackTeamTimer = isBlackTeamTimer;
         mClockLastUpdatedTime = System.currentTimeMillis();
         mInitialStartTime = startTime;
-        init(timeElapsedCallback);
     }
 
     /**

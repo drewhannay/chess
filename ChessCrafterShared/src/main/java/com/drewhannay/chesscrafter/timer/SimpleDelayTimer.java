@@ -1,15 +1,12 @@
 package com.drewhannay.chesscrafter.timer;
 
-import com.drewhannay.chesscrafter.utility.RunnableOfT;
-
 class SimpleDelayTimer extends ChessTimer {
-    public SimpleDelayTimer(RunnableOfT<Boolean> timeElapsedCallback, long delayTime, long startTime, boolean isBlackTeamTimer) {
+    public SimpleDelayTimer(long delayTime, long startTime, boolean isBlackTeamTimer) {
         mDelayTime = delayTime;
         mIsBlackTeamTimer = isBlackTeamTimer;
         mCurrentTime = startTime;
         mInitialStartTime = startTime;
         mClockLastUpdatedTime = System.currentTimeMillis();
-        init(timeElapsedCallback);
     }
 
     @Override

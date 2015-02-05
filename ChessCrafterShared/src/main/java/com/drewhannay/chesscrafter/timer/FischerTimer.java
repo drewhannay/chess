@@ -1,17 +1,13 @@
 package com.drewhannay.chesscrafter.timer;
 
-import com.drewhannay.chesscrafter.utility.RunnableOfT;
-
 class FischerTimer extends ChessTimer {
-    public FischerTimer(RunnableOfT<Boolean> timeElapsedCallback, long incrementAmount, long startTime, boolean isFischerAfterTimer,
-                        boolean isBlack) {
+    public FischerTimer(long incrementAmount, long startTime, boolean isFischerAfterTimer, boolean isBlack) {
         mIncrementAmount = incrementAmount;
         mCurrentTime = startTime;
         mIsFisherAfterTimer = isFischerAfterTimer;
         mIsFirstTime = true;
         mIsBlackTeamTimer = isBlack;
         mInitialStartTime = startTime;
-        init(timeElapsedCallback);
     }
 
     @Override

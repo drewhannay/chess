@@ -2,7 +2,7 @@ package com.drewhannay.chesscrafter.timer;
 
 class NoTimer extends ChessTimer {
     public NoTimer() {
-        init(null);
+        init();
     }
 
     @Override

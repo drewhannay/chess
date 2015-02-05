@@ -4,7 +4,7 @@ class WordTimer extends ChessTimer {
     public WordTimer(long startTime) {
         mCurrentTime = startTime;
         mInitialStartTime = startTime;
-        init(null);
+        init();
     }
 
     @Override
