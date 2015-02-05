@@ -13,13 +13,14 @@ public final class PieceCrafterFrame extends ChessFrame {
         super.doInitComponents();
 
         setTitle("Piece Crafter");
+        setResizable(false);
 
-        PieceCrafterDetailPanel detailPanel = new PieceCrafterDetailPanel();
+        PieceCrafterDetailPanel detailPanel = new PieceCrafterDetailPanel(getGlassPane());
         PieceCrafterMasterPanel masterPanel = new PieceCrafterMasterPanel(detailPanel::newPieceType, detailPanel::loadPieceType);
 
-        setPreferredSize(new Dimension(530, 575));
+        setPreferredSize(new Dimension(800, 575));
         masterPanel.setMinimumSize(new Dimension(200, 575));
-        detailPanel.setMinimumSize(new Dimension(300, 575));
+        detailPanel.setMinimumSize(new Dimension(600, 575));
 
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, masterPanel, detailPanel);
         splitPane.setPreferredSize(new Dimension(530, 575));
