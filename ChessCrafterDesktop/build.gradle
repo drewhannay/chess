@@ -41,10 +41,13 @@ jar {
     from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
 }
 
-apply plugin: 'macAppBundle'
+import org.apache.tools.ant.taskdefs.condition.Os
+if (Os.isFamily(Os.FAMILY_MAC)) {
+    apply plugin: 'macAppBundle'
 
-macAppBundle {
-    mainClassName = "com.drewhannay.chesscrafter.Main"
-	appName = "Chess Crafter"
-	icon = "chess.icns"
+    macAppBundle {
+        mainClassName = "com.drewhannay.chesscrafter.Main"
+        appName = "Chess Crafter"
+        icon = "chess.icns"
+    }
 }
