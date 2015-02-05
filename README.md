@@ -1,4 +1,4 @@
-Chess Crafter
+Chess Crafter [![Build Status](https://travis-ci.org/drewhannay/chess.svg?branch=rewrite)](https://travis-ci.org/drewhannay/chess)
 =====
 A Java application which allows users to design variants on chess, specifying new kinds of pieces and how they move, the board layout, the initial positions of pieces, how the game is won, and special rules.
 Users can play either as two humans at one computer, two humans at different computers through a network connection, or one human versus the computer.
@@ -8,9 +8,6 @@ The AI for the "computer" player is be defined by plug-ins that users can write.
 
 ### Note
 All new development is happening on the `rewrite` branch, which is focused on separating the logic code from the UI and adding unit tests. Please do not submit pull requests to the `master` branch.
-
-### Status
-[![Build Status](https://travis-ci.org/drewhannay/chess.svg?branch=rewrite)](https://travis-ci.org/drewhannay/chess)
 
 ---
 
