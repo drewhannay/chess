@@ -15,6 +15,7 @@ import com.drewhannay.chesscrafter.utility.PieceIconUtility;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -25,6 +26,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -32,27 +34,23 @@ import java.util.Set;
 public class PieceCrafterDetailPanel extends ChessPanel {
 
     private final JTextField mPieceNameField;
-    private final JTextField[] mCardinalMovements;
-    private final JTextField[] mCapturingMovements;
-    private final JTextField[][] mTwoHopMovements;
+    private final Map<String, Integer> mCardinalMovementMap;
+    private final Map<String, Integer> mCapturingMovementMap;
+    private final Map<String, Integer> mTwoHopMovementMap;
+
     private final JComboBox<String> mBidirectionalMovementComboBox;
     private final GlassPane mGlassPane;
-    private final JButton mAddKnightMoveButton;
-    private final JButton mRemoveKnightMoveButton;
 
     private BufferedImage mImage;
-    private BufferedImage mDarkImage;
-    private List<String> mBidirectionalMovements;
+    private JList mCardinalMovements;
+    private JList mCapturingMovements;
+    private JList mTwoHopMovements;
 
     public PieceCrafterDetailPanel(GlassPane glassPane) {
-        mCardinalMovements = new JTextField[8];
-        mCapturingMovements = new JTextField[8];
-        mTwoHopMovements = new JTextField[10][10];
+        mCardinalMovementMap = Maps.newHashMap();
+        mCapturingMovementMap = Maps.newHashMap();
+        mTwoHopMovementMap = Maps.newHashMap();
         mPieceNameField = new JTextField(15);
-        mAddKnightMoveButton = new JButton(Messages.getString("PieceMakerPanel.add"));
-        mRemoveKnightMoveButton = new JButton(Messages.getString("PieceMakerPanel.remove"));
-
-        mBidirectionalMovements = Lists.newArrayList();
 
         mGlassPane = glassPane;
 
@@ -95,36 +93,119 @@ public class PieceCrafterDetailPanel extends ChessPanel {
 
         JPanel allMovementsPanel = new JPanel();
         allMovementsPanel.setOpaque(false);
+        allMovementsPanel.setLayout(new GridBagLayout());
 
-        List<String> directions = Lists.newArrayList("North", "Northeast", "East", "Southeast", "South", "Southwest", "West", "Northwest");
+        mCardinalMovements = setupJList(mCardinalMovementMap);
 
-        JPanel cardinalMovements = new JPanel();
-        cardinalMovements.setOpaque(false);
-        cardinalMovements.setLayout(new GridBagLayout());
-
-        JPanel capturingMovements = new JPanel();
-        capturingMovements.setOpaque(false);
-        capturingMovements.setLayout(new GridBagLayout());
-
-        int counter = 0;
-        for(String direction : directions) {
-            mCardinalMovements[counter] = new JTextField(4);
-            mCapturingMovements[counter] = new JTextField(4);
-            setupMovementsFields(cardinalMovements, mCardinalMovements, direction, counter);
-            setupMovementsFields(capturingMovements, mCapturingMovements, direction, counter);
-            counter++;
-        }
-        JScrollPane cardinalScrollPane = new JScrollPane(cardinalMovements);
+        JScrollPane cardinalScrollPane = new JScrollPane(mCardinalMovements);
         cardinalScrollPane.setPreferredSize(new Dimension(150,140));
-        cardinalScrollPane.setBorder(BorderFactory.createTitledBorder("Movements"));
+        cardinalScrollPane.setBorder(BorderFactory.createTitledBorder(Messages.getString("PieceCrafterDetailPanel.movements")));
         cardinalScrollPane.getVerticalScrollBar().setUnitIncrement(25);
-        allMovementsPanel.add(cardinalScrollPane);
 
-        JScrollPane captureScrollPane = new JScrollPane(capturingMovements);
+        GridBagConstraints constraints = new GridBagConstraints();
+
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.weightx = 1.0;
+        constraints.weighty = 1.0;
+        constraints.gridwidth = 3;
+        constraints.insets = new Insets(0,10,10,10);
+        allMovementsPanel.add(cardinalScrollPane, constraints);
+
+        JButton addMovement = new JButton("+");
+        addMovement.addActionListener(event -> createMovementPopup(mCardinalMovements.getSelectedValue()));
+        constraints = new GridBagConstraints();
+        constraints.gridy = 1;
+        constraints.insets = new Insets(0,10,0,0);
+        allMovementsPanel.add(addMovement, constraints);
+
+        JButton removeMovement = new JButton("-");
+        removeMovement.addActionListener(event ->{
+            mCardinalMovementMap.remove(mCardinalMovements.getSelectedValue());
+            refreshLists();
+        });
+        constraints.gridx = 1;
+        allMovementsPanel.add(removeMovement, constraints);
+
+        JButton editMovement = new JButton("Edit");
+        editMovement.addActionListener(event -> createMovementPopup(mCardinalMovements.getSelectedValue()));
+        constraints.gridx = 2;
+        allMovementsPanel.add(editMovement, constraints);
+
+        mCapturingMovements = setupJList(mCapturingMovementMap);
+
+        JScrollPane captureScrollPane = new JScrollPane(mCapturingMovements);
         captureScrollPane.setPreferredSize(new Dimension(150,140));
-        captureScrollPane.setBorder(BorderFactory.createTitledBorder("Capturing"));
+        captureScrollPane.setBorder(BorderFactory.createTitledBorder(Messages.getString("PieceCrafterDetailPanel.capturing")));
         captureScrollPane.getVerticalScrollBar().setUnitIncrement(25);
-        allMovementsPanel.add(captureScrollPane);
+
+        constraints = new GridBagConstraints();
+        constraints.gridwidth = 3;
+        constraints.gridx = 3;
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.weightx = 1.0;
+        constraints.weighty = 1.0;
+        constraints.insets = new Insets(0,10,10,10);
+        allMovementsPanel.add(captureScrollPane, constraints);
+
+        JButton addCapture = new JButton("+");
+        addCapture.addActionListener(event -> createMovementPopup(mCapturingMovements.getSelectedValue()));
+        constraints = new GridBagConstraints();
+        constraints.gridy = 1;
+        constraints.gridx = 3;
+
+        constraints.insets = new Insets(0,10,0,0);
+        allMovementsPanel.add(addCapture, constraints);
+
+        JButton removeCapture = new JButton("-");
+        removeCapture.addActionListener(event ->{
+            mCapturingMovementMap.remove(mCapturingMovements.getSelectedValue());
+            refreshLists();
+        });
+        constraints.gridx = 4;
+        allMovementsPanel.add(removeCapture, constraints);
+
+        JButton editCapture = new JButton("Edit");
+        editCapture.addActionListener(event -> createMovementPopup(mCapturingMovements.getSelectedValue()));
+        constraints.gridx = 5;
+        allMovementsPanel.add(editCapture, constraints);
+
+        mTwoHopMovements = setupJList(mTwoHopMovementMap);
+
+        JScrollPane twoHopScrollPane = new JScrollPane(mTwoHopMovements);
+        twoHopScrollPane.setPreferredSize(new Dimension(150,140));
+        twoHopScrollPane.setBorder(BorderFactory.createTitledBorder(Messages.getString("PieceCrafterDetailPanel.twoHop")));
+        twoHopScrollPane.getVerticalScrollBar().setUnitIncrement(25);
+
+        constraints = new GridBagConstraints();
+        constraints.gridwidth = 3;
+        constraints.gridx = 6;
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.weightx = 1.0;
+        constraints.weighty = 1.0;
+        constraints.insets = new Insets(0,10,10,10);
+        allMovementsPanel.add(twoHopScrollPane, constraints);
+
+        JButton addTwoHop = new JButton("+");
+        addTwoHop.addActionListener(event -> createMovementPopup(mTwoHopMovements.getSelectedValue()));
+        constraints = new GridBagConstraints();
+        constraints.gridy = 1;
+        constraints.gridx = 6;
+
+        constraints.insets = new Insets(0,10,0,0);
+        allMovementsPanel.add(addTwoHop, constraints);
+
+        JButton removeTwoHop = new JButton("-");
+        removeTwoHop.addActionListener(event ->{
+            mCapturingMovementMap.remove(mTwoHopMovements.getSelectedValue());
+            refreshLists();
+        });
+        constraints.gridx = 7;
+        allMovementsPanel.add(removeTwoHop, constraints);
+
+        JButton editTwoHop = new JButton("Edit");
+        editTwoHop.addActionListener(event -> createMovementPopup(mTwoHopMovements.getSelectedValue()));
+        constraints.gridx = 8;
+        allMovementsPanel.add(editTwoHop, constraints);
 
         JPanel twoHopMovements = new JPanel();
         twoHopMovements.setOpaque(false);
@@ -159,7 +240,7 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
         gbc.weightx = 1.0;
-        gbc.weighty = 0.5;
+        gbc.weighty = 0.7;
         add(namePanel, gbc);
 
         gbc.gridy = 1;
@@ -169,6 +250,14 @@ public class PieceCrafterDetailPanel extends ChessPanel {
 
         gbc.gridy = 2;
         add(boardAndSave, gbc);
+    }
+
+    private void refreshLists() {
+        mCardinalMovements = setupJList(mCardinalMovementMap);
+    }
+
+    private void createMovementPopup(Object selectedValue) {
+
     }
 
     private boolean isIntegerDistance(JTextField textField) {
@@ -186,17 +275,16 @@ public class PieceCrafterDetailPanel extends ChessPanel {
     }
 
 
-    private void setupMovementsFields(JPanel movementPanel, JTextField[] movementFields, String direction, int row){
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.fill = GridBagConstraints.BOTH;
-        gbc.gridx = 0;
-        gbc.gridy = row;
-        gbc.insets = new Insets(5,5,5,5);
-        movementPanel.add(new JLabel(direction), gbc);
-        gbc.gridx = 1;
-        gbc.gridy = row;
-        movementPanel.add(movementFields[row], gbc);
+    private JList setupJList(Map<String, Integer> movements){
+        DefaultListModel model = new DefaultListModel();
+        for(Map.Entry<String, Integer> entry : movements.entrySet()){
+            model.addElement(entry.getKey());
+        }
+
+        return new JList(model);
     }
+
+
 
     private final class ImageButtonActionListener implements ActionListener {
 
