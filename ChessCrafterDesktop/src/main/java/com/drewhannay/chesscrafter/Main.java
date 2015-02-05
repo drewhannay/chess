@@ -44,7 +44,20 @@ public final class Main {
 
         Application application = Application.getApplication();
         if (application != null) {
-            application.setDefaultMenuBar(ChessActions.createJMenuBar());
+            application.setDefaultMenuBar(ChessActions.createJMenuBar(false));
+        }
+
+        setMacApplicationMenuHandlers();
+    }
+
+    private static void setMacApplicationMenuHandlers() {
+        Application application = Application.getApplication();
+        if (application != null) {
+            application.setAboutHandler(aboutEvent -> ChessActions.ABOUT.getAction().actionPerformed(null));
+            application.setPreferencesHandler(preferencesEvent -> ChessActions.PREFERENCES.getAction().actionPerformed(null));
+
+            // TODO: this isn't always correct; prompt to save game, etc
+            application.setQuitHandler((quitEvent, quitResponse) -> quitResponse.performQuit());
         }
     }
 
