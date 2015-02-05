@@ -9,6 +9,9 @@ The AI for the "computer" player is be defined by plug-ins that users can write.
 ### Note
 All new development is happening on the `rewrite` branch, which is focused on separating the logic code from the UI and adding unit tests. Please do not submit pull requests to the `master` branch.
 
+### Status
+[![Build Status](https://travis-ci.org/drewhannay/chess.svg?branch=rewrite)](https://travis-ci.org/drewhannay/chess)
+
 ---
 
 How to Contribute
