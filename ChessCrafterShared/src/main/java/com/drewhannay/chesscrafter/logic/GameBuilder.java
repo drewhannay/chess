@@ -19,28 +19,15 @@ import com.drewhannay.chesscrafter.rules.endconditions.EndCondition;
 import com.drewhannay.chesscrafter.rules.movefilter.MoveFilter;
 import com.drewhannay.chesscrafter.rules.postmoveaction.PostMoveAction;
 import com.drewhannay.chesscrafter.rules.promotionmethods.PiecePromoter;
-import com.google.common.collect.Lists;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.Color;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-public class GameBuilder {
-    public GameBuilder(String name) {
-        mName = name;
-        mWhiteTeam = Lists.newArrayList();
-        mBlackTeam = Lists.newArrayList();
-    }
-
-    public GameBuilder(String name, Board[] boards, List<Piece> whiteTeam, List<Piece> blackTeam) {
-        mName = name;
-        mBoards = boards;
-
-        mWhiteTeam = whiteTeam;
-        mBlackTeam = blackTeam;
+public final class GameBuilder {
+    private GameBuilder() {
     }
 
     public static void setupClassicNorthFacingPawns(Board target, int row, int teamId) {
@@ -240,36 +227,4 @@ public class GameBuilder {
 
         pieces[4][row - 1] = king;
     }
-
-    public Board[] getBoards() {
-        return mBoards;
-    }
-
-    public void setBoards(Board[] boards) {
-        mBoards = boards;
-    }
-
-    public void setName(String name) {
-        mName = name;
-    }
-
-    public String getName() {
-        return mName;
-    }
-
-    public void setWhiteTeam(List<Piece> whiteTeam) {
-        mWhiteTeam.clear();
-        mWhiteTeam.addAll(whiteTeam);
-    }
-
-    public void setBlackTeam(List<Piece> blackTeam) {
-        mBlackTeam.clear();
-        mBlackTeam.addAll(blackTeam);
-    }
-
-    private final List<Piece> mWhiteTeam;
-    private final List<Piece> mBlackTeam;
-
-    private String mName;
-    private Board[] mBoards;
 }
