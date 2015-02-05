@@ -1,6 +1,5 @@
 package com.drewhannay.chesscrafter.panel;
 
-import com.drewhannay.chesscrafter.logic.PieceTypeBuilder;
 import com.drewhannay.chesscrafter.models.Direction;
 import com.drewhannay.chesscrafter.models.PieceType;
 import com.drewhannay.chesscrafter.models.TwoHopMovement;
@@ -11,8 +10,19 @@ import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Image;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -43,7 +53,6 @@ public class PieceCrafterDetailPanel extends ChessPanel {
     private final JButton mAddKnightMoveButton;
     private final JButton mRemoveKnightMoveButton;
 
-    private PieceTypeBuilder mBuilder;
     private BufferedImage mLightImage;
     private BufferedImage mDarkImage;
     private List<String> mTempBidirectionalMovements;
@@ -63,7 +72,6 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         mAddKnightMoveButton = new JButton(Messages.getString("PieceMakerPanel.add"));
         mRemoveKnightMoveButton = new JButton(Messages.getString("PieceMakerPanel.remove"));
 
-        PieceTypeBuilder builder = null;
         //TODO Fix editing pieces
         //if (pieceName != null)
         //	builder = PieceBuilder.loadFromDisk(pieceName);
@@ -84,7 +92,7 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         mBidirectionalMovementComboBox.setEnabled(false);
         //}
 
-        initGUIComponents(builder);
+        initGUIComponents();
     }
 
     public void newPieceType() {
@@ -122,12 +130,7 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         return String.valueOf(intValue == Integer.MAX_VALUE ? "\u221e" : intValue);
     }
 
-    private void initGUIComponents(PieceTypeBuilder builder) {
-        if (builder == null)
-            mBuilder = new PieceTypeBuilder();
-        else
-            mBuilder = builder;
-
+    private void initGUIComponents() {
         setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
 
@@ -141,8 +144,6 @@ public class PieceCrafterDetailPanel extends ChessPanel {
 
         namePanel.add(GuiUtility.createJLabel(Messages.getString("PieceMakerPanel.pieceName")));
         mPieceNameField.setToolTipText(Messages.getString("PieceMakerPanel.enterNameOfNewPiece"));
-        if (builder != null)
-            mPieceNameField.setText(builder.getName());
         GuiUtility.requestFocus(mPieceNameField);
         namePanel.add(mPieceNameField);
 
@@ -158,15 +159,6 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         lightIconPanel.setOpaque(false);
         JLabel lightIconLabel = GuiUtility.createJLabel("");
         lightIconLabel.setSize(48, 48);
-
-        if (builder != null) {
-            try {
-                mLightImage = GuiUtility.createBufferedImage(48, 48, "l_" + builder.getName() + ".png");
-                mDarkImage = GuiUtility.createBufferedImage(48, 48, "d_" + builder.getName() + ".png");
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-        }
 
         JButton lightImageButton = new JButton(Messages.getString("PieceMakerPanel.chooseLightImage"));
         lightImageButton.setToolTipText(Messages.getString("PieceMakerPanel.clickForLight"));
@@ -375,7 +367,7 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         savePieceButton.addActionListener(event -> {
             String pieceName = mPieceNameField.getText().trim();
             //TODO fix this when checking for an existing piece
-            if (pieceName.isEmpty() || PieceTypeBuilder.parsePieceType(mPieceNameField.getText()) != null) {
+            if (pieceName.isEmpty()) {
                 JOptionPane.showMessageDialog(
                         PieceCrafterDetailPanel.this,
                         Messages.getString("PieceMakerPanel.enterUniqueName"), Messages.getString("PieceMakerPanel.invalidPieceName"),
@@ -386,18 +378,18 @@ public class PieceCrafterDetailPanel extends ChessPanel {
             if (isIntegerDistance(mNorthField) && isIntegerDistance(mNorthEastField) && isIntegerDistance(mNorthWestField)
                     && isIntegerDistance(mEastField) && isIntegerDistance(mWestField) && isIntegerDistance(mSouthField)
                     && isIntegerDistance(mSouthEastField) && isIntegerDistance(mSouthWestField)) {
-                mBuilder.addMovement(Direction.NORTH, Integer.parseInt(mNorthField.getText()));
-                mBuilder.addMovement(Direction.NORTHEAST, Integer.parseInt(mNorthEastField.getText()));
-                mBuilder.addMovement(Direction.NORTHWEST, Integer.parseInt(mNorthWestField.getText()));
-                mBuilder.addMovement(Direction.EAST, Integer.parseInt(mEastField.getText()));
-                mBuilder.addMovement(Direction.WEST, Integer.parseInt(mWestField.getText()));
-                mBuilder.addMovement(Direction.SOUTH, Integer.parseInt(mSouthField.getText()));
-                mBuilder.addMovement(Direction.SOUTHEAST, Integer.parseInt(mSouthEastField.getText()));
-                mBuilder.addMovement(Direction.SOUTHWEST, Integer.parseInt(mSouthWestField.getText()));
+//                mBuilder.addMovement(Direction.NORTH, Integer.parseInt(mNorthField.getText()));
+//                mBuilder.addMovement(Direction.NORTHEAST, Integer.parseInt(mNorthEastField.getText()));
+//                mBuilder.addMovement(Direction.NORTHWEST, Integer.parseInt(mNorthWestField.getText()));
+//                mBuilder.addMovement(Direction.EAST, Integer.parseInt(mEastField.getText()));
+//                mBuilder.addMovement(Direction.WEST, Integer.parseInt(mWestField.getText()));
+//                mBuilder.addMovement(Direction.SOUTH, Integer.parseInt(mSouthField.getText()));
+//                mBuilder.addMovement(Direction.SOUTHEAST, Integer.parseInt(mSouthEastField.getText()));
+//                mBuilder.addMovement(Direction.SOUTHWEST, Integer.parseInt(mSouthWestField.getText()));
             }
 
             if (mBidirectionalMovementComboBox.getItemCount() != 0) {
-                mBuilder.clearBidirectionalMovements();
+//                mBuilder.clearBidirectionalMovements();
                 for (int i = 0; i < mBidirectionalMovementComboBox.getItemCount(); i++) {
                     String line = mBidirectionalMovementComboBox.getItemAt(i).toString();
                     StringTokenizer tokenizer = new StringTokenizer(line);
@@ -405,11 +397,11 @@ public class PieceCrafterDetailPanel extends ChessPanel {
                     int k1 = Integer.parseInt(tokenizer.nextToken());
                     tokenizer.nextToken();
                     int k2 = Integer.parseInt(tokenizer.nextToken());
-                    mBuilder.addBidirectionalMovement(TwoHopMovement.with(k2, k1));
+//                    mBuilder.addBidirectionalMovement(TwoHopMovement.with(k2, k1));
                 }
             }
 
-            mBuilder.setName(pieceName);
+//            mBuilder.setName(pieceName);
 //            mBuilder.setCanJump(mLeaperCheckBox.isSelected());
             //TODO Write new piece to disk
             //PieceBuilder.savePieceType(mBuilder);
