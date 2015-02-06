@@ -56,6 +56,11 @@ public class PieceType {
     }
 
     @NotNull
+    public Map<Direction, Integer> getCapturingMovements() {
+        return ImmutableMap.copyOf(mCapturingMovements);
+    }
+
+    @NotNull
     public Set<TwoHopMovement> getTwoHopMovements() {
         return ImmutableSet.copyOf(mTwoHopMovements);
     }
