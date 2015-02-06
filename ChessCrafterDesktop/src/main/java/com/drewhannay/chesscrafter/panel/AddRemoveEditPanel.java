@@ -4,28 +4,45 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import java.awt.Dimension;
+import java.awt.event.ActionListener;
 
 public class AddRemoveEditPanel extends ChessPanel {
+
+    private final JButton mAdd;
+    private final JButton mRemove;
+    private final JButton mEdit;
+
     public AddRemoveEditPanel() {
         super(false);
 
+        mAdd = new JButton("+");
+        mRemove = new JButton("-");
+        mEdit = new JButton("Edit");
+
+        initComponents();
+    }
+
+    private void initComponents() {
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
 
         add(Box.createRigidArea(new Dimension(10, 0)));
-
-        JButton addMovement = new JButton("+");
-        add(addMovement);
-
+        add(mAdd);
         add(Box.createRigidArea(new Dimension(5, 0)));
-
-        JButton removeMovement = new JButton("-");
-        add(removeMovement);
-
+        add(mRemove);
         add(Box.createHorizontalGlue());
-
-        JButton editMovement = new JButton("Edit");
-        add(editMovement);
-
+        add(mEdit);
         add(Box.createRigidArea(new Dimension(10, 0)));
+    }
+
+    public void addAddActionListener(ActionListener actionListener) {
+        mAdd.addActionListener(actionListener);
+    }
+
+    public void addRemoveActionListener(ActionListener actionListener) {
+        mRemove.addActionListener(actionListener);
+    }
+
+    public void addEditActionListener(ActionListener actionListener) {
+        mEdit.addActionListener(actionListener);
     }
 }
