@@ -3,8 +3,12 @@ package com.drewhannay.chesscrafter.panel;
 import com.drewhannay.chesscrafter.dragNdrop.DropManager;
 import com.drewhannay.chesscrafter.dragNdrop.GlassPane;
 import com.drewhannay.chesscrafter.dragNdrop.SquareConfig;
+import com.drewhannay.chesscrafter.label.SquareJLabel;
+import com.drewhannay.chesscrafter.models.Board;
+import com.drewhannay.chesscrafter.models.BoardCoordinate;
 import com.drewhannay.chesscrafter.models.BoardSize;
 import com.drewhannay.chesscrafter.models.Direction;
+import com.drewhannay.chesscrafter.models.Piece;
 import com.drewhannay.chesscrafter.models.PieceType;
 import com.drewhannay.chesscrafter.models.TwoHopMovement;
 import com.drewhannay.chesscrafter.utility.GuiUtility;
@@ -19,10 +23,16 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.IntStream;
 
 public class PieceCrafterDetailPanel extends ChessPanel {
 
@@ -32,7 +42,9 @@ public class PieceCrafterDetailPanel extends ChessPanel {
     private final DefaultListModel<Pair<Direction, Integer>> mCapturingListModel;
     private final DefaultListModel<TwoHopMovement> mTwoHopListModel;
 
-    private final GlassPane mGlassPane;
+    private final BoardPanel mBoardPanel;
+
+    private Board mBoard;
 
     public PieceCrafterDetailPanel(GlassPane glassPane) {
         mPieceNameField = new JTextField(15);
@@ -41,9 +53,44 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         mCapturingListModel = new DefaultListModel<>();
         mTwoHopListModel = new DefaultListModel<>();
 
-        mGlassPane = glassPane;
+        mBoard = new Board(BoardSize.CLASSIC_SIZE);
+        mBoardPanel = new BoardPanel(BoardSize.CLASSIC_SIZE, new SquareConfig(new DropManager(this::refreshBoard,
+                pair -> {
+                    SquareJLabel origin = (SquareJLabel) pair.first;
+                    SquareJLabel destination = (SquareJLabel) pair.second;
+                    Piece piece = mBoard.getPiece(origin.getCoordinates());
+                    if (piece != null) {
+                        mBoard.removePiece(origin.getCoordinates());
+                        mBoard.addPiece(piece, destination.getCoordinates());
+                    }
+                    refreshBoard();
+                }), glassPane),
+                this::getMovesFrom);
 
         initComponents();
+    }
+
+    private Set<BoardCoordinate> getMovesFrom(BoardCoordinate coordinate) {
+        if (!mBoard.doesPieceExistAt(coordinate)) {
+            return ImmutableSet.of();
+        }
+
+        Map<Direction, Integer> movements = new HashMap<>(mMovementListModel.size());
+        IntStream.range(0, mMovementListModel.size()).forEach(i -> {
+            Pair<Direction, Integer> pair = mMovementListModel.get(i);
+            movements.put(pair.getKey(), pair.getValue());
+        });
+        Map<Direction, Integer> capturingMovements = new HashMap<>(mCapturingListModel.size());
+        IntStream.range(0, mCapturingListModel.size()).forEach(i -> {
+            Pair<Direction, Integer> pair = mCapturingListModel.get(i);
+            capturingMovements.put(pair.getKey(), pair.getValue());
+        });
+        Set<TwoHopMovement> twoHopMovements = new HashSet<>(mTwoHopListModel.size());
+        IntStream.range(0, mTwoHopListModel.size()).forEach(i -> twoHopMovements.add(mTwoHopListModel.get(i)));
+
+        PieceType pieceType = new PieceType(mPieceNameField.getText(), mPieceNameField.getText(),
+                movements, capturingMovements, twoHopMovements);
+        return pieceType.getMovesFrom(coordinate, mBoard.getBoardSize(), 0);
     }
 
     public void newPieceType() {
@@ -57,6 +104,13 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         pieceType.getMovements().forEach((direction, value) -> mMovementListModel.addElement(new Pair<>(direction, value)));
         pieceType.getCapturingMovements().forEach((direction, value) -> mCapturingListModel.addElement(new Pair<>(direction, value)));
         pieceType.getTwoHopMovements().forEach(mTwoHopListModel::addElement);
+
+        mBoard.addPiece(new Piece(Piece.TEAM_ONE, pieceType), BoardCoordinate.at(4, 4));
+        refreshBoard();
+    }
+
+    private void refreshBoard() {
+        mBoardPanel.updatePieceLocations(mBoard, i -> Color.WHITE);
     }
 
     private void clearPieceData() {
@@ -64,6 +118,9 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         mMovementListModel.clear();
         mCapturingListModel.clear();
         mTwoHopListModel.clear();
+
+        mBoard = new Board(BoardSize.CLASSIC_SIZE);
+        refreshBoard();
     }
 
     private void initComponents() {
@@ -195,10 +252,7 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
-        BoardPanel board = new BoardPanel(BoardSize.CLASSIC_SIZE, new SquareConfig(new DropManager(() -> {
-        }, pair -> {
-        }), mGlassPane), bc -> ImmutableSet.of());
-        boardAndSave.add(board, gbc);
+        boardAndSave.add(mBoardPanel, gbc);
 
         JButton save = new JButton(Messages.getString("PieceMakerPanel.saveAndReturn"));
         save.addActionListener(event -> {
