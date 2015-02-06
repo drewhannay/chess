@@ -2,17 +2,13 @@ package com.drewhannay.chesscrafter.panel;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.DefaultListModel;
 import javax.swing.JButton;
-import javax.swing.JPanel;
-import javax.swing.ListCellRenderer;
 import java.awt.Dimension;
 
-public class AddRemoveEditPanel<T> extends ChessPanel {
-
-    public AddRemoveEditPanel(DefaultListModel<T> movementListModel, ListCellRenderer<T> movementRenderer) {
+public class AddRemoveEditPanel extends ChessPanel {
+    public AddRemoveEditPanel() {
         super(false);
-        setOpaque(false);
+
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
 
         add(Box.createRigidArea(new Dimension(10, 0)));

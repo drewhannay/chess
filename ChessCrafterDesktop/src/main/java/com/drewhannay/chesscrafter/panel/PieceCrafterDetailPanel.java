@@ -170,7 +170,7 @@ public class PieceCrafterDetailPanel extends ChessPanel {
 
         if (movement == null && unusedDirections.size() == 0) {
             JOptionPane.showMessageDialog(null, Messages.getString("PieceCrafterDetailPanel.noMoreDirections"),
-                    Messages.getString("PieceCrafterDetailPanel.error"), 0);
+                    Messages.getString("PieceCrafterDetailPanel.error"), JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -188,13 +188,13 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         gbc.insets = new Insets(5, 5, 5, 5);
         movementPopupPanel.add(GuiUtility.createJLabel(Messages.getString("PieceCrafterDetailPanel.direction")), gbc);
 
-        JComboBox directions;
+        JComboBox<Direction> directions;
         if (movement != null) {
-            directions = new JComboBox(Direction.values());
+            directions = new JComboBox<>(Direction.values());
             directions.setSelectedItem(movement.getKey());
             directions.setEnabled(false);
         } else {
-            directions = new JComboBox(unusedDirections.toArray());
+            directions = new JComboBox<>((Direction[]) unusedDirections.toArray());
         }
 
         gbc.gridx = 1;
@@ -226,9 +226,9 @@ public class PieceCrafterDetailPanel extends ChessPanel {
             }
             if (movement != null) {
                 model.remove(selectedIndex);
-                model.add(selectedIndex, new Pair<Direction, Integer>((Direction) directions.getSelectedItem(), movementDistance));
+                model.add(selectedIndex, new Pair<>((Direction) directions.getSelectedItem(), movementDistance));
             } else {
-                model.addElement(new Pair<Direction, Integer>((Direction) directions.getSelectedItem(),
+                model.addElement(new Pair<>((Direction) directions.getSelectedItem(),
                         movementDistance));
             }
             movementPopupFrame.dispose();
@@ -299,8 +299,8 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         twoHopPopupFrame.setVisible(true);
     }
 
-    private <T> void createScrollPanel(JPanel movementPanel, DefaultListModel<T> movementListModel, ListCellRenderer<T> movementRenderer,
-                                       String title, int row) {
+    private <T> void createScrollPanel(JPanel movementPanel, DefaultListModel<T> movementListModel,
+                                       ListCellRenderer<T> movementRenderer, String title, int row) {
 
         JList<T> movementList = new JList<>(movementListModel);
         movementList.setCellRenderer(movementRenderer);
@@ -319,7 +319,7 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         gbc.insets = new Insets(10, 10, 0, 10);
         movementPanel.add(scrollPane, gbc);
 
-        AddRemoveEditPanel buttonPanel = new AddRemoveEditPanel(mMovementListModel, mMovementRenderer);
+        AddRemoveEditPanel buttonPanel = new AddRemoveEditPanel();
 
         gbc.gridy = 1;
         gbc.weighty = 0.5;
@@ -380,11 +380,9 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         return label;
     };
 
-    private static List getUnusedDirections(DefaultListModel<javafx.util.Pair<Direction, Integer>> model) {
-        List<Direction> unusedDirections =
-                Stream.of(Direction.values())
-                        .filter(d -> IntStream.range(0, model.size()).allMatch(i -> model.get(i).getKey() != d))
-                        .collect(Collectors.toList());
-        return unusedDirections;
+    private static List<Direction> getUnusedDirections(DefaultListModel<Pair<Direction, Integer>> model) {
+        return Stream.of(Direction.values())
+                .filter(d -> IntStream.range(0, model.size()).allMatch(i -> model.get(i).getKey() != d))
+                .collect(Collectors.toList());
     }
 }
