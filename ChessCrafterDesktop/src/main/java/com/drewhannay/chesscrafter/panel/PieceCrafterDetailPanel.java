@@ -16,14 +16,17 @@ import com.drewhannay.chesscrafter.utility.Messages;
 import com.google.common.collect.ImmutableSet;
 import javafx.util.Pair;
 
+import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
 import java.awt.Color;
@@ -113,28 +116,50 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         allMovementsPanel.setOpaque(false);
         allMovementsPanel.setLayout(new GridBagLayout());
 
-        AddRemoveEditPanel movementPanel = new AddRemoveEditPanel(mMovementListModel, mMovementRenderer,
-                Messages.getString("PieceCrafterDetailPanel.movements"));
-
         GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
+        gbc.insets = new Insets(10, 10, 0, 10);
+        allMovementsPanel.add(createScrollPanel(mMovementListModel, mMovementRenderer,
+                Messages.getString("PieceCrafterDetailPanel.movements")), gbc);
+
+        AddRemoveEditPanel movementPanel = new AddRemoveEditPanel(mMovementListModel, mMovementRenderer);
+
+        gbc.gridy = 1;
+        gbc.weighty = 0.5;
+        gbc.insets = new Insets(0, 0, 0, 0);
         allMovementsPanel.add(movementPanel, gbc);
 
-        AddRemoveEditPanel capturePanel = new AddRemoveEditPanel(mCapturingListModel, mMovementRenderer,
-                Messages.getString("PieceCrafterDetailPanel.capturing"));
-
         gbc.gridx = 1;
-        gbc.weightx = 1.0;
+        gbc.gridy = 0;
         gbc.weighty = 1.0;
+        gbc.insets = new Insets(10, 10, 0, 10);
+        allMovementsPanel.add(createScrollPanel(mCapturingListModel, mMovementRenderer,
+                Messages.getString("PieceCrafterDetailPanel.capturing")), gbc);
+
+        AddRemoveEditPanel capturePanel = new AddRemoveEditPanel(mCapturingListModel, mMovementRenderer);
+
+        gbc.gridy = 1;
+        gbc.weighty = 0.5;
+        gbc.insets = new Insets(0, 0, 0, 0);
         allMovementsPanel.add(capturePanel, gbc);
 
-        AddRemoveEditPanel twoHopPanel = new AddRemoveEditPanel(mTwoHopListModel, mTwoHopRenderer,
-                Messages.getString("PieceCrafterDetailPanel.twoHop"));
 
         gbc.gridx = 2;
-        allMovementsPanel.add(twoHopPanel, gbc);
+        gbc.gridy = 0;
+        gbc.weighty = 1.0;
+        gbc.insets = new Insets(10, 10, 0, 10);
+        allMovementsPanel.add(createScrollPanel(mTwoHopListModel, mTwoHopRenderer,
+                Messages.getString("PieceCrafterDetailPanel.twoHop")), gbc);
+
+        AddRemoveEditPanel twoHopButtons = new AddRemoveEditPanel(mCapturingListModel, mMovementRenderer);
+        gbc.gridy = 1;
+        gbc.weighty = 0.5;
+        gbc.insets = new Insets(0, 0, 0, 0);
+        allMovementsPanel.add(twoHopButtons, gbc);
 
         JPanel boardAndSave = new JPanel();
         boardAndSave.setOpaque(false);
@@ -155,7 +180,7 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         gbc.weighty = 0.0;
         gbc.fill = GridBagConstraints.NONE;
         gbc.anchor = GridBagConstraints.LAST_LINE_END;
-        gbc.insets = new Insets(25, 0, 25, 25);
+        gbc.insets = new Insets(10, 0, 25, 25);
         boardAndSave.add(save, gbc);
 
         gbc = new GridBagConstraints();
@@ -174,7 +199,7 @@ public class PieceCrafterDetailPanel extends ChessPanel {
     }
 
     public static void createMovementPopup(DefaultListModel<Pair<Direction, Integer>> model,
-                                        Pair<Direction, Integer> movement, int selectedIndex) {
+                                           Pair<Direction, Integer> movement, int selectedIndex) {
         List<Direction> unusedDirections = getUnusedDirections(model);
 
         if (movement == null && unusedDirections.size() == 0) {
@@ -306,6 +331,18 @@ public class PieceCrafterDetailPanel extends ChessPanel {
 
         twoHopPopupFrame.add(twoHopPopupPanel);
         twoHopPopupFrame.setVisible(true);
+    }
+
+    private <T> JScrollPane createScrollPanel(DefaultListModel<T> movementListModel, ListCellRenderer<T> movementRenderer,
+                                              String title) {
+        JList<T> movementList = new JList<>(movementListModel);
+        movementList.setCellRenderer(movementRenderer);
+
+        JScrollPane scrollPane = new JScrollPane(movementList);
+        scrollPane.setPreferredSize(new Dimension(150, 140));
+        scrollPane.setBorder(BorderFactory.createTitledBorder(title));
+        scrollPane.getVerticalScrollBar().setUnitIncrement(25);
+        return scrollPane;
     }
 
     private void movePiece(com.drewhannay.chesscrafter.utility.Pair<JComponent, JComponent> pair) {
