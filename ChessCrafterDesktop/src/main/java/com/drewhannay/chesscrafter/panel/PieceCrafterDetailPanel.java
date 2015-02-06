@@ -117,49 +117,15 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         allMovementsPanel.setLayout(new GridBagLayout());
 
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.fill = GridBagConstraints.BOTH;
-        gbc.weightx = 1.0;
-        gbc.weighty = 1.0;
-        gbc.insets = new Insets(10, 10, 0, 10);
-        allMovementsPanel.add(createScrollPanel(mMovementListModel, mMovementRenderer,
-                Messages.getString("PieceCrafterDetailPanel.movements")), gbc);
 
-        AddRemoveEditPanel movementPanel = new AddRemoveEditPanel(mMovementListModel, mMovementRenderer);
+        createScrollPanel(allMovementsPanel, mMovementListModel, mMovementRenderer,
+                Messages.getString("PieceCrafterDetailPanel.movements"), 0);
 
-        gbc.gridy = 1;
-        gbc.weighty = 0.5;
-        gbc.insets = new Insets(0, 0, 0, 0);
-        allMovementsPanel.add(movementPanel, gbc);
+        createScrollPanel(allMovementsPanel, mCapturingListModel, mMovementRenderer,
+                Messages.getString("PieceCrafterDetailPanel.capturing"), 1);
 
-        gbc.gridx = 1;
-        gbc.gridy = 0;
-        gbc.weighty = 1.0;
-        gbc.insets = new Insets(10, 10, 0, 10);
-        allMovementsPanel.add(createScrollPanel(mCapturingListModel, mMovementRenderer,
-                Messages.getString("PieceCrafterDetailPanel.capturing")), gbc);
-
-        AddRemoveEditPanel capturePanel = new AddRemoveEditPanel(mCapturingListModel, mMovementRenderer);
-
-        gbc.gridy = 1;
-        gbc.weighty = 0.5;
-        gbc.insets = new Insets(0, 0, 0, 0);
-        allMovementsPanel.add(capturePanel, gbc);
-
-
-        gbc.gridx = 2;
-        gbc.gridy = 0;
-        gbc.weighty = 1.0;
-        gbc.insets = new Insets(10, 10, 0, 10);
-        allMovementsPanel.add(createScrollPanel(mTwoHopListModel, mTwoHopRenderer,
-                Messages.getString("PieceCrafterDetailPanel.twoHop")), gbc);
-
-        AddRemoveEditPanel twoHopButtons = new AddRemoveEditPanel(mCapturingListModel, mMovementRenderer);
-        gbc.gridy = 1;
-        gbc.weighty = 0.5;
-        gbc.insets = new Insets(0, 0, 0, 0);
-        allMovementsPanel.add(twoHopButtons, gbc);
+        createScrollPanel(allMovementsPanel, mTwoHopListModel, mTwoHopRenderer,
+                Messages.getString("PieceCrafterDetailPanel.twoHop"), 2);
 
         JPanel boardAndSave = new JPanel();
         boardAndSave.setOpaque(false);
@@ -333,8 +299,9 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         twoHopPopupFrame.setVisible(true);
     }
 
-    private <T> JScrollPane createScrollPanel(DefaultListModel<T> movementListModel, ListCellRenderer<T> movementRenderer,
-                                              String title) {
+    private <T> void createScrollPanel(JPanel movementPanel, DefaultListModel<T> movementListModel, ListCellRenderer<T> movementRenderer,
+                                       String title, int row) {
+
         JList<T> movementList = new JList<>(movementListModel);
         movementList.setCellRenderer(movementRenderer);
 
@@ -342,7 +309,22 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         scrollPane.setPreferredSize(new Dimension(150, 140));
         scrollPane.setBorder(BorderFactory.createTitledBorder(title));
         scrollPane.getVerticalScrollBar().setUnitIncrement(25);
-        return scrollPane;
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = row;
+        gbc.gridy = 0;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.insets = new Insets(10, 10, 0, 10);
+        movementPanel.add(scrollPane, gbc);
+
+        AddRemoveEditPanel buttonPanel = new AddRemoveEditPanel(mMovementListModel, mMovementRenderer);
+
+        gbc.gridy = 1;
+        gbc.weighty = 0.5;
+        gbc.insets = new Insets(0, 0, 0, 0);
+        movementPanel.add(buttonPanel, gbc);
     }
 
     private void movePiece(com.drewhannay.chesscrafter.utility.Pair<JComponent, JComponent> pair) {
@@ -398,7 +380,7 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         return label;
     };
 
-    public static List getUnusedDirections(DefaultListModel<javafx.util.Pair<Direction, Integer>> model) {
+    private static List getUnusedDirections(DefaultListModel<javafx.util.Pair<Direction, Integer>> model) {
         List<Direction> unusedDirections =
                 Stream.of(Direction.values())
                         .filter(d -> IntStream.range(0, model.size()).allMatch(i -> model.get(i).getKey() != d))

@@ -8,9 +8,10 @@ import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
 import java.awt.Dimension;
 
-public class AddRemoveEditPanel extends JPanel {
+public class AddRemoveEditPanel<T> extends ChessPanel {
 
-    public <T> AddRemoveEditPanel(DefaultListModel<T> movementListModel, ListCellRenderer<T> movementRenderer) {
+    public AddRemoveEditPanel(DefaultListModel<T> movementListModel, ListCellRenderer<T> movementRenderer) {
+        super(false);
         setOpaque(false);
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
 
