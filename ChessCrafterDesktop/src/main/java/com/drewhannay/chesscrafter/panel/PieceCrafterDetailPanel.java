@@ -19,10 +19,13 @@ import javafx.util.Pair;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.ListCellRenderer;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -54,43 +57,10 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         mTwoHopListModel = new DefaultListModel<>();
 
         mBoard = new Board(BoardSize.CLASSIC_SIZE);
-        mBoardPanel = new BoardPanel(BoardSize.CLASSIC_SIZE, new SquareConfig(new DropManager(this::refreshBoard,
-                pair -> {
-                    SquareJLabel origin = (SquareJLabel) pair.first;
-                    SquareJLabel destination = (SquareJLabel) pair.second;
-                    Piece piece = mBoard.getPiece(origin.getCoordinates());
-                    if (piece != null) {
-                        mBoard.removePiece(origin.getCoordinates());
-                        mBoard.addPiece(piece, destination.getCoordinates());
-                    }
-                    refreshBoard();
-                }), glassPane),
-                this::getMovesFrom);
+        mBoardPanel = new BoardPanel(BoardSize.CLASSIC_SIZE,
+                new SquareConfig(new DropManager(this::refreshBoard, this::movePiece), glassPane), this::getMovesFrom);
 
         initComponents();
-    }
-
-    private Set<BoardCoordinate> getMovesFrom(BoardCoordinate coordinate) {
-        if (!mBoard.doesPieceExistAt(coordinate)) {
-            return ImmutableSet.of();
-        }
-
-        Map<Direction, Integer> movements = new HashMap<>(mMovementListModel.size());
-        IntStream.range(0, mMovementListModel.size()).forEach(i -> {
-            Pair<Direction, Integer> pair = mMovementListModel.get(i);
-            movements.put(pair.getKey(), pair.getValue());
-        });
-        Map<Direction, Integer> capturingMovements = new HashMap<>(mCapturingListModel.size());
-        IntStream.range(0, mCapturingListModel.size()).forEach(i -> {
-            Pair<Direction, Integer> pair = mCapturingListModel.get(i);
-            capturingMovements.put(pair.getKey(), pair.getValue());
-        });
-        Set<TwoHopMovement> twoHopMovements = new HashSet<>(mTwoHopListModel.size());
-        IntStream.range(0, mTwoHopListModel.size()).forEach(i -> twoHopMovements.add(mTwoHopListModel.get(i)));
-
-        PieceType pieceType = new PieceType(mPieceNameField.getText(), mPieceNameField.getText(),
-                movements, capturingMovements, twoHopMovements);
-        return pieceType.getMovesFrom(coordinate, mBoard.getBoardSize(), 0);
     }
 
     public void newPieceType() {
@@ -141,6 +111,7 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         allMovementsPanel.setLayout(new GridBagLayout());
 
         JList<Pair<Direction, Integer>> movementList = new JList<>(mMovementListModel);
+        movementList.setCellRenderer(mMovementRenderer);
 
         JScrollPane cardinalScrollPane = new JScrollPane(movementList);
         cardinalScrollPane.setPreferredSize(new Dimension(150, 140));
@@ -173,7 +144,8 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         constraints.gridx = 2;
         allMovementsPanel.add(editMovement, constraints);
 
-        JList<Pair<Direction, Integer>> capturingList = new JList<>(mMovementListModel);
+        JList<Pair<Direction, Integer>> capturingList = new JList<>(mCapturingListModel);
+        capturingList.setCellRenderer(mMovementRenderer);
 
         JScrollPane captureScrollPane = new JScrollPane(capturingList);
         captureScrollPane.setPreferredSize(new Dimension(150, 140));
@@ -209,6 +181,7 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         allMovementsPanel.add(editCapture, constraints);
 
         JList<TwoHopMovement> twoHopList = new JList<>(mTwoHopListModel);
+        twoHopList.setCellRenderer(mTwoHopRenderer);
 
         JScrollPane twoHopScrollPane = new JScrollPane(twoHopList);
         twoHopScrollPane.setPreferredSize(new Dimension(150, 140));
@@ -234,7 +207,7 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         allMovementsPanel.add(addTwoHop, constraints);
 
         JButton removeTwoHop = new JButton("-");
-        removeTwoHop.addActionListener(event -> mCapturingListModel.remove(twoHopList.getSelectedIndex()));
+        removeTwoHop.addActionListener(event -> mTwoHopListModel.remove(twoHopList.getSelectedIndex()));
         constraints.gridx = 7;
         allMovementsPanel.add(removeTwoHop, constraints);
 
@@ -288,4 +261,57 @@ public class PieceCrafterDetailPanel extends ChessPanel {
     private void createMovementPopup(TwoHopMovement movement) {
         // TODO:
     }
+
+    private void movePiece(com.drewhannay.chesscrafter.utility.Pair<JComponent, JComponent> pair) {
+        SquareJLabel origin = (SquareJLabel) pair.first;
+        SquareJLabel destination = (SquareJLabel) pair.second;
+        Piece piece = mBoard.getPiece(origin.getCoordinates());
+        if (piece != null) {
+            mBoard.removePiece(origin.getCoordinates());
+            mBoard.addPiece(piece, destination.getCoordinates());
+        }
+        refreshBoard();
+    }
+
+    private Set<BoardCoordinate> getMovesFrom(BoardCoordinate coordinate) {
+        if (!mBoard.doesPieceExistAt(coordinate)) {
+            return ImmutableSet.of();
+        }
+
+        Map<Direction, Integer> movements = new HashMap<>(mMovementListModel.size());
+        IntStream.range(0, mMovementListModel.size()).forEach(i -> {
+            Pair<Direction, Integer> pair = mMovementListModel.get(i);
+            movements.put(pair.getKey(), pair.getValue());
+        });
+        Map<Direction, Integer> capturingMovements = new HashMap<>(mCapturingListModel.size());
+        IntStream.range(0, mCapturingListModel.size()).forEach(i -> {
+            Pair<Direction, Integer> pair = mCapturingListModel.get(i);
+            capturingMovements.put(pair.getKey(), pair.getValue());
+        });
+        Set<TwoHopMovement> twoHopMovements = new HashSet<>(mTwoHopListModel.size());
+        IntStream.range(0, mTwoHopListModel.size()).forEach(i -> twoHopMovements.add(mTwoHopListModel.get(i)));
+
+        PieceType pieceType = new PieceType(mPieceNameField.getText(), mPieceNameField.getText(),
+                movements, capturingMovements, twoHopMovements);
+        return pieceType.getMovesFrom(coordinate, mBoard.getBoardSize(), 0);
+    }
+
+    private final ListCellRenderer<Pair<Direction, Integer>> mMovementRenderer = (list, value, index, isSelected, cellHasFocus) -> {
+        String direction = String.valueOf(value.getKey());
+        String distance = value.getValue() == Integer.MAX_VALUE ? Messages.getString("PieceCrafterDetailPanel.unlimited")
+                : String.valueOf(value.getValue());
+        JLabel label = new JLabel(Messages.getString("PieceCrafterDetailPanel.movementItem", direction, distance));
+        label.setOpaque(true);
+        label.setBackground(isSelected ? list.getSelectionBackground() : list.getBackground());
+        label.setForeground(isSelected ? list.getSelectionForeground() : list.getForeground());
+        return label;
+    };
+
+    private final ListCellRenderer<TwoHopMovement> mTwoHopRenderer = (list, value, index, isSelected, cellHasFocus) -> {
+        JLabel label = new JLabel(Messages.getString("PieceCrafterDetailPanel.twoHopItem", value.x, value.y));
+        label.setOpaque(true);
+        label.setBackground(isSelected ? list.getSelectionBackground() : list.getBackground());
+        label.setForeground(isSelected ? list.getSelectionForeground() : list.getForeground());
+        return label;
+    };
 }
