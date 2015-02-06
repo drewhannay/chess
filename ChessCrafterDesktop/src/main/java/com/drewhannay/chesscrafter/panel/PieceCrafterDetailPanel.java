@@ -13,17 +13,15 @@ import com.drewhannay.chesscrafter.models.PieceType;
 import com.drewhannay.chesscrafter.models.TwoHopMovement;
 import com.drewhannay.chesscrafter.utility.GuiUtility;
 import com.drewhannay.chesscrafter.utility.Messages;
+import com.drewhannay.chesscrafter.utility.PieceCrafterUtility;
 import com.google.common.collect.ImmutableSet;
 import javafx.util.Pair;
 
-import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
 import java.awt.Color;
@@ -110,111 +108,13 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         allMovementsPanel.setOpaque(false);
         allMovementsPanel.setLayout(new GridBagLayout());
 
-        JList<Pair<Direction, Integer>> movementList = new JList<>(mMovementListModel);
-        movementList.setCellRenderer(mMovementRenderer);
+        PieceCrafterUtility.createMovementButtonPanel(allMovementsPanel, mMovementListModel, mMovementRenderer, 0,
+                Messages.getString("PieceCrafterDetailPanel.movements"));
 
-        JScrollPane cardinalScrollPane = new JScrollPane(movementList);
-        cardinalScrollPane.setPreferredSize(new Dimension(150, 140));
-        cardinalScrollPane.setBorder(BorderFactory.createTitledBorder(Messages.getString("PieceCrafterDetailPanel.movements")));
-        cardinalScrollPane.getVerticalScrollBar().setUnitIncrement(25);
+        PieceCrafterUtility.createMovementButtonPanel(allMovementsPanel, mCapturingListModel, mMovementRenderer, 3,
+                Messages.getString("PieceCrafterDetailPanel.capturing"));
 
-        GridBagConstraints constraints = new GridBagConstraints();
-
-        constraints.fill = GridBagConstraints.BOTH;
-        constraints.weightx = 1.0;
-        constraints.weighty = 1.0;
-        constraints.gridwidth = 3;
-        constraints.insets = new Insets(0, 10, 10, 10);
-        allMovementsPanel.add(cardinalScrollPane, constraints);
-
-        JButton addMovement = new JButton("+");
-        addMovement.addActionListener(event -> createMovementPopup(movementList.getSelectedValue()));
-        constraints = new GridBagConstraints();
-        constraints.gridy = 1;
-        constraints.insets = new Insets(0, 10, 0, 0);
-        allMovementsPanel.add(addMovement, constraints);
-
-        JButton removeMovement = new JButton("-");
-        removeMovement.addActionListener(event -> mMovementListModel.remove(movementList.getSelectedIndex()));
-        constraints.gridx = 1;
-        allMovementsPanel.add(removeMovement, constraints);
-
-        JButton editMovement = new JButton("Edit");
-        editMovement.addActionListener(event -> createMovementPopup(movementList.getSelectedValue()));
-        constraints.gridx = 2;
-        allMovementsPanel.add(editMovement, constraints);
-
-        JList<Pair<Direction, Integer>> capturingList = new JList<>(mCapturingListModel);
-        capturingList.setCellRenderer(mMovementRenderer);
-
-        JScrollPane captureScrollPane = new JScrollPane(capturingList);
-        captureScrollPane.setPreferredSize(new Dimension(150, 140));
-        captureScrollPane.setBorder(BorderFactory.createTitledBorder(Messages.getString("PieceCrafterDetailPanel.capturing")));
-        captureScrollPane.getVerticalScrollBar().setUnitIncrement(25);
-
-        constraints = new GridBagConstraints();
-        constraints.gridwidth = 3;
-        constraints.gridx = 3;
-        constraints.fill = GridBagConstraints.BOTH;
-        constraints.weightx = 1.0;
-        constraints.weighty = 1.0;
-        constraints.insets = new Insets(0, 10, 10, 10);
-        allMovementsPanel.add(captureScrollPane, constraints);
-
-        JButton addCapture = new JButton("+");
-        addCapture.addActionListener(event -> createMovementPopup(capturingList.getSelectedValue()));
-        constraints = new GridBagConstraints();
-        constraints.gridy = 1;
-        constraints.gridx = 3;
-
-        constraints.insets = new Insets(0, 10, 0, 0);
-        allMovementsPanel.add(addCapture, constraints);
-
-        JButton removeCapture = new JButton("-");
-        removeCapture.addActionListener(event -> mCapturingListModel.remove(capturingList.getSelectedIndex()));
-        constraints.gridx = 4;
-        allMovementsPanel.add(removeCapture, constraints);
-
-        JButton editCapture = new JButton("Edit");
-        editCapture.addActionListener(event -> createMovementPopup(capturingList.getSelectedValue()));
-        constraints.gridx = 5;
-        allMovementsPanel.add(editCapture, constraints);
-
-        JList<TwoHopMovement> twoHopList = new JList<>(mTwoHopListModel);
-        twoHopList.setCellRenderer(mTwoHopRenderer);
-
-        JScrollPane twoHopScrollPane = new JScrollPane(twoHopList);
-        twoHopScrollPane.setPreferredSize(new Dimension(150, 140));
-        twoHopScrollPane.setBorder(BorderFactory.createTitledBorder(Messages.getString("PieceCrafterDetailPanel.twoHop")));
-        twoHopScrollPane.getVerticalScrollBar().setUnitIncrement(25);
-
-        constraints = new GridBagConstraints();
-        constraints.gridwidth = 3;
-        constraints.gridx = 6;
-        constraints.fill = GridBagConstraints.BOTH;
-        constraints.weightx = 1.0;
-        constraints.weighty = 1.0;
-        constraints.insets = new Insets(0, 10, 10, 10);
-        allMovementsPanel.add(twoHopScrollPane, constraints);
-
-        JButton addTwoHop = new JButton("+");
-        addTwoHop.addActionListener(event -> createMovementPopup(twoHopList.getSelectedValue()));
-        constraints = new GridBagConstraints();
-        constraints.gridy = 1;
-        constraints.gridx = 6;
-
-        constraints.insets = new Insets(0, 10, 0, 0);
-        allMovementsPanel.add(addTwoHop, constraints);
-
-        JButton removeTwoHop = new JButton("-");
-        removeTwoHop.addActionListener(event -> mTwoHopListModel.remove(twoHopList.getSelectedIndex()));
-        constraints.gridx = 7;
-        allMovementsPanel.add(removeTwoHop, constraints);
-
-        JButton editTwoHop = new JButton("Edit");
-        editTwoHop.addActionListener(event -> createMovementPopup(twoHopList.getSelectedValue()));
-        constraints.gridx = 8;
-        allMovementsPanel.add(editTwoHop, constraints);
+        PieceCrafterUtility.createTwoHopButtonPanel(allMovementsPanel, mTwoHopListModel, mTwoHopRenderer);
 
         JPanel boardAndSave = new JPanel();
         boardAndSave.setOpaque(false);
@@ -252,14 +152,6 @@ public class PieceCrafterDetailPanel extends ChessPanel {
 
         gbc.gridy = 2;
         add(boardAndSave, gbc);
-    }
-
-    private void createMovementPopup(Pair<Direction, Integer> movement) {
-        // TODO:
-    }
-
-    private void createMovementPopup(TwoHopMovement movement) {
-        // TODO:
     }
 
     private void movePiece(com.drewhannay.chesscrafter.utility.Pair<JComponent, JComponent> pair) {
