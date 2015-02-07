@@ -8,9 +8,9 @@ import java.awt.event.ActionListener;
 
 public class AddRemoveEditPanel extends ChessPanel {
 
-    private final JButton mAdd;
-    private final JButton mRemove;
-    private final JButton mEdit;
+    public final JButton mAdd;
+    public final JButton mRemove;
+    public final JButton mEdit;
 
     public AddRemoveEditPanel() {
         super(false);

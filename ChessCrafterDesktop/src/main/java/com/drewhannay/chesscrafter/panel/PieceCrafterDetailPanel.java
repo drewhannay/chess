@@ -7,14 +7,15 @@ import com.drewhannay.chesscrafter.label.SquareJLabel;
 import com.drewhannay.chesscrafter.models.Board;
 import com.drewhannay.chesscrafter.models.BoardCoordinate;
 import com.drewhannay.chesscrafter.models.BoardSize;
+import com.drewhannay.chesscrafter.models.CardinalMovement;
 import com.drewhannay.chesscrafter.models.Direction;
+import com.drewhannay.chesscrafter.models.Movement;
 import com.drewhannay.chesscrafter.models.Piece;
 import com.drewhannay.chesscrafter.models.PieceType;
 import com.drewhannay.chesscrafter.models.TwoHopMovement;
 import com.drewhannay.chesscrafter.utility.GuiUtility;
 import com.drewhannay.chesscrafter.utility.Messages;
 import com.google.common.collect.ImmutableSet;
-import javafx.util.Pair;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.BorderFactory;
@@ -25,7 +26,6 @@ import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -38,26 +38,42 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class PieceCrafterDetailPanel extends ChessPanel {
 
+    private static class ListData<T extends Movement> {
+        public final String title;
+        public final DefaultListModel<T> model;
+        public final JList<T> list;
+        public final AddRemoveEditPanel buttons;
+        public final Consumer<Boolean> showInputDialog;
+        public final Supplier<Boolean> isFull;
+
+        private ListData(String title, DefaultListModel<T> model, JList<T> list, AddRemoveEditPanel buttons,
+                         BiConsumer<ListData<T>, Boolean> showInputDialog, Supplier<Boolean> isFull) {
+            this.title = title;
+            this.model = model;
+            this.list = list;
+            this.buttons = buttons;
+            this.showInputDialog = isEdit -> showInputDialog.accept(this, isEdit);
+            this.isFull = isFull;
+        }
+    }
+
     private final JTextField mPieceNameField;
 
-    private final DefaultListModel<Pair<Direction, Integer>> mMovementListModel;
-    private final DefaultListModel<Pair<Direction, Integer>> mCapturingListModel;
-    private final DefaultListModel<TwoHopMovement> mTwoHopListModel;
-
-    private final JList<Pair<Direction, Integer>> mMovementList;
-    private final JList<Pair<Direction, Integer>> mCapturingList;
-    private final JList<TwoHopMovement> mTwoHopList;
+    private final ListData<CardinalMovement> mMovementData;
+    private final ListData<CardinalMovement> mCapturingData;
+    private final ListData<TwoHopMovement> mTwoHopData;
 
     private final BoardPanel mBoardPanel;
 
@@ -66,26 +82,39 @@ public class PieceCrafterDetailPanel extends ChessPanel {
     public PieceCrafterDetailPanel(GlassPane glassPane) {
         mPieceNameField = new JTextField(15);
 
-        mMovementListModel = new DefaultListModel<>();
-        mMovementList = new JList<>(mMovementListModel);
-        mMovementList.setCellRenderer(createMovementRenderer());
-        mMovementList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        DefaultListModel<CardinalMovement> movementListModel = new DefaultListModel<>();
+        JList<CardinalMovement> movementList = new JList<>(movementListModel);
+        movementList.setCellRenderer(createMovementRenderer());
+        movementList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        AddRemoveEditPanel mMovementButtons = new AddRemoveEditPanel();
 
-        mCapturingListModel = new DefaultListModel<>();
-        mCapturingList = new JList<>(mCapturingListModel);
-        mCapturingList.setCellRenderer(createMovementRenderer());
-        mCapturingList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        DefaultListModel<CardinalMovement> capturingListModel = new DefaultListModel<>();
+        JList<CardinalMovement> capturingList = new JList<>(capturingListModel);
+        capturingList.setCellRenderer(createMovementRenderer());
+        capturingList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        AddRemoveEditPanel capturingButtons = new AddRemoveEditPanel();
 
-        mTwoHopListModel = new DefaultListModel<>();
-        mTwoHopList = new JList<>(mTwoHopListModel);
-        mTwoHopList.setCellRenderer(createTwoHopRenderer());
-        mTwoHopList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        DefaultListModel<TwoHopMovement> twoHopListModel = new DefaultListModel<>();
+        JList<TwoHopMovement> twoHopList = new JList<>(twoHopListModel);
+        twoHopList.setCellRenderer(createTwoHopRenderer());
+        twoHopList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        AddRemoveEditPanel twoHopButtons = new AddRemoveEditPanel();
+
+        mMovementData = new ListData<>(Messages.getString("PieceCrafterDetailPanel.movements"),
+                movementListModel, movementList, mMovementButtons, this::showCardinalInputDialog,
+                () -> getUnusedDirections(movementListModel).isEmpty());
+        mCapturingData = new ListData<>(Messages.getString("PieceCrafterDetailPanel.capturing"),
+                capturingListModel, capturingList, capturingButtons, this::showCardinalInputDialog,
+                () -> getUnusedDirections(capturingListModel).isEmpty());
+        mTwoHopData = new ListData<>(Messages.getString("PieceCrafterDetailPanel.twoHop"),
+                twoHopListModel, twoHopList, twoHopButtons, this::showTwoHopInputDialog, () -> false);
 
         mBoard = new Board(BoardSize.CLASSIC_SIZE);
         mBoardPanel = new BoardPanel(BoardSize.CLASSIC_SIZE,
                 new SquareConfig(new DropManager(this::refreshBoard, this::movePiece), glassPane), this::getMovesFrom);
 
         initComponents();
+        newPieceType();
     }
 
     public void newPieceType() {
@@ -96,11 +125,12 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         clearPieceData();
 
         mPieceNameField.setText(pieceType.getName());
-        pieceType.getMovements().forEach((direction, value) -> mMovementListModel.addElement(new Pair<>(direction, value)));
-        pieceType.getCapturingMovements().forEach((direction, value) -> mCapturingListModel.addElement(new Pair<>(direction, value)));
-        pieceType.getTwoHopMovements().forEach(mTwoHopListModel::addElement);
+        pieceType.getMovements().forEach(mMovementData.model::addElement);
+        pieceType.getCapturingMovements().forEach(mCapturingData.model::addElement);
+        pieceType.getTwoHopMovements().forEach(mTwoHopData.model::addElement);
 
         mBoard.addPiece(new Piece(Piece.TEAM_ONE, pieceType), BoardCoordinate.at(4, 4));
+        dataStream().forEach(this::refreshButtonState);
         refreshBoard();
     }
 
@@ -108,11 +138,14 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         mBoardPanel.updatePieceLocations(mBoard, i -> Color.WHITE);
     }
 
+    private Stream<ListData<?>> dataStream() {
+        return Stream.of(mMovementData, mCapturingData, mTwoHopData);
+    }
+
     private void clearPieceData() {
         mPieceNameField.setText("");
-        mMovementListModel.clear();
-        mCapturingListModel.clear();
-        mTwoHopListModel.clear();
+        dataStream().forEach(data -> data.model.clear());
+        dataStream().forEach(this::refreshButtonState);
 
         mBoard = new Board(BoardSize.CLASSIC_SIZE);
         refreshBoard();
@@ -135,41 +168,12 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         allMovementsPanel.setOpaque(false);
         allMovementsPanel.setLayout(new GridBagLayout());
 
-        AddRemoveEditPanel buttons = createScrollPane(allMovementsPanel, mMovementList,
-                Messages.getString("PieceCrafterDetailPanel.movements"), 0);
-        buttons.addAddActionListener(e -> createMovementPopup(mMovementList, false));
-        buttons.addEditActionListener(e -> createMovementPopup(mMovementList, true));
-        buttons.addRemoveActionListener(e -> {
-            if (mMovementList.getSelectedIndex() == -1) {
-                JOptionPane.showMessageDialog(null, Messages.getString("PieceCrafterDetailPanel.selectItem"),
-                        Messages.getString("PieceCrafterDetailPanel.error"), JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            mMovementListModel.remove(mMovementList.getSelectedIndex());
-        });
-
-        buttons = createScrollPane(allMovementsPanel, mCapturingList, Messages.getString("PieceCrafterDetailPanel.capturing"), 1);
-        buttons.addAddActionListener(e -> createMovementPopup(mCapturingList, false));
-        buttons.addEditActionListener(e -> createMovementPopup(mCapturingList, true));
-        buttons.addRemoveActionListener(e -> {
-            if (mCapturingList.getSelectedIndex() == -1) {
-                JOptionPane.showMessageDialog(null, Messages.getString("PieceCrafterDetailPanel.selectItem"),
-                        Messages.getString("PieceCrafterDetailPanel.error"), JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            mCapturingListModel.remove(mCapturingList.getSelectedIndex());
-        });
-
-        buttons = createScrollPane(allMovementsPanel, mTwoHopList, Messages.getString("PieceCrafterDetailPanel.twoHop"), 2);
-        buttons.addAddActionListener(e -> createTwoHopMovementPopup(mTwoHopList, false));
-        buttons.addEditActionListener(e -> createTwoHopMovementPopup(mTwoHopList, true));
-        buttons.addRemoveActionListener(e -> {
-            if (mTwoHopList.getSelectedIndex() == -1) {
-                JOptionPane.showMessageDialog(null, Messages.getString("PieceCrafterDetailPanel.selectItem"),
-                        Messages.getString("PieceCrafterDetailPanel.error"), JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            mTwoHopListModel.remove(mTwoHopList.getSelectedIndex());
+        dataStream().forEachOrdered(data -> {
+            createScrollPane(allMovementsPanel, data.list, data.buttons, data.title);
+            data.buttons.addAddActionListener(e -> data.showInputDialog.accept(false));
+            data.buttons.addEditActionListener(e -> data.showInputDialog.accept(true));
+            data.buttons.addRemoveActionListener(e -> data.model.remove(data.list.getSelectedIndex()));
+            data.list.addListSelectionListener(e -> refreshButtonState(data));
         });
 
         JPanel boardAndSave = new JPanel();
@@ -211,19 +215,19 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         add(boardAndSave, gbc);
     }
 
-    private static void createMovementPopup(@NotNull JList<Pair<Direction, Integer>> list, boolean isEdit) {
-        List<Direction> unusedDirections = getUnusedDirections(list.getModel());
+    private void refreshButtonState(@NotNull ListData<?> data) {
+        data.buttons.mAdd.setEnabled(!data.isFull.get());
+        data.buttons.mRemove.setEnabled(data.list.getSelectedIndex() >= 0);
+        data.buttons.mEdit.setEnabled(data.list.getSelectedIndex() >= 0);
+    }
 
-        if (!isEdit && unusedDirections.size() == 0) {
-            JOptionPane.showMessageDialog(null, Messages.getString("PieceCrafterDetailPanel.noMoreDirections"),
-                    Messages.getString("PieceCrafterDetailPanel.error"), JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+    private void showCardinalInputDialog(@NotNull ListData<CardinalMovement> data, boolean isEdit) {
+        List<Direction> unusedDirections = getUnusedDirections(data.model);
 
         JDialog movementDialog = new JDialog();
         movementDialog.setSize(new Dimension(300, 200));
         movementDialog.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
-        movementDialog.setLocationRelativeTo(null);
+        movementDialog.setLocationRelativeTo(this);
 
         ChessPanel movementPopupPanel = new ChessPanel();
         movementPopupPanel.setLayout(new GridBagLayout());
@@ -237,7 +241,7 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         JComboBox<Direction> directions;
         if (isEdit) {
             directions = new JComboBox<>(Direction.values());
-            directions.setSelectedItem(list.getSelectedValue().getKey());
+            directions.setSelectedItem(data.list.getSelectedValue().direction);
             directions.setEnabled(false);
         } else {
             Direction[] directionArray = new Direction[unusedDirections.size()];
@@ -256,7 +260,7 @@ public class PieceCrafterDetailPanel extends ChessPanel {
 
         JTextField distance = new JTextField(4);
         if (isEdit) {
-            int value = list.getSelectedValue().getValue();
+            int value = data.list.getSelectedValue().distance;
             if (value == Integer.MAX_VALUE) {
                 distance.setText(Messages.getString("PieceCrafterDetailPanel.unlimited"));
             } else {
@@ -273,14 +277,14 @@ public class PieceCrafterDetailPanel extends ChessPanel {
             if (distance.getText().toLowerCase().equals("unlimited")) {
                 movementDistance = Integer.MAX_VALUE;
             }
-            DefaultListModel<Pair<Direction, Integer>> model = (DefaultListModel<Pair<Direction, Integer>>) list.getModel();
             if (isEdit) {
-                int selectedIndex = list.getSelectedIndex();
-                model.remove(selectedIndex);
-                model.add(selectedIndex, new Pair<>((Direction) directions.getSelectedItem(), movementDistance));
+                int selectedIndex = data.list.getSelectedIndex();
+                data.model.remove(selectedIndex);
+                data.model.add(selectedIndex, CardinalMovement.with((Direction) directions.getSelectedItem(), movementDistance));
             } else {
-                model.addElement(new Pair<>((Direction) directions.getSelectedItem(), movementDistance));
+                data.model.addElement(CardinalMovement.with((Direction) directions.getSelectedItem(), movementDistance));
             }
+            refreshButtonState(data);
             movementDialog.dispose();
         });
         gbc.gridy = 2;
@@ -291,7 +295,7 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         movementDialog.setVisible(true);
     }
 
-    private void createTwoHopMovementPopup(@NotNull JList<TwoHopMovement> list, boolean isEdit) {
+    private void showTwoHopInputDialog(@NotNull ListData<TwoHopMovement> data, boolean isEdit) {
         JDialog twoHopDialog = new JDialog();
         twoHopDialog.setSize(new Dimension(300, 200));
         twoHopDialog.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
@@ -307,7 +311,7 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         twoHopPopupPanel.add(GuiUtility.createJLabel(Messages.getString("PieceCrafterDetailPanel.xDirection")), gbc);
 
         JTextField xDirection = new JTextField(4);
-        xDirection.setText("0");
+        xDirection.setText("1");
 
         gbc.gridx = 1;
         gbc.weightx = 1.0;
@@ -319,10 +323,10 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         twoHopPopupPanel.add(GuiUtility.createJLabel(Messages.getString("PieceCrafterDetailPanel.yDirection")), gbc);
 
         JTextField yDirection = new JTextField(4);
-        yDirection.setText("0");
+        yDirection.setText("2");
 
         if (isEdit) {
-            TwoHopMovement movement = list.getSelectedValue();
+            TwoHopMovement movement = data.list.getSelectedValue();
             xDirection.setText(String.valueOf(movement.x));
             yDirection.setText(String.valueOf(movement.y));
         }
@@ -333,15 +337,14 @@ public class PieceCrafterDetailPanel extends ChessPanel {
 
         JButton saveMovement = new JButton(Messages.getString("PieceCrafterDetailPanel.saveAndClose"));
         saveMovement.addActionListener(event -> {
-            DefaultListModel<TwoHopMovement> model = (DefaultListModel<TwoHopMovement>) list.getModel();
             int xMovementDistance = Integer.parseInt(xDirection.getText());
             int yMovementDistance = Integer.parseInt(yDirection.getText());
             if (isEdit) {
-                int selectedIndex = list.getSelectedIndex();
-                model.remove(selectedIndex);
-                model.add(selectedIndex, TwoHopMovement.with(xMovementDistance, yMovementDistance));
+                int selectedIndex = data.list.getSelectedIndex();
+                data.model.remove(selectedIndex);
+                data.model.add(selectedIndex, TwoHopMovement.with(xMovementDistance, yMovementDistance));
             } else {
-                model.addElement(TwoHopMovement.with(xMovementDistance, yMovementDistance));
+                data.model.addElement(TwoHopMovement.with(xMovementDistance, yMovementDistance));
             }
             twoHopDialog.dispose();
         });
@@ -353,15 +356,17 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         twoHopDialog.setVisible(true);
     }
 
-    private AddRemoveEditPanel createScrollPane(@NotNull JPanel movementPanel, @NotNull JList<?> list,
-                                                @NotNull String title, int column) {
+    private void createScrollPane(@NotNull JPanel movementPanel, @NotNull JList<?> list,
+                                  @NotNull AddRemoveEditPanel buttons, @NotNull String title) {
         JScrollPane scrollPane = new JScrollPane(list);
         scrollPane.setPreferredSize(new Dimension(150, 140));
         scrollPane.setBorder(BorderFactory.createTitledBorder(title));
         scrollPane.getVerticalScrollBar().setUnitIncrement(25);
 
+        int c = movementPanel.getComponentCount() / 2;
+
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = column;
+        gbc.gridx = c;
         gbc.gridy = 0;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.weightx = 1.0;
@@ -369,14 +374,10 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         gbc.insets = new Insets(10, 10, 0, 10);
         movementPanel.add(scrollPane, gbc);
 
-        AddRemoveEditPanel buttonPanel = new AddRemoveEditPanel();
-
         gbc.gridy = 1;
         gbc.weighty = 0.5;
         gbc.insets = new Insets(0, 0, 0, 0);
-        movementPanel.add(buttonPanel, gbc);
-
-        return buttonPanel;
+        movementPanel.add(buttons, gbc);
     }
 
     private void movePiece(com.drewhannay.chesscrafter.utility.Pair<JComponent, JComponent> pair) {
@@ -395,29 +396,23 @@ public class PieceCrafterDetailPanel extends ChessPanel {
             return ImmutableSet.of();
         }
 
-        Map<Direction, Integer> movements = new HashMap<>(mMovementListModel.size());
-        IntStream.range(0, mMovementListModel.size()).forEach(i -> {
-            Pair<Direction, Integer> pair = mMovementListModel.get(i);
-            movements.put(pair.getKey(), pair.getValue());
-        });
-        Map<Direction, Integer> capturingMovements = new HashMap<>(mCapturingListModel.size());
-        IntStream.range(0, mCapturingListModel.size()).forEach(i -> {
-            Pair<Direction, Integer> pair = mCapturingListModel.get(i);
-            capturingMovements.put(pair.getKey(), pair.getValue());
-        });
-        Set<TwoHopMovement> twoHopMovements = new HashSet<>(mTwoHopListModel.size());
-        IntStream.range(0, mTwoHopListModel.size()).forEach(i -> twoHopMovements.add(mTwoHopListModel.get(i)));
+        Set<CardinalMovement> movements = new HashSet<>(mMovementData.model.size());
+        IntStream.range(0, mMovementData.model.size()).forEach(i -> movements.add(mMovementData.model.get(i)));
+        Set<CardinalMovement> capturingMovements = new HashSet<>(mCapturingData.model.size());
+        IntStream.range(0, mCapturingData.model.size()).forEach(i -> capturingMovements.add(mCapturingData.model.get(i)));
+        Set<TwoHopMovement> twoHopMovements = new HashSet<>(mTwoHopData.model.size());
+        IntStream.range(0, mTwoHopData.model.size()).forEach(i -> twoHopMovements.add(mTwoHopData.model.get(i)));
 
         PieceType pieceType = new PieceType(mPieceNameField.getText(), mPieceNameField.getText(),
                 movements, capturingMovements, twoHopMovements);
         return pieceType.getMovesFrom(coordinate, mBoard.getBoardSize(), 0);
     }
 
-    private ListCellRenderer<Pair<Direction, Integer>> createMovementRenderer() {
+    private ListCellRenderer<CardinalMovement> createMovementRenderer() {
         return (list, value, index, isSelected, cellHasFocus) -> {
-            String direction = String.valueOf(value.getKey());
-            String distance = value.getValue() == Integer.MAX_VALUE ? Messages.getString("PieceCrafterDetailPanel.unlimited")
-                    : String.valueOf(value.getValue());
+            String direction = String.valueOf(value.direction);
+            String distance = value.distance == Integer.MAX_VALUE ? Messages.getString("PieceCrafterDetailPanel.unlimited")
+                    : String.valueOf(value.distance);
             JLabel label = new JLabel(Messages.getString("PieceCrafterDetailPanel.movementItem", direction, distance));
             label.setOpaque(true);
             label.setBackground(isSelected ? list.getSelectionBackground() : list.getBackground());
@@ -436,9 +431,9 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         };
     }
 
-    private static List<Direction> getUnusedDirections(ListModel<Pair<Direction, Integer>> model) {
+    private static List<Direction> getUnusedDirections(@NotNull ListModel<CardinalMovement> model) {
         return Stream.of(Direction.values())
-                .filter(d -> IntStream.range(0, model.getSize()).allMatch(i -> model.getElementAt(i).getKey() != d))
+                .filter(d -> IntStream.range(0, model.getSize()).allMatch(i -> model.getElementAt(i).direction != d))
                 .collect(Collectors.toList());
     }
 }
