@@ -4,13 +4,11 @@ import com.drewhannay.chesscrafter.logic.PathMaker;
 import com.drewhannay.chesscrafter.logic.PieceTypeManager;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 public class PieceType {
@@ -18,25 +16,24 @@ public class PieceType {
 
     private final String mInternalId;
     private final String mName;
-    private final Map<Direction, Integer> mMovements;
-    private final Map<Direction, Integer> mCapturingMovements;
+    private final Set<CardinalMovement> mMovements;
+    private final Set<CardinalMovement> mCapturingMovements;
     private final Set<TwoHopMovement> mTwoHopMovements;
 
-    public PieceType(@NotNull String internalId, @NotNull String name, @Nullable Map<Direction, Integer> movements,
+    public PieceType(@NotNull String internalId, @NotNull String name, @Nullable Set<CardinalMovement> movements,
                      @Nullable Set<TwoHopMovement> twoHopMovements) {
         this(internalId, name, movements, movements, twoHopMovements);
     }
 
-    public PieceType(@NotNull String internalId, @NotNull String name, @Nullable Map<Direction, Integer> movements,
-                     @Nullable Map<Direction, Integer> capturingMovements,
-                     @Nullable Set<TwoHopMovement> twoHopMovements) {
+    public PieceType(@NotNull String internalId, @NotNull String name, @Nullable Set<CardinalMovement> movements,
+                     @Nullable Set<CardinalMovement> capturingMovements, @Nullable Set<TwoHopMovement> twoHopMovements) {
         Preconditions.checkArgument(!internalId.isEmpty());
         Preconditions.checkArgument(!name.isEmpty());
 
         mInternalId = internalId;
         mName = name;
-        mMovements = movements != null ? ImmutableMap.copyOf(movements) : ImmutableMap.<Direction, Integer>of();
-        mCapturingMovements = capturingMovements != null ? ImmutableMap.copyOf(capturingMovements) : ImmutableMap.<Direction, Integer>of();
+        mMovements = movements != null ? ImmutableSet.copyOf(movements) : ImmutableSet.<CardinalMovement>of();
+        mCapturingMovements = capturingMovements != null ? ImmutableSet.copyOf(capturingMovements) : ImmutableSet.<CardinalMovement>of();
         mTwoHopMovements = twoHopMovements != null ? ImmutableSet.copyOf(twoHopMovements) : ImmutableSet.<TwoHopMovement>of();
     }
 
@@ -51,13 +48,13 @@ public class PieceType {
     }
 
     @NotNull
-    public Map<Direction, Integer> getMovements() {
-        return ImmutableMap.copyOf(mMovements);
+    public Set<CardinalMovement> getMovements() {
+        return ImmutableSet.copyOf(mMovements);
     }
 
     @NotNull
-    public Map<Direction, Integer> getCapturingMovements() {
-        return ImmutableMap.copyOf(mCapturingMovements);
+    public Set<CardinalMovement> getCapturingMovements() {
+        return ImmutableSet.copyOf(mCapturingMovements);
     }
 
     @NotNull
@@ -87,12 +84,12 @@ public class PieceType {
 
     private Set<BoardCoordinate> getMovesFromImpl(@NotNull BoardCoordinate startLocation,
                                                   @NotNull BoardSize boardSize,
-                                                  @NotNull Map<Direction, Integer> movements) {
+                                                  @NotNull Set<CardinalMovement> movements) {
         Set<BoardCoordinate> moves = new HashSet<>();
 
-        for (Direction direction : movements.keySet()) {
-            PathMaker pathMaker = new PathMaker(startLocation, direction.getFurthestPoint(startLocation, boardSize));
-            moves.addAll(pathMaker.getPathToDestination(movements.get(direction)));
+        for (CardinalMovement movement : movements) {
+            PathMaker pathMaker = new PathMaker(startLocation, movement.direction.getFurthestPoint(startLocation, boardSize));
+            moves.addAll(pathMaker.getPathToDestination(movement.distance));
         }
 
         for (TwoHopMovement twoHopMovement : mTwoHopMovements) {

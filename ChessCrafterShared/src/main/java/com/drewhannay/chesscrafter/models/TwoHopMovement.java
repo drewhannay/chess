@@ -3,7 +3,7 @@ package com.drewhannay.chesscrafter.models;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 
-public final class TwoHopMovement {
+public final class TwoHopMovement implements Movement {
     public final int x;
     public final int y;
 

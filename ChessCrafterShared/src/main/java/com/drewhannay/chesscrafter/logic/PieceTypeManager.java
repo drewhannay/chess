@@ -1,16 +1,15 @@
 package com.drewhannay.chesscrafter.logic;
 
+import com.drewhannay.chesscrafter.models.CardinalMovement;
 import com.drewhannay.chesscrafter.models.Direction;
 import com.drewhannay.chesscrafter.models.PieceType;
 import com.drewhannay.chesscrafter.models.TwoHopMovement;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 public enum PieceTypeManager {
@@ -72,18 +71,18 @@ public enum PieceTypeManager {
     }
 
     public static PieceType getBishopPieceType() {
-        Map<Direction, Integer> movements = Maps.newHashMap();
+        Set<CardinalMovement> movements = new HashSet<>(Direction.values().length);
         for (Direction direction : Direction.DIAGONAL_DIRECTIONS) {
-            movements.put(direction, PieceType.UNLIMITED);
+            movements.add(CardinalMovement.with(direction, PieceType.UNLIMITED));
         }
 
         return new PieceType(BISHOP_ID, "Bishop", movements, null);
     }
 
     public static PieceType getKingPieceType() {
-        Map<Direction, Integer> movements = Maps.newHashMap();
+        Set<CardinalMovement> movements = new HashSet<>(Direction.values().length);
         for (Direction direction : Direction.values()) {
-            movements.put(direction, 1);
+            movements.add(CardinalMovement.with(direction, 1));
         }
 
         return new PieceType(KING_ID, "King", movements, null);
@@ -96,40 +95,40 @@ public enum PieceTypeManager {
     }
 
     public static PieceType getNorthFacingPawnPieceType() {
-        Map<Direction, Integer> movements = Maps.newHashMapWithExpectedSize(1);
-        movements.put(Direction.NORTH, 1);
+        Set<CardinalMovement> movements = new HashSet<>(1);
+        movements.add(CardinalMovement.with(Direction.NORTH, 1));
 
-        Map<Direction, Integer> capturingMovements = Maps.newHashMapWithExpectedSize(2);
-        capturingMovements.put(Direction.NORTHEAST, 1);
-        capturingMovements.put(Direction.NORTHWEST, 1);
+        Set<CardinalMovement> capturingMovements = new HashSet<>(2);
+        capturingMovements.add(CardinalMovement.with(Direction.NORTHEAST, 1));
+        capturingMovements.add(CardinalMovement.with(Direction.NORTHWEST, 1));
 
         return new PieceType(NORTH_FACING_PAWN_ID, "Pawn", movements, capturingMovements, null);
     }
 
     public static PieceType getSouthFacingPawnPieceType() {
-        Map<Direction, Integer> movements = Maps.newHashMapWithExpectedSize(1);
-        movements.put(Direction.SOUTH, 1);
+        Set<CardinalMovement> movements = new HashSet<>(1);
+        movements.add(CardinalMovement.with(Direction.SOUTH, 1));
 
-        Map<Direction, Integer> capturingMovements = Maps.newHashMapWithExpectedSize(2);
-        capturingMovements.put(Direction.SOUTHEAST, 1);
-        capturingMovements.put(Direction.SOUTHWEST, 1);
+        Set<CardinalMovement> capturingMovements = new HashSet<>(2);
+        capturingMovements.add(CardinalMovement.with(Direction.SOUTHEAST, 1));
+        capturingMovements.add(CardinalMovement.with(Direction.SOUTHWEST, 1));
 
         return new PieceType(SOUTH_FACING_PAWN_ID, "Pawn", movements, capturingMovements, null);
     }
 
     public static PieceType getQueenPieceType() {
-        Map<Direction, Integer> movements = Maps.newHashMap();
+        Set<CardinalMovement> movements = new HashSet<>(Direction.values().length);
         for (Direction direction : Direction.values()) {
-            movements.put(direction, PieceType.UNLIMITED);
+            movements.add(CardinalMovement.with(direction, PieceType.UNLIMITED));
         }
 
         return new PieceType(QUEEN_ID, "Queen", movements, null);
     }
 
     public static PieceType getRookPieceType() {
-        Map<Direction, Integer> movements = Maps.newHashMap();
+        Set<CardinalMovement> movements = new HashSet<>(Direction.ADJACENT_DIRECTIONS.size());
         for (Direction direction : Direction.ADJACENT_DIRECTIONS) {
-            movements.put(direction, PieceType.UNLIMITED);
+            movements.add(CardinalMovement.with(direction, PieceType.UNLIMITED));
         }
 
         return new PieceType(ROOK_ID, "Rook", movements, null);
