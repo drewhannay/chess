@@ -1,6 +1,7 @@
 package com.drewhannay.chesscrafter.panel;
 
 import com.drewhannay.chesscrafter.dialog.CardinalInputDialog;
+import com.drewhannay.chesscrafter.dialog.TwoHopInputDialog;
 import com.drewhannay.chesscrafter.dragNdrop.DropManager;
 import com.drewhannay.chesscrafter.dragNdrop.GlassPane;
 import com.drewhannay.chesscrafter.dragNdrop.SquareConfig;
@@ -24,7 +25,6 @@ import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -34,7 +34,6 @@ import javax.swing.ListCellRenderer;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 import java.awt.Color;
-import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -240,64 +239,18 @@ public class PieceCrafterDetailPanel extends ChessPanel {
     }
 
     private void showTwoHopInputDialog(@NotNull ListData<TwoHopMovement> data, boolean isEdit) {
-        JDialog twoHopDialog = new JDialog();
-        twoHopDialog.setSize(new Dimension(300, 200));
-        twoHopDialog.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
-        twoHopDialog.setLocationRelativeTo(this);
-
-        ChessPanel twoHopPopupPanel = new ChessPanel();
-        twoHopPopupPanel.setLayout(new GridBagLayout());
-
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.fill = GridBagConstraints.BOTH;
-        gbc.weightx = 0.5;
-        gbc.insets = new Insets(5, 5, 5, 5);
-        twoHopPopupPanel.add(GuiUtility.createJLabel(Messages.getString("PieceCrafterDetailPanel.xDirection")), gbc);
-
-        JTextField xDirection = new JTextField(4);
-        xDirection.setText("1");
-
-        gbc.gridx = 1;
-        gbc.weightx = 1.0;
-        twoHopPopupPanel.add(xDirection, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        gbc.weightx = 0.5;
-        twoHopPopupPanel.add(GuiUtility.createJLabel(Messages.getString("PieceCrafterDetailPanel.yDirection")), gbc);
-
-        JTextField yDirection = new JTextField(4);
-        yDirection.setText("2");
-
-        if (isEdit) {
-            TwoHopMovement movement = data.list.getSelectedValue();
-            xDirection.setText(String.valueOf(movement.x));
-            yDirection.setText(String.valueOf(movement.y));
-        }
-
-        gbc.gridx = 1;
-        gbc.weightx = 1.0;
-        twoHopPopupPanel.add(yDirection, gbc);
-
-        JButton saveMovement = new JButton(Messages.getString("PieceCrafterDetailPanel.saveAndClose"));
-        saveMovement.addActionListener(event -> {
-            int xMovementDistance = Integer.parseInt(xDirection.getText());
-            int yMovementDistance = Integer.parseInt(yDirection.getText());
+        TwoHopMovement editingMovement = data.list.getSelectedValue();
+        TwoHopInputDialog dialog = new TwoHopInputDialog(editingMovement, movement -> {
             if (isEdit) {
                 int selectedIndex = data.list.getSelectedIndex();
                 data.model.remove(selectedIndex);
-                data.model.add(selectedIndex, TwoHopMovement.with(xMovementDistance, yMovementDistance));
+                data.model.add(selectedIndex, movement);
             } else {
-                data.model.addElement(TwoHopMovement.with(xMovementDistance, yMovementDistance));
+                data.model.addElement(movement);
             }
-            twoHopDialog.dispose();
         });
-        gbc.gridy = 2;
-        gbc.weightx = 0.5;
-        twoHopPopupPanel.add(saveMovement, gbc);
-
-        twoHopDialog.add(twoHopPopupPanel);
-        twoHopDialog.setVisible(true);
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
     }
 
     private void createScrollPane(@NotNull JPanel movementPanel, @NotNull JList<?> list,
