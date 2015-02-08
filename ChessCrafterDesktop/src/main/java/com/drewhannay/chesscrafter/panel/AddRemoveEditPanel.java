@@ -24,8 +24,7 @@ public class AddRemoveEditPanel extends ChessPanel {
 
         initComponents();
     }
-
-
+    
     private void initComponents() {
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
 
