@@ -1,5 +1,6 @@
 package com.drewhannay.chesscrafter.panel;
 
+import com.drewhannay.chesscrafter.dialog.CardinalInputDialog;
 import com.drewhannay.chesscrafter.dragNdrop.DropManager;
 import com.drewhannay.chesscrafter.dragNdrop.GlassPane;
 import com.drewhannay.chesscrafter.dragNdrop.SquareConfig;
@@ -16,12 +17,12 @@ import com.drewhannay.chesscrafter.models.TwoHopMovement;
 import com.drewhannay.chesscrafter.utility.GuiUtility;
 import com.drewhannay.chesscrafter.utility.Messages;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Sets;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -39,7 +40,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -222,77 +222,21 @@ public class PieceCrafterDetailPanel extends ChessPanel {
     }
 
     private void showCardinalInputDialog(@NotNull ListData<CardinalMovement> data, boolean isEdit) {
-        List<Direction> unusedDirections = getUnusedDirections(data.model);
+        CardinalMovement editingMovement = data.list.getSelectedValue();
+        Set<Direction> directions = isEdit ? Sets.newHashSet(editingMovement.direction) : getUnusedDirections(data.model);
 
-        JDialog movementDialog = new JDialog();
-        movementDialog.setSize(new Dimension(300, 200));
-        movementDialog.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
-        movementDialog.setLocationRelativeTo(this);
-
-        ChessPanel movementPopupPanel = new ChessPanel();
-        movementPopupPanel.setLayout(new GridBagLayout());
-
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.fill = GridBagConstraints.BOTH;
-        gbc.weightx = 0.5;
-        gbc.insets = new Insets(5, 5, 5, 5);
-        movementPopupPanel.add(GuiUtility.createJLabel(Messages.getString("PieceCrafterDetailPanel.direction")), gbc);
-
-        JComboBox<Direction> directions;
-        if (isEdit) {
-            directions = new JComboBox<>(Direction.values());
-            directions.setSelectedItem(data.list.getSelectedValue().direction);
-            directions.setEnabled(false);
-        } else {
-            Direction[] directionArray = new Direction[unusedDirections.size()];
-            unusedDirections.toArray(directionArray);
-            directions = new JComboBox<>(directionArray);
-        }
-
-        gbc.gridx = 1;
-        gbc.weightx = 1.0;
-        movementPopupPanel.add(directions, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        gbc.weightx = 0.5;
-        movementPopupPanel.add(GuiUtility.createJLabel(Messages.getString("PieceCrafterDetailPanel.distance")), gbc);
-
-        JTextField distance = new JTextField(4);
-        if (isEdit) {
-            int value = data.list.getSelectedValue().distance;
-            if (value == Integer.MAX_VALUE) {
-                distance.setText(Messages.getString("PieceCrafterDetailPanel.unlimited"));
-            } else {
-                distance.setText(String.valueOf(value));
-            }
-        }
-        gbc.gridx = 1;
-        gbc.weightx = 1.0;
-        movementPopupPanel.add(distance, gbc);
-
-        JButton saveMovement = new JButton(Messages.getString("PieceCrafterDetailPanel.saveAndClose"));
-        saveMovement.addActionListener(event -> {
-            int movementDistance = Integer.parseInt(distance.getText());
-            if (distance.getText().toLowerCase().equals("unlimited")) {
-                movementDistance = Integer.MAX_VALUE;
-            }
+        CardinalInputDialog dialog = new CardinalInputDialog(directions, editingMovement, movement -> {
             if (isEdit) {
                 int selectedIndex = data.list.getSelectedIndex();
                 data.model.remove(selectedIndex);
-                data.model.add(selectedIndex, CardinalMovement.with((Direction) directions.getSelectedItem(), movementDistance));
+                data.model.add(selectedIndex, movement);
             } else {
-                data.model.addElement(CardinalMovement.with((Direction) directions.getSelectedItem(), movementDistance));
+                data.model.addElement(movement);
             }
             refreshButtonState(data);
-            movementDialog.dispose();
         });
-        gbc.gridy = 2;
-        gbc.weightx = 0.5;
-        movementPopupPanel.add(saveMovement, gbc);
-
-        movementDialog.add(movementPopupPanel);
-        movementDialog.setVisible(true);
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
     }
 
     private void showTwoHopInputDialog(@NotNull ListData<TwoHopMovement> data, boolean isEdit) {
@@ -431,9 +375,9 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         };
     }
 
-    private static List<Direction> getUnusedDirections(@NotNull ListModel<CardinalMovement> model) {
+    private static Set<Direction> getUnusedDirections(@NotNull ListModel<CardinalMovement> model) {
         return Stream.of(Direction.values())
                 .filter(d -> IntStream.range(0, model.getSize()).allMatch(i -> model.getElementAt(i).direction != d))
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
 }
