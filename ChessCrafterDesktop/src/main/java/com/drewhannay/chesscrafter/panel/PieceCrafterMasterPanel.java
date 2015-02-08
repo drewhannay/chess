@@ -2,8 +2,11 @@ package com.drewhannay.chesscrafter.panel;
 
 import com.drewhannay.chesscrafter.logic.PieceTypeManager;
 import com.drewhannay.chesscrafter.models.PieceType;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -51,18 +54,18 @@ public class PieceCrafterMasterPanel extends ChessPanel {
             mPieceTypeSelectedCallback.accept(mPieceList.getSelectedValue());
         });
 
+        setBorder(BorderFactory.createEmptyBorder(25,25,25,25));
+
         JScrollPane scrollPane = new JScrollPane(mPieceList);
         scrollPane.setFont(new Font(mPieceList.getName(), Font.PLAIN, 26));
         scrollPane.setPreferredSize(new Dimension(190, 500));
 
-        setLayout(new GridBagLayout());
-        GridBagConstraints constraints = new GridBagConstraints();
-
-        constraints.fill = GridBagConstraints.BOTH;
-        constraints.weightx = .5;
-        constraints.weighty = 1.0;
-        constraints.insets = new Insets(25, 25, 25, 25);
-        add(scrollPane, constraints);
+        setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+        add(scrollPane);
+        add(Box.createRigidArea(new Dimension(0, 10)));
+        AddRemoveEditPanel buttons = new AddRemoveEditPanel();
+        //TODO hookup the buttons to actual actions
+        add(buttons);
     }
 
     public void refreshList() {
