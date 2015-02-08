@@ -17,6 +17,11 @@ import java.io.File;
 import java.io.IOException;
 
 public final class GuiUtility {
+
+    public static boolean isMac() {
+        return System.getProperty("os.name").startsWith("Mac");
+    }
+
     public static void requestFocus(final JComponent component) {
         SwingUtilities.invokeLater(component::requestFocus);
     }
