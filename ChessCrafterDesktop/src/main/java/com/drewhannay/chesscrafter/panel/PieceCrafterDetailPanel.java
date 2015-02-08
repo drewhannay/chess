@@ -166,6 +166,7 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         JPanel allMovementsPanel = new JPanel();
         allMovementsPanel.setOpaque(false);
         allMovementsPanel.setLayout(new GridBagLayout());
+        allMovementsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10));
 
         dataStream().forEachOrdered(data -> {
             createScrollPane(allMovementsPanel, data.list, data.buttons, data.title);
@@ -202,15 +203,16 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
         gbc.weightx = 1.0;
-        gbc.weighty = 0.7;
+        gbc.weighty = 0.0;
+        gbc.ipady = 50;
         add(namePanel, gbc);
 
         gbc.gridy = 1;
-        gbc.weighty = 1.0;
-        gbc.ipady = 0;
+        gbc.weighty = 0.2;
         add(allMovementsPanel, gbc);
 
         gbc.gridy = 2;
+        gbc.weighty = 1.0;
         add(boardAndSave, gbc);
     }
 
@@ -268,12 +270,12 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         gbc.fill = GridBagConstraints.BOTH;
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
-        gbc.insets = new Insets(10, 10, 0, 10);
+        gbc.insets = new Insets(0, 5, 0, 5);
         movementPanel.add(scrollPane, gbc);
 
         gbc.gridy = 1;
         gbc.weighty = 0.5;
-        gbc.insets = new Insets(0, 0, 0, 0);
+        gbc.insets = new Insets(0, 5, 0, 5);
         movementPanel.add(buttons, gbc);
     }
 
