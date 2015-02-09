@@ -1,13 +1,21 @@
 package com.drewhannay.chesscrafter.frame;
 
+import com.drewhannay.chesscrafter.logic.PieceTypeManager;
 import com.drewhannay.chesscrafter.panel.ChessPanel;
 import com.drewhannay.chesscrafter.utility.AppConstants;
 import com.drewhannay.chesscrafter.utility.GuiUtility;
 import com.drewhannay.chesscrafter.utility.Messages;
 import com.drewhannay.chesscrafter.utility.PieceIconUtility;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import java.awt.Color;
+import java.awt.Desktop;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.net.URI;
 
 public class AboutFrame extends ChessFrame {
@@ -39,7 +47,7 @@ public class AboutFrame extends ChessFrame {
         JLabel visitSiteLabel = GuiUtility.createJLabel(Messages.getString("AboutFrame.visitOurSite"));
 
         JButton siteButton = new JButton();
-        siteButton.setIcon(PieceIconUtility.getPieceIcon("King", Color.BLACK));
+        siteButton.setIcon(PieceIconUtility.getPieceIcon(PieceTypeManager.KING_ID, Color.BLACK));
         siteButton.setPreferredSize(new Dimension(80, 80));
         siteButton.addActionListener(event -> {
             if (Desktop.isDesktopSupported()) {
