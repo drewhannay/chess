@@ -30,6 +30,7 @@ public final class CardinalInputDialog extends ChessDialog {
 
     public CardinalInputDialog(@NotNull Set<Direction> directions, @Nullable CardinalMovement editingMovement,
                                @NotNull Consumer<CardinalMovement> callback) {
+        super(true);
         mDirections = directions;
         mEditingMovement = editingMovement;
         mCallback = callback;

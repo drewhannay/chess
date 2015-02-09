@@ -23,6 +23,7 @@ public final class TwoHopInputDialog extends ChessDialog {
     private final Consumer<TwoHopMovement> mCallback;
 
     public TwoHopInputDialog(@Nullable TwoHopMovement editingMovement, @NotNull Consumer<TwoHopMovement> callback) {
+        super(true);
         mEditingMovement = editingMovement;
         mCallback = callback;
 

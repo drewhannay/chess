@@ -14,7 +14,7 @@ public class NewGameDialog extends ChessDialog {
     private final GameFrame mGameFrame;
 
     public NewGameDialog(GameFrame owner) {
-        super(owner, true);
+        super(true, owner);
 
         mGameFrame = owner;
 
