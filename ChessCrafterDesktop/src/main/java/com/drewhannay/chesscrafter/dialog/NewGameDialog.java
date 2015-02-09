@@ -9,12 +9,12 @@ import com.drewhannay.chesscrafter.utility.Messages;
 import javax.swing.*;
 import java.awt.*;
 
-public class NewGameDialog extends JDialog {
+public class NewGameDialog extends ChessDialog {
 
     private final GameFrame mGameFrame;
 
     public NewGameDialog(GameFrame owner) {
-        super(owner, true);
+        super(true, owner);
 
         mGameFrame = owner;
 

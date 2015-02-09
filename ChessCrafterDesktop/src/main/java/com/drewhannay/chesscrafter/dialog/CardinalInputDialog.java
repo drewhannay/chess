@@ -21,7 +21,7 @@ import java.awt.Insets;
 import java.util.Set;
 import java.util.function.Consumer;
 
-public final class CardinalInputDialog extends JDialog {
+public final class CardinalInputDialog extends ChessDialog {
 
     private final Set<Direction> mDirections;
     private final Consumer<CardinalMovement> mCallback;
@@ -30,6 +30,7 @@ public final class CardinalInputDialog extends JDialog {
 
     public CardinalInputDialog(@NotNull Set<Direction> directions, @Nullable CardinalMovement editingMovement,
                                @NotNull Consumer<CardinalMovement> callback) {
+        super(true);
         mDirections = directions;
         mEditingMovement = editingMovement;
         mCallback = callback;
@@ -41,7 +42,6 @@ public final class CardinalInputDialog extends JDialog {
         boolean isEdit = mEditingMovement != null;
 
         setSize(new Dimension(200, 200));
-        setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
 
         ChessPanel panel = new ChessPanel();
         panel.setLayout(new GridBagLayout());

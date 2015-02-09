@@ -17,12 +17,13 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.function.Consumer;
 
-public final class TwoHopInputDialog extends JDialog {
+public final class TwoHopInputDialog extends ChessDialog {
 
     private final TwoHopMovement mEditingMovement;
     private final Consumer<TwoHopMovement> mCallback;
 
     public TwoHopInputDialog(@Nullable TwoHopMovement editingMovement, @NotNull Consumer<TwoHopMovement> callback) {
+        super(true);
         mEditingMovement = editingMovement;
         mCallback = callback;
 
@@ -33,7 +34,6 @@ public final class TwoHopInputDialog extends JDialog {
         boolean isEdit = mEditingMovement != null;
 
         setSize(new Dimension(300, 200));
-        setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
 
         ChessPanel twoHopPopupPanel = new ChessPanel();
         twoHopPopupPanel.setLayout(new GridBagLayout());
