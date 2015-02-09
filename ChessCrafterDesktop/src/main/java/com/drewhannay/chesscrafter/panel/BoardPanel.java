@@ -11,6 +11,8 @@ import com.drewhannay.chesscrafter.utility.PreferenceUtility;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -38,6 +40,15 @@ public class BoardPanel extends ChessPanel {
         GridLayout gridLayout = new GridLayout(mBoardSize.width + 2, mBoardSize.height + 2);
         setLayout(gridLayout);
         createGrid(gridLayout);
+    }
+
+    public void updateDimensions(int width, int height) {
+        int size = Math.min(width, height);
+        setMinimumSize(new Dimension(size, size));
+        setPreferredSize(new Dimension(size, size));
+        setMaximumSize(new Dimension(size, size));
+        revalidate();
+        repaint();
     }
 
     @Override
@@ -74,7 +85,7 @@ public class BoardPanel extends ChessPanel {
     private void createGrid(GridLayout gridLayout) {
         for (int y = gridLayout.getRows() - 1; y >= 0; y--) {
             for (int x = 0; x < gridLayout.getColumns(); x++) {
-                add(getComponentForCell(x, y, gridLayout.getColumns()-1, gridLayout.getRows()-1));
+                add(getComponentForCell(x, y, gridLayout.getColumns() - 1, gridLayout.getRows() - 1));
             }
         }
     }
