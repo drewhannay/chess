@@ -1,12 +1,9 @@
 package com.drewhannay.chesscrafter.panel;
 
 import com.drewhannay.chesscrafter.logic.PieceTypeManager;
-import com.drewhannay.chesscrafter.models.CardinalMovement;
 import com.drewhannay.chesscrafter.models.PieceType;
-import com.drewhannay.chesscrafter.models.TwoHopMovement;
 import com.drewhannay.chesscrafter.utility.Messages;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableSet;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -84,8 +81,7 @@ public class PieceCrafterMasterPanel extends ChessPanel {
     }
 
     private void createPiece() {
-        PieceType pieceType = new PieceType(UUID.randomUUID().toString(), Messages.getString("PieceType.newPiece"),
-                ImmutableSet.<CardinalMovement>of(), ImmutableSet.<TwoHopMovement>of());
+        PieceType pieceType = new PieceType(UUID.randomUUID().toString(), Messages.getString("PieceType.newPiece"), null, null);
         PieceTypeManager.INSTANCE.registerPieceType(pieceType);
         // TODO: write file to disk
         mPieceListModel.addElement(pieceType);
