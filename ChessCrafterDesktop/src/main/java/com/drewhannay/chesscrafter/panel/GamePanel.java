@@ -83,23 +83,25 @@ public final class GamePanel extends ChessPanel {
     private void initComponents() {
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
         Board[] boards = mGame.getBoards();
-
-
+        
         JPanel boardPanels = new JPanel();
         boardPanels.setOpaque(false);
         boardPanels.setLayout(new BoxLayout(boardPanels, BoxLayout.LINE_AXIS));
         boardPanels.addComponentListener(new ComponentListener() {
             @Override
             public void componentResized(ComponentEvent e) {
-                Stream.of(mGameBoards).forEach(board ->board.updateDimensions(e.getComponent().getWidth(),
+                Stream.of(mGameBoards).forEach(board -> board.updateDimensions(e.getComponent().getWidth(),
                         e.getComponent().getHeight()));
             }
+
             @Override
             public void componentMoved(ComponentEvent e) {
             }
+
             @Override
             public void componentShown(ComponentEvent e) {
             }
+
             @Override
             public void componentHidden(ComponentEvent e) {
             }
