@@ -24,6 +24,7 @@ public class PieceCrafterMasterPanel extends ChessPanel {
 
     private final JList<PieceType> mPieceList;
     private final DefaultListModel<PieceType> mPieceListModel;
+    private final AddRemoveEditPanel mButtons;
 
     public PieceCrafterMasterPanel(Runnable newPieceCallback, Consumer<PieceType> pieceTypeSelectedCallback) {
         mNewPieceCallback = newPieceCallback;
@@ -31,6 +32,7 @@ public class PieceCrafterMasterPanel extends ChessPanel {
 
         mPieceListModel = new DefaultListModel<>();
         mPieceList = new JList<>(mPieceListModel);
+        mButtons = new AddRemoveEditPanel();
         refreshList();
 
         initComponents();
@@ -47,7 +49,9 @@ public class PieceCrafterMasterPanel extends ChessPanel {
             if (e.getValueIsAdjusting()) {
                 return;
             }
-            mPieceTypeSelectedCallback.accept(mPieceList.getSelectedValue());
+            PieceType pieceType = mPieceList.getSelectedValue();
+            mButtons.mRemove.setEnabled(!PieceTypeManager.INSTANCE.isSystemPiece(pieceType.getInternalId()));
+            mPieceTypeSelectedCallback.accept(pieceType);
         });
 
         setBorder(BorderFactory.createEmptyBorder(25, 25, 25, 25));
@@ -59,10 +63,10 @@ public class PieceCrafterMasterPanel extends ChessPanel {
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         add(scrollPane);
         add(Box.createRigidArea(new Dimension(0, 10)));
-        AddRemoveEditPanel buttons = new AddRemoveEditPanel();
-        buttons.mEdit.setVisible(false);
+
+        mButtons.mEdit.setVisible(false);
         //TODO hookup the buttons to actual actions
-        add(buttons);
+        add(mButtons);
     }
 
     public void refreshList() {
