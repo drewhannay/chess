@@ -17,7 +17,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.function.Consumer;
 
-public final class TwoHopInputDialog extends JDialog {
+public final class TwoHopInputDialog extends ChessDialog {
 
     private final TwoHopMovement mEditingMovement;
     private final Consumer<TwoHopMovement> mCallback;

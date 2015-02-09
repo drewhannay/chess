@@ -21,7 +21,7 @@ import java.awt.Insets;
 import java.util.Set;
 import java.util.function.Consumer;
 
-public final class CardinalInputDialog extends JDialog {
+public final class CardinalInputDialog extends ChessDialog {
 
     private final Set<Direction> mDirections;
     private final Consumer<CardinalMovement> mCallback;

@@ -9,7 +9,7 @@ import com.drewhannay.chesscrafter.utility.Messages;
 import javax.swing.*;
 import java.awt.*;
 
-public class NewGameDialog extends JDialog {
+public class NewGameDialog extends ChessDialog {
 
     private final GameFrame mGameFrame;
 
