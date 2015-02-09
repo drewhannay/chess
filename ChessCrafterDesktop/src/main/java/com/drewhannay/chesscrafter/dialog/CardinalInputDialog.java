@@ -42,7 +42,6 @@ public final class CardinalInputDialog extends ChessDialog {
         boolean isEdit = mEditingMovement != null;
 
         setSize(new Dimension(200, 200));
-        setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
 
         ChessPanel panel = new ChessPanel();
         panel.setLayout(new GridBagLayout());
