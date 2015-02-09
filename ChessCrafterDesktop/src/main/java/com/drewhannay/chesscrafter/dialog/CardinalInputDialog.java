@@ -82,13 +82,7 @@ public final class CardinalInputDialog extends JDialog {
 
         JCheckBox unlimited = new JCheckBox();
         unlimited.setOpaque(false);
-        unlimited.addActionListener(event -> {
-            if (unlimited.isSelected()) {
-                distanceField.setEnabled(false);
-            } else {
-                distanceField.setEnabled(true);
-            }
-        });
+        unlimited.addActionListener(event -> distanceField.setEnabled(!unlimited.isSelected()));
         if (isEdit && mEditingMovement.distance == Integer.MAX_VALUE) {
             unlimited.setSelected(true);
             distanceField.setEnabled(false);
