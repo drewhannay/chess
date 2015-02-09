@@ -113,11 +113,6 @@ public class PieceCrafterDetailPanel extends ChessPanel {
                 new SquareConfig(new DropManager(this::refreshBoard, this::movePiece), glassPane), this::getMovesFrom);
 
         initComponents();
-        newPieceType();
-    }
-
-    public void newPieceType() {
-        clearPieceData();
     }
 
     public void loadPieceType(PieceType pieceType) {

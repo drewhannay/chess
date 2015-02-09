@@ -1,7 +1,12 @@
 package com.drewhannay.chesscrafter.panel;
 
 import com.drewhannay.chesscrafter.logic.PieceTypeManager;
+import com.drewhannay.chesscrafter.models.CardinalMovement;
 import com.drewhannay.chesscrafter.models.PieceType;
+import com.drewhannay.chesscrafter.models.TwoHopMovement;
+import com.drewhannay.chesscrafter.utility.Messages;
+import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableSet;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -14,19 +19,18 @@ import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 public class PieceCrafterMasterPanel extends ChessPanel {
 
-    private final Runnable mNewPieceCallback;
     private final Consumer<PieceType> mPieceTypeSelectedCallback;
 
     private final JList<PieceType> mPieceList;
     private final DefaultListModel<PieceType> mPieceListModel;
     private final AddRemoveEditPanel mButtons;
 
-    public PieceCrafterMasterPanel(Runnable newPieceCallback, Consumer<PieceType> pieceTypeSelectedCallback) {
-        mNewPieceCallback = newPieceCallback;
+    public PieceCrafterMasterPanel(Consumer<PieceType> pieceTypeSelectedCallback) {
         mPieceTypeSelectedCallback = pieceTypeSelectedCallback;
 
         mPieceListModel = new DefaultListModel<>();
@@ -67,7 +71,9 @@ public class PieceCrafterMasterPanel extends ChessPanel {
         add(Box.createRigidArea(new Dimension(0, 10)));
 
         mButtons.mEdit.setVisible(false);
-        //TODO hookup the buttons to actual actions
+        mButtons.mAdd.addActionListener(e -> createPiece());
+        mButtons.mRemove.addActionListener(e -> deletePiece());
+
         add(mButtons);
     }
 
@@ -77,13 +83,22 @@ public class PieceCrafterMasterPanel extends ChessPanel {
         PieceTypeManager.INSTANCE.getAllPieceTypes().forEach(mPieceListModel::addElement);
     }
 
+    private void createPiece() {
+        PieceType pieceType = new PieceType(UUID.randomUUID().toString(), Messages.getString("PieceType.newPiece"),
+                ImmutableSet.<CardinalMovement>of(), ImmutableSet.<TwoHopMovement>of());
+        PieceTypeManager.INSTANCE.registerPieceType(pieceType);
+        // TODO: write file to disk
+        mPieceListModel.addElement(pieceType);
+        mPieceList.setSelectedValue(pieceType, true);
+    }
+
     private void deletePiece() {
-        // TODO: need to delete the actual custom piece
-        // TODO: don't allow deleting classic pieces
-        int index = mPieceList.getSelectedIndex();
-        if (index >= 0) {
-            mPieceListModel.remove(index);
-        }
+        PieceType pieceType = mPieceList.getSelectedValue();
+        Preconditions.checkState(!PieceTypeManager.INSTANCE.isSystemPiece(pieceType.getInternalId()));
+        PieceTypeManager.INSTANCE.unregisterPieceType(pieceType);
+        // TODO: delete the actual piece file from disk
+
+        mPieceListModel.removeElement(pieceType);
     }
 
     private final ListCellRenderer<PieceType> mCellRenderer = (JList<? extends PieceType> list, PieceType value,

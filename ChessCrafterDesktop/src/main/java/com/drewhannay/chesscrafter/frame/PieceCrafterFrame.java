@@ -15,7 +15,7 @@ public final class PieceCrafterFrame extends ChessFrame {
         setTitle("Piece Crafter");
 
         PieceCrafterDetailPanel detailPanel = new PieceCrafterDetailPanel(getGlassPane());
-        PieceCrafterMasterPanel masterPanel = new PieceCrafterMasterPanel(detailPanel::newPieceType, detailPanel::loadPieceType);
+        PieceCrafterMasterPanel masterPanel = new PieceCrafterMasterPanel(detailPanel::loadPieceType);
 
         setPreferredSize(new Dimension(800, 575));
         masterPanel.setMinimumSize(new Dimension(200, 575));
