@@ -17,12 +17,14 @@ import com.drewhannay.chesscrafter.models.PieceType;
 import com.drewhannay.chesscrafter.models.TwoHopMovement;
 import com.drewhannay.chesscrafter.utility.GuiUtility;
 import com.drewhannay.chesscrafter.utility.Messages;
+import com.drewhannay.chesscrafter.utility.PieceIconUtility;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -69,6 +71,7 @@ public class PieceCrafterDetailPanel extends ChessPanel {
     }
 
     private final JTextField mPieceNameField;
+    private final JButton mImageButton;
 
     private final ListData<CardinalMovement> mMovementData;
     private final ListData<CardinalMovement> mCapturingData;
@@ -80,6 +83,7 @@ public class PieceCrafterDetailPanel extends ChessPanel {
 
     public PieceCrafterDetailPanel(GlassPane glassPane) {
         mPieceNameField = new JTextField(15);
+        mImageButton = new JButton();
 
         DefaultListModel<CardinalMovement> movementListModel = new DefaultListModel<>();
         JList<CardinalMovement> movementList = new JList<>(movementListModel);
@@ -118,6 +122,10 @@ public class PieceCrafterDetailPanel extends ChessPanel {
     public void loadPieceType(PieceType pieceType) {
         clearPieceData();
 
+        Icon pieceIcon = PieceIconUtility.getPieceIcon(pieceType.getInternalId(), Color.WHITE);
+        mImageButton.setIcon(pieceIcon);
+        mImageButton.setPressedIcon(pieceIcon);
+
         mPieceNameField.setText(pieceType.getName());
         pieceType.getMovements().forEach(mMovementData.model::addElement);
         pieceType.getCapturingMovements().forEach(mCapturingData.model::addElement);
@@ -153,10 +161,9 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         namePanel.add(GuiUtility.createJLabel(Messages.getString("PieceCrafterDetailPanel.pieceName")));
         namePanel.add(mPieceNameField);
 
-        JButton imageButton = new JButton(Messages.getString("PieceCrafterDetailPanel.image"));
-        imageButton.setToolTipText(Messages.getString("PieceCrafterDetailPanel.pieceIcon"));
-        imageButton.setPreferredSize(new Dimension(75, 75));
-        namePanel.add(imageButton);
+        mImageButton.setToolTipText(Messages.getString("PieceCrafterDetailPanel.pieceIcon"));
+        mImageButton.setPreferredSize(new Dimension(75, 75));
+        namePanel.add(mImageButton);
 
         JPanel allMovementsPanel = new JPanel();
         allMovementsPanel.setOpaque(false);
