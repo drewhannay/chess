@@ -37,46 +37,18 @@ public class BoardPanel extends ChessPanel {
         mBoardSize = boardSize;
         mSquareLabels = new ArrayList<>(boardSize.width * boardSize.height);
 
-        addComponentListener(new ComponentListener() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                int size = Math.min(e.getComponent().getHeight(), e.getComponent().getWidth());
-                setMinimumSize(new Dimension(size, size));
-                setPreferredSize(new Dimension(size, size));
-                setMaximumSize(new Dimension(size, size));
-            }
-
-            @Override
-            public void componentMoved(ComponentEvent e) {
-
-            }
-
-            @Override
-            public void componentShown(ComponentEvent e) {
-
-            }
-
-            @Override
-            public void componentHidden(ComponentEvent e) {
-
-            }
-        });
-
         GridLayout gridLayout = new GridLayout(mBoardSize.width + 2, mBoardSize.height + 2);
         setLayout(gridLayout);
         createGrid(gridLayout);
     }
 
     public void updateDimensions(int width, int height) {
-        if (height > width) {
-            setMinimumSize(getMinimumSize());
-            setPreferredSize(new Dimension(width, width));
-            setMaximumSize(new Dimension(width, width));
-        } else {
-            setMinimumSize(getMinimumSize());
-            setPreferredSize(new Dimension(height, height));
-            setMaximumSize(new Dimension(height, height));
-        }
+        int size = Math.min(width, height);
+        setMinimumSize(new Dimension(size, size));
+        setPreferredSize(new Dimension(size, size));
+        setMaximumSize(new Dimension(size, size));
+        revalidate();
+        repaint();
     }
 
     @Override

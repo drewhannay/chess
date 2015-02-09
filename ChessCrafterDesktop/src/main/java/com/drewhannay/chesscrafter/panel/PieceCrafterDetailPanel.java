@@ -203,23 +203,15 @@ public class PieceCrafterDetailPanel extends ChessPanel {
             @Override
             public void componentResized(ComponentEvent e) {
                 mBoardPanel.updateDimensions(e.getComponent().getWidth(), e.getComponent().getHeight());
-                mBoardPanel.revalidate();
-                mBoardPanel.repaint();
             }
-
             @Override
             public void componentMoved(ComponentEvent e) {
-
             }
-
             @Override
             public void componentShown(ComponentEvent e) {
-
             }
-
             @Override
             public void componentHidden(ComponentEvent e) {
-
             }
         });
 
