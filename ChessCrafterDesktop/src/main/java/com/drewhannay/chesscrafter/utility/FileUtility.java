@@ -55,9 +55,7 @@ public final class FileUtility {
     }
 
     public static File getGameFile(String gameFileName) {
-        String path = HIDDEN_DIR + SLASH + SAVED_GAMES;
-        if (PreferenceUtility.getSaveLocationPreference() != "default")
-            path = PreferenceUtility.getSaveLocationPreference();
+        String path = PreferenceUtility.getSaveLocationPreference();
         new File(path).mkdirs();
         return new File(path + SLASH + gameFileName + SAVED_GAME_EXTENSION);
     }
