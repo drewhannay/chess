@@ -23,6 +23,8 @@ import com.google.common.collect.Sets;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.Icon;
 import javax.swing.JButton;
@@ -31,15 +33,20 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Rectangle;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.BiConsumer;
@@ -154,7 +161,8 @@ public class PieceCrafterDetailPanel extends ChessPanel {
     }
 
     private void initComponents() {
-        setLayout(new GridBagLayout());
+        setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+
         JPanel namePanel = new JPanel();
         namePanel.setOpaque(false);
 
@@ -170,6 +178,13 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         allMovementsPanel.setLayout(new GridBagLayout());
         allMovementsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10));
 
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.gridwidth = 3;
+        allMovementsPanel.add(namePanel, gbc);
+
         dataStream().forEachOrdered(data -> {
             createScrollPane(allMovementsPanel, data.list, data.buttons, data.title);
             data.buttons.addAddActionListener(e -> data.showInputDialog.accept(false));
@@ -178,44 +193,45 @@ public class PieceCrafterDetailPanel extends ChessPanel {
             data.list.addListSelectionListener(e -> refreshButtonState(data));
         });
 
-        JPanel boardAndSave = new JPanel();
-        boardAndSave.setOpaque(false);
-        boardAndSave.setLayout(new GridBagLayout());
+        JPanel boardPanels = new JPanel();
+        boardPanels.setOpaque(false);
+        boardPanels.setLayout(new BoxLayout(boardPanels, BoxLayout.LINE_AXIS));
+        boardPanels.add(Box.createHorizontalGlue());
+        boardPanels.add(mBoardPanel);
+        boardPanels.add(Box.createHorizontalGlue());
+        boardPanels.addComponentListener(new ComponentListener() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                mBoardPanel.updateDimensions(e.getComponent().getWidth(), e.getComponent().getHeight());
+                mBoardPanel.revalidate();
+                mBoardPanel.repaint();
+            }
 
-        GridBagConstraints gbc = new GridBagConstraints();
+            @Override
+            public void componentMoved(ComponentEvent e) {
 
-        gbc.gridx = 0;
-        gbc.weightx = 1.0;
-        gbc.weighty = 1.0;
-        gbc.fill = GridBagConstraints.BOTH;
-        boardAndSave.add(mBoardPanel, gbc);
+            }
 
-        JButton save = new JButton(Messages.getString("PieceMakerPanel.saveAndReturn"));
-        save.addActionListener(event -> {
-            //TODO save piece here
+            @Override
+            public void componentShown(ComponentEvent e) {
+
+            }
+
+            @Override
+            public void componentHidden(ComponentEvent e) {
+
+            }
         });
-        gbc.gridx = 1;
-        gbc.weightx = 0.0;
-        gbc.weighty = 0.0;
-        gbc.fill = GridBagConstraints.NONE;
-        gbc.anchor = GridBagConstraints.LAST_LINE_END;
-        gbc.insets = new Insets(10, 0, 25, 25);
-        boardAndSave.add(save, gbc);
 
-        gbc = new GridBagConstraints();
-        gbc.fill = GridBagConstraints.BOTH;
-        gbc.weightx = 1.0;
-        gbc.weighty = 0.0;
-        gbc.ipady = 50;
-        add(namePanel, gbc);
+        JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, allMovementsPanel, boardPanels);
+        splitPane.setPreferredSize(new Dimension(755, 475));
+        splitPane.setDividerLocation(230);
+        splitPane.setOpaque(false);
+        splitPane.setDividerSize(0);
+        splitPane.setResizeWeight(0.3);
+        splitPane.setEnabled(false);
 
-        gbc.gridy = 1;
-        gbc.weighty = 0.2;
-        add(allMovementsPanel, gbc);
-
-        gbc.gridy = 2;
-        gbc.weighty = 1.0;
-        add(boardAndSave, gbc);
+        add(splitPane);
     }
 
     private void refreshButtonState(@NotNull ListData<?> data) {
@@ -268,14 +284,14 @@ public class PieceCrafterDetailPanel extends ChessPanel {
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = c;
-        gbc.gridy = 0;
+        gbc.gridy = 1;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         gbc.insets = new Insets(0, 5, 0, 5);
         movementPanel.add(scrollPane, gbc);
 
-        gbc.gridy = 1;
+        gbc.gridy = 2;
         gbc.weighty = 0.5;
         gbc.insets = new Insets(0, 5, 0, 5);
         movementPanel.add(buttons, gbc);

@@ -11,6 +11,8 @@ import com.drewhannay.chesscrafter.utility.PreferenceUtility;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -35,9 +37,54 @@ public class BoardPanel extends ChessPanel {
         mBoardSize = boardSize;
         mSquareLabels = new ArrayList<>(boardSize.width * boardSize.height);
 
+        addComponentListener(new ComponentListener() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                Rectangle b = e.getComponent().getBounds();
+                if(b.height > b.width){
+                    setMinimumSize(new Dimension(b.width, b.width));
+                    setPreferredSize(new Dimension(b.width, b.width));
+                    setMaximumSize(new Dimension(b.width, b.width));
+                }
+                else{
+                    setMinimumSize(new Dimension(b.height, b.height));
+                    setPreferredSize(new Dimension(b.height, b.height));
+                    setMaximumSize(new Dimension(b.height, b.height));
+                }
+            }
+
+            @Override
+            public void componentMoved(ComponentEvent e) {
+
+            }
+
+            @Override
+            public void componentShown(ComponentEvent e) {
+
+            }
+
+            @Override
+            public void componentHidden(ComponentEvent e) {
+
+            }
+        });
+
         GridLayout gridLayout = new GridLayout(mBoardSize.width + 2, mBoardSize.height + 2);
         setLayout(gridLayout);
         createGrid(gridLayout);
+    }
+
+    public void updateDimensions(int width, int height){
+        if(height > width){
+            setMinimumSize(getMinimumSize());
+            setPreferredSize(new Dimension(width, width));
+            setMaximumSize(new Dimension(width, width));
+        }
+        else{
+            setMinimumSize(getMinimumSize());
+            setPreferredSize(new Dimension(height, height));
+            setMaximumSize(new Dimension(height, height));
+        }
     }
 
     @Override

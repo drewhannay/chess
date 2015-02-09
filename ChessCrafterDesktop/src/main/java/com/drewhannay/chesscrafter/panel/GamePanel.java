@@ -20,6 +20,8 @@ import com.drewhannay.chesscrafter.utility.PieceIconUtility;
 import com.google.common.base.Preconditions;
 import org.jetbrains.annotations.NotNull;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -33,7 +35,10 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.FileOutputStream;
@@ -76,11 +81,34 @@ public final class GamePanel extends ChessPanel {
     }
 
     private void initComponents() {
-        setLayout(new GridBagLayout());
+        setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
 
         JPanel boardPanels = new JPanel();
         boardPanels.setOpaque(false);
-        boardPanels.setLayout(new GridBagLayout());
+        boardPanels.setLayout(new BoxLayout(boardPanels, BoxLayout.LINE_AXIS));
+        boardPanels.addComponentListener(new ComponentListener() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                mGameBoards[0].updateDimensions(e.getComponent().getWidth(), e.getComponent().getHeight());
+                mGameBoards[0].revalidate();
+                mGameBoards[0].repaint();
+            }
+
+            @Override
+            public void componentMoved(ComponentEvent e) {
+
+            }
+
+            @Override
+            public void componentShown(ComponentEvent e) {
+
+            }
+
+            @Override
+            public void componentHidden(ComponentEvent e) {
+
+            }
+        });
 
         Board[] boards = mGame.getBoards();
         IntStream.range(0, boards.length).forEach(boardIndex -> {
@@ -93,12 +121,7 @@ public final class GamePanel extends ChessPanel {
                             return Collections.emptySet();
                         }
                     });
-            GridBagConstraints gridBagConstraints = new GridBagConstraints();
-            gridBagConstraints.gridx = boardIndex;
-            gridBagConstraints.fill = GridBagConstraints.BOTH;
-            gridBagConstraints.weightx = 1.0;
-            gridBagConstraints.weighty = 1.0;
-            boardPanels.add(mGameBoards[boardIndex], gridBagConstraints);
+            boardPanels.add(mGameBoards[boardIndex]);
         });
 
         Stream.of(mGame.getTeams()).forEach(team -> mTeamStatusPanels.add(new TeamStatusPanel(team)));
@@ -149,21 +172,15 @@ public final class GamePanel extends ChessPanel {
         gbc.gridx = 1;
         detailsPanel.add(mForwardButton, gbc);
 
-        GridBagConstraints constraints = new GridBagConstraints();
-
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, boardPanels, detailsPanel);
         splitPane.setPreferredSize(new Dimension(755, 475));
-        splitPane.setDividerLocation(450);
+        splitPane.setDividerLocation(350);
         splitPane.setOpaque(false);
         splitPane.setDividerSize(1);
-        splitPane.setResizeWeight(0.7);
+        splitPane.setResizeWeight(0.55);
         splitPane.setEnabled(false);
-        constraints.weightx = 1.0;
-        constraints.weighty = 1.0;
-        constraints.gridheight = 1;
-        constraints.fill = GridBagConstraints.BOTH;
 
-        add(splitPane, constraints);
+        add(splitPane);
 
         refresh();
     }
