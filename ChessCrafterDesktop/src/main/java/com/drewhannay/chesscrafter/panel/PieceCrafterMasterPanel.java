@@ -36,6 +36,9 @@ public class PieceCrafterMasterPanel extends ChessPanel {
 
         initComponents();
         validate();
+
+        // select the first piece by default
+        mPieceList.setSelectedIndex(0);
     }
 
     private void initComponents() {
