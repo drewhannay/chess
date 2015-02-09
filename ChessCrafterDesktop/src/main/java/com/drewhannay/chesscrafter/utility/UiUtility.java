@@ -8,8 +8,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 import java.awt.Color;
 
-public final class GuiUtility {
-
+public final class UiUtility {
     public static boolean isMac() {
         return System.getProperty("os.name").startsWith("Mac");
     }

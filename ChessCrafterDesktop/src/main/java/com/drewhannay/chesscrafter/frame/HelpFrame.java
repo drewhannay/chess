@@ -1,7 +1,7 @@
 package com.drewhannay.chesscrafter.frame;
 
 import com.drewhannay.chesscrafter.panel.ChessPanel;
-import com.drewhannay.chesscrafter.utility.GuiUtility;
+import com.drewhannay.chesscrafter.utility.UiUtility;
 import com.drewhannay.chesscrafter.utility.Messages;
 
 import javax.swing.*;
@@ -58,16 +58,16 @@ public class HelpFrame extends ChessFrame {
 
         helpPanel.add(helpTypesTabbedPane, BorderLayout.CENTER);
 
-        JLabel gamePlayHelpText = GuiUtility.createJLabel(Messages.getString("HelpFrame.gamePlayText"));
+        JLabel gamePlayHelpText = UiUtility.createJLabel(Messages.getString("HelpFrame.gamePlayText"));
         gamePlayHelpPanel.add(gamePlayHelpText);
 
-        JLabel generalHelpText = GuiUtility.createJLabel(Messages.getString("HelpFrame.generalHelpText"));
+        JLabel generalHelpText = UiUtility.createJLabel(Messages.getString("HelpFrame.generalHelpText"));
         generalHelpPanel.add(generalHelpText);
 
-        JLabel variantMakingHelpText = GuiUtility.createJLabel(Messages.getString("HelpFrame.variantHelpText"));
+        JLabel variantMakingHelpText = UiUtility.createJLabel(Messages.getString("HelpFrame.variantHelpText"));
         variantMakingHelpPanel.add(variantMakingHelpText);
 
-        JLabel pieceMakingHelpText = GuiUtility.createJLabel(Messages.getString("HelpFrame.pieceOptionsText"));
+        JLabel pieceMakingHelpText = UiUtility.createJLabel(Messages.getString("HelpFrame.pieceOptionsText"));
         pieceMakingHelpPanel.add(pieceMakingHelpText);
 
         add(helpPanel);

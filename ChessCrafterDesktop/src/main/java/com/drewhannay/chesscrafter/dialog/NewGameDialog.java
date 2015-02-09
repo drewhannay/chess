@@ -3,7 +3,7 @@ package com.drewhannay.chesscrafter.dialog;
 import com.drewhannay.chesscrafter.frame.GameFrame;
 import com.drewhannay.chesscrafter.logic.GameBuilder;
 import com.drewhannay.chesscrafter.models.Game;
-import com.drewhannay.chesscrafter.utility.GuiUtility;
+import com.drewhannay.chesscrafter.utility.UiUtility;
 import com.drewhannay.chesscrafter.utility.Messages;
 
 import javax.swing.*;
@@ -33,7 +33,7 @@ public class NewGameDialog extends ChessDialog {
         constraints.ipadx = 0;
         constraints.insets = new Insets(5, 50, 5, 50);
         constraints.anchor = GridBagConstraints.CENTER;
-        add(GuiUtility.createJLabel(Messages.getString("NewGamePanel.howToPlay")), constraints);
+        add(UiUtility.createJLabel(Messages.getString("NewGamePanel.howToPlay")), constraints);
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new GridBagLayout());

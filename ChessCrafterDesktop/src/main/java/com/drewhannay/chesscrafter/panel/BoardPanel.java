@@ -6,7 +6,7 @@ import com.drewhannay.chesscrafter.models.Board;
 import com.drewhannay.chesscrafter.models.BoardCoordinate;
 import com.drewhannay.chesscrafter.models.BoardSize;
 import com.drewhannay.chesscrafter.models.Piece;
-import com.drewhannay.chesscrafter.utility.GuiUtility;
+import com.drewhannay.chesscrafter.utility.UiUtility;
 import com.drewhannay.chesscrafter.utility.PreferenceUtility;
 
 import javax.swing.*;
@@ -92,13 +92,13 @@ public class BoardPanel extends ChessPanel {
 
     private JLabel getComponentForCell(int x, int y, int maxColumns, int maxRows) {
         if ((x == 0 && y == 0) || (x == maxColumns) || (y == maxRows)) {
-            return GuiUtility.createJLabel("");
+            return UiUtility.createJLabel("");
         } else if (x == 0) {
-            JLabel label = GuiUtility.createJLabel(String.valueOf(y));
+            JLabel label = UiUtility.createJLabel(String.valueOf(y));
             label.setHorizontalAlignment(SwingConstants.CENTER);
             return label;
         } else if (y == 0) {
-            JLabel label = GuiUtility.createJLabel(String.valueOf((char) (x - 1 + 'A')));
+            JLabel label = UiUtility.createJLabel(String.valueOf((char) (x - 1 + 'A')));
             label.setHorizontalAlignment(SwingConstants.CENTER);
             return label;
         } else {

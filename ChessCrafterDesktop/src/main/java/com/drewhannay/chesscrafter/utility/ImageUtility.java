@@ -61,7 +61,7 @@ public final class ImageUtility {
     @NotNull
     private static BufferedImage readImage(@NotNull String path, boolean isSystemFile) throws IOException {
         if (isSystemFile)
-            return ImageIO.read(GuiUtility.class.getResourceAsStream("/" + path + ".png"));
+            return ImageIO.read(ImageUtility.class.getResourceAsStream("/" + path + ".png"));
         else
             return ImageIO.read(FileUtility.readPieceImage(path));
     }

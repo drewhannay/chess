@@ -3,7 +3,7 @@ package com.drewhannay.chesscrafter.frame;
 import com.drewhannay.chesscrafter.logic.PieceTypeManager;
 import com.drewhannay.chesscrafter.panel.ChessPanel;
 import com.drewhannay.chesscrafter.utility.AppConstants;
-import com.drewhannay.chesscrafter.utility.GuiUtility;
+import com.drewhannay.chesscrafter.utility.UiUtility;
 import com.drewhannay.chesscrafter.utility.Messages;
 import com.drewhannay.chesscrafter.utility.PieceIconUtility;
 
@@ -38,11 +38,11 @@ public class AboutFrame extends ChessFrame {
         aboutPanel.setLayout(new GridBagLayout());
 
         Font font = new Font(Messages.getString("AboutFrame.verdana"), Font.BOLD, 18);
-        JLabel title = GuiUtility.createJLabel(AppConstants.APP_NAME + Messages.getString("AboutFrame.newline"));
+        JLabel title = UiUtility.createJLabel(AppConstants.APP_NAME + Messages.getString("AboutFrame.newline"));
         title.setFont(font);
 
-        JLabel versionLabel = GuiUtility.createJLabel(Messages.getString("AboutFrame.version"));
-        JLabel visitSiteLabel = GuiUtility.createJLabel(Messages.getString("AboutFrame.visitOurSite"));
+        JLabel versionLabel = UiUtility.createJLabel(Messages.getString("AboutFrame.version"));
+        JLabel visitSiteLabel = UiUtility.createJLabel(Messages.getString("AboutFrame.visitOurSite"));
 
         JButton siteButton = new JButton();
         siteButton.setIcon(PieceIconUtility.getPieceIcon(PieceTypeManager.KING_ID, Color.BLACK));

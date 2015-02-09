@@ -3,7 +3,7 @@ package com.drewhannay.chesscrafter.dialog;
 import com.drewhannay.chesscrafter.models.CardinalMovement;
 import com.drewhannay.chesscrafter.models.Direction;
 import com.drewhannay.chesscrafter.panel.ChessPanel;
-import com.drewhannay.chesscrafter.utility.GuiUtility;
+import com.drewhannay.chesscrafter.utility.UiUtility;
 import com.drewhannay.chesscrafter.utility.Messages;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -11,9 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JDialog;
 import javax.swing.JTextField;
-import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -50,7 +48,7 @@ public final class CardinalInputDialog extends ChessDialog {
         gbc.fill = GridBagConstraints.BOTH;
         gbc.weightx = 0.5;
         gbc.insets = new Insets(5, 5, 5, 5);
-        panel.add(GuiUtility.createJLabel(Messages.getString("PieceCrafterDetailPanel.direction")), gbc);
+        panel.add(UiUtility.createJLabel(Messages.getString("PieceCrafterDetailPanel.direction")), gbc);
 
         JComboBox<Direction> directions = new JComboBox<>();
         mDirections.forEach(directions::addItem);
@@ -67,7 +65,7 @@ public final class CardinalInputDialog extends ChessDialog {
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.weightx = 0.5;
-        panel.add(GuiUtility.createJLabel(Messages.getString("PieceCrafterDetailPanel.distance")), gbc);
+        panel.add(UiUtility.createJLabel(Messages.getString("PieceCrafterDetailPanel.distance")), gbc);
 
         JTextField distanceField = new JTextField(4);
 
@@ -78,7 +76,7 @@ public final class CardinalInputDialog extends ChessDialog {
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.weightx = 0.5;
-        panel.add(GuiUtility.createJLabel(Messages.getString("PieceCrafterDetailPanel.unlimited")), gbc);
+        panel.add(UiUtility.createJLabel(Messages.getString("PieceCrafterDetailPanel.unlimited")), gbc);
 
         JCheckBox unlimited = new JCheckBox();
         unlimited.setOpaque(false);

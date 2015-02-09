@@ -2,15 +2,13 @@ package com.drewhannay.chesscrafter.dialog;
 
 import com.drewhannay.chesscrafter.models.TwoHopMovement;
 import com.drewhannay.chesscrafter.panel.ChessPanel;
-import com.drewhannay.chesscrafter.utility.GuiUtility;
+import com.drewhannay.chesscrafter.utility.UiUtility;
 import com.drewhannay.chesscrafter.utility.Messages;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JTextField;
-import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -42,7 +40,7 @@ public final class TwoHopInputDialog extends ChessDialog {
         gbc.fill = GridBagConstraints.BOTH;
         gbc.weightx = 0.5;
         gbc.insets = new Insets(5, 5, 5, 5);
-        twoHopPopupPanel.add(GuiUtility.createJLabel(Messages.getString("PieceCrafterDetailPanel.xDirection")), gbc);
+        twoHopPopupPanel.add(UiUtility.createJLabel(Messages.getString("PieceCrafterDetailPanel.xDirection")), gbc);
 
         JTextField xDirection = new JTextField(4);
         xDirection.setText("1");
@@ -54,7 +52,7 @@ public final class TwoHopInputDialog extends ChessDialog {
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.weightx = 0.5;
-        twoHopPopupPanel.add(GuiUtility.createJLabel(Messages.getString("PieceCrafterDetailPanel.yDirection")), gbc);
+        twoHopPopupPanel.add(UiUtility.createJLabel(Messages.getString("PieceCrafterDetailPanel.yDirection")), gbc);
 
         JTextField yDirection = new JTextField(4);
         yDirection.setText("2");

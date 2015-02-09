@@ -1,6 +1,6 @@
 package com.drewhannay.chesscrafter.panel;
 
-import com.drewhannay.chesscrafter.utility.GuiUtility;
+import com.drewhannay.chesscrafter.utility.UiUtility;
 import com.drewhannay.chesscrafter.utility.ImageUtility;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,7 +18,7 @@ public class AddRemoveEditPanel extends ChessPanel {
     public final JButton mRemove;
     public final JButton mEdit;
 
-    private static final int WIDTH = GuiUtility.isMac() ? -4 : 4;
+    private static final int WIDTH = UiUtility.isMac() ? -4 : 4;
 
     public AddRemoveEditPanel() {
         super(false);

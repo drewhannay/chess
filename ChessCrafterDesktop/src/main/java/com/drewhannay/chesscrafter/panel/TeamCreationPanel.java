@@ -5,7 +5,7 @@ import com.drewhannay.chesscrafter.label.SquareJLabel;
 import com.drewhannay.chesscrafter.models.BoardCoordinate;
 import com.drewhannay.chesscrafter.models.Piece;
 import com.drewhannay.chesscrafter.models.PieceType;
-import com.drewhannay.chesscrafter.utility.GuiUtility;
+import com.drewhannay.chesscrafter.utility.UiUtility;
 import com.drewhannay.chesscrafter.utility.Messages;
 
 import javax.swing.Box;
@@ -110,7 +110,7 @@ public class TeamCreationPanel extends ChessPanel {
         teamPanel.setLayout(new BoxLayout(teamPanel, BoxLayout.PAGE_AXIS));
         teamPanel.setOpaque(false);
 
-        teamPanel.add(GuiUtility.createJLabel(Messages.getString("TeamCreationPanel.team", teamInfo.teamId)));
+        teamPanel.add(UiUtility.createJLabel(Messages.getString("TeamCreationPanel.team", teamInfo.teamId)));
 
         teamInfo.label = new SquareJLabel(BoardCoordinate.at(1, teamInfo.teamId));
         squareConfig.configureSquare(teamInfo.label);
@@ -121,7 +121,7 @@ public class TeamCreationPanel extends ChessPanel {
         JPanel teamNamePanel = new JPanel();
         teamNamePanel.setOpaque(false);
         teamNamePanel.setLayout(new BoxLayout(teamNamePanel, BoxLayout.LINE_AXIS));
-        teamNamePanel.add(GuiUtility.createJLabel(Messages.getString("TeamCreationPanel.name")));
+        teamNamePanel.add(UiUtility.createJLabel(Messages.getString("TeamCreationPanel.name")));
 
         Dimension minSize = new Dimension(5, 25);
         Dimension prefSize = new Dimension(5, 25);
@@ -141,7 +141,7 @@ public class TeamCreationPanel extends ChessPanel {
         JPanel teamColorPanel = new JPanel();
         teamColorPanel.setOpaque(false);
         teamColorPanel.setLayout(new BoxLayout(teamColorPanel, BoxLayout.LINE_AXIS));
-        teamColorPanel.add(GuiUtility.createJLabel(Messages.getString("TeamCreationPanel.color")));
+        teamColorPanel.add(UiUtility.createJLabel(Messages.getString("TeamCreationPanel.color")));
 
         teamColorPanel.add(new Box.Filler(minSize, prefSize, maxSize));
         teamColorPanel.add(Box.createHorizontalGlue());

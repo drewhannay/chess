@@ -3,7 +3,7 @@ package com.drewhannay.chesscrafter.panel;
 import com.drewhannay.chesscrafter.label.SquareJLabel;
 import com.drewhannay.chesscrafter.models.BoardCoordinate;
 import com.drewhannay.chesscrafter.models.Piece;
-import com.drewhannay.chesscrafter.utility.GuiUtility;
+import com.drewhannay.chesscrafter.utility.UiUtility;
 import com.drewhannay.chesscrafter.utility.Messages;
 import org.jetbrains.annotations.NotNull;
 
@@ -26,7 +26,7 @@ public class JailPanel extends ChessPanel {
         mJailDimension = (totalPieces / 4) + (totalPieces % 4);
         mSquareLabels = new ArrayList<>(totalPieces);
 
-        setBorder(GuiUtility.createBorder(Messages.getString("PlayGamePanel.capturedPieces")));
+        setBorder(UiUtility.createBorder(Messages.getString("PlayGamePanel.capturedPieces")));
         setLayout(new GridLayout(mJailDimension, mJailDimension));
         createGrid();
     }

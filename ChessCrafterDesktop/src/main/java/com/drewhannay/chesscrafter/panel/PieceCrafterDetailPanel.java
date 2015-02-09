@@ -15,7 +15,7 @@ import com.drewhannay.chesscrafter.models.Movement;
 import com.drewhannay.chesscrafter.models.Piece;
 import com.drewhannay.chesscrafter.models.PieceType;
 import com.drewhannay.chesscrafter.models.TwoHopMovement;
-import com.drewhannay.chesscrafter.utility.GuiUtility;
+import com.drewhannay.chesscrafter.utility.UiUtility;
 import com.drewhannay.chesscrafter.utility.Messages;
 import com.drewhannay.chesscrafter.utility.PieceIconUtility;
 import com.google.common.collect.ImmutableSet;
@@ -166,7 +166,7 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         JPanel namePanel = new JPanel();
         namePanel.setOpaque(false);
 
-        namePanel.add(GuiUtility.createJLabel(Messages.getString("PieceCrafterDetailPanel.pieceName")));
+        namePanel.add(UiUtility.createJLabel(Messages.getString("PieceCrafterDetailPanel.pieceName")));
         namePanel.add(mPieceNameField);
 
         mImageButton.setToolTipText(Messages.getString("PieceCrafterDetailPanel.pieceIcon"));
