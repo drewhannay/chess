@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JTextField;
@@ -39,7 +40,7 @@ public final class CardinalInputDialog extends JDialog {
     private void initComponents() {
         boolean isEdit = mEditingMovement != null;
 
-        setSize(new Dimension(300, 200));
+        setSize(new Dimension(200, 200));
         setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
 
         ChessPanel panel = new ChessPanel();
@@ -69,23 +70,39 @@ public final class CardinalInputDialog extends JDialog {
         panel.add(GuiUtility.createJLabel(Messages.getString("PieceCrafterDetailPanel.distance")), gbc);
 
         JTextField distanceField = new JTextField(4);
-        if (isEdit) {
-            int value = mEditingMovement.distance;
-            if (value == Integer.MAX_VALUE) {
-                // TODO: should have a separate checkbox for this, no magic strings
-                distanceField.setText("Unlimited");
-            } else {
-                distanceField.setText(String.valueOf(value));
-            }
-        }
+
         gbc.gridx = 1;
         gbc.weightx = 1.0;
         panel.add(distanceField, gbc);
 
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.weightx = 0.5;
+        panel.add(GuiUtility.createJLabel(Messages.getString("PieceCrafterDetailPanel.unlimited")), gbc);
+
+        JCheckBox unlimited = new JCheckBox();
+        unlimited.setOpaque(false);
+        unlimited.addActionListener(event -> {
+            if (unlimited.isSelected()) {
+                distanceField.setEnabled(false);
+            } else {
+                distanceField.setEnabled(true);
+            }
+        });
+        if (isEdit && mEditingMovement.distance == Integer.MAX_VALUE) {
+            unlimited.setSelected(true);
+            distanceField.setEnabled(false);
+        }
+
+        gbc.gridx = 1;
+        gbc.weightx = 1.0;
+        gbc.insets = new Insets(5, 0, 5, 5);
+        panel.add(unlimited, gbc);
+
         JButton saveMovement = new JButton(Messages.getString("PieceCrafterDetailPanel.saveAndClose"));
         saveMovement.addActionListener(event -> {
             int distance;
-            if (distanceField.getText().toLowerCase().equals("unlimited")) {
+            if (unlimited.isSelected()) {
                 distance = Integer.MAX_VALUE;
             } else {
                 distance = Integer.parseInt(distanceField.getText().trim());
@@ -93,8 +110,11 @@ public final class CardinalInputDialog extends JDialog {
             mCallback.accept(CardinalMovement.with(directions.getItemAt(directions.getSelectedIndex()), distance));
             dispose();
         });
-        gbc.gridy = 2;
+        gbc.gridy = 3;
+        gbc.gridx = 0;
         gbc.weightx = 0.5;
+        gbc.gridwidth = 2;
+        gbc.insets = new Insets(5, 5, 5, 5);
         panel.add(saveMovement, gbc);
 
         add(panel);
