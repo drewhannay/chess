@@ -82,6 +82,8 @@ public final class GamePanel extends ChessPanel {
 
     private void initComponents() {
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
+        Board[] boards = mGame.getBoards();
+
 
         JPanel boardPanels = new JPanel();
         boardPanels.setOpaque(false);
@@ -89,9 +91,11 @@ public final class GamePanel extends ChessPanel {
         boardPanels.addComponentListener(new ComponentListener() {
             @Override
             public void componentResized(ComponentEvent e) {
-                mGameBoards[0].updateDimensions(e.getComponent().getWidth(), e.getComponent().getHeight());
-                mGameBoards[0].revalidate();
-                mGameBoards[0].repaint();
+                IntStream.range(0, boards.length).forEach(boardIndex -> {
+                    mGameBoards[boardIndex].updateDimensions(e.getComponent().getWidth(), e.getComponent().getHeight());
+                    mGameBoards[boardIndex].revalidate();
+                    mGameBoards[boardIndex].repaint();
+                });
             }
 
             @Override
@@ -110,7 +114,6 @@ public final class GamePanel extends ChessPanel {
             }
         });
 
-        Board[] boards = mGame.getBoards();
         IntStream.range(0, boards.length).forEach(boardIndex -> {
             mGameBoards[boardIndex] = new BoardPanel(boards[boardIndex].getBoardSize(), mSquareConfig,
                     coordinate -> {
@@ -152,7 +155,7 @@ public final class GamePanel extends ChessPanel {
         gbc.weightx = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.weighty = 1.0;
-        gbc.insets = new Insets(0,10,10, 10);
+        gbc.insets = new Insets(0, 10, 10, 10);
         detailsPanel.add(mTabbedPane, gbc);
 
         // add the undo button

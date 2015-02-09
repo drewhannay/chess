@@ -40,17 +40,10 @@ public class BoardPanel extends ChessPanel {
         addComponentListener(new ComponentListener() {
             @Override
             public void componentResized(ComponentEvent e) {
-                Rectangle b = e.getComponent().getBounds();
-                if(b.height > b.width){
-                    setMinimumSize(new Dimension(b.width, b.width));
-                    setPreferredSize(new Dimension(b.width, b.width));
-                    setMaximumSize(new Dimension(b.width, b.width));
-                }
-                else{
-                    setMinimumSize(new Dimension(b.height, b.height));
-                    setPreferredSize(new Dimension(b.height, b.height));
-                    setMaximumSize(new Dimension(b.height, b.height));
-                }
+                int size = Math.min(e.getComponent().getHeight(), e.getComponent().getWidth());
+                setMinimumSize(new Dimension(size, size));
+                setPreferredSize(new Dimension(size, size));
+                setMaximumSize(new Dimension(size, size));
             }
 
             @Override
@@ -74,13 +67,12 @@ public class BoardPanel extends ChessPanel {
         createGrid(gridLayout);
     }
 
-    public void updateDimensions(int width, int height){
-        if(height > width){
+    public void updateDimensions(int width, int height) {
+        if (height > width) {
             setMinimumSize(getMinimumSize());
             setPreferredSize(new Dimension(width, width));
             setMaximumSize(new Dimension(width, width));
-        }
-        else{
+        } else {
             setMinimumSize(getMinimumSize());
             setPreferredSize(new Dimension(height, height));
             setMaximumSize(new Dimension(height, height));
@@ -121,7 +113,7 @@ public class BoardPanel extends ChessPanel {
     private void createGrid(GridLayout gridLayout) {
         for (int y = gridLayout.getRows() - 1; y >= 0; y--) {
             for (int x = 0; x < gridLayout.getColumns(); x++) {
-                add(getComponentForCell(x, y, gridLayout.getColumns()-1, gridLayout.getRows()-1));
+                add(getComponentForCell(x, y, gridLayout.getColumns() - 1, gridLayout.getRows() - 1));
             }
         }
     }
