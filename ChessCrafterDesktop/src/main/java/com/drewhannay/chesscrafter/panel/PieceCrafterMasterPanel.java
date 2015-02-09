@@ -15,7 +15,6 @@ import javax.swing.ListSelectionModel;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.util.function.Consumer;
-import java.util.stream.IntStream;
 
 public class PieceCrafterMasterPanel extends ChessPanel {
 
@@ -72,8 +71,7 @@ public class PieceCrafterMasterPanel extends ChessPanel {
     public void refreshList() {
         mPieceListModel.clear();
 
-        // TODO: currently adding duplicates to force the list to scroll
-        IntStream.range(0, 6).forEach((i) -> PieceTypeManager.INSTANCE.getAllPieceTypes().forEach(mPieceListModel::addElement));
+        PieceTypeManager.INSTANCE.getAllPieceTypes().forEach(mPieceListModel::addElement);
     }
 
     private void deletePiece() {
