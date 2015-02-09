@@ -2,14 +2,20 @@ package com.drewhannay.chesscrafter.utility;
 
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.Icon;
+import java.awt.AlphaComposite;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsEnvironment;
+import java.awt.RenderingHints;
+import java.awt.Transparency;
 import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
 import java.awt.image.ComponentColorModel;
 import java.awt.image.DataBuffer;
 import java.awt.image.WritableRaster;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,27 +25,22 @@ public final class PieceIconUtility {
     private static final Map<String, Icon> ICON_CACHE = new HashMap<>();
 
     @Nullable
-    public static Icon getPieceIcon(String pieceName, Color teamColor) {
-        String key = getKey(pieceName, teamColor);
+    public static Icon getPieceIcon(String internalId, Color teamColor) {
+        String key = getKey(internalId, teamColor);
         if (ICON_CACHE.containsKey(key)) {
             return ICON_CACHE.get(key);
         }
-        try {
-            BufferedImage pieceImage = ImageUtility.getPieceImage(pieceName);
-            long start = System.currentTimeMillis();
-            BufferedImage mask = generateMask(pieceImage, teamColor, 0.5f);
-            Log.d(TAG, "GenerateMask took:" + String.valueOf(System.currentTimeMillis() - start));
-            start = System.currentTimeMillis();
-            BufferedImage tintedImage = tint(pieceImage, mask);
-            Log.d(TAG, "Tint took:" + String.valueOf(System.currentTimeMillis() - start));
-            Icon icon = new StretchIcon(tintedImage, true);
-            ICON_CACHE.put(key, icon);
-            return icon;
-        } catch (IOException e) {
-            Log.e(TAG, "Could not load image:" + pieceName);
-            e.printStackTrace();
-        }
-        return null;
+
+        BufferedImage pieceImage = ImageUtility.getPieceImage(internalId);
+        long start = System.currentTimeMillis();
+        BufferedImage mask = generateMask(pieceImage, teamColor, 0.5f);
+        Log.d(TAG, "GenerateMask took:" + String.valueOf(System.currentTimeMillis() - start));
+        start = System.currentTimeMillis();
+        BufferedImage tintedImage = tint(pieceImage, mask);
+        Log.d(TAG, "Tint took:" + String.valueOf(System.currentTimeMillis() - start));
+        Icon icon = new StretchIcon(tintedImage, true);
+        ICON_CACHE.put(key, icon);
+        return icon;
     }
 
     private static String getKey(String pieceName, Color teamColor) {
