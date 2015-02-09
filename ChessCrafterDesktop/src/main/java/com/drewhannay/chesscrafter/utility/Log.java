@@ -1,5 +1,7 @@
 package com.drewhannay.chesscrafter.utility;
 
+import org.jetbrains.annotations.Contract;
+
 public final class Log {
     private Log() {
     }
@@ -37,10 +39,12 @@ public final class Log {
         print(Priority.ERROR, tag, message, e);
     }
 
+    @Contract(value = "_, _ -> fail")
     public static void wtf(String tag, String message) {
         print(Priority.ASSERT, tag, message, null);
     }
 
+    @Contract(value = "_, _, _ -> fail")
     public static void wtf(String tag, String message, Throwable e) {
         print(Priority.ASSERT, tag, message, e);
     }

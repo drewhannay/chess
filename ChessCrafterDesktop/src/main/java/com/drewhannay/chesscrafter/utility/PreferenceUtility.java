@@ -1,7 +1,6 @@
 package com.drewhannay.chesscrafter.utility;
 
 import com.drewhannay.chesscrafter.Main;
-import org.jetbrains.annotations.NotNull;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -16,12 +15,10 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.io.File;
 import java.util.prefs.Preferences;
 
 public final class PreferenceUtility {
 
-    private static final String SAVE_LOCATION = "saveLocation";
     private static final String HIGHLIGHT_MOVES = "highlightMoves";
 
     private static final Preferences PREFERENCES = Preferences.userNodeForPackage(Main.class);
@@ -37,12 +34,12 @@ public final class PreferenceUtility {
         popupFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         GridBagConstraints constraints = new GridBagConstraints();
 
-        String userSaveLocation = PreferenceUtility.getSaveLocationPreference();
+        String userSaveLocation = "Delete Me!";
 
         JPanel holder = new JPanel();
         holder.setBorder(BorderFactory.createTitledBorder(Messages.getString("PreferenceUtility.defaultCompletedLocation")));
         JLabel currentSaveLocationLabel = new JLabel(Messages.getString("PreferenceUtility.currentSaveLocation"));
-        JTextField currentSaveLocationField = new JTextField(FileUtility.getDefaultCompletedLocation());
+        JTextField currentSaveLocationField = new JTextField("Delete Me!");
         currentSaveLocationField.setEditable(false);
         int width = Math.max(userSaveLocation.length() + 15, 300);
         currentSaveLocationField.setPreferredSize(new Dimension(width, 25));
@@ -51,7 +48,7 @@ public final class PreferenceUtility {
         JCheckBox highlightingCheckBox = new JCheckBox(Messages.getString("PreferenceUtility.enableHighlighting"));
 
         JButton closeButton = new JButton(Messages.getString("PreferenceUtility.close"));
-        GuiUtility.setupDoneButton(closeButton, popupFrame);
+        closeButton.addActionListener(event1 -> popupFrame.dispose());
 
         holder.add(currentSaveLocationLabel);
         holder.add(currentSaveLocationField);
@@ -60,18 +57,11 @@ public final class PreferenceUtility {
         highlightingCheckBox.setSelected(getHighlightMovesPreference());
 
         resetButton.addActionListener(event -> {
-            String saveLocation = FileUtility.getDefaultCompletedLocation();
-            currentSaveLocationField.setText(saveLocation);
-            PreferenceUtility.setSaveLocationPreference(saveLocation);
+            currentSaveLocationField.setText("Delete Me");
         });
 
         changeLocationButton.addActionListener(event -> {
-            File directory = FileUtility.chooseDirectory();
-            if (directory != null) {
-                String path = directory.getAbsolutePath();
-                currentSaveLocationField.setText(path);
-                PreferenceUtility.setSaveLocationPreference(path);
-            }
+            // TODO: delete me
         });
 
         highlightingCheckBox.addActionListener(event -> setHighlightMovesPreference(highlightingCheckBox.isSelected()));
@@ -119,21 +109,5 @@ public final class PreferenceUtility {
 
     private static void setHighlightMovesPreference(boolean highlightMoves) {
         PREFERENCES.putBoolean(HIGHLIGHT_MOVES, highlightMoves);
-    }
-
-    /**
-     * Method to get the preference for Save game location
-     *
-     * @return returns the string value for the save game location
-     */
-    public static String getSaveLocationPreference() {
-        return PREFERENCES.get(SAVE_LOCATION, FileUtility.getDefaultCompletedLocation());
-    }
-
-    /**
-     * Method to set the preference for Save game location
-     */
-    public static void setSaveLocationPreference(@NotNull String location) {
-        PREFERENCES.put(SAVE_LOCATION, location);
     }
 }

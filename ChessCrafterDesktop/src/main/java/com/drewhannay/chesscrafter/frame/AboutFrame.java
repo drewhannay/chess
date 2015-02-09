@@ -37,8 +37,6 @@ public class AboutFrame extends ChessFrame {
         ChessPanel aboutPanel = new ChessPanel();
         aboutPanel.setLayout(new GridBagLayout());
 
-        JLabel frontPageImage = new JLabel(GuiUtility.createSystemImageIcon(250, 250, "/chess_logo.png"));
-
         Font font = new Font(Messages.getString("AboutFrame.verdana"), Font.BOLD, 18);
         JLabel title = GuiUtility.createJLabel(AppConstants.APP_NAME + Messages.getString("AboutFrame.newline"));
         title.setFont(font);
@@ -63,15 +61,12 @@ public class AboutFrame extends ChessFrame {
         constraints.insets = new Insets(10, 5, 10, 5);
         aboutPanel.add(title, constraints);
         constraints.gridy = 1;
-        constraints.insets = new Insets(0, 0, 0, 0);
-        aboutPanel.add(frontPageImage, constraints);
-        constraints.gridy = 2;
         constraints.insets = new Insets(10, 5, 5, 5);
         aboutPanel.add(versionLabel, constraints);
-        constraints.gridy = 3;
+        constraints.gridy = 2;
         constraints.insets = new Insets(10, 5, 5, 5);
         aboutPanel.add(visitSiteLabel, constraints);
-        constraints.gridy = 4;
+        constraints.gridy = 3;
         aboutPanel.add(siteButton, constraints);
 
         add(aboutPanel);

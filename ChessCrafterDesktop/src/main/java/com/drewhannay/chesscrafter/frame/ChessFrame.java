@@ -2,7 +2,7 @@ package com.drewhannay.chesscrafter.frame;
 
 import com.drewhannay.chesscrafter.action.ChessActions;
 import com.drewhannay.chesscrafter.dragNdrop.GlassPane;
-import com.drewhannay.chesscrafter.utility.FileUtility;
+import com.drewhannay.chesscrafter.utility.ImageUtility;
 import com.drewhannay.chesscrafter.utility.Log;
 import com.google.common.base.Preconditions;
 
@@ -47,7 +47,7 @@ class ChessFrame extends JFrame {
         setResizable(true);
 
         // TODO: always use this image?
-        setIconImage(FileUtility.getFrontPageImage());
+        setIconImage(ImageUtility.readSystemImage("chess_logo"));
 
         setJMenuBar(ChessActions.createJMenuBar());
         setPreferredSize(new Dimension(685, 450));

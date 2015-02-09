@@ -5,17 +5,12 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.Icon;
 import java.awt.AlphaComposite;
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsEnvironment;
 import java.awt.RenderingHints;
 import java.awt.Transparency;
-import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
-import java.awt.image.ComponentColorModel;
-import java.awt.image.DataBuffer;
-import java.awt.image.WritableRaster;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -95,18 +90,5 @@ public final class PieceIconUtility {
 
     private static GraphicsConfiguration getGraphicsConfiguration() {
         return GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration();
-    }
-
-    public static BufferedImage greyscaleImage(BufferedImage image) {
-        ColorSpace gsColorSpace = ColorSpace.getInstance(ColorSpace.CS_GRAY);
-        ComponentColorModel ccm = new ComponentColorModel(gsColorSpace, true, false, Transparency.TRANSLUCENT, DataBuffer.TYPE_BYTE);
-        WritableRaster raster = ccm.createCompatibleWritableRaster(image.getWidth(), image.getHeight());
-
-        BufferedImage greyscaleImage = new BufferedImage(ccm, raster, ccm.isAlphaPremultiplied(), null);
-
-        Graphics g = greyscaleImage.getGraphics();
-        g.drawImage(image, 0, 0, null);
-        g.dispose();
-        return greyscaleImage;
     }
 }

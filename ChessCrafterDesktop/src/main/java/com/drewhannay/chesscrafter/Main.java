@@ -4,6 +4,7 @@ import com.apple.eawt.Application;
 import com.drewhannay.chesscrafter.action.ChessActions;
 import com.drewhannay.chesscrafter.frame.FrameManager;
 import com.drewhannay.chesscrafter.utility.FileUtility;
+import com.drewhannay.chesscrafter.utility.ImageUtility;
 import com.drewhannay.chesscrafter.utility.Log;
 
 import javax.swing.SwingUtilities;
@@ -13,6 +14,7 @@ import java.awt.AWTException;
 import java.awt.Image;
 import java.awt.SystemTray;
 import java.awt.TrayIcon;
+import java.io.IOException;
 
 public final class Main {
 
@@ -33,6 +35,12 @@ public final class Main {
 
             // set a tray icon if the system supports it
             createTrayIcon();
+
+            try {
+                FileUtility.init();
+            } catch (IOException e) {
+                Log.wtf(TAG, "Failed to init FileUtility, exiting with error");
+            }
 
             FrameManager.INSTANCE.openGameFrame();
         });
@@ -64,7 +72,7 @@ public final class Main {
     private static void createTrayIcon() {
         if (SystemTray.isSupported()) {
             SystemTray systemTray = SystemTray.getSystemTray();
-            TrayIcon tray = new TrayIcon(FileUtility.getFrontPageImage().getScaledInstance(25, 18, Image.SCALE_SMOOTH));
+            TrayIcon tray = new TrayIcon(ImageUtility.readSystemImage("chess_logo").getScaledInstance(25, 18, Image.SCALE_SMOOTH));
             try {
                 systemTray.add(tray);
             } catch (AWTException e) {

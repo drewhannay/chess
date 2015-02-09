@@ -1,6 +1,7 @@
 package com.drewhannay.chesscrafter.panel;
 
 import com.drewhannay.chesscrafter.utility.GuiUtility;
+import com.drewhannay.chesscrafter.utility.ImageUtility;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.Box;
@@ -32,9 +33,9 @@ public class AddRemoveEditPanel extends ChessPanel {
     private void initComponents() {
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
 
-        configureButton(mAdd, GuiUtility.createSystemImageIcon(25, 25, "/add_button.png"));
-        configureButton(mRemove, GuiUtility.createSystemImageIcon(25, 25, "/remove_button.png"));
-        configureButton(mEdit, GuiUtility.createSystemImageIcon(27, 27, "/edit_button.png"));
+        configureButton(mAdd, ImageUtility.createStretchIcon(ImageUtility.readSystemImage("add_button")));
+        configureButton(mRemove, ImageUtility.createStretchIcon(ImageUtility.readSystemImage("remove_button")));
+        configureButton(mEdit, ImageUtility.createStretchIcon(ImageUtility.readSystemImage("edit_button")));
 
         add(mAdd);
         add(Box.createRigidArea(new Dimension(WIDTH, 0)));

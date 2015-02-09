@@ -1,22 +1,22 @@
 package com.drewhannay.chesscrafter.dialog;
 
-import com.drewhannay.chesscrafter.utility.FileUtility;
+import com.drewhannay.chesscrafter.utility.ImageUtility;
 
 import javax.swing.JDialog;
 import java.awt.Dialog;
 import java.awt.Frame;
 
-public class ChessDialog extends JDialog{
+public class ChessDialog extends JDialog {
 
-    public ChessDialog(boolean modal){
+    public ChessDialog(boolean modal) {
         this(modal, null);
     }
 
     public ChessDialog(boolean modal, Frame owner) {
         super(owner);
-        if(modal) {
+        if (modal) {
             setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
         }
-        setIconImage(FileUtility.getFrontPageImage());
+        setIconImage(ImageUtility.readSystemImage("chess_logo"));
     }
 }

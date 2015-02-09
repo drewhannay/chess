@@ -14,7 +14,6 @@ import com.drewhannay.chesscrafter.models.Piece;
 import com.drewhannay.chesscrafter.models.PieceType;
 import com.drewhannay.chesscrafter.models.Team;
 import com.drewhannay.chesscrafter.utility.FileUtility;
-import com.drewhannay.chesscrafter.utility.GsonUtility;
 import com.drewhannay.chesscrafter.utility.Messages;
 import com.drewhannay.chesscrafter.utility.PieceIconUtility;
 import com.google.common.base.Preconditions;
@@ -200,12 +199,8 @@ public final class GamePanel extends ChessPanel {
             return;
         }
 
-        try (FileOutputStream fileOut = new FileOutputStream(FileUtility.getGameFile(fileName))) {
-            String json = GsonUtility.toJson(mGame.getHistory());
-            fileOut.write(json.getBytes());
-            fileOut.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (!FileUtility.writeHistory(mGame.getHistory(), fileName)) {
+            // TODO: report failure to user
         }
     }
 

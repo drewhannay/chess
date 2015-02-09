@@ -1,13 +1,18 @@
 package com.drewhannay.chesscrafter.utility;
 
+import com.drewhannay.chesscrafter.models.History;
+import com.drewhannay.chesscrafter.models.PieceType;
+import com.google.common.base.Preconditions;
 import javafx.stage.FileChooser;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URL;
+import java.util.stream.Stream;
 
 public final class FileUtility {
     public static final FileChooser.ExtensionFilter IMAGE_EXTENSION_FILTER = new FileChooser.ExtensionFilter("PNG", "*.png");
@@ -17,100 +22,99 @@ public final class FileUtility {
 
     private static final String TAG = "FileUtility";
 
-    private static final String HIDDEN_DIR;
-    private static final String IMAGES = "Images";
-    private static final String VARIANTS = "Crafted_Games";
-    private static final String PIECES = "Pieces";
-    private static final String SAVED_GAMES = "Saved_Games";
     private static final String SAVED_GAME_EXTENSION = ".chesscrafter";
     private static final String GAME_CRAFTER_EXTENSION = ".craftconfig";
     private static final String PIECE_EXTENSION = ".piece";
 
-    private static final String SLASH;
+    private static File sImageDir;
+    private static File sGameConfigDir;
+    private static File sSavedGameDir;
+    private static File sPieceDir;
 
-    public static String getImagePath(String imageName) {
-        File file = new File(HIDDEN_DIR + SLASH + IMAGES);
-        file.mkdirs();
-        return HIDDEN_DIR + SLASH + IMAGES + SLASH + imageName;
+    private static boolean mInitialized;
+
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    public static void init() throws IOException {
+        String hiddenDir;
+
+        if (System.getProperty("os.name").startsWith("Windows")) {
+            hiddenDir = System.getProperty("user.home") + "\\chess";
+
+            Runtime rt = Runtime.getRuntime();
+            // try to make our folder hidden on Windows
+            rt.exec("attrib +H " + System.getProperty("user.home") + "\\chess");
+        } else {
+            // if we're not on Windows, just add a period
+            hiddenDir = System.getProperty("user.home") + "/.chess";
+        }
+
+        sSavedGameDir = new File(hiddenDir + File.separator + "SavedGames" + File.separator);
+        sGameConfigDir = new File(hiddenDir + File.separator + "GameConfigs" + File.separator);
+        sPieceDir = new File(hiddenDir + File.separator + "Pieces" + File.separator);
+        sImageDir = new File(hiddenDir + File.separator + "Images" + File.separator);
+
+        boolean allExist = Stream.of(sSavedGameDir, sGameConfigDir, sPieceDir, sImageDir)
+                .allMatch(dir -> {
+                    dir.mkdirs();
+                    return dir.exists();
+                });
+
+        if (!allExist) {
+            throw new IOException("Failed to create directory");
+        }
+
+        mInitialized = true;
     }
 
-    public static String[] getVariantsFileArray() {
-        File file = new File(HIDDEN_DIR + SLASH + VARIANTS);
-        file.mkdirs();
-        return file.list();
+    private static void verifyInitialized() {
+        Preconditions.checkState(mInitialized, "Must call FileUtility.init()");
     }
 
-    public static String[] getCustomPieceArray() {
-        File file = new File(HIDDEN_DIR + SLASH + PIECES);
-        file.mkdirs();
-        return file.list();
+    public static boolean writeHistory(History history, String fileName) {
+        verifyInitialized();
+
+        return writeToFile(history, new File(sSavedGameDir, fileName + SAVED_GAME_EXTENSION));
     }
 
-    public static File getVariantsFile(String variantName) {
-        return new File(HIDDEN_DIR + SLASH + VARIANTS + SLASH + variantName);
+    public static boolean writePiece(PieceType pieceType) {
+        verifyInitialized();
+
+        return writeToFile(pieceType, new File(sPieceDir, pieceType.getInternalId() + PIECE_EXTENSION));
     }
 
-    public static File getPieceFile(String pieceName) {
-        return new File(HIDDEN_DIR + SLASH + PIECES + SLASH + pieceName);
-    }
-
-    public static File getGameFile(String gameFileName) {
-        String path = PreferenceUtility.getSaveLocationPreference();
-        new File(path).mkdirs();
-        return new File(path + SLASH + gameFileName + SAVED_GAME_EXTENSION);
-    }
-
-    public static String getDefaultCompletedLocation() {
-        String path = HIDDEN_DIR + SLASH + SAVED_GAMES;
-        new File(path).mkdirs();
-        return path;
+    private static boolean writeToFile(Object object, File file) {
+        try (FileOutputStream fileOut = new FileOutputStream(file)) {
+            String json = GsonUtility.toJson(object);
+            fileOut.write(json.getBytes());
+            fileOut.flush();
+        } catch (IOException e) {
+            Log.e(TAG, "Error writing file", e);
+            return false;
+        }
+        return true;
     }
 
     @Nullable
     public static File chooseFile(FileChooser.ExtensionFilter filter) {
-        return JavaFxFileDialog.chooseFile(filter, new File(PreferenceUtility.getSaveLocationPreference()));
+        return JavaFxFileDialog.chooseFile(filter, sSavedGameDir);
+    }
+
+    static boolean writePieceImage(@NotNull String internalId, @NotNull BufferedImage image) {
+        try {
+            ImageIO.write(image, "png", new File(sImageDir, internalId));
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    static File readPieceImage(String imageName) {
+        return new File(sImageDir, imageName);
     }
 
     @Nullable
     public static File chooseDirectory() {
-        return JavaFxFileDialog.chooseDirectory(new File(PreferenceUtility.getSaveLocationPreference()));
-    }
-
-    static {
-        if (System.getProperty("os.name").startsWith("Windows")) {
-            HIDDEN_DIR = System.getProperty("user.home") + "\\chess";
-            SLASH = "\\";
-
-            try {
-                Runtime rt = Runtime.getRuntime();
-                // try to make our folder hidden on Windows
-                rt.exec("attrib +H " + System.getProperty("user.home") + "\\chess");
-            } catch (Throwable t) {
-                t.printStackTrace();
-            }
-        } else {
-            // if we're not on Windows, just add a period
-            HIDDEN_DIR = System.getProperty("user.home") + "/.chess";
-            SLASH = "/";
-        }
-    }
-
-    public static BufferedImage getFrontPageImage() {
-        BufferedImage frontPage = null;
-        String path = "/chess_logo.png";
-        try {
-            URL resource = FileUtility.class.getResource(path);
-            frontPage = ImageIO.read(resource);
-        } catch (IOException e) {
-            Log.e(TAG, "Can't find path:" + path, e);
-        }
-        return frontPage;
-    }
-
-    public static void deletePiece(String pieceName) {
-        File pieceFile = getPieceFile(pieceName);
-        pieceFile.delete();
-        new File((getImagePath("l_" + pieceName + ".png"))).delete();
-        new File((getImagePath("d_" + pieceName + ".png"))).delete();
+        return JavaFxFileDialog.chooseDirectory(sSavedGameDir);
     }
 }
