@@ -2,7 +2,6 @@ package com.drewhannay.chesscrafter.panel;
 
 import com.drewhannay.chesscrafter.logic.PieceTypeManager;
 import com.drewhannay.chesscrafter.models.PieceType;
-import org.jetbrains.annotations.NotNull;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -15,9 +14,6 @@ import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
@@ -54,7 +50,7 @@ public class PieceCrafterMasterPanel extends ChessPanel {
             mPieceTypeSelectedCallback.accept(mPieceList.getSelectedValue());
         });
 
-        setBorder(BorderFactory.createEmptyBorder(25,25,25,25));
+        setBorder(BorderFactory.createEmptyBorder(25, 25, 25, 25));
 
         JScrollPane scrollPane = new JScrollPane(mPieceList);
         scrollPane.setFont(new Font(mPieceList.getName(), Font.PLAIN, 26));
@@ -64,6 +60,7 @@ public class PieceCrafterMasterPanel extends ChessPanel {
         add(scrollPane);
         add(Box.createRigidArea(new Dimension(0, 10)));
         AddRemoveEditPanel buttons = new AddRemoveEditPanel();
+        buttons.mEdit.setVisible(false);
         //TODO hookup the buttons to actual actions
         add(buttons);
     }
