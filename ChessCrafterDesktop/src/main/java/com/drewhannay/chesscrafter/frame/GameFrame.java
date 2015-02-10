@@ -8,7 +8,7 @@ import com.drewhannay.chesscrafter.models.History;
 import com.drewhannay.chesscrafter.panel.GamePanel;
 import com.drewhannay.chesscrafter.panel.HintPanel;
 import com.drewhannay.chesscrafter.utility.AppConstants;
-import com.drewhannay.chesscrafter.utility.FileUtility;
+import com.drewhannay.chesscrafter.utility.FileManager;
 import com.drewhannay.chesscrafter.utility.GsonUtility;
 import com.drewhannay.chesscrafter.utility.Messages;
 import com.google.gson.JsonElement;
@@ -143,7 +143,7 @@ public class GameFrame extends ChessFrame {
 
     private void openGame() {
         try {
-            File gameFile = FileUtility.chooseFile(FileUtility.HISTORY_EXTENSION_FILTER);
+            File gameFile = FileManager.chooseFile(FileManager.HISTORY_EXTENSION_FILTER);
             if (gameFile != null) {
                 JsonParser parser = new JsonParser();
                 JsonElement jsonElement = parser.parse(new FileReader(gameFile));

@@ -41,7 +41,7 @@ public final class ImageUtility {
     }
 
     public static boolean writePieceImage(@NotNull String internalId, @NotNull BufferedImage image) {
-        return FileUtility.writePieceImage(internalId, greyscaleImage(image));
+        return FileManager.writePieceImage(internalId, greyscaleImage(image));
     }
 
     @NotNull
@@ -63,7 +63,7 @@ public final class ImageUtility {
         if (isSystemFile)
             return ImageIO.read(ImageUtility.class.getResourceAsStream("/" + path + ".png"));
         else
-            return ImageIO.read(FileUtility.readPieceImage(path));
+            return ImageIO.read(FileManager.readPieceImage(path));
     }
 
     @NotNull

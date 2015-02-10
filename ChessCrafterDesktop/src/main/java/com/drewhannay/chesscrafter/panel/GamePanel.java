@@ -13,13 +13,12 @@ import com.drewhannay.chesscrafter.models.MoveBuilder;
 import com.drewhannay.chesscrafter.models.Piece;
 import com.drewhannay.chesscrafter.models.PieceType;
 import com.drewhannay.chesscrafter.models.Team;
-import com.drewhannay.chesscrafter.utility.FileUtility;
+import com.drewhannay.chesscrafter.utility.FileManager;
 import com.drewhannay.chesscrafter.utility.Messages;
 import com.drewhannay.chesscrafter.utility.PieceIconUtility;
 import com.google.common.base.Preconditions;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -34,14 +33,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
-import java.awt.Rectangle;
-import java.awt.Toolkit;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -199,7 +192,7 @@ public final class GamePanel extends ChessPanel {
             return;
         }
 
-        if (!FileUtility.writeHistory(mGame.getHistory(), fileName)) {
+        if (!FileManager.writeHistory(mGame.getHistory(), fileName)) {
             // TODO: report failure to user
         }
     }

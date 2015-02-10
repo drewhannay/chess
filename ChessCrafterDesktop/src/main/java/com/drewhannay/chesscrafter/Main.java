@@ -3,7 +3,7 @@ package com.drewhannay.chesscrafter;
 import com.apple.eawt.Application;
 import com.drewhannay.chesscrafter.action.ChessActions;
 import com.drewhannay.chesscrafter.frame.FrameManager;
-import com.drewhannay.chesscrafter.utility.FileUtility;
+import com.drewhannay.chesscrafter.utility.FileManager;
 import com.drewhannay.chesscrafter.utility.ImageUtility;
 import com.drewhannay.chesscrafter.utility.Log;
 
@@ -37,7 +37,7 @@ public final class Main {
             createTrayIcon();
 
             try {
-                FileUtility.init();
+                FileManager.init();
             } catch (IOException e) {
                 Log.wtf(TAG, "Failed to init FileUtility, exiting with error");
             }
