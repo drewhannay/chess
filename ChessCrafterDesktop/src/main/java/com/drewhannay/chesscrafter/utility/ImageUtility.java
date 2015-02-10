@@ -1,5 +1,6 @@
 package com.drewhannay.chesscrafter.utility;
 
+import com.drewhannay.chesscrafter.files.FileManager;
 import com.drewhannay.chesscrafter.logic.PieceTypeManager;
 import com.drewhannay.chesscrafter.models.PieceType;
 import org.jetbrains.annotations.NotNull;

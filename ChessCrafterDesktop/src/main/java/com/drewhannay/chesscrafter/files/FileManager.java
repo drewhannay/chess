@@ -1,7 +1,10 @@
-package com.drewhannay.chesscrafter.utility;
+package com.drewhannay.chesscrafter.files;
 
 import com.drewhannay.chesscrafter.models.History;
 import com.drewhannay.chesscrafter.models.PieceType;
+import com.drewhannay.chesscrafter.utility.GsonUtility;
+import com.drewhannay.chesscrafter.utility.JavaFxFileDialog;
+import com.drewhannay.chesscrafter.utility.Log;
 import com.google.common.base.Preconditions;
 import javafx.stage.FileChooser;
 import org.jetbrains.annotations.NotNull;
@@ -107,12 +110,7 @@ public enum FileManager {
         return true;
     }
 
-    @Nullable
-    public File chooseFile(FileChooser.ExtensionFilter filter) {
-        return JavaFxFileDialog.chooseFile(filter, sSavedGameDir);
-    }
-
-    boolean writePieceImage(@NotNull String internalId, @NotNull BufferedImage image) {
+    public boolean writePieceImage(@NotNull String internalId, @NotNull BufferedImage image) {
         try {
             ImageIO.write(image, "png", new File(sImageDir, internalId));
         } catch (IOException e) {
@@ -122,8 +120,13 @@ public enum FileManager {
         return true;
     }
 
-    File readPieceImage(String imageName) {
+    public File readPieceImage(String imageName) {
         return new File(sImageDir, imageName);
+    }
+
+    @Nullable
+    public File chooseFile(FileChooser.ExtensionFilter filter) {
+        return JavaFxFileDialog.chooseFile(filter, sSavedGameDir);
     }
 
     @Nullable

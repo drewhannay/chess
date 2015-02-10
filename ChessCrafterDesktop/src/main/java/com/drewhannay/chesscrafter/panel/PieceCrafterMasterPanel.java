@@ -2,7 +2,7 @@ package com.drewhannay.chesscrafter.panel;
 
 import com.drewhannay.chesscrafter.logic.PieceTypeManager;
 import com.drewhannay.chesscrafter.models.PieceType;
-import com.drewhannay.chesscrafter.utility.FileManager;
+import com.drewhannay.chesscrafter.files.FileManager;
 import com.drewhannay.chesscrafter.utility.Messages;
 import com.google.common.base.Preconditions;
 

@@ -13,7 +13,7 @@ import com.drewhannay.chesscrafter.models.MoveBuilder;
 import com.drewhannay.chesscrafter.models.Piece;
 import com.drewhannay.chesscrafter.models.PieceType;
 import com.drewhannay.chesscrafter.models.Team;
-import com.drewhannay.chesscrafter.utility.FileManager;
+import com.drewhannay.chesscrafter.files.FileManager;
 import com.drewhannay.chesscrafter.utility.Messages;
 import com.drewhannay.chesscrafter.utility.PieceIconUtility;
 import com.google.common.base.Preconditions;

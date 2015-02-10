@@ -8,7 +8,7 @@ import com.drewhannay.chesscrafter.models.History;
 import com.drewhannay.chesscrafter.panel.GamePanel;
 import com.drewhannay.chesscrafter.panel.HintPanel;
 import com.drewhannay.chesscrafter.utility.AppConstants;
-import com.drewhannay.chesscrafter.utility.FileManager;
+import com.drewhannay.chesscrafter.files.FileManager;
 import com.drewhannay.chesscrafter.utility.GsonUtility;
 import com.drewhannay.chesscrafter.utility.Messages;
 import com.google.gson.JsonElement;

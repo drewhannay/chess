@@ -3,7 +3,7 @@ package com.drewhannay.chesscrafter;
 import com.apple.eawt.Application;
 import com.drewhannay.chesscrafter.action.ChessActions;
 import com.drewhannay.chesscrafter.frame.FrameManager;
-import com.drewhannay.chesscrafter.utility.FileManager;
+import com.drewhannay.chesscrafter.files.FileManager;
 import com.drewhannay.chesscrafter.utility.ImageUtility;
 import com.drewhannay.chesscrafter.utility.Log;
 
