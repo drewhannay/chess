@@ -1,11 +1,14 @@
 package com.drewhannay.chesscrafter.files;
 
+import com.drewhannay.chesscrafter.logic.PieceTypeManager;
 import com.drewhannay.chesscrafter.models.History;
 import com.drewhannay.chesscrafter.models.PieceType;
 import com.drewhannay.chesscrafter.utility.GsonUtility;
 import com.drewhannay.chesscrafter.utility.JavaFxFileDialog;
 import com.drewhannay.chesscrafter.utility.Log;
 import com.google.common.base.Preconditions;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import javafx.stage.FileChooser;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -14,7 +17,10 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Stream;
 
 public enum FileManager {
@@ -31,12 +37,18 @@ public enum FileManager {
     private static final String GAME_CRAFTER_EXTENSION = ".craftconfig";
     private static final String PIECE_EXTENSION = ".piece";
 
+    private final List<ChessFileListener> mListeners;
+
+    private boolean mInitialized;
+
     private File sImageDir;
     private File sGameConfigDir;
     private File sSavedGameDir;
     private File sPieceDir;
 
-    private boolean mInitialized;
+    private FileManager() {
+        mListeners = new ArrayList<>();
+    }
 
     public void init() throws IOException {
         String hiddenDir;
@@ -68,6 +80,19 @@ public enum FileManager {
             throw new IOException("Failed to create directory");
         }
 
+        File[] pieceFiles = sPieceDir.listFiles();
+        if (pieceFiles == null) {
+            throw new IOException("Failed to list files in piece directory");
+        }
+        Stream.of(pieceFiles).forEach(file -> {
+            PieceType pieceType = readPiece(file);
+            if (pieceType != null) {
+                PieceTypeManager.INSTANCE.registerPieceType(pieceType);
+            } else {
+                Log.e(TAG, "Couldn't register null PieceType for file:" + file.getPath());
+            }
+        });
+
         mInitialized = true;
     }
 
@@ -75,16 +100,36 @@ public enum FileManager {
         Preconditions.checkState(mInitialized, "Must call FileUtility.init()");
     }
 
+    public void addChessFileListener(@NotNull ChessFileListener listener) {
+        mListeners.add(listener);
+    }
+
+    public void removeChessFileListener(@NotNull ChessFileListener listener) {
+        mListeners.remove(listener);
+    }
+
     public boolean writeHistory(History history, String fileName) {
         verifyInitialized();
 
-        return writeToFile(history, new File(sSavedGameDir, fileName + SAVED_GAME_EXTENSION));
+        boolean result = writeToFile(history, new File(sSavedGameDir, fileName + SAVED_GAME_EXTENSION));
+        if (result) {
+            mListeners.forEach(ChessFileListener::onSavedGameFileChanged);
+        }
+        return result;
     }
 
     public boolean writePiece(PieceType pieceType) {
         verifyInitialized();
 
-        return writeToFile(pieceType, new File(sPieceDir, pieceType.getInternalId() + PIECE_EXTENSION));
+        boolean result = writeToFile(pieceType, new File(sPieceDir, pieceType.getInternalId() + PIECE_EXTENSION));
+        if (result) {
+            mListeners.forEach(ChessFileListener::onPieceFileChanged);
+            if (PieceTypeManager.INSTANCE.hasPieceTypeWithId(pieceType.getInternalId())) {
+                PieceTypeManager.INSTANCE.unregisterPieceType(pieceType.getInternalId());
+            }
+            PieceTypeManager.INSTANCE.registerPieceType(pieceType);
+        }
+        return result;
     }
 
     public boolean deletePiece(PieceType pieceType) {
@@ -95,7 +140,12 @@ public enum FileManager {
             Log.e(TAG, "Could not delete image for PieceType:" + pieceType.getInternalId());
         }
 
-        return new File(sPieceDir, pieceType.getInternalId()).delete();
+        boolean result = new File(sPieceDir, pieceType.getInternalId()).delete();
+        if (result) {
+            mListeners.forEach(ChessFileListener::onPieceFileChanged);
+            PieceTypeManager.INSTANCE.unregisterPieceType(pieceType.getInternalId());
+        }
+        return result;
     }
 
     private boolean writeToFile(Object object, File file) {
@@ -108,6 +158,18 @@ public enum FileManager {
             return false;
         }
         return true;
+    }
+
+    @Nullable
+    private PieceType readPiece(@NotNull File pieceFile) {
+        try {
+            JsonParser parser = new JsonParser();
+            JsonElement jsonElement = parser.parse(new FileReader(pieceFile));
+            return GsonUtility.fromJson(jsonElement, PieceType.class);
+        } catch (IOException e) {
+            Log.e(TAG, "Could not read piece file:" + pieceFile.getPath());
+            return null;
+        }
     }
 
     public boolean writePieceImage(@NotNull String internalId, @NotNull BufferedImage image) {

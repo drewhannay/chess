@@ -53,6 +53,15 @@ public enum PieceTypeManager {
         throw new IllegalArgumentException("Unknown PieceType:" + internalId);
     }
 
+    public boolean hasPieceTypeWithId(@NotNull String internalId) {
+        for (PieceType pieceType : mPieceTypes) {
+            if (internalId.equals(pieceType.getInternalId())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @NotNull
     public Set<PieceType> getAllPieceTypes() {
         return ImmutableSet.copyOf(mPieceTypes);
@@ -64,10 +73,10 @@ public enum PieceTypeManager {
         mPieceTypes.add(pieceType);
     }
 
-    public void unregisterPieceType(@NotNull PieceType pieceType) {
-        Preconditions.checkArgument(mPieceTypes.contains(pieceType), "Unknown PieceType");
+    public void unregisterPieceType(@NotNull String internalId) {
+        Preconditions.checkArgument(hasPieceTypeWithId(internalId), "Unknown PieceType");
 
-        mPieceTypes.remove(pieceType);
+        mPieceTypes.remove(getPieceTypeById(internalId));
     }
 
     public static PieceType getBishopPieceType() {
