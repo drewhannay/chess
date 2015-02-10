@@ -143,7 +143,7 @@ public class GameFrame extends ChessFrame {
 
     private void openGame() {
         try {
-            File gameFile = FileManager.chooseFile(FileManager.HISTORY_EXTENSION_FILTER);
+            File gameFile = FileManager.INSTANCE.chooseFile(FileManager.HISTORY_EXTENSION_FILTER);
             if (gameFile != null) {
                 JsonParser parser = new JsonParser();
                 JsonElement jsonElement = parser.parse(new FileReader(gameFile));

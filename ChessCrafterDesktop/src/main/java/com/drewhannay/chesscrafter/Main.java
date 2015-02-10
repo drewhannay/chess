@@ -37,7 +37,7 @@ public final class Main {
             createTrayIcon();
 
             try {
-                FileManager.init();
+                FileManager.INSTANCE.init();
             } catch (IOException e) {
                 Log.wtf(TAG, "Failed to init FileUtility, exiting with error");
             }

@@ -192,7 +192,7 @@ public final class GamePanel extends ChessPanel {
             return;
         }
 
-        if (!FileManager.writeHistory(mGame.getHistory(), fileName)) {
+        if (!FileManager.INSTANCE.writeHistory(mGame.getHistory(), fileName)) {
             // TODO: report failure to user
         }
     }

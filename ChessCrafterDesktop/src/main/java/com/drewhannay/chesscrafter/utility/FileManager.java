@@ -14,7 +14,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.stream.Stream;
 
-public final class FileManager {
+public enum FileManager {
+    INSTANCE;
+
     public static final FileChooser.ExtensionFilter IMAGE_EXTENSION_FILTER = new FileChooser.ExtensionFilter("PNG", "*.png");
     public static final FileChooser.ExtensionFilter HISTORY_EXTENSION_FILTER = new FileChooser.ExtensionFilter("Saved Chess Game", "*.chesscrafter");
     public static final FileChooser.ExtensionFilter CONFIG_EXTENSION_FILTER = new FileChooser.ExtensionFilter("Crafted Game", "*.craftconfig");
@@ -26,14 +28,14 @@ public final class FileManager {
     private static final String GAME_CRAFTER_EXTENSION = ".craftconfig";
     private static final String PIECE_EXTENSION = ".piece";
 
-    private static File sImageDir;
-    private static File sGameConfigDir;
-    private static File sSavedGameDir;
-    private static File sPieceDir;
+    private File sImageDir;
+    private File sGameConfigDir;
+    private File sSavedGameDir;
+    private File sPieceDir;
 
-    private static boolean mInitialized;
+    private boolean mInitialized;
 
-    public static void init() throws IOException {
+    public void init() throws IOException {
         String hiddenDir;
 
         if (System.getProperty("os.name").startsWith("Windows")) {
@@ -66,23 +68,23 @@ public final class FileManager {
         mInitialized = true;
     }
 
-    private static void verifyInitialized() {
+    private void verifyInitialized() {
         Preconditions.checkState(mInitialized, "Must call FileUtility.init()");
     }
 
-    public static boolean writeHistory(History history, String fileName) {
+    public boolean writeHistory(History history, String fileName) {
         verifyInitialized();
 
         return writeToFile(history, new File(sSavedGameDir, fileName + SAVED_GAME_EXTENSION));
     }
 
-    public static boolean writePiece(PieceType pieceType) {
+    public boolean writePiece(PieceType pieceType) {
         verifyInitialized();
 
         return writeToFile(pieceType, new File(sPieceDir, pieceType.getInternalId() + PIECE_EXTENSION));
     }
 
-    public static boolean deletePiece(PieceType pieceType) {
+    public boolean deletePiece(PieceType pieceType) {
         verifyInitialized();
 
         // we might not HAVE an image to delete
@@ -93,7 +95,7 @@ public final class FileManager {
         return new File(sPieceDir, pieceType.getInternalId()).delete();
     }
 
-    private static boolean writeToFile(Object object, File file) {
+    private boolean writeToFile(Object object, File file) {
         try (FileOutputStream fileOut = new FileOutputStream(file)) {
             String json = GsonUtility.toJson(object);
             fileOut.write(json.getBytes());
@@ -106,11 +108,11 @@ public final class FileManager {
     }
 
     @Nullable
-    public static File chooseFile(FileChooser.ExtensionFilter filter) {
+    public File chooseFile(FileChooser.ExtensionFilter filter) {
         return JavaFxFileDialog.chooseFile(filter, sSavedGameDir);
     }
 
-    static boolean writePieceImage(@NotNull String internalId, @NotNull BufferedImage image) {
+    boolean writePieceImage(@NotNull String internalId, @NotNull BufferedImage image) {
         try {
             ImageIO.write(image, "png", new File(sImageDir, internalId));
         } catch (IOException e) {
@@ -120,12 +122,12 @@ public final class FileManager {
         return true;
     }
 
-    static File readPieceImage(String imageName) {
+    File readPieceImage(String imageName) {
         return new File(sImageDir, imageName);
     }
 
     @Nullable
-    public static File chooseDirectory() {
+    public File chooseDirectory() {
         return JavaFxFileDialog.chooseDirectory(sSavedGameDir);
     }
 }
