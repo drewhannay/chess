@@ -1,8 +1,8 @@
 package com.drewhannay.chesscrafter.panel;
 
+import com.drewhannay.chesscrafter.files.FileManager;
 import com.drewhannay.chesscrafter.logic.PieceTypeManager;
 import com.drewhannay.chesscrafter.models.PieceType;
-import com.drewhannay.chesscrafter.files.FileManager;
 import com.drewhannay.chesscrafter.utility.Messages;
 import com.google.common.base.Preconditions;
 
@@ -98,7 +98,7 @@ public class PieceCrafterMasterPanel extends ChessPanel {
         Preconditions.checkState(!PieceTypeManager.INSTANCE.isSystemPiece(pieceType.getInternalId()));
 
         if (FileManager.INSTANCE.deletePiece(pieceType)) {
-            PieceTypeManager.INSTANCE.unregisterPieceType(pieceType);
+            PieceTypeManager.INSTANCE.unregisterPieceType(pieceType.getInternalId());
             mPieceListModel.removeElement(pieceType);
         } else {
             // TODO: notify user of failure
