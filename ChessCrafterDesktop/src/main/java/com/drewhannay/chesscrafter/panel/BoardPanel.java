@@ -22,7 +22,10 @@ import java.util.stream.Collectors;
 
 public class BoardPanel extends ChessPanel {
 
+    private final int VERTICAL_PADDING = 1;
+    private final int HORIZONTAL_PADDING = 2;
     private final BoardSize mBoardSize;
+    private final BoardSize mTotalBoardSize;
     private final List<SquareJLabel> mSquareLabels;
     private final Function<BoardCoordinate, Set<BoardCoordinate>> mGetMovesCallback;
 
@@ -35,9 +38,10 @@ public class BoardPanel extends ChessPanel {
         mSquareConfig = squareConfig;
         mGetMovesCallback = getMovesCallback;
         mBoardSize = boardSize;
+        mTotalBoardSize = BoardSize.withDimensions(mBoardSize.width + HORIZONTAL_PADDING, mBoardSize.height + VERTICAL_PADDING);
         mSquareLabels = new ArrayList<>(boardSize.width * boardSize.height);
 
-        GridLayout gridLayout = new GridLayout(mBoardSize.height + 1, mBoardSize.width + 2);
+        GridLayout gridLayout = new GridLayout(mTotalBoardSize.height, mTotalBoardSize.width);
         setLayout(gridLayout);
         createGrid(gridLayout);
     }
@@ -46,9 +50,9 @@ public class BoardPanel extends ChessPanel {
         int newHeight = height;
         int newWidth = width;
         if (width < height) {
-            newHeight = (width / (mBoardSize.width + 2)) * (mBoardSize.height + 1);
+            newHeight = (width / mTotalBoardSize.width) * mTotalBoardSize.height;
         } else {
-            newWidth = (height / (mBoardSize.height + 1)) * (mBoardSize.width + 2);
+            newWidth = (height / mTotalBoardSize.height) * mTotalBoardSize.width;
         }
 
         setMinimumSize(new Dimension(newWidth, newHeight));
@@ -91,7 +95,7 @@ public class BoardPanel extends ChessPanel {
     }
 
     private void createGrid(GridLayout gridLayout) {
-        for (int y = gridLayout.getRows() - 1; y >= 0; y--) {
+        for (int y = gridLayout.getRows() - VERTICAL_PADDING; y >= 0; y--) {
             for (int x = 0; x < gridLayout.getColumns(); x++) {
                 add(getComponentForCell(x, y, gridLayout.getColumns() - 1));
             }

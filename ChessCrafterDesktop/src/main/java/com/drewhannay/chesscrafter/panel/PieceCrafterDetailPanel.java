@@ -138,8 +138,8 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         pieceType.getCapturingMovements().forEach(mCapturingData.model::addElement);
         pieceType.getTwoHopMovements().forEach(mTwoHopData.model::addElement);
 
-        mBoard.addPiece(new Piece(Piece.TEAM_ONE, pieceType), BoardCoordinate.at(mBoard.getBoardSize().width/2,
-                mBoard.getBoardSize().height/2));
+        mBoard.addPiece(new Piece(Piece.TEAM_ONE, pieceType), BoardCoordinate.at(mBoard.getBoardSize().width / 2,
+                mBoard.getBoardSize().height / 2));
         dataStream().forEach(this::refreshButtonState);
         refreshBoard();
     }
