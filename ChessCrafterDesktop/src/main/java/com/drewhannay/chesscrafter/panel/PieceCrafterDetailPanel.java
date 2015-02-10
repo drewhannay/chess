@@ -138,7 +138,8 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         pieceType.getCapturingMovements().forEach(mCapturingData.model::addElement);
         pieceType.getTwoHopMovements().forEach(mTwoHopData.model::addElement);
 
-        mBoard.addPiece(new Piece(Piece.TEAM_ONE, pieceType), BoardCoordinate.at(4, 4));
+        mBoard.addPiece(new Piece(Piece.TEAM_ONE, pieceType), BoardCoordinate.at(mBoard.getBoardSize().width / 2,
+                mBoard.getBoardSize().height / 2));
         dataStream().forEach(this::refreshButtonState);
         refreshBoard();
     }
@@ -170,13 +171,13 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         namePanel.add(mPieceNameField);
 
         mImageButton.setToolTipText(Messages.getString("PieceCrafterDetailPanel.pieceIcon"));
-        mImageButton.setPreferredSize(new Dimension(75, 75));
+        mImageButton.setPreferredSize(new Dimension(70, 70));
         namePanel.add(mImageButton);
 
         JPanel allMovementsPanel = new JPanel();
         allMovementsPanel.setOpaque(false);
         allMovementsPanel.setLayout(new GridBagLayout());
-        allMovementsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10));
+        allMovementsPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 10, 10));
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
