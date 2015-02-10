@@ -2,6 +2,7 @@ package com.drewhannay.chesscrafter.panel;
 
 import com.drewhannay.chesscrafter.logic.PieceTypeManager;
 import com.drewhannay.chesscrafter.models.PieceType;
+import com.drewhannay.chesscrafter.utility.FileUtility;
 import com.drewhannay.chesscrafter.utility.Messages;
 import com.google.common.base.Preconditions;
 
@@ -82,19 +83,26 @@ public class PieceCrafterMasterPanel extends ChessPanel {
 
     private void createPiece() {
         PieceType pieceType = new PieceType(UUID.randomUUID().toString(), Messages.getString("PieceType.newPiece"), null, null);
-        PieceTypeManager.INSTANCE.registerPieceType(pieceType);
-        // TODO: write file to disk
-        mPieceListModel.addElement(pieceType);
-        mPieceList.setSelectedValue(pieceType, true);
+
+        if (FileUtility.writePiece(pieceType)) {
+            PieceTypeManager.INSTANCE.registerPieceType(pieceType);
+            mPieceListModel.addElement(pieceType);
+            mPieceList.setSelectedValue(pieceType, true);
+        } else {
+            // TODO: notify user of failure
+        }
     }
 
     private void deletePiece() {
         PieceType pieceType = mPieceList.getSelectedValue();
         Preconditions.checkState(!PieceTypeManager.INSTANCE.isSystemPiece(pieceType.getInternalId()));
-        PieceTypeManager.INSTANCE.unregisterPieceType(pieceType);
-        // TODO: delete the actual piece file from disk
 
-        mPieceListModel.removeElement(pieceType);
+        if (FileUtility.deletePiece(pieceType)) {
+            PieceTypeManager.INSTANCE.unregisterPieceType(pieceType);
+            mPieceListModel.removeElement(pieceType);
+        } else {
+            // TODO: notify user of failure
+        }
     }
 
     private final ListCellRenderer<PieceType> mCellRenderer = (JList<? extends PieceType> list, PieceType value,

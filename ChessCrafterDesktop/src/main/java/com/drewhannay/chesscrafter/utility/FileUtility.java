@@ -33,7 +33,6 @@ public final class FileUtility {
 
     private static boolean mInitialized;
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     public static void init() throws IOException {
         String hiddenDir;
 
@@ -55,6 +54,7 @@ public final class FileUtility {
 
         boolean allExist = Stream.of(sSavedGameDir, sGameConfigDir, sPieceDir, sImageDir)
                 .allMatch(dir -> {
+                    //noinspection ResultOfMethodCallIgnored
                     dir.mkdirs();
                     return dir.exists();
                 });
@@ -80,6 +80,17 @@ public final class FileUtility {
         verifyInitialized();
 
         return writeToFile(pieceType, new File(sPieceDir, pieceType.getInternalId() + PIECE_EXTENSION));
+    }
+
+    public static boolean deletePiece(PieceType pieceType) {
+        verifyInitialized();
+
+        // we might not HAVE an image to delete
+        if (!new File(sImageDir, pieceType.getInternalId()).delete()) {
+            Log.e(TAG, "Could not delete image for PieceType:" + pieceType.getInternalId());
+        }
+
+        return new File(sPieceDir, pieceType.getInternalId()).delete();
     }
 
     private static boolean writeToFile(Object object, File file) {
