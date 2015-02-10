@@ -37,16 +37,24 @@ public class BoardPanel extends ChessPanel {
         mBoardSize = boardSize;
         mSquareLabels = new ArrayList<>(boardSize.width * boardSize.height);
 
-        GridLayout gridLayout = new GridLayout(mBoardSize.width + 2, mBoardSize.height + 2);
+        GridLayout gridLayout = new GridLayout(mBoardSize.height + 1, mBoardSize.width + 2);
         setLayout(gridLayout);
         createGrid(gridLayout);
     }
 
     public void updateDimensions(int width, int height) {
-        int size = Math.min(width, height);
-        setMinimumSize(new Dimension(size, size));
-        setPreferredSize(new Dimension(size, size));
-        setMaximumSize(new Dimension(size, size));
+        int newHeight = height;
+        int newWidth = width;
+        if (width < height) {
+            newHeight = (width / (mBoardSize.width + 2)) * (mBoardSize.height + 1);
+        } else {
+            newWidth = (height / (mBoardSize.height + 1)) * (mBoardSize.width + 2);
+        }
+
+        setMinimumSize(new Dimension(newWidth, newHeight));
+        setPreferredSize(new Dimension(newWidth, newHeight));
+        setMaximumSize(new Dimension(newWidth, newHeight));
+
         revalidate();
         repaint();
     }
@@ -85,13 +93,13 @@ public class BoardPanel extends ChessPanel {
     private void createGrid(GridLayout gridLayout) {
         for (int y = gridLayout.getRows() - 1; y >= 0; y--) {
             for (int x = 0; x < gridLayout.getColumns(); x++) {
-                add(getComponentForCell(x, y, gridLayout.getColumns() - 1, gridLayout.getRows() - 1));
+                add(getComponentForCell(x, y, gridLayout.getColumns() - 1));
             }
         }
     }
 
-    private JLabel getComponentForCell(int x, int y, int maxColumns, int maxRows) {
-        if ((x == 0 && y == 0) || (x == maxColumns) || (y == maxRows)) {
+    private JLabel getComponentForCell(int x, int y, int maxColumns) {
+        if ((x == 0 && y == 0) || x == maxColumns) {
             return UiUtility.createJLabel("");
         } else if (x == 0) {
             JLabel label = UiUtility.createJLabel(String.valueOf(y));

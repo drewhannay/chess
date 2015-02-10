@@ -169,7 +169,7 @@ public final class GamePanel extends ChessPanel {
 
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, boardPanels, detailsPanel);
         splitPane.setPreferredSize(new Dimension(755, 475));
-        splitPane.setDividerLocation(350);
+        splitPane.setDividerLocation(375);
         splitPane.setOpaque(false);
         splitPane.setDividerSize(1);
         splitPane.setResizeWeight(0.55);
