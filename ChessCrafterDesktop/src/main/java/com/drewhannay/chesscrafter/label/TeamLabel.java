@@ -5,12 +5,16 @@ import com.drewhannay.chesscrafter.utility.Messages;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import java.awt.Color;
+import java.awt.Dimension;
 
 public class TeamLabel extends JLabel {
 
     public TeamLabel() {
         setHorizontalAlignment(SwingConstants.CENTER);
         setOpaque(true);
+        setMinimumSize(new Dimension(136, 20));
+        setPreferredSize(new Dimension(136, 20));
+        setMaximumSize(new Dimension(136, 20));
     }
 
     public void setDraw() {

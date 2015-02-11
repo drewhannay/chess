@@ -17,22 +17,21 @@ import com.drewhannay.chesscrafter.files.FileManager;
 import com.drewhannay.chesscrafter.utility.Messages;
 import com.drewhannay.chesscrafter.utility.PieceIconUtility;
 import com.google.common.base.Preconditions;
+import net.miginfocom.swing.MigLayout;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Insets;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.util.ArrayList;
@@ -73,17 +72,19 @@ public final class GamePanel extends ChessPanel {
     }
 
     private void initComponents() {
-        setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
+        setLayout(new MigLayout("", "[grow,fill,center][pref!]", "[grow,center,fill]"));
         Board[] boards = mGame.getBoards();
-        
+
         JPanel boardPanels = new JPanel();
         boardPanels.setOpaque(false);
-        boardPanels.setLayout(new BoxLayout(boardPanels, BoxLayout.LINE_AXIS));
+        boardPanels.setLayout(new MigLayout("center"));
         boardPanels.addComponentListener(new ComponentListener() {
             @Override
             public void componentResized(ComponentEvent e) {
                 Stream.of(mGameBoards).forEach(board -> board.updateDimensions(e.getComponent().getWidth(),
                         e.getComponent().getHeight()));
+                revalidate();
+                repaint();
             }
 
             @Override
@@ -109,7 +110,7 @@ public final class GamePanel extends ChessPanel {
                             return Collections.emptySet();
                         }
                     });
-            boardPanels.add(mGameBoards[boardIndex]);
+            boardPanels.add(mGameBoards[boardIndex], "center");
         });
 
         Stream.of(mGame.getTeams()).forEach(team -> mTeamStatusPanels.add(new TeamStatusPanel(team)));
@@ -129,46 +130,38 @@ public final class GamePanel extends ChessPanel {
             refresh();
         });
 
-        GridBagConstraints gbc = new GridBagConstraints();
-
         JPanel detailsPanel = new JPanel();
-        detailsPanel.setLayout(new GridBagLayout());
+        detailsPanel.setLayout(new MigLayout("wrap", "[fill]", "[fill]"));
         detailsPanel.setOpaque(false);
 
         // add the tabbed pane
-        gbc.gridwidth = 2;
-        gbc.weightx = 1.0;
-        gbc.fill = GridBagConstraints.BOTH;
-        gbc.weighty = 1.0;
-        gbc.insets = new Insets(0, 10, 10, 10);
-        detailsPanel.add(mTabbedPane, gbc);
+        detailsPanel.add(mTabbedPane, "top, gapy 0px 10px");
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new GridBagLayout());
+        buttonPanel.setOpaque(false);
+
+        GridBagConstraints gbc = new GridBagConstraints();
 
         // add the undo button
-        gbc.gridy = 1;
-        gbc.gridx = 0;
         gbc.gridwidth = 2;
-        gbc.weighty = 0.0;
-        detailsPanel.add(mUndoButton, gbc);
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weightx = 1.0;
+        buttonPanel.add(mUndoButton, gbc);
 
         // add the back button
-        gbc.gridy = 2;
-        gbc.gridx = 0;
         gbc.gridwidth = 1;
-        detailsPanel.add(mBackButton, gbc);
+        gbc.gridy = 1;
+        buttonPanel.add(mBackButton, gbc);
+        buttonPanel.setAlignmentY(Component.TOP_ALIGNMENT);
 
         // add the forward  button
         gbc.gridx = 1;
-        detailsPanel.add(mForwardButton, gbc);
+        buttonPanel.add(mForwardButton, gbc);
+        detailsPanel.add(buttonPanel, "top");
 
-        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, boardPanels, detailsPanel);
-        splitPane.setPreferredSize(new Dimension(755, 475));
-        splitPane.setDividerLocation(400);
-        splitPane.setOpaque(false);
-        splitPane.setDividerSize(1);
-        splitPane.setResizeWeight(0.70);
-        splitPane.setEnabled(false);
-
-        add(splitPane);
+        add(boardPanels);
+        add(detailsPanel, "top,wmax 235");
 
         refresh();
     }

@@ -17,6 +17,8 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
@@ -74,6 +76,20 @@ class ChessFrame extends JFrame {
             }
         });
 
+        setPreferredSize(new Dimension(685, 450));
+        setMinimumSize(new Dimension(685, 450));
+
+        this.addComponentListener(new ComponentAdapter(){
+            public void componentResized(ComponentEvent e){
+                Dimension d = getSize();
+                Dimension minD = getMinimumSize();
+                if(d.width<minD.width)
+                    d.width=minD.width;
+                if(d.height<minD.height)
+                    d.height=minD.height;
+                setSize(d);
+            }
+        });
         doInitComponents();
     }
 
