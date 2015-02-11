@@ -24,6 +24,7 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
 import java.awt.CardLayout;
+import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ContainerEvent;
@@ -64,6 +65,7 @@ public class GameFrame extends ChessFrame {
         mCardPanel.add(mTabbedPane, KEY_TABS);
 
         add(mCardPanel);
+        setPreferredSize(new Dimension(685, 450));
 
         setFocusable(true);
         addWindowFocusListener(mWindowFocusListener);

@@ -4,14 +4,13 @@ import com.drewhannay.chesscrafter.label.TeamLabel;
 import com.drewhannay.chesscrafter.logic.Status;
 import com.drewhannay.chesscrafter.models.Team;
 import com.drewhannay.chesscrafter.utility.Messages;
+import net.miginfocom.swing.MigLayout;
 
-import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 
 public final class TeamStatusPanel extends ChessPanel {
 
@@ -66,59 +65,45 @@ public final class TeamStatusPanel extends ChessPanel {
     }
 
     private void initComponents() {
-        GridBagConstraints constraints = new GridBagConstraints();
+        setLayout(new MigLayout("", "[100:pref,fill]", "[100:pref,fill]"));
 
-        setLayout(new GridBagLayout());
+        JPanel jailHolderPanel = new JPanel();
+        jailHolderPanel.setOpaque(false);
+        jailHolderPanel.add(mJailPanel);
 
-        JPanel teamMetadata = new JPanel();
-        teamMetadata.setOpaque(false);
-        teamMetadata.setLayout(new GridBagLayout());
-        teamMetadata.setBorder(BorderFactory.createTitledBorder(Messages.getString("GamePanel.info")));
+        jailHolderPanel.addComponentListener(new ComponentListener() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                mJailPanel.updateDimensions(e.getComponent().getWidth(), e.getComponent().getHeight());
+            }
 
-        GridBagConstraints teamConstraint = new GridBagConstraints();
+            @Override
+            public void componentMoved(ComponentEvent e) {
+            }
+
+            @Override
+            public void componentShown(ComponentEvent e) {
+            }
+
+            @Override
+            public void componentHidden(ComponentEvent e) {
+            }
+        });
+
+        JPanel statusPanel = new JPanel();
+        statusPanel.setOpaque(false);
+        statusPanel.setLayout(new MigLayout("", "[50:pref]", "[pref!]"));
 
         // add team name label
-        teamConstraint.fill = GridBagConstraints.BOTH;
-        teamConstraint.gridx = 0;
-        teamConstraint.gridy = 0;
-        teamConstraint.insets = new Insets(5, 0, 5, 5);
-        teamMetadata.add(new JLabel(Messages.getString("GamePanel.player")), teamConstraint);
-
-        // add player name
-        teamConstraint.weightx = 1.0;
-        teamConstraint.gridx = 1;
-        teamConstraint.insets = new Insets(5, 0, 5, 0);
-        teamMetadata.add(mPlayerName, teamConstraint);
+        statusPanel.add(new JLabel(Messages.getString("GamePanel.player")), "cell 0 0");
+        statusPanel.add(mPlayerName, "cell 1 0");
 
         // add status label
-        teamConstraint.gridx = 0;
-        teamConstraint.gridy = 1;
-        teamConstraint.weightx = 0.0;
-        teamMetadata.add(new JLabel(Messages.getString("GamePanel.status")), teamConstraint);
-
-        // add player status
-        teamConstraint.gridx = 1;
-        teamConstraint.weightx = 1.0;
-        teamMetadata.add(mTeamLabel, teamConstraint);
-
-        // add the JailPanel
-        teamConstraint.gridy = 2;
-        teamConstraint.gridx = 0;
-        teamConstraint.gridwidth = 2;
-        teamConstraint.weighty = 0.1;
-        teamConstraint.weightx = 1.0;
-        teamMetadata.add(mJailPanel, teamConstraint);
+        statusPanel.add(new JLabel(Messages.getString("GamePanel.status")), "cell 0 1");
+        statusPanel.add(mTeamLabel, "cell 1 1");
 
         // add teamMetadata
-        constraints.anchor = GridBagConstraints.BASELINE;
-        constraints.fill = GridBagConstraints.BOTH;
-        constraints.gridy = 0;
-        constraints.weightx = 1.0;
-        constraints.weighty = 0.5;
-        constraints.gridwidth = 2;
-        constraints.insets = new Insets(10, 10, 10, 10);
-        add(teamMetadata, constraints);
-
-
+        add(statusPanel, "cell 0 0, growy 0");
+        add(jailHolderPanel, "cell 0 1");
     }
 }
