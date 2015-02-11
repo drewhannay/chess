@@ -85,7 +85,6 @@ public class PieceCrafterMasterPanel extends ChessPanel {
         PieceType pieceType = new PieceType(UUID.randomUUID().toString(), Messages.getString("PieceType.newPiece"), null, null);
 
         if (FileManager.INSTANCE.writePiece(pieceType)) {
-            PieceTypeManager.INSTANCE.registerPieceType(pieceType);
             mPieceListModel.addElement(pieceType);
             mPieceList.setSelectedValue(pieceType, true);
         } else {
@@ -98,7 +97,6 @@ public class PieceCrafterMasterPanel extends ChessPanel {
         Preconditions.checkState(!PieceTypeManager.INSTANCE.isSystemPiece(pieceType.getInternalId()));
 
         if (FileManager.INSTANCE.deletePiece(pieceType)) {
-            PieceTypeManager.INSTANCE.unregisterPieceType(pieceType.getInternalId());
             mPieceListModel.removeElement(pieceType);
         } else {
             // TODO: notify user of failure
