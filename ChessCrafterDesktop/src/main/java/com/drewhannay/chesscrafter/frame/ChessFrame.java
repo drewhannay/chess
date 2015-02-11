@@ -77,19 +77,7 @@ class ChessFrame extends JFrame {
         });
 
         setPreferredSize(new Dimension(685, 450));
-        setMinimumSize(new Dimension(685, 450));
 
-        this.addComponentListener(new ComponentAdapter(){
-            public void componentResized(ComponentEvent e){
-                Dimension d = getSize();
-                Dimension minD = getMinimumSize();
-                if(d.width<minD.width)
-                    d.width=minD.width;
-                if(d.height<minD.height)
-                    d.height=minD.height;
-                setSize(d);
-            }
-        });
         doInitComponents();
     }
 
