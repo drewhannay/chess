@@ -67,11 +67,11 @@ public final class TeamStatusPanel extends ChessPanel {
     private void initComponents() {
         setLayout(new MigLayout("", "[100:pref,fill]", "[100:pref,fill]"));
 
-        JPanel jailPanel = new JPanel();
-        jailPanel.setOpaque(false);
-        jailPanel.add(mJailPanel);
+        JPanel jailHolderPanel = new JPanel();
+        jailHolderPanel.setOpaque(false);
+        jailHolderPanel.add(mJailPanel);
 
-        jailPanel.addComponentListener(new ComponentListener() {
+        jailHolderPanel.addComponentListener(new ComponentListener() {
             @Override
             public void componentResized(ComponentEvent e) {
                 mJailPanel.updateDimensions(e.getComponent().getWidth(), e.getComponent().getHeight());
@@ -104,6 +104,6 @@ public final class TeamStatusPanel extends ChessPanel {
 
         // add teamMetadata
         add(statusPanel, "cell 0 0, growy 0");
-        add(jailPanel, "cell 0 1");
+        add(jailHolderPanel, "cell 0 1");
     }
 }

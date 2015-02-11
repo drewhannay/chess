@@ -26,7 +26,7 @@ public class JailPanel extends ChessPanel {
     public JailPanel(int totalPieces) {
         super(false);
 
-        if(totalPieces % 4 == 0) {
+        if(totalPieces % JAIL_WIDTH == 0) {
             mJailSize = BoardSize.withDimensions(JAIL_WIDTH, totalPieces / JAIL_WIDTH);
         } else {
             mJailSize = BoardSize.withDimensions(JAIL_WIDTH, (totalPieces / JAIL_WIDTH) + 1);
