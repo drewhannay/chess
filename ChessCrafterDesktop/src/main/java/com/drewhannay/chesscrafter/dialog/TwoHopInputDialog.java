@@ -31,7 +31,7 @@ public final class TwoHopInputDialog extends ChessDialog {
     private void initComponents() {
         boolean isEdit = mEditingMovement != null;
 
-        setSize(new Dimension(300, 200));
+        setSize(new Dimension(200, 200));
 
         ChessPanel twoHopPopupPanel = new ChessPanel();
         twoHopPopupPanel.setLayout(new GridBagLayout());
@@ -74,7 +74,9 @@ public final class TwoHopInputDialog extends ChessDialog {
             dispose();
         });
         gbc.gridy = 2;
+        gbc.gridx = 0;
         gbc.weightx = 0.5;
+        gbc.gridwidth = 2;
         twoHopPopupPanel.add(saveMovement, gbc);
 
         add(twoHopPopupPanel);

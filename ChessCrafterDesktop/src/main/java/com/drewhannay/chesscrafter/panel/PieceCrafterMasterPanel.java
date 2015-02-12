@@ -17,6 +17,9 @@ import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.util.UUID;
 import java.util.function.Consumer;
 
@@ -64,15 +67,21 @@ public class PieceCrafterMasterPanel extends ChessPanel {
         scrollPane.setFont(new Font(mPieceList.getName(), Font.PLAIN, 26));
         scrollPane.setPreferredSize(new Dimension(190, 500));
 
-        setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-        add(scrollPane);
-        add(Box.createRigidArea(new Dimension(0, 10)));
+        setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        add(scrollPane, gbc);
 
         mButtons.mEdit.setVisible(false);
         mButtons.mAdd.addActionListener(e -> createPiece());
         mButtons.mRemove.addActionListener(e -> deletePiece());
-
-        add(mButtons);
+        gbc.gridy = 2;
+        gbc.weighty = 0.1;
+        add(mButtons, gbc);
     }
 
     public void refreshList() {

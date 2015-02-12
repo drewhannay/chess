@@ -171,7 +171,7 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         namePanel.add(mPieceNameField);
 
         mImageButton.setToolTipText(Messages.getString("PieceCrafterDetailPanel.pieceIcon"));
-        mImageButton.setPreferredSize(new Dimension(70, 70));
+        mImageButton.setPreferredSize(new Dimension(60, 60));
         namePanel.add(mImageButton);
 
         JPanel allMovementsPanel = new JPanel();
@@ -220,7 +220,6 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         });
 
         JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, allMovementsPanel, boardPanels);
-        splitPane.setPreferredSize(new Dimension(755, 475));
         splitPane.setDividerLocation(230);
         splitPane.setOpaque(false);
         splitPane.setDividerSize(0);
@@ -283,12 +282,12 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         gbc.gridy = 1;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.weightx = 1.0;
-        gbc.weighty = 1.0;
+        gbc.weighty = 0.7;
         gbc.insets = new Insets(0, 5, 0, 5);
         movementPanel.add(scrollPane, gbc);
 
         gbc.gridy = 2;
-        gbc.weighty = 0.5;
+        gbc.weighty = 1.0;
         gbc.insets = new Insets(0, 5, 0, 5);
         movementPanel.add(buttons, gbc);
     }
