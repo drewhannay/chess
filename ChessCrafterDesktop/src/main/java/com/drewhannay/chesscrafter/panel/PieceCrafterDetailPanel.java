@@ -282,7 +282,7 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         gbc.gridy = 1;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.weightx = 1.0;
-        gbc.weighty = 0.7;
+        gbc.weighty = 0.8;
         gbc.insets = new Insets(0, 5, 0, 5);
         movementPanel.add(scrollPane, gbc);
 
