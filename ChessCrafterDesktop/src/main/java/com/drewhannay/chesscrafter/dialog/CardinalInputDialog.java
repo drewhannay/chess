@@ -39,8 +39,6 @@ public final class CardinalInputDialog extends ChessDialog {
     private void initComponents() {
         boolean isEdit = mEditingMovement != null;
 
-        setSize(new Dimension(200, 200));
-
         ChessPanel panel = new ChessPanel();
         panel.setLayout(new GridBagLayout());
 
@@ -110,5 +108,6 @@ public final class CardinalInputDialog extends ChessDialog {
         panel.add(saveMovement, gbc);
 
         add(panel);
+        pack();
     }
 }
