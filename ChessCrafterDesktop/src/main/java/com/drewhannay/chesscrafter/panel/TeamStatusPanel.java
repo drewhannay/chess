@@ -9,6 +9,9 @@ import net.miginfocom.swing.MigLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 
@@ -92,15 +95,29 @@ public final class TeamStatusPanel extends ChessPanel {
 
         JPanel statusPanel = new JPanel();
         statusPanel.setOpaque(false);
-        statusPanel.setLayout(new MigLayout("", "[fill,left]", "[pref!]"));
+        statusPanel.setLayout(new GridBagLayout());
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.BOTH;
 
         // add team name label
-        statusPanel.add(new JLabel(Messages.getString("GamePanel.player")), "cell 0 0, gapright 8px");
-        statusPanel.add(mPlayerName, "cell 0 0");
+        gbc.insets = new Insets(0,0,5,0);
+        statusPanel.add(new JLabel(Messages.getString("GamePanel.player")), gbc);
+        gbc.weightx = 1.0;
+        gbc.gridx = 1;
+        gbc.insets = new Insets(0,5,5,0);
+        statusPanel.add(mPlayerName, gbc);
 
         // add status label
-        statusPanel.add(new JLabel(Messages.getString("GamePanel.status")), "cell 0 1, gapright 5px");
-        statusPanel.add(mTeamLabel, "grow, cell 0 1");
+        gbc.weightx = 0.0;
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.insets = new Insets(0,0,0,0);
+        statusPanel.add(new JLabel(Messages.getString("GamePanel.status")), gbc);
+        gbc.weightx = 1.0;
+        gbc.gridx = 1;
+        gbc.insets = new Insets(0,5,0,0);
+        statusPanel.add(mTeamLabel, gbc);
 
         // add teamMetadata
         add(statusPanel, "cell 0 0");
