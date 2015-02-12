@@ -12,9 +12,6 @@ public class TeamLabel extends JLabel {
     public TeamLabel() {
         setHorizontalAlignment(SwingConstants.CENTER);
         setOpaque(true);
-        setMinimumSize(new Dimension(136, 20));
-        setPreferredSize(new Dimension(136, 20));
-        setMaximumSize(new Dimension(136, 20));
     }
 
     public void setDraw() {
