@@ -65,7 +65,7 @@ public final class TeamStatusPanel extends ChessPanel {
     }
 
     private void initComponents() {
-        setLayout(new MigLayout("", "[100:pref,fill]", "[100:pref,fill]"));
+        setLayout(new MigLayout("", "[100:pref,fill]", "[pref!]"));
 
         JPanel jailHolderPanel = new JPanel();
         jailHolderPanel.setOpaque(false);
@@ -92,18 +92,18 @@ public final class TeamStatusPanel extends ChessPanel {
 
         JPanel statusPanel = new JPanel();
         statusPanel.setOpaque(false);
-        statusPanel.setLayout(new MigLayout("", "[50:pref]", "[pref!]"));
+        statusPanel.setLayout(new MigLayout("", "[fill,left]", "[pref!]"));
 
         // add team name label
-        statusPanel.add(new JLabel(Messages.getString("GamePanel.player")), "cell 0 0");
-        statusPanel.add(mPlayerName, "cell 1 0");
+        statusPanel.add(new JLabel(Messages.getString("GamePanel.player")), "cell 0 0, gapright 8px");
+        statusPanel.add(mPlayerName, "cell 0 0");
 
         // add status label
-        statusPanel.add(new JLabel(Messages.getString("GamePanel.status")), "cell 0 1");
-        statusPanel.add(mTeamLabel, "cell 1 1");
+        statusPanel.add(new JLabel(Messages.getString("GamePanel.status")), "cell 0 1, gapright 5px");
+        statusPanel.add(mTeamLabel, "grow, cell 0 1");
 
         // add teamMetadata
-        add(statusPanel, "cell 0 0, growy 0");
-        add(jailHolderPanel, "cell 0 1");
+        add(statusPanel, "cell 0 0");
+        add(jailHolderPanel, "cell 0 1, grow");
     }
 }

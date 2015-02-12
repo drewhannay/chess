@@ -110,7 +110,7 @@ public final class GamePanel extends ChessPanel {
                             return Collections.emptySet();
                         }
                     });
-            boardPanels.add(mGameBoards[boardIndex], "center");
+            boardPanels.add(mGameBoards[boardIndex], "top");
         });
 
         Stream.of(mGame.getTeams()).forEach(team -> mTeamStatusPanels.add(new TeamStatusPanel(team)));

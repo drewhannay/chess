@@ -65,7 +65,7 @@ public class GameFrame extends ChessFrame {
         mCardPanel.add(mTabbedPane, KEY_TABS);
 
         add(mCardPanel);
-        setPreferredSize(new Dimension(685, 450));
+        setPreferredSize(new Dimension(685, 475));
 
         setFocusable(true);
         addWindowFocusListener(mWindowFocusListener);
