@@ -29,7 +29,7 @@ public class AboutFrame extends ChessFrame {
 
         setTitle(Messages.getString("AboutFrame.about") + AppConstants.APP_NAME);
 
-        setSize(350, 450);
+        setPreferredSize(new Dimension(250, 250));
         setResizable(false);
 
         GridBagConstraints constraints = new GridBagConstraints();
@@ -58,7 +58,7 @@ public class AboutFrame extends ChessFrame {
         });
 
         constraints.gridy = 0;
-        constraints.insets = new Insets(10, 5, 10, 5);
+        constraints.insets = new Insets(10, 5, 5, 5);
         aboutPanel.add(title, constraints);
         constraints.gridy = 1;
         constraints.insets = new Insets(10, 5, 5, 5);

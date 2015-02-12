@@ -47,7 +47,7 @@ public final class CardinalInputDialog extends ChessDialog {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
         gbc.weightx = 0.5;
-        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.insets = new Insets(5, 5, 0, 5);
         panel.add(UiUtility.createJLabel(Messages.getString("PieceCrafterDetailPanel.direction")), gbc);
 
         JComboBox<Direction> directions = new JComboBox<>();
@@ -88,7 +88,7 @@ public final class CardinalInputDialog extends ChessDialog {
 
         gbc.gridx = 1;
         gbc.weightx = 1.0;
-        gbc.insets = new Insets(5, 0, 5, 5);
+        gbc.insets = new Insets(5, 5, 0, 5);
         panel.add(unlimited, gbc);
 
         JButton saveMovement = new JButton(Messages.getString("PieceCrafterDetailPanel.saveAndClose"));
