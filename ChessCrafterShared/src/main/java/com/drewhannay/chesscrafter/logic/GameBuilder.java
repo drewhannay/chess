@@ -12,9 +12,15 @@ import com.drewhannay.chesscrafter.models.History;
 import com.drewhannay.chesscrafter.models.Piece;
 import com.drewhannay.chesscrafter.models.Team;
 import com.drewhannay.chesscrafter.models.turnkeeper.TurnKeeper;
+import com.drewhannay.chesscrafter.rules.conditionalmovegenerator.CastlingMoveGenerator;
 import com.drewhannay.chesscrafter.rules.conditionalmovegenerator.ConditionalMoveGenerator;
+import com.drewhannay.chesscrafter.rules.conditionalmovegenerator.EnPassantMoveGenerator;
+import com.drewhannay.chesscrafter.rules.endconditions.CaptureObjectiveEndCondition;
 import com.drewhannay.chesscrafter.rules.endconditions.EndCondition;
+import com.drewhannay.chesscrafter.rules.movefilter.ClassicMoveFilter;
 import com.drewhannay.chesscrafter.rules.movefilter.MoveFilter;
+import com.drewhannay.chesscrafter.rules.postmoveaction.CastlingPostMoveAction;
+import com.drewhannay.chesscrafter.rules.postmoveaction.EnPassantPostMoveAction;
 import com.drewhannay.chesscrafter.rules.postmoveaction.PostMoveAction;
 import com.drewhannay.chesscrafter.rules.promotionmethods.PiecePromoter;
 import org.jetbrains.annotations.NotNull;
@@ -136,21 +142,21 @@ public final class GameBuilder {
         teamOne.teamId = Piece.TEAM_ONE;
         teamOne.teamColor = Color.WHITE.getRGB();
         teamOne.teamName = "White";
-        teamOne.conditionalMoveGenerators = new String[]{"CastlingMoveGenerator", "EnPassantMoveGenerator"};
-        teamOne.moveFilters = new String[]{"ClassicMoveFilter"};
-        teamOne.postMoveActions = new String[]{"CastlingPostMoveAction", "EnPassantPostMoveAction"};
+        teamOne.conditionalMoveGenerators = new String[]{CastlingMoveGenerator.NAME, EnPassantMoveGenerator.NAME};
+        teamOne.moveFilters = new String[]{ClassicMoveFilter.NAME};
+        teamOne.postMoveActions = new String[]{CastlingPostMoveAction.NAME, EnPassantPostMoveAction.NAME};
         teamOne.piecePromoterConfiguration = teamOnePiecePromoter;
-        teamOne.endCondition = "CaptureObjectiveEndCondition";
+        teamOne.endCondition = CaptureObjectiveEndCondition.NAME;
 
         TeamConfiguration teamTwo = new TeamConfiguration();
         teamTwo.teamId = Piece.TEAM_TWO;
         teamTwo.teamColor = Color.BLACK.getRGB();
         teamTwo.teamName = "Black";
-        teamTwo.conditionalMoveGenerators = new String[]{"CastlingMoveGenerator", "EnPassantMoveGenerator"};
-        teamTwo.moveFilters = new String[]{"ClassicMoveFilter"};
-        teamTwo.postMoveActions = new String[]{"CastlingPostMoveAction", "EnPassantPostMoveAction"};
+        teamTwo.conditionalMoveGenerators = new String[]{CastlingMoveGenerator.NAME, EnPassantMoveGenerator.NAME};
+        teamTwo.moveFilters = new String[]{ClassicMoveFilter.NAME};
+        teamTwo.postMoveActions = new String[]{CastlingPostMoveAction.NAME, EnPassantPostMoveAction.NAME};
         teamTwo.piecePromoterConfiguration = teamTwoPiecePromoter;
-        teamTwo.endCondition = "CaptureObjectiveEndCondition";
+        teamTwo.endCondition = CaptureObjectiveEndCondition.NAME;
 
         TeamConfiguration[] teams = new TeamConfiguration[]{teamOne, teamTwo};
 
