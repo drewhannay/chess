@@ -41,10 +41,6 @@ public final class ImageUtility {
         }
     }
 
-    public static boolean writePieceImage(@NotNull String internalId, @NotNull BufferedImage image) {
-        return FileManager.INSTANCE.writePieceImage(internalId, greyscaleImage(image));
-    }
-
     @NotNull
     static BufferedImage getPieceImage(@NotNull String internalId) {
         boolean isSystemFile = PieceTypeManager.INSTANCE.isSystemPiece(internalId);
@@ -92,7 +88,7 @@ public final class ImageUtility {
     }
 
     @NotNull
-    private static BufferedImage greyscaleImage(@NotNull BufferedImage image) {
+    public static BufferedImage getGreyscaleImage(@NotNull BufferedImage image) {
         ColorSpace gsColorSpace = ColorSpace.getInstance(ColorSpace.CS_GRAY);
         ComponentColorModel ccm = new ComponentColorModel(gsColorSpace, true, false, Transparency.TRANSLUCENT, DataBuffer.TYPE_BYTE);
         WritableRaster raster = ccm.createCompatibleWritableRaster(image.getWidth(), image.getHeight());

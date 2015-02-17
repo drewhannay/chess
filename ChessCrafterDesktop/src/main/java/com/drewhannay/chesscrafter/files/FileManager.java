@@ -4,6 +4,7 @@ import com.drewhannay.chesscrafter.logic.PieceTypeManager;
 import com.drewhannay.chesscrafter.models.History;
 import com.drewhannay.chesscrafter.models.PieceType;
 import com.drewhannay.chesscrafter.utility.GsonUtility;
+import com.drewhannay.chesscrafter.utility.ImageUtility;
 import com.drewhannay.chesscrafter.utility.JavaFxFileDialog;
 import com.drewhannay.chesscrafter.utility.Log;
 import com.drewhannay.chesscrafter.utility.PieceIconUtility;
@@ -177,11 +178,15 @@ public enum FileManager {
         }
     }
 
-    public boolean writePieceImage(@NotNull String internalId, @NotNull BufferedImage image) {
+    public boolean writePieceImage(@NotNull String internalId, @NotNull File imageFile) {
         try {
+            BufferedImage image = ImageIO.read(imageFile);
+            image = ImageUtility.getGreyscaleImage(image);
             ImageIO.write(image, "png", new File(sImageDir, internalId));
+            PieceIconUtility.invalidateCache(internalId);
+            mListeners.forEach(listener -> listener.onPieceImageChanged(internalId));
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Could not write image:" + imageFile.getPath(), e);
             return false;
         }
         return true;

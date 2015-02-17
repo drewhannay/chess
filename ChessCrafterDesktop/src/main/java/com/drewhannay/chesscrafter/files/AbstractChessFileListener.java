@@ -9,6 +9,10 @@ public abstract class AbstractChessFileListener implements ChessFileListener {
     }
 
     @Override
+    public void onPieceImageChanged(@NotNull String internalId) {
+    }
+
+    @Override
     public void onGameConfigFileChanged() {
     }
 

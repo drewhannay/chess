@@ -5,6 +5,8 @@ import com.drewhannay.chesscrafter.dialog.TwoHopInputDialog;
 import com.drewhannay.chesscrafter.dragNdrop.DropManager;
 import com.drewhannay.chesscrafter.dragNdrop.GlassPane;
 import com.drewhannay.chesscrafter.dragNdrop.SquareConfig;
+import com.drewhannay.chesscrafter.files.AbstractChessFileListener;
+import com.drewhannay.chesscrafter.files.ChessFileListener;
 import com.drewhannay.chesscrafter.files.FileManager;
 import com.drewhannay.chesscrafter.label.SquareJLabel;
 import com.drewhannay.chesscrafter.logic.PieceTypeManager;
@@ -54,6 +56,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.BiConsumer;
@@ -156,6 +159,8 @@ public class PieceCrafterDetailPanel extends ChessPanel {
             }
         });
 
+        mImageButton.addActionListener(e -> pickImage());
+
         initComponents();
     }
 
@@ -167,9 +172,13 @@ public class PieceCrafterDetailPanel extends ChessPanel {
 
         mInternalId = pieceType.getInternalId();
 
+        boolean isSystemPiece = PieceTypeManager.INSTANCE.isSystemPiece(mInternalId);
+
         mPieceNameLabel.setText(pieceType.getName());
         mPieceNameField.setText(pieceType.getName());
-        mPieceNameField.setEnabled(!PieceTypeManager.INSTANCE.isSystemPiece(pieceType.getInternalId()));
+        mPieceNameField.setEnabled(!isSystemPiece);
+
+        mImageButton.setVisible(!isSystemPiece);
 
         pieceType.getMovements().forEach(mMovementData.model::addElement);
         pieceType.getCapturingMovements().forEach(mCapturingData.model::addElement);
@@ -302,6 +311,18 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         splitPane.setEnabled(false);
 
         add(splitPane);
+    }
+
+    @Override
+    public void addNotify() {
+        super.addNotify();
+        FileManager.INSTANCE.addChessFileListener(mFileListener);
+    }
+
+    @Override
+    public void removeNotify() {
+        super.removeNotify();
+        FileManager.INSTANCE.removeChessFileListener(mFileListener);
     }
 
     private void refreshButtonState(@NotNull ListData<?> data) {
@@ -439,12 +460,31 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         }
     };
 
+    private final ChessFileListener mFileListener = new AbstractChessFileListener() {
+        @Override
+        public void onPieceImageChanged(@NotNull String internalId) {
+            super.onPieceImageChanged(internalId);
+            if (internalId.equals(mInternalId)) {
+                updatePieceIcon();
+            }
+        }
+    };
+
     private void savePiece() {
         if (!mLoading) {
             if (!PieceTypeManager.INSTANCE.isSystemPiece(mInternalId)) {
                 Log.v(TAG, "Saving piece...");
                 FileManager.INSTANCE.writePiece(createPieceTypeFromData());
             }
+        }
+    }
+
+    private void pickImage() {
+        File imageFile = FileManager.INSTANCE.chooseFile(FileManager.IMAGE_EXTENSION_FILTER);
+        if (imageFile != null) {
+            FileManager.INSTANCE.writePieceImage(mInternalId, imageFile);
+        } else {
+            Log.e(TAG, "User-chosen image file is null");
         }
     }
 
