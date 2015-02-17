@@ -11,7 +11,6 @@ import com.drewhannay.chesscrafter.models.BoardSize;
 import com.drewhannay.chesscrafter.models.Game;
 import com.drewhannay.chesscrafter.models.History;
 import com.drewhannay.chesscrafter.models.Piece;
-import com.drewhannay.chesscrafter.models.PieceType;
 import com.drewhannay.chesscrafter.models.Team;
 import com.drewhannay.chesscrafter.models.turnkeeper.TurnKeeper;
 import com.drewhannay.chesscrafter.rules.conditionalmovegenerator.ConditionalMoveGenerator;
@@ -80,7 +79,8 @@ public final class GameBuilder {
                 for (int y = 0; y < boardConfig.pieces[x].length; y++) {
                     PieceConfiguration pieceConfig = boardConfig.pieces[x][y];
                     if (pieceConfig != null) {
-                        board.addPiece(new Piece(pieceConfig.teamId, pieceConfig.pieceType,
+                        board.addPiece(new Piece(pieceConfig.teamId,
+                                PieceTypeManager.INSTANCE.getPieceTypeById(pieceConfig.internalId),
                                 pieceConfig.isObjective, 0), BoardCoordinate.at(x + 1, y + 1));
                     }
                 }
@@ -156,8 +156,8 @@ public final class GameBuilder {
         TeamConfiguration[] teams = new TeamConfiguration[]{teamOne, teamTwo};
 
         PieceConfiguration[][] boardOnePieces = new PieceConfiguration[8][8];
-        setupClassicPawns(boardOnePieces, 2, Piece.TEAM_ONE, PieceTypeManager.getNorthFacingPawnPieceType());
-        setupClassicPawns(boardOnePieces, 7, Piece.TEAM_TWO, PieceTypeManager.getSouthFacingPawnPieceType());
+        setupClassicPawns(boardOnePieces, 2, Piece.TEAM_ONE, PieceTypeManager.NORTH_FACING_PAWN_ID);
+        setupClassicPawns(boardOnePieces, 7, Piece.TEAM_TWO, PieceTypeManager.SOUTH_FACING_PAWN_ID);
         setupClassicPieces(boardOnePieces, 1, Piece.TEAM_ONE);
         setupClassicPieces(boardOnePieces, 8, Piece.TEAM_TWO);
 
@@ -182,11 +182,11 @@ public final class GameBuilder {
         return classicConfig;
     }
 
-    private static void setupClassicPawns(PieceConfiguration[][] pieces, int row, int teamId, PieceType pieceType) {
+    private static void setupClassicPawns(PieceConfiguration[][] pieces, int row, int teamId, String internalId) {
         PieceConfiguration pieceConfiguration = new PieceConfiguration();
         pieceConfiguration.teamId = teamId;
         pieceConfiguration.isObjective = false;
-        pieceConfiguration.pieceType = pieceType;
+        pieceConfiguration.internalId = internalId;
         for (int x = 1; x <= BoardSize.CLASSIC_SIZE.width; x++) {
             pieces[x - 1][row - 1] = pieceConfiguration;
         }
@@ -195,35 +195,35 @@ public final class GameBuilder {
     private static void setupClassicPieces(PieceConfiguration[][] pieces, int row, int teamId) {
         PieceConfiguration rook = new PieceConfiguration();
         rook.teamId = teamId;
-        rook.pieceType = PieceTypeManager.getRookPieceType();
+        rook.internalId = PieceTypeManager.ROOK_ID;
 
         pieces[0][row - 1] = rook;
         pieces[7][row - 1] = rook;
 
         PieceConfiguration knight = new PieceConfiguration();
         knight.teamId = teamId;
-        knight.pieceType = PieceTypeManager.getKnightPieceType();
+        knight.internalId = PieceTypeManager.KNIGHT_ID;
 
         pieces[1][row - 1] = knight;
         pieces[6][row - 1] = knight;
 
         PieceConfiguration bishop = new PieceConfiguration();
         bishop.teamId = teamId;
-        bishop.pieceType = PieceTypeManager.getBishopPieceType();
+        bishop.internalId = PieceTypeManager.BISHOP_ID;
 
         pieces[2][row - 1] = bishop;
         pieces[5][row - 1] = bishop;
 
         PieceConfiguration queen = new PieceConfiguration();
         queen.teamId = teamId;
-        queen.pieceType = PieceTypeManager.getQueenPieceType();
+        queen.internalId = PieceTypeManager.QUEEN_ID;
 
         pieces[3][row - 1] = queen;
 
         PieceConfiguration king = new PieceConfiguration();
         king.teamId = teamId;
         king.isObjective = true;
-        king.pieceType = PieceTypeManager.getKingPieceType();
+        king.internalId = PieceTypeManager.KING_ID;
 
         pieces[4][row - 1] = king;
     }

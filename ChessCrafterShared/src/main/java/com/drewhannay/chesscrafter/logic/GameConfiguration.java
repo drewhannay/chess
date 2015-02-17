@@ -1,7 +1,5 @@
 package com.drewhannay.chesscrafter.logic;
 
-import com.drewhannay.chesscrafter.models.PieceType;
-
 public final class GameConfiguration {
     public static class TeamConfiguration {
         public int teamId;
@@ -22,7 +20,7 @@ public final class GameConfiguration {
     public static class PieceConfiguration {
         public int teamId;
         public boolean isObjective;
-        public PieceType pieceType;
+        public String internalId;
     }
 
     public static class BoardConfiguration {
