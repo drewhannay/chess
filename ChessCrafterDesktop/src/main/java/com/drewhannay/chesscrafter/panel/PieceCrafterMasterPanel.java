@@ -22,7 +22,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.util.UUID;
 import java.util.function.Consumer;
 
 public class PieceCrafterMasterPanel extends ChessPanel {
@@ -110,7 +109,7 @@ public class PieceCrafterMasterPanel extends ChessPanel {
     }
 
     private void createPiece() {
-        PieceType pieceType = new PieceType(Messages.getString("PieceType.newPiece"), null, null);
+        PieceType pieceType = new PieceType(Messages.getString("PieceType.newPiece"));
 
         if (FileManager.INSTANCE.writePiece(pieceType)) {
             mPieceList.setSelectedValue(pieceType, true);

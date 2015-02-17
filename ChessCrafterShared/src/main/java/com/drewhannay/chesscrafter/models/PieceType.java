@@ -21,9 +21,8 @@ public class PieceType {
     private final Set<CardinalMovement> mCapturingMovements;
     private final Set<TwoHopMovement> mTwoHopMovements;
 
-    public PieceType(@NotNull String name, @Nullable Set<CardinalMovement> movements,
-                     @Nullable Set<TwoHopMovement> twoHopMovements) {
-        this(UUID.randomUUID().toString(), name, movements, twoHopMovements);
+    public PieceType(@NotNull String name) {
+        this(UUID.randomUUID().toString(), name, null, null, null);
     }
 
     public PieceType(@NotNull String internalId, @NotNull String name, @Nullable Set<CardinalMovement> movements,
