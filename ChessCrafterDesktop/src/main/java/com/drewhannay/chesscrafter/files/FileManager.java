@@ -6,6 +6,7 @@ import com.drewhannay.chesscrafter.models.PieceType;
 import com.drewhannay.chesscrafter.utility.GsonUtility;
 import com.drewhannay.chesscrafter.utility.JavaFxFileDialog;
 import com.drewhannay.chesscrafter.utility.Log;
+import com.drewhannay.chesscrafter.utility.PieceIconUtility;
 import com.google.common.base.Preconditions;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -123,11 +124,12 @@ public enum FileManager {
 
         boolean result = writeToFile(pieceType, new File(sPieceDir, pieceType.getInternalId() + PIECE_EXTENSION));
         if (result) {
-            mListeners.forEach(ChessFileListener::onPieceFileChanged);
             if (PieceTypeManager.INSTANCE.hasPieceTypeWithId(pieceType.getInternalId())) {
                 PieceTypeManager.INSTANCE.unregisterPieceType(pieceType.getInternalId());
+                PieceIconUtility.invalidateCache(pieceType.getInternalId());
             }
             PieceTypeManager.INSTANCE.registerPieceType(pieceType);
+            mListeners.forEach(listener -> listener.onPieceFileChanged(pieceType.getInternalId()));
         }
         return result;
     }
@@ -135,15 +137,18 @@ public enum FileManager {
     public boolean deletePiece(PieceType pieceType) {
         verifyInitialized();
 
-        // we might not HAVE an image to delete
-        if (!new File(sImageDir, pieceType.getInternalId()).delete()) {
+        File imageFile = new File(sImageDir, pieceType.getInternalId());
+        if (imageFile.exists() && !imageFile.delete()) {
             Log.e(TAG, "Could not delete image for PieceType:" + pieceType.getInternalId());
         }
 
-        boolean result = new File(sPieceDir, pieceType.getInternalId()).delete();
+        boolean result = new File(sPieceDir, pieceType.getInternalId() + PIECE_EXTENSION).delete();
         if (result) {
-            mListeners.forEach(ChessFileListener::onPieceFileChanged);
             PieceTypeManager.INSTANCE.unregisterPieceType(pieceType.getInternalId());
+            PieceIconUtility.invalidateCache(pieceType.getInternalId());
+            mListeners.forEach(listener -> listener.onPieceFileChanged(pieceType.getInternalId()));
+        } else {
+            Log.e(TAG, "Could not delete PieceType:" + pieceType.getInternalId());
         }
         return result;
     }

@@ -1,9 +1,11 @@
 package com.drewhannay.chesscrafter.files;
 
+import org.jetbrains.annotations.NotNull;
+
 public abstract class AbstractChessFileListener implements ChessFileListener {
 
     @Override
-    public void onPieceFileChanged() {
+    public void onPieceFileChanged(@NotNull String internalId) {
     }
 
     @Override

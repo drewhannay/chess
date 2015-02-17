@@ -1,25 +1,26 @@
 package com.drewhannay.chesscrafter.panel;
 
+import com.drewhannay.chesscrafter.files.AbstractChessFileListener;
 import com.drewhannay.chesscrafter.files.FileManager;
 import com.drewhannay.chesscrafter.logic.PieceTypeManager;
 import com.drewhannay.chesscrafter.models.PieceType;
 import com.drewhannay.chesscrafter.utility.Messages;
 import com.google.common.base.Preconditions;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.util.UUID;
 import java.util.function.Consumer;
 
@@ -42,6 +43,13 @@ public class PieceCrafterMasterPanel extends ChessPanel {
         initComponents();
         validate();
 
+        FileManager.INSTANCE.addChessFileListener(new AbstractChessFileListener() {
+            @Override
+            public void onPieceFileChanged(@NotNull String internalId) {
+                refreshList();
+            }
+        });
+
         // select the first piece by default
         mPieceList.setSelectedIndex(0);
     }
@@ -52,14 +60,7 @@ public class PieceCrafterMasterPanel extends ChessPanel {
         mPieceList.setVisibleRowCount(-1);
         mPieceList.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         mPieceList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        mPieceList.addListSelectionListener(e -> {
-            if (e.getValueIsAdjusting()) {
-                return;
-            }
-            PieceType pieceType = mPieceList.getSelectedValue();
-            mButtons.mRemove.setEnabled(!PieceTypeManager.INSTANCE.isSystemPiece(pieceType.getInternalId()));
-            mPieceTypeSelectedCallback.accept(pieceType);
-        });
+        mPieceList.addListSelectionListener(mListSelectionListener);
 
         setBorder(BorderFactory.createEmptyBorder(25, 25, 25, 25));
 
@@ -84,17 +85,28 @@ public class PieceCrafterMasterPanel extends ChessPanel {
         add(mButtons, gbc);
     }
 
-    public void refreshList() {
-        mPieceListModel.clear();
+    private void refreshList() {
+        int selectedIndex = mPieceList.getSelectedIndex();
+        String selectedInternalId = selectedIndex < 0 ? null : mPieceList.getSelectedValue().getInternalId();
+        mPieceList.removeListSelectionListener(mListSelectionListener);
 
-        PieceTypeManager.INSTANCE.getAllPieceTypes().forEach(mPieceListModel::addElement);
+        mPieceListModel.clear();
+        PieceTypeManager.INSTANCE.getAllPieceTypes().stream()
+                .sorted((p1, p2) -> p1.getName().compareTo(p2.getName()))
+                .forEach(mPieceListModel::addElement);
+
+        mPieceList.addListSelectionListener(mListSelectionListener);
+        if (selectedInternalId != null && PieceTypeManager.INSTANCE.hasPieceTypeWithId(selectedInternalId)) {
+            mPieceList.setSelectedValue(PieceTypeManager.INSTANCE.getPieceTypeById(selectedInternalId), true);
+        } else {
+            mPieceList.setSelectedIndex(selectedIndex < 0 ? 0 : selectedIndex);
+        }
     }
 
     private void createPiece() {
         PieceType pieceType = new PieceType(UUID.randomUUID().toString(), Messages.getString("PieceType.newPiece"), null, null);
 
         if (FileManager.INSTANCE.writePiece(pieceType)) {
-            mPieceListModel.addElement(pieceType);
             mPieceList.setSelectedValue(pieceType, true);
         } else {
             // TODO: notify user of failure
@@ -105,9 +117,7 @@ public class PieceCrafterMasterPanel extends ChessPanel {
         PieceType pieceType = mPieceList.getSelectedValue();
         Preconditions.checkState(!PieceTypeManager.INSTANCE.isSystemPiece(pieceType.getInternalId()));
 
-        if (FileManager.INSTANCE.deletePiece(pieceType)) {
-            mPieceListModel.removeElement(pieceType);
-        } else {
+        if (!FileManager.INSTANCE.deletePiece(pieceType)) {
             // TODO: notify user of failure
         }
     }
@@ -122,5 +132,19 @@ public class PieceCrafterMasterPanel extends ChessPanel {
 
         // TODO: render custom pieceType view here
         return label;
+    };
+
+    private final ListSelectionListener mListSelectionListener = new ListSelectionListener() {
+        @Override
+        public void valueChanged(ListSelectionEvent e) {
+            if (e.getValueIsAdjusting()) {
+                return;
+            }
+            PieceType pieceType = mPieceList.getSelectedValue();
+            mButtons.mRemove.setEnabled(pieceType != null && !PieceTypeManager.INSTANCE.isSystemPiece(pieceType.getInternalId()));
+            if (pieceType != null) {
+                mPieceTypeSelectedCallback.accept(pieceType);
+            }
+        }
     };
 }

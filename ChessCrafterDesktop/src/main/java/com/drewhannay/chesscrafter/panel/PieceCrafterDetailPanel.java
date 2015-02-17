@@ -5,7 +5,9 @@ import com.drewhannay.chesscrafter.dialog.TwoHopInputDialog;
 import com.drewhannay.chesscrafter.dragNdrop.DropManager;
 import com.drewhannay.chesscrafter.dragNdrop.GlassPane;
 import com.drewhannay.chesscrafter.dragNdrop.SquareConfig;
+import com.drewhannay.chesscrafter.files.FileManager;
 import com.drewhannay.chesscrafter.label.SquareJLabel;
+import com.drewhannay.chesscrafter.logic.PieceTypeManager;
 import com.drewhannay.chesscrafter.models.Board;
 import com.drewhannay.chesscrafter.models.BoardCoordinate;
 import com.drewhannay.chesscrafter.models.BoardSize;
@@ -15,9 +17,10 @@ import com.drewhannay.chesscrafter.models.Movement;
 import com.drewhannay.chesscrafter.models.Piece;
 import com.drewhannay.chesscrafter.models.PieceType;
 import com.drewhannay.chesscrafter.models.TwoHopMovement;
-import com.drewhannay.chesscrafter.utility.UiUtility;
+import com.drewhannay.chesscrafter.utility.Log;
 import com.drewhannay.chesscrafter.utility.Messages;
 import com.drewhannay.chesscrafter.utility.PieceIconUtility;
+import com.drewhannay.chesscrafter.utility.UiUtility;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import org.jetbrains.annotations.NotNull;
@@ -38,15 +41,19 @@ import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.ListDataEvent;
+import javax.swing.event.ListDataListener;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.Rectangle;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.BiConsumer;
@@ -77,6 +84,9 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         }
     }
 
+    private static final String TAG = "PieceCrafterDetailPanel";
+
+    private final JLabel mPieceNameLabel;
     private final JTextField mPieceNameField;
     private final JButton mImageButton;
 
@@ -87,9 +97,12 @@ public class PieceCrafterDetailPanel extends ChessPanel {
     private final BoardPanel mBoardPanel;
 
     private Board mBoard;
+    private String mInternalId;
+    private boolean mLoading;
 
     public PieceCrafterDetailPanel(GlassPane glassPane) {
-        mPieceNameField = new JTextField(15);
+        mPieceNameLabel = UiUtility.createJLabel("");
+        mPieceNameField = new JTextField();
         mImageButton = new JButton();
 
         DefaultListModel<CardinalMovement> movementListModel = new DefaultListModel<>();
@@ -123,17 +136,41 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         mBoardPanel = new BoardPanel(BoardSize.CLASSIC_SIZE,
                 new SquareConfig(new DropManager(this::refreshBoard, this::movePiece), glassPane), this::getMovesFrom);
 
+        mPieceNameLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                startNameEdit();
+            }
+        });
+
+        mPieceNameField.addActionListener(e -> confirmNameEdit());
+        mPieceNameField.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                confirmNameEdit();
+            }
+        });
+
         initComponents();
     }
 
     public void loadPieceType(PieceType pieceType) {
+        mLoading = true;
+        dataStream().forEach(data -> data.model.removeListDataListener(mListDataListener));
+
         clearPieceData();
 
-        Icon pieceIcon = PieceIconUtility.getPieceIcon(pieceType.getInternalId(), Color.WHITE);
-        mImageButton.setIcon(pieceIcon);
-        mImageButton.setPressedIcon(pieceIcon);
+        mInternalId = pieceType.getInternalId();
 
+        mPieceNameLabel.setText(pieceType.getName());
         mPieceNameField.setText(pieceType.getName());
+        mPieceNameField.setEnabled(!PieceTypeManager.INSTANCE.isSystemPiece(pieceType.getInternalId()));
+
         pieceType.getMovements().forEach(mMovementData.model::addElement);
         pieceType.getCapturingMovements().forEach(mCapturingData.model::addElement);
         pieceType.getTwoHopMovements().forEach(mTwoHopData.model::addElement);
@@ -141,7 +178,41 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         mBoard.addPiece(new Piece(Piece.TEAM_ONE, pieceType), BoardCoordinate.at(mBoard.getBoardSize().width / 2,
                 mBoard.getBoardSize().height / 2));
         dataStream().forEach(this::refreshButtonState);
+
+        updatePieceIcon();
+
+        dataStream().forEach(data -> data.model.addListDataListener(mListDataListener));
+        mLoading = false;
+    }
+
+    private void updatePieceIcon() {
+        Icon pieceIcon = PieceIconUtility.getPieceIcon(mInternalId, Color.WHITE);
+        mImageButton.setIcon(pieceIcon);
+        mImageButton.setPressedIcon(pieceIcon);
+
         refreshBoard();
+    }
+
+    private void startNameEdit() {
+        if (!PieceTypeManager.INSTANCE.isSystemPiece(mInternalId)) {
+            mPieceNameLabel.setVisible(false);
+            mPieceNameField.setVisible(true);
+            mPieceNameField.requestFocus();
+        }
+    }
+
+    private void confirmNameEdit() {
+        if (mPieceNameField.getText().trim().isEmpty()) {
+            mPieceNameField.setText(Messages.getString("PieceType.newPiece"));
+        }
+
+        savePiece();
+        updatePieceIcon();
+
+        mPieceNameField.setVisible(false);
+        mPieceNameLabel.setText(mPieceNameField.getText());
+        mPieceNameLabel.setVisible(true);
+        mPieceNameLabel.requestFocusInWindow();
     }
 
     private void refreshBoard() {
@@ -153,21 +224,25 @@ public class PieceCrafterDetailPanel extends ChessPanel {
     }
 
     private void clearPieceData() {
+        mInternalId = null;
+        mPieceNameLabel.setText("");
         mPieceNameField.setText("");
         dataStream().forEach(data -> data.model.clear());
         dataStream().forEach(this::refreshButtonState);
 
         mBoard = new Board(BoardSize.CLASSIC_SIZE);
-        refreshBoard();
     }
 
     private void initComponents() {
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
+        mPieceNameField.setColumns(15);
+        mPieceNameField.setVisible(false);
+
         JPanel namePanel = new JPanel();
         namePanel.setOpaque(false);
 
-        namePanel.add(UiUtility.createJLabel(Messages.getString("PieceCrafterDetailPanel.pieceName")));
+        namePanel.add(mPieceNameLabel);
         namePanel.add(mPieceNameField);
 
         mImageButton.setToolTipText(Messages.getString("PieceCrafterDetailPanel.pieceIcon"));
@@ -308,6 +383,11 @@ public class PieceCrafterDetailPanel extends ChessPanel {
             return ImmutableSet.of();
         }
 
+        PieceType pieceType = createPieceTypeFromData();
+        return pieceType.getMovesFrom(coordinate, mBoard.getBoardSize(), 0);
+    }
+
+    private PieceType createPieceTypeFromData() {
         Set<CardinalMovement> movements = new HashSet<>(mMovementData.model.size());
         IntStream.range(0, mMovementData.model.size()).forEach(i -> movements.add(mMovementData.model.get(i)));
         Set<CardinalMovement> capturingMovements = new HashSet<>(mCapturingData.model.size());
@@ -315,9 +395,8 @@ public class PieceCrafterDetailPanel extends ChessPanel {
         Set<TwoHopMovement> twoHopMovements = new HashSet<>(mTwoHopData.model.size());
         IntStream.range(0, mTwoHopData.model.size()).forEach(i -> twoHopMovements.add(mTwoHopData.model.get(i)));
 
-        PieceType pieceType = new PieceType(mPieceNameField.getText(), mPieceNameField.getText(),
+        return new PieceType(mInternalId, mPieceNameField.getText().trim(),
                 movements, capturingMovements, twoHopMovements);
-        return pieceType.getMovesFrom(coordinate, mBoard.getBoardSize(), 0);
     }
 
     private ListCellRenderer<CardinalMovement> createMovementRenderer() {
@@ -341,6 +420,32 @@ public class PieceCrafterDetailPanel extends ChessPanel {
             label.setForeground(isSelected ? list.getSelectionForeground() : list.getForeground());
             return label;
         };
+    }
+
+    private final ListDataListener mListDataListener = new ListDataListener() {
+        @Override
+        public void intervalAdded(ListDataEvent e) {
+            savePiece();
+        }
+
+        @Override
+        public void intervalRemoved(ListDataEvent e) {
+            savePiece();
+        }
+
+        @Override
+        public void contentsChanged(ListDataEvent e) {
+            savePiece();
+        }
+    };
+
+    private void savePiece() {
+        if (!mLoading) {
+            if (!PieceTypeManager.INSTANCE.isSystemPiece(mInternalId)) {
+                Log.v(TAG, "Saving piece...");
+                FileManager.INSTANCE.writePiece(createPieceTypeFromData());
+            }
+        }
     }
 
     private static Set<Direction> getUnusedDirections(@NotNull ListModel<CardinalMovement> model) {

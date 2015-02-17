@@ -1,7 +1,9 @@
 package com.drewhannay.chesscrafter.files;
 
+import org.jetbrains.annotations.NotNull;
+
 public interface ChessFileListener {
-    public void onPieceFileChanged();
+    public void onPieceFileChanged(@NotNull String internalId);
 
     public void onGameConfigFileChanged();
 
