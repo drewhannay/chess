@@ -1,5 +1,6 @@
 package com.drewhannay.chesscrafter.utility;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.Icon;
@@ -13,6 +14,7 @@ import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public final class PieceIconUtility {
 
@@ -36,6 +38,15 @@ public final class PieceIconUtility {
         Icon icon = new StretchIcon(tintedImage, true);
         ICON_CACHE.put(key, icon);
         return icon;
+    }
+
+    public static void invalidateCache(@NotNull String internalId) {
+        Map<String, Icon> iconCache = ICON_CACHE.entrySet().stream()
+                .filter(p -> !p.getKey().startsWith(internalId))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+        ICON_CACHE.clear();
+        ICON_CACHE.putAll(iconCache);
     }
 
     private static String getKey(String pieceName, Color teamColor) {
