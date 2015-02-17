@@ -1,6 +1,7 @@
 package com.drewhannay.chesscrafter.panel;
 
 import com.drewhannay.chesscrafter.files.AbstractChessFileListener;
+import com.drewhannay.chesscrafter.files.ChessFileListener;
 import com.drewhannay.chesscrafter.files.FileManager;
 import com.drewhannay.chesscrafter.logic.PieceTypeManager;
 import com.drewhannay.chesscrafter.models.PieceType;
@@ -43,13 +44,6 @@ public class PieceCrafterMasterPanel extends ChessPanel {
         initComponents();
         validate();
 
-        FileManager.INSTANCE.addChessFileListener(new AbstractChessFileListener() {
-            @Override
-            public void onPieceFileChanged(@NotNull String internalId) {
-                refreshList();
-            }
-        });
-
         // select the first piece by default
         mPieceList.setSelectedIndex(0);
     }
@@ -83,6 +77,18 @@ public class PieceCrafterMasterPanel extends ChessPanel {
         gbc.gridy = 2;
         gbc.weighty = 0.1;
         add(mButtons, gbc);
+    }
+
+    @Override
+    public void addNotify() {
+        super.addNotify();
+        FileManager.INSTANCE.addChessFileListener(mFileListener);
+    }
+
+    @Override
+    public void removeNotify() {
+        super.removeNotify();
+        FileManager.INSTANCE.removeChessFileListener(mFileListener);
     }
 
     private void refreshList() {
@@ -145,6 +151,13 @@ public class PieceCrafterMasterPanel extends ChessPanel {
             if (pieceType != null) {
                 mPieceTypeSelectedCallback.accept(pieceType);
             }
+        }
+    };
+
+    private final ChessFileListener mFileListener = new AbstractChessFileListener() {
+        @Override
+        public void onPieceFileChanged(@NotNull String internalId) {
+            refreshList();
         }
     };
 }
