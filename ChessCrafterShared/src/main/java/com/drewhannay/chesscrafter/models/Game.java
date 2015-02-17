@@ -17,7 +17,8 @@ import java.util.Set;
 
 public final class Game {
 
-    private final String mGameType;
+    private final String mName;
+    private final String mInternalGameId;
     private final Team[] mTeams;
     private final Board[] mBoards;
     private final TurnKeeper mTurnKeeper;
@@ -26,19 +27,20 @@ public final class Game {
     private int mHistoryIndex;
     private Status mStatus;
 
-    public Game(@NotNull String gameType, @NotNull Board[] boards, @NotNull Team[] teams,
-                @NotNull TurnKeeper turnKeeper, @Nullable History history) {
-        mGameType = gameType;
+    public Game(@NotNull String name, @NotNull String internalGameId, @NotNull Board[] boards,
+                @NotNull Team[] teams, @NotNull TurnKeeper turnKeeper, @Nullable History history) {
+        mName = name;
+        mInternalGameId = internalGameId;
         mBoards = boards;
         mTeams = teams;
         mTurnKeeper = turnKeeper;
 
         mStatus = Status.CONTINUE;
 
-        mHistory = history != null ? history : new History(gameType, new ArrayList<Move>());
+        mHistory = history != null ? history : new History(internalGameId, new ArrayList<Move>());
         if (history != null) {
-            Preconditions.checkArgument(gameType.equals(history.variantName),
-                    "History variantName {" + history.variantName + "} does not match gameType {" + gameType + "}");
+            Preconditions.checkArgument(internalGameId.equals(history.internalGameId),
+                    "History name {" + history.internalGameId + "} does not match internalGameId {" + internalGameId + "}");
 
             if (!mHistory.isComplete()) {
                 for (Move move : history.moves) {
@@ -48,11 +50,14 @@ public final class Game {
         }
     }
 
-    public String getGameType() {
-        return mGameType;
+    public String getName() {
+        return mName;
     }
 
-    // TODO: don't want this to be public
+    public String getInternalGameId() {
+        return mInternalGameId;
+    }
+
     public History getHistory() {
         return mHistory;
     }

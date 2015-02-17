@@ -29,7 +29,8 @@ public final class GameConfiguration {
         public int[] turnIncrements;
     }
 
-    public String variantName;
+    public String name;
+    public String internalGameId;
     public BoardConfiguration[] boards;
     public TeamConfiguration[] teams;
     public TurnKeeperConfiguration turnKeeper;

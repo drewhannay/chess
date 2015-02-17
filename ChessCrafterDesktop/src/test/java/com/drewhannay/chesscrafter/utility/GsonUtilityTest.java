@@ -68,10 +68,10 @@ public class GsonUtilityTest {
         }
 
         @Test
-        public void returnsSameVariantNameForHistory() {
+        public void returnsSameInternalGameIdForHistory() {
             String json = GsonUtility.toJson(mHistory);
             History history = GsonUtility.fromJson(json, History.class);
-            assertEquals(mHistory.variantName, history.variantName);
+            assertEquals(mHistory.internalGameId, history.internalGameId);
         }
 
         @Test

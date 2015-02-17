@@ -65,7 +65,7 @@ public final class GameBuilder {
         TurnKeeper turnKeeper = new TurnKeeper(config.turnKeeper.teamIds, config.turnKeeper.turnCounts,
                 config.turnKeeper.turnIncrements);
 
-        return new Game(config.variantName, boards, teams, turnKeeper, history);
+        return new Game(config.name, config.internalGameId, boards, teams, turnKeeper, history);
     }
 
     @NotNull
@@ -173,7 +173,8 @@ public final class GameBuilder {
         turnKeeper.turnIncrements = new int[]{0, 0};
 
         GameConfiguration classicConfig = new GameConfiguration();
-        classicConfig.variantName = "Classic";
+        classicConfig.name = "Classic";
+        classicConfig.internalGameId = "Classic";
         classicConfig.boards = boards;
         classicConfig.teams = teams;
         classicConfig.turnKeeper = turnKeeper;
