@@ -113,7 +113,7 @@ public final class GameBuilder {
 
             PiecePromoterConfiguration promoterConfig = teamConfig.piecePromoterConfiguration;
             PiecePromoter piecePromoter = PiecePromoter.createClassicPiecePromoter(promoterConfig.promotionRow,
-                    PieceTypeManager.INSTANCE.getPieceTypeById(promoterConfig.pieceType));
+                    PieceTypeManager.INSTANCE.getPieceTypeById(promoterConfig.pieceTypeId));
 
             Team team = new Team(teamConfig.teamId, teamConfig.teamColor, teamConfig.teamName, moveGenerators,
                     moveFilters, postMoveActions, endCondition, piecePromoter);
@@ -126,11 +126,11 @@ public final class GameBuilder {
     public static GameConfiguration getClassicConfiguration() {
         PiecePromoterConfiguration teamOnePiecePromoter = new PiecePromoterConfiguration();
         teamOnePiecePromoter.promotionRow = 8;
-        teamOnePiecePromoter.pieceType = "NorthFacingPawn";
+        teamOnePiecePromoter.pieceTypeId = PieceTypeManager.NORTH_FACING_PAWN_ID;
 
         PiecePromoterConfiguration teamTwoPiecePromoter = new PiecePromoterConfiguration();
         teamTwoPiecePromoter.promotionRow = 1;
-        teamTwoPiecePromoter.pieceType = "SouthFacingPawn";
+        teamTwoPiecePromoter.pieceTypeId = PieceTypeManager.SOUTH_FACING_PAWN_ID;
 
         TeamConfiguration teamOne = new TeamConfiguration();
         teamOne.teamId = Piece.TEAM_ONE;

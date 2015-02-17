@@ -14,7 +14,7 @@ public final class GameConfiguration {
 
     public static class PiecePromoterConfiguration {
         public int promotionRow;
-        public String pieceType;
+        public String pieceTypeId;
     }
 
     public static class BoardConfiguration {
