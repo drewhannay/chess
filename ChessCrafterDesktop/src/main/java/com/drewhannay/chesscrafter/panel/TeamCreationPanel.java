@@ -21,8 +21,8 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -176,30 +176,15 @@ public class TeamCreationPanel extends ChessPanel {
     }
 
     private void createMouseListener(JTextField colorField, TeamInfo teamInfo) {
-        colorField.addMouseListener(new MouseListener() {
+        colorField.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
                 Color c = JColorChooser.showDialog(colorField, Messages.getString("TeamCreationPanel.teamColor"), colorField.getBackground());
                 colorField.setBackground(c);
                 teamInfo.color = c;
                 teamInfo.label.setPiece(teamInfo.label.getPiece(), c);
                 mTeamListener.run();
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
             }
         });
     }
