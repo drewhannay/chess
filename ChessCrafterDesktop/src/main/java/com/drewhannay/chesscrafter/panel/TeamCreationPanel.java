@@ -5,11 +5,13 @@ import com.drewhannay.chesscrafter.label.SquareJLabel;
 import com.drewhannay.chesscrafter.models.BoardCoordinate;
 import com.drewhannay.chesscrafter.models.Piece;
 import com.drewhannay.chesscrafter.models.PieceType;
-import com.drewhannay.chesscrafter.utility.UiUtility;
+import com.drewhannay.chesscrafter.utility.ImageUtility;
 import com.drewhannay.chesscrafter.utility.Messages;
+import com.drewhannay.chesscrafter.utility.UiUtility;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JPanel;
@@ -82,24 +84,32 @@ public class TeamCreationPanel extends ChessPanel {
     private void initComponents(SquareConfig squareConfig) {
         mTeamInfos.forEach(teamInfo -> createTeamPanel(squareConfig, teamInfo));
 
-        JButton addTeam = new JButton("+");
-        addTeam.addActionListener(event -> {
+        JButton addButton = new JButton();
+        addButton.setMinimumSize(new Dimension(36, 36));
+        addButton.setPreferredSize(new Dimension(36, 36));
+
+        Icon icon = ImageUtility.createStretchIcon(ImageUtility.readSystemImage("add_button"));
+        addButton.setDisabledIcon(icon);
+        addButton.setIcon(icon);
+        addButton.setPressedIcon(icon);
+
+        addButton.addActionListener(event -> {
             TeamInfo newTeam = new TeamInfo();
             newTeam.teamId = mTeamIDCounter;
             newTeam.color = Color.gray;
             newTeam.teamName = Messages.getString("TeamCreationPanel.team", mTeamIDCounter++);
             mTeamInfos.add(newTeam);
             createTeamPanel(squareConfig, newTeam);
-            remove(addTeam);
+            remove(addButton);
             if (mTeamIDCounter <= 4) {
-                add(addTeam);
+                add(addButton);
             }
             validate();
             repaint();
 
             mTeamListener.run();
         });
-        add(addTeam);
+        add(addButton);
     }
 
     private void createTeamPanel(SquareConfig squareConfig, TeamInfo teamInfo) {
