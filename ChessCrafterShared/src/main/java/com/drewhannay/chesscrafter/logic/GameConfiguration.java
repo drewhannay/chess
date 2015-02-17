@@ -17,12 +17,6 @@ public final class GameConfiguration {
         public String pieceType;
     }
 
-    public static class PieceConfiguration {
-        public int teamId;
-        public boolean isObjective;
-        public String internalId;
-    }
-
     public static class BoardConfiguration {
         public int width;
         public int height;

@@ -1,7 +1,6 @@
 package com.drewhannay.chesscrafter.logic;
 
 import com.drewhannay.chesscrafter.logic.GameConfiguration.BoardConfiguration;
-import com.drewhannay.chesscrafter.logic.GameConfiguration.PieceConfiguration;
 import com.drewhannay.chesscrafter.logic.GameConfiguration.PiecePromoterConfiguration;
 import com.drewhannay.chesscrafter.logic.GameConfiguration.TeamConfiguration;
 import com.drewhannay.chesscrafter.logic.GameConfiguration.TurnKeeperConfiguration;
