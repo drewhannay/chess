@@ -423,7 +423,7 @@ public class PieceCrafterDetailPanel extends ChessPanel {
     private ListCellRenderer<CardinalMovement> createMovementRenderer() {
         return (list, value, index, isSelected, cellHasFocus) -> {
             String direction = String.valueOf(value.direction);
-            String distance = value.distance == Integer.MAX_VALUE ? Messages.getString("PieceCrafterDetailPanel.unlimited")
+            String distance = value.distance == PieceType.UNLIMITED ? Messages.getString("PieceCrafterDetailPanel.unlimited")
                     : String.valueOf(value.distance);
             JLabel label = new JLabel(Messages.getString("PieceCrafterDetailPanel.movementItem", direction, distance));
             label.setOpaque(true);

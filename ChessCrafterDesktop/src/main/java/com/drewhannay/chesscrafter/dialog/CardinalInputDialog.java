@@ -2,9 +2,10 @@ package com.drewhannay.chesscrafter.dialog;
 
 import com.drewhannay.chesscrafter.models.CardinalMovement;
 import com.drewhannay.chesscrafter.models.Direction;
+import com.drewhannay.chesscrafter.models.PieceType;
 import com.drewhannay.chesscrafter.panel.ChessPanel;
-import com.drewhannay.chesscrafter.utility.UiUtility;
 import com.drewhannay.chesscrafter.utility.Messages;
+import com.drewhannay.chesscrafter.utility.UiUtility;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,7 +13,6 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -79,7 +79,7 @@ public final class CardinalInputDialog extends ChessDialog {
         JCheckBox unlimited = new JCheckBox();
         unlimited.setOpaque(false);
         unlimited.addActionListener(event -> distanceField.setEnabled(!unlimited.isSelected()));
-        if (isEdit && mEditingMovement.distance == Integer.MAX_VALUE) {
+        if (isEdit && mEditingMovement.distance == PieceType.UNLIMITED) {
             unlimited.setSelected(true);
             distanceField.setEnabled(false);
         }
@@ -93,7 +93,7 @@ public final class CardinalInputDialog extends ChessDialog {
         saveMovement.addActionListener(event -> {
             int distance;
             if (unlimited.isSelected()) {
-                distance = Integer.MAX_VALUE;
+                distance = PieceType.UNLIMITED;
             } else {
                 distance = Integer.parseInt(distanceField.getText().trim());
             }
