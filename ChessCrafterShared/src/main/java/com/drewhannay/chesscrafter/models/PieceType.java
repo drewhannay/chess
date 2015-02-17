@@ -10,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 public class PieceType {
     public static final int UNLIMITED = Integer.MAX_VALUE;
@@ -19,6 +20,11 @@ public class PieceType {
     private final Set<CardinalMovement> mMovements;
     private final Set<CardinalMovement> mCapturingMovements;
     private final Set<TwoHopMovement> mTwoHopMovements;
+
+    public PieceType(@NotNull String name, @Nullable Set<CardinalMovement> movements,
+                     @Nullable Set<TwoHopMovement> twoHopMovements) {
+        this(UUID.randomUUID().toString(), name, movements, twoHopMovements);
+    }
 
     public PieceType(@NotNull String internalId, @NotNull String name, @Nullable Set<CardinalMovement> movements,
                      @Nullable Set<TwoHopMovement> twoHopMovements) {

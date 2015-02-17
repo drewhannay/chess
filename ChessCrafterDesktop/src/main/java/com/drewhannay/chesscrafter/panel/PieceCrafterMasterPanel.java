@@ -110,7 +110,7 @@ public class PieceCrafterMasterPanel extends ChessPanel {
     }
 
     private void createPiece() {
-        PieceType pieceType = new PieceType(UUID.randomUUID().toString(), Messages.getString("PieceType.newPiece"), null, null);
+        PieceType pieceType = new PieceType(Messages.getString("PieceType.newPiece"), null, null);
 
         if (FileManager.INSTANCE.writePiece(pieceType)) {
             mPieceList.setSelectedValue(pieceType, true);
