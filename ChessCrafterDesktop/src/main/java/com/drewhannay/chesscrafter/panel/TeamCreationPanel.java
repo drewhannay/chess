@@ -92,6 +92,8 @@ public class TeamCreationPanel extends ChessPanel {
         addButton.setDisabledIcon(icon);
         addButton.setIcon(icon);
         addButton.setPressedIcon(icon);
+        addButton.putClientProperty("JButton.buttonType", "square");
+        addButton.setMargin(new Insets(0, 0, 0, 0));
 
         addButton.addActionListener(event -> {
             TeamInfo newTeam = new TeamInfo();
