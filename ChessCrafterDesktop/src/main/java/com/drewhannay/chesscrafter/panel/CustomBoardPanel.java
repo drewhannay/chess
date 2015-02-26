@@ -3,7 +3,7 @@ package com.drewhannay.chesscrafter.panel;
 import javax.swing.*;
 
 public class CustomBoardPanel extends ChessPanel {
-    public CustomBoardPanel(VariantCreationPanel variant, JFrame optionsFrame) {
+    public CustomBoardPanel(GameCrafterPanel variant, JFrame optionsFrame) {
 //        mFrame = optionsFrame;
 //        mFrame.add(this);
 //        mFrame.setSize(300, 250);

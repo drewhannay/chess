@@ -1,7 +1,7 @@
 package com.drewhannay.chesscrafter.frame;
 
 import com.drewhannay.chesscrafter.panel.PieceCrafterMasterPanel;
-import com.drewhannay.chesscrafter.panel.VariantCreationPanel;
+import com.drewhannay.chesscrafter.panel.GameCrafterPanel;
 
 import javax.swing.JSplitPane;
 import java.awt.Dimension;
@@ -14,7 +14,7 @@ public final class GameCrafterFrame extends ChessFrame {
 
         setTitle("Game Crafter");
 
-        VariantCreationPanel detailPanel = new VariantCreationPanel(getGlassPane());
+        GameCrafterPanel detailPanel = new GameCrafterPanel(getGlassPane());
         PieceCrafterMasterPanel masterPanel = new PieceCrafterMasterPanel(detailPanel::onPieceTypeSelected);
 
         Dimension frameSize = new Dimension(755, 475);

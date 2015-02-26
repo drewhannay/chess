@@ -11,26 +11,30 @@ import com.drewhannay.chesscrafter.models.BoardSize;
 import com.drewhannay.chesscrafter.models.Piece;
 import com.drewhannay.chesscrafter.models.PieceType;
 import com.drewhannay.chesscrafter.panel.TeamCreationPanel.TeamInfo;
+import com.drewhannay.chesscrafter.utility.Messages;
 import com.drewhannay.chesscrafter.utility.Pair;
 import com.google.common.collect.ImmutableSet;
 import org.jetbrains.annotations.NotNull;
+import sun.plugin2.message.Message;
 
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class VariantCreationPanel extends ChessPanel {
+public class GameCrafterPanel extends ChessPanel {
 
     private final Board mBoard;
     private final BoardPanel mBoardPanel;
     private final TeamCreationPanel mTeamPanel;
 
-    public VariantCreationPanel(@NotNull GlassPane glassPane) {
+    public GameCrafterPanel(@NotNull GlassPane glassPane) {
         DropManager boardDropManager = new DropManager(this::boardRefresh, getBoardDragDropConsumer());
         DropManager teamDropManager = new DropManager(this::boardRefresh, getTeamDragDropConsumer());
 
@@ -67,6 +71,16 @@ public class VariantCreationPanel extends ChessPanel {
         gbc.weighty = 0.8;
         gbc.fill = GridBagConstraints.BOTH;
         add(mBoardPanel, gbc);
+
+        JButton save = new JButton(Messages.getString("GameCrafterPanel.save"));
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.weighty = 0.0;
+        gbc.insets = new Insets(10, 0, 10, 0);
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.anchor = GridBagConstraints.CENTER;
+        add(save, gbc);
     }
 
     private void boardRefresh() {
