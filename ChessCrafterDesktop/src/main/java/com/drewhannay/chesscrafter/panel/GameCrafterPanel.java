@@ -15,7 +15,6 @@ import com.drewhannay.chesscrafter.utility.Messages;
 import com.drewhannay.chesscrafter.utility.Pair;
 import com.google.common.collect.ImmutableSet;
 import org.jetbrains.annotations.NotNull;
-import sun.plugin2.message.Message;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
