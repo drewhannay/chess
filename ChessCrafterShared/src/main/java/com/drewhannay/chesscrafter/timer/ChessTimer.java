@@ -6,15 +6,15 @@ import java.text.NumberFormat;
 
 public abstract class ChessTimer {
     public interface ChessTimerListener {
-        public void onDisplayUpdated(String displayText);
+        void onDisplayUpdated(String displayText);
 
-        public void onTimerStart();
+        void onTimerStart();
 
-        public void onTimerStop();
+        void onTimerStop();
 
-        public void setInitialDelay(int initialDelay);
+        void setInitialDelay(int initialDelay);
 
-        public void onTimerRestart();
+        void onTimerRestart();
     }
 
     public void init() {
