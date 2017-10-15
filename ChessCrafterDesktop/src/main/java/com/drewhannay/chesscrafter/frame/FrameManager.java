@@ -14,7 +14,7 @@ public enum FrameManager {
 
     private final List<ChessFrame> mFrames;
 
-    private FrameManager() {
+    FrameManager() {
         mFrames = new ArrayList<>();
     }
 

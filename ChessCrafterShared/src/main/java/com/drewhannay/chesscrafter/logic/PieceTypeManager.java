@@ -27,7 +27,7 @@ public enum PieceTypeManager {
     private final Set<PieceType> mPieceTypes;
     private final Set<String> mSystemPieceIds;
 
-    private PieceTypeManager() {
+    PieceTypeManager() {
         mPieceTypes = new HashSet<>();
         mPieceTypes.add(getBishopPieceType());
         mPieceTypes.add(getKingPieceType());

@@ -6,7 +6,7 @@ public final class Log {
     private Log() {
     }
 
-    private static enum Priority {
+    private enum Priority {
         VERBOSE,
         DEBUG,
         INFO,

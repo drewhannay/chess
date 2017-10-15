@@ -48,7 +48,7 @@ public enum FileManager {
     private File sSavedGameDir;
     private File sPieceDir;
 
-    private FileManager() {
+    FileManager() {
         mListeners = new ArrayList<>();
     }
 

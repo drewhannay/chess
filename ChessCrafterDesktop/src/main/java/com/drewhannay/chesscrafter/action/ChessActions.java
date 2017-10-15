@@ -22,7 +22,7 @@ public enum ChessActions {
 
     private final ChessAction mAction;
 
-    private ChessActions(ChessAction action) {
+    ChessActions(ChessAction action) {
         mAction = action;
     }
 
