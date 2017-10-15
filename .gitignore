@@ -15,6 +15,7 @@ ACN File
 completedGames/
 gamesInProgress/
 variants/
+out/
 
 .gradle/
 

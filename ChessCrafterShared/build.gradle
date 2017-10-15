@@ -1,27 +1,19 @@
 apply plugin: 'java'
-apply plugin: 'eclipse'
 
 sourceCompatibility = 1.7
-version = '1.0'
+version = appVersion
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    compile 'com.google.guava:guava:18.0'
+    compile deps.guava
 
-    compile 'org.jetbrains:annotations:13.0'
+    compile deps.annotations
 
-    testCompile 'junit:junit:4.12'
-    testCompile 'nl.jqno.equalsverifier:equalsverifier:1.5.1'
-}
-
-test {
-    testLogging {
-        // show that events are run in the command-line output
-        events 'started', 'passed'
-    }
+    testCompile deps.junit
+    testCompile deps.equalsVerifier
 }
 
 jar {
