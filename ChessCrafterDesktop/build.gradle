@@ -1,19 +1,19 @@
-apply plugin: 'java'
-apply plugin: 'eclipse'
-
-sourceCompatibility = 1.8
-version = '1.0'
-
 // configuration for the build itself
 buildscript {
 	repositories {
 		mavenCentral()
 	}
-
-	dependencies {
-		classpath 'edu.sc.seis.gradle:macappbundle:2.0.0'
-	}
 }
+
+plugins {
+	id "edu.sc.seis.macAppBundle" version "2.1.7" apply false
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+sourceCompatibility = 1.8
+version = '1.0'
 
 // configuration for the project
 repositories {
@@ -44,7 +44,7 @@ jar {
 
 import org.apache.tools.ant.taskdefs.condition.Os
 if (Os.isFamily(Os.FAMILY_MAC)) {
-    apply plugin: 'macAppBundle'
+    apply plugin: 'edu.sc.seis.macAppBundle'
 
     macAppBundle {
         mainClassName = "com.drewhannay.chesscrafter.Main"
